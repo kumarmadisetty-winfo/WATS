@@ -1,0 +1,30 @@
+
+>> main() 16-SEP-2019 11:42:28
+Job Request Id: 1663372
+
+>> glucmt() 16-SEP-2019 11:42:28
+
+<< glucmt() 16-SEP-2019 11:42:28
+PPOS0214: Running AutoPost for criteria set: All Journals US Primary Ledger
+
+
+>> glucmt() 16-SEP-2019 11:42:28
+
+<< glucmt() 16-SEP-2019 11:42:28
+PPOS0208: Processing priority 1 for ledger or ledger set US Primary Ledger. (TYPE=Journal updates actual balances.) (PERIOD=ALL) (SOURCE=All) (CATEGORY=All)
+
+PPOS0209: No journal batches were found for ledger or ledger set US Primary Ledger. (TYPE=Journal updates actual balances.) (PERIOD=ALL) (SOURCE=All) (CATEGORY=All)
+
+SHRD0147: Finished processing rows
+No batch to print
+SHRD0001: Error in afpoget() - trying to read MAX_PAGE_LENGTH
+
+PROFILES-CANNOT READ (OPTION=MAX_PAGE_LENGTH)
+PPOS0213: No batches were selected for posting.
+
+<< main() 16-SEP-2019 11:42:28
+
++---------------------------------------------------------------------------+
+UTIL-CURRENT TIME (DATE=16-SEP-2019) (TIME=11:42:28)
+
++---------------------------------------------------------------------------+
