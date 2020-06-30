@@ -25,9 +25,65 @@ public class FetchConfigVO {
 	private int parallel_dependent;
 	private String screenshot_path;
 	private String pdf_path;
+	private String db_host;
+	private String db_username;
+	private String db_password; 
+	private String sharepoint_drive_id;
+	private String sharepoint_item_id;
+	private String client_id;
+	private String client_secret;
+	private String tenant_id;
 	
 	
 	
+	public String getDb_host() {
+		return db_host;
+	}
+	public void setDb_host(String db_host) {
+		this.db_host = db_host;
+	}
+	public String getDb_username() {
+		return db_username;
+	}
+	public void setDb_username(String db_username) {
+		this.db_username = db_username;
+	}
+	public String getDb_password() {
+		return db_password;
+	}
+	public void setDb_password(String db_password) {
+		this.db_password = db_password;
+	}
+	public String getSharepoint_drive_id() {
+		return sharepoint_drive_id;
+	}
+	public void setSharepoint_drive_id(String sharepoint_drive_id) {
+		this.sharepoint_drive_id = sharepoint_drive_id;
+	}
+	public String getSharepoint_item_id() {
+		return sharepoint_item_id;
+	}
+	public void setSharepoint_item_id(String sharepoint_item_id) {
+		this.sharepoint_item_id = sharepoint_item_id;
+	}
+	public String getClient_id() {
+		return client_id;
+	}
+	public void setClient_id(String client_id) {
+		this.client_id = client_id;
+	}
+	public String getClient_secret() {
+		return client_secret;
+	}
+	public void setClient_secret(String client_secret) {
+		this.client_secret = client_secret;
+	}
+	public String getTenant_id() {
+		return tenant_id;
+	}
+	public void setTenant_id(String tenant_id) {
+		this.tenant_id = tenant_id;
+	}
 	public String getScreenshot_path() {
 		return screenshot_path;
 	}

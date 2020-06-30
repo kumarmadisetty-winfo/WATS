@@ -1,13 +1,20 @@
 package com.winfo.scripts;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,11 +29,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.xmlgraphics.image.codec.util.SeekableStream;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
@@ -60,6 +73,14 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfArray;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfDictionary;
+import com.itextpdf.text.pdf.PdfImportedPage;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.DocumentException;
 import com.winfo.services.FetchConfigVO;
@@ -82,8 +103,8 @@ public class SeleniumKeyWords {
 	
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
 			FetchMetadataVO fetchMetadataVO, String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend, String value) throws Exception {
-		String param5 = "Password";
-		String param6 = "Sign In ";
+		String param5 = "password";
+		String param6 = "Sign In";
 		navigateUrl(driver, fetchConfigVO, fetchMetadataVO);
 		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
 		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
@@ -96,6 +117,7 @@ public class SeleniumKeyWords {
 		String param3 = "Navigator";
 		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
 	}
 	
 	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO,
@@ -164,88 +186,77 @@ public class SeleniumKeyWords {
 		}
 	}
 	
-	public  void uploadImage(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO){
-		try {
-			String sharepoint = fetchConfigVO.getSharepoint_resp();
-			System.out.println(sharepoint);
-			String accessToken = getAccessToken();
-			List imageUrlList = new ArrayList();
-			File imageDir = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name());
-			for (File imageFile : imageDir.listFiles()) {
-				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
-				imageUrlList.add(imageFileName);
-				BufferedImage bImage = ImageIO.read(new File(imageDir + "\\" + imageFileName));
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				ImageIO.write(bImage, "png", bos);
-				byte[] data = bos.toByteArray();
-
-				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
-				bodyMap.add("user-file", data);
-				// Outer header
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.IMAGE_PNG);
-				headers.add("userName", "kaushik.sekaran@winfosolutions.com");
-				headers.add("password", "WatsSelenium@1");
-				headers.set("Authorization", "Bearer " + accessToken);
-				headers.add("scope",
-						"https://graph.microsoft.com/Sites.ReadWrite.All https://graph.microsoft.com/Files.ReadWrite");
-				HttpEntity<byte[]> requestEntity = new HttpEntity<>(data, headers);
-
-				RestTemplate restTemplate = new RestTemplate();
-				ResponseEntity<byte[]> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/me/drive/root:/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "/" + imageFileName + ":/content",
-						HttpMethod.PUT, requestEntity, byte[].class);
-
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
-			}
-		} catch (Exception e) {
-			  System.out.println(e);
-		  }
-	}
+	/*
+	 * public void uploadImage(List<FetchMetadataVO> fetchMetadataListVO,
+	 * FetchConfigVO fetchConfigVO){ try { String sharepoint =
+	 * fetchConfigVO.getSharepoint_resp(); System.out.println(sharepoint); String
+	 * accessToken = getAccessToken(); List imageUrlList = new ArrayList(); File
+	 * imageDir = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\" +
+	 * fetchMetadataListVO.get(0).getCustomer_name() + "\\" +
+	 * fetchMetadataListVO.get(0).getTest_run_name()); for (File imageFile :
+	 * imageDir.listFiles()) { String imageFileName = imageFile.getName();
+	 * System.out.println(imageFileName); imageUrlList.add(imageFileName);
+	 * BufferedImage bImage = ImageIO.read(new File(imageDir + "\\" +
+	 * imageFileName)); ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	 * ImageIO.write(bImage, "png", bos); byte[] data = bos.toByteArray();
+	 * 
+	 * MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
+	 * bodyMap.add("user-file", data); // Outer header HttpHeaders headers = new
+	 * HttpHeaders(); headers.setContentType(MediaType.IMAGE_PNG);
+	 * headers.add("userName", "kaushik.sekaran@winfosolutions.com");
+	 * headers.add("password", ""); headers.set("Authorization",
+	 * "Bearer " + accessToken); headers.add("scope",
+	 * "https://graph.microsoft.com/Sites.ReadWrite.All https://graph.microsoft.com/Files.ReadWrite"
+	 * ); HttpEntity<byte[]> requestEntity = new HttpEntity<>(data, headers);
+	 * 
+	 * RestTemplate restTemplate = new RestTemplate(); ResponseEntity<byte[]>
+	 * response = restTemplate.exchange(
+	 * "https://graph.microsoft.com/v1.0/me/drive/root:/Screenshot/" +
+	 * fetchMetadataListVO.get(0).getCustomer_name() + "/" + imageFileName +
+	 * ":/content", HttpMethod.PUT, requestEntity, byte[].class);
+	 * 
+	 * System.out.println("response status: " + response.getStatusCode());
+	 * System.out.println("response body: " + response.getBody());
+	 * System.out.println("response : " + response); } } catch (Exception e) {
+	 * System.out.println(e); } }
+	 */
 	
-	public  String getAccessToken(){
-		  String acessToken = null;
-		  try {
-			  RestTemplate restTemplate = new RestTemplate();
-
-			  HttpHeaders headers = new HttpHeaders();
-			  headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-			  
-			  MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-				
-			  map.add("grant_type", "password");
-			  map.add("client_id", "874400db-4a61-4f17-a697-8b1a3e9228ea");
-			  
-			  map.add("client_secret", "GBLpmY0UP04JOHsixinT9j]B_UKjTM@=");
-			  map.add("scope", "https://graph.microsoft.com/Sites.ReadWrite.All");
-
-			  map.add("userName", "kaushik.sekaran@winfosolutions.com");
-			  map.add("password", "WatsSelenium@1");
-
-			  HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-			  ResponseEntity<Object> response = restTemplate.exchange(
-					  "https://login.microsoftonline.com/7c51d221-e93b-4397-b4c7-775faf9f6d10/oauth2/v2.0/token",
-					  HttpMethod.POST, entity, Object.class);
-				
-			  System.out.println(response);
-
-			  @SuppressWarnings("unchecked")
-			  Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody() : null;
-			  acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		  System.out.println(acessToken);
-		  return acessToken;
-	  }
+	/*
+	 * public String getAccessToken(){ String acessToken = null; try { RestTemplate
+	 * restTemplate = new RestTemplate();
+	 * 
+	 * HttpHeaders headers = new HttpHeaders();
+	 * headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	 * 
+	 * MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+	 * 
+	 * map.add("grant_type", "password"); map.add("client_id",
+	 * "874400db-4a61-4f17-a697-8b1a3e9228ea");
+	 * 
+	 * map.add("client_secret", "GBLpmY0UP04JOHsixinT9j]B_UKjTM@=");
+	 * map.add("scope", "https://graph.microsoft.com/Sites.ReadWrite.All");
+	 * 
+	 * map.add("userName", "kaushik.sekaran@winfosolutions.com");
+	 * map.add("password", "");
+	 * 
+	 * HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map,
+	 * headers); ResponseEntity<Object> response = restTemplate.exchange(
+	 * "https://login.microsoftonline.com/7c51d221-e93b-4397-b4c7-775faf9f6d10/oauth2/v2.0/token",
+	 * HttpMethod.POST, entity, Object.class);
+	 * 
+	 * System.out.println(response);
+	 * 
+	 * @SuppressWarnings("unchecked") Map<String, Object> linkedMap =
+	 * response.getBody() != null ? (Map<String, Object>) response.getBody() : null;
+	 * acessToken = linkedMap != null ?
+	 * StringUtils.convertToString(linkedMap.get("access_token")) : null; } catch
+	 * (Exception e) { System.out.println(e); } System.out.println(acessToken);
+	 * return acessToken; }
+	 */
 	
-	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path()+"\\"+fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -265,7 +276,7 @@ public class SeleniumKeyWords {
 				String currentScriptNumber = _arr[2];
 				String Status = _arr[6];
 				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber) && "Passed".equalsIgnoreCase(status)) {
+				if ("jpg".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber) && "Passed".equalsIgnoreCase(status)) {
 					fileNameList.add(fileName);
 				}
 			}
@@ -273,9 +284,9 @@ public class SeleniumKeyWords {
 		return fileNameList;
 	}
 	
-	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() +"\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -295,7 +306,7 @@ public class SeleniumKeyWords {
 				String currentScriptNumber = _arr[2];
 				String Status = _arr[6];
 				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
+				if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
 					fileNameList.add(fileName);
 				}
 			}
@@ -303,10 +314,10 @@ public class SeleniumKeyWords {
 		return fileNameList;
 	}
 	
-	public  List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public  List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() +"\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -325,7 +336,7 @@ public class SeleniumKeyWords {
 				String currentScriptNumber = _arr[2];
 				String Status = _arr[6];
 				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && ("Failed".equalsIgnoreCase(status))) {
+				if ("jpg".equalsIgnoreCase(fileExt) && ("Failed".equalsIgnoreCase(status))) {
 					fileNameList.add(fileName);
 				}
 			}
@@ -333,9 +344,9 @@ public class SeleniumKeyWords {
 		return fileNameList;
 	}
 	
-	public  List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public  List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() +"\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -354,7 +365,7 @@ public class SeleniumKeyWords {
 				String currentScriptNumber = _arr[2];
 				String Status = _arr[6];
 				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt)) {
+				if ("jpg".equalsIgnoreCase(fileExt)) {
 					fileNameList.add(fileName);
 				}
 			}
@@ -372,13 +383,13 @@ public class SeleniumKeyWords {
 			System.out.println(FILE);
 			List<String> fileNameList = null;
 			if("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getPassedPdf(fetchMetadataListVO);
+				fileNameList = getPassedPdf(fetchMetadataListVO, fetchConfigVO);
 			}else if("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getFailedPdf(fetchMetadataListVO);
+				fileNameList = getFailedPdf(fetchMetadataListVO, fetchConfigVO);
 			}else if("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getDetailPdf(fetchMetadataListVO);
+				fileNameList = getDetailPdf(fetchMetadataListVO, fetchConfigVO);
 			}else {
-				fileNameList = getFileNameList(fetchMetadataListVO);
+				fileNameList = getFileNameList(fetchMetadataListVO, fetchConfigVO);
 			}
 			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
@@ -417,7 +428,7 @@ public class SeleniumKeyWords {
 				String SN = "Script Number:" + " " + ScriptNumber;
 				String S  = "Status:" + " " + status;
 				String Scenarios = "Scenario Name :" + "" + Scenario;
- 				document.add(new Paragraph(TR, fnt)); 
+				document.add(new Paragraph(TR, fnt)); 
 				document.add(new Paragraph(SN, fnt));
 				document.add(new Paragraph(S, fnt));
 				document.add(new Paragraph(Scenarios, fnt));
@@ -428,13 +439,303 @@ public class SeleniumKeyWords {
 				document.add(img);
 			}
 			document.close();
+			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
 		} catch (Exception e) {
 			System.out.println("Not able to upload the pdf");
 		}
 	}
+	
+	
+	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+		List<String> fileNameList = new ArrayList<String>();
+		File folder = new File(fetchConfigVO.getScreenshot_path()+"\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File[] listOfFiles = folder.listFiles();
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				System.out.println("File " + listOfFiles[i].getName());
+				String fileName = listOfFiles[i].getName();
+				String[] fileNameArr = fileName.split("\\.");
+				String fileExt = fileNameArr[fileNameArr.length - 1];
+				String[] _arr = fileName.split("_");
+				String currentScriptNumber = _arr[2];
+				String Status = _arr[6];
+				String status = Status.split("\\.")[0];
+				if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
+					fileNameList.add(fileName);
+				}
+			}
+		}
+		return fileNameList;
+	}
+	
+	public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName) throws IOException {
+		String Folder =(fetchConfigVO.getScreenshot_path()+"\\"+ fetchMetadataListVO.get(0).getCustomer_name() +"\\" +fetchMetadataListVO.get(0).getTest_run_name()
+				+ "\\");
+		List<String> fileNameList = null;
+		String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
+		String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
+		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO);
+		
+		for (String image : fileNameList) {
+			
+			FileInputStream inputStream = new FileInputStream(fetchConfigVO.getScreenshot_path()+"\\"+customer_Name + "\\" +test_Run_Name+ "\\" +image);
+			BufferedImage inputImage = ImageIO.read(inputStream);
+			
+			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
+			jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+			jpegParams.setCompressionQuality(.4f);
+			
+			final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+			// specifies where the jpg image has to be written
+			writer.setOutput(new FileImageOutputStream(new File("C:\\Kaushik"+"\\"+image)));
+			
+			BufferedImage convertedImg = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+			convertedImg.getGraphics().drawImage(inputImage, 0, 0, null);
+
+			// writes the file with given compression level 
+			// from your JPEGImageWriteParam instance
+			writer.write(null, new IIOImage(convertedImg, null, null), jpegParams);
+			
+//		BufferedImage originalImage = ImageIO.read(new File(Folder+image));
+//		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+
+//		BufferedImage resizeImageGif = resizeImage(originalImage, type);
+//		ImageIO.write(resizeImageGif, "jpg", new File("C:\\Kaushik"+"\\"+image));
+
+		/*
+		 * BufferedImage resizeImagePng = resizeImage(originalImage, type);
+		 * ImageIO.write(resizeImagePng, "png", new File("c:\\image\\mkyong_png.jpg"));
+		 * 
+		 * BufferedImage resizeImageHintJpg = resizeImageWithHint(originalImage, type);
+		 * ImageIO.write(resizeImageHintJpg, "jpg", new
+		 * File("c:\\image\\mkyong_hint_jpg.jpg"));
+		 * 
+		 * BufferedImage resizeImageHintPng = resizeImageWithHint(originalImage, type);
+		 * ImageIO.write(resizeImageHintPng, "png", new
+		 * File("c:\\image\\mkyong_hint_png.jpg"));
+		 */
+		}
+
+	}
+	private static BufferedImage resizeImage(BufferedImage originalImage, int type){
+		final int IMG_WIDTH = 1280;
+		final int IMG_HEIGHT = 960;
+		BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+		g.dispose();
+
+		return resizedImage;
+	    }
+
+		private static BufferedImage resizeImageWithHint(BufferedImage originalImage, int type) {
+			final int IMG_WIDTH = 1280;
+			final int IMG_HEIGHT = 768;
+			BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+			Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+			g.dispose();
+			g.setComposite(AlphaComposite.Src);
+
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			return resizedImage;
+		}
+		
+		public List<String> getLowFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
+			List<String> fileNameList = new ArrayList<String>();
+			File folder = new File("C:\\Kaushik\\");
+			File[] listOfFiles = folder.listFiles();
+			Arrays.sort(listOfFiles, new Comparator<File>(){
+	            public int compare(File f1, File f2)
+	            {
+	                return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+	                
+	            } });
+			String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+			String Number = fetchMetadataListVO.get(0).getLine_number();
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile()) {
+					System.out.println("File " + listOfFiles[i].getName());
+					String fileName = listOfFiles[i].getName();
+					String[] fileNameArr = fileName.split("\\.");
+					String fileExt = fileNameArr[fileNameArr.length - 1];
+					String[] _arr = fileName.split("_");
+					String currentScriptNumber = _arr[2];
+					String Status = _arr[6];
+					String status = Status.split("\\.")[0];
+					if ("jpg".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber) && "Passed".equalsIgnoreCase(status)) {
+						fileNameList.add(fileName);
+					}
+				}
+			}
+			return fileNameList;
+		}
+		
+		public List<String> getLowPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+			List<String> fileNameList = new ArrayList<String>();
+			File folder = new File("C:\\Kaushik\\");
+			File[] listOfFiles = folder.listFiles();
+			Arrays.sort(listOfFiles, new Comparator<File>(){
+	            public int compare(File f1, File f2)
+	            {
+	                return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+	                
+	            } });
+			String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+			String STATUS = fetchMetadataListVO.get(0).getStatus();
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile()) {
+					System.out.println("File " + listOfFiles[i].getName());
+					String fileName = listOfFiles[i].getName();
+					String[] fileNameArr = fileName.split("\\.");
+					String fileExt = fileNameArr[fileNameArr.length - 1];
+					String[] _arr = fileName.split("_");
+					String currentScriptNumber = _arr[2];
+					String Status = _arr[6];
+					String status = Status.split("\\.")[0];
+					if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
+						fileNameList.add(fileName);
+					}
+				}
+			}
+			return fileNameList;
+		}
+		
+		public  List<String> getLowFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+
+			List<String> fileNameList = new ArrayList<String>();
+			File folder = new File("C:\\Kaushik\\");
+			File[] listOfFiles = folder.listFiles();
+			Arrays.sort(listOfFiles, new Comparator<File>(){
+	            public int compare(File f1, File f2)
+	            {
+	                return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+	                
+	            } });
+			String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile()) {
+					System.out.println("File " + listOfFiles[i].getName());
+					String fileName = listOfFiles[i].getName();
+					String[] fileNameArr = fileName.split("\\.");
+					String fileExt = fileNameArr[fileNameArr.length - 1];
+					String[] _arr = fileName.split("_");
+					String currentScriptNumber = _arr[2];
+					String Status = _arr[6];
+					String status = Status.split("\\.")[0];
+					if ("jpg".equalsIgnoreCase(fileExt) && ("Failed".equalsIgnoreCase(status))) {
+						fileNameList.add(fileName);
+					}
+				}
+			}
+			return fileNameList;
+		}
+		
+		public  List<String> getLowDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+			List<String> fileNameList = new ArrayList<String>();
+			File folder = new File("C:\\Kaushik\\");
+			File[] listOfFiles = folder.listFiles();
+			Arrays.sort(listOfFiles, new Comparator<File>(){
+	            public int compare(File f1, File f2)
+	            {
+	                return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
+	                
+	            } });
+			String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile()) {
+					System.out.println("File " + listOfFiles[i].getName());
+					String fileName = listOfFiles[i].getName();
+					String[] fileNameArr = fileName.split("\\.");
+					String fileExt = fileNameArr[fileNameArr.length - 1];
+					String[] _arr = fileName.split("_");
+					String currentScriptNumber = _arr[2];
+					String Status = _arr[6];
+					String status = Status.split("\\.")[0];
+					if ("jpg".equalsIgnoreCase(fileExt)) {
+						fileNameList.add(fileName);
+					}
+				}
+			}
+			return fileNameList;
+		}
+		
+		public void createLowPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
+				throws IOException, DocumentException, com.itextpdf.text.DocumentException {
+			try {
+				String Date = DateUtils.getSysdate();
+				String Folder =("C:\\Kaushik\\PDF\\");
+				String FILE = (Folder + pdffileName);
+				System.out.println(FILE);
+				List<String> fileNameList = null;
+				if("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+					fileNameList = getLowPassedPdf(fetchMetadataListVO);
+				}else if("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+					fileNameList = getLowFailedPdf(fetchMetadataListVO);
+				}else if("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+					fileNameList = getLowDetailPdf(fetchMetadataListVO);
+				}else {
+					fileNameList = getLowFileNameList(fetchMetadataListVO);
+				}
+				String Script_Number = fetchMetadataListVO.get(0).getScript_number();
+				String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
+				String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
+				String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
+				File theDir = new File(Folder);
+				if (!theDir.exists()) {
+		            System.out.println("creating directory: " + theDir.getName());
+		            boolean result = false;
+		            try {
+		            	theDir.mkdirs();
+		                result = true;
+		            } catch (SecurityException se) {
+		                // handle it
+		                System.out.println(se.getMessage());
+		            }
+		        } else {
+		        	System.out.println("Folder exist");
+		        }
+		        Document document = new Document();
+				PdfWriter.getInstance(document,
+						new FileOutputStream(FILE));
+				document.open();
+				for (String image : fileNameList) {
+					Image img = Image
+							.getInstance("C:\\Kaushik\\"+ image);
+					String ScriptNumber = image.split("_")[2];
+					String TestRun = image.split("_")[3];
+					String Status = image.split("_")[6];
+					String status = Status.split("\\.")[0];
+					String Scenario = image.split("_")[1];
+					document.setPageSize(img);
+					document.newPage();
+					Font fnt = FontFactory.getFont("Arial", 12);
+					String TR = "Test Run Name:" + " " + TestRun;
+					String SN = "Script Number:" + " " + ScriptNumber;
+					String S  = "Status:" + " " + status;
+					String Scenarios = "Scenario Name :" + "" + Scenario;
+					document.add(new Paragraph(TR, fnt)); 
+					document.add(new Paragraph(SN, fnt));
+					document.add(new Paragraph(S, fnt));
+					document.add(new Paragraph(Scenarios, fnt));
+					document.add(Chunk.NEWLINE);
+					img.setAlignment(Image.ALIGN_CENTER);
+					img.isScaleToFitHeight();
+					img.scalePercent(60,60);
+					document.add(img);
+				}
+				document.close();
+			} catch (Exception e) {
+				System.out.println("Not able to upload the pdf");
+			}
+		}
+
+    
 	public  void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO){
 		try {
-			  String accessToken = getAccessTokenPdf();
+			  String accessToken = getAccessTokenPdf(fetchConfigVO);
 			  List imageUrlList = new ArrayList();
 			  File imageDir = new File(fetchConfigVO.getPdf_path()+"\\"+fetchMetadataListVO.get(0).getCustomer_name() +"\\" +fetchMetadataListVO.get(0).getTest_run_name()+"\\");
 			  System.out.println(imageDir);
@@ -460,10 +761,11 @@ public class SeleniumKeyWords {
 			      HttpHeaders uploadSessionHeader = new HttpHeaders();
 	//			  uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
 				  uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
-				  
+				  System.out.println(fetchConfigVO.getSharepoint_drive_id());
+				  System.out.println(fetchConfigVO.getSharepoint_item_id());
 				  HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
 				  ResponseEntity<Object> response = restTemplate
-						  .exchange("https://graph.microsoft.com/v1.0/drives/b!KcGTxB8fRUOsVkFTx3_XQI27VIClhktAidGIE0ZEKfowr1GL3k-zRrQ5i52Xg3Jv/items/01NZEJ6GV6Y2GOVW7725BZO354PWSELRRZ:/ArloSelenium/"
+						  .exchange("https://graph.microsoft.com/v1.0/drives/"+fetchConfigVO.getSharepoint_drive_id()+"/items/"+fetchConfigVO.getSharepoint_item_id()+":/Screenshot/"
 								  + fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" + imageFileName
 								  + ":/createUploadSession", HttpMethod.POST, uploadSessionRequest, Object.class);
 				  System.out.println(response);
@@ -490,7 +792,7 @@ public class SeleniumKeyWords {
 			  System.out.println(e);
 		  }
 	}
-	public  String getAccessTokenPdf(){
+	public  String getAccessTokenPdf(FetchConfigVO fetchConfigVO){
 		  String acessToken = null;
 		  try {
 			  RestTemplate restTemplate = new RestTemplate();
@@ -498,14 +800,14 @@ public class SeleniumKeyWords {
 			  headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			  MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			  map.add("grant_type", "client_credentials");
-			  map.add("client_id", "e3cac627-b21f-4c30-8de4-7765bc1618da");
-			  map.add("client_secret", "XF.Xr78H26?rKNcvXdL=:[q.sni-oyFG");
+			  map.add("client_id", fetchConfigVO.getClient_id());
+			  map.add("client_secret", fetchConfigVO.getClient_secret());
 			  map.add("scope", "https://graph.microsoft.com/.default");
 
 
 			  HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 			  ResponseEntity<Object> response = restTemplate.exchange(
-					  "https://login.microsoftonline.com/0e295999-ec13-4f09-9407-28050f7372cc/oauth2/v2.0/token",
+					  "https://login.microsoftonline.com/"+fetchConfigVO.getTenant_id()+"/oauth2/v2.0/token",
 					  HttpMethod.POST, entity, Object.class);
 			  System.out.println(response);
 
@@ -614,9 +916,11 @@ public class SeleniumKeyWords {
 	public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 	try { 
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='Navigator']/following::*[text()='"+param1+"']/following::a[text()='"+param2+"']")));
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[text()='Navigator']/following::*[text()='"+param1+"']/following::a[text()='"+param2+"']"), param2));
-		WebElement waittext = driver.findElement(By.xpath("//h1[text()='Navigator']/following::*[text()='"+param1+"']/following::a[text()='"+param2+"']"));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@title='"+param1+"']")));
+		Thread.sleep(4000);
+		WebElement waittext = driver.findElement(By.xpath("//div[@title='"+param1+"']"));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
@@ -627,6 +931,8 @@ public class SeleniumKeyWords {
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[text()='" + param1 + "']"))));
 		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("//a[text()='" + param1 + "']")), param1));
 		WebElement waittext = driver.findElement(By.xpath(("//a[text()='" + param1 + "']")));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
@@ -636,6 +942,8 @@ public class SeleniumKeyWords {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//div[contains(@style,'display: block')]//div[text()='" + param1 + "']"))));
 		WebElement waittext = driver.findElement(By.xpath(("//div[contains(@style,'display: block')]//div[text()='" + param1 + "']")));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
@@ -647,6 +955,8 @@ public class SeleniumKeyWords {
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//div[text()='" + param1 + "']"))));
 		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("//div[text()='" + param1 + "']")), param1));
 		WebElement waittext = driver.findElement(By.xpath(("//div[text()='" + param1 + "']")));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
@@ -657,6 +967,8 @@ public class SeleniumKeyWords {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//div[contains(@id,'" + param1 + "')])[1]")));
 		WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,'" + param1 + "')])[1]"));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
@@ -670,8 +982,8 @@ public class SeleniumKeyWords {
 	public void clickSignInSignOut(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 	try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()='" + param1 + "']"))));
-		WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[normalize-space(text()='" + param1 + "')]"))));
+		WebElement waittext = driver.findElement(By.xpath(("//button[normalize-space(text()='" + param1 + "')]")));
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		return;
 	} catch (Exception e) {
@@ -1064,6 +1376,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                             .presenceOfElementLocated(By.xpath(("//span[text()='o']"))));
                 wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='o']"), "o"));
                 WebElement waittext = driver.findElement(By.xpath(("//span[text()='o']")));
+                Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
                 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
                 clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                 return;
@@ -1088,6 +1402,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                 Thread.sleep(4000);
                 WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::span[text()='m']")));
                 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+                Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
                 clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                 Thread.sleep(3000);
                 return;
@@ -1111,6 +1427,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                 wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']"), "x"));
                 WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']"));
                 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+                Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
                 clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                 Thread.sleep(8000);
                 return;
@@ -1121,6 +1439,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                   wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='"+param1+"']/following::span[text()='Y']"), "Y"));
                   Thread.sleep(4000);
                   WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::span[text()='Y']")));
+                  Actions actions = new Actions(driver); 
+                  actions.moveToElement(waittext).build().perform();
                   screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
                   clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                   Thread.sleep(2000);
@@ -1132,6 +1452,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                 wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//button[@_afrpdo='ok' and @accesskey='K']"), "K"));
                 Thread.sleep(4000);
                 WebElement waittext = driver.findElement(By.xpath("//button[@_afrpdo='ok' and @accesskey='K']"));
+                Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
                 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
                 clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                 Thread.sleep(4000);
@@ -1143,6 +1465,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                 wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='S']"), "S"));
                 Thread.sleep(4000);
                 WebElement waittext = driver.findElement(By.xpath(("//span[text()='S']")));
+                Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
                 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
                 clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                 return;
@@ -1164,6 +1488,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                           .presenceOfElementLocated(By.xpath(("//button[text()='Contin']"))));
               wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//button[text()='Contin']"), "Contin"));
               WebElement waittext = driver.findElement(By.xpath(("//button[text()='Contin']")));
+              Actions actions = new Actions(driver); 
+              actions.moveToElement(waittext).build().perform();
               screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
               clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
               return;
@@ -1177,7 +1503,18 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                   actions.moveToElement(waittext).build().perform();
                   clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                   return;
-            }else if(param1.equalsIgnoreCase("Cancel")) {
+            }else if(param1.equalsIgnoreCase("Adjustment")) {
+    			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+    			Thread.sleep(3000);
+    			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//span[text()='" + param1 + "'])[1]"))));
+    			WebElement waittext = driver.findElement(By.xpath(("(//span[text()='" + param1 + "'])[1]")));
+    			Actions actions = new Actions(driver); 
+    			actions.moveToElement(waittext).build().perform();
+    			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+    			Thread.sleep(5000);
+    			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+    			return;
+    		}else if(param1.equalsIgnoreCase("Cancel")) {
                 WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
                 wait.until(ExpectedConditions
                             .presenceOfElementLocated(By.xpath(("//span[text()='C']"))));
@@ -1209,6 +1546,8 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
                             .presenceOfElementLocated(By.xpath(("//*[text()=\""+param1+"\"]/following::span[text()='K']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::span[text()='K']"), "K"));
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()=\""+param1+"\"]/following::span[text()='K']")));
+				Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
@@ -1219,9 +1558,12 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		}try {
 			if(param2.equalsIgnoreCase("Submit")) {
                 WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                Thread.sleep(3000);
                 wait.until(ExpectedConditions
                             .presenceOfElementLocated(By.xpath(("//*[text()='"+param1+"']/following::span[text()='"+param2+"']"))));
                 WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::span[text()='"+param2+"']")));
+                Actions actions = new Actions(driver); 
+                actions.moveToElement(waittext).build().perform();
                 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
                 clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
                 Thread.sleep(3000);
@@ -1230,8 +1572,24 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		try { 
+			if(param2!= null) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='"+param1+"']/following::*[text()='"+param2+"'])[1]")));
+			WebElement waittext = driver.findElement(By.xpath("(//*[text()='"+param1+"']/following::*[text()='"+param2+"'])[1]"));
+			Actions actions = new Actions(driver); 
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			return;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			Thread.sleep(3000);
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()='" + param1 + "']"))));
 			WebElement waittext = driver.findElement(By.xpath(("//span[text()='" + param1 + "']")));
 			Actions actions = new Actions(driver); 
@@ -1269,38 +1627,12 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		} catch (Exception e) {
 			System.out.println(e);
 		}try { 
-			if(param1.equalsIgnoreCase("Warning")) {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Warning']/following::*[contains(text(),'Do you want to continue?') and not(text()=\"Your changes aren't saved. If you leave this page, then your changes will be lost. Do you want to continue?\")]/following::*[text()='Yes']")));
-			WebElement waittext = driver.findElement(By.xpath("//*[text()='Warning']/following::*[contains(text(),'Do you want to continue?') and not(text()=\"Your changes aren't saved. If you leave this page, then your changes will be lost. Do you want to continue?\")]/following::*[text()='Yes']"));
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(1000);
-			return;
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		try { 
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='"+param1+"']/following::*[text()='"+param2+"' and not(@_afrpdo)])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[text()='"+param1+"']/following::*[text()='"+param2+"' and not(@_afrpdo)])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			return;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		try { 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='"+param1+"']/following::*[text()='"+param2+"'])[1]")));
-			WebElement waittext = driver.findElement(By.xpath("(//*[text()='"+param1+"']/following::*[text()='"+param2+"'])[1]"));
-			Actions actions = new Actions(driver); 
-			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			Thread.sleep(1000);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -1400,20 +1732,35 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 	} catch (Exception e) {
 		System.out.println(e);
 	}try {
+		if(param1.equalsIgnoreCase("Statement Date")){
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[(text()='" + param1 + "')][1]"))));
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[(text()='" + param1 + "')and @onclick]"), param1));
-		WebElement waittext = driver.findElement(By.xpath("//a[(text()='" + param1 + "')][1]"));
-		Thread.sleep(5000);
+		Thread.sleep(4000);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//div[contains(@id,'StmtDate::dropdownPopup::popup-container')]//span)[1]")));
+		WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,'StmtDate::dropdownPopup::popup-container')]//span)[1]"));
 		Actions actions = new Actions(driver); 
 		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		Thread.sleep(2000);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
+		}
 	} catch (Exception e) {
 		System.out.println(e);
 	}try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[(text()='" + param1 + "')][1]"))));
+			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[(text()='" + param1 + "')and @onclick]"), param1));
+			WebElement waittext = driver.findElement(By.xpath("//a[(text()='" + param1 + "')][1]"));
+			Thread.sleep(5000);
+			Actions actions = new Actions(driver); 
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(2000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			return;
+		} catch (Exception e) {
+			System.out.println(e);
+		}try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,'" + param1 + "')])[1]")));
 		WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,'" + param1 + "')])[1]"));
@@ -1709,6 +2056,59 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
     		System.out.println(e);
     	}
 	try { 
+		if(param2.equalsIgnoreCase("Accounting Period")) {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h2[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']/following::input)[2]")));
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h2[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']"), param2));
+		WebElement waittill = driver.findElement(By.xpath("//h2[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']/following::input[2]"));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittill).build().perform();
+		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+		Thread.sleep(500);
+		return keysToSend;
+		}
+	} catch (Exception e) {
+		System.out.println(e);
+	}try {
+		if(param1.equalsIgnoreCase("password")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='"+param1+"']")));
+			WebElement waittill = driver.findElement(By.xpath("//input[@type='"+param1+"']"));
+			JavascriptExecutor jse = (JavascriptExecutor) driver;
+			jse.executeScript("document.getElementById('password').value = '"+keysToSend+"';");
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			return keysToSend;
+			}
+	} catch (Exception e) {
+		System.out.println(e);
+	}try { 
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h2[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']/following::input)[1]")));
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h2[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']"), param2));
+		WebElement waittill = driver.findElement(By.xpath("//h2[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']/following::input[1]"));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittill).build().perform();
+		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+		Thread.sleep(500);
+		return keysToSend;
+	} catch (Exception e) {
+		System.out.println(e);
+	}try {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'"+param1+"')]")));
+		WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'"+param1+"')]"));
+		Actions actions = new Actions(driver); 
+		actions.moveToElement(waittill).build().perform();
+		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Thread.sleep(1000);
+		return keysToSend;
+	} catch (Exception e) {
+		System.out.println(e);	
+	}try { 
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),'"+param1+"')]/following::label[text()='"+param2+"']/following::input)[1]")));
 		Thread.sleep(1000);
@@ -1721,16 +2121,6 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		return keysToSend;
 	} catch (Exception e) {
 		System.out.println(e);
-	}try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'"+param1+"')]")));
-		WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'"+param1+"')]"));
-		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		Thread.sleep(1000);
-		return keysToSend;
-	} catch (Exception e) {
-		System.out.println(e);	
 	}try { 
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//label[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input)[1]")));
@@ -1776,85 +2166,85 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 }
 	public void dropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
 		FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-	try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+param2+"']/following::span[text()='"+keysToSend+"']")));
-		Thread.sleep(4000);
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+param2+"']/following::span[text()='"+keysToSend+"']"), keysToSend));
-		WebElement waittext = driver.findElement(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+param2+"']/following::span[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}
-	try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='"+param1+"']/following::*[text()=\""+param2+"\"]/following::*[text()='"+keysToSend+"']")));
-		WebElement waittext = driver.findElement(By.xpath("//h1[text()='"+param1+"']/following::*[text()=\""+param2+"\"]/following::*[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}
-	try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[text()='"+param1+"']/following::*[text()='"+param2+"']/following::*[text()='"+keysToSend+"']")));
-		WebElement waittext = driver.findElement(By.xpath("//label[text()='"+param1+"']/following::*[text()='"+param2+"']/following::*[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[text()='"+param1+"']/following::label[text()='"+param2+"'][1]/following::div[contains(@style,'position')]//li[text()='"+keysToSend+"']")));
-		WebElement waittext = driver.findElement(By.xpath("//label[text()='"+param1+"']/following::*[text()='"+param2+"']/following::*[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}
-	try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[text()='"+param1+"']/following::label[text()='"+param2+"'][1]/following::div[contains(@style,'position')]//li[text()='"+keysToSend+"']")));
-		WebElement waittext = driver.findElement(By.xpath("//h3[text()='"+param1+"']/following::label[text()='"+param2+"'][1]/following::div[contains(@style,'position')]//li[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()=\""+param2+"\"]/following::*[@type='checkbox']/following::*[text()='"+keysToSend+"']")));
-		WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()=\""+param2+"\"]/following::*[@type='checkbox']/following::*[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		Thread.sleep(500);
-		tab(driver, fetchMetadataVO, fetchConfigVO);
-		Thread.sleep(500);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()=\""+param2+"\"]/following::*[text()='"+keysToSend+"']")));
-		WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()=\""+param2+"\"]/following::*[text()='"+keysToSend+"']"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}
+		/*
+		 * try { WebDriverWait wait = new WebDriverWait(driver,
+		 * fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//div[@class='AFDetectExpansion']/following::*[text()='"+param1+
+		 * "']/following::*[text()='"+param2+"']/following::span[text()='"+keysToSend+
+		 * "'][1]"))); Thread.sleep(4000); WebElement waittext =
+		 * driver.findElement(By.xpath(
+		 * "//div[@class='AFDetectExpansion']/following::*[text()='"+param1+
+		 * "']/following::*[text()='"+param2+"']/following::span[text()='"+keysToSend+
+		 * "'][1]")); Actions actions = new Actions(driver);
+		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
+		 * fetchMetadataVO, waittext, fetchConfigVO); return; } catch (Exception e) {
+		 * System.out.println(e); } try { WebDriverWait wait = new WebDriverWait(driver,
+		 * fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//h1[text()='"+param1+"']/following::*[text()=\""+param2+
+		 * "\"]/following::*[text()='"+keysToSend+"']"))); WebElement waittext =
+		 * driver.findElement(By.xpath("//h1[text()='"+param1+
+		 * "']/following::*[text()=\""+param2+"\"]/following::*[text()='"+keysToSend+
+		 * "']")); Actions actions = new Actions(driver);
+		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
+		 * fetchMetadataVO, waittext, fetchConfigVO); return; } catch (Exception e) {
+		 * System.out.println(e); } try { WebDriverWait wait = new WebDriverWait(driver,
+		 * fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//label[text()='"+param1+"']/following::*[text()='"+param2+
+		 * "']/following::*[text()='"+keysToSend+"']"))); WebElement waittext =
+		 * driver.findElement(By.xpath("//label[text()='"+param1+
+		 * "']/following::*[text()='"+param2+"']/following::*[text()='"+keysToSend+"']")
+		 * ); Actions actions = new Actions(driver);
+		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
+		 * fetchMetadataVO, waittext, fetchConfigVO); return; } catch (Exception e) {
+		 * System.out.println(e); }try { WebDriverWait wait = new WebDriverWait(driver,
+		 * fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//h3[text()='"+param1+"']/following::label[text()='"+param2+
+		 * "'][1]/following::div[contains(@style,'position')]//li[text()='"+keysToSend+
+		 * "']"))); WebElement waittext =
+		 * driver.findElement(By.xpath("//label[text()='"+param1+
+		 * "']/following::*[text()='"+param2+"']/following::*[text()='"+keysToSend+"']")
+		 * ); Actions actions = new Actions(driver);
+		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
+		 * fetchMetadataVO, waittext, fetchConfigVO); return; } catch (Exception e) {
+		 * System.out.println(e); } try { WebDriverWait wait = new WebDriverWait(driver,
+		 * fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//h3[text()='"+param1+"']/following::label[text()='"+param2+
+		 * "'][1]/following::div[contains(@style,'position')]//li[text()='"+keysToSend+
+		 * "']"))); WebElement waittext =
+		 * driver.findElement(By.xpath("//h3[text()='"+param1+
+		 * "']/following::label[text()='"+param2+
+		 * "'][1]/following::div[contains(@style,'position')]//li[text()='"+keysToSend+
+		 * "']")); Actions actions = new Actions(driver);
+		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
+		 * fetchMetadataVO, waittext, fetchConfigVO); return; } catch (Exception e) {
+		 * System.out.println(e); }try { WebDriverWait wait = new WebDriverWait(driver,
+		 * fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//*[text()='"+param1+"']/following::*[text()=\""+param2+
+		 * "\"]/following::*[@type='checkbox']/following::*[text()='"+keysToSend+"']")))
+		 * ; WebElement waittext =
+		 * driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()=\""
+		 * +param2+"\"]/following::*[@type='checkbox']/following::*[text()='"+keysToSend
+		 * +"']")); Actions actions = new Actions(driver);
+		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
+		 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(500); tab(driver,
+		 * fetchMetadataVO, fetchConfigVO); Thread.sleep(500); return; } catch
+		 * (Exception e) { System.out.println(e); }try { WebDriverWait wait = new
+		 * WebDriverWait(driver, fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		 * "//*[text()='"+param1+"']/following::*[text()=\""+param2+
+		 * "\"]/following::*[text()='"+keysToSend+"']"))); WebElement waittext =
+		 * driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()=\""
+		 * +param2+"\"]/following::*[text()='"+keysToSend+"']")); Actions actions = new
+		 * Actions(driver); actions.moveToElement(waittext).build().perform();
+		 * clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO); return;
+		 * } catch (Exception e) { System.out.println(e); }
+		 */
 	try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),'Search')]")));
@@ -1864,7 +2254,6 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		actions.moveToElement(search).build().perform();
 		search.click();
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']/following::input[1]")));
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']"), param2));
 		WebElement searchResult = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']/following::input[1]"));
 		typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 		if(keysToSend!=null) {
@@ -2066,20 +2455,6 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	}
 	try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::a)[1]")));
-		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("(//h1[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]"), param2));
-		WebElement waittext = driver.findElement(By.xpath("(//h1[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::a)[1]"));
-		Actions actions = new Actions(driver); 
-		actions.moveToElement(waittext).build().perform();
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		return;
-	} catch (Exception e) {
-		System.out.println(e);
-	}
-	try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[text()='"+param1+"']/following::*[text()='"+param2+"']/following::a[1]")));
 		WebElement waittext = driver.findElement(By.xpath("//label[text()='"+param1+"']/following::*[text()='"+param2+"']/following::a[1]"));
 		Actions actions = new Actions(driver); 
@@ -2110,10 +2485,69 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
-		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-		throw e;
-	}
+	}try {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),'Search')]")));
+		WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')]"));
+        Actions actions = new Actions(driver); 
+        actions.moveToElement(search).build().perform();
+        search.click();
+        Thread.sleep(2000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']/following::input[1]")));
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']"), param2));
+        WebElement searchResult = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']/following::input[1]"));
+        typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+        if(keysToSend!=null) {
+              enter(driver, fetchMetadataVO, fetchConfigVO);
+              Thread.sleep(5000);
+              WebElement text = driver.findElement(By.xpath("(//span[text()='"+keysToSend+"'])[1]"));
+              text.click();
+        }
+        WebElement button = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']/following::*[text()='K'][1]"));
+        button.click();   
+        return;
+  } catch (Exception e) {
+        System.out.println(e);
+        }
+  try {
+        WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+  wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]")));
+        WebElement searchResult = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
+        typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+        enter(driver, fetchMetadataVO, fetchConfigVO);
+        Thread.sleep(5000);
+        WebElement text = driver.findElement(By.xpath("//span[text()='"+keysToSend+"']"));
+        text.click();
+        Thread.sleep(1000);
+        WebElement button = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]"));
+        button.click();   
+        return;
+  } catch (Exception e) {
+        System.out.println(e);
+  }
+  try {
+        WebElement button = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='"+param2+"']/following::*[text()='OK'][1]"));
+        button.click();   
+        return;
+  } catch (Exception e) {
+        System.out.println(e);
+  }
+  try { 
+        WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+  wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),'"+param1+"')]/following::label[text()='"+keysToSend+"']/following::input)[1]")));
+        Thread.sleep(1000);
+  wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[contains(text(),'"+param1+"')]/following::label[text()='"+keysToSend+"']"), keysToSend));
+        WebElement waittill = driver.findElement(By.xpath("//h1[contains(text(),'"+param1+"')]/following::label[text()='"+keysToSend+"']/following::input[1]"));
+        Actions actions = new Actions(driver); 
+        actions.moveToElement(waittill).build().perform();
+        typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+        Thread.sleep(500);
+  } catch (Exception e) {
+        System.out.println(e);
+        logger.error("Failed during Click action.");
+        screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+        throw e;
+  }
 }
 	private  void clickValidateXpath(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext, FetchConfigVO fetchConfigVO) {
 		try {
@@ -2321,6 +2755,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		try {
 			Actions action = new Actions(driver);
 			action.sendKeys(Keys.TAB).build().perform();
+			Thread.sleep(8000);
 			logger.info("Successfully Clicked the tab.");
 		} catch (Exception e) {
 			logger.error("Failed During clicking the tab");
@@ -2361,7 +2796,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		try {
 			Actions actionObject = new Actions(driver);
 			actionObject.sendKeys(Keys.ENTER).build().perform();
-			Thread.sleep(3000);
+			Thread.sleep(8000);
 		} catch (Exception e) {
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
@@ -2376,7 +2811,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			image_dest = (fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name()
 				+ "\\" + fetchMetadataVO.getTest_run_name()+ "\\" + fetchMetadataVO.getLine_number()+ "_" + fetchMetadataVO.getScenario_name() 
 				+ "_" + fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name()
-				+ "_" + fetchMetadataVO.getScript_id() + "_" + fetchMetadataVO.getLine_number() + "_Passed").concat(".png");
+				+ "_" + fetchMetadataVO.getScript_id() + "_" + fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
 			System.out.println(image_dest);
 			File destination = new File(image_dest);
 			FileUtils.copyFile(source, destination);
@@ -2396,7 +2831,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			String currenttime = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime());
 			image_dest =(fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name()
 			+ "\\" + fetchMetadataVO.getTest_run_name()+ "\\" + fetchMetadataVO.getLine_number()+ "_" + fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name()
-			+ "_" + fetchMetadataVO.getScript_id() + "_" + fetchMetadataVO.getInput_parameter() + "_Failed").concat(".png");
+			+ "_" + fetchMetadataVO.getScript_id() + "_" + fetchMetadataVO.getInput_parameter() + "_Failed").concat(".jpg");
 			File destination = new File(image_dest);
 			FileUtils.copyFile(source, destination);
 			logger.info("Successfully Failed Screenshot is Taken ");
@@ -2414,7 +2849,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			image_dest =(fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataListVO.get(0).getCustomer_name()
 			+ "\\" + fetchMetadataListVO.get(0).getTest_run_name()+ "\\" + fetchMetadataListVO.get(0).getLine_number()+ "_" + fetchMetadataListVO.get(0).getScenario_name() + "_" + fetchMetadataListVO.get(0).getScript_number() + "_" + fetchMetadataListVO.get(0).getTest_run_name()
-			+ "_" + fetchMetadataListVO.get(0).getScript_id() + "_" + "NoSuchElementException" + "_Failed").concat(".png");
+			+ "_" + fetchMetadataListVO.get(0).getScript_id() + "_" + "NoSuchElementException" + "_Failed").concat(".jpg");
 			File destination = new File(image_dest);
 			FileUtils.copyFile(source, destination);
 			logger.info("Successfully Failed Screenshot is Taken ");
@@ -2453,19 +2888,19 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			throw e;
 		}
 	}
-	public  void selectByText(WebDriver driver, String inputParam, String inputData, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public  void selectByText(WebDriver driver, String param1, String param2, String inputData, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
-			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'"+inputParam+"')]/following::select[1]")));
+			WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			System.out.println(param2);
 		}try {
-			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'"+inputParam+"')]/preceding-sibling::select[1]")));
+			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'"+param1+"')]/preceding-sibling::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			System.out.println(param2);
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}

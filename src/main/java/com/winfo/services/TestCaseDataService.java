@@ -27,12 +27,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
-import com.winfo.config.DataBaseConfiguration;
 import com.winfo.scripts.SeleniumKeyWords;
 
 @Service
 public class TestCaseDataService {
-	DataBaseConfiguration Db = new DataBaseConfiguration();
 	Logger logger = LogManager.getLogger(TestCaseDataService.class);
 	public  LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
@@ -72,9 +70,6 @@ public class TestCaseDataService {
 
 	public  List<FetchMetadataVO> getFetchMetaData(String parameter, String uri )  {
 
-//		final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/ta/data/" + parameter;
-//		final String uri =  fetchConfigVO.get(0).getUri_test_scripts()+ parameter;
-//		final String uri = "http://140.238.247.246:8081/watsstdb/wats_standard_edition/ta/data/" + parameter;
 		System.out.println(uri);
 		RestTemplate restTemplate = new RestTemplate();
 		System.out.println(restTemplate);
@@ -89,8 +84,8 @@ public class TestCaseDataService {
 
 	public FetchConfigVO getFetchConfigVO(String parameter) {
 
-		final String uri = "https://wats.winfosolutions.com/wats/wats_cloud/taconfig/data/" + parameter;
-//		final String uri = "http://140.238.247.246:8081/watsstdb/wats_standard_edition/taconfig/data/" + parameter;
+		final String uri = "config_url" + parameter;
+//		final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/taconfig/data/" + parameter;
 		System.out.println(uri);
 		RestTemplate restTemplate = new RestTemplate();
 		System.out.println(restTemplate);
@@ -109,7 +104,6 @@ public class TestCaseDataService {
 	public  void updateTestCaseStatus(FetchScriptVO request, String parameter, FetchConfigVO fetchConfigVO) {
 		try {
 			
-//			final String uri = "http://140.238.247.246:8081/watsstdb/wats_standard_edition/ta/data/" + parameter +"?p_script_id="+request.getP_script_id()+"&p_status="+request.getP_status()+"&p_test_set_id="+request.getP_test_set_id()+"&p_test_set_line_id="+request.getP_test_set_line_id()+"&p_pass_path="+request.getP_pass_path()+"&p_fail_path="+request.getP_fail_path()+"&p_exception_path="+request.getP_exception_path();
 			final String uri = fetchConfigVO.getUri_test_scripts() + parameter +"?p_script_id="+request.getP_script_id()+"&p_status="+request.getP_status()+"&p_test_set_id="+request.getP_test_set_id()+"&p_test_set_line_id="+request.getP_test_set_line_id()+"&p_pass_path="+request.getP_pass_path()+"&p_fail_path="+request.getP_fail_path()+"&p_exception_path="+request.getP_exception_path()+"&p_test_set_line_path="+request.getP_test_set_line_path();
 			System.out.println(uri);
 			RestTemplate restTemplate = new RestTemplate();

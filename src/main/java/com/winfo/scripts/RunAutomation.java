@@ -42,6 +42,8 @@ public class RunAutomation extends SeleniumKeyWords
 			FetchConfigVO fetchConfigVO = DataService.getFetchConfigVO(args);
 			final String uri =  fetchConfigVO.getUri_test_scripts()+ args;
 			List<FetchMetadataVO> fetchMetadataListVO = DataService.getFetchMetaData(args, uri);
+//			createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
+//			createLowPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = DataService.prepareTestcasedata(fetchMetadataListVO);
 			System.out.println(metaDataMap.toString());
@@ -87,7 +89,7 @@ public class RunAutomation extends SeleniumKeyWords
 					createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 					createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
 					createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
-	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
+					uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} 
 			catch (InterruptedException e) 
 			{
@@ -110,10 +112,10 @@ public class RunAutomation extends SeleniumKeyWords
 		String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
-		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Passed_Report.pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Passed_Report.pdf";
-		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Failed_Report.pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Failed_Report.pdf";
-		String detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Detailed_Report.pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Detailed_Report.pdf";
-		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +fetchMetadataListVO.get(0).getScript_number() + ".pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Passed_Report.pdf";
+		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Failed_Report.pdf";
+		String detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Detailed_Report.pdf";
+		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +fetchMetadataListVO.get(0).getScript_number() + ".pdf";
 		System.out.println(passurl);
 		System.out.println(failurl);
 		System.out.println(detailurl);
@@ -126,7 +128,7 @@ public class RunAutomation extends SeleniumKeyWords
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, DataService);
 			
 		} catch (Exception e) {
-			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
+	//		screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
@@ -174,10 +176,10 @@ public class RunAutomation extends SeleniumKeyWords
 		String script_Number = null;
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
-			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Passed_Report.pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Passed_Report.pdf";
-			failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Failed_Report.pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Failed_Report.pdf";
-			detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Detailed_Report.pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Detailed_Report.pdf";
-			scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +fetchMetadataListVO.get(0).getScript_number() + ".pdf"+"AAAparent="+fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Passed_Report.pdf";
+			failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Failed_Report.pdf";
+			detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name()+"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +"Detailed_Report.pdf";
+			scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() +"/" + fetchMetadataListVO.get(0).getTest_run_name()+"/" +fetchMetadataListVO.get(0).getScript_number() + ".pdf";
 			String userName = null;
 			ConnectToSQL dataSource = null;
 		for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
@@ -208,7 +210,7 @@ public class RunAutomation extends SeleniumKeyWords
 					case "Login into Application": 
 						userName = fetchMetadataVO.getInput_value();
 						if(dataSource == null) dataSource = new ConnectToSQL();
-						loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3,param1, param2, param3, fetchMetadataVO.getInput_value(),dataSource.getPassword(param, userName)); 
+						loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3,param1, param2, param3, fetchMetadataVO.getInput_value(),dataSource.getPassword(param, userName, fetchConfigVO)); 
 						userName = null; 
 						break;
 						
@@ -302,8 +304,7 @@ public class RunAutomation extends SeleniumKeyWords
 								fetchMetadataVO.getXpath_location1(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "selectByText":
-						selectByText(driver, fetchMetadataVO.getInput_parameter(),
-								fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+						selectByText(driver, param1, param2,fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copy":
 						copy(driver, fetchMetadataVO, fetchConfigVO);
@@ -323,6 +324,9 @@ public class RunAutomation extends SeleniumKeyWords
 					case "enter":
 						enter(driver, fetchMetadataVO, fetchConfigVO);
 						break;
+					case "tab":
+						tab(driver, fetchMetadataVO, fetchConfigVO);
+						break;
 					case "paste":
 						paste(driver, fetchMetadataVO, fetchConfigVO);
 						break;
@@ -334,7 +338,7 @@ public class RunAutomation extends SeleniumKeyWords
 						break;
 					default:
 						System.out.println("TestCaseName is not matched" + "" + actionName);
-						screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
+	//					screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 						break;
 					}
 					i++;
@@ -358,7 +362,7 @@ public class RunAutomation extends SeleniumKeyWords
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println("Error occurred in TestCaseName=" + actionName + "" + "Exception="
 							+ "" + e.getMessage());
-					screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
+//					screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
@@ -375,7 +379,7 @@ public class RunAutomation extends SeleniumKeyWords
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
+//			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 			throw e;
 		}
 	}
