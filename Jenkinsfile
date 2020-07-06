@@ -87,6 +87,8 @@
   // Selenium validation 
      stage('Validation') {
      sh """
+       echo " Updating validations script"
+       sed -i -e  "s|UBVMNAME|watsselt01|g"  /var/lib/jenkins/workspace/testGit/Validations.sh
        echo "Validating of wats.war on ubuntu server"
        . /var/lib/jenkins/workspace/testGit/Validations.sh  > /tmp/Validations.log
        """
