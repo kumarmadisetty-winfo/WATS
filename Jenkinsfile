@@ -88,6 +88,7 @@
      stage('Validation') {
      sh """
        echo " Updating validations script"
+       cp -p /var/lib/jenkins/workspace/testGit/Validations.sh_org /var/lib/jenkins/workspace/testGit/Validations.sh
        sed -i -e  "s|UBVMNAME|watsselt01|g"  /var/lib/jenkins/workspace/testGit/Validations.sh
        echo "Validating of wats.war on ubuntu server"
        . /var/lib/jenkins/workspace/testGit/Validations.sh  > /tmp/Validations.log
