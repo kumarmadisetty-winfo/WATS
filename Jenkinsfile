@@ -84,8 +84,21 @@
 	colorized: true) 
    }
 	
-	  // Selenium validation 
-
+  // Selenium validation 
+     stage('Validation') {
+     sh """
+       echo "Validating of wats.war on ubuntu server"
+       status="$(curl -Is http://watsselt01.winfosolutions.com:8083/wats/executeTestScript|head -1|cut -d' ' -f2)"
+         if echo ${status} = 200
+            then
+       echo "war deployment validation on watsselt01 is success"|mail -r wats.cloud@winfosolutions.com -s "war deployment validation on watsselt01 is success " shaik.meeravali@winfosolutions.com < /dev/null
+            exit 0
+          else
+       echo "war deployment validation on watsselt01 is Failed"|mail -r wats.cloud@winfosolutions.com -s "war deployment validation on watsselt01 is Failed " shaik.meeravali@winfosolutions.com < /dev/null
+             exit 1
+         fi
+       """
+      }
                 
 	// stage ('Generate Latesttag') {
 	// 	echo "Generate Next Tag"
@@ -129,4 +142,4 @@
     //     echo "Functional testing..."
 	 //     echo "Functional testing..."
     // }
-      // } 
+      } 
