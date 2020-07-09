@@ -46,7 +46,7 @@
         echo "SonarQube Analysis..."
 		
 		 withSonarQubeEnv('sonarqube'){ 
-            sh '/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=ingestion -Dsonar.projectKey=ingestion -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.scm.disabled=true -Dsonar.host.url=http://192.168.1.207:9000 -Dsonar.login=9c38ce38703e38024d6d4d741c6145d3ee22fd70'
+            sh '/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=wats_selenium -Dsonar.projectKey=ingestion -Dsonar.sources=src/main/java -Dsonar.java.binaries=target/classes -Dsonar.scm.disabled=true -Dsonar.host.url=http://192.168.1.207:9000 -Dsonar.login=9c38ce38703e38024d6d4d741c6145d3ee22fd70'
        }
      }
 	 
