@@ -5,10 +5,10 @@
 		<listener
 			class-name="org.uncommons.reportng.JUnitXMLReporter" />
 	</listeners>
-	<!-- test name="Test" preserve-order="true">
+	<test name="Test" preserve-order="true">
 		<classes>
 			<class name="com.winfo.testcase.Testcases" />
 		</classes>
 		<methods />
-	</test -->
+	</test>
 </suite>

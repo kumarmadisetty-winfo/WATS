@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.testng.annotations.Test;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.config.DriverConfiguration;
@@ -89,7 +88,7 @@ public class RunAutomation extends SeleniumKeyWords
 					createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 					createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
 					createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
-					uploadPDF(fetchMetadataListVO, fetchConfigVO);
+//					uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} 
 			catch (InterruptedException e) 
 			{
@@ -132,6 +131,7 @@ public class RunAutomation extends SeleniumKeyWords
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
+			System.out.println(e);
 //			uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			if(isDriverError) 
 			{
@@ -215,127 +215,135 @@ public class RunAutomation extends SeleniumKeyWords
 						break;
 						
 					case "Navigate": 
-						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
-						break;
-						
+                        navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
+                        break;
+                        
 					case "openTask": 
-						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
-						break;
-						
+                        openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
+                        break;
+                        
 					case "Logout": 
-						logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
-						break;
+                        logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
+                        break;
 					case "SendKeys":
-						sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "textarea":
-						textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "Dropdown Values" :
-						dropdownValues(driver, param1, param2,param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        dropdownValues(driver, param1, param2,param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "Table SendKeys" :
-						tableSendKeys(driver, param1, param2,param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        tableSendKeys(driver, param1, param2,param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "Table Dropdown Values" :
-						tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickLinkAction" :
-						clickLinkAction(driver, param1,param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickLinkAction(driver, param1,param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickCheckbox" :
-						clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickRadiobutton" :
-						clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "selectAValue" :
-						selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickTableLink":
-						clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickLink":
-						clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
+					case "clickNotificationLink":
+                        clickNotificationLink(driver, param1, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickMenu":
-						clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickImage":
-						clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickTableImage":
-						clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickExpandorcollapse":
-						clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickButton":
-						clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "tableRowSelect":
-						tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickButton Dropdown":
-						clickButtonDropdown(driver, param1,param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickButtonDropdown(driver, param1,param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "mousehover":
-						mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						break;
+                        mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "scrollUsingElement":
-						scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
-								fetchConfigVO);
-						break;
+                        scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
+                                                      fetchConfigVO);
+                        break;
+					case "moveToElement":
+                        moveToElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
+                                                      fetchConfigVO);
+                        break;
 					case "switchToDefaultFrame":
-						switchToDefaultFrame(driver);
-						break;
+                        switchToDefaultFrame(driver);
+                        break;
 					case "switchToFrame":
-						switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "windowhandle":
-						windowhandle(driver, fetchMetadataVO, fetchConfigVO);
-						break;
+                        windowhandle(driver, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "dragAnddrop":
-						dragAnddrop(driver, fetchMetadataVO.getXpath_location(),
-								fetchMetadataVO.getXpath_location1(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        dragAnddrop(driver, fetchMetadataVO.getXpath_location(),
+                                                      fetchMetadataVO.getXpath_location1(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clickFilter":
-						clickFilter(driver, fetchMetadataVO.getXpath_location(),
-								fetchMetadataVO.getXpath_location1(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clickFilter(driver, fetchMetadataVO.getXpath_location(),
+                                                      fetchMetadataVO.getXpath_location1(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "selectByText":
-						selectByText(driver, param1, param2,fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        selectByText(driver, param1, param2,fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "copy":
-						copy(driver, fetchMetadataVO, fetchConfigVO);
-						break;
+                        copy(driver, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "copynumber":
-						copynumber(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
-						break; 
+						copynumber(driver,  param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break; 
 					case "copyy":
-						copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "copytext":
-						copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "clear":
-						clear(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
-						break;
+                        clear(driver,  param1, param2, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "enter":
-						enter(driver, fetchMetadataVO, fetchConfigVO);
-						break;
+                        enter(driver, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "tab":
-						tab(driver, fetchMetadataVO, fetchConfigVO);
-						break;
+                        tab(driver, fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "paste":
-						paste(driver, fetchMetadataVO, fetchConfigVO);
-						break;
+                        paste(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+                        break;
 					case "uploadFileAutoIT":
-						uploadFileAutoIT(fetchMetadataVO.getField_type(), fetchMetadataVO);
-						break;
+                        uploadFileAutoIT(fetchMetadataVO.getField_type(), fetchMetadataVO);
+                        break;
 					case "windowclose":
-						windowclose(driver, fetchMetadataVO, fetchConfigVO);
-						break;
+                        windowclose(driver, fetchMetadataVO, fetchConfigVO);
+                        break;
+
 					default:
 						System.out.println("TestCaseName is not matched" + "" + actionName);
 	//					screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
@@ -362,7 +370,7 @@ public class RunAutomation extends SeleniumKeyWords
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println("Error occurred in TestCaseName=" + actionName + "" + "Exception="
 							+ "" + e.getMessage());
-//					screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
+					screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
@@ -372,7 +380,7 @@ public class RunAutomation extends SeleniumKeyWords
 					post.setP_fail_path(failurl);
 					post.setP_exception_path(detailurl);
 					post.setP_test_set_line_path(scripturl);
-					createPdf(fetchMetadataListVO, fetchConfigVO, script_Number+".pdf");
+					createFailedPdf(fetchMetadataListVO, fetchConfigVO, script_Number+".pdf");
 					DataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					throw e;
 				}
