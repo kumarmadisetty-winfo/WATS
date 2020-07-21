@@ -1702,6 +1702,24 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 }
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+            Thread.sleep(2000);
+      if(param2.equalsIgnoreCase("OK")) {
+            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+            Thread.sleep(8000);
+            wait.until(ExpectedConditions
+                        .presenceOfElementLocated(By.xpath(("//div[contains(@id,'RejectPopup::content')]//span[text()='K']"))));
+         //   wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='ne']"), "ne"));
+           WebElement waittext = driver.findElement(By.xpath(("//div[contains(@id,'RejectPopup::content')]//span[text()='K']")));
+            screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+            Actions actions = new Actions(driver); 
+            actions.moveToElement(waittext).build().perform();
+            clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+            return;
+      }
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		try {
             if(param1.equalsIgnoreCase("Done")) {
                   WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
                   Thread.sleep(5000);
@@ -2023,31 +2041,69 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 			System.out.println(e);
 		}try {
             if(param1.equalsIgnoreCase("Freeze")) {
-                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-                Thread.sleep(3000);
-                wait.until(ExpectedConditions
-                            .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_FREEZE')]//td[text()='" +param1+ "']"))));
-                WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_FREEZE')]//td[text()='" +param1+ "']")));
-                Actions actions = new Actions(driver);
-                actions.moveToElement(waittext).build().perform();
-                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-                clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-                Thread.sleep(3000);
-                return;
-          }
-            else if(param1.equalsIgnoreCase("Unfreeze")) {
-                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-                Thread.sleep(3000);
-                wait.until(ExpectedConditions
-                            .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_UNFREEZE')]//td[text()='" +param1+ "']"))));
-                WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_UNFREEZE')]//td[text()='" +param1+ "']")));
-                Actions actions = new Actions(driver);
-                actions.moveToElement(waittext).build().perform();
-                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-                clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-                Thread.sleep(3000);
-                return;
+          WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+          Thread.sleep(3000);
+          wait.until(ExpectedConditions
+                      .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_FREEZE')]//td[text()='" +param1+ "']"))));
+          WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_FREEZE')]//td[text()='" +param1+ "']")));
+          Actions actions = new Actions(driver); 
+          actions.moveToElement(waittext).build().perform();
+          screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+          clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+          Thread.sleep(3000);
+          return;
+	    } else if(param1.equalsIgnoreCase("Unfreeze")) {
+                  WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+          Thread.sleep(3000);
+          wait.until(ExpectedConditions
+                      .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_UNFREEZE')]//td[text()='" +param1+ "']"))));
+          WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_UNFREEZE')]//td[text()='" +param1+ "']")));
+          Actions actions = new Actions(driver); 
+          actions.moveToElement(waittext).build().perform();
+          screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+          clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+          Thread.sleep(3000);
+          return;
             }
+            else if(param1.equalsIgnoreCase("Close")) {
+                  WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+          Thread.sleep(3000);
+          wait.until(ExpectedConditions
+                      .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_CLOSE')]//td[text()='" +param1+ "']"))));
+          WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_CLOSE')]//td[text()='" +param1+ "']")));
+          Actions actions = new Actions(driver); 
+          actions.moveToElement(waittext).build().perform();
+          screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+          clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+          Thread.sleep(3000);
+          return;
+            }
+            else if(param1.equalsIgnoreCase("Reopen")) {
+                  WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+          Thread.sleep(3000);
+          wait.until(ExpectedConditions
+                      .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_REOPEN')]//td[text()='" +param1+ "']"))));
+          WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_REOPEN')]//td[text()='" +param1+ "']")));
+          Actions actions = new Actions(driver); 
+          actions.moveToElement(waittext).build().perform();
+          screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+          clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+          Thread.sleep(3000);
+          return;
+            }else if(param1.equalsIgnoreCase("Edit")) {
+                  WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+          Thread.sleep(3000);
+          wait.until(ExpectedConditions
+                      .presenceOfElementLocated(By.xpath(("//tr[contains(@id,'HEADER_EDIT')]//td[text()='" +param1+ "']"))));
+          WebElement waittext = driver.findElement(By.xpath(("//tr[contains(@id,'HEADER_EDIT')]//td[text()='" +param1+ "']")));
+          Actions actions = new Actions(driver); 
+          actions.moveToElement(waittext).build().perform();
+          screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+          clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+          Thread.sleep(3000);
+          return;
+            }
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -3036,8 +3092,17 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-		}
-		try {
+		}try {
+            WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\""+param1+"\"]/following::label[normalize-space(text())='"+param2+"']/preceding-sibling::textarea)[1]"));
+            Actions actions = new Actions(driver); 
+            actions.moveToElement(waittill).build().perform();
+            JavascriptExecutor jse = (JavascriptExecutor) driver;
+			jse.executeScript("arguments[0].value='"+keysToSend+"';",waittill);
+            screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+            return;
+      } catch (Exception e) {
+            System.out.println(e);
+      }	try {
 			WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())=\""+param1+"\"]/following::table[@summary='"+param2+"']//*[text()='"+param3+"']/following::input[contains(@id,'NewBdgtPctLst')][1]"));
 			Actions actions = new Actions(driver); 
 			actions.moveToElement(waittill).build().perform();
