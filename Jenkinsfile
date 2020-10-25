@@ -76,6 +76,29 @@
 			sh '/opt/apache-maven-3.6.3/bin/mvn dependency:resolve -U -B -DskipTests clean package'
 		 //}
     }
+	  
+	  stage('Upload War To Nexus'){
+           
+                    def mavenPom = readMavenPom file: 'pom.xml'
+                    def nexusRepoName = mavenPom.version.endsWith("SNAPSHOT") ? "wats_snapshot" : "wats_release"
+                    nexusArtifactUploader artifacts: [
+                        [
+                            artifactId: 'WinfoAutomation', 
+                            classifier: '', 
+                            file: "target/${mavenPom.name}.war", 
+                            type: 'war'
+                        ]
+                    ], 
+                    credentialsId: 'nexus3', 
+                    groupId: 'com.automationtesting', 
+                    nexusUrl: 'winfosys103.winfosolutions.com:8091', 
+                    nexusVersion: 'nexus3', 
+                    protocol: 'http', 
+                    repository: nexusRepoName, 
+                    version: "${mavenPom.version}"
+            
+        }
+	  
 	 //Ansible command
 	 ansiColor('xterm') {
     ansiblePlaybook( 
