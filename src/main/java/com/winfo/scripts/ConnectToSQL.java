@@ -16,13 +16,8 @@ public class ConnectToSQL {
 		String password = null;
 		
 
-		Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),fetchConfigVO.getDb_password());
-//		Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),"Winfo_123");
-
 //		Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),fetchConfigVO.getDb_password());
-//		Connection conn = DriverManager.getConnection(DB_Connection);
-//		Added by Venkat for handling connection string
-	//	Connection conn = DriverManager.getConnection("DB_Connection","wats_prod","DB_Password");
+		Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),"Winfo_123");
 
 		Statement st = conn.createStatement();
 //		String sqlStr = "SELECT TOOLKIT.DECRYPT(PASSWORD) PASSWORD FROM WIN_TA_CONFIG WHERE CONFIGURATION_ID = (SELECT CONFIGURATION_ID FROM WIN_TA_TEST_SET WHERE TEST_SET_ID = "+args+")";
