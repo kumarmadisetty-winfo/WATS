@@ -29,8 +29,18 @@ public class FetchMetadataVO implements Serializable {
 	private String test_run_name;
 	private String field_type;
 	private String scenario_name;
+	private String seq_num;
 	
 	
+	
+	public String getSeq_num() {
+		return seq_num;
+	}
+
+	public void setSeq_num(String seq_num) {
+		this.seq_num = seq_num;
+	}
+
 	public String getScenario_name() {
 		return scenario_name;
 	}
