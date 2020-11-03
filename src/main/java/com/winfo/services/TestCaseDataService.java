@@ -84,9 +84,9 @@ public class TestCaseDataService {
 
 	public FetchConfigVO getFetchConfigVO(String parameter) {
 		
-//		final String uri = "https://watsapxp001.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
+		final String uri = "https://watsudgp01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 //		final String uri = "config_url" + parameter;
-		final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/taconfig/data/" + parameter;
+//		final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/taconfig/data/" + parameter;
 		System.out.println(uri);
 		RestTemplate restTemplate = new RestTemplate();
 		System.out.println(restTemplate);

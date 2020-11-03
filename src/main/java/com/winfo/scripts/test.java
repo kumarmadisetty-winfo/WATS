@@ -4,27 +4,34 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.winfo.services.FetchConfigVO;
+import com.winfo.services.FetchMetadataListVO;
+import com.winfo.services.FetchMetadataVO;
 
  
 
-public class test {
+public class test/* extends SeleniumKeyWords */{
 
  
 
-    public static void main(String[] args) throws Exception {
-        String urlStr = "http://10.110.1.35:8080/executeTestScript";
-//        String urlStr = "http://localhost:8080/executeTestScript";
-        
-        try {
-            runWithParams(urlStr, "1");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
- 
-
-    public static void runWithParams(String urlStr, String testScriptId) throws Exception {
+	public static void main(String[] args) throws Exception {
+//		
+//		   String urlStr = "http://watsudgp03.winfosolutions.com:8080/executeTestScript"; 
+		String urlStr = "http://localhost:8080/executeTestScript";
+		  
+		   try { 
+			   runWithParams(urlStr, "463"); 
+		   } catch (IOException e) {
+			   e.printStackTrace();
+		   }
+		 
+		
+	}
+    
+	public static void runWithParams(String urlStr, String testScriptId) throws Exception {
         String param = "{\"testScriptNo\": \"" + testScriptId + "\"}";
         System.out.println("Param : " + param);
 

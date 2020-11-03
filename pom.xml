@@ -26,41 +26,16 @@
 	</properties>
 
 
-		<!--plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
+	<!--plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
+		<version>3.2</version> <configuration> <source>1.8</source> <target>1.8</target> 
+		</configuration> </plugin> <plugin> <artifactId>maven-assembly-plugin</artifactId> 
+		<configuration> <archive> <manifest> <mainClass>com.pwc.scfa.pensareautomatio3.Main</mainClass> 
+		</manifest> </archive> <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
+		</descriptorRefs> </configuration> <executions> <execution> <id>make-assembly</id> 
+		<phase>package</phase> <goals> <goal>single</goal> </goals> </execution> 
+		</executions> </plugin -->
 
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>com.pwc.scfa.pensareautomatio3.Main</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> 
-						<phase>package</phase> 
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin-->
 
-			
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -72,6 +47,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.sikulix/sikulixapi -->
+		<dependency>
+			<groupId>com.sikulix</groupId>
+			<artifactId>sikulixapi</artifactId>
+			<version>2.0.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
@@ -90,8 +72,6 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13</version>
 		</dependency>
-		
-		
 
 		<!-- <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-rest-webmvc</artifactId> 
 			<version>3.2.5.RELEASE</version> </dependency> -->
@@ -190,6 +170,12 @@
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
+			<version>5.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.4.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.lept4j/lept4j -->
 		<dependency>
@@ -224,6 +210,17 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>3.4.0</version>
+		<exclusions>
+			<exclusion>
+				<groupId>net.java.dev.jna</groupId>
+				<artifactId>jna</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>net.java.dev.jna</groupId>
+				<artifactId>jna-platform</artifactId>
+			</exclusion>
+			
+		</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.appium</groupId>
@@ -284,11 +281,8 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
-		<!-- <dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			<version>1.2.17</version> </dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
@@ -335,16 +329,20 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-		</dependency> 
-		
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId>
-</dependency>
+		</dependency>
 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+<!--  <dependency>   
+   <groupId>org.bytedeco</groupId>   
+   <artifactId>javacv</artifactId>   
+   <version>1.0</version>   
+  </dependency>  -->
 
 	</dependencies>
-	
+
 	<profiles>
 		<profile>
 			<id>rest</id>
@@ -388,18 +386,18 @@
 						</executions>
 					</plugin>
 					<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<!-- <configuration>
-					<suiteXmlFiles>
-						<suiteXmlFile>testng.xml</suiteXmlFile>
-					</suiteXmlFiles>
-				</configuration> -->
-			</plugin>			
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.18.1</version>
+						<configuration>
+							<!-- <suiteXmlFiles>
+								<suiteXmlFile>testng.xml</suiteXmlFile>
+							</suiteXmlFiles> -->
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
-			
+
 		</profile>
-		</profiles>
+	</profiles>
 </project>

@@ -28,6 +28,11 @@ public class RunAutomation extends SeleniumKeyWords {
 	TestCaseDataService dataService;
 	public String c_url = null;
 
+	/**
+	 * @throws IOException
+	 * @throws DocumentException
+	 * @throws com.itextpdf.text.DocumentException
+	 */
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
 		FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
@@ -35,12 +40,20 @@ public class RunAutomation extends SeleniumKeyWords {
 		fetchMetadataListVO.add(fetchMetadataVO);
 		FetchConfigVO fetchConfigVO = new FetchConfigVO();
 		
-		//createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount, failcount);
-
-		//createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount, failcount);
-		createPdf(fetchMetadataListVO, fetchConfigVO, "14_OTC.AR.224.pdf", passcount, failcount);
-
-		//createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", passcount, failcount);
+//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
+//
+//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
+//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "5_OTC.AR.224.pdf");
+//
+//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf",passcount,failcount);
+//	
+		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",20,7);
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf",17,5);
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "3_PPM.PF.103.pdf",passcount,failcount);
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf",passcount,failcount);
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "55_OTC.AR.218.pdf",passcount,failcount);
+		
 
 	}
 

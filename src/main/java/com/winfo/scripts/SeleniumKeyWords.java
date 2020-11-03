@@ -1,12 +1,77 @@
 package com.winfo.scripts;
 
+
+//import static org.bytedeco.javacpp.opencv_imgcodecs.*;  
+import java.io.File;  
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;  
+import java.util.Scanner;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.DecimalFormat;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.block.LineBorder;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+
+//import org.bytedeco.javacpp.avcodec;
+//import org.bytedeco.javacv.FFmpegFrameRecorder;  
+//import org.bytedeco.javacv.OpenCVFrameConverter;
+//import org.bytedeco.javacv.OpenCVFrameConverter.ToIplImage;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.block.LineBorder;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
+
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,6 +81,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +107,9 @@ import javax.imageio.stream.FileImageOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+//import org.bytedeco.javacv.FFmpegFrameRecorder;
+//import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -66,14 +135,24 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.Font.FontFamily;
+
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.text.DocumentException;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.DateUtils;
@@ -407,18 +486,18 @@ public class SeleniumKeyWords {
 
 	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+//		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 
-//		File folder = new File("C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Screenshot\\UDG\\AR - UK-Vynamic Ltd(1773)\\");
+		File folder = new File("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\");
 
 		File[] listOfFiles = folder.listFiles();
 
 		// List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
 		        List<File> fileList = new ArrayList<>();
-		        String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-//		        String seqNumber = "14";
+//		        String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+		        String seqNumber = "5";
 
 		        for (File file : allFileList) {
 		            if(file.getName().startsWith(seqNumber+"_")) {
@@ -430,7 +509,7 @@ public class SeleniumKeyWords {
 
 		public int compare(File f1, File f2) {
 
-		return Integer.valueOf(f1.getName().split("_", 0)[1]).compareTo(Integer.valueOf(f2.getName().split("_", 0)[1]));
+			return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
 
 		}
 
@@ -438,52 +517,52 @@ public class SeleniumKeyWords {
 
 		List<String> fileNameList = new ArrayList<String>();
 
-		// if (fileList.get(0).getName().endsWith("Failed.jpg")) {
-		//
-		// fileNameList.add(fileList.get(0).getName());
-		//
-		// for (int i = 1; i < fileList.size(); i++) {
-		//
-		// if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-		//
-		// fileNameList.add(fileList.get(i).getName());
-		//
-		// } else {
-		//
-		// break;
-		//
-		// }
-		//
-		// }
-		//
-		// Collections.reverse(fileNameList);
-		//
-		// }
-		if (!fileList.get(0).getName().endsWith("Failed.jpg")) {
-
-		fileNameList.add(fileList.get(0).getName());
-
-		for (int i = 1; i < fileList.size(); i++) {
-
-		if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-
-		fileNameList.add(fileList.get(i).getName());
-
-		} else {
-		fileNameList.add(fileList.get(i).getName());
-
+		 if (fileList.get(0).getName().endsWith("Failed.jpg")) {
+		
+		 fileNameList.add(fileList.get(0).getName());
+		
+		 for (int i = 1; i < fileList.size(); i++) {
+		
+		 if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+		
+		 fileNameList.add(fileList.get(i).getName());
+		
+		 } else {
 		break;
-
-		}
-
-		}
-
-
-		}
-		else {
-		fileNameList.add(fileList.get(0).getName());
-
-		}
+	
+		
+		 }
+		
+		 }
+		
+		 Collections.reverse(fileNameList);
+		
+		 }
+//		if (!fileList.get(0).getName().endsWith("Failed.jpg")) {
+//
+//		fileNameList.add(fileList.get(0).getName());
+//
+//		for (int i = 1; i < fileList.size(); i++) {
+//
+//		if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+//
+//		fileNameList.add(fileList.get(i).getName());
+//
+//		} else {
+//		fileNameList.add(fileList.get(i).getName());
+//
+//		break;
+//
+//		}
+//
+//		}
+//
+//
+//		}
+//		else {
+//		fileNameList.add(fileList.get(0).getName());
+//
+//		}
 		System.out.println(fileNameList);
 		//Collections.reverse(fileNameList);
 
@@ -503,18 +582,17 @@ public class SeleniumKeyWords {
 		}
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//		File folder = new File("C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Screenshot\\UDG\\AR - UK-Vynamic Ltd(1773)\\");
-
+//		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\");
 
 		File[] listOfFiles = folder.listFiles();
 
 		// List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
 		        List<File> fileList = new ArrayList<>();
-		        String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-//		      String seqNumber = "14";
+//		        String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+		      String seqNumber = "3";
 
 		        for (File file : allFileList) {
 		            if(file.getName().startsWith(seqNumber+"_")) {
@@ -526,8 +604,7 @@ public class SeleniumKeyWords {
 
 		public int compare(File f1, File f2) {
 
-		return Integer.valueOf(f1.getName().split("_", 0)[1]).compareTo(Integer.valueOf(f2.getName().split("_", 0)[1]));
-
+			return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
 		}
 
 		});
@@ -554,6 +631,7 @@ public class SeleniumKeyWords {
 //		Collections.reverse(fileNameList);
 
 		}
+		Collections.reverse(fileNameList);
 
 		// targetFileList.addAll(seqList);
 
@@ -570,10 +648,11 @@ public class SeleniumKeyWords {
 		}
 
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-
-		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//		File folder = new File("C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Screenshot\\UDG\\AR - UK-Vynamic Ltd(1773)\\");
+         
+//		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\");
+		 String VedioGen="on";
 		File[] listOfFiles = folder.listFiles();
 
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
@@ -593,7 +672,7 @@ public class SeleniumKeyWords {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-
+		ArrayList<String> links = new ArrayList<String>();
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 		List<File> seqList = seqEntry.getValue();
@@ -608,21 +687,20 @@ public class SeleniumKeyWords {
 		Collections.sort(seqList, new Comparator<File>() {
 
 		public int compare(File f1, File f2) {
-		return Integer.valueOf(f1.getName().split("_", 0)[1]).compareTo(Integer.valueOf(f2.getName().split("_", 0)[1]));
-
+			return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
 		}
 
 		});
 		List<String> seqFileNameList = new ArrayList<String>();
-
+		ArrayList<String> links1 = new ArrayList<String>();
 		if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-
+			links1.add(seqList.get(0).getPath());
 		seqFileNameList.add(seqList.get(0).getName());
 
 		for (int i = 1; i < seqList.size(); i++) {
 
 		if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-
+			links1.add(seqList.get(i).getAbsolutePath());
 		seqFileNameList.add(seqList.get(i).getName());
 
 		} else {
@@ -631,8 +709,9 @@ public class SeleniumKeyWords {
 		}
 
 		}
-
-
+		Collections.reverse(links1);
+		 Collections.reverse(seqFileNameList);
+		 links.addAll(links1);
 		targetFileList.addAll(seqFileNameList);
 
 		}
@@ -648,18 +727,22 @@ public class SeleniumKeyWords {
 		*
 		* }
 		*/
-
+          String vidPath="C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\Passed_vedio.mp4";
+          if(VedioGen.equalsIgnoreCase("ON")) {
+//		convertJPGtoMovie(targetFileList,vidPath);
+          }
 		System.out.println(targetFileList.size());
 		return targetFileList;
 
 		}
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//		File folder = new File("C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Screenshot\\UDG\\AR - UK-Vynamic Ltd(1773)\\");
+//		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\");
 		File[] listOfFiles = folder.listFiles();
-
+  
+	    String VedioGen="";	
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 
 		for (File file : Arrays.asList(listOfFiles)) {
@@ -677,7 +760,7 @@ public class SeleniumKeyWords {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-
+		ArrayList<String> links = new ArrayList<String>();
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 		List<File> seqList = seqEntry.getValue();
@@ -686,59 +769,60 @@ public class SeleniumKeyWords {
 
 		public int compare(File f1, File f2) {
 
-		return Integer.valueOf(f1.getName().split("_", 0)[1]).compareTo(Integer.valueOf(f2.getName().split("_", 0)[1]));
+			return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
 
 		}
 
 		});
 
 		List<String> seqFileNameList = new ArrayList<String>();
-
-		                    for (int i = 0; i < seqList.size(); i++) {
-
-		                            if (seqList.get(i).getName().endsWith("Failed.jpg")) {
-
-		                                   seqFileNameList.add(seqList.get(i).getName());
-
-		                             } else {
-
-		                             
-
-		                                       }
-		 
-		                            }
-
-//		                            Collections.reverse(seqFileNameList);
-
-		                            targetFileList.addAll(seqFileNameList);
+		ArrayList<String> links1 = new ArrayList<String>();
+//
+//		                    for (int i = 0; i < seqList.size(); i++) {
+//
+//		                            if (seqList.get(i).getName().endsWith("Failed.jpg")) {
+//
+//		                                   seqFileNameList.add(seqList.get(i).getName());
+//
+//		                             } else {
+//
+//		                             
+//
+//		                                       }
+//		 
+//		                            }
+//
+////		                            Collections.reverse(seqFileNameList);
+//
+//		                            targetFileList.addAll(seqFileNameList);
 
 		                     
 
-		// if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-		//
-////		                                   System.out.println("SEQ : "+seqEntry.getKey());
-		//
-		// seqFileNameList.add(seqList.get(0).getName());
-		//
-		// for (int i = 1; i < seqList.size(); i++) {
-		//
-		// if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-		//
-		// seqFileNameList.add(seqList.get(i).getName());
-		//
-		// } else {
-		//
-		// break;
-		//
-		// }
-		//
-		// }
-		//
-		// Collections.reverse(seqFileNameList);
-		//
-		// targetFileList.addAll(seqFileNameList);
-		//
-		// }
+		 if (seqList.get(0).getName().endsWith("Failed.jpg")) {
+		
+         links1.add(seqList.get(0).getAbsolutePath());
+		 seqFileNameList.add(seqList.get(0).getName());
+		
+		 for (int i = 1; i < seqList.size(); i++) {
+		
+		 if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+	         links1.add(seqList.get(i).getAbsolutePath());
+		 seqFileNameList.add(seqList.get(i).getName());
+		
+		 } else {
+		
+		 
+		
+		 }
+		
+		 }
+		 Collections.reverse(links1);
+		 Collections.reverse(seqFileNameList);
+		 
+		 links.addAll(links1);
+		 targetFileList.addAll(seqFileNameList);
+		
+		 }
 
 //		                    targetFileList.addAll(seqList);
 
@@ -751,22 +835,25 @@ public class SeleniumKeyWords {
 		*
 		* }
 		*/
-
+		 String vidPath="C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\field_vedio.mp4";
+			
+		 if(VedioGen.equalsIgnoreCase("ON")) {
+//				convertJPGtoMovie(links,vidPath);
+		          }
 		return targetFileList;
 
 		}
 
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//		File folder = new File("C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Screenshot\\UDG\\AR - UK-Vynamic Ltd(1773)\\");
+//		 File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//		 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\");
 
-
+		String VedioGen="";
 		File[] listOfFiles = folder.listFiles();
 
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
-
 		for (File file : Arrays.asList(listOfFiles)) {
 
 		Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
@@ -786,6 +873,7 @@ public class SeleniumKeyWords {
 		List<String> targetSuccessFileList = new ArrayList<>();
 
 		List<String> targetFailedFileList = new ArrayList<>();
+		ArrayList<String> links = new ArrayList<String>();
 
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
@@ -795,16 +883,16 @@ public class SeleniumKeyWords {
 
 		public int compare(File f1, File f2) {
 
-		return Integer.valueOf(f1.getName().split("_", 0)[1]).compareTo(Integer.valueOf(f2.getName().split("_", 0)[1]));
+			return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified())*-1;
 
 		}
 
 		});
 
 		List<String> seqFileNameList = new ArrayList<String>();
-
+		ArrayList<String> links1 = new ArrayList<String>();
 		if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-
+			links1.add(seqList.get(0).getAbsolutePath());
 		seqFileNameList.add(seqList.get(0).getName());
 
 //		                                  System.out.println("FIRST S STEP: "+seqList.get(0).getName());
@@ -812,50 +900,49 @@ public class SeleniumKeyWords {
 		for (int i = 1; i < seqList.size(); i++) {
 
 		if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-
+			links1.add(seqList.get(i).getAbsolutePath());
 		seqFileNameList.add(seqList.get(i).getName());
 
 //		                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
 
-		} else {
-		seqFileNameList.add(seqList.get(i).getName());
-
-
+		}else {
+			
 		}
 
 		}
-
-//		Collections.reverse(seqFileNameList);
-
+		Collections.reverse(links1);
+		Collections.reverse(seqFileNameList);
+        links.addAll(links1);
 		targetSuccessFileList.addAll(seqFileNameList);
 
 		} else {
 
 
-//		              System.out.println("FIRST F STEP: "+seqList.get(0).getName());
+		             if (seqList.get(0).getName().endsWith("Failed.jpg")) {
+			links1.add(seqList.get(0).getAbsolutePath());
+		seqFileNameList.add(seqList.get(0).getName());
 
-		                     for (int i = 0; i < seqList.size(); i++) {
+//		                                  System.out.println("FIRST S STEP: "+seqList.get(0).getName());
 
-		                         if (seqList.get(i).getName().endsWith("Failed.jpg")) {
+		for (int i = 1; i < seqList.size(); i++) {
 
-		                          seqFileNameList.add(seqList.get(i).getName());
+		if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+			links1.add(seqList.get(i).getAbsolutePath());
+		seqFileNameList.add(seqList.get(i).getName());
 
-//		                           System.out.println("F STEP: "+seqList.get(i).getName());
-		 
-		                           } else {
+//		                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
 
-		                          seqFileNameList.add(seqList.get(i).getName());
-		   
-
-		                            }
+		}else {
+			
+		}
 
 		                       }
-
-//		                  Collections.reverse(seqFileNameList);
-
+		                  Collections.reverse(links1);
+		          		Collections.reverse(seqFileNameList);
+		                  links.addAll(links1);
 		                  targetFailedFileList.addAll(seqFileNameList);
 
-
+		             }
 
 //		                                   System.out.println("SEQ : "+seqEntry.getKey());
 
@@ -901,11 +988,43 @@ public class SeleniumKeyWords {
 		*
 		* }
 		*/
-
+		 String vidPath="C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\detailed_vedio.mp4";
+		 if(VedioGen.equalsIgnoreCase("ON")) {
+//				convertJPGtoMovie(links,vidPath);
+		          }
 		return targetFileList;
 
 		}
 
+
+
+
+
+
+//	private void convertJPGtoMovie(List<String> links, String vidPath) {
+//		
+//		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
+//		 FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath,1366,613);
+//		 try {
+//			 recorder.setFrameRate(0.33);
+//            recorder.setVideoCodec(avcodec.AV_CODEC_ID_MPEG4);
+//            recorder.setVideoBitrate(9000);
+//            recorder.setFormat("mp4");
+//            recorder.setVideoQuality(0); // maximum quality
+//            recorder.start();
+//            
+//            for (String image : links) {
+//				
+//		        recorder.record(grabberConverter.convert(cvLoadImage(image)));
+//		     }
+//		     recorder.stop();
+//		    }
+//		    catch (org.bytedeco.javacv.FrameRecorder.Exception e){
+//		       e.printStackTrace();
+//		    }
+//	 }
+//		
+	
 
 	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
@@ -1074,10 +1193,10 @@ public class SeleniumKeyWords {
 			int passcount, int failcount) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			 String Folder = (fetchConfigVO.getPdf_path() +
-			 fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-			 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//			String Folder = "C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Report\\UDG\\AR - UK-Vynamic Ltd(1773)\\";
+//			 String Folder = (fetchConfigVO.getPdf_path() +
+//			 fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//			 + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			String Folder = "C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -1108,17 +1227,138 @@ public class SeleniumKeyWords {
 			} else {
 				System.out.println("Folder exist");
 			}
+			
+//			start piechart and table code
 			Document document = new Document();
+			String start = "Execution Summary";
+			String pichart = "Pie-Chart";
+			 Font bfBold12 = FontFactory.getFont("Arial", 25); 
+			 Font fnt = FontFactory.getFont("Arial", 12);
+			 DefaultPieDataset dataSet = new DefaultPieDataset();
 			PdfWriter writer = null;
 			writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
+			Rectangle one = new Rectangle(1900,1000);
+//			Image one = Image.getInstance(
+//					"C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\"
+//							+ fileNameList.get(1));
+	        document.setPageSize(one);
 			document.open();
+			
+			
+			if(passcount==0) {
+				
+				dataSet.setValue("Fail", failcount);
+			}else if(failcount==0) {
+				dataSet.setValue("Pass", passcount);
+			}
+			else {
+				dataSet.setValue("Pass", passcount);
+				dataSet.setValue("Fail", failcount);
+			}
+			double pass=Math.round((passcount * 100.0) /(passcount + failcount));
+			double fail=Math.round((failcount * 100.0) /(passcount + failcount));
+		
+	        document.add(new Paragraph(start, bfBold12));
+	        document.add(Chunk.NEWLINE);
+	   	 DecimalFormat df1 = new DecimalFormat("0");
+	   	 DecimalFormat df2 = new DecimalFormat("0");
+	   	 Font bf12 = new Font(FontFamily.TIMES_ROMAN, 23);
+	   	PdfPTable table = new PdfPTable(3); 
+		 table.setWidths(new int[]{1, 1, 1});
+		 table.setWidthPercentage(100f);
+		 insertCell(table, "Status", Element.ALIGN_CENTER, 1, bfBold12);
+	     insertCell(table, "Total", Element.ALIGN_CENTER, 1, bfBold12);
+	     insertCell(table, "Percentage", Element.ALIGN_CENTER, 1, bfBold12);
+//	     table.setHeaderRows(1);
+	     PdfPCell[] cells1 = table.getRow(0).getCells(); 
+		  for (int k=0;k<cells1.length;k++){
+		     cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
+		  }
+	     insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
+	     insertCell(table, df1.format(passcount),  Element.ALIGN_CENTER, 1, bf12);
+	     insertCell(table,df2.format(pass)+"%",  Element.ALIGN_CENTER, 1, bf12);
+	     
+	     insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
+	     insertCell(table, df1.format(failcount),  Element.ALIGN_CENTER, 1, bf12);
+	     insertCell(table, df2.format(fail)+"%",  Element.ALIGN_CENTER, 1, bf12);
+	     document.setMargins(20, 20, 20, 20);
+	     document.add(table);
+	     Font bfBold = FontFactory.getFont("Arial", 25,BaseColor.WHITE);
+	     Chunk ch = new Chunk(pichart, bfBold);
+	     ch.setTextRise(-18);
+	     ch.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
+	     
+	     Paragraph p1 = new Paragraph(ch);
+	     p1.setSpacingBefore(50);
+	     document.add(p1);    
+	        
+	     JFreeChart chart = ChartFactory.createPieChart(
+				 " ", dataSet, true, true, false);
+			Color c1=new Color(102, 255, 102);
+			Color c=new Color(253, 32, 32);
+			
+			LegendTitle legend = chart.getLegend();
+			 PiePlot piePlot = (PiePlot) chart.getPlot();
+			 piePlot.setSectionPaint("Pass",c1);
+			 piePlot.setSectionPaint("Fail", c);
+			 piePlot.setBackgroundPaint(Color.WHITE);
+			 piePlot.setOutlinePaint(null);
+			 piePlot.setLabelBackgroundPaint(null);
+			 piePlot.setLabelOutlinePaint(null);
+			 piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
+			 piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
+			 piePlot.setLabelShadowPaint(null);
+			 piePlot.setShadowXOffset(0.0D);
+			 piePlot.setShadowYOffset(0.0D); 
+			 piePlot.setLabelGenerator(null);
+			 piePlot.setBackgroundAlpha(0.4f);
+			 piePlot.setExplodePercent("Pass", 0.05);
+			 piePlot.setSimpleLabels(true);
+		   piePlot.setSectionOutlinesVisible(false);
+		   java.awt.Font f2=new java.awt.Font("", java.awt.Font.PLAIN, 22);
+		   piePlot.setLabelFont(f2);
+		   
+		   if(passcount==0||failcount==0) {
+			    PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
+			    		  "{2}", new DecimalFormat("0"), new DecimalFormat("0%")) ;
+			  piePlot.setLegendLabelGenerator(gen);
+			  legend.setPosition(RectangleEdge.BOTTOM);
+			   legend.setVerticalAlignment(VerticalAlignment.CENTER);
+		   }else {
+			   PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
+			    		  "{2}", new DecimalFormat("0"), new DecimalFormat("0%")) ;
+			  piePlot.setLabelGenerator(gen);
+			  legend.setPosition(RectangleEdge.RIGHT);
+			   legend.setVerticalAlignment(VerticalAlignment.CENTER);
+		   }
+		   piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
+		   legend.setFrame(BlockBorder.NONE);
+		   legend.setFrame(new LineBorder(Color.white, new BasicStroke(20f),
+				    new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
+		   
+		   java.awt.Font pass1=new java.awt.Font("", Font.NORMAL, 22);
+				  legend.setItemFont(pass1);
+				  PdfContentByte contentByte = writer.getDirectContent();
+					PdfTemplate template = contentByte.createTemplate(1000, 900);
+					Graphics2D graphics2d = template.createGraphics(900, 500,
+							new DefaultFontMapper());
+					Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 750,
+							450);
+					chart.draw(graphics2d, rectangle2d);
+					graphics2d.dispose();
+					contentByte.addTemplate(template, 500, 100);
+			
+			
+			
+			int i=0;
 			for (String image : fileNameList) {
-				 Image img = Image.getInstance(
-				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
-				 "\\" + image);
-//				Image img = Image.getInstance(
-//						"C:\\Kaushik\\Selenium\\WinfoAutomation_MultiThread\\Screenshot\\UDG\\AR - UK-Vynamic Ltd(1773)\\"
-//								+ image);
+//				 Image img = Image.getInstance(
+//				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
+//				 "\\" + image);
+				i++;
+				Image img = Image.getInstance(
+						"C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\PPM Dry Run 1\\"
+								+ image);
 
 				String ScriptNumber = image.split("_")[3];
 				String TestRun = image.split("_")[4];
@@ -1127,20 +1367,28 @@ public class SeleniumKeyWords {
 				String Scenario = image.split("_")[2];
 				document.setPageSize(img);
 				document.newPage();
-				Font fnt = FontFactory.getFont("Arial", 12);
+				
 				String TR = "Test Run Name:" + " " + TestRun;
 				String SN = "Script Number:" + " " + ScriptNumber;
 				String S = "Status:" + " " + status;
 				String Scenarios = "Scenario Name :" + "" + Scenario;
+				Image img1 = Image.getInstance("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\wats_icon.png");
+				img1.scalePercent(65, 65);
+		         img1.setAlignment(Image.ALIGN_RIGHT);
+		        document.add(img1);
 				document.add(new Paragraph(TR, fnt));
 				document.add(new Paragraph(SN, fnt));
 				document.add(new Paragraph(S, fnt));
 				document.add(new Paragraph(Scenarios, fnt));
 				document.add(Chunk.NEWLINE);
+				
+				Paragraph p=new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
+				p.setAlignment(Element.ALIGN_RIGHT);
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
-				img.scalePercent(65, 65);
+				img.scalePercent(60, 60);
 				document.add(img);
+				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
 			}
 			document.close();
@@ -1149,7 +1397,72 @@ public class SeleniumKeyWords {
 			System.out.println("Not able to Create pdf");
 		}
 	}
-
+	 private static void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
+  	   
+   	  //create a new cell with the specified Text and Font
+   	  PdfPCell cell = new PdfPCell(new Paragraph(text.trim(), font));
+   	  cell.setBorder(PdfPCell.NO_BORDER);
+   	  //set the cell alignment
+   	  
+   	  cell.setUseVariableBorders(true);
+  	  if(text.equalsIgnoreCase("Status")) {
+  		cell.setBorderWidthLeft(0.3f);
+  		cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+  		cell.setBorderWidthTop(0.3f); 
+  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+  	    cell.setBorderWidthRight(0.3f);
+  	 cell.setBorderColorRight(new BaseColor(230, 225, 225));
+  	    cell.setBorderWidthBottom(0.3f);
+  	 cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+   	  }
+  	  else if(text.equalsIgnoreCase("Total")) {
+  		 cell.setBorderWidthTop(0.3f); 
+  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+  		 cell.setBorderWidthRight(0.3f);
+  		cell.setBorderColorRight(new BaseColor(230, 225, 225));
+  	  cell.setBorderWidthBottom(0.3f);
+  	cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+  	  }else if(text.equalsIgnoreCase("Percentage")) {
+  		 cell.setBorderWidthTop(0.3f); 
+  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+  		 cell.setBorderWidthRight(0.3f);
+  		cell.setBorderColorRight(new BaseColor(230, 225, 225));
+  	  cell.setBorderWidthBottom(0.3f);
+  	cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+  	  }
+  	else if(text.equalsIgnoreCase("Passed")||text.equalsIgnoreCase("Failed")) {
+  		cell.setBorderWidthLeft(0.3f);
+  		cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+		 cell.setBorderWidthRight(0.3f);
+		cell.setBorderColorRight(new BaseColor(230, 225, 225));
+	  cell.setBorderWidthBottom(0.3f);
+	 cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+	  }
+  	else if(text.contains("%")) {
+  	 cell.setBorderWidthRight(0.3f);
+  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
+  	    cell.setBorderWidthBottom(0.3f);
+  	cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+  	}
+  	else {
+  	 cell.setBorderWidthRight(0.3f);
+  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
+  		cell.setBorderWidthBottom(0.3f);
+  		cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+  	}
+  	  
+  	      cell.setHorizontalAlignment(align);
+   	  cell.setColspan(colspan);
+   	  //in case there is no text and you wan to create an empty row
+   	  if(text.trim().equalsIgnoreCase("")){
+   	   cell.setMinimumHeight(20f);
+   	  }
+   	  cell.setFixedHeight(40f);
+   	  //add the call to the table
+   	  table.addCell(cell);
+   	   
+    
+}
 	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
@@ -1444,8 +1757,10 @@ public class SeleniumKeyWords {
 			String pdffileName) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+//			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			String Folder = "C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\";
+
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -1479,9 +1794,14 @@ public class SeleniumKeyWords {
 			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
 			document.open();
+			int i=0;
 			for (String image : fileNameList) {
+//				Image img = Image.getInstance(
+//						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
 				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+						"C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\UDG - PPM\\"
+								+ image);
+                i++;
 				String ScriptNumber = image.split("_")[3];
 				String TestRun = image.split("_")[4];
 				String Status = image.split("_")[6];
@@ -1498,6 +1818,10 @@ public class SeleniumKeyWords {
 				String Message = "Failed at Line Number:" + "" + Reason;
 				// String message = "Failed at
 				// :"+fetchMetadataListVO.get(0).getInput_parameter();
+				Image img1 = Image.getInstance("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\wats_icon.png");
+				img1.scalePercent(65, 65);
+		         img1.setAlignment(Image.ALIGN_RIGHT);
+		        document.add(img1);
 				document.add(new Paragraph(TR, fnt));
 				document.add(new Paragraph(SN, fnt));
 				document.add(new Paragraph(S, fnt));
@@ -1506,10 +1830,13 @@ public class SeleniumKeyWords {
 					document.add(new Paragraph(Message, fnt));
 				}
 				document.add(Chunk.NEWLINE);
+				Paragraph p=new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
+				p.setAlignment(Element.ALIGN_RIGHT);
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
 				img.scalePercent(45, 45);
 				document.add(img);
+				document.add(p);
 			}
 			document.close();
 			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
@@ -7109,9 +7436,13 @@ public class SeleniumKeyWords {
 			System.out.println(image_dest);
 			File destination = new File(image_dest);
 //			FileUtils.copyFile(source, destination);
-			Files.copy(FileSystems.getDefault().getPath(source.getPath()),
-					FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES,
+//			Files.copy(FileSystems.getDefault().getPath(source.getPath()),
+//					FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES,
+//					StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(source.toPath(),
+					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
 					StandardCopyOption.REPLACE_EXISTING);
+			
 			logger.info("Successfully Screenshot is taken");
 			return image_dest;
 		} catch (Exception e) {

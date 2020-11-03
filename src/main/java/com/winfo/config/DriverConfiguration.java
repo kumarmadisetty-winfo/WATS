@@ -20,10 +20,13 @@ import com.winfo.services.FetchConfigVO;
 
 public class DriverConfiguration {
 
+	@SuppressWarnings("deprecation")
 	public static WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
 		WebDriver driver = null;
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+			System.out.println("The Driver Path is:"+ ""+ fetchConfigVO.getChrome_driver_path());
 			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
+			System.setProperty("java.awt.headless", "false");
 			Map<String, Object> prefs = new HashMap<String, Object>();
 			prefs.put("profile.default_content_settings.popups", 0);
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
@@ -31,6 +34,7 @@ public class DriverConfiguration {
 			options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 			options.addArguments("start-maximized");
 			options.addArguments("test-type=browser");
+	//		options.addArguments("headless");
 			options.addArguments("disable-infobars");
 			options.setExperimentalOption("prefs", prefs);
 			DesiredCapabilities cap = DesiredCapabilities.chrome();

@@ -32,7 +32,6 @@ public class FetchMetadataVO implements Serializable {
 	private String seq_num;
 	
 	
-	
 	public String getSeq_num() {
 		return seq_num;
 	}
