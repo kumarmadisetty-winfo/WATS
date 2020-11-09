@@ -23,8 +23,23 @@ public enum PropertyConstants {
 	ACCOUNT("account"),
 	IS_SKIP("IS_SKIP")
 	;
+//	change public to private
+	private String value;
 	
-	public String value;
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
+
 	PropertyConstants(String value){
 		this.value = value;
 	}

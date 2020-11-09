@@ -5,11 +5,22 @@ public enum BrowserConstants{
 	FIREFOX("firefox"),
 	IE("ie")
 	;
-	public String value;
-	
+//	change public to private
+	private String value;
+
 	BrowserConstants(String value) {
 		this.value = value;
 	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+
 }
 
 

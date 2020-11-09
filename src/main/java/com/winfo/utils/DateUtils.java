@@ -9,7 +9,8 @@ import com.winfo.constants.DateConstants;
 public class DateUtils {
 
 	public static String getSysdate() {
-		DateFormat dateFormat = new SimpleDateFormat(DateConstants.DATE_FORMAT_TWO_MM_DD_YYYY_HH_MM_SS.value);
+//		change .value to getvalue()
+		DateFormat dateFormat = new SimpleDateFormat(DateConstants.DATE_FORMAT_TWO_MM_DD_YYYY_HH_MM_SS.getValue());
 		Date date = new Date();
    	 	String sysdate= dateFormat.format(date);
 		return sysdate;

@@ -23,9 +23,11 @@ public class DriverConfiguration {
 	@SuppressWarnings("deprecation")
 	public static WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
 		WebDriver driver = null;
-		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+//		change .value to getvalue()
+		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.out.println("The Driver Path is:"+ ""+ fetchConfigVO.getChrome_driver_path());
-			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
+//			change .value to getvalue()
+			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
 			System.setProperty("java.awt.headless", "false");
 			Map<String, Object> prefs = new HashMap<String, Object>();
 			prefs.put("profile.default_content_settings.popups", 0);
@@ -42,13 +44,15 @@ public class DriverConfiguration {
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			driver = new ChromeDriver(cap);
 
-		} else if (BrowserConstants.FIREFOX.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.FIREFOX_DRIVER.value, fetchConfigVO.getFirefox_driver_path());
+		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+//			change .value to getvalue()
+			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(), fetchConfigVO.getFirefox_driver_path());
 			DesiredCapabilities capabilities = DesiredCapabilities.firefox();
 			capabilities.setCapability("marionette", true);
 			driver = new FirefoxDriver(capabilities);
-		} else if (BrowserConstants.IE.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.IE_DRIVER.value, fetchConfigVO.getIe_driver_path());
+		} else if (BrowserConstants.IE.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+//			change .value to getvalue()
+			System.setProperty(DriverConstants.IE_DRIVER.getValue(), fetchConfigVO.getIe_driver_path());
 			driver = new InternetExplorerDriver();
 		}
 		if (driver != null) {

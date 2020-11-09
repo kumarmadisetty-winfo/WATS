@@ -26,7 +26,8 @@ public class RunAutomation extends SeleniumKeyWords {
 
 	@Autowired
 	TestCaseDataService dataService;
-	public String c_url = null;
+//	change public to private
+	private String c_url = null;
 
 	/**
 	 * @throws IOException
@@ -79,6 +80,8 @@ public class RunAutomation extends SeleniumKeyWords {
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+                        //add logger
+						logger.log(null, "context", e);
 					}
 				});
 			}
@@ -101,6 +104,8 @@ public class RunAutomation extends SeleniumKeyWords {
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
+								 //add logger
+								logger.log(null, "context", e);
 							}
 						});
 					}
@@ -112,11 +117,15 @@ public class RunAutomation extends SeleniumKeyWords {
 				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				 //add logger
+				logger.log(null, "context", e);
 				  // Restore interrupted state...
 			    Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			System.out.println("Error in Block 1");
 			FetchScriptVO post = new FetchScriptVO();
 			post.setP_status("Fail");
@@ -125,7 +134,7 @@ public class RunAutomation extends SeleniumKeyWords {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
+			Entry<String, List<FetchMetadataVO>> metaData) throws Exception,NullPointerException {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 		ConnectToSQL sql = null;

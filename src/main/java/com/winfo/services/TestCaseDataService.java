@@ -32,7 +32,7 @@ import com.winfo.scripts.SeleniumKeyWords;
 @Service
 public class TestCaseDataService {
 	Logger logger = LogManager.getLogger(TestCaseDataService.class);
-	public  LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
+	private  LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
 	public  LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list) {
 		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();

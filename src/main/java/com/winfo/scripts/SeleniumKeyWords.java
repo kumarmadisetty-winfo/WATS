@@ -161,15 +161,15 @@ import com.winfo.utils.StringUtils;
 @Service
 public class SeleniumKeyWords {
 
-	public static Logger logger = LogManager.getLogger(SeleniumKeyWords.class);
+	public static final Logger logger = LogManager.getLogger(SeleniumKeyWords.class);
 	/*
 	 * private Integer ElementWait = Integer
 	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
 	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
 	 */
-	public String Main_Window = "";
-	public WebElement fromElement;
-	public WebElement toElement;
+	private String Main_Window = "";
+	private WebElement fromElement;
+	private WebElement toElement;
 
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
@@ -456,6 +456,8 @@ public class SeleniumKeyWords {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		} catch (InterruptedException e) {
 			e.printStackTrace(); // Restore interrupted state...
+			 //add logger
+			logger.log(null, "context", e);
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -467,6 +469,8 @@ public class SeleniumKeyWords {
 			Thread.sleep(seconds);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			// Restore interrupted state...
 			Thread.currentThread().interrupt();
 		}
@@ -479,6 +483,8 @@ public class SeleniumKeyWords {
 			Thread.sleep(seconds);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			// Restore interrupted state...
 			Thread.currentThread().interrupt();
 		}
@@ -1845,7 +1851,7 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws NullPointerException{
 		try {
 			String accessToken = getAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
@@ -1858,14 +1864,24 @@ public class SeleniumKeyWords {
 				imageUrlList.add(imageFileName);
 				File pdfFile = new File(imageDir + "\\" + imageFileName);
 				System.out.println(pdfFile);
-				FileInputStream input = new FileInputStream(pdfFile);
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				
+//			add try-catch-finall
+				FileInputStream input = null;
+				ByteArrayOutputStream bos = null;
+				try {
+				 input= new FileInputStream(pdfFile);
+				 bos= new ByteArrayOutputStream();
 				byte[] buffer = new byte[99999999];
 				int l;
 				while ((l = input.read(buffer)) > 0) {
 					bos.write(buffer, 0, l);
 				}
-				input.close();
+				}catch (Exception e) {
+					System.out.println(e);
+				}finally {
+					input.close();
+				}
+				
 				byte[] data = bos.toByteArray();
 				RestTemplate restTemplate = new RestTemplate();
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
@@ -1947,6 +1963,8 @@ public class SeleniumKeyWords {
 		} catch (Exception e) {
 			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO);
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}// input[@placeholder='Enter search terms']
@@ -7137,6 +7155,8 @@ public class SeleniumKeyWords {
 			// waittext.click();
 		} catch (Exception e) {
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 		}
 	}
 
@@ -7195,6 +7215,8 @@ public class SeleniumKeyWords {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 		}
 	}
 
@@ -7345,6 +7367,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(inputParam);
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -7372,6 +7396,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed to do TAB Action");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -7522,6 +7548,8 @@ public class SeleniumKeyWords {
 			logger.error("Failed While Selecting Checkbox.");
 			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null);
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			System.out.println(xpath);
 			throw e;
 		}
@@ -7651,6 +7679,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -7938,6 +7968,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not maximize");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 
 		}
@@ -7952,7 +7984,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not switch to window");
 			e.printStackTrace();
-
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -7975,6 +8008,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -8012,6 +8047,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -8040,6 +8077,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -8060,6 +8099,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -8089,6 +8130,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 		}
 	}
@@ -8143,6 +8186,8 @@ public class SeleniumKeyWords {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			System.out.println(filelocation);
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 
 		}
@@ -8157,6 +8202,8 @@ public class SeleniumKeyWords {
 			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not refresh the page");
 			e.printStackTrace();
+			 //add logger
+			logger.log(null, "context", e);
 			throw e;
 
 		}
