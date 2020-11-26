@@ -27,12 +27,13 @@ public class FetchConfigVO {
 	private String pdf_path;
 	private String db_host;
 	private String db_username;
-	private String db_password; 
 	private String sharepoint_drive_id;
 	private String sharepoint_item_id;
 	private String client_id;
 	private String client_secret;
 	private String tenant_id;
+	
+	
 	
 	
 	
@@ -47,12 +48,6 @@ public class FetchConfigVO {
 	}
 	public void setDb_username(String db_username) {
 		this.db_username = db_username;
-	}
-	public String getDb_password() {
-		return db_password;
-	}
-	public void setDb_password(String db_password) {
-		this.db_password = db_password;
 	}
 	public String getSharepoint_drive_id() {
 		return sharepoint_drive_id;

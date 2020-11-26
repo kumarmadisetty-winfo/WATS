@@ -1,6 +1,7 @@
 package com.winfo.scripts;
 
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +28,26 @@ public class RunAutomation extends SeleniumKeyWords {
 
 	@Autowired
 	TestCaseDataService dataService;
-//	change public to private
-	private String c_url = null;
+	public String c_url = null;
 
-	/**
-	 * @throws IOException
-	 * @throws DocumentException
-	 * @throws com.itextpdf.text.DocumentException
+	/*
+	 * public void report() throws IOException, DocumentException,
+	 * com.itextpdf.text.DocumentException {
+	 * 
+	 * FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
+	 * List<FetchMetadataVO> fetchMetadataListVO = new ArrayList<FetchMetadataVO>();
+	 * fetchMetadataListVO.add(fetchMetadataVO); FetchConfigVO fetchConfigVO = new
+	 * FetchConfigVO();
+	 * 
+	 * createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount,
+	 * failcount);
+	 * 
+	 * createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount,
+	 * failcount); createPdf(fetchMetadataListVO, fetchConfigVO,
+	 * "Detailed_Report.pdf", passcount, failcount);
+	 * 
+	 * 
+	 * }
 	 */
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -44,20 +59,16 @@ public class RunAutomation extends SeleniumKeyWords {
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 //
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
-//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "5_OTC.AR.224.pdf");
+//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "14_OTC.AR.224.pdf");
 //
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
-//		createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf",passcount,failcount);
-//	
-		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",20,7);
-//		createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf",17,5);
-//		createPdf(fetchMetadataListVO, fetchConfigVO, "3_PPM.PF.103.pdf",passcount,failcount);
+		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",passcount,failcount);
+		createPdf(fetchMetadataListVO, fetchConfigVO, "3_10_Create Contract-Using Wizard_PPM.PF.103_UDG - PPM _10_Passed",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO, "55_OTC.AR.218.pdf",passcount,failcount);
 		
 
 	}
-
 	public void run(String args) throws MalformedURLException {
 		System.out.println(args);
 		try {
@@ -80,8 +91,6 @@ public class RunAutomation extends SeleniumKeyWords {
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-                        //add logger
-						logger.log(null, "context", e);
 					}
 				});
 			}
@@ -104,8 +113,6 @@ public class RunAutomation extends SeleniumKeyWords {
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-								 //add logger
-								logger.log(null, "context", e);
 							}
 						});
 					}
@@ -114,18 +121,12 @@ public class RunAutomation extends SeleniumKeyWords {
 				createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount, failcount);
 				createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount, failcount);
 				createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", passcount, failcount);
-				uploadPDF(fetchMetadataListVO, fetchConfigVO);
+//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				 //add logger
-				logger.log(null, "context", e);
-				  // Restore interrupted state...
-			    Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			 //add logger
-			logger.log(null, "context", e);
 			System.out.println("Error in Block 1");
 			FetchScriptVO post = new FetchScriptVO();
 			post.setP_status("Fail");
@@ -134,7 +135,7 @@ public class RunAutomation extends SeleniumKeyWords {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData) throws Exception,NullPointerException {
+			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
@@ -190,6 +191,10 @@ public class RunAutomation extends SeleniumKeyWords {
 
 	public void switchActions(String param, WebDriver driver, List<FetchMetadataVO> fetchMetadataListVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		String log4jConfPath="log4j.properties";
+		PropertyConfigurator.configure(log4jConfPath);
+		
 		int i = 0;
 		String passurl = null;
 		String failurl = null;
@@ -247,7 +252,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						userName = fetchMetadataVO.getInput_value();
 						if (dataSource == null)
 							dataSource = new ConnectToSQL();
-						logger.info("Navigating to Login into Application Action");
+						log.info("Navigating to Login into Application Action");
 						loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
 								param3, fetchMetadataVO.getInput_value(),
 								dataSource.getPassword(param, userName, fetchConfigVO));
@@ -255,12 +260,12 @@ public class RunAutomation extends SeleniumKeyWords {
 						break;
 
 					case "Navigate":
-						logger.info("Navigating to Navigate Action");
+						log.info("Navigating to Navigate Action");
 						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
 						break;
 
 					case "openTask":
-						logger.info("Navigating to openTask Action");
+						log.info("Navigating to openTask Action");
 						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
 						break;
 
@@ -281,6 +286,10 @@ public class RunAutomation extends SeleniumKeyWords {
 						break;
 					case "Table SendKeys":
 						tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+								fetchConfigVO);
+						break;
+					case "multiplelinestableSendKeys":
+						multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "Table Dropdown Values":
@@ -405,6 +414,8 @@ public class RunAutomation extends SeleniumKeyWords {
 					case "switchToParentWindow":
 						switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
 						break;
+					case "DatePicker":
+						datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",
@@ -427,7 +438,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-						uploadPDF(fetchMetadataListVO, fetchConfigVO);
+//						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
 				} catch (Exception e) {
@@ -446,7 +457,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					failcount = failcount + 1;
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-					uploadPDF(fetchMetadataListVO, fetchConfigVO);
+	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 					throw e;
 				}

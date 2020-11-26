@@ -6,16 +6,8 @@ public enum DriverConstants {
 	IE_DRIVER("webdriver.ie.driver"),
 	DEFAULT_DOWNLOAD_DIRECTORY("download.default_directory")
 	;
-//	change public to private
-	private String value;
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
+	public String value;
 
 	DriverConstants(String value) {
 		this.value = value;

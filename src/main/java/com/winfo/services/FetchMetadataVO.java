@@ -29,8 +29,8 @@ public class FetchMetadataVO implements Serializable {
 	private String test_run_name;
 	private String field_type;
 	private String scenario_name;
+	private String module;
 	private String seq_num;
-	
 	
 	public String getSeq_num() {
 		return seq_num;
@@ -38,6 +38,14 @@ public class FetchMetadataVO implements Serializable {
 
 	public void setSeq_num(String seq_num) {
 		this.seq_num = seq_num;
+	}
+
+	public String getModule() {
+		return module;
+	}
+
+	public void setModule(String module) {
+		this.module = module;
 	}
 
 	public String getScenario_name() {

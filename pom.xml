@@ -210,17 +210,17 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>3.4.0</version>
-		<exclusions>
-			<exclusion>
-				<groupId>net.java.dev.jna</groupId>
-				<artifactId>jna</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>net.java.dev.jna</groupId>
-				<artifactId>jna-platform</artifactId>
-			</exclusion>
-			
-		</exclusions>
+			<exclusions>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna-platform</artifactId>
+				</exclusion>
+
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.appium</groupId>
@@ -291,6 +291,9 @@
 			<version>20180813</version>
 		</dependency>
 
+		
+
+
 		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
@@ -335,11 +338,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-<!--  <dependency>   
-   <groupId>org.bytedeco</groupId>   
-   <artifactId>javacv</artifactId>   
-   <version>1.0</version>   
-  </dependency>  -->
+
 
 	</dependencies>
 
@@ -390,9 +389,9 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.18.1</version>
 						<configuration>
-							<!-- <suiteXmlFiles>
+							<suiteXmlFiles>
 								<suiteXmlFile>testng.xml</suiteXmlFile>
-							</suiteXmlFiles> -->
+							</suiteXmlFiles>
 						</configuration>
 					</plugin>
 				</plugins>

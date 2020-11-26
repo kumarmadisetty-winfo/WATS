@@ -10,8 +10,7 @@ public class StringUtils {
 	}
 
 	public static boolean isNotNullorBlank(String input) {
-		//Changed != to not equals method		
-		return input != null || !input.trim().equals("");
+		return input != null || input.trim() != "";
 	}
 
 	public static final boolean isNullOrBlank(String input) {
