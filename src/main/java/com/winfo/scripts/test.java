@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Test {
+public class test {
 
 	public static void main(String[] args) throws Exception {
 		String urlStr = "http://10.110.1.44:8080/executeTestScript";
