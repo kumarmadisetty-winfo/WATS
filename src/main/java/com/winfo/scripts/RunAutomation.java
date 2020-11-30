@@ -58,12 +58,12 @@ public class RunAutomation extends SeleniumKeyWords {
 		
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf");
 //
-//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
+	//	createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "14_OTC.AR.224.pdf");
 //
-//		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
+		//createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
 		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",passcount,failcount);
-		createPdf(fetchMetadataListVO, fetchConfigVO, "3_10_Create Contract-Using Wizard_PPM.PF.103_UDG - PPM _10_Passed",passcount,failcount);
+		createPdf(fetchMetadataListVO, fetchConfigVO, "1_10_Create Manual Invoice Transaction_OTC.AR.203.pdf",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO, "55_OTC.AR.218.pdf",passcount,failcount);
 		
