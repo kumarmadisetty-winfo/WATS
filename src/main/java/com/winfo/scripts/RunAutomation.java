@@ -22,12 +22,14 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.TestCaseDataService;
+import com.winfo.scripts.DataBaseEntry;
 
 @Service
 public class RunAutomation extends SeleniumKeyWords {
 
 	@Autowired
 	TestCaseDataService dataService;
+	DataBaseEntry dataBaseEntry;
 	public String c_url = null;
 
 	/*
@@ -61,10 +63,10 @@ public class RunAutomation extends SeleniumKeyWords {
 	//	createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf");
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "14_OTC.AR.224.pdf");
 //
-		//createFailedPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf");
+		//createFailedPdf(fetchMetadataListVO, fetchConfigVO,fetchMetadataVO, "Detailed_Report.pdf");
 		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",passcount,failcount);
 		createPdf(fetchMetadataListVO, fetchConfigVO, "1_10_Create Manual Invoice Transaction_OTC.AR.203.pdf",passcount,failcount);
-//		createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf",passcount,failcount);
+//		createPdf(fetchMetadataListVO, fetchConfigVO,"Failed_Report.pdf",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO, "55_OTC.AR.218.pdf",passcount,failcount);
 		
 
@@ -74,6 +76,7 @@ public class RunAutomation extends SeleniumKeyWords {
 		try {
 			// Config Webservice
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
+			//FetchMetadataVO fetchMetadataVO = (FetchMetadataVO) dataService.getFetchMetaData(args, uri);
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
@@ -207,6 +210,7 @@ public class RunAutomation extends SeleniumKeyWords {
 		String script_Number = null;
 		String line_number = null;
 		String seq_num = null;
+		String step_description=null;
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
 			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -229,6 +233,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
+				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				String param1 = null;
 				String param2 = null;
@@ -441,10 +446,12 @@ public class RunAutomation extends SeleniumKeyWords {
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
+					dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO,fetchConfigVO,line_number,script_Number,"Pass");
 				} catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
+					String error_message=actionName+"was not performed due to error at"+step_description+"step";
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
@@ -458,7 +465,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
-
+					dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,line_number,script_Number,"Fail",error_message);
 					throw e;
 				}
 			}

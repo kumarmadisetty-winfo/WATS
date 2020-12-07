@@ -31,7 +31,24 @@ public class FetchMetadataVO implements Serializable {
 	private String scenario_name;
 	private String module;
 	private String seq_num;
-	
+	private String step_description;
+	private String script_description;
+	public String getScript_description() {
+		return script_description;
+	}
+
+	public void setScript_description(String script_description) {
+		this.script_description = script_description;
+	}
+
+	public String getStep_description() {
+		return step_description;
+	}
+
+	public void setStep_description(String step_description) {
+		this.step_description = step_description;
+	}
+
 	public String getSeq_num() {
 		return seq_num;
 	}

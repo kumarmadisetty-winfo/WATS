@@ -32,11 +32,51 @@ public class FetchConfigVO {
 	private String client_id;
 	private String client_secret;
 	private String tenant_id;
-	
-	
-	
-	
-	
+	private String video_rec;
+	//private String step_description;
+	//private String executed_by;
+	private String start_time;
+	private String end_time;
+	private String execution_time;
+	//public String getExecuted_by() {
+	//	return executed_by;
+	//}
+
+	//public void setExecuted_by(String executed_by) {
+	//	this.executed_by = executed_by;
+	//}
+
+	public String getStart_time() {
+		return start_time;
+	}
+
+	public void setStart_time(String start_time) {
+		this.start_time = start_time;
+	}
+
+	public String getEnd_time() {
+		return end_time;
+	}
+
+	public void setEnd_time(String end_time) {
+		this.end_time = end_time;
+	}
+
+	public String getExecution_time() {
+		return execution_time;
+	}
+
+	public void setExecution_time(String execution_time) {
+		this.execution_time = execution_time;
+	}
+
+
+	public String getVideo_rec() {
+		return video_rec;
+	}
+	public void setVideo_rec(String video_rec) {
+		this.video_rec = video_rec;
+	}
 	public String getDb_host() {
 		return db_host;
 	}

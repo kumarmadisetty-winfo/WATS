@@ -37,8 +37,8 @@ public class JobController {
 		if(testScriptDto !=null && testScriptDto.getTestScriptNo() != null) {
 			System.out.println("Parameter test script # : "+testScriptDto.getTestScriptNo());
 			try {
-				//runAutomation.run(testScriptDto.getTestScriptNo());
-			runAutomation.report();
+				runAutomation.run(testScriptDto.getTestScriptNo());
+			//runAutomation.report();
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
