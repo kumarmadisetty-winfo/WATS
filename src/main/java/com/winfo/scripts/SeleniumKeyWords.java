@@ -614,7 +614,7 @@ public class SeleniumKeyWords {
         //String Tname = "AP Module Testing";
         //String Snumber="PTR.AP.123";
         //String Sname="Invoice Creation";
-        String Description=fetchMetadataListVO.get(0).getScript_description();
+        //String Description=fetchMetadataListVO.get(0).getScript_description();
         //String Status="Fail";
         String ExeBy=fetchConfigVO.getApplication_user_name();
         String StartTime=fetchConfigVO.getStart_time();
@@ -642,8 +642,8 @@ public class SeleniumKeyWords {
  	    }
         g.drawString("Test Run Name : " +  TName, 50, 50);
         g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-        g.drawString("Script Name :"+Scenario, 50, 200);
-        g.drawString("Script Description :"+Description, 50, 275);
+        g.drawString("Scenario Name :"+Scenario, 50, 200);
+        //g.drawString("Script Description :"+Description, 50, 275);
         g.drawString("Status : "+status, 50, 350);
         g.drawString("Executed By :"+ExeBy, 50, 425);
         g.drawString("Start Time :"+StartTime, 50, 500);
@@ -773,7 +773,7 @@ public class SeleniumKeyWords {
          //String Tname = "AP Module Testing";
          //String Snumber="PTR.AP.123";
          //String Sname="Invoice Creation";
-         String Description=fetchMetadataListVO.get(0).getScript_description();
+         //String Description=fetchMetadataListVO.get(0).getScript_description();
          //String Status="Fail";
          String ExeBy=fetchConfigVO.getApplication_user_name();
          String StartTime=fetchConfigVO.getStart_time();
@@ -802,8 +802,8 @@ public class SeleniumKeyWords {
          
          g.drawString("Test Run Name : " +  TName, 50, 50);
          g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-         g.drawString("Script Name :"+Scenario, 50, 200);
-         g.drawString("Script Description :"+Description, 50, 275);
+         g.drawString("Scenario Name :"+Scenario, 50, 200);
+         //g.drawString("Script Description :"+Description, 50, 275);
          g.drawString("Status : "+status, 50, 350);
          g.drawString("Executed By :"+ExeBy, 50, 425);
          g.drawString("Start Time :"+StartTime, 50, 500);
