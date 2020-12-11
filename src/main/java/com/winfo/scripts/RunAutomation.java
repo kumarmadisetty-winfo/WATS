@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -158,6 +159,8 @@ public class RunAutomation extends SeleniumKeyWords {
 		try {
 			driver = DriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
+			 Date date = new Date();
+			 fetchConfigVO.setStarttime(date);
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
 
@@ -435,6 +438,8 @@ public class RunAutomation extends SeleniumKeyWords {
 						post.setP_exception_path(detailurl);
 						post.setP_test_set_line_path(scripturl);
 						// passcount = passcount+1;
+						Date date = new Date();
+						 fetchConfigVO.setEndtime(date);
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
@@ -455,6 +460,8 @@ public class RunAutomation extends SeleniumKeyWords {
 					post.setP_exception_path(detailurl);
 					post.setP_test_set_line_path(scripturl);
 					failcount = failcount + 1;
+					Date date = new Date();
+					 fetchConfigVO.setEndtime(date);
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
