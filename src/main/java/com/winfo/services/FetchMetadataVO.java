@@ -33,6 +33,15 @@ public class FetchMetadataVO implements Serializable {
 	private String seq_num;
 	private String step_description;
 	private String script_description;
+	private String test_script_param_id;
+	public String getTest_script_param_id() {
+		return test_script_param_id;
+	}
+
+	public void setTest_script_param_id(String test_script_param_id) {
+		this.test_script_param_id = test_script_param_id;
+	}
+
 	public String getScript_description() {
 		return script_description;
 	}

@@ -614,12 +614,12 @@ public class SeleniumKeyWords {
         //String Tname = "AP Module Testing";
         //String Snumber="PTR.AP.123";
         //String Sname="Invoice Creation";
-        String Description=fetchMetadataListVO.get(0).getScript_description();
+        //String Description=fetchMetadataListVO.get(0).getScript_description();
         //String Status="Fail";
         String ExeBy=fetchConfigVO.getApplication_user_name();
         String StartTime=fetchConfigVO.getStart_time();
         String EndTime=fetchConfigVO.getEnd_time();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a"); 
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
 
  	    Date d1 = null;
  	    Date d2 = null; 
@@ -633,7 +633,26 @@ public class SeleniumKeyWords {
  	        long diffMinutes = diff / (60 * 1000) % 60;
  	        long diffHours = diff / (60 * 60 * 1000) % 24;
  	        long diffDays = diff / (24 * 60 * 60 * 1000);
- 	        execution_time=diffHours+":"+diffMinutes+":"+diffSeconds;
+ 	       String hours= diffHours+"";
+	        String minutes=diffMinutes+"";
+	        String seconds=diffSeconds+"";
+	       
+	        if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
+	        {
+	        	if(diffSeconds < 10) {
+	        		seconds="0"+seconds;
+	        		
+	        	}
+	        	if(diffHours < 10) {
+	        		hours="0"+hours;
+	        	}
+	        	if(diffMinutes < 10) {
+	        		minutes="0"+minutes;
+	        	}
+	        }
+	        
+	        
+	        execution_time=hours+":"+minutes+":"+seconds;
  	        
  	        //System.out.print(exe_time);
  	    } catch (ParseException e1) {
@@ -642,8 +661,8 @@ public class SeleniumKeyWords {
  	    }
         g.drawString("Test Run Name : " +  TName, 50, 50);
         g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-        g.drawString("Script Name :"+Scenario, 50, 200);
-        g.drawString("Script Description :"+Description, 50, 275);
+        g.drawString("Scenario Name :"+Scenario, 50, 200);
+       // g.drawString("Script Description :"+Description, 50, 275);
         g.drawString("Status : "+status, 50, 350);
         g.drawString("Executed By :"+ExeBy, 50, 425);
         g.drawString("Start Time :"+StartTime, 50, 500);
@@ -773,7 +792,7 @@ public class SeleniumKeyWords {
          //String Tname = "AP Module Testing";
          //String Snumber="PTR.AP.123";
          //String Sname="Invoice Creation";
-         String Description=fetchMetadataListVO.get(0).getScript_description();
+         //String Description=fetchMetadataListVO.get(0).getScript_description();
          //String Status="Fail";
          String ExeBy=fetchConfigVO.getApplication_user_name();
          String StartTime=fetchConfigVO.getStart_time();
@@ -803,7 +822,7 @@ public class SeleniumKeyWords {
          g.drawString("Test Run Name : " +  TName, 50, 50);
          g.drawString("Script Number : " +  ScriptNumber, 50, 125);
          g.drawString("Script Name :"+Scenario, 50, 200);
-         g.drawString("Script Description :"+Description, 50, 275);
+         //g.drawString("Script Description :"+Description, 50, 275);
          g.drawString("Status : "+status, 50, 350);
          g.drawString("Executed By :"+ExeBy, 50, 425);
          g.drawString("Start Time :"+StartTime, 50, 500);
@@ -944,7 +963,7 @@ public class SeleniumKeyWords {
 		        String ExeBy=fetchConfigVO.getApplication_user_name();
 		         String StartTime=fetchConfigVO.getStart_time();
 		         String EndTime=fetchConfigVO.getEnd_time();
-		         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a"); 
+		         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
 
 		  	    Date d1 = null;
 		  	    Date d2 = null; 
@@ -958,7 +977,26 @@ public class SeleniumKeyWords {
 		  	        long diffMinutes = diff / (60 * 1000) % 60;
 		  	        long diffHours = diff / (60 * 60 * 1000) % 24;
 		  	        long diffDays = diff / (24 * 60 * 60 * 1000);
-		  	        execution_time=diffHours+":"+diffMinutes+":"+diffSeconds;
+		  	      String hours= diffHours+"";
+			        String minutes=diffMinutes+"";
+			        String seconds=diffSeconds+"";
+			       
+			        if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
+			        {
+			        	if(diffSeconds < 10) {
+			        		seconds="0"+seconds;
+			        		
+			        	}
+			        	if(diffHours < 10) {
+			        		hours="0"+hours;
+			        	}
+			        	if(diffMinutes < 10) {
+			        		minutes="0"+minutes;
+			        	}
+			        }
+			        
+			        
+			        execution_time=hours+":"+minutes+":"+seconds;
 		  	        
 		  	        //System.out.print(exe_time);
 		  	    } catch (ParseException e1) {
@@ -1106,7 +1144,7 @@ int passcount=0;
 	        String ExeBy=fetchConfigVO.getApplication_user_name();
 	         String StartTime=fetchConfigVO.getStart_time();
 	         String EndTime=fetchConfigVO.getEnd_time();
-	         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a"); 
+	         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
 
 	  	    Date d1 = null;
 	  	    Date d2 = null; 
@@ -1120,7 +1158,26 @@ int passcount=0;
 	  	        long diffMinutes = diff / (60 * 1000) % 60;
 	  	        long diffHours = diff / (60 * 60 * 1000) % 24;
 	  	        long diffDays = diff / (24 * 60 * 60 * 1000);
-	  	        execution_time=diffHours+":"+diffMinutes+":"+diffSeconds;
+	  	      String hours= diffHours+"";
+		        String minutes=diffMinutes+"";
+		        String seconds=diffSeconds+"";
+		       
+		        if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
+		        {
+		        	if(diffSeconds < 10) {
+		        		seconds="0"+seconds;
+		        		
+		        	}
+		        	if(diffHours < 10) {
+		        		hours="0"+hours;
+		        	}
+		        	if(diffMinutes < 10) {
+		        		minutes="0"+minutes;
+		        	}
+		        }
+		        
+		        
+		       execution_time=hours+":"+minutes+":"+seconds;
 	  	        
 	  	        //System.out.print(exe_time);
 	  	    } catch (ParseException e1) {
@@ -1288,7 +1345,7 @@ int passcount=0;
 				         String ExeBy=fetchConfigVO.getApplication_user_name();
 				         String StartTime=fetchConfigVO.getStart_time();
 				         String EndTime=fetchConfigVO.getEnd_time();
-				         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a"); 
+				         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
 
 				  	    Date d1 = null;
 				  	    Date d2 = null; 
@@ -1302,7 +1359,26 @@ int passcount=0;
 				  	        long diffMinutes = diff / (60 * 1000) % 60;
 				  	        long diffHours = diff / (60 * 60 * 1000) % 24;
 				  	        long diffDays = diff / (24 * 60 * 60 * 1000);
-				  	        execution_time=diffHours+":"+diffMinutes+":"+diffSeconds;
+				  	      String hours= diffHours+"";
+					        String minutes=diffMinutes+"";
+					        String seconds=diffSeconds+"";
+					       
+					        if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
+					        {
+					        	if(diffSeconds < 10) {
+					        		seconds="0"+seconds;
+					        		
+					        	}
+					        	if(diffHours < 10) {
+					        		hours="0"+hours;
+					        	}
+					        	if(diffMinutes < 10) {
+					        		minutes="0"+minutes;
+					        	}
+					        }
+					        
+					        
+					        execution_time=hours+":"+minutes+":"+seconds;
 				  	        
 				  	        //System.out.print(exe_time);
 				  	    } catch (ParseException e1) {
