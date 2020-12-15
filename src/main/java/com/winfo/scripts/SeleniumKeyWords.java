@@ -451,7 +451,7 @@ public class SeleniumKeyWords {
 	}
 
 	public void menuNavigationButton(WebDriver driver, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO,String param1,String type1,String type2,int count) throws Exception {
+			FetchConfigVO fetchConfigVO,String type1,String type2,String param1,int count) throws Exception {
 		try {
 			Thread.sleep(3000);
 			if (param2.equalsIgnoreCase("Assets")) {
@@ -2118,6 +2118,8 @@ public class SeleniumKeyWords {
 				    long diffHours = diff / (60 * 60 * 1000);
 			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
+			Rectangle one = new Rectangle(1360,800);
+	        document.setPageSize(one);
 			document.open();
 			String TestRun=test_Run_Name;
 			String ScriptNumber=Script_Number;
@@ -2136,6 +2138,7 @@ public class SeleniumKeyWords {
 		String ST = "Start Time";
 		String ET = "End Time" ;
 		String EX = "Execution Time";
+	
 		 document.add(img1);
 
 		document.add(new Paragraph(Report,bfBold12));
