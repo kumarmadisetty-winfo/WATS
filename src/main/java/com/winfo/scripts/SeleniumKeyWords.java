@@ -135,24 +135,24 @@ public class SeleniumKeyWords {
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String param1, String param2) throws Exception {
+	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+			String type2, String param1, String param2,int count) throws Exception {
 		String param3 = "Navigator";
 		navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
 		menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
-		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO);
+		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO,type1,type2,param1,count);
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String param1, String param2) throws Exception {
+	public synchronized void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+			String type2, String param1, String param2,int count) throws Exception {
 		String param3 = "Tasks";
 //		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 		task(driver, param3, fetchMetadataVO, fetchConfigVO);
-		taskMenu(driver, param1, fetchMetadataVO, fetchConfigVO);
+		taskMenu(driver, param1, fetchMetadataVO, fetchConfigVO,type1,type2,param2,count);
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
@@ -450,11 +450,11 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void menuNavigationButton(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void menuNavigationButton(WebDriver driver, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,String param1,String type1,String type2,int count) throws Exception {
 		try {
 			Thread.sleep(3000);
-			if (param1.equalsIgnoreCase("Assets")) {
+			if (param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(
 						By.xpath("//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='" + param1 + "']"));
 				Actions actions = new Actions(driver);
@@ -465,10 +465,11 @@ public class SeleniumKeyWords {
 				log.info("Successfully menuNavigationButton is done " +scripNumber);
 				return;
 			} 	else {
+			//	try {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']")));
-				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']")));
-				WebElement waittext = driver.findElement(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']"));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+				WebElement waittext = driver.findElement(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
@@ -477,14 +478,28 @@ public class SeleniumKeyWords {
 				log.info("Successfully menuNavigationButton is done " +scripNumber);
 				return;
 			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed During MenuNavigation" +scripNumber);
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
-			System.out.println("Not able to navitage to the :" + "" + param1);
-			throw e;
 		}
-	}
+			catch (Exception e) {
+				 if(count==0) {
+					  count = 1; 
+					  System.out.println(" The Count Value is : "+count);
+				  navigate(driver, fetchConfigVO,fetchMetadataVO,type1,type2, param1, param2,count); 
+				  }else if(count<=10) { 
+					  count = count+1;
+				  System.out.println(" The Count Value is : "+count); 
+				  navigate(driver,fetchConfigVO,fetchMetadataVO,type1,type2, param1, param2,count); 
+				  }
+				  else 
+				  {
+				  System.out.println("Count value exceeds the limit"); 
+					log.error("Failed During Navigation");
+					screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println("Not able to navitage to the :" + "" + param1);
+					throw e;
+				  }	
+			}
+		}
+
 
 	public void task(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
@@ -510,7 +525,7 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void taskMenu(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void taskMenu(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,String type1,String type2,String param2,int count)
 			throws Exception {
 		try {
 			Thread.sleep(2000);
@@ -530,11 +545,24 @@ public class SeleniumKeyWords {
 			log.info("Successfully open Task " +scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed During open Task " +scripNumber);
-			screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO);
-			System.out.println("Failed to Open Task Menu");
-			throw e;
+			 if(count==0) {
+				  count = 1; 
+				  System.out.println(" The Count Value is : "+count);
+				  openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
+			  }else if(count<=10) { 
+				  count = count+1;
+				  System.out.println(" The Count Value is : "+count); 
+				  openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
+			  }
+			  else 
+			  {
+			  System.out.println("Count value exceeds the limit"); 
+			  log.error("Failed to Open Task Menu");
+			  screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO);
+			  System.out.println("Failed to Open Task Menu");
+			  throw e;
+			
+			  }
 		}
 	}
 
@@ -1401,7 +1429,7 @@ public class SeleniumKeyWords {
 									sno1=sndo;
 								}	
 					 		}	
-					 		
+					 		sno1 = "";
 					 		 document.newPage();
 							 document.add(img1);
 //				Start to add page heading 
@@ -2072,6 +2100,8 @@ public class SeleniumKeyWords {
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
 			 Image img1 = Image.getInstance("/Uploads/WatsIconwats_icon.png");
+			 img1.scalePercent(65, 68);
+	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
 			 String Report="Execution Report";
 			 Font fnt = FontFactory.getFont("Arial", 12);
@@ -2147,11 +2177,9 @@ public class SeleniumKeyWords {
 						
 						document.setPageSize(img);
 						document.newPage();
-						
+						document.add(img1);
 						String Reason = image.split("_")[5];
-						document.setPageSize(img);
-						document.newPage();
-//						String TR = "Test Run Name:" + " " + TestRun;
+					//						String TR = "Test Run Name:" + " " + TestRun;
 //						String SN = "Script Number:" + " " + ScriptNumber;
 						String S = "Status:" + " " + status;
 //						String Scenarios = "Scenario Name :" + "" + Scenario;

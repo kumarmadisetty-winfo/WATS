@@ -239,6 +239,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				String type1 = null;
 				String type2 = null;
 				String type3 = null;
+				int count=0;
 				if (screenParameter != null) {
 					param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
 					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
@@ -247,6 +248,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					type1 = actionType != null ? actionType.split(">").length > 0 ? actionType.split(">")[0] : "" : "";
 					type2 = actionType != null ? actionType.split(">").length > 1 ? actionType.split(">")[1] : "" : "";
 					type3 = actionType != null ? actionType.split(">").length > 2 ? actionType.split(">")[2] : "" : "";
+				
 				}
 				try {
 					switch (actionName) {
@@ -264,12 +266,12 @@ public class RunAutomation extends SeleniumKeyWords {
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
-						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
+						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "openTask":
 						log.info("Navigating to openTask Action");
-						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
+						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "Logout":
