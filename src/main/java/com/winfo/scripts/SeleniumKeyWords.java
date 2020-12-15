@@ -1676,7 +1676,8 @@ public class SeleniumKeyWords {
 				p.setAlignment(Element.ALIGN_RIGHT);
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
-				img.scalePercent(60, 60);
+				img.scalePercent(60, 71);
+				document.add(img);
 				document.add(img);
 				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
@@ -1685,9 +1686,10 @@ public class SeleniumKeyWords {
 
 			}
 			}
+			}
 			document.close();
 //			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
-			}
+			
 			} catch (Exception e) {
 			System.out.println("Not able to Create pdf");
 		}
@@ -2199,7 +2201,8 @@ public class SeleniumKeyWords {
 						p.setAlignment(Element.ALIGN_RIGHT);
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
-						img.scalePercent(60, 60);
+						img.scalePercent(60, 71);
+						document.add(img);
 						document.add(img);
 						document.add(p);
 						System.out.println("This Image " + "" + image + "" + "was added to the report");
