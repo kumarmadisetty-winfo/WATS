@@ -23,6 +23,9 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.scripts.DataBaseEntry;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class RunAutomation extends SeleniumKeyWords {
@@ -75,6 +78,9 @@ public class RunAutomation extends SeleniumKeyWords {
 		System.out.println(args);
 		try {
 			// Config Webservice
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+	        LocalDateTime now = LocalDateTime.now();
+	        String start_time=dtf.format(now);
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			//FetchMetadataVO fetchMetadataVO = (FetchMetadataVO) dataService.getFetchMetaData(args, uri);
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;
@@ -87,7 +93,7 @@ public class RunAutomation extends SeleniumKeyWords {
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
 					try {
-						executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+						executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,start_time);
 					} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -109,7 +115,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					for (Entry<String, List<FetchMetadataVO>> metaData : dependantmetaDataMap.entrySet()) {
 						executordependent.execute(() -> {
 							try {
-								executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+								executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,start_time);
 							} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -138,13 +144,18 @@ public class RunAutomation extends SeleniumKeyWords {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
+			Entry<String, List<FetchMetadataVO>> metaData,String start_time) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
-		String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
+		String end_time=null;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();
+        String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
+		
+		
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -162,7 +173,7 @@ public class RunAutomation extends SeleniumKeyWords {
 			driver = DriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,start_time);
 
 		} catch (Exception e) {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO, "0", inputParam);
@@ -185,6 +196,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			}
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
+			end_time=dtf.format(now);
+			dataBaseEntry.updateEndTime(fetchConfigVO,end_time,test_set_line_id,test_set_id);
 			driver.quit();
 		}
 	}
@@ -193,7 +206,7 @@ public class RunAutomation extends SeleniumKeyWords {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<FetchMetadataVO> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, String start_time) throws Exception {
 		
 		String log4jConfPath="log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -212,6 +225,8 @@ public class RunAutomation extends SeleniumKeyWords {
 		String seq_num = null;
 		String step_description=null;
 		String test_script_param_id=null;
+		//String start_time=null;
+		//String end_time=null;
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
 			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -226,6 +241,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			String userName = null;
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+	       
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -234,9 +251,13 @@ public class RunAutomation extends SeleniumKeyWords {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
+				if(seq_num.charAt(0) == '1' && seq_num.length()==1) {
+				dataBaseEntry.updateStartTime(fetchConfigVO,start_time,test_set_line_id,test_set_id);
+				}
 				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id=fetchMetadataVO.getTest_script_param_id();
+				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"In-Progress");
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -430,6 +451,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						break;
 					}
 					i++;
+					
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
@@ -468,6 +490,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+					
 					throw e;
 				}
 			}
