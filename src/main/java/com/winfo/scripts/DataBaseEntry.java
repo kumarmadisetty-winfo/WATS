@@ -73,5 +73,9 @@ public void updateEndTime(FetchConfigVO fetchConfigVO, String end_time, String l
 	st.executeQuery(sqlQuery);
 	
 	conn.close();
+
 }
+
 }
+
+

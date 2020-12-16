@@ -148,14 +148,15 @@ public class RunAutomation extends SeleniumKeyWords {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
+		//String start_time=null;
 		String end_time=null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
         LocalDateTime now = LocalDateTime.now();
         String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
-		
-		
+		start_time=dtf.format(now);
+		dataBaseEntry.updateStartTime(fetchConfigVO,start_time,test_set_line_id,test_set_id);
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -225,8 +226,10 @@ public class RunAutomation extends SeleniumKeyWords {
 		String seq_num = null;
 		String step_description=null;
 		String test_script_param_id=null;
+
 		//String start_time=null;
 		//String end_time=null;
+
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
 			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
