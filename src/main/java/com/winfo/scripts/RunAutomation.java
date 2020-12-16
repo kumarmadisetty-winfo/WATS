@@ -23,6 +23,9 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.scripts.DataBaseEntry;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class RunAutomation extends SeleniumKeyWords {
@@ -142,9 +145,15 @@ public class RunAutomation extends SeleniumKeyWords {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
-		String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
+		String start_time=null;
+		String end_time=null;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();
+        String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
+		start_time=dtf.format(now);
+		dataBaseEntry.updateStartTime(fetchConfigVO,start_time,test_set_line_id,test_set_id);
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -185,6 +194,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			}
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
+			end_time=dtf.format(now);
+			dataBaseEntry.updateEndTime(fetchConfigVO,end_time,test_set_line_id,test_set_id);
 			driver.quit();
 		}
 	}
@@ -211,6 +222,9 @@ public class RunAutomation extends SeleniumKeyWords {
 		String line_number = null;
 		String seq_num = null;
 		String step_description=null;
+		String test_script_param_id=null;
+		String start_time=null;
+		String end_time=null;
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
 			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -225,6 +239,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			String userName = null;
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+	       
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -235,6 +251,8 @@ public class RunAutomation extends SeleniumKeyWords {
 				seq_num = fetchMetadataVO.getSeq_num();
 				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
+				test_script_param_id=fetchMetadataVO.getTest_script_param_id();
+				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"In-Progress");
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -428,6 +446,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						break;
 					}
 					i++;
+					
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
@@ -446,7 +465,7 @@ public class RunAutomation extends SeleniumKeyWords {
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
-					dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO,fetchConfigVO,line_number,script_Number,"Pass");
+					dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Pass");
 				} catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
@@ -465,7 +484,8 @@ public class RunAutomation extends SeleniumKeyWords {
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
-					dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,line_number,script_Number,"Fail",error_message);
+					dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+					
 					throw e;
 				}
 			}
