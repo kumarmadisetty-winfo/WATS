@@ -784,7 +784,7 @@ public class SeleniumKeyWords {
       
         String details= fileList.get(0).getName();
         //String details= seqList.get(0).getName();
-        	String ScriptNumber = details.split("_")[3];
+        String ScriptNumber = details.split("_")[3];
  		String TestRun = details.split("_")[4];
  		String Status = details.split("_")[6];
  		String status = Status.split("\\.")[0];
