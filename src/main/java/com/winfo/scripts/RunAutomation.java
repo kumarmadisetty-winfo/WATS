@@ -155,7 +155,7 @@ public class RunAutomation extends SeleniumKeyWords {
         String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
-		start_time=dtf.format(now);
+		//start_time=dtf.format(now);
 		dataBaseEntry.updateStartTime(fetchConfigVO,start_time,test_set_line_id,test_set_id);
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
