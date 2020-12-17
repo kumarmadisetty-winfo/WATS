@@ -80,6 +80,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
+			Date date = new Date();
+			 fetchConfigVO.setStarttime1(date);
 			System.out.println(metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
@@ -224,6 +226,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			String userName = null;
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
+			DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
+
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();

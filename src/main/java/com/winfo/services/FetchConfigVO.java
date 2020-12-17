@@ -35,6 +35,7 @@ public class FetchConfigVO {
 	private String client_secret;
 	private String tenant_id;
 	private Date starttime;
+	private Date Starttime1;
 	private Date endtime;
 	private int passcount;
 	private int failcount;
@@ -42,7 +43,12 @@ public class FetchConfigVO {
 	
 	
 	
-	
+	public Date getStarttime1() {
+		return Starttime1;
+	}
+	public void setStarttime1(Date starttime1) {
+		Starttime1 = starttime1;
+	}
 	public Date getStarttime() {
 		return starttime;
 	}

@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1234,13 +1236,19 @@ public class SeleniumKeyWords {
 			int failcount=fetchConfigVO.getFailcount();
 			Date Starttime = fetchConfigVO.getStarttime();
 			Date endtime=fetchConfigVO.getEndtime();
+			Date TStarttime=fetchConfigVO.getStarttime1();
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 			String Starttime1=dateFormat.format(Starttime);
+			String TStarttime1=dateFormat.format(TStarttime);
 			String endtime1=dateFormat.format(endtime);
 			long diff=endtime.getTime() - Starttime.getTime();
 			 long diffSeconds = diff / 1000 % 60;
 			    long diffMinutes = diff / (60 * 1000) % 60;
 			    long diffHours = diff / (60 * 60 * 1000);
+			    long Tdiff=endtime.getTime() - TStarttime.getTime();
+			    long TdiffSeconds = Tdiff / 1000 % 60;
+			    long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+			    long TdiffHours = Tdiff / (60 * 60 * 1000);
 
 			Document document = new Document();
 			String start = "Execution Summary";
@@ -1264,9 +1272,9 @@ public class SeleniumKeyWords {
 //	     Start testrun to add details like start and end time,testrun name 			
 				String TestRun=test_Run_Name;
 //				String ExecutedBy=fetchConfigVO.getApplication_user_name();
-				String StartTime=Starttime1;
+				String StartTime=TStarttime1;
 				String EndTime=endtime1;
-				String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+				String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
 
 				String TR = "Test Run Name";
 				String SN = "Executed By" ;
@@ -2169,6 +2177,7 @@ public class SeleniumKeyWords {
 //				Start to add screenshoots and pagenumbers and wats icon		 		
 				int i=0;
 					for (String image : fileNameList) {
+						i++;
 						Image img = Image.getInstance(
 								fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
 
@@ -10550,6 +10559,30 @@ System.out.println(e);
 			e.printStackTrace();
 			throw e;
 
+		}
+	}
+	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		if (folder.exists()) {
+		File[] listOfFiles = folder.listFiles();
+		
+//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+//				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//				+ fetchMetadataVO.getLine_number();
+			for (File file : Arrays.asList(listOfFiles)) {
+
+				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+			
+			String seqnum1=fetchMetadataListVO.get(0).getSeq_num();
+			if(seqNum.equalsIgnoreCase(seqnum1)) {
+				Path imagesPath = Paths.get(file.getPath());
+				 Files.delete(imagesPath);
+			}
+		}
 		}
 	}
 
