@@ -140,6 +140,8 @@ public class RunAutomation extends SeleniumKeyWords {
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
 			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
+		 Date date = new Date();
+		 fetchConfigVO.setStarttime(date);
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
 		String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
@@ -159,10 +161,9 @@ public class RunAutomation extends SeleniumKeyWords {
 		System.out.println(detailurl);
 		boolean isDriverError = true;
 		try {
+			
 			driver = DriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
-			 Date date = new Date();
-			 fetchConfigVO.setStarttime(date);
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
 
