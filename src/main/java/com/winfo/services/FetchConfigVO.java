@@ -1,5 +1,7 @@
 package com.winfo.services;
 
+import java.util.Date;
+
 public class FetchConfigVO {
 	
 	private String browser;
@@ -33,44 +35,31 @@ public class FetchConfigVO {
 	private String client_secret;
 	private String tenant_id;
 	private String video_rec;
-	//private String step_description;
-	//private String executed_by;
-	private String start_time;
-	private String end_time;
-	private String execution_time;
-	//public String getExecuted_by() {
-	//	return executed_by;
-	//}
+	
+	private Date starttime;
+	private Date Starttime1;
+	private Date endtime;
+	
 
-	//public void setExecuted_by(String executed_by) {
-	//	this.executed_by = executed_by;
-	//}
 
-	public String getStart_time() {
-		return start_time;
+	public Date getStarttime() {
+		return starttime;
 	}
-
-	public void setStart_time(String start_time) {
-		this.start_time = start_time;
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
 	}
-
-	public String getEnd_time() {
-		return end_time;
+	public Date getStarttime1() {
+		return Starttime1;
 	}
-
-	public void setEnd_time(String end_time) {
-		this.end_time = end_time;
+	public void setStarttime1(Date starttime1) {
+		Starttime1 = starttime1;
 	}
-
-	public String getExecution_time() {
-		return execution_time;
+	public Date getEndtime() {
+		return endtime;
 	}
-
-	public void setExecution_time(String execution_time) {
-		this.execution_time = execution_time;
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
 	}
-
-
 	public String getVideo_rec() {
 		return video_rec;
 	}

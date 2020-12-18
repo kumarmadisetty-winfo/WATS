@@ -78,9 +78,10 @@ public class RunAutomation extends SeleniumKeyWords {
 		System.out.println(args);
 		try {
 			// Config Webservice
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-	        LocalDateTime now = LocalDateTime.now();
-	        String start_time=dtf.format(now);
+//			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+//	        LocalDateTime now = LocalDateTime.now();
+//	        String start_time=dtf.format(now);
+			
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			//FetchMetadataVO fetchMetadataVO = (FetchMetadataVO) dataService.getFetchMetaData(args, uri);
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;
@@ -89,11 +90,13 @@ public class RunAutomation extends SeleniumKeyWords {
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
 			System.out.println(metaDataMap.toString());
+			Date date = new Date();
+            fetchConfigVO.setStarttime1(date);
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
 					try {
-						executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,start_time);
+						executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 					} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -115,7 +118,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					for (Entry<String, List<FetchMetadataVO>> metaData : dependantmetaDataMap.entrySet()) {
 						executordependent.execute(() -> {
 							try {
-								executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,start_time);
+								executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 							} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -144,19 +147,22 @@ public class RunAutomation extends SeleniumKeyWords {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData,String start_time) throws Exception {
+			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
+		Date date = new Date();
+        fetchConfigVO.setStarttime(date);
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
-		//String start_time=null;
-		String end_time=null;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();
+//		//String start_time=null;
+//		String end_time=null;
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
+//        LocalDateTime now = LocalDateTime.now();
+		
         String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
 		//start_time=dtf.format(now);
-		dataBaseEntry.updateStartTime(fetchConfigVO,start_time,test_set_line_id,test_set_id);
+		dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -174,7 +180,7 @@ public class RunAutomation extends SeleniumKeyWords {
 			driver = DriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,start_time);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
 
 		} catch (Exception e) {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO, "0", inputParam);
@@ -197,8 +203,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			}
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
-			end_time=dtf.format(now);
-			dataBaseEntry.updateEndTime(fetchConfigVO,end_time,test_set_line_id,test_set_id);
+			
+			dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
 			driver.quit();
 		}
 	}
@@ -207,7 +213,7 @@ public class RunAutomation extends SeleniumKeyWords {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<FetchMetadataVO> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO, String start_time) throws Exception {
+			FetchConfigVO fetchConfigVO) throws Exception {
 		
 		String log4jConfPath="log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -255,7 +261,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 				if(seq_num.charAt(0) == '1' && seq_num.length()==1) {
-				dataBaseEntry.updateStartTime(fetchConfigVO,start_time,test_set_line_id,test_set_id);
+				//dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
 				}
 				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
@@ -267,6 +273,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				String type1 = null;
 				String type2 = null;
 				String type3 = null;
+				int count=0;
 				if (screenParameter != null) {
 					param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
 					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
@@ -292,7 +299,7 @@ public class RunAutomation extends SeleniumKeyWords {
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
-						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
+						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "openTask":
@@ -365,14 +372,20 @@ public class RunAutomation extends SeleniumKeyWords {
 						clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton":
-						clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						String message=getErrorMessages(driver);
+						if(message == null) {
+							clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						}
+						else {
+							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",message);
+						}
 						break;
 					case "tableRowSelect":
 						tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton Dropdown":
 						clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
-								fetchConfigVO);
+								fetchConfigVO);https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/
 						break;
 					case "mousehover":
 						mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
@@ -467,6 +480,8 @@ public class RunAutomation extends SeleniumKeyWords {
 						post.setP_exception_path(detailurl);
 						post.setP_test_set_line_path(scripturl);
 						// passcount = passcount+1;
+						Date date = new Date();
+                        fetchConfigVO.setEndtime(date);
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
@@ -478,7 +493,10 @@ public class RunAutomation extends SeleniumKeyWords {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
-					String error_message=actionName+"was not performed due to error at"+step_description+"step";
+					if(actionName != "clickButton") {
+						String error_message=actionName+"was not performed due to error at"+step_description+"step";
+						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+						}
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
@@ -489,10 +507,12 @@ public class RunAutomation extends SeleniumKeyWords {
 					post.setP_exception_path(detailurl);
 					post.setP_test_set_line_path(scripturl);
 					failcount = failcount + 1;
+					Date date = new Date();
+                    fetchConfigVO.setEndtime(date);
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
-					dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+					
 					
 					throw e;
 				}

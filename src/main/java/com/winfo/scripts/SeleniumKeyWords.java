@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -117,12 +118,12 @@ public class SeleniumKeyWords {
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String param1, String param2) throws Exception {
+	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+			String type2, String param1, String param2,int count) throws Exception {
 		String param3 = "Navigator";
 		navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
 		menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
-		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO);
+		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO,param1,type1,type2,count);
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
@@ -432,11 +433,12 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void menuNavigationButton(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public  void menuNavigationButton(WebDriver driver, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,String param1,String type1,String type2,int count) throws Exception {
+		String scripNumbers = fetchMetadataVO.getScript_number();
 		try {
 			Thread.sleep(3000);
-			if (param1.equalsIgnoreCase("Assets")) {
+			if (param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(
 						By.xpath("//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='" + param1 + "']"));
 				Actions actions = new Actions(driver);
@@ -447,10 +449,11 @@ public class SeleniumKeyWords {
 				log.info("Successfully menuNavigationButton is done " +scripNumber);
 				return;
 			} 	else {
+			//	try {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']")));
-				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']")));
-				WebElement waittext = driver.findElement(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']"));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+				WebElement waittext = driver.findElement(By.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
@@ -459,15 +462,29 @@ public class SeleniumKeyWords {
 				log.info("Successfully menuNavigationButton is done " +scripNumber);
 				return;
 			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed During MenuNavigation" +scripNumber);
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
-			System.out.println("Not able to navitage to the :" + "" + param1);
-			throw e;
 		}
-	}
+         catch (Exception e) {
+        	 if(count==0) {
+				  count = 1; 
+				  System.out.println(" The Count Value is : "+count);
+			  navigate(driver, fetchConfigVO,fetchMetadataVO,type1,type2, param1, param2,count); 
+			  }else if(count<=10) { 
+				  count = count+1;
+			  System.out.println(" The Count Value is : "+count); 
+			  navigate(driver,fetchConfigVO,fetchMetadataVO,type1,type2, param1, param2,count); 
+			  }
+			  else 
+			  {
+			  System.out.println("Count value exceeds the limit"); 
+				log.error("Failed During Navigation");
+				screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
+				System.out.println("Not able to navitage to the :" + "" + param1);
+				throw e;
+			  }	
 
+							}
+			}
+	
 	public void task(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
@@ -566,8 +583,8 @@ public class SeleniumKeyWords {
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 		File[] listOfFiles = folder.listFiles();
-		String video_rec=fetchConfigVO.getVideo_rec();
-		//String video_rec="yes";
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="yes";
 //		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
         List<File> fileList = new ArrayList<>();
@@ -592,7 +609,7 @@ public class SeleniumKeyWords {
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/WinfoAutomation/AddOn_Images/white.jpg");
+		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 
         BufferedImage image = null;
         image = ImageIO.read(file);
@@ -611,70 +628,35 @@ public class SeleniumKeyWords {
 		String imagename=TestRun+ScriptNumber;
         String TName = fetchMetadataListVO.get(0).getTest_run_name();
         String no = details.split("_")[0];
-        //String Tname = "AP Module Testing";
-        //String Snumber="PTR.AP.123";
-        //String Sname="Invoice Creation";
-        //String Description=fetchMetadataListVO.get(0).getScript_description();
-        //String Status="Fail";
-        String ExeBy=fetchConfigVO.getApplication_user_name();
-        String StartTime=fetchConfigVO.getStart_time();
-        String EndTime=fetchConfigVO.getEnd_time();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
+        Date Starttime = fetchConfigVO.getStarttime();
+        Date endtime=fetchConfigVO.getEndtime();
+        
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String Starttime1=dateFormat.format(Starttime);
+        
+        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+        String endtime1=dateFormat.format(endtime);
+        long diff=endtime.getTime() - Starttime.getTime();
+         long diffSeconds = diff / 1000 % 60;
+            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffHours = diff / (60 * 60 * 1000);
+           
+            String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
 
- 	    Date d1 = null;
- 	    Date d2 = null; 
- 	    String execution_time=null;
- 	    try {
- 	        d1 = format.parse(StartTime);
- 	        d2 = format.parse(EndTime);
- 	        long diff = Math.abs(d2.getTime() - d1.getTime());
-
- 	        long diffSeconds = diff / 1000 % 60;
- 	        long diffMinutes = diff / (60 * 1000) % 60;
- 	        long diffHours = diff / (60 * 60 * 1000) % 24;
- 	        long diffDays = diff / (24 * 60 * 60 * 1000);
-
- 	     
-
- 	     String hours= diffHours+"";
-		String minutes=diffMinutes+"";
-	 	String seconds=diffSeconds+"";
-			       
-		if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
-			{
-			       if(diffSeconds < 10) {
-			        	seconds="0"+seconds;
-			        	}
-			        if(diffHours < 10) {
-			        	hours="0"+hours;
-			        	}
-			        if(diffMinutes < 10) {
-			        	minutes="0"+minutes;
-			        	}
-			 }
-			        
-			        
-		execution_time=hours+":"+minutes+":"+seconds;
-
- 	        
- 	        //System.out.print(exe_time);
- 	    } catch (ParseException e1) {
- 	        // TODO Auto-generated catch block
- 	        e1.printStackTrace();
- 	    }
+ 	    
+ 	    
         g.drawString("Test Run Name : " +  TName, 50, 50);
         g.drawString("Script Number : " +  ScriptNumber, 50, 125);
         g.drawString("Scenario Name :"+Scenario, 50, 200);
-
-        g.drawString("Status : "+status, 50, 350);
-        g.drawString("Executed By :"+ExeBy, 50, 425);
-        g.drawString("Start Time :"+StartTime, 50, 500);
-        g.drawString("End Time :"+EndTime, 50, 575);
-        g.drawString("Execution Time : "+execution_time, 50, 650);
+        g.drawString("Status : "+status, 50, 275);
+        g.drawString("Executed By :"+ExeBy, 50, 350);
+        g.drawString("Start Time :"+Starttime1, 50, 425);
+        g.drawString("End Time :"+endtime1, 50, 500);
+        g.drawString("Execution Time : "+ExecutionTime, 50, 575);
         g.dispose();
     
     
-        ImageIO.write(image, "jpg", new File("/WinfoAutomation/AddOn_Images/first.jpg"));
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
         BufferedImage image1 = null;
         image1 = ImageIO.read(file);
         Graphics g1 = image1.getGraphics();
@@ -684,8 +666,8 @@ public class SeleniumKeyWords {
         g1.drawString("FAILED IN THE NEXT STEP!!", 495, 300);
      
         g1.dispose();
-        ImageIO.write(image1, "jpg", new File("/WinfoAutomation/AddOn_Images/last.jpg"));
-        String imgpath2 ="/WinfoAutomation/AddOn_Images";
+        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
 
@@ -734,7 +716,8 @@ public class SeleniumKeyWords {
 		 * }
 		 */
 		if(video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(links1,fetchMetadataListVO,fetchConfigVO,no+"_"+ScriptNumber+".mp4");
+			String name=no+"_"+ScriptNumber+".mp4";
+			convertJPGtoMovie(null,links1,fetchMetadataListVO,fetchConfigVO,name);
 	          }
 		return fileNameList;
 	}
@@ -746,8 +729,8 @@ public class SeleniumKeyWords {
 		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 
 		File[] listOfFiles = folder.listFiles();
-		String video_rec=fetchConfigVO.getVideo_rec();
-		//String video_rec="yes";
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="yes";
 //		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
         List<File> fileList = new ArrayList<>();
@@ -773,7 +756,7 @@ public class SeleniumKeyWords {
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/WinfoAutomation/AddOn_Images/white.jpg");
+		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 
         BufferedImage image = null;
         image = ImageIO.read(file);
@@ -792,71 +775,33 @@ public class SeleniumKeyWords {
  		String imagename=TestRun+ScriptNumber;
          String TName = fetchMetadataListVO.get(0).getTest_run_name();
          String no = details.split("_")[0];
-         //String Tname = "AP Module Testing";
-         //String Snumber="PTR.AP.123";
-         //String Sname="Invoice Creation";
-         //String Description=fetchMetadataListVO.get(0).getScript_description();
-         //String Status="Fail";
-         String ExeBy=fetchConfigVO.getApplication_user_name();
-         String StartTime=fetchConfigVO.getStart_time();
-         String EndTime=fetchConfigVO.getEnd_time();
-       SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
+         Date Starttime = fetchConfigVO.getStarttime();
+         Date endtime=fetchConfigVO.getEndtime();
+         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+         String Starttime1=dateFormat.format(Starttime);
+         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+         String endtime1=dateFormat.format(endtime);
+         long diff=endtime.getTime() - Starttime.getTime();
+          long diffSeconds = diff / 1000 % 60;
+             long diffMinutes = diff / (60 * 1000) % 60;
+             long diffHours = diff / (60 * 60 * 1000);
+          
+             String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
 
- 	    Date d1 = null;
- 	    Date d2 = null; 
- 	    String execution_time=null;
- 	    try {
- 	        d1 = format.parse(StartTime);
- 	        d2 = format.parse(EndTime);
- 	        long diff = Math.abs(d2.getTime() - d1.getTime());
-
- 	        long diffSeconds = diff / 1000 % 60;
- 	        long diffMinutes = diff / (60 * 1000) % 60;
- 	        long diffHours = diff / (60 * 60 * 1000) % 24;
- 	        long diffDays = diff / (24 * 60 * 60 * 1000);
- 	        String hours= diffHours+"";
-		String minutes=diffMinutes+"";
-	 	String seconds=diffSeconds+"";
-			       
-		if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
-			{
-			       if(diffSeconds < 10) {
-			        	seconds="0"+seconds;
-			        	}
-			        if(diffHours < 10) {
-			        	hours="0"+hours;
-			        	}
-			        if(diffMinutes < 10) {
-			        	minutes="0"+minutes;
-			        	}
-			 }
-			        
-			        
-		execution_time=hours+":"+minutes+":"+seconds;
- 	        
- 	        //System.out.print(exe_time);
- 	    } catch (ParseException e1) {
- 	        // TODO Auto-generated catch block
- 	        e1.printStackTrace();
- 	    }
          
-         g.drawString("Test Run Name : " +  TName, 50, 50);
-         g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-
-         g.drawString("Script Name :"+Scenario, 50, 200);
-
-         g.drawString("Scenario Name :"+Scenario, 50, 200);
-
-         //g.drawString("Script Description :"+Description, 50, 275);
-         g.drawString("Status : "+status, 50, 350);
-         g.drawString("Executed By :"+ExeBy, 50, 425);
-         g.drawString("Start Time :"+StartTime, 50, 500);
-         g.drawString("End Time :"+EndTime, 50, 575);
-         g.drawString("Execution Time : "+execution_time, 50, 650);
-         g.dispose();
+             g.drawString("Test Run Name : " +  TName, 50, 50);
+             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
+             g.drawString("Scenario Name :"+Scenario, 50, 200);
+             g.drawString("Status : "+status, 50, 275);
+             g.drawString("Executed By :"+ExeBy, 50, 350);
+             g.drawString("Start Time :"+Starttime1, 50, 425);
+             g.drawString("End Time :"+endtime1, 50, 500);
+             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+             g.dispose();
+             
     
     
-        ImageIO.write(image, "jpg", new File("/WinfoAutomation/AddOn_Images/first.jpg"));
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
         BufferedImage image1 = null;
         image1 = ImageIO.read(file);
         Graphics g1 = image1.getGraphics();
@@ -866,8 +811,8 @@ public class SeleniumKeyWords {
         g1.drawString("FAILED IN THE NEXT STEP!!", 495, 300);
      
         g1.dispose();
-        ImageIO.write(image1, "jpg", new File("/WinfoAutomation/AddOn_Images/last.jpg"));
-        String imgpath2 ="/WinfoAutomation/AddOn_Images";
+        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
        
@@ -912,7 +857,8 @@ public class SeleniumKeyWords {
 		 * }
 		 */
 		if(video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(links1,fetchMetadataListVO,fetchConfigVO,no+"_"+ScriptNumber+".mp4");
+			String name=no+"_"+ScriptNumber+".mp4";
+			convertJPGtoMovie(null,links1,fetchMetadataListVO,fetchConfigVO,name);
 	          }
 		return fileNameList;
 
@@ -924,8 +870,8 @@ public class SeleniumKeyWords {
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-		String video_rec=fetchConfigVO.getVideo_rec();
-		//String video_rec="yes";
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="yes";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		int passcount=0;
 		int failcount=0;
@@ -945,6 +891,7 @@ public class SeleniumKeyWords {
 
 		List<String> targetFileList = new ArrayList<>();
 		ArrayList<String> links = new ArrayList<String>();
+		String firstimagelink=null;
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
@@ -962,7 +909,7 @@ public class SeleniumKeyWords {
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/WinfoAutomation/AddOn_Images/white.jpg");
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 
 			   BufferedImage image = null;
 		        image = ImageIO.read(file);
@@ -974,74 +921,55 @@ public class SeleniumKeyWords {
 		        String details= seqList.get(0).getName();
 		        String ScriptNumber = details.split("_")[3];
 				String TestRun = details.split("_")[4];
-			//	String Status = details.split("_")[6];
-			//	String status = Status.split("\\.")[0];
-			//	String Scenario = details.split("_")[2];
+				String Status = details.split("_")[6];
+				String status = Status.split("\\.")[0];
+				String Scenario = details.split("_")[2];
 		       String imagename=TestRun+ScriptNumber;
 		        String TName = fetchMetadataListVO.get(0).getTest_run_name();
-//		        int number=12345;
-//		        String Status="Failed";
-//		        String Execution="06:15:45";
+		         Date endtime=fetchConfigVO.getEndtime();
+		         Date TStarttime=fetchConfigVO.getStarttime1();
+		         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		         String TStarttime1=dateFormat.format(TStarttime);
+		         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+		         String endtime1=dateFormat.format(endtime);
 		        
-		         //String Tname = "AP Module Testing";
-		        
-		        String ExeBy=fetchConfigVO.getApplication_user_name();
-		         String StartTime=fetchConfigVO.getStart_time();
-		         String EndTime=fetchConfigVO.getEnd_time();
+		             long Tdiff=endtime.getTime() - TStarttime.getTime();
+		             long TdiffSeconds = Tdiff / 1000 % 60;
+		             long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+		             long TdiffHours = Tdiff / (60 * 60 * 1000);
+		             String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
 
-		         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
-
-		  	    Date d1 = null;
-		  	    Date d2 = null; 
-		  	    String execution_time=null;
-		  	    try {
-		  	        d1 = format.parse(StartTime);
-		  	        d2 = format.parse(EndTime);
-		  	        long diff = Math.abs(d2.getTime() - d1.getTime());
-
-		  	        long diffSeconds = diff / 1000 % 60;
-		  	        long diffMinutes = diff / (60 * 1000) % 60;
-		  	        long diffHours = diff / (60 * 60 * 1000) % 24;
-		  	        long diffDays = diff / (24 * 60 * 60 * 1000);
-		  	      String hours= diffHours+"";
-			        String minutes=diffMinutes+"";
-			        String seconds=diffSeconds+"";
-			       
-			        if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
-			        {
-			        	if(diffSeconds < 10) {
-			        		seconds="0"+seconds;
-			        		
-			        	}
-			        	if(diffHours < 10) {
-			        		hours="0"+hours;
-			        	}
-			        	if(diffMinutes < 10) {
-			        		minutes="0"+minutes;
-			        	}
-			        }
-			        
-			        
-			        execution_time=hours+":"+minutes+":"+seconds;
-
-		  	        
-		  	        //System.out.print(exe_time);
-		  	    } catch (ParseException e1) {
-		  	        // TODO Auto-generated catch block
-		  	        e1.printStackTrace();
-		  	    }
-		         g.drawString("Test Run Name : " +  TName, 50, 50);
-		         g.drawString("Executed By :"+ExeBy, 50, 125);
-		         g.drawString("Start Time :"+StartTime, 50, 200);
-		         g.drawString("End Time :"+EndTime, 50, 275);
-		         g.drawString("Execution Time : "+execution_time, 50, 350);
+		             g.drawString("Test Run Name : " +  TName, 50, 50);
+		             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
+		             g.drawString("Scenario Name :"+Scenario, 50, 200);
+		             g.drawString("Status : "+status, 50, 275);
+		             g.drawString("Executed By :"+ExeBy, 50, 350);
+//		             g.drawString("Start Time :"+TStarttime1, 50, 425);
+//		             g.drawString("End Time :"+endtime1, 50, 500);
+//		             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 		         g.dispose();
-		     
-		     
-	        ImageIO.write(image, "jpg", new File("/WinfoAutomation/AddOn_Images/"+imagename+".jpg"));
-	        	        String imgpath2 ="/WinfoAutomation/AddOn_Images";
+		         BufferedImage image2 = null;
+			        image2 = ImageIO.read(file);
+			        Graphics g2 = image2.getGraphics();
+			        g2.setColor(Color.black);
+			        
+			        g2.setFont(font);
+			        g2.drawString("Test Run Name : " +  TName, 50, 50);
+		            g2.drawString("Executed By :"+ExeBy, 50, 125);
+		            g2.drawString("Start Time :"+TStarttime1, 50, 200);
+		            g2.drawString("End Time :"+endtime1, 50, 275);
+		            g2.drawString("Execution Time : "+ExecutionTime, 50,350);
+			        g2.dispose();
+			        ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+			       
+			        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+			        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+	        	        
 	        File f11=new File(imgpath2);
 	        File[] f22=f11.listFiles();
+	        File f44=new File(imgpath3);
+	        firstimagelink=f44.getAbsolutePath();
 
 			
 	        if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
@@ -1093,7 +1021,7 @@ public class SeleniumKeyWords {
 		//fetchConfigVO.setPasscount(passcount);
 		//fetchConfigVO.setFailcount(failcount);
 		if(video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(links,fetchMetadataListVO,fetchConfigVO,"Passed_Video.mp4");
+			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Passed_Video.mp4");
 	          }
 		System.out.println(targetFileList.size());
 		return targetFileList;
@@ -1105,8 +1033,8 @@ public class SeleniumKeyWords {
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-		String video_rec=fetchConfigVO.getVideo_rec();
-		//String video_rec="yes";
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="yes";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 int failcount=0;
 int passcount=0;
@@ -1126,6 +1054,7 @@ int passcount=0;
 
 		List<String> targetFileList = new ArrayList<>();
 		ArrayList<String> links = new ArrayList<String>();
+		String firstimagelink=null;
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
@@ -1145,7 +1074,7 @@ int passcount=0;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/WinfoAutomation/AddOn_Images/white.jpg");
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 
 	        BufferedImage image = null;
 	        image = ImageIO.read(file);
@@ -1157,68 +1086,36 @@ int passcount=0;
 	        String details= seqList.get(0).getName();
 	        String ScriptNumber = details.split("_")[3];
 			String TestRun = details.split("_")[4];
-		//	String Status = details.split("_")[6];
-		//	String status = Status.split("\\.")[0];
-		//	String Scenario = details.split("_")[2];
+			String Status = details.split("_")[6];
+			String status = Status.split("\\.")[0];
+			String Scenario = details.split("_")[2];
 	       String imagename=TestRun+ScriptNumber;
 	        String TName = fetchMetadataListVO.get(0).getTest_run_name();
-//	        int number=12345;
-//	        String Status="Failed";
-//	        String Execution="06:15:45";
-	        
-	         //String Tname = "AP Module Testing";
-	        
-	        String ExeBy=fetchConfigVO.getApplication_user_name();
-	         String StartTime=fetchConfigVO.getStart_time();
-	         String EndTime=fetchConfigVO.getEnd_time();
 
-	        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
+	         Date endtime=fetchConfigVO.getEndtime();
+	         Date TStarttime=fetchConfigVO.getStarttime1();
+	         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	         String TStarttime1=dateFormat.format(TStarttime);
+	         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+	         String endtime1=dateFormat.format(endtime);
+	       
+	             long Tdiff=endtime.getTime() - TStarttime.getTime();
+	             long TdiffSeconds = Tdiff / 1000 % 60;
+	             long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+	             long TdiffHours = Tdiff / (60 * 60 * 1000);
+	             String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
 
- 	    Date d1 = null;
- 	    Date d2 = null; 
- 	    String execution_time=null;
- 	    try {
- 	        d1 = format.parse(StartTime);
- 	        d2 = format.parse(EndTime);
- 	        long diff = Math.abs(d2.getTime() - d1.getTime());
-
- 	        long diffSeconds = diff / 1000 % 60;
- 	        long diffMinutes = diff / (60 * 1000) % 60;
- 	        long diffHours = diff / (60 * 60 * 1000) % 24;
- 	        long diffDays = diff / (24 * 60 * 60 * 1000);
- 	        String hours= diffHours+"";
-		String minutes=diffMinutes+"";
-	 	String seconds=diffSeconds+"";
-			       
-		if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
-			{
-			       if(diffSeconds < 10) {
-			        	seconds="0"+seconds;
-			        	}
-			        if(diffHours < 10) {
-			        	hours="0"+hours;
-			        	}
-			        if(diffMinutes < 10) {
-			        	minutes="0"+minutes;
-			        	}
-			 }
-			        
-			        
-		execution_time=hours+":"+minutes+":"+seconds;
-
-	  	        //System.out.print(exe_time);
-	  	    } catch (ParseException e1) {
-	  	        // TODO Auto-generated catch block
-	  	        e1.printStackTrace();
-	  	    }
-	         g.drawString("Test Run Name : " +  TName, 50, 50);
-	         g.drawString("Executed By :"+ExeBy, 50, 125);
-	         g.drawString("Start Time :"+StartTime, 50, 200);
-	         g.drawString("End Time :"+EndTime, 50, 275);
-	         g.drawString("Execution Time : "+execution_time, 50, 350);
+	             g.drawString("Test Run Name : " +  TName, 50, 50);
+	             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
+	             g.drawString("Scenario Name :"+Scenario, 50, 200);
+	             g.drawString("Status : "+status, 50, 275);
+	             g.drawString("Executed By :"+ExeBy, 50, 350);
+//	             g.drawString("Start Time :"+TStarttime1, 50, 425);
+//	             g.drawString("End Time :"+endtime1, 50, 500);
+//	             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 	         g.dispose();
 	         
-	        ImageIO.write(image, "jpg", new File("/WinfoAutomation/AddOn_Images/"+imagename+".jpg"));
+	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
 	        BufferedImage image1 = null;
 	        image1 = ImageIO.read(file);
 	        Graphics g1 = image1.getGraphics();
@@ -1228,10 +1125,27 @@ int passcount=0;
 	        g1.drawString("FAILED IN THE NEXT STEP!!", 435, 300);
 	     
 	        g1.dispose();
-	        ImageIO.write(image1, "jpg", new File("/WinfoAutomation/AddOn_Images/last.jpg"));
-	        String imgpath2 ="/WinfoAutomation/AddOn_Images";
+	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+	        BufferedImage image2 = null;
+	        image2 = ImageIO.read(file);
+	        Graphics g2 = image2.getGraphics();
+	        g2.setColor(Color.black);
+	        
+	        g2.setFont(font);
+	        g2.drawString("Test Run Name : " +  TName, 50, 50);
+            g2.drawString("Executed By :"+ExeBy, 50, 125);
+            g2.drawString("Start Time :"+TStarttime1, 50, 200);
+            g2.drawString("End Time :"+endtime1, 50, 275);
+            g2.drawString("Execution Time : "+ExecutionTime, 50,350);
+	        g2.dispose();
+	        ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+	       
+	        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+	        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
 	        File f11=new File(imgpath2);
 	        File[] f22=f11.listFiles();
+	        File f44=new File(imgpath3);
+	        firstimagelink=f44.getAbsolutePath();
 	        
 
 			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
@@ -1288,7 +1202,7 @@ int passcount=0;
 		//fetchConfigVO.setPasscount(passcount);
 		//fetchConfigVO.setFailcount(failcount);
 		if(video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(links,fetchMetadataListVO,fetchConfigVO,"Failed_Video.mp4");
+			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Failed_Video.mp4");
 	          }
 		return targetFileList;
 
@@ -1301,8 +1215,8 @@ int passcount=0;
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-		String video_rec=fetchConfigVO.getVideo_rec();
-		 //String video_rec="yes";
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		 String video_rec="yes";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		int failcount=0;
 		int passcount=0;
@@ -1326,6 +1240,7 @@ int passcount=0;
 		ArrayList<String> links = new ArrayList<String>();
 		ArrayList<String> links2 = new ArrayList<String>();
 		List<String> targetFailedFileList = new ArrayList<>();
+		String firstimagelink = null;
 
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
@@ -1345,8 +1260,9 @@ int passcount=0;
 			ArrayList<String> links1 = new ArrayList<String>();
 						
 						ArrayList<String> linksall = new ArrayList<String>();
+						
 
-						File file = new File("/WinfoAutomation/AddOn_Image/white.jpg");
+						File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 
 				        BufferedImage image = null;
 				        image = ImageIO.read(file);
@@ -1358,70 +1274,34 @@ int passcount=0;
 				        String details= seqList.get(0).getName();
 				        String ScriptNumber = details.split("_")[3];
 						String TestRun = details.split("_")[4];
-					//	String Status = details.split("_")[6];
-					//	String status = Status.split("\\.")[0];
-					//	String Scenario = details.split("_")[2];
+						String Status = details.split("_")[6];
+						String status = Status.split("\\.")[0];
+						String Scenario = details.split("_")[2];
 				       String imagename=TestRun+ScriptNumber;
 				        String TName = fetchMetadataListVO.get(0).getTest_run_name();
-//				        int number=12345;
-//				        String Status="Failed";
-//				        String Execution="06:15:45";
-				        
-				         //String Tname = "AP Module Testing";
-				        
-				         String ExeBy=fetchConfigVO.getApplication_user_name();
-				         String StartTime=fetchConfigVO.getStart_time();
-				         String EndTime=fetchConfigVO.getEnd_time();
-				         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a"); 
+				         Date endtime=fetchConfigVO.getEndtime();
+				         Date TStarttime=fetchConfigVO.getStarttime1();
+				         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+				         String TStarttime1=dateFormat.format(TStarttime);
+				         String ExeBy=fetchMetadataListVO.get(0).getInput_value();;
+				         String endtime1=dateFormat.format(endtime);
+				             long Tdiff=endtime.getTime() - TStarttime.getTime();
+				             long TdiffSeconds = Tdiff / 1000 % 60;
+				             long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+				             long TdiffHours = Tdiff / (60 * 60 * 1000);
+				             String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
 
-
-				  	    Date d1 = null;
-				  	    Date d2 = null; 
-				  	    String execution_time=null;
-				  	    try {
-				  	        d1 = format.parse(StartTime);
-				  	        d2 = format.parse(EndTime);
-				  	        long diff = Math.abs(d2.getTime() - d1.getTime());
-
-				  	        long diffSeconds = diff / 1000 % 60;
-				  	        long diffMinutes = diff / (60 * 1000) % 60;
-				  	        long diffHours = diff / (60 * 60 * 1000) % 24;
-				  	        long diffDays = diff / (24 * 60 * 60 * 1000);
-				  	      String hours= diffHours+"";
-					        String minutes=diffMinutes+"";
-					        String seconds=diffSeconds+"";
-					       
-					        if(diffSeconds < 10 || diffMinutes < 10 || diffHours < 10)
-					        {
-					        	if(diffSeconds < 10) {
-					        		seconds="0"+seconds;
-					        		
-					        	}
-					        	if(diffHours < 10) {
-					        		hours="0"+hours;
-					        	}
-					        	if(diffMinutes < 10) {
-					        		minutes="0"+minutes;
-					        	}
-					        }
-					        
-					        
-					        execution_time=hours+":"+minutes+":"+seconds;
-
- 	   
-				  	        
-				  	        //System.out.print(exe_time);
-				  	    } catch (ParseException e1) {
-				  	        // TODO Auto-generated catch block
-				  	        e1.printStackTrace();
-				  	    }
-				         g.drawString("Test Run Name : " +  TName, 50, 50);
-				         g.drawString("Executed By :"+ExeBy, 50, 125);
-				         g.drawString("Start Time :"+StartTime, 50, 200);
-				         g.drawString("End Time :"+EndTime, 50, 275);
-				         g.drawString("Execution Time : "+execution_time, 50, 350);
-				         g.dispose();
-				        ImageIO.write(image, "jpg", new File("/WinfoAutomation/AddOn_Images/"+imagename+".jpg"));
+				             g.drawString("Test Run Name : " +  TName, 50, 50);
+				             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
+				             g.drawString("Scenario Name :"+Scenario, 50, 200);
+				             g.drawString("Status : "+status, 50, 275);
+				             g.drawString("Executed By :"+ExeBy, 50, 350);
+//				             g.drawString("Start Time :"+TStarttime1, 50, 425);
+//				             g.drawString("End Time :"+endtime1, 50, 500);
+//				             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+				             g.dispose();
+				         
+				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
 				        BufferedImage image1 = null;
 				        image1 = ImageIO.read(file);
 				        Graphics g1 = image1.getGraphics();
@@ -1431,11 +1311,25 @@ int passcount=0;
 				        g1.drawString("FAILED IN THE NEXT STEP!!", 435, 300);
 				     
 				        g1.dispose();
-				        ImageIO.write(image1, "jpg", new File("/WinfoAutomation/AddOn_Images/last.jpg"));
-				        String imgpath2 ="/WinfoAutomation/AddOn_Images";
+				        BufferedImage image2 = null;
+				        image2 = ImageIO.read(file);
+				        Graphics g2 = image2.getGraphics();
+				        g2.setColor(Color.black);
+				        
+				        g2.setFont(font);
+				        g2.drawString("Test Run Name : " +  TName, 50, 50);
+			            g2.drawString("Executed By :"+ExeBy, 50, 125);
+			            g2.drawString("Start Time :"+TStarttime1, 50, 200);
+			            g2.drawString("End Time :"+endtime1, 50, 275);
+			            g2.drawString("Execution Time : "+ExecutionTime, 50,350);
+				        g2.dispose();
+				        ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+				        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+				        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
 				        File f11=new File(imgpath2);
 				        File[] f22=f11.listFiles();
-				      
+				        File f44=new File(imgpath3);
+				        firstimagelink=f44.getAbsolutePath();
 
 						if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
 							passcount++;
@@ -1542,22 +1436,40 @@ int passcount=0;
 					//fetchConfigVO.setPasscount(passcount);
 					//fetchConfigVO.setFailcount(failcount);
 					if(video_rec.equalsIgnoreCase("yes")) {
-						convertJPGtoMovie(finalLinks,fetchMetadataListVO,fetchConfigVO,"Detailed_Video.mp4");
+						
+						convertJPGtoMovie(firstimagelink,finalLinks,fetchMetadataListVO,fetchConfigVO,"Detailed_Video.mp4");
 				          }
 					return targetFileList;
 	}
 	
-	 public static void convertJPGtoMovie(List<String> targetFileList, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,String name)
+	 public  void convertJPGtoMovie(String targetFile1,List<String> targetFileList, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,String name)
      {
 		 String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+name);
-		
+		 String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		 File theDir = new File(Folder);
+			if (!theDir.exists()) {
+				System.out.println("creating directory: " + theDir.getName());
+				boolean result = false;
+				try {
+					theDir.mkdirs();
+					result = true;
+				} catch (SecurityException se) {
+					// handle it
+					System.out.println(se.getMessage());
+				}
+			} else {
+				System.out.println("Folder exist");
+			}
 		//String vidPath = "C:\\Users\\Winfo Solutions\\Desktop\\"+name;
          OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
          FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath,1366,613);
+         String str=null;
+    	 IplImage ipl = cvLoadImage(str);
          try {
              recorder.setFrameRate(0.33);
-             //recorder.setVideoCodec(avcodec.AV_CODEC_ID_MPEG4);
+             recorder.setVideoCodec(avcodec.AV_CODEC_ID_MPEG4);
              recorder.setVideoBitrate(9000);
              recorder.setFormat("mp4");
              recorder.setVideoQuality(0); // maximum quality
@@ -1566,10 +1478,17 @@ int passcount=0;
 //             {
 //            	 System.out.println(targetFileList.get(i));
 //             }
+             if(targetFile1 != null)
+             {
+            	 System.out.println(targetFile1);
+            	 str=targetFile1;
+            	 ipl = cvLoadImage(str);
+            	 recorder.record(grabberConverter.convert(ipl));
+             }
              for (String image : targetFileList) {
             	 System.out.println(image);
-            	 String str=image;
-            	 IplImage ipl = cvLoadImage(str);
+            	 str=image;
+            	 ipl = cvLoadImage(str);
             	 recorder.record(grabberConverter.convert(ipl));             }
              recorder.stop();
              System.out.println("ok");
@@ -1745,9 +1664,9 @@ int passcount=0;
 			int passcount, int failcount) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			//String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				//	+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-			String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
+			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			//String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
@@ -1784,9 +1703,9 @@ int passcount=0;
 			writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
 			document.open();
 			for (String image : fileNameList) {
-				//Image img = Image.getInstance(
-					//	fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
-				Image img = Image.getInstance("C:\\Users\\Winfo Solutions\\Desktop\\test\\" + image);
+				Image img = Image.getInstance(
+					fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+				//Image img = Image.getInstance("C:\\Users\\Winfo Solutions\\Desktop\\test\\" + image);
 
 				String ScriptNumber = image.split("_")[3];
 				String TestRun = image.split("_")[4];
@@ -10517,6 +10436,20 @@ System.out.println(e);
 			throw e;
 
 		}
+	}
+	public String getErrorMessages(WebDriver driver) {
+	    try {
+	          String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
+	return text;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	    }try {
+	          String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
+	return text;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	    }
+	    return null;
 	}
 
 }
