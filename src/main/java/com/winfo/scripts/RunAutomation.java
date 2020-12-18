@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -89,6 +90,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
+			Date date = new Date();
+			 fetchConfigVO.setStarttime1(date);
 			System.out.println(metaDataMap.toString());
 			Date date = new Date();
             fetchConfigVO.setStarttime1(date);
@@ -149,8 +152,8 @@ public class RunAutomation extends SeleniumKeyWords {
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
 			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
-		Date date = new Date();
-        fetchConfigVO.setStarttime(date);
+		 Date date = new Date();
+		 fetchConfigVO.setStarttime(date);
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
 //		//String start_time=null;
@@ -177,6 +180,7 @@ public class RunAutomation extends SeleniumKeyWords {
 		System.out.println(detailurl);
 		boolean isDriverError = true;
 		try {
+			
 			driver = DriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
@@ -252,6 +256,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			String globalValueForSteps = null;
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 	       
+			DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
+
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -282,6 +288,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					type1 = actionType != null ? actionType.split(">").length > 0 ? actionType.split(">")[0] : "" : "";
 					type2 = actionType != null ? actionType.split(">").length > 1 ? actionType.split(">")[1] : "" : "";
 					type3 = actionType != null ? actionType.split(">").length > 2 ? actionType.split(">")[2] : "" : "";
+				
 				}
 				try {
 					switch (actionName) {
@@ -304,7 +311,7 @@ public class RunAutomation extends SeleniumKeyWords {
 
 					case "openTask":
 						log.info("Navigating to openTask Action");
-						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2);
+						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "Logout":
@@ -481,7 +488,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						post.setP_test_set_line_path(scripturl);
 						// passcount = passcount+1;
 						Date date = new Date();
-                        fetchConfigVO.setEndtime(date);
+						 fetchConfigVO.setEndtime(date);
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
@@ -508,7 +515,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					post.setP_test_set_line_path(scripturl);
 					failcount = failcount + 1;
 					Date date = new Date();
-                    fetchConfigVO.setEndtime(date);
+					 fetchConfigVO.setEndtime(date);
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
