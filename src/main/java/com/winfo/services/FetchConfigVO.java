@@ -1,5 +1,7 @@
 package com.winfo.services;
 
+import java.util.Date;
+
 public class FetchConfigVO {
 	
 	private String browser;
@@ -32,11 +34,38 @@ public class FetchConfigVO {
 	private String client_id;
 	private String client_secret;
 	private String tenant_id;
+	private String video_rec;
 	
+	private Date starttime;
+	private Date Starttime1;
+	private Date endtime;
 	
-	
-	
-	
+
+
+	public Date getStarttime() {
+		return starttime;
+	}
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+	public Date getStarttime1() {
+		return Starttime1;
+	}
+	public void setStarttime1(Date starttime1) {
+		Starttime1 = starttime1;
+	}
+	public Date getEndtime() {
+		return endtime;
+	}
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+	public String getVideo_rec() {
+		return video_rec;
+	}
+	public void setVideo_rec(String video_rec) {
+		this.video_rec = video_rec;
+	}
 	public String getDb_host() {
 		return db_host;
 	}

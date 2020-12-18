@@ -38,7 +38,7 @@ public class JobController {
 			System.out.println("Parameter test script # : "+testScriptDto.getTestScriptNo());
 			try {
 				runAutomation.run(testScriptDto.getTestScriptNo());
-//				runAutomation.report();
+			//runAutomation.report();
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
