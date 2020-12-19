@@ -142,7 +142,7 @@ public class SeleniumKeyWords {
 		String param3 = "Navigator";
 		navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
 		menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
-		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO,type1,type2,param1,count);
+		menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO,type1,type2,param1,param2,count);
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
@@ -154,7 +154,7 @@ public class SeleniumKeyWords {
 //		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 		task(driver, param3, fetchMetadataVO, fetchConfigVO);
-		taskMenu(driver, param1, fetchMetadataVO, fetchConfigVO,type1,type2,param2,count);
+		taskMenu(driver,fetchMetadataVO, fetchConfigVO,type1,type2,param1,param2,count);
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
@@ -452,8 +452,8 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void menuNavigationButton(WebDriver driver, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO,String type1,String type2,String param1,int count) throws Exception {
+	public void menuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,String type1,String type2,String param1,String param2,int count) throws Exception {
 		try {
 			Thread.sleep(3000);
 			if (param2.equalsIgnoreCase("Assets")) {
@@ -527,7 +527,7 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void taskMenu(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,String type1,String type2,String param2,int count)
+	public void taskMenu(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,String type1,String type2, String param1,String param2,int count)
 			throws Exception {
 		try {
 			Thread.sleep(2000);
@@ -10546,7 +10546,7 @@ System.out.println(e);
 		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver
-					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
+					.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
 			driver.switchTo().frame(waittext);
 			return;
 		} catch (Exception e) {
