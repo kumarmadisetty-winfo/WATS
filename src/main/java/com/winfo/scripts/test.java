@@ -8,11 +8,11 @@ import java.net.URL;
 public class test {
 
 	public static void main(String[] args) throws Exception {
-		String urlStr = "http://10.110.1.44:8080/executeTestScript";
+		String urlStr = "http://192.168.1.201:8080/executeTestScript";
 //		String urlStr = "http://localhost:8080/executeTestScript";
 		
 		try {
-			runWithParams(urlStr, "181");
+			runWithParams(urlStr, "341");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

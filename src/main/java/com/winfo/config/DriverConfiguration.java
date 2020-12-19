@@ -25,14 +25,14 @@ public class DriverConfiguration {
 		WebDriver driver = null;
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
-	//		System.setProperty(DriverConstants.CHROME_DRIVER.value, "C:\\Users\\watsadmin\\Documents\\Selenium Grid\\chromedriver.exe");
+//			System.setProperty(DriverConstants.CHROME_DRIVER.value, "C:\\Users\\winfo83\\Documents\\wats\\chormedriver\\chromedriver.exe");
 			Map<String, Object> prefs = new HashMap<String, Object>();
 			prefs.put("profile.default_content_settings.popups", 0);
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
-//			options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+//			options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 			options.setBinary("/usr/bin/google-chrome");
-			options.addArguments("headless");
+	//		options.addArguments("headless");
 			options.addArguments("start-maximized");
 			options.addArguments("--enable-automation");
 			options.addArguments("test-type=browser");
@@ -41,7 +41,7 @@ public class DriverConfiguration {
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
-			//driver = new ChromeDriver(cap);
+//			driver = new ChromeDriver(cap);
 			driver=new RemoteWebDriver(new URL("config_url"), cap); 
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 			

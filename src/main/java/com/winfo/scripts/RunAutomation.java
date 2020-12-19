@@ -224,6 +224,7 @@ public class RunAutomation extends SeleniumKeyWords {
 			scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+			
 			String userName = null;
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
@@ -238,6 +239,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
+				String step_description=fetchMetadataVO.getStep_description();
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -343,8 +345,15 @@ public class RunAutomation extends SeleniumKeyWords {
 					case "clickExpandorcollapse":
 						clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
-					case "clickButton":
-						clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+					case "clickButton":		  
+						  clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						    String message=getErrorMessages(driver);
+	                     if(message != null) {
+	                           fetchConfigVO.setErrormessage(message);
+	                           screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
+	                          throw new IllegalArgumentException("Erroe occured");
+	                        }
+	                     screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						break;
 					case "tableRowSelect":
 						tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
@@ -457,6 +466,11 @@ public class RunAutomation extends SeleniumKeyWords {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
+					if(fetchConfigVO.getErrormessage()==null) {
+						String error_message=actionName+" action was not performed ";
+					fetchConfigVO.setErrormessage(error_message);
+					}
+			
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");

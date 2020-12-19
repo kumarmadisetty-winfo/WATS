@@ -1264,7 +1264,7 @@ public class SeleniumKeyWords {
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			 Image img1 = Image.getInstance("/Uploads/WatsIconwats_icon.png");
+			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -1684,8 +1684,7 @@ public class SeleniumKeyWords {
 				p.setAlignment(Element.ALIGN_RIGHT);
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
-				img.scalePercent(60, 71);
-				document.add(img);
+				img.scalePercent(60, 70);
 				document.add(img);
 				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
@@ -2109,7 +2108,7 @@ public class SeleniumKeyWords {
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("/Uploads/WatsIconwats_icon.png");
+			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
@@ -2198,6 +2197,7 @@ public class SeleniumKeyWords {
 						String S = "Status:" + " " + status;
 //						String Scenarios = "Scenario Name :" + "" + Scenario;
 						String Message = "Failed at Line Number:" + ""+ Reason;
+						String errorMessage = "Failed Message:" + ""+ fetchConfigVO.getErrormessage();
 						// String message = "Failed at
 						// :"+fetchMetadataListVO.get(0).getInput_parameter();
 //						document.add(new Paragraph(TR, fnt));
@@ -2206,16 +2206,27 @@ public class SeleniumKeyWords {
 //						document.add(new Paragraph(Scenarios, fnt));
 						if (status.equalsIgnoreCase("Failed")) {
 							document.add(new Paragraph(Message, fnt));
+							if(fetchConfigVO.getErrormessage()!=null) {
+							document.add(new Paragraph(errorMessage, fnt));
+							}
+							document.add(Chunk.NEWLINE);
+							img.setAlignment(Image.ALIGN_CENTER);
+							img.isScaleToFitHeight();
+							img.scalePercent(60,70);
+							document.add(img);
+						}else {
+							document.add(Chunk.NEWLINE);
+							img.setAlignment(Image.ALIGN_CENTER);
+							img.isScaleToFitHeight();
+							img.scalePercent(60,68);
+							document.add(img);
 						}
-						document.add(Chunk.NEWLINE);
+						
 										
 						Paragraph p=new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
 						p.setAlignment(Element.ALIGN_RIGHT);
-						img.setAlignment(Image.ALIGN_CENTER);
-						img.isScaleToFitHeight();
-						img.scalePercent(60, 71);
-						document.add(img);
-						document.add(img);
+						
+						
 						document.add(p);
 						System.out.println("This Image " + "" + image + "" + "was added to the report");
 //				End to add screenshoots and pagenumbers and wats icon
@@ -3566,7 +3577,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//*[text()='Create Time Card']/following::span[text()='K']"))));
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()='Create Time Card']/following::span[text()='K']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3589,7 +3600,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//*[contains(text(),'"+param1+"')]/following::span[normalize-space(text())='K']"))));
 				WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'"+param1+"')]/following::span[normalize-space(text())='K']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(4000);
@@ -3610,7 +3621,7 @@ public class SeleniumKeyWords {
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[@title='" + param2 + "']"))));
 				WebElement waittext = driver.findElement(By.xpath(("//button[@title='" + param2 + "']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3631,7 +3642,7 @@ public class SeleniumKeyWords {
 						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::button[@title='" + param2 + "']")));
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::button[@title='" + param2 + "']"));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3656,7 +3667,7 @@ public class SeleniumKeyWords {
 				// "ne"));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//div[contains(@id,'RejectPopup::content')]//span[text()='K']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3679,7 +3690,7 @@ public class SeleniumKeyWords {
 								+ "']/following::*[not (@aria-disabled) and text()='OK'][1]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='" + param1
 						+ "']/following::*[not (@aria-disabled) and text()='OK'][1]")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(4000);
@@ -3702,7 +3713,7 @@ public class SeleniumKeyWords {
 						By.xpath(("//[contains(text(),'" + param1 + "')]/following::span[text()='K']"))));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//[contains(text(),'" + param1 + "')]/following::span[text()='K']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3725,7 +3736,7 @@ public class SeleniumKeyWords {
 						+ "') and (@type)]/following::button[contains(text(),'" + param2 + "')])[1]"))));
 				WebElement waittext = driver.findElement(By.xpath(("(//input[contains(@value,'" + param1
 						+ "') and (@type)]/following::button[contains(text(),'" + param2 + "')])[1]")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3747,7 +3758,7 @@ public class SeleniumKeyWords {
 						By.xpath(("//*[contains(@id,'tAccountPopup::content')]//*[text()='o']"))));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(@id,'tAccountPopup::content')]//*[text()='o']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3769,7 +3780,7 @@ public class SeleniumKeyWords {
 				// "l"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath("//input[@value='" + param1 + "']"));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 			//	clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3791,7 +3802,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[text()='ne']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='ne']"), "ne"));
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()='ne']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3810,7 +3821,7 @@ public class SeleniumKeyWords {
 						By.xpath(("//div[contains(text(),'" + param1 + "')]/following::span[text()='o']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Approval and Notification History or Done clickButton"+scripNumber);
@@ -3826,7 +3837,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::span[text()='o']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Done clickButton"+scripNumber);
@@ -3837,7 +3848,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='m']"), "m"));
 				Thread.sleep(20000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='m']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3854,7 +3865,7 @@ public class SeleniumKeyWords {
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='m']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3866,7 +3877,7 @@ public class SeleniumKeyWords {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='istributions']")));
 				WebElement waittext = driver.findElement(By.xpath("//span[text()='istributions']"));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3884,7 +3895,7 @@ public class SeleniumKeyWords {
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(
 						("//*[normalize-space(text())='" + param1 + "']/following::button[text()='Save and Close']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3901,7 +3912,7 @@ public class SeleniumKeyWords {
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='S']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3915,7 +3926,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='x']"), "x"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='x']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3932,7 +3943,7 @@ public class SeleniumKeyWords {
 						"x"));
 				WebElement waittext = driver.findElement(By
 						.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + param2 + "']"));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -3955,7 +3966,7 @@ public class SeleniumKeyWords {
 								+ "']/following::span[text()='Y']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -3971,7 +3982,7 @@ public class SeleniumKeyWords {
 				WebElement waittext = driver.findElement(By.xpath("//button[@_afrpdo='ok' and @accesskey='K']"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -3985,7 +3996,7 @@ public class SeleniumKeyWords {
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='S']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save and Close clickButton"+scripNumber);
@@ -3996,7 +4007,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='u']"), "u"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='u']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4011,7 +4022,7 @@ public class SeleniumKeyWords {
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()='Contin']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Continue clickButton"+scripNumber);
@@ -4037,7 +4048,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Adjustment clickButton"+scripNumber);
 				return;
@@ -4058,7 +4069,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ave']"), "ave"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='ave']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4072,7 +4083,7 @@ public class SeleniumKeyWords {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='l']"), "l"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='l']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4089,7 +4100,7 @@ public class SeleniumKeyWords {
 				Thread.sleep(4000);
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='l']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(2000);
@@ -4106,7 +4117,7 @@ public class SeleniumKeyWords {
 				Thread.sleep(4000);
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='p']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4131,7 +4142,7 @@ public class SeleniumKeyWords {
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()='K']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4151,7 +4162,7 @@ public class SeleniumKeyWords {
 					wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='A']"), "A"));
 					Thread.sleep(4000);
 					WebElement waittext = driver.findElement(By.xpath(("//span[text()='A']")));
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4163,7 +4174,7 @@ public class SeleniumKeyWords {
 					expand.click();
 					Thread.sleep(2000);
 					WebElement waittext = driver.findElement(By.xpath(("//span[text()='A']")));
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4187,7 +4198,7 @@ public class SeleniumKeyWords {
 							.textToBePresentInElementLocated(By.xpath("//button[text()='" + param1 + "']"), "param1"));
 					Thread.sleep(4000);
 					WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4200,7 +4211,7 @@ public class SeleniumKeyWords {
 					expand.click();
 					Thread.sleep(2000);
 					WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4224,7 +4235,7 @@ public class SeleniumKeyWords {
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[normalize-space(text())='" + param2 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4246,7 +4257,7 @@ public class SeleniumKeyWords {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickButton"+scripNumber);
@@ -4265,7 +4276,7 @@ public class SeleniumKeyWords {
 				// "l"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath("(//td[normalize-space(text())='" + param1 + "'])[2]"));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4288,7 +4299,7 @@ public class SeleniumKeyWords {
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4310,7 +4321,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//tr[contains(@id,'HEADER_FREEZE')]//td[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4325,7 +4336,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//tr[contains(@id,'HEADER_UNFREEZE')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4340,7 +4351,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//tr[contains(@id,'HEADER_CLOSE')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4355,7 +4366,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//tr[contains(@id,'HEADER_REOPEN')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4370,7 +4381,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//tr[contains(@id,'HEADER_EDIT')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4392,7 +4403,7 @@ public class SeleniumKeyWords {
 						.findElement(By.xpath(("//tr[contains(@id,'commandMenuItem')]//td[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -4415,7 +4426,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Reverse clickButton"+scripNumber);
 				return;
@@ -4434,7 +4445,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(60000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton"+scripNumber);
 				return;
@@ -4453,7 +4464,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Republish clickButton"+scripNumber);
 				return;
@@ -4473,7 +4484,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickButton"+scripNumber);
 				return;
@@ -4492,7 +4503,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickButton"+scripNumber);
 				return;
@@ -4513,7 +4524,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickButton"+scripNumber);
@@ -4534,7 +4545,7 @@ public class SeleniumKeyWords {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickButton"+scripNumber);
 				return;
@@ -4552,7 +4563,7 @@ public class SeleniumKeyWords {
 					"(//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + param2 + "' and not(@_afrpdo)])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton"+scripNumber);
 			return;
@@ -4569,7 +4580,7 @@ public class SeleniumKeyWords {
 					.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())='" + param2 + "'])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton"+scripNumber);
 			return;
@@ -4586,7 +4597,7 @@ public class SeleniumKeyWords {
 					.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title='" + param2 + "'])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton"+scripNumber);
 			return;
@@ -4595,6 +4606,7 @@ public class SeleniumKeyWords {
 			log.error("Failed during clickButton"+scripNumber);
 			System.out.println(e);
 		}
+	
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			Thread.sleep(3000);
@@ -4606,7 +4618,7 @@ public class SeleniumKeyWords {
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton"+scripNumber);
 			return;
@@ -4614,6 +4626,19 @@ public class SeleniumKeyWords {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during clickButton"+scripNumber);
 		}
+//		   try {
+//	              String text = driver.findElement(By.xpath("//td[@class='AFNoteWindow']")).getText();
+//	              fetchConfigVO.setErrormessage(text);
+//	  			return;
+//	        } catch (Exception e) {
+//	            System.out.println(e);
+//	        }try {
+//	              String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
+//	              fetchConfigVO.setErrormessage(text);
+//	  			return;
+//	        } catch (Exception e) {
+//	            System.out.println(e);
+//	        }
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -4623,7 +4648,7 @@ public class SeleniumKeyWords {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton"+scripNumber);
@@ -4632,9 +4657,11 @@ public class SeleniumKeyWords {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during clickButton"+scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+//			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
+		
+
 	}
 
 	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
@@ -10585,5 +10612,18 @@ System.out.println(e);
 		}
 		}
 	}
-
+	public String getErrorMessages(WebDriver driver) {
+        try {
+              String text = driver.findElement(By.xpath("//td[@class='AFNoteWindow']")).getText();
+    return text;
+        } catch (Exception e) {
+            System.out.println(e);
+        }try {
+              String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
+    return text;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 }

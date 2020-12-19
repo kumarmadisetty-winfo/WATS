@@ -40,9 +40,15 @@ public class FetchConfigVO {
 	private int passcount;
 	private int failcount;
 	private String status1;
+	private String errormessage;
 	
-	
-	
+
+	public String getErrormessage() {
+		return errormessage;
+	}
+	public void setErrormessage(String errormessage) {
+		this.errormessage = errormessage;
+	}
 	public Date getStarttime1() {
 		return Starttime1;
 	}
