@@ -93,8 +93,6 @@ public class RunAutomation extends SeleniumKeyWords {
 			Date date = new Date();
 			 fetchConfigVO.setStarttime1(date);
 			System.out.println(metaDataMap.toString());
-			Date date = new Date();
-            fetchConfigVO.setStarttime1(date);
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
@@ -274,7 +272,6 @@ public class RunAutomation extends SeleniumKeyWords {
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id=fetchMetadataVO.getTest_script_param_id();
 				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"In-Progress");
-				String step_description=fetchMetadataVO.getStep_description();
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;

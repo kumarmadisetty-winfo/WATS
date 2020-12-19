@@ -11303,19 +11303,7 @@ System.out.println(e);
 
 		}
 	}
-	public String getErrorMessages(WebDriver driver) {
-	    try {
-	          String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
-	return text;
-	    } catch (Exception e) {
-	        System.out.println(e);
-	    }try {
-	          String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
-	return text;
-	    } catch (Exception e) {
-	        System.out.println(e);
-	    }
-	    return null;
+
 	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");

@@ -42,10 +42,7 @@ public class FetchConfigVO {
 	private String status1;
 	private String errormessage;
 	
-	private Date starttime;
-	private Date Starttime1;
-	private Date endtime;
-	
+
 
 
 
@@ -67,12 +64,7 @@ public class FetchConfigVO {
 	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
-	public Date getStarttime1() {
-		return Starttime1;
-	}
-	public void setStarttime1(Date starttime1) {
-		Starttime1 = starttime1;
-	}
+
 	public Date getEndtime() {
 		return endtime;
 	}
