@@ -58,6 +58,10 @@ public class FetchMetadataVO implements Serializable {
 		this.step_description = step_description;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public String getSeq_num() {
 		return seq_num;
 	}

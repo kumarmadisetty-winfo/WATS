@@ -251,6 +251,7 @@ public class RunAutomation extends SeleniumKeyWords {
 			scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+			
 			String userName = null;
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
@@ -273,6 +274,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id=fetchMetadataVO.getTest_script_param_id();
 				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"In-Progress");
+				String step_description=fetchMetadataVO.getStep_description();
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -378,14 +380,15 @@ public class RunAutomation extends SeleniumKeyWords {
 					case "clickExpandorcollapse":
 						clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
-					case "clickButton":
-						String message=getErrorMessages(driver);
-						if(message == null) {
-							clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						}
-						else {
-							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",message);
-						}
+					case "clickButton":		  
+						  clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						    String message=getErrorMessages(driver);
+	                     if(message != null) {
+	                           fetchConfigVO.setErrormessage(message);
+	                           screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
+	                          throw new IllegalArgumentException("Erroe occured");
+	                        }
+	                     screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						break;
 					case "tableRowSelect":
 						tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
@@ -504,6 +507,11 @@ public class RunAutomation extends SeleniumKeyWords {
 						String error_message=actionName+"was not performed due to error at"+step_description+"step";
 						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
 						}
+					if(fetchConfigVO.getErrormessage()==null) {
+						String error_message=actionName+" action was not performed ";
+					fetchConfigVO.setErrormessage(error_message);
+					}
+			
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
