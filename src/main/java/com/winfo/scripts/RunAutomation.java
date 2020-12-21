@@ -127,6 +127,8 @@ public class RunAutomation extends SeleniumKeyWords {
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				  // Restore interrupted state...
+			    Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
