@@ -154,11 +154,9 @@ public class SeleniumKeyWords {
 		String param3 = "Navigator";
 		navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
 		menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
-<<<<<<< HEAD
-		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO,param1,type1,type2,count);
-=======
+
 		menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO,type1,type2,param1,param2,count);
->>>>>>> piechartandtable
+
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
@@ -468,14 +466,10 @@ public class SeleniumKeyWords {
 		}
 	}
 
-<<<<<<< HEAD
-	public  void menuNavigationButton(WebDriver driver, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO,String param1,String type1,String type2,int count) throws Exception {
-		String scripNumbers = fetchMetadataVO.getScript_number();
-=======
+
+
 	public void menuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO,String type1,String type2,String param1,String param2,int count) throws Exception {
->>>>>>> piechartandtable
 		try {
 			Thread.sleep(3000);
 			if (param2.equalsIgnoreCase("Assets")) {
@@ -642,8 +636,8 @@ public class SeleniumKeyWords {
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 		File[] listOfFiles = folder.listFiles();
-		//String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec="yes";
+		String video_rec=fetchConfigVO.getEnable_video();
+		//String video_rec="yes";
 //		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
         List<File> fileList = new ArrayList<>();
@@ -664,19 +658,23 @@ public class SeleniumKeyWords {
 			}
 
 		});
-
+		
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
 		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
         BufferedImage image = null;
         image = ImageIO.read(file);
+        BufferedImage logo = null;
+        logo = ImageIO.read(file1);
         Graphics g = image.getGraphics();
         g.setColor(Color.black);
         java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
         g.setFont(font);
-      
         String details= fileList.get(0).getName();
        //String details= seqList.get(0).getName();
        	String ScriptNumber = details.split("_")[3];
@@ -689,44 +687,42 @@ public class SeleniumKeyWords {
         String no = details.split("_")[0];
         Date Starttime = fetchConfigVO.getStarttime();
         Date endtime=fetchConfigVO.getEndtime();
-        
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String Starttime1=dateFormat.format(Starttime);
-        
         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
         String endtime1=dateFormat.format(endtime);
         long diff=endtime.getTime() - Starttime.getTime();
-         long diffSeconds = diff / 1000 % 60;
-            long diffMinutes = diff / (60 * 1000) % 60;
-            long diffHours = diff / (60 * 60 * 1000);
-           
-            String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
-
- 	    
- 	    
-        g.drawString("Test Run Name : " +  TName, 50, 50);
-        g.drawString("Script Number : " +  ScriptNumber, 50, 125);
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+        String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+        g.drawString("TEST SCRIPT DETAILS",450, 50);
+        g.drawString("Test Run Name : " +  TName, 50, 100);
+        g.drawString("Script Number : " +  ScriptNumber, 50, 150);
         g.drawString("Scenario Name :"+Scenario, 50, 200);
-        g.drawString("Status : "+status, 50, 275);
-        g.drawString("Executed By :"+ExeBy, 50, 350);
-        g.drawString("Start Time :"+Starttime1, 50, 425);
-        g.drawString("End Time :"+endtime1, 50, 500);
-        g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+        g.drawString("Status : "+status, 50, 250);
+        g.drawString("Executed By :"+ExeBy, 50, 300);
+        g.drawString("Start Time :"+Starttime1, 50, 350);
+        g.drawString("End Time :"+endtime1, 50, 400);
+        g.drawString("Execution Time : "+ExecutionTime, 50, 450);
+        g.drawImage(logo,1012,15,null);
         g.dispose();
-    
-    
         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+        
         BufferedImage image1 = null;
         image1 = ImageIO.read(file);
         Graphics g1 = image1.getGraphics();
         g1.setColor(Color.red);
         java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
         g1.setFont(font1);
-        g1.drawString("FAILED IN THE NEXT STEP!!", 495, 300);
-     
+        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+        g1.drawImage(logo,1012,15,null);
         g1.dispose();
         ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
         String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
+        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
 
@@ -742,8 +738,7 @@ public class SeleniumKeyWords {
 	        		linksall.set(1,f33.getAbsolutePath());
 
 	        	}}
-
-        	fetchConfigVO.setStatus1("Fail");
+			fetchConfigVO.setStatus1("Fail");
 			fileNameList.add(fileList.get(0).getName());
 			links1.add(fileList.get(0).getAbsolutePath());
             links1.add(linksall.get(1));
@@ -775,12 +770,14 @@ public class SeleniumKeyWords {
 		 * 
 		 * }
 		 */
-		if(video_rec.equalsIgnoreCase("yes")) {
+		if(video_rec.equalsIgnoreCase("Y")) {
 			String name=no+"_"+ScriptNumber+".mp4";
 			convertJPGtoMovie(null,links1,fetchMetadataListVO,fetchConfigVO,name);
 	          }
 		return fileNameList;
 	}
+
+
 
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
 
@@ -789,8 +786,8 @@ public class SeleniumKeyWords {
 		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 
 		File[] listOfFiles = folder.listFiles();
-		//String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec="yes";
+		String video_rec=fetchConfigVO.getEnable_video();
+		//String video_rec="yes";
 //		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
         List<File> fileList = new ArrayList<>();
@@ -812,19 +809,23 @@ public class SeleniumKeyWords {
 			}
 
 		});
-
+		 
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
 		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
-
+		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+		
         BufferedImage image = null;
         image = ImageIO.read(file);
+        BufferedImage logo = null;
+        logo = ImageIO.read(file1);
         Graphics g = image.getGraphics();
         g.setColor(Color.black);
         java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
         g.setFont(font);
-      
         String details= fileList.get(0).getName();
         //String details= seqList.get(0).getName();
         String ScriptNumber = details.split("_")[3];
@@ -833,46 +834,46 @@ public class SeleniumKeyWords {
  		String status = Status.split("\\.")[0];
  		String Scenario = details.split("_")[2];
  		String imagename=TestRun+ScriptNumber;
-         String TName = fetchMetadataListVO.get(0).getTest_run_name();
-         String no = details.split("_")[0];
-         Date Starttime = fetchConfigVO.getStarttime();
-         Date endtime=fetchConfigVO.getEndtime();
-         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-         String Starttime1=dateFormat.format(Starttime);
-         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
-         String endtime1=dateFormat.format(endtime);
-         long diff=endtime.getTime() - Starttime.getTime();
-          long diffSeconds = diff / 1000 % 60;
-             long diffMinutes = diff / (60 * 1000) % 60;
-             long diffHours = diff / (60 * 60 * 1000);
-          
-             String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
-
-         
-             g.drawString("Test Run Name : " +  TName, 50, 50);
-             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-             g.drawString("Scenario Name :"+Scenario, 50, 200);
-             g.drawString("Status : "+status, 50, 275);
-             g.drawString("Executed By :"+ExeBy, 50, 350);
-             g.drawString("Start Time :"+Starttime1, 50, 425);
-             g.drawString("End Time :"+endtime1, 50, 500);
-             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-             g.dispose();
-             
-    
-    
+        String TName = fetchMetadataListVO.get(0).getTest_run_name();
+        String no = details.split("_")[0];
+        Date Starttime = fetchConfigVO.getStarttime();
+        Date endtime=fetchConfigVO.getEndtime();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String Starttime1=dateFormat.format(Starttime);
+        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+        String endtime1=dateFormat.format(endtime);
+        long diff=endtime.getTime() - Starttime.getTime();
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+        String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+        g.drawString("TEST SCRIPT DETAILS",450, 50);
+        g.drawString("Test Run Name : " +  TName, 50, 100);
+        g.drawString("Script Number : " +  ScriptNumber, 50, 150);
+        g.drawString("Scenario Name :"+Scenario, 50, 200);
+        g.drawString("Status : "+status, 50, 250);
+        g.drawString("Executed By :"+ExeBy, 50, 300);
+        g.drawString("Start Time :"+Starttime1, 50, 350);
+        g.drawString("End Time :"+endtime1, 50, 400);
+        g.drawString("Execution Time : "+ExecutionTime, 50, 450);
+        g.drawImage(logo,1012,15,null);
+        g.dispose();
         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+        
         BufferedImage image1 = null;
         image1 = ImageIO.read(file);
         Graphics g1 = image1.getGraphics();
         g1.setColor(Color.red);
         java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
         g1.setFont(font1);
-        g1.drawString("FAILED IN THE NEXT STEP!!", 495, 300);
-     
+        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+        g1.drawImage(logo,1150,15,null);
         g1.dispose();
         ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
         String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
        
@@ -917,159 +918,359 @@ public class SeleniumKeyWords {
 		 * 
 		 * }
 		 */
-		if(video_rec.equalsIgnoreCase("yes")) {
+		if(video_rec.equalsIgnoreCase("Y")) {
 			String name=no+"_"+ScriptNumber+".mp4";
 			convertJPGtoMovie(null,links1,fetchMetadataListVO,fetchConfigVO,name);
 	          }
 		return fileNameList;
 
 	}
+	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
 
-//	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
-//
-//		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-//		File[] listOfFiles = folder.listFiles();
-//		//String video_rec=fetchConfigVO.getVideo_rec();
-//		String video_rec="yes";
-//		Map<Integer, List<File>> filesMap = new TreeMap<>();
-//		int passcount=0;
-//		int failcount=0;
-//		for (File file : Arrays.asList(listOfFiles)) {
-//
-//			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-//
-//			if (!filesMap.containsKey(seqNum)) {
-//
-//				filesMap.put(seqNum, new ArrayList<File>());
-//
-//			}
-//
-//			filesMap.get(seqNum).add(file);
-//
-//		}
-//
-//		List<String> targetFileList = new ArrayList<>();
-//		ArrayList<String> links = new ArrayList<String>();
-//		String firstimagelink=null;
-//		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-//
-//			List<File> seqList = seqEntry.getValue();
-//
-//			Collections.sort(seqList, new Comparator<File>() {
-//
-//				public int compare(File f1, File f2) {
-//
-//					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-//
-//				}
-//
-//			});
-//			List<String> seqFileNameList = new ArrayList<String>();
-//			ArrayList<String> links1 = new ArrayList<String>();
-//			ArrayList<String> linksall = new ArrayList<String>();
-//
-//			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
-//
-//			   BufferedImage image = null;
-//		        image = ImageIO.read(file);
-//		        Graphics g = image.getGraphics();
-//		        g.setColor(Color.black);
-//		        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
-//		        g.setFont(font);
-//		      
-//		        String details= seqList.get(0).getName();
-//		        String ScriptNumber = details.split("_")[3];
-//				String TestRun = details.split("_")[4];
-//				String Status = details.split("_")[6];
-//				String status = Status.split("\\.")[0];
-//				String Scenario = details.split("_")[2];
-//		       String imagename=TestRun+ScriptNumber;
-//		        String TName = fetchMetadataListVO.get(0).getTest_run_name();
-//		         Date endtime=fetchConfigVO.getEndtime();
-//		         Date TStarttime=fetchConfigVO.getStarttime1();
-//		         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-//		         String TStarttime1=dateFormat.format(TStarttime);
-//		         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
-//		         String endtime1=dateFormat.format(endtime);
-//		        
-//		             long Tdiff=endtime.getTime() - TStarttime.getTime();
-//		             long TdiffSeconds = Tdiff / 1000 % 60;
-//		             long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-//		             long TdiffHours = Tdiff / (60 * 60 * 1000);
-//		             String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
-//
-//		             g.drawString("Test Run Name : " +  TName, 50, 50);
-//		             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-//		             g.drawString("Scenario Name :"+Scenario, 50, 200);
-//		             g.drawString("Status : "+status, 50, 275);
-//		             g.drawString("Executed By :"+ExeBy, 50, 350);
-////		             g.drawString("Start Time :"+TStarttime1, 50, 425);
-////		             g.drawString("End Time :"+endtime1, 50, 500);
-////		             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-//		         g.dispose();
-//		         BufferedImage image2 = null;
-//			        image2 = ImageIO.read(file);
-//			        Graphics g2 = image2.getGraphics();
-//			        g2.setColor(Color.black);
-//			        
-//			        g2.setFont(font);
-//			        g2.drawString("Test Run Name : " +  TName, 50, 50);
-//		            g2.drawString("Executed By :"+ExeBy, 50, 125);
-//		            g2.drawString("Start Time :"+TStarttime1, 50, 200);
-//		            g2.drawString("End Time :"+endtime1, 50, 275);
-//		            g2.drawString("Execution Time : "+ExecutionTime, 50,350);
-//			        g2.dispose();
-//			        ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
-//			       
-//			        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
-//			        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
-//	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
-//	        	        
-//	        File f11=new File(imgpath2);
-//	        File[] f22=f11.listFiles();
-//	        File f44=new File(imgpath3);
-//	        firstimagelink=f44.getAbsolutePath();
-//
-//			
-//	        if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-//				passcount++;
-//				for(File f33:f22)
-//		        {
-//					if(f33.getAbsolutePath().contains(imagename)) {
-//						  linksall.add(f33.getAbsolutePath());
-//				        	}
-//		        }
-//				links1.add(seqList.get(0).getAbsolutePath());
-//				seqFileNameList.add(seqList.get(0).getName());
-//
-//				for (int i = 1; i < seqList.size(); i++) {
-//
-//					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-//						links1.add(seqList.get(i).getAbsolutePath());
-//						seqFileNameList.add(seqList.get(i).getName());
-//
-//					} else {
-//
-//						
-//
-//					}
-//
-//				}
-//
-//				links1.add(linksall.get(0));
-//				Collections.reverse(links1);
-//				Collections.reverse(seqFileNameList);
-//				links.addAll(links1);
-//				targetFileList.addAll(seqFileNameList);
-//
-//
-//			}
-//
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
+		File[] listOfFiles = folder.listFiles();
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="no";
+		Map<Integer, List<File>> filesMap = new TreeMap<>();
+		int passcount=0;
+		int failcount=0;
+		for (File file : Arrays.asList(listOfFiles)) {
+
+			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+			if (!filesMap.containsKey(seqNum)) {
+
+				filesMap.put(seqNum, new ArrayList<File>());
+
+			}
+
+			filesMap.get(seqNum).add(file);
+
+		}
+
+		List<String> targetFileList = new ArrayList<>();
+		ArrayList<String> links = new ArrayList<String>();
+		String firstimagelink=null;
+		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
+
+			List<File> seqList = seqEntry.getValue();
+
+			Collections.sort(seqList, new Comparator<File>() {
+
+				public int compare(File f1, File f2) {
+
+					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
+
+				}
+
+			});
+			List<String> seqFileNameList = new ArrayList<String>();
+			ArrayList<String> links1 = new ArrayList<String>();
+			ArrayList<String> linksall = new ArrayList<String>();
+
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+
+			 BufferedImage image = null;
+		     image = ImageIO.read(file);
+		     BufferedImage logo = null;
+		     logo = ImageIO.read(file1);
+		     Graphics g = image.getGraphics();
+		     g.setColor(Color.black);
+		     java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+		     g.setFont(font);
+		      
+		     String details= seqList.get(0).getName();
+		     String ScriptNumber = details.split("_")[3];
+		     String TestRun = details.split("_")[4];
+		     String Status = details.split("_")[6];
+		     String status = Status.split("\\.")[0];
+		     String Scenario = details.split("_")[2];
+		     String imagename=TestRun+ScriptNumber;
+		     String TName = fetchMetadataListVO.get(0).getTest_run_name();
+		     Date endtime=fetchConfigVO.getEndtime();
+		     Date TStarttime=fetchConfigVO.getStarttime1();
+		     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		     String TStarttime1=dateFormat.format(TStarttime);
+		     String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+		     String endtime1=dateFormat.format(endtime);
+		     long Tdiff=endtime.getTime() - TStarttime.getTime();
+		     long TdiffSeconds = Tdiff / 1000 % 60;
+		     long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+		     long TdiffHours = Tdiff / (60 * 60 * 1000);
+		     String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+		     g.drawString("TEST SCRIPT DETAILS", 450, 50);
+		     g.drawString("Test Run Name : " +  TName, 50, 125);
+		     g.drawString("Script Number : " +  ScriptNumber, 50, 200);
+		     g.drawString("Scenario Name :"+Scenario, 50, 275);
+		     g.drawString("Status : "+status, 50, 350);
+		     g.drawString("Executed By :"+ExeBy, 50, 425);
+		     g.drawImage(logo,1012,15,null);
+////		 g.drawString("Start Time :"+TStarttime1, 50, 425);
+////		 g.drawString("End Time :"+endtime1, 50, 500);
+////		 g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+		     g.dispose();
+		     
+		     BufferedImage image2 = null;
+			 image2 = ImageIO.read(file);
+			 Graphics g2 = image2.getGraphics();
+			 g2.setColor(Color.black);
+			 g2.setFont(font);
+			 g2.drawString("TEST RUN SUMMARY", 450, 50);
+		     g2.drawString("Test Run Name : " +  TName, 50, 125);
+	         g2.drawString("Executed By :"+ExeBy, 50, 200);
+	         g2.drawString("Start Time :"+TStarttime1, 50, 275);
+	         g2.drawString("End Time :"+endtime1, 50, 350);
+	         g2.drawString("Execution Time : "+ExecutionTime, 50,425);
+	         g2.drawImage(logo,1012,15,null);
+		     g2.dispose();
+			 ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+			 //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+			 String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+			 String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+			 //String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
+			 //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+	         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
+	        	        
+	        File f11=new File(imgpath2);
+	        File[] f22=f11.listFiles();
+	        File f44=new File(imgpath3);
+	        firstimagelink=f44.getAbsolutePath();
+
+			
+	        if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
+				passcount++;
+				for(File f33:f22)
+		        {
+					if(f33.getAbsolutePath().contains(imagename)) {
+						  linksall.add(f33.getAbsolutePath());
+				        	}
+		        }
+				links1.add(seqList.get(0).getAbsolutePath());
+				seqFileNameList.add(seqList.get(0).getName());
+
+				for (int i = 1; i < seqList.size(); i++) {
+
+					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+						links1.add(seqList.get(i).getAbsolutePath());
+						seqFileNameList.add(seqList.get(i).getName());
+
+					} else {
+
+						
+
+					}
+
+				}
+
+				links1.add(linksall.get(0));
+				Collections.reverse(links1);
+				Collections.reverse(seqFileNameList);
+				links.addAll(links1);
+				targetFileList.addAll(seqFileNameList);
+
+
+			}
+
 ////                    targetFileList.addAll(seqList);
-//
-//		}
+
+		}
+
+		/*
+		 * for (String fileName : targetFileList) {
+		 * 
+		 * System.out.println("Target File : " + fileName);
+		 * 
+		 * }
+		 */
+
+		fetchConfigVO.setPasscount(passcount);
+		fetchConfigVO.setFailcount(failcount);
+		if(video_rec.equalsIgnoreCase("yes")) {
+			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Passed_Video.mp4");
+	          }
+		System.out.println(targetFileList.size());
+		return targetFileList;
+	}
+
+	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
+
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
+		File[] listOfFiles = folder.listFiles();
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="no";
+		Map<Integer, List<File>> filesMap = new TreeMap<>();
+		int failcount=0;
+		int passcount=0;
+		for (File file : Arrays.asList(listOfFiles)) {
+
+			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+			if (!filesMap.containsKey(seqNum)) {
+
+				filesMap.put(seqNum, new ArrayList<File>());
+
+			}
+
+			filesMap.get(seqNum).add(file);
+
+		}
+
+		List<String> targetFileList = new ArrayList<>();
+		ArrayList<String> links = new ArrayList<String>();
+		String firstimagelink=null;
+		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
+
+			List<File> seqList = seqEntry.getValue();
+
+			Collections.sort(seqList, new Comparator<File>() {
+
+				public int compare(File f1, File f2) {
+
+					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
+
+				}
+
+			});
+			
+
+			List<String> seqFileNameList = new ArrayList<String>();
+			ArrayList<String> links1 = new ArrayList<String>();
+			ArrayList<String> linksall = new ArrayList<String>();
+
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+			
+	        BufferedImage image = null;
+	        image = ImageIO.read(file);
+	        BufferedImage logo = null;
+	        logo = ImageIO.read(file1);
+	        Graphics g = image.getGraphics();
+	        g.setColor(Color.black);
+	        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+	        g.setFont(font);
+	        String details= seqList.get(0).getName();
+	        String ScriptNumber = details.split("_")[3];
+			String TestRun = details.split("_")[4];
+			String Status = details.split("_")[6];
+			String status = Status.split("\\.")[0];
+			String Scenario = details.split("_")[2];
+			String imagename=TestRun+ScriptNumber;
+	        String TName = fetchMetadataListVO.get(0).getTest_run_name();
+	        Date endtime=fetchConfigVO.getEndtime();
+	        Date TStarttime=fetchConfigVO.getStarttime1();
+	        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	        String TStarttime1=dateFormat.format(TStarttime);
+	        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+	        String endtime1=dateFormat.format(endtime);
+	        long Tdiff=endtime.getTime() - TStarttime.getTime();
+	        long TdiffSeconds = Tdiff / 1000 % 60;
+	        long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+	        long TdiffHours = Tdiff / (60 * 60 * 1000);
+	        String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+
+	        g.drawString("TEST SCRIPT DETAILS", 450, 50);
+	        g.drawString("Test Run Name : " +  TName, 50, 125);
+	        g.drawString("Script Number : " +  ScriptNumber, 50, 200);
+	        g.drawString("Scenario Name :"+Scenario, 50, 275);
+	        g.drawString("Status : "+status, 50, 350);
+	        g.drawString("Executed By :"+ExeBy, 50, 425);
+	        g.drawImage(logo,1150,15,null);
+////	    g.drawString("Start Time :"+TStarttime1, 50, 425);
+////	    g.drawString("End Time :"+endtime1, 50, 500);
+////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+	        g.dispose();
+	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+	        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
+	        
+	        BufferedImage image1 = null;
+	        image1 = ImageIO.read(file);
+	        Graphics g1 = image1.getGraphics();
+	        g1.setColor(Color.red);
+	        java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
+	        g1.setFont(font1);
+	        g1.drawImage(logo,1012,14,null);
+	        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+	        g1.dispose();
+	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+	        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
+	        
+	        BufferedImage image2 = null;
+	        image2 = ImageIO.read(file);
+	        Graphics g2 = image2.getGraphics();
+	        g2.setColor(Color.black);
+	        g2.setFont(font);
+	        g2.drawString("TEST RUN SUMMARY", 50, 50);
+	        g2.drawString("Test Run Name : " +  TName, 50, 125);
+            g2.drawString("Executed By :"+ExeBy, 50, 200);
+            g2.drawString("Start Time :"+TStarttime1, 50, 275);
+            g2.drawString("End Time :"+endtime1, 50, 350);
+            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
+            g2.drawImage(logo,1012,15,null);
+	        g2.dispose();
+	       	ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+	        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+	        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	        
+	        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+		    //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
+	        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+	        File f11=new File(imgpath2);
+	        File[] f22=f11.listFiles();
+	        File f44=new File(imgpath3);
+	        firstimagelink=f44.getAbsolutePath();
+	      
+			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
+				failcount++;
+				for(File f33:f22) {
+		        	if(f33.getAbsolutePath().contains(imagename)) {
+		        		linksall.add(f33.getAbsolutePath());
+		        		linksall.set(0,f33.getAbsolutePath());
+		        	}if(f33.getAbsolutePath().contains("last")) {
+		        		linksall.add(f33.getAbsolutePath());
+		        		linksall.add(f33.getAbsolutePath());  
+		        		linksall.set(1,f33.getAbsolutePath());
+
+	        	}
+		        }
+//                                   System.out.println("SEQ : "+seqEntry.getKey());
+				links1.add(seqList.get(0).getAbsolutePath());
+				links1.add(linksall.get(1));
+				seqFileNameList.add(seqList.get(0).getName());
+
+				for (int i = 1; i < seqList.size(); i++) {
+
+					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+						  links1.add(seqList.get(i).getAbsolutePath());
+						seqFileNameList.add(seqList.get(i).getName());
+
+					} else {
+
+						
+
+					}
+
+				}
+				links1.add(linksall.get(0));
+				 Collections.reverse(links1);
+				Collections.reverse(seqFileNameList);
+				links.addAll(links1);
+				targetFileList.addAll(seqFileNameList);
+
+			}
+
+//                    targetFileList.addAll(seqList);
+
+		}
 //
 //		/*
 //		 * for (String fileName : targetFileList) {
@@ -1078,197 +1279,15 @@ public class SeleniumKeyWords {
 //		 * 
 //		 * }
 //		 */
-//
-//		//fetchConfigVO.setPasscount(passcount);
-//		//fetchConfigVO.setFailcount(failcount);
-//		if(video_rec.equalsIgnoreCase("yes")) {
-//			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Passed_Video.mp4");
-//	          }
-//		System.out.println(targetFileList.size());
-//		return targetFileList;
-//	}
+		fetchConfigVO.setPasscount(passcount);
+		fetchConfigVO.setFailcount(failcount);
+		if(video_rec.equalsIgnoreCase("yes")) {
+			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Failed_Video.mp4");
+	          }
+		return targetFileList;
 
-//	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
-//
-//		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-//		File[] listOfFiles = folder.listFiles();
-//		//String video_rec=fetchConfigVO.getVideo_rec();
-//		String video_rec="yes";
-//		Map<Integer, List<File>> filesMap = new TreeMap<>();
-//int failcount=0;
-//int passcount=0;
-//		for (File file : Arrays.asList(listOfFiles)) {
-//
-//			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-//
-//			if (!filesMap.containsKey(seqNum)) {
-//
-//				filesMap.put(seqNum, new ArrayList<File>());
-//
-//			}
-//
-//			filesMap.get(seqNum).add(file);
-//
-//		}
-//
-//		List<String> targetFileList = new ArrayList<>();
-//		ArrayList<String> links = new ArrayList<String>();
-//		String firstimagelink=null;
-//		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-//
-//			List<File> seqList = seqEntry.getValue();
-//
-//			Collections.sort(seqList, new Comparator<File>() {
-//
-//				public int compare(File f1, File f2) {
-//
-//					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-//
-//				}
-//
-//			});
-//			
-//
-//			List<String> seqFileNameList = new ArrayList<String>();
-//			ArrayList<String> links1 = new ArrayList<String>();
-//			ArrayList<String> linksall = new ArrayList<String>();
-//
-//			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
-//
-//	        BufferedImage image = null;
-//	        image = ImageIO.read(file);
-//	        Graphics g = image.getGraphics();
-//	        g.setColor(Color.black);
-//	        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
-//	        g.setFont(font);
-//	      
-//	        String details= seqList.get(0).getName();
-//	        String ScriptNumber = details.split("_")[3];
-//			String TestRun = details.split("_")[4];
-//			String Status = details.split("_")[6];
-//			String status = Status.split("\\.")[0];
-//			String Scenario = details.split("_")[2];
-//	       String imagename=TestRun+ScriptNumber;
-//	        String TName = fetchMetadataListVO.get(0).getTest_run_name();
-//
-//	         Date endtime=fetchConfigVO.getEndtime();
-//	         Date TStarttime=fetchConfigVO.getStarttime1();
-//	         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-//	         String TStarttime1=dateFormat.format(TStarttime);
-//	         String ExeBy=fetchMetadataListVO.get(0).getInput_value();
-//	         String endtime1=dateFormat.format(endtime);
-//	       
-//	             long Tdiff=endtime.getTime() - TStarttime.getTime();
-//	             long TdiffSeconds = Tdiff / 1000 % 60;
-//	             long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-//	             long TdiffHours = Tdiff / (60 * 60 * 1000);
-//	             String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
-//
-//	             g.drawString("Test Run Name : " +  TName, 50, 50);
-//	             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-//	             g.drawString("Scenario Name :"+Scenario, 50, 200);
-//	             g.drawString("Status : "+status, 50, 275);
-//	             g.drawString("Executed By :"+ExeBy, 50, 350);
-////	             g.drawString("Start Time :"+TStarttime1, 50, 425);
-////	             g.drawString("End Time :"+endtime1, 50, 500);
-////	             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-//	         g.dispose();
-//	         
-//	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
-//	        BufferedImage image1 = null;
-//	        image1 = ImageIO.read(file);
-//	        Graphics g1 = image1.getGraphics();
-//	        g1.setColor(Color.red);
-//	        java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-//	        g1.setFont(font1);
-//	        g1.drawString("FAILED IN THE NEXT STEP!!", 435, 300);
-//	     
-//	        g1.dispose();
-//	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
-//	        BufferedImage image2 = null;
-//	        image2 = ImageIO.read(file);
-//	        Graphics g2 = image2.getGraphics();
-//	        g2.setColor(Color.black);
-//	        
-//	        g2.setFont(font);
-//	        g2.drawString("Test Run Name : " +  TName, 50, 50);
-//            g2.drawString("Executed By :"+ExeBy, 50, 125);
-//            g2.drawString("Start Time :"+TStarttime1, 50, 200);
-//            g2.drawString("End Time :"+endtime1, 50, 275);
-//            g2.drawString("Execution Time : "+ExecutionTime, 50,350);
-//	        g2.dispose();
-//	        ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
-//	       
-//	        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
-//	        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
-//	        File f11=new File(imgpath2);
-//	        File[] f22=f11.listFiles();
-//	        File f44=new File(imgpath3);
-//	        firstimagelink=f44.getAbsolutePath();
-//	        
-//
-//			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-//				failcount++;
-//				for(File f33:f22) {
-//		        	if(f33.getAbsolutePath().contains(imagename)) {
-//		        		linksall.add(f33.getAbsolutePath());
-//		        		linksall.set(0,f33.getAbsolutePath());
-//		        	}if(f33.getAbsolutePath().contains("last")) {
-//		        		linksall.add(f33.getAbsolutePath());
-//		        		linksall.add(f33.getAbsolutePath());  
-//		        		linksall.set(1,f33.getAbsolutePath());
-//
-//		        	}
-//		        }
-////                                   System.out.println("SEQ : "+seqEntry.getKey());
-//				links1.add(seqList.get(0).getAbsolutePath());
-//				links1.add(linksall.get(1));
-//				seqFileNameList.add(seqList.get(0).getName());
-//
-//				for (int i = 1; i < seqList.size(); i++) {
-//
-//					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-//						  links1.add(seqList.get(i).getAbsolutePath());
-//
-//						seqFileNameList.add(seqList.get(i).getName());
-//
-//					} else {
-//
-//						
-//
-//					}
-//
-//				}
-//				links1.add(linksall.get(0));
-//				 Collections.reverse(links1);
-//				Collections.reverse(seqFileNameList);
-//				links.addAll(links1);
-//				targetFileList.addAll(seqFileNameList);
-//
-//			}
-//
-////                    targetFileList.addAll(seqList);
-//
-//		}
-//
-//		/*
-//		 * for (String fileName : targetFileList) {
-//		 * 
-//		 * System.out.println("Target File : " + fileName);
-//		 * 
-//		 * }
-//		 */
-//		//fetchConfigVO.setPasscount(passcount);
-//		//fetchConfigVO.setFailcount(failcount);
-//		if(video_rec.equalsIgnoreCase("yes")) {
-//			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Failed_Video.mp4");
-//	          }
-//		return targetFileList;
-//
-//
-//	}
+
+	}
 
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
 
@@ -1276,10 +1295,8 @@ public class SeleniumKeyWords {
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-		//String video_rec=fetchConfigVO.getVideo_rec();
-		 String video_rec="yes";
-		int passcount=0;
-        int failcount=0;
+		String video_rec=fetchConfigVO.getEnable_video();
+		 //String video_rec="yes";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		int failcount=0;
 		int passcount=0;
@@ -1323,111 +1340,16 @@ public class SeleniumKeyWords {
 			ArrayList<String> links1 = new ArrayList<String>();
 						
 						ArrayList<String> linksall = new ArrayList<String>();
-
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-					} else {
-
-						
-
-					}
-
-				}
-
-				Collections.reverse(seqFileNameList);
-
-				targetFileList.addAll(seqFileNameList);
-
-			}
-
-//                    targetFileList.addAll(seqList);
-
-		}
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		System.out.println(targetFileList.size());
-		return targetFileList;
-
-	}
-
-	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//		File folder = new File("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/");
-		File[] listOfFiles = folder.listFiles();
-		int passcount=0;
-		int failcount=0;
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-
-			List<String> seqFileNameList = new ArrayList<String>();
-
-			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-				failcount++;
-//                                   System.out.println("SEQ : "+seqEntry.getKey());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-					} else {
-
 						
 
 						File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
-
+						File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 				        BufferedImage image = null;
 				        image = ImageIO.read(file);
+				        BufferedImage logo = null;
+				        logo = ImageIO.read(file1);
 				        Graphics g = image.getGraphics();
 				        g.setColor(Color.black);
 				        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
@@ -1439,55 +1361,62 @@ public class SeleniumKeyWords {
 						String Status = details.split("_")[6];
 						String status = Status.split("\\.")[0];
 						String Scenario = details.split("_")[2];
-				       String imagename=TestRun+ScriptNumber;
-				        //String TName = fetchMetadataListVO.get(0).getTest_run_name();
-				         Date endtime=fetchConfigVO.getEndtime();
-				         Date TStarttime=fetchConfigVO.getStarttime1();
-				         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-				         String TStarttime1=dateFormat.format(TStarttime);
-				         String ExeBy=fetchMetadataListVO.get(0).getInput_value();;
-				         String endtime1=dateFormat.format(endtime);
-				             long Tdiff=endtime.getTime() - TStarttime.getTime();
-				             long TdiffSeconds = Tdiff / 1000 % 60;
-				             long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-				             long TdiffHours = Tdiff / (60 * 60 * 1000);
-				             String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
-
-				             g.drawString("Test Run Name : " +  TName, 50, 50);
-				             g.drawString("Script Number : " +  ScriptNumber, 50, 125);
-				             g.drawString("Scenario Name :"+Scenario, 50, 200);
-				             g.drawString("Status : "+status, 50, 275);
-				             g.drawString("Executed By :"+ExeBy, 50, 350);
-//				             g.drawString("Start Time :"+TStarttime1, 50, 425);
-//				             g.drawString("End Time :"+endtime1, 50, 500);
-//				             g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-				             g.dispose();
-				         
+						String imagename=TestRun+ScriptNumber;
+				      //String TName = fetchMetadataListVO.get(0).getTest_run_name();
+				        Date endtime=fetchConfigVO.getEndtime();
+				        Date TStarttime=fetchConfigVO.getStarttime1();
+				        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+				        String TStarttime1=dateFormat.format(TStarttime);
+				        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+				        String endtime1=dateFormat.format(endtime);
+				        long Tdiff=endtime.getTime() - TStarttime.getTime();
+				        long TdiffSeconds = Tdiff / 1000 % 60;
+				        long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+				        long TdiffHours = Tdiff / (60 * 60 * 1000);
+				        String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+				        g.drawString("TEST SCRIPT DETAILS", 450, 50);
+				        g.drawString("Test Run Name : " +  TName, 50, 125);
+				        g.drawString("Script Number : " +  ScriptNumber, 50, 200);
+				        g.drawString("Scenario Name :"+Scenario, 50, 275);
+				        g.drawString("Status : "+status, 50, 350);
+				        g.drawString("Executed By :"+ExeBy, 50, 425);
+				        g.drawImage(logo,1012,15,null);
+				        //g.drawString("Start Time :"+TStarttime1, 50, 425);
+				        //g.drawString("End Time :"+endtime1, 50, 500);
+				        //g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+				        g.dispose();
 				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+				        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
+				        
 				        BufferedImage image1 = null;
 				        image1 = ImageIO.read(file);
 				        Graphics g1 = image1.getGraphics();
 				        g1.setColor(Color.red);
 				        java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
 				        g1.setFont(font1);
-				        g1.drawString("FAILED IN THE NEXT STEP!!", 435, 300);
-				     
+				        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+				        g1.drawImage(logo,1012,14,null);
 				        g1.dispose();
+				        
 				        BufferedImage image2 = null;
 				        image2 = ImageIO.read(file);
 				        Graphics g2 = image2.getGraphics();
 				        g2.setColor(Color.black);
-				        
 				        g2.setFont(font);
-				        g2.drawString("Test Run Name : " +  TName, 50, 50);
-			            g2.drawString("Executed By :"+ExeBy, 50, 125);
-			            g2.drawString("Start Time :"+TStarttime1, 50, 200);
-			            g2.drawString("End Time :"+endtime1, 50, 275);
-			            g2.drawString("Execution Time : "+ExecutionTime, 50,350);
+				        g2.drawString("TEST RUN SUMMARY", 450, 50);
+				        g2.drawString("Test Run Name : " +  TName, 50, 125);
+			            g2.drawString("Executed By :"+ExeBy, 50, 200);
+			            g2.drawString("Start Time :"+TStarttime1, 50, 275);
+			            g2.drawString("End Time :"+endtime1, 50, 350);
+			            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
+			            g2.drawImage(logo,1012,15,null);
 				        g2.dispose();
-				        ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
-				        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+				       ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+				        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+				       String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+				        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 				        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+				        //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 				        File f11=new File(imgpath2);
 				        File[] f22=f11.listFiles();
 				        File f44=new File(imgpath3);
@@ -1528,56 +1457,6 @@ public class SeleniumKeyWords {
 							Collections.reverse(seqFileNameList);
 							links.addAll(links1);
 							targetSuccessFileList.addAll(seqFileNameList);
-			}
-
-//                    targetFileList.addAll(seqList);
-
-		}
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		return targetFileList;
-
-	}
-
-	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-
-		File[] listOfFiles = folder.listFiles();
-		int passcount=0;
-		int failcount=0;
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-
-		List<String> targetSuccessFileList = new ArrayList<>();
-
-		List<String> targetFailedFileList = new ArrayList<>();
-
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 						} else {
 							failcount++;
@@ -1612,9 +1491,6 @@ public class SeleniumKeyWords {
 //			                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
 
 								} else {
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
-				seqFileNameList.add(seqList.get(0).getName());
 
 									
 
@@ -1648,33 +1524,9 @@ public class SeleniumKeyWords {
 					 * 
 					 * }
 					 */
-					//fetchConfigVO.setPasscount(passcount);
-					//fetchConfigVO.setFailcount(failcount);
-					if(video_rec.equalsIgnoreCase("yes")) {
-				}
-
-				Collections.reverse(seqFileNameList);
-
-				targetSuccessFileList.addAll(seqFileNameList);
-
-			} else {
-				failcount++;
-//                                   System.out.println("SEQ : "+seqEntry.getKey());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-//                                   System.out.println("FIRST F STEP: "+seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-//                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
-
-					} else {
-
+					fetchConfigVO.setPasscount(passcount);
+					fetchConfigVO.setFailcount(failcount);
+					if(video_rec.equalsIgnoreCase("Y")) {
 						
 						convertJPGtoMovie(firstimagelink,finalLinks,fetchMetadataListVO,fetchConfigVO,TName+".mp4");
 				          }
@@ -1685,6 +1537,7 @@ public class SeleniumKeyWords {
      {
 		 String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+name);
+		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
 		 String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		 File theDir = new File(Folder);
@@ -1703,12 +1556,12 @@ public class SeleniumKeyWords {
 			}
 		//String vidPath = "C:\\Users\\Winfo Solutions\\Desktop\\"+name;
          OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
-         FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath,1366,613);
+         FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath,1366,614);
          String str=null;
     	 IplImage ipl = cvLoadImage(str);
          try {
              recorder.setFrameRate(0.33);
-             recorder.setVideoCodec(avcodec.AV_CODEC_ID_MPEG4);
+             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
              recorder.setVideoBitrate(9000);
              recorder.setFormat("mp4");
              recorder.setVideoQuality(0); // maximum quality
@@ -1736,27 +1589,6 @@ public class SeleniumKeyWords {
                e.printStackTrace();
             }
      }
-
-//                    targetFileList.addAll(seqList);
-
-		}
-
-		targetFileList.addAll(targetSuccessFileList);
-
-		targetFileList.addAll(targetFailedFileList);
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		return targetFileList;
-
-	}
 
 	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
@@ -1932,9 +1764,9 @@ public class SeleniumKeyWords {
 			System.out.println(FILE);
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				//fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
+				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
 			} else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				//fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
+				fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
 			} else if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = getDetailPdfNew(fetchMetadataListVO, fetchConfigVO);
 			} else {

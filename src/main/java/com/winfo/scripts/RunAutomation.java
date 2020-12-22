@@ -33,6 +33,7 @@ public class RunAutomation extends SeleniumKeyWords {
 
 	@Autowired
 	TestCaseDataService dataService;
+	@Autowired
 	DataBaseEntry dataBaseEntry;
 	public String c_url = null;
 
@@ -165,7 +166,6 @@ public class RunAutomation extends SeleniumKeyWords {
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
 		//start_time=dtf.format(now);
-		dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -267,9 +267,8 @@ public class RunAutomation extends SeleniumKeyWords {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
-				if(seq_num.charAt(0) == '1' && seq_num.length()==1) {
-				//dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
-				}
+				
+				dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
 				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id=fetchMetadataVO.getTest_script_param_id();
@@ -280,6 +279,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				String type1 = null;
 				String type2 = null;
 				String type3 = null;
+				String message=null;
 				int count=0;
 				if (screenParameter != null) {
 					param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
@@ -381,7 +381,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						break;
 					case "clickButton":		  
 						  clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						    String message=getErrorMessages(driver);
+						    message=getErrorMessages(driver);
 	                     if(message != null) {
 	                           fetchConfigVO.setErrormessage(message);
 	                           screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -494,6 +494,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+						 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
@@ -502,12 +503,17 @@ public class RunAutomation extends SeleniumKeyWords {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
-					if(actionName != "clickButton") {
-						String error_message=actionName+"was not performed due to error at"+step_description+"step";
-						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
-						}
+					 String error_message="Took more than 10 seconds to load the page";
+					if(actionName.equalsIgnoreCase("clickButton") && message != null) {
+                        //String error_message="Took more than 10 seconds to load the page";
+                        dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",message);
+                        }
+                    else
+                    {
+                        dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+                       
+                    }
 					if(fetchConfigVO.getErrormessage()==null) {
-						String error_message="Took more than 10 seconds to load the page";
 					fetchConfigVO.setErrormessage(error_message);
 					}
 			
@@ -523,6 +529,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					failcount = failcount + 1;
 					Date date = new Date();
 					 fetchConfigVO.setEndtime(date);
+					 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);

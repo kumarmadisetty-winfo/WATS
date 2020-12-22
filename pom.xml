@@ -342,7 +342,16 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-
+<dependency>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacv</artifactId>
+    <version>1.2</version>
+</dependency>
+<dependency>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp</artifactId>
+    <version>1.2</version>
+</dependency>
 
 	</dependencies>
 
