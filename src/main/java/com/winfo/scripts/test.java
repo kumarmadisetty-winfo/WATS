@@ -8,7 +8,7 @@ import java.net.URL;
 public class test {
 
 	public static void main(String[] args) throws Exception {
-		String urlStr = "http://192.168.1.201:8080/executeTestScript";
+		String urlStr = "http://192.168.225.113:8080/executeTestScript";
 //		String urlStr = "http://localhost:8080/executeTestScript";
 		
 		try {

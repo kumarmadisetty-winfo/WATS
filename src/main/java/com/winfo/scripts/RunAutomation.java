@@ -469,7 +469,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
 					if(fetchConfigVO.getErrormessage()==null) {
-						String error_message=actionName+" action was not performed ";
+						String error_message="Took more than 10 seconds to load the page";
 					fetchConfigVO.setErrormessage(error_message);
 					}
 			

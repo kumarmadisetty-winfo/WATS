@@ -2218,13 +2218,13 @@ public class SeleniumKeyWords {
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
-							img.scalePercent(60,70);
+							img.scalePercent(60,62);
 							document.add(img);
 						}else {
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
-							img.scalePercent(60,68);
+							img.scalePercent(60,70);
 							document.add(img);
 						}
 						
