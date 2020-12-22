@@ -1270,7 +1270,7 @@ public class SeleniumKeyWords {
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			 Image img1 = Image.getInstance("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\wats_icon.png");
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -1565,7 +1565,10 @@ public class SeleniumKeyWords {
 		         document.newPage();
 		         document.add(img1);
 		         document.add(new Paragraph(Scenarios, fnt));
-		       
+		         String Reason = image.split("_")[5];
+
+		         String Message = "Failed at Line Number:" + ""+ Reason;
+					String errorMessage = "Failed Message:" + ""+ fetchConfigVO.getErrormessage();  
 		         Paragraph pr1=new Paragraph();
 		         pr1.add("Status:");
 		        String sndo = image.split("_")[0];
@@ -1574,14 +1577,29 @@ public class SeleniumKeyWords {
 			    target1.setName(String.valueOf(status+j));
 			    j++; 
 		        pr1.add(target1);
-		    		
+		        document.add(pr1);
+		        document.add(new Paragraph(Message, fnt));
+		        if(fetchConfigVO.getErrormessage()!=null) {
+					document.add(new Paragraph(errorMessage, fnt));
+					}
+					document.add(Chunk.NEWLINE);
+//					img.setAlignment(Image.ALIGN_CENTER);
+					img.isScaleToFitHeight();
+					img.scalePercent(60,60);
+					document.add(img);
+	
 			}else {
 					 Anchor target1 = new Anchor(status);
 					    target1.setName(String.valueOf(status));
 				        pr1.add(target1);
+				        document.add(pr1);
+						img.setAlignment(Image.ALIGN_CENTER);
+						img.isScaleToFitHeight();
+						img.scalePercent(60,70);
+						document.add(img);
 				}   
 		
-                document.add(pr1);
+               
 				Anchor target = new Anchor(String.valueOf(i));
 			    target.setName(String.valueOf(i));
 				Anchor target1 = new Anchor(String.valueOf("Back to Index"));
@@ -1592,10 +1610,10 @@ public class SeleniumKeyWords {
 				p.add(" page ");
 				p.add(target);
 				p.add(" of "+fileNameList.size());
-				img.setAlignment(Image.ALIGN_CENTER);
-				img.isScaleToFitHeight();
-				img.scalePercent(60, 71);
-				document.add(img);
+//				img.setAlignment(Image.ALIGN_CENTER);
+//				img.isScaleToFitHeight();
+//				img.scalePercent(60, 71);
+//				document.add(img);
 				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
 //	End to add  screenshots and pagenumbers and wats icon		 		
@@ -2114,7 +2132,7 @@ public class SeleniumKeyWords {
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			 Image img1 = Image.getInstance("C:\\\\Users\\\\winfo83\\\\Documents\\\\wats\\\\passedpdfs\\\\wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
