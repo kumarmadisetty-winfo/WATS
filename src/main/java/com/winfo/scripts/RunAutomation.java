@@ -137,6 +137,8 @@ public class RunAutomation extends SeleniumKeyWords {
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				  // Restore interrupted state...
+			    Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -505,7 +507,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
 						}
 					if(fetchConfigVO.getErrormessage()==null) {
-						String error_message=actionName+" action was not performed ";
+						String error_message="Took more than 10 seconds to load the page";
 					fetchConfigVO.setErrormessage(error_message);
 					}
 			

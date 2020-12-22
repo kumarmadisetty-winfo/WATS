@@ -154,7 +154,11 @@ public class SeleniumKeyWords {
 		String param3 = "Navigator";
 		navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
 		menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
+<<<<<<< HEAD
 		menuNavigationButton(driver, param2, fetchMetadataVO, fetchConfigVO,param1,type1,type2,count);
+=======
+		menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO,type1,type2,param1,param2,count);
+>>>>>>> piechartandtable
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
@@ -166,7 +170,7 @@ public class SeleniumKeyWords {
 //		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 		task(driver, param3, fetchMetadataVO, fetchConfigVO);
-		taskMenu(driver, param1, fetchMetadataVO, fetchConfigVO,type1,type2,param2,count);
+		taskMenu(driver,fetchMetadataVO, fetchConfigVO,type1,type2,param1,param2,count);
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
@@ -464,9 +468,14 @@ public class SeleniumKeyWords {
 		}
 	}
 
+<<<<<<< HEAD
 	public  void menuNavigationButton(WebDriver driver, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO,String param1,String type1,String type2,int count) throws Exception {
 		String scripNumbers = fetchMetadataVO.getScript_number();
+=======
+	public void menuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,String type1,String type2,String param1,String param2,int count) throws Exception {
+>>>>>>> piechartandtable
 		try {
 			Thread.sleep(3000);
 			if (param2.equalsIgnoreCase("Assets")) {
@@ -540,7 +549,7 @@ public class SeleniumKeyWords {
 		}
 	}
 
-	public void taskMenu(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,String type1,String type2,String param2,int count)
+	public void taskMenu(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,String type1,String type2, String param1,String param2,int count)
 			throws Exception {
 		try {
 			Thread.sleep(2000);
@@ -594,6 +603,8 @@ public class SeleniumKeyWords {
 	    	String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed During meduim wait" +scripNumber);
 			e.printStackTrace();
+			// Restore interrupted state...
+						Thread.currentThread().interrupt();
 		}
 	}
 
@@ -606,6 +617,8 @@ public class SeleniumKeyWords {
 		} catch (InterruptedException e) {
 			log.error("Failed During shortwait");
 			e.printStackTrace();
+			// Restore interrupted state...
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -618,6 +631,8 @@ public class SeleniumKeyWords {
 		} catch (InterruptedException e) {
 			log.error("Failed During wait");
 			e.printStackTrace();
+			// Restore interrupted state...
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -1977,7 +1992,7 @@ public class SeleniumKeyWords {
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			 Image img1 = Image.getInstance("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\wats_icon.png");
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -2272,7 +2287,10 @@ public class SeleniumKeyWords {
 		         document.newPage();
 		         document.add(img1);
 		         document.add(new Paragraph(Scenarios, fnt));
-		       
+		         String Reason = image.split("_")[5];
+
+		         String Message = "Failed at Line Number:" + ""+ Reason;
+					String errorMessage = "Failed Message:" + ""+ fetchConfigVO.getErrormessage();  
 		         Paragraph pr1=new Paragraph();
 		         pr1.add("Status:");
 		        String sndo = image.split("_")[0];
@@ -2281,14 +2299,29 @@ public class SeleniumKeyWords {
 			    target1.setName(String.valueOf(status+j));
 			    j++; 
 		        pr1.add(target1);
-		    		
+		        document.add(pr1);
+		        document.add(new Paragraph(Message, fnt));
+		        if(fetchConfigVO.getErrormessage()!=null) {
+					document.add(new Paragraph(errorMessage, fnt));
+					}
+					document.add(Chunk.NEWLINE);
+//					img.setAlignment(Image.ALIGN_CENTER);
+					img.isScaleToFitHeight();
+					img.scalePercent(60,60);
+					document.add(img);
+	
 			}else {
 					 Anchor target1 = new Anchor(status);
 					    target1.setName(String.valueOf(status));
 				        pr1.add(target1);
+				        document.add(pr1);
+						img.setAlignment(Image.ALIGN_CENTER);
+						img.isScaleToFitHeight();
+						img.scalePercent(60,70);
+						document.add(img);
 				}   
 		
-                document.add(pr1);
+               
 				Anchor target = new Anchor(String.valueOf(i));
 			    target.setName(String.valueOf(i));
 				Anchor target1 = new Anchor(String.valueOf("Back to Index"));
@@ -2299,10 +2332,10 @@ public class SeleniumKeyWords {
 				p.add(" page ");
 				p.add(target);
 				p.add(" of "+fileNameList.size());
-				img.setAlignment(Image.ALIGN_CENTER);
-				img.isScaleToFitHeight();
-				img.scalePercent(60, 71);
-				document.add(img);
+//				img.setAlignment(Image.ALIGN_CENTER);
+//				img.isScaleToFitHeight();
+//				img.scalePercent(60, 71);
+//				document.add(img);
 				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
 //	End to add  screenshots and pagenumbers and wats icon		 		
@@ -2823,7 +2856,7 @@ public class SeleniumKeyWords {
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			 Image img1 = Image.getInstance("C:\\\\Users\\\\winfo83\\\\Documents\\\\wats\\\\passedpdfs\\\\wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
@@ -2927,13 +2960,13 @@ public class SeleniumKeyWords {
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
-							img.scalePercent(60,70);
+							img.scalePercent(60,62);
 							document.add(img);
 						}else {
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
-							img.scalePercent(60,68);
+							img.scalePercent(60,70);
 							document.add(img);
 						}
 						
@@ -3446,7 +3479,8 @@ public class SeleniumKeyWords {
 	public void clickButtonDropdown(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
 				WebElement waittext = driver.findElement(By.xpath("//a[@title='" + param1 + "']"));
@@ -3465,7 +3499,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]")));
@@ -3989,7 +4024,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@title='" + param1 + "']")));
 				WebElement waittext = driver.findElement(By.xpath("//img[@title='" + param1 + "']"));
@@ -4088,7 +4124,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath("//img[contains(@id,'" + param1 + "')]")));
@@ -4107,7 +4144,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				Thread.sleep(3000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
@@ -4963,7 +5001,8 @@ public class SeleniumKeyWords {
 			log.error("Failed during Submit clickButton"+scripNumber);
 		}
 		try {
-			if (param2 != "") {
+			// Changed == to equals method
+						if (!param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + param2 + "'])[1]")));
@@ -5190,7 +5229,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[normalize-space(text())='" + param1 + "']"))));
@@ -5210,7 +5250,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//td[(normalize-space(text())='" + param1 + "')]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//td[(normalize-space(text())='" + param1 + "')]")));
@@ -5229,7 +5270,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//button[text()='" + param1 + "'and not(@style='display:none')]"))));
@@ -5251,7 +5293,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//div[normalize-space(text())='" + param1 + "']"))));
@@ -5511,7 +5554,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//a)[1]")));
@@ -5950,7 +5994,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 != "") {
+			// Changed == to equals method
+			if (!param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//h1[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='" + param2 + "']/following::a[1]")));
@@ -6062,7 +6107,8 @@ public class SeleniumKeyWords {
 				return;
 			}
 			try {
-				if (param2 == "") {
+				//Changed == to equals method
+				if (param2.equals("")) {
 					Thread.sleep(3000);
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					wait.until(
@@ -6088,7 +6134,8 @@ public class SeleniumKeyWords {
 			log.error("Failed during Invoice Actions clickLink"+scripNumber);
 			System.out.println(e);
 		}try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				Thread.sleep(3000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(
@@ -6173,7 +6220,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//a[contains(text(),'" + param1 + "')]")));
@@ -6192,7 +6240,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//a[contains(@id,'" + param1 + "')])[1]")));
@@ -6211,7 +6260,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@title='" + param1 + "']")));
 				WebElement waittext = driver.findElement(By.xpath("//div[@title='" + param1 + "']"));
@@ -6229,7 +6279,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
 				WebElement waittext = driver.findElement(By.xpath("//a[@title='" + param1 + "']"));
@@ -6248,7 +6299,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[contains(@title,'" + param1 + "')]")));
@@ -6268,7 +6320,8 @@ public class SeleniumKeyWords {
 		}
 		// Need to check for what purpose
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//div[contains(text(),'" + param1 + "')])[2]")));
@@ -6287,7 +6340,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[@role='" + param1 + "']"))));
 				WebElement waittext = driver.findElement(By.xpath(("//a[@role='" + param1 + "']")));
@@ -6668,7 +6722,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::a[normalize-space(text())='" + keysToSend + "']")));
@@ -6688,7 +6743,8 @@ public class SeleniumKeyWords {
 			System.out.println(e);
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='" + keysToSend
 						+ "']/following::td[normalize-space(text())='" + param1 + "']/following::table[1]//div)[1]")));
@@ -7184,7 +7240,8 @@ public class SeleniumKeyWords {
 			log.error("Failed during sendValue"+scripNumber);	
 		}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'" + param1 + "')]")));
@@ -9736,8 +9793,11 @@ System.out.println(e);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					} catch (Exception ex1) {
 						for (int i = 0; i <= 2; i++) {
-							actions.click(waittext).build().perform();
-							break;
+//		if condition added							
+							if (i <= 2) {
+								actions.click(waittext).build().perform();
+								break;
+							}
 						}
 						Thread.sleep(3000);
 						WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'suggestions-popup')]"));
@@ -10700,7 +10760,8 @@ System.out.println(e);
 			System.out.println(param2);
 			}
 		try {
-			if (param2 == "") {
+			//Changed == to equals method
+			if (param2.equals("")) {
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::select[1]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
@@ -11261,7 +11322,7 @@ System.out.println(e);
 		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver
-					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
+					.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
 			driver.switchTo().frame(waittext);
 			return;
 		} catch (Exception e) {
