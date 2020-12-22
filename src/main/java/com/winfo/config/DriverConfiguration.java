@@ -38,7 +38,7 @@ public class DriverConfiguration {
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
 			options.setExperimentalOption("prefs", prefs);
-		
+			options.setExperimentalOption("useAutomationExtension", false);
 			options.setCapability("capability_name", "capability_value");
 			
 //			driver = new ChromeDriver(cap);
