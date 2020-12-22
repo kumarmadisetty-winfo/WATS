@@ -38,11 +38,11 @@ public class DriverConfiguration {
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
 			options.setExperimentalOption("prefs", prefs);
-			DesiredCapabilities cap = DesiredCapabilities.chrome();
-			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			cap.setCapability(ChromeOptions.CAPABILITY, options);
+		
+			options.setCapability("capability_name", "capability_value");
+			
 //			driver = new ChromeDriver(cap);
-			driver=new RemoteWebDriver(new URL("config_url"), cap); 
+			driver=new RemoteWebDriver(new URL("config_url"), options); 
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 			
 			
