@@ -41,17 +41,22 @@ public class FetchConfigVO {
 	private int failcount;
 	private String status1;
 	private String errormessage;
-	private String Enable_video;
+//changed the name from Enable_video to enable_video
+	private String enable_video;
+	
 
-
-
-
+//New - change
 	public String getEnable_video() {
-		return Enable_video;
+		return enable_video;
 	}
+
 	public void setEnable_video(String enable_video) {
-		Enable_video = enable_video;
+		this.enable_video = enable_video;
 	}
+
+
+
+
 	public String getErrormessage() {
 		return errormessage;
 	}

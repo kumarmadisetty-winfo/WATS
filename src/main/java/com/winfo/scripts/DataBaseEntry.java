@@ -30,84 +30,150 @@ public class DataBaseEntry {
 
 
 public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
-    
+    // Added try catch blocks
+	Connection conn=null;
+	Statement st=null;
+	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
-    Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
             "Winfo_123");
-    Statement st = conn.createStatement();
-    
+    st = conn.createStatement();
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Pass' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
     st.executeQuery(sqlQuery);
-    
-    conn.close();
-    
-            
+    }
+    catch (Exception e) {
+		System.out.println(e);
+	}finally {
+		conn.close();
+		 st.close();
+    }
 }
 public  void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status,String error_message) throws ClassNotFoundException, SQLException {
-    
+	// Added try catch blocks
+	Connection conn=null;
+	Statement st=null;
+	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
-    Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
             "Winfo_123");
-    Statement st = conn.createStatement();
-    
+    st = conn.createStatement();
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE='"+error_message+"' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
     st.executeQuery(sqlQuery);
-    
-    conn.close();
-    
-            
+	}
+	catch (Exception e) {
+		System.out.println(e);
+	}finally {
+		conn.close();
+		 st.close();
+   }
 }
-public  void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status) throws ClassNotFoundException, SQLException {
-    
+//new change-database to get error message
+public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {
+	Connection conn=null;
+	Statement st=null;
+	String error=null;
+	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
-    Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
             "Winfo_123");
-    Statement st = conn.createStatement();
+    st = conn.createStatement();
+    String sqlQuery="SELECT PARAM.LINE_ERROR_MESSAGE "
+			+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
+			+ "WHERE TS.TEST_SET_ID = LINES.TEST_SET_ID "
+			+ "AND LINES.TEST_SET_LINE_ID = PARAM.TEST_SET_LINE_ID "
+			+ "AND TS.TEST_SET_ID =(SELECT TEST_SET_ID FROM WIN_TA_TEST_SET WHERE UPPER(TEST_SET_NAME)=UPPER('"+testRunName+"')) "
+			+ "AND UPPER(LINES.SCRIPT_NUMBER) = UPPER('"+ScriptName+"') "
+			+ "AND LINES.SEQ_NUM = "+sndo+" "
+			+ "AND PARAM.LINE_ERROR_MESSAGE IS NOT NULL";
+    ResultSet rs=st.executeQuery(sqlQuery);
     
+    if(rs.next()){
+    	error=rs.getString("LINE_ERROR_MESSAGE");
+    	System.out.println(error);
+    }
+	}
+	catch (Exception e) {
+		System.out.println(e);
+	}finally {
+		conn.close();
+		 st.close();
+   }
+	return error;
+}
+
+public  void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status) throws ClassNotFoundException, SQLException {
+//Added try catch blocks	
+	Connection conn=null;
+	Statement st=null;
+	try {
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+            "Winfo_123");
+    st = conn.createStatement();
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='In-Progress' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
     st.executeQuery(sqlQuery);
-    
-    conn.close();
-    
-            
+	}
+    catch (Exception e) {
+		System.out.println(e);
+	}
+	finally {
+		conn.close();
+		 st.close();
+}
 }
 public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String test_set_id) throws ClassNotFoundException, SQLException{
-    //System.out.println("Start Method");
+//Added try catch blocks    
+//System.out.println("Start Method");
+	Connection conn=null;
+	Statement st=null;
+	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
-    Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
             "Winfo_123");
-    Statement st = conn.createStatement();
+    st = conn.createStatement();
     //DateFormat format = new SimpleDateFormat("MM/DD/YYYY HH24:MI:SS");
     Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
     Date start_time1=fetchConfigVO.getStarttime();
     String start_time= startformat.format(start_time1);
     //System.out.println(start_time);
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"+start_time+"','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID = "+line_id;
-    
     st.executeQuery(sqlQuery);
+	}
+    catch (Exception e) {
+		System.out.println(e);
+	}
+	finally {
+		conn.close();
+		 st.close();
+    }
     
-    conn.close();
 }
 
  
 
 public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test_set_id) throws ClassNotFoundException, SQLException{
-    Class.forName("oracle.jdbc.driver.OracleDriver");
-    Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+	//Added try catch blocks
+	Connection conn=null;
+	Statement st=null;
+	try {
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
             "Winfo_123");
-    Statement st = conn.createStatement();
+    st = conn.createStatement();
     Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
     Date end_time1=fetchConfigVO.getEndtime();
     String end_time= startformat.format(end_time1);
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_END_TIME=TO_TIMESTAMP('"+end_time+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID ="+line_id;
     st.executeQuery(sqlQuery);
+	}
+    catch (Exception e) {
+		System.out.println(e);
+	}
+	finally {
+		conn.close();
+		 st.close();
+    }
     
-    conn.close();
-
- 
-
-}
-
- 
+  }
 
 }

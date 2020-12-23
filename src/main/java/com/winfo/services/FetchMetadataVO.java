@@ -34,6 +34,18 @@ public class FetchMetadataVO implements Serializable {
 	private String step_description;
 	private String script_description;
 	private String test_script_param_id;
+//added executed_by
+    private String executed_by;
+
+ //added set and get method   
+	public String getExecuted_by() {
+		return executed_by;
+	}
+
+	public void setExecuted_by(String executed_by) {
+		this.executed_by = executed_by;
+	}
+
 	public String getTest_script_param_id() {
 		return test_script_param_id;
 	}

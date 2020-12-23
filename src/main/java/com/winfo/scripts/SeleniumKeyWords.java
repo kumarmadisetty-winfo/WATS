@@ -65,6 +65,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 //import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -122,7 +123,9 @@ import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
 @Service
 public class SeleniumKeyWords {
-
+//New-changes - added annotation for DatabaseEntry
+@Autowired
+private DataBaseEntry  databaseentry;
 //	public static log log = LogManager.getlog(SeleniumKeyWords.class);
 	/*
 	 * private Integer ElementWait = Integer
@@ -689,7 +692,8 @@ public class SeleniumKeyWords {
         Date endtime=fetchConfigVO.getEndtime();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String Starttime1=dateFormat.format(Starttime);
-        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+//Changed the executed by variable
+        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
         String endtime1=dateFormat.format(endtime);
         long diff=endtime.getTime() - Starttime.getTime();
         long diffSeconds = diff / 1000 % 60;
@@ -840,7 +844,8 @@ public class SeleniumKeyWords {
         Date endtime=fetchConfigVO.getEndtime();
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String Starttime1=dateFormat.format(Starttime);
-        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+//Changed the executed by variable
+        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
         String endtime1=dateFormat.format(endtime);
         long diff=endtime.getTime() - Starttime.getTime();
         long diffSeconds = diff / 1000 % 60;
@@ -996,7 +1001,8 @@ public class SeleniumKeyWords {
 		     Date TStarttime=fetchConfigVO.getStarttime1();
 		     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		     String TStarttime1=dateFormat.format(TStarttime);
-		     String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+//Changed the executed by variable
+		     String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
 		     String endtime1=dateFormat.format(endtime);
 		     long Tdiff=endtime.getTime() - TStarttime.getTime();
 		     long TdiffSeconds = Tdiff / 1000 % 60;
@@ -1170,7 +1176,8 @@ public class SeleniumKeyWords {
 	        Date TStarttime=fetchConfigVO.getStarttime1();
 	        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	        String TStarttime1=dateFormat.format(TStarttime);
-	        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+//Changed the executed by variable
+	        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
 	        String endtime1=dateFormat.format(endtime);
 	        long Tdiff=endtime.getTime() - TStarttime.getTime();
 	        long TdiffSeconds = Tdiff / 1000 % 60;
@@ -1367,7 +1374,8 @@ public class SeleniumKeyWords {
 				        Date TStarttime=fetchConfigVO.getStarttime1();
 				        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 				        String TStarttime1=dateFormat.format(TStarttime);
-				        String ExeBy=fetchMetadataListVO.get(0).getInput_value();
+//Changed the executed by variable
+				        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
 				        String endtime1=dateFormat.format(endtime);
 				        long Tdiff=endtime.getTime() - TStarttime.getTime();
 				        long TdiffSeconds = Tdiff / 1000 % 60;
@@ -1776,7 +1784,8 @@ public class SeleniumKeyWords {
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
 			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
 			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
-			String ExecutedBy = fetchMetadataListVO.get(0).getInput_value();
+			//new change add ExecutedBy field
+			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
 			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
 			File theDir = new File(Folder);
 			if (!theDir.exists()) {
@@ -2063,6 +2072,7 @@ public class SeleniumKeyWords {
 				String ScriptNumber = image.split("_")[3];
 				String SNM = "Scenario Name";
 				String ScriptName = image.split("_")[2];
+				String testRunName=image.split("_")[4];
 //				String scrtipt=;
 				if(!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(img);
@@ -2102,7 +2112,6 @@ public class SeleniumKeyWords {
 //	End to add script details 
 				
 //	Start to add  screenshoots and pagenumbers and wats icon		 		
-//				String ScriptNumber = image.split("_")[3];
 //				String TestRun = image.split("_")[4];
 				String Status = image.split("_")[6];
 				String status = Status.split("\\.")[0];
@@ -2112,20 +2121,31 @@ public class SeleniumKeyWords {
 //				String SN = "Script Number:" + " " + ScriptNumber;
 				String S = "Status:" + " " + status;
 				String Scenarios = "Scenario Name :" + "" + Scenario;
-//				Image img1 = Image.getInstance("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\wats_icon.png");
-				img1.scalePercent(65, 68);
+				 String sndo = image.split("_")[0];
+				 img1.scalePercent(65, 68);
+					
 		         img1.setAlignment(Image.ALIGN_RIGHT);
+				 //new change-failed pdf to set pagesize 
+				if(image.startsWith(sndo+"_")&&image.contains("Failed")) {
+//					Rectangle one2 = new Rectangle(1360,1000);
+			        document.setPageSize(one1); 
+				 document.newPage();
+				}	else {
+					
 		         document.setPageSize(img);
 		         document.newPage();
+				}
 		         document.add(img1);
 		         document.add(new Paragraph(Scenarios, fnt));
 		         String Reason = image.split("_")[5];
 
 		         String Message = "Failed at Line Number:" + ""+ Reason;
-					String errorMessage = "Failed Message:" + ""+ fetchConfigVO.getErrormessage();  
+				 //new change-database to get error message
+		         String error=databaseentry.getErrorMessage(sndo,ScriptNumber,testRunName,fetchConfigVO);
+					String errorMessage = "Failed Message:" + ""+error; 
 		         Paragraph pr1=new Paragraph();
 		         pr1.add("Status:");
-		        String sndo = image.split("_")[0];
+		       
 			if(image.startsWith(sndo+"_")&&image.contains("Failed")) {
 		        Anchor target1 = new Anchor(status);
 			    target1.setName(String.valueOf(status+j));
@@ -2133,12 +2153,13 @@ public class SeleniumKeyWords {
 		        pr1.add(target1);
 		        document.add(pr1);
 		        document.add(new Paragraph(Message, fnt));
-		        if(fetchConfigVO.getErrormessage()!=null) {
+		        if(error!=null) {
 					document.add(new Paragraph(errorMessage, fnt));
 					}
 					document.add(Chunk.NEWLINE);
-//					img.setAlignment(Image.ALIGN_CENTER);
+					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
+					//new change-change page size
 					img.scalePercent(60,60);
 					document.add(img);
 	
@@ -2149,7 +2170,8 @@ public class SeleniumKeyWords {
 				        document.add(pr1);
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
-						img.scalePercent(60,70);
+						//new change-change page size
+						img.scalePercent(60,68);
 						document.add(img);
 				}   
 		
@@ -2233,27 +2255,18 @@ public class SeleniumKeyWords {
 				Image img = Image.getInstance(
 						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
 
-//				String ScriptNumber = image.split("_")[3];
-//				String TestRun = image.split("_")[4];
 				String Status = image.split("_")[6];
 				String status = Status.split("\\.")[0];
 				String Scenario = image.split("_")[2];
-				
-				
-				
+
 				document.setPageSize(img);
 				document.newPage();
-				
-//				String TR = "Test Run Name:" + " " + TestRun;
-//				String SN = "Script Number:" + " " + ScriptNumber;
+
 				String S = "Status:" + " " + status;
 				String Scenarios = "Scenario Name :" + "" + Scenario;
-//				Image img1 = Image.getInstance("C:\\Users\\winfo83\\Documents\\wats\\passedpdfs\\wats_icon.png");
 				img1.scalePercent(65, 65);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 		        document.add(img1);
-//				document.add(new Paragraph(TR, fnt));
-//				document.add(new Paragraph(SN, fnt));
 				document.add(new Paragraph(S, fnt));
 				document.add(new Paragraph(Scenarios, fnt));
 				document.add(Chunk.NEWLINE);
@@ -2262,7 +2275,8 @@ public class SeleniumKeyWords {
 				p.setAlignment(Element.ALIGN_RIGHT);
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
-				img.scalePercent(60, 70);
+				//new change-change page size
+				img.scalePercent(60, 64);
 				document.add(img);
 				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
@@ -2671,7 +2685,8 @@ public class SeleniumKeyWords {
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
 			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
 			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
-			String ExecutedBy = fetchMetadataListVO.get(0).getInput_value();
+			//new change add ExecutedBy field
+			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();	
 			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
 			File theDir = new File(Folder);
 			if (!theDir.exists()) {
@@ -2766,10 +2781,15 @@ public class SeleniumKeyWords {
 						String status = Status.split("\\.")[0];
 						String Scenario = image.split("_")[2];
 						
-						
-						
-						document.setPageSize(img);
-						document.newPage();
+						if (status.equalsIgnoreCase("Failed")) {//							Rectangle one2 = new Rectangle(1360,1000);
+					        document.setPageSize(one); 
+						 document.newPage();
+						}	else {
+							
+				         document.setPageSize(img);
+				         document.newPage();
+						}
+					
 						document.add(img1);
 						String Reason = image.split("_")[5];
 					//						String TR = "Test Run Name:" + " " + TestRun;
@@ -2784,6 +2804,7 @@ public class SeleniumKeyWords {
 //						document.add(new Paragraph(SN, fnt));
 						document.add(new Paragraph(S, fnt));
 //						document.add(new Paragraph(Scenarios, fnt));
+//new change-failed pdf to add pagesize
 						if (status.equalsIgnoreCase("Failed")) {
 							document.add(new Paragraph(Message, fnt));
 							if(fetchConfigVO.getErrormessage()!=null) {
@@ -2792,13 +2813,15 @@ public class SeleniumKeyWords {
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
-							img.scalePercent(60,62);
+							//new change-change page size
+							img.scalePercent(60,60);
 							document.add(img);
 						}else {
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
-							img.scalePercent(60,70);
+							//new change-change page size
+							img.scalePercent(60,68);
 							document.add(img);
 						}
 						

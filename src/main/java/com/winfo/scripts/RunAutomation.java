@@ -166,6 +166,7 @@ public class RunAutomation extends SeleniumKeyWords {
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
 		//start_time=dtf.format(now);
+		
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -207,8 +208,6 @@ public class RunAutomation extends SeleniumKeyWords {
 			}
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
-			
-			//dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
 			driver.quit();
 		}
 	}
@@ -382,6 +381,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					case "clickButton":		  
 						  clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						    message=getErrorMessages(driver);
+						    String message1=getErrorMessages(driver);
 	                     if(message != null) {
 	                           fetchConfigVO.setErrormessage(message);
 	                           screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -511,12 +511,10 @@ public class RunAutomation extends SeleniumKeyWords {
                     else
                     {
                         dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
-                       
+                        //new changes-error_message added to else block
+						fetchConfigVO.setErrormessage(error_message);
                     }
-					if(fetchConfigVO.getErrormessage()==null) {
-					fetchConfigVO.setErrormessage(error_message);
-					}
-			
+
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
