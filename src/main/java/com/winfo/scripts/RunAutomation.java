@@ -208,7 +208,7 @@ public class RunAutomation extends SeleniumKeyWords {
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
 			
-			dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
+			//dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
 			driver.quit();
 		}
 	}
