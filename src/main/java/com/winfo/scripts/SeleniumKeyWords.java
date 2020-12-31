@@ -7659,7 +7659,7 @@ System.out.println(e);
 
 				if (param1.equalsIgnoreCase("Mon")) {
 					Thread.sleep(1000);
-					WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[1]"));
+					WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[3]"));
 					
 				WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
 
