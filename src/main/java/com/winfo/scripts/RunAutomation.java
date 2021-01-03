@@ -153,8 +153,6 @@ public class RunAutomation extends SeleniumKeyWords {
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
 			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
-		 Date date = new Date();
-		 fetchConfigVO.setStarttime(date);
 		WebDriver driver = null;
 		ConnectToSQL sql = null;
 //		//String start_time=null;
@@ -255,7 +253,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-	       
+			Date date = new Date();
+			 fetchConfigVO.setStarttime(date);
 			DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
@@ -489,7 +488,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						post.setP_exception_path(detailurl);
 						post.setP_test_set_line_path(scripturl);
 						// passcount = passcount+1;
-						Date date = new Date();
+						 date = new Date();
 						 fetchConfigVO.setEndtime(date);
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
@@ -525,7 +524,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					post.setP_exception_path(detailurl);
 					post.setP_test_set_line_path(scripturl);
 					failcount = failcount + 1;
-					Date date = new Date();
+					 date = new Date();
 					 fetchConfigVO.setEndtime(date);
 					 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
 					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
