@@ -492,13 +492,21 @@ public class RunAutomation extends SeleniumKeyWords {
 						 fetchConfigVO.setEndtime(date);
 						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
 								failcount);
+						try {
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 						 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
+						}catch (Exception e) {
+                        System.out.println("e");				
+                        }
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
+					try {
 					dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Pass");
-				} catch (Exception e) {
+					}catch (Exception e) {
+                        System.out.println("e");				
+                        }
+					} catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());

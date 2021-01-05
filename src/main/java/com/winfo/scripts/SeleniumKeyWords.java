@@ -7681,7 +7681,7 @@ System.out.println(e);
 				if (param1.equalsIgnoreCase("Tue")) {
 
 					Thread.sleep(1000);
-					WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[1]"));
+					WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[3]"));
 					WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
 
 					+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]"));
@@ -7698,7 +7698,7 @@ System.out.println(e);
 
 					return;
 					}if (param1.equalsIgnoreCase("Wed")) {
-						WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[1]"));
+						WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[3]"));
 
 						WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
 
@@ -7715,7 +7715,7 @@ System.out.println(e);
 						return;
 						}if (param1.equalsIgnoreCase("Thu")) {
 
-							WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[1]"));
+							WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[3]"));
 							WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
 
 							+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]"));
@@ -7731,7 +7731,7 @@ System.out.println(e);
 							return;
 							}
 						if (param1.equalsIgnoreCase("Fri")) {
-							WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[1]"));
+							WebElement saturday = driver.findElement(By.xpath("(//td[contains(text(),'Sat')])[3]"));
 
 							WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
 
