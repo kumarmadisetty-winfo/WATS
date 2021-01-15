@@ -175,5 +175,31 @@ public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test
     }
     
   }
-
+public String getTrMode(String args,FetchConfigVO fetchConfigVO) throws SQLException {
+	Connection conn=null;
+	Statement st=null;
+	String states = null;
+	try {
+	Class.forName("oracle.jdbc.driver.OracleDriver");
+    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+            "Winfo_123");
+    st = conn.createStatement();
+    String sqlQuery="SELECT TR_MODE FROM WIN_TA_TEST_SET WHERE TEST_SET_ID ="+args;
+ResultSet rs=st.executeQuery(sqlQuery);
+    
+    if(rs.next()){
+    	states=rs.getString("TR_MODE");
+    	System.out.println(states);
+    }
+	
+	}
+    catch (Exception e) {
+		System.out.println(e);
+	}
+	finally {
+		conn.close();
+		 st.close();
+    }
+	return states;
+}
 }
