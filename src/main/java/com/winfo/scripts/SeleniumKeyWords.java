@@ -1806,7 +1806,7 @@ private DataBaseEntry  databaseentry;
 			Date Starttime = fetchConfigVO.getStarttime();
 			Date endtime=fetchConfigVO.getEndtime();
 			Date TStarttime=fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:s");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");			
 			String Starttime1=dateFormat.format(Starttime);
 			String TStarttime1=dateFormat.format(TStarttime);
 			String endtime1=dateFormat.format(endtime);
@@ -1985,15 +1985,16 @@ private DataBaseEntry  databaseentry;
 					 			String name = image.split("_")[3];
 					 			if(!sndo.equalsIgnoreCase(sno1)) {
 					 				Map<String, String> toc1 = new TreeMap<>();
-					 				l=0;
+//					 				l=0;
 					 				for (String image1 : fileNameList) {
 					 					String Status = image1.split("_")[6];
 					 					String status = Status.split("\\.")[0];
-					 					l++;
+//					 					l++;
 					 					if(image1.startsWith(sndo+"_")&&image1.contains("Failed")) {
 					 						
-					 						toc2.put(sndo,String.valueOf(l-2));	
-					 						
+//					 						toc2.put(sndo,String.valueOf(l-2));	
+					 						toc2.put(sndo,"Failed"+l);	
+					 						l++;
 					 						}
 					 					}
 					 				
@@ -2711,8 +2712,7 @@ private DataBaseEntry  databaseentry;
 			 Font fnt = FontFactory.getFont("Arial", 12);
 			 Date Starttime = fetchConfigVO.getStarttime();
 				Date endtime=fetchConfigVO.getEndtime();
-				DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:s");
-				String Starttime1=dateFormat.format(Starttime);
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");				String Starttime1=dateFormat.format(Starttime);
 				String endtime1=dateFormat.format(endtime);
 				long diff=endtime.getTime() - Starttime.getTime();
 				 long diffSeconds = diff / 1000 % 60;
