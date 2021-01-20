@@ -121,6 +121,26 @@ public  void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO,Fe
 		 st.close();
 }
 }
+public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String test_set_id,String test_set_line_id) throws ClassNotFoundException, SQLException {
+	//Added try catch blocks	
+		Connection conn=null;
+		Statement st=null;
+		try {
+	    Class.forName("oracle.jdbc.driver.OracleDriver");
+	    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+	            "Winfo_123");
+	    st = conn.createStatement();
+	    String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES SET Status='IN-PROGRESS' where test_set_id="+test_set_id +"and test_set_line_id="+test_set_line_id;
+	    st.executeQuery(sqlQuery);
+		}
+	    catch (Exception e) {
+			System.out.println(e);
+		}
+		finally {
+			conn.close();
+			 st.close();
+	}
+	}
 public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String test_set_id) throws ClassNotFoundException, SQLException{
 //Added try catch blocks    
 //System.out.println("Start Method");
