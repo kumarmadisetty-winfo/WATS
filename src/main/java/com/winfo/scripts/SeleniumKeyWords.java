@@ -1985,15 +1985,16 @@ private DataBaseEntry  databaseentry;
 					 			String name = image.split("_")[3];
 					 			if(!sndo.equalsIgnoreCase(sno1)) {
 					 				Map<String, String> toc1 = new TreeMap<>();
-					 				l=0;
+//					 				l=0;
 					 				for (String image1 : fileNameList) {
 					 					String Status = image1.split("_")[6];
 					 					String status = Status.split("\\.")[0];
-					 					l++;
+//					 					l++;
 					 					if(image1.startsWith(sndo+"_")&&image1.contains("Failed")) {
 					 						
-					 						toc2.put(sndo,String.valueOf(l-2));	
-					 						
+//					 						toc2.put(sndo,String.valueOf(l-2));	
+					 						toc2.put(sndo,"Failed"+l);	
+					 						l++;
 					 						}
 					 					}
 					 				
