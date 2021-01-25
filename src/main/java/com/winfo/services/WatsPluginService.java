@@ -126,5 +126,11 @@ public class WatsPluginService {
         String scriptnumber=master.getScript_number();
 		return dao.pluginData(master,scriptnumber);
 	}
+	
+	@Transactional
+	public DomGenericResponseBean copyTestrun(String testScriptNo) {
+		dao.getdata(testScriptNo);
+		return null;
+	}
 
 }
