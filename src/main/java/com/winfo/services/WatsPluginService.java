@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.winfo.dao.WatsPluginDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.model.Testrundata;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsMasterVO;
 import com.winfo.vo.WatsMetaDataVO;
@@ -129,7 +130,9 @@ public class WatsPluginService {
 	
 	@Transactional
 	public DomGenericResponseBean copyTestrun(String testScriptNo) {
-		dao.getdata(testScriptNo);
+		Testrundata test=dao.getdata(testScriptNo);
+		
+		System.out.println(test.getDescription());
 		return null;
 	}
 

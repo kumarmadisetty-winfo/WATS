@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.Testrundata;
 import com.winfo.vo.DomGenericResponseBean;
 
 @Repository
@@ -72,12 +73,14 @@ public class WatsPluginDao {
 		
 	}
 
-	public void getdata(String testScriptNo) {
-		Session session = entityManager.unwrap(Session.class);
-		String sql = " SELECT test_set_desc, test_set_comments,enabled,description,effective_from,effective_to FROM win_ta_test_set WHERE test_set_id = :p5_test_run_name_copy;";
-		SQLQuery query = session.createSQLQuery(sql);
-		query.setParameter("p5_test_run_name_copy", testScriptNo);
-		List results = query.list();
+	public Testrundata getdata(String testScriptNo) {
+//		Session session = entityManager.unwrap(Session.class);
+//		String sql = " SELECT test_set_desc, test_set_comments,enabled,description,effective_from,effective_to FROM win_ta_test_set WHERE test_set_id = :p5_test_run_name_copy;";
+//		SQLQuery query = session.createSQLQuery(sql);
+//		query.setParameter("p5_test_run_name_copy", testScriptNo);
+//		List results = query.list();
+		Testrundata ta=entityManager.find(Testrundata.class, testScriptNo);
+		 return ta;
 	}
 
 }

@@ -20,6 +20,7 @@ public class CopyTestrunController {
 	@PostMapping("/copyTestrun")
 	public DomGenericResponseBean copyTestrun(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
 			BindingResult bindingResult) {
+		System.out.println(testScriptDto.getTestScriptNo());
 		return service.copyTestrun(testScriptDto.getTestScriptNo());
 		
 	}
