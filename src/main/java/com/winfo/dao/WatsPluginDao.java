@@ -79,8 +79,8 @@ public class WatsPluginDao {
 //		SQLQuery query = session.createSQLQuery(sql);
 //		query.setParameter("p5_test_run_name_copy", testScriptNo);
 //		List results = query.list();
-		Testrundata ta=entityManager.find(Testrundata.class, testScriptNo);
-		 return ta;
+		Testrundata getTestrun=entityManager.find(Testrundata.class, testScriptNo);
+		 return getTestrun;
 	}
 
 }

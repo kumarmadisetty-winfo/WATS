@@ -1,5 +1,9 @@
 package com.winfo.services;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.winfo.dao.WatsPluginDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.model.ScriptsData;
+import com.winfo.model.ScritplinesData;
 import com.winfo.model.Testrundata;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsMasterVO;
@@ -129,11 +135,53 @@ public class WatsPluginService {
 	}
 	
 	@Transactional
-	public DomGenericResponseBean copyTestrun(String testScriptNo) {
-		Testrundata test=dao.getdata(testScriptNo);
+	public DomGenericResponseBean copyTestrun(String testScriptNo) throws InterruptedException {
+		Testrundata getTestrun=dao.getdata(testScriptNo);
+		Testrundata setTestrundata=new Testrundata();
 		
-		System.out.println(test.getDescription());
+		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
+		setTestrundata.setTest_set_comments(getTestrun.getTest_set_comments());
+		setTestrundata.setEnabled(getTestrun.getEnabled());
+		setTestrundata.setDescription(getTestrun.getDescription());
+		setTestrundata.setEffective_from(getTestrun.getEffective_from());
+		setTestrundata.setEffective_to(getTestrun.getEffective_to());
+		
+		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
+			
+			ScriptsData setScriptdata=new ScriptsData();
+			setScriptdata.setScriptid(getScriptdata.getScriptid());
+			setScriptdata.setScriptid(getScriptdata.getScriptid());
+			
+			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
+				
+				String getInputvalues=getScriptlinedata.getInput_value();
+				
+				if(getScriptlinedata.getInput_parameter().contains("#")) {
+				if("".equalsIgnoreCase("alphanumeric")) {
+					DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+					Date dateobj = new Date();
+					String str=df.format(dateobj);
+					Thread.sleep(1);
+					str=str.replaceAll("[^0-9]", "");
+					String str5="agaggagagaga1qqqq";
+					int one=Integer.parseInt(str.substring(0, 8));
+					int two=Integer.parseInt(str.substring(8, 15));
+					String a=Integer.toString(one , 36)+Integer.toString(two , 36);
+					a=a+getInputvalues.substring(0, 5);
+				}
+				else if("".equalsIgnoreCase("numeric")) {
+					DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+					Date dateobj = new Date();
+					String str=df.format(dateobj);
+					Thread.sleep(1);
+					str=str.replaceAll("[^0-9]", "");
+				}
+				
+			}
+			}
+		}
 		return null;
+	
 	}
 
 }
