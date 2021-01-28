@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.services.WatsPluginService;
+import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestScriptDto;
 import com.winfo.vo.WatsMasterVO;
@@ -18,10 +19,10 @@ public class CopyTestrunController {
 	@Autowired
 	WatsPluginService service;
 	@PostMapping("/copyTestrun")
-	public DomGenericResponseBean copyTestrun(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
-			BindingResult bindingResult) {
-		System.out.println(testScriptDto.getTestScriptNo());
-		return service.copyTestrun(testScriptDto.getTestScriptNo());
+	public DomGenericResponseBean copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
+			BindingResult bindingResult) throws InterruptedException {
+		System.out.println(copyTestrunvo.getTestScriptNo());
+		return service.copyTestrun(copyTestrunvo);
 		
 	}
 }

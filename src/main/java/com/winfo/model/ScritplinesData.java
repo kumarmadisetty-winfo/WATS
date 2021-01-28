@@ -11,15 +11,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM_BKP")
+@Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM_BKP3")
 public class ScritplinesData {
 	@Id
 	@GeneratedValue
 	@Column(name = "TEST_SCRIPT_PARAM_ID")
-	private String testscriptperamid;
+	private int testscriptperamid;
 	
 	@Column(name = "SCRIPT_ID")
-	private String script_id;
+	private int script_id;
 	
 	@Column(name = "SCRIPT_NUMBER")
 	private String script_number;
@@ -51,13 +51,14 @@ public class ScritplinesData {
 	@Column(name = "FIELD_TYPE")
 	private String field_type;
 	
-
+	@Column(name = "VALIDATION_TYPE")
+	private String validationtype;
 
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "TEST_SET_LINE_ID")
 	private ScriptsData Scriptsdata;
 
-	public String getTestscriptperamid() {
+	public int getTestscriptperamid() {
 		return testscriptperamid;
 	}
 	public ScriptsData getScriptsdata() {
@@ -68,15 +69,20 @@ public class ScritplinesData {
 		Scriptsdata = scriptsdata;
 	}
 
-	public void setTestscriptperamid(String testscriptperamid) {
+	public void setTestscriptperamid(int testscriptperamid) {
 		this.testscriptperamid = testscriptperamid;
 	}
-
-	public String getScript_id() {
+	public String getValidationtype() {
+		return validationtype;
+	}
+	public void setValidationtype(String validationtype) {
+		this.validationtype = validationtype;
+	}
+	public int getScript_id() {
 		return script_id;
 	}
 
-	public void setScript_id(String script_id) {
+	public void setScript_id(int script_id) {
 		this.script_id = script_id;
 	}
 
@@ -160,12 +166,5 @@ public class ScritplinesData {
 	public void setField_type(String field_type) {
 		this.field_type = field_type;
 	}
-	@Override
-	public String toString() {
-		return "ScritplinesData [testscriptperamid=" + testscriptperamid + ", script_id=" + script_id
-				+ ", script_number=" + script_number + ", line_number=" + line_number + ", input_parameter="
-				+ input_parameter + ", action=" + action + ", test_run_param_name=" + test_run_param_name
-				+ ", test_run_param_desc=" + test_run_param_desc + ", input_value=" + input_value + ", metadata_id="
-				+ metadata_id + ", hint=" + hint + ", field_type=" + field_type + ", Scriptsdata=" + Scriptsdata + "]";
-	}
+	
 }

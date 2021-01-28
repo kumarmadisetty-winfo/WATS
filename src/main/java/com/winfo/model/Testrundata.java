@@ -7,17 +7,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="WIN_TA_TEST_SET_BKP")
+@Table(name="WIN_TA_TEST_SET_BKP3")
 public class Testrundata {
 	@Id
-	@GeneratedValue
+	  @GeneratedValue
 	@Column(name = "TEST_SET_ID")
-	private String testsetid;
+	private int testsetid;
 	
 
 	@Column(name = "TEST_SET_DESC")
@@ -37,11 +38,47 @@ public class Testrundata {
 	
 	@Column(name = "EFFECTIVE_TO")
 	private String  effective_to;
+	
+	@Column(name = "PROJECT_ID")
+	private String  projectid;
+	
+	@Column(name = "TEST_SET_NAME")
+	private String  testsetname;
+	
+	@Column(name = "CONFIGURATION_ID")
+	private String  configurationid;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "Testrundata")
 
 	private List<ScriptsData> Scriptsdata = new ArrayList<ScriptsData>();
 
+	public void addScriptsdata(ScriptsData scriptsdata) {
+		Scriptsdata.add(scriptsdata);
+		scriptsdata.setTestrundata(this);
+	}
+	public String getProjectid() {
+		return projectid;
+	}
+
+	public void setProjectid(String projectid) {
+		this.projectid = projectid;
+	}
+
+	public String getTestsetname() {
+		return testsetname;
+	}
+
+	public void setTestsetname(String testsetname) {
+		this.testsetname = testsetname;
+	}
+
+	public String getConfigurationid() {
+		return configurationid;
+	}
+
+	public void setConfigurationid(String configurationid) {
+		this.configurationid = configurationid;
+	}
 
 	public List<ScriptsData> getScriptsdata() {
 		return Scriptsdata;
@@ -51,11 +88,11 @@ public class Testrundata {
 		Scriptsdata = scriptsdata;
 	}
 
-	public String getTestsetid() {
+	public int getTestsetid() {
 		return testsetid;
 	}
 
-	public void setTestsetid(String testsetid) {
+	public void setTestsetid(int testsetid) {
 		this.testsetid = testsetid;
 	}
 
@@ -106,11 +143,6 @@ public class Testrundata {
 	public void setEffective_to(String effective_to) {
 		this.effective_to = effective_to;
 	}
-	@Override
-	public String toString() {
-		return "Testrundata [testsetid=" + testsetid + ", test_set_desc=" + test_set_desc + ", test_set_comments="
-				+ test_set_comments + ", enabled=" + enabled + ", description=" + description + ", effective_from="
-				+ effective_from + ", effective_to=" + effective_to + ", Scriptsdata=" + Scriptsdata + "]";
-	}
+
 
 }

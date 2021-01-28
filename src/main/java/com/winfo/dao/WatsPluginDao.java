@@ -73,14 +73,16 @@ public class WatsPluginDao {
 		
 	}
 
-	public Testrundata getdata(String testScriptNo) {
-//		Session session = entityManager.unwrap(Session.class);
-//		String sql = " SELECT test_set_desc, test_set_comments,enabled,description,effective_from,effective_to FROM win_ta_test_set WHERE test_set_id = :p5_test_run_name_copy;";
-//		SQLQuery query = session.createSQLQuery(sql);
-//		query.setParameter("p5_test_run_name_copy", testScriptNo);
-//		List results = query.list();
+	public Testrundata getdata(int testScriptNo) {
 		Testrundata getTestrun=entityManager.find(Testrundata.class, testScriptNo);
-		 return getTestrun;
+		return getTestrun;
+	}
+
+	public void saveTestrun(Testrundata setTestrundata) {
+		// TODO Auto-generated method stub
+		entityManager.persist(setTestrundata);
+//		Session session = entityManager.unwrap(Session.class);
+//		session.save(setTestrundata);
 	}
 
 }

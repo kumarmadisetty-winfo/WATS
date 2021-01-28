@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-@Entity
+//@Entity
 @Table(name = "WIN_TA_SCRIPT_MASTER_BKP4")
 public class ScriptMaster {
 

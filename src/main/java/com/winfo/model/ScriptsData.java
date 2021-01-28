@@ -16,24 +16,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "WIN_TA_TEST_SET_LINES_BKP")
+@Table(name = "WIN_TA_TEST_SET_LINES_BKP3")
 public class ScriptsData {
 	@Id
 	@GeneratedValue
 	@Column(name = "TEST_SET_LINE_ID")
-	private String testsetlineid;
-	
-	public List<ScritplinesData> getScriptslinedata() {
-		return Scriptslinedata;
-	}
-
-	public void setScriptslinedata(List<ScritplinesData> scriptslinedata) {
-		Scriptslinedata = scriptslinedata;
-	}
-
+	private int testsetlineid;
 
 	@Column(name = "SCRIPT_ID")
-	private String scriptid;
+	private int scriptid;
 	
 	@Column(name = "SCRIPT_NUMBER")
 	private String scriptnumber;
@@ -47,7 +38,16 @@ public class ScriptsData {
 
 	@Column(name = "SEQ_NUM")
 	private String seqnum;
-
+	
+//	@Column(name = "TEST_SET_ID")
+//	private int testsetid;
+//	
+	@Column(name = "CREATED_BY")
+	private String createdby;
+	
+	@Column(name = "CREATION_DATE")
+	private String creationdate;
+	
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "TEST_SET_ID")
 	private Testrundata Testrundata;
@@ -56,32 +56,67 @@ public class ScriptsData {
 
 	private List<ScritplinesData> Scriptslinedata = new ArrayList<ScritplinesData>();
 	
+
+	public List<ScritplinesData> getScriptslinedata() {
+		return Scriptslinedata;
+	}
+
+	public void setScriptslinedata(List<ScritplinesData> scriptslinedata) {
+		Scriptslinedata = scriptslinedata;
+	}
+
+
+
+	public String getScriptnumber() {
+		return scriptnumber;
+	}
+
+	public int getTestsetlineid() {
+		return testsetlineid;
+	}
+
+	public void setTestsetlineid(int testsetlineid) {
+		this.testsetlineid = testsetlineid;
+	}
+
+	public int getScriptid() {
+		return scriptid;
+	}
+
+	public void setScriptid(int scriptid) {
+		this.scriptid = scriptid;
+	}
+
+//	public int getTestsetid() {
+//		return testsetid;
+//	}
+//
+//	public void setTestsetid(int testsetid) {
+//		this.testsetid = testsetid;
+//	}
+
+	public String getCreatedby() {
+		return createdby;
+	}
+
+	public void setCreatedby(String createdby) {
+		this.createdby = createdby;
+	}
+
+	public String getCreationdate() {
+		return creationdate;
+	}
+
+	public void setCreationdate(String creationdate) {
+		this.creationdate = creationdate;
+	}
+
 	public Testrundata getTestrundata() {
 		return Testrundata;
 	}
 
 	public void setTestrundata(Testrundata testrundata) {
 		Testrundata = testrundata;
-	}
-
-	public String getTestsetlineid() {
-		return testsetlineid;
-	}
-
-	public void setTestsetlineid(String testsetlineid) {
-		this.testsetlineid = testsetlineid;
-	}
-
-	public String getScriptid() {
-		return scriptid;
-	}
-
-	public void setScriptid(String scriptid) {
-		this.scriptid = scriptid;
-	}
-
-	public String getScriptnumber() {
-		return scriptnumber;
 	}
 
 	public void setScriptnumber(String scriptnumber) {
@@ -111,14 +146,7 @@ public class ScriptsData {
 	public void setSeqnum(String seqnum) {
 		this.seqnum = seqnum;
 	}
-	
-	
-	@Override
-	public String toString() {
-		return "ScriptsData [testsetlineid=" + testsetlineid + ", scriptid=" + scriptid + ", scriptnumber="
-				+ scriptnumber + ", status=" + status + ", enabled=" + enabled + ", seqnum=" + seqnum + ", Testrundata="
-				+ Testrundata + ", Scriptslinedata=" + Scriptslinedata + "]";
-	}
+
 
 	
 }

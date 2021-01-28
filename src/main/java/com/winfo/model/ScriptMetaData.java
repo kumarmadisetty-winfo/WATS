@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
+//@Entity
 @Table(name = "WIN_TA_SCRIPT_METADATA_BKP4")
 public class ScriptMetaData {
 
