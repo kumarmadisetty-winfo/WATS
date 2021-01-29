@@ -48,7 +48,7 @@ public class ScriptsData {
 	@Column(name = "CREATION_DATE")
 	private String creationdate;
 	
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_ID")
 	private Testrundata Testrundata;
 	
@@ -56,7 +56,10 @@ public class ScriptsData {
 
 	private List<ScritplinesData> Scriptslinedata = new ArrayList<ScritplinesData>();
 	
-
+    public void addScriptlines(ScritplinesData scriptslinedata) {
+    	Scriptslinedata.add(scriptslinedata);
+    	scriptslinedata.setScriptsdata(this);
+    }
 	public List<ScritplinesData> getScriptslinedata() {
 		return Scriptslinedata;
 	}

@@ -178,7 +178,7 @@ public class WatsPluginService {
 						int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
 						int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
 						String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-						hexaDecimal=hexaDecimal+getInputvalues.substring(0, 5);
+						hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
 						setScriptlinedata.setInput_value(hexaDecimal);
 					}
 					else if(getScriptlinedata.getValidationtype().equalsIgnoreCase("numeric")) {
@@ -190,42 +190,26 @@ public class WatsPluginService {
 						setScriptlinedata.setInput_value(covertDateobj);
 					}
 					}else {
-						
+						setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
 					}
-				setScriptdata.setScriptid(getScriptlinedata.getScript_id());
+				setScriptlinedata.setInput_parameter(getScriptlinedata.getInput_parameter());
+				setScriptlinedata.setScript_id(getScriptlinedata.getScript_id());
+				setScriptlinedata.setScript_number(getScriptlinedata.getScript_number());
+				setScriptlinedata.setLine_number(getScriptlinedata.getLine_number());
+				setScriptlinedata.setAction(getScriptlinedata.getAction());
+				setScriptlinedata.setTest_run_param_desc(getScriptlinedata.getTest_run_param_desc());
+				setScriptlinedata.setTest_run_param_name(getScriptlinedata.getTest_run_param_name());
+				setScriptlinedata.setMetadata_id(getScriptlinedata.getMetadata_id());
+				setScriptlinedata.setHint(getScriptlinedata.getHint());
+				setScriptlinedata.setField_type(getScriptlinedata.getField_type());
+				setScriptlinedata.setValidationtype(getScriptlinedata.getValidationtype());
+				setScriptdata.addScriptlines(setScriptlinedata);
 				}
 			}
-		}
-//		setTestrundata.setScriptsdata(listsScriptdata);
 		dao.saveTestrun(setTestrundata);
-//			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
-//				
-//				String getInputvalues=getScriptlinedata.getInput_value();
-//				
-//				if(getScriptlinedata.getInput_parameter().contains("#")) {
-//				if("".equalsIgnoreCase("alphanumeric")) {
-//					DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-//					Date dateobj = new Date();
-//					String str=df.format(dateobj);
-//					Thread.sleep(1);
-//					str=str.replaceAll("[^0-9]", "");
-//					String str5="agaggagagaga1qqqq";
-//					int one=Integer.parseInt(str.substring(0, 8));
-//					int two=Integer.parseInt(str.substring(8, 15));
-//					String a=Integer.toString(one , 36)+Integer.toString(two , 36);
-//					a=a+getInputvalues.substring(0, 5);
-//				}
-//				else if("".equalsIgnoreCase("numeric")) {
-//					DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-//					Date dateobj = new Date();
-//					String str=df.format(dateobj);
-//					Thread.sleep(1);
-//					str=str.replaceAll("[^0-9]", "");
-//				}
-//				
-//			}
-//			}
-//		}
+//		setTestrundata.setScriptsdata(listsScriptdata);
+		
+
 		return null;
 	
 	}

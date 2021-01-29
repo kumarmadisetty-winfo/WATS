@@ -54,7 +54,7 @@ public class ScritplinesData {
 	@Column(name = "VALIDATION_TYPE")
 	private String validationtype;
 
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_LINE_ID")
 	private ScriptsData Scriptsdata;
 
