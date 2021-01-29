@@ -164,6 +164,8 @@ public class WatsPluginService {
 			setScriptdata.setStatus(getScriptdata.getStatus());
 			setTestrundata.addScriptsdata(setScriptdata);
 			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
+				ScritplinesData setScriptlinedata=new ScritplinesData();
+	
 				String getInputvalues=getScriptlinedata.getInput_value();
 				System.out.println(getScriptlinedata.getInput_parameter().substring(0, 3));
 				if(getScriptlinedata.getInput_parameter().substring(0, 3).contains("(#")) {
@@ -175,19 +177,22 @@ public class WatsPluginService {
 						covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
 						int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
 						int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
-						String a=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-						a=a+getInputvalues.substring(0, 5);
+						String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
+						hexaDecimal=hexaDecimal+getInputvalues.substring(0, 5);
+						setScriptlinedata.setInput_value(hexaDecimal);
 					}
 					else if(getScriptlinedata.getValidationtype().equalsIgnoreCase("numeric")) {
-						DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 						Date dateobj = new Date();
-						String str=df.format(dateobj);
+						String covertDateobj=dateformate.format(dateobj);
 						Thread.sleep(1);
-						str=str.replaceAll("[^0-9]", "");
+						covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
+						setScriptlinedata.setInput_value(covertDateobj);
 					}
 					}else {
 						
 					}
+				setScriptdata.setScriptid(getScriptlinedata.getScript_id());
 				}
 			}
 		}
