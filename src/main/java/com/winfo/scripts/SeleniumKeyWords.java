@@ -665,9 +665,9 @@ private DataBaseEntry  databaseentry;
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/Images/white.jpg");
+		File file = new File("Images/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/Images/WATS_LOGO.JPG");
+		File file1 = new File("Images/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
         BufferedImage image = null;
@@ -817,9 +817,9 @@ private DataBaseEntry  databaseentry;
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/Images/white.jpg");
+		File file = new File("Images/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/Images/WATS_LOGO.JPG");
+		File file1 = new File("Images/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 		
         BufferedImage image = null;
@@ -975,9 +975,9 @@ private DataBaseEntry  databaseentry;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/Images/white.jpg");
+			File file = new File("Images/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/Images/WATS_LOGO.JPG");
+			File file1 = new File("Images/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
 			 BufferedImage image = null;
@@ -1151,9 +1151,9 @@ private DataBaseEntry  databaseentry;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/Images/white.jpg");
+			File file = new File("Images/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/Images/WATS_LOGO.JPG");
+			File file1 = new File("Images/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 			
 	        BufferedImage image = null;
@@ -1349,8 +1349,8 @@ private DataBaseEntry  databaseentry;
 						ArrayList<String> linksall = new ArrayList<String>();
 						
 
-						File file = new File("/Images/white.jpg");
-						File file1 = new File("/Images/WATS_LOGO.JPG");
+						File file = new File("Images/white.jpg");
+						File file1 = new File("Images/WATS_LOGO.JPG");
 						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
 						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 				        BufferedImage image = null;
@@ -1833,7 +1833,7 @@ private DataBaseEntry  databaseentry;
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			 Image img1 = Image.getInstance("/Images/wats_icon.png");
+			 Image img1 = Image.getInstance("Images/wats_icon.png");
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -2704,7 +2704,7 @@ private DataBaseEntry  databaseentry;
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("/Images/wats_icon.png");
+			 Image img1 = Image.getInstance("Images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
