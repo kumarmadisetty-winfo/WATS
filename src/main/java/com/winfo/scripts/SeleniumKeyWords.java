@@ -5270,7 +5270,7 @@ private DataBaseEntry  databaseentry;
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during clickButton"+scripNumber);
 			System.out.println(e);
-//			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 		
