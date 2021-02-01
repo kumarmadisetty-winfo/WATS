@@ -282,6 +282,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
+				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO,test_set_id,test_set_line_id);
 				dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
 				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
