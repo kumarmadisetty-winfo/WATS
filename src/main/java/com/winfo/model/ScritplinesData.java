@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM_BKP3")
+@Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM_BKP")
 public class ScritplinesData {
 	@Id
 	@GeneratedValue

@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "WIN_TA_TEST_SET_LINES_BKP3")
+@Table(name = "WIN_TA_TEST_SET_LINES_BKP")
 public class ScriptsData {
 	@Id
 	@GeneratedValue
