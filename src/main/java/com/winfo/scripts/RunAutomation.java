@@ -76,6 +76,7 @@ public class RunAutomation extends SeleniumKeyWords {
 		
 
 	}
+	long increment=0;
 	public void run(String args) throws MalformedURLException {
 		System.out.println(args);
 		try {
@@ -98,8 +99,17 @@ public class RunAutomation extends SeleniumKeyWords {
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
 					try {
-						executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
-					} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
+						long starttimeIntermediate = System.currentTimeMillis();	
+						String flag=dataBaseEntry.getTrMode(args,fetchConfigVO);
+					              if(flag.equalsIgnoreCase("STOP")) {
+										metaData.getValue().clear();
+										executor.shutdown();
+									}else {
+										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+									}
+									long i=System.currentTimeMillis()-starttimeIntermediate;
+									increment=increment+i; 
+									System.out.println("time"+increment/ 1000 % 60);					} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (Exception e) {
@@ -120,7 +130,13 @@ public class RunAutomation extends SeleniumKeyWords {
 					for (Entry<String, List<FetchMetadataVO>> metaData : dependantmetaDataMap.entrySet()) {
 						executordependent.execute(() -> {
 							try {
-								executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+								String flag=dataBaseEntry.getTrMode(args,fetchConfigVO);
+					              if(flag.equalsIgnoreCase("STOP")) {
+										metaData.getValue().clear();
+										executor.shutdown();
+									}else {
+										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+									}
 							} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -135,6 +151,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount, failcount);
 				createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount, failcount);
 				createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", passcount, failcount);
+				increment=0;
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
