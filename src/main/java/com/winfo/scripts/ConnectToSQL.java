@@ -31,7 +31,7 @@ public class ConnectToSQL {
 //                           Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),fetchConfigVO.getDb_password());
 
 		 conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-				"Winfo_123");
+				"DB_PASSWORD");
 
 		 st = conn.createStatement();
 

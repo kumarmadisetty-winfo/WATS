@@ -36,7 +36,7 @@ public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchC
 	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Pass' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
     st.executeQuery(sqlQuery);
@@ -55,7 +55,7 @@ public  void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchC
 	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE='"+error_message+"' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
     st.executeQuery(sqlQuery);
@@ -75,7 +75,7 @@ public  String getErrorMessage(String sndo,String ScriptName,String testRunName,
 	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     String sqlQuery="SELECT PARAM.LINE_ERROR_MESSAGE "
 			+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
@@ -108,7 +108,7 @@ public  void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO,Fe
 	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='In-Progress' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
     st.executeQuery(sqlQuery);
@@ -130,7 +130,7 @@ public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String t
 	try {
     Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     //DateFormat format = new SimpleDateFormat("MM/DD/YYYY HH24:MI:SS");
     Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
@@ -156,7 +156,7 @@ public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test
 	try {
 	Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
     Date end_time1=fetchConfigVO.getEndtime();
@@ -180,7 +180,7 @@ public String getTrMode(String args,FetchConfigVO fetchConfigVO) throws SQLExcep
 	try {
 	Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-            "Winfo_123");
+            "DB_PASSWORD");
     st = conn.createStatement();
     String sqlQuery="SELECT TR_MODE FROM WIN_TA_TEST_SET WHERE TEST_SET_ID ="+args;
 ResultSet rs=st.executeQuery(sqlQuery);
