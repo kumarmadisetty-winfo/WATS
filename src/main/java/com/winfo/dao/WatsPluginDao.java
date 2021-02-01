@@ -73,16 +73,6 @@ public class WatsPluginDao {
 		
 	}
 
-	public Testrundata getdata(int testScriptNo) {
-		Testrundata getTestrun=entityManager.find(Testrundata.class, testScriptNo);
-		return getTestrun;
-	}
-
-	public void saveTestrun(Testrundata setTestrundata) {
-		// TODO Auto-generated method stub
-		entityManager.persist(setTestrundata);
-//		Session session = entityManager.unwrap(Session.class);
-//		session.save(setTestrundata);
-	}
+	
 
 }

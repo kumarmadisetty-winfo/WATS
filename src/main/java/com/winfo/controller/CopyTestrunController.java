@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.services.WatsPluginService;
+import com.winfo.services.CopyTestRunService;
 import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestScriptDto;
@@ -17,7 +17,7 @@ import com.winfo.vo.WatsMasterVO;
 @RestController
 public class CopyTestrunController {
 	@Autowired
-	WatsPluginService service;
+	CopyTestRunService service;
 	@PostMapping("/copyTestrun")
 	public DomGenericResponseBean copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException {
