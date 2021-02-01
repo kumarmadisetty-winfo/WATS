@@ -665,9 +665,9 @@ private DataBaseEntry  databaseentry;
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		File file = new File("/Images/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		File file1 = new File("/Images/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
         BufferedImage image = null;
@@ -817,9 +817,9 @@ private DataBaseEntry  databaseentry;
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		File file = new File("/Images/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		File file1 = new File("/Images/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 		
         BufferedImage image = null;
@@ -975,9 +975,9 @@ private DataBaseEntry  databaseentry;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			File file = new File("/Images/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			File file1 = new File("/Images/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
 			 BufferedImage image = null;
@@ -1151,9 +1151,9 @@ private DataBaseEntry  databaseentry;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			File file = new File("/Images/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			File file1 = new File("/Images/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 			
 	        BufferedImage image = null;
@@ -1349,8 +1349,8 @@ private DataBaseEntry  databaseentry;
 						ArrayList<String> linksall = new ArrayList<String>();
 						
 
-						File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
-						File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+						File file = new File("/Images/white.jpg");
+						File file1 = new File("/Images/WATS_LOGO.JPG");
 						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
 						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 				        BufferedImage image = null;
