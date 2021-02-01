@@ -149,9 +149,6 @@ public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String t
     }
     
 }
-
- 
-
 public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test_set_id) throws ClassNotFoundException, SQLException{
 	//Added try catch blocks
 	Connection conn=null;
