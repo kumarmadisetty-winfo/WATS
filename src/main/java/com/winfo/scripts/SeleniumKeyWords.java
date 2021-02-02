@@ -661,7 +661,7 @@ private DataBaseEntry  databaseentry;
 			}
 
 		});
-		
+		System.out.println("Collections.sort completed");
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
@@ -711,6 +711,7 @@ private DataBaseEntry  databaseentry;
         g.drawString("Execution Time : "+ExecutionTime, 50, 450);
         g.drawImage(logo,1012,15,null);
         g.dispose();
+        System.out.println("before ImageIO.write");
         ImageIO.write(image, "jpg", new File("Images/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
@@ -729,7 +730,7 @@ private DataBaseEntry  databaseentry;
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
-
+        System.out.println("before Failed.jpg");
 		if (fileList.get(0).getName().endsWith("Failed.jpg")) {
 			for(File f33:f22) {
 	        	if(f33.getAbsolutePath().contains("first")) {
@@ -746,6 +747,7 @@ private DataBaseEntry  databaseentry;
 			fileNameList.add(fileList.get(0).getName());
 			links1.add(fileList.get(0).getAbsolutePath());
             links1.add(linksall.get(1));
+            System.out.println("added links1 list");
 			for (int i = 1; i < fileList.size(); i++) {
 
 				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
@@ -763,6 +765,7 @@ private DataBaseEntry  databaseentry;
 			links1.add(linksall.get(0));
 			Collections.reverse(links1);
 			Collections.reverse(fileNameList);
+			 System.out.println("Collections.reverse");
 		}
 
 		// targetFileList.addAll(seqList);
@@ -2682,6 +2685,7 @@ private DataBaseEntry  databaseentry;
 			} else {
 				fileNameList = getFailFileNameListNew(fetchMetadataListVO, fetchConfigVO);
 			}
+			
 			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
 			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();

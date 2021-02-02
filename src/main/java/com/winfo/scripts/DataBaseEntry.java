@@ -128,7 +128,7 @@ public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String tes
 		try {
 	    Class.forName("oracle.jdbc.driver.OracleDriver");
 	    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-	            "Winfo_123");
+	            "DB_PASSWORD");
 	    st = conn.createStatement();
 	    String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES SET Status='IN-PROGRESS' where test_set_id="+test_set_id +"and test_set_line_id="+test_set_line_id;
 	    st.executeQuery(sqlQuery);
