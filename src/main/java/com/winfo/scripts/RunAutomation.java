@@ -104,6 +104,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					              if(flag.equalsIgnoreCase("STOP")) {
 										metaData.getValue().clear();
 										executor.shutdown();
+										System.out.println("treminattion is succeed");
 									}else {
 										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 									}
@@ -134,6 +135,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					              if(flag.equalsIgnoreCase("STOP")) {
 										metaData.getValue().clear();
 										executor.shutdown();
+										System.out.println("treminattion is succeed");
 									}else {
 										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 									}
