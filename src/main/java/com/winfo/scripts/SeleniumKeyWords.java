@@ -634,7 +634,7 @@ private DataBaseEntry  databaseentry;
 	}
 
 	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
-
+System.out.println("entered to getFailFileNameListNew");
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
@@ -651,7 +651,7 @@ private DataBaseEntry  databaseentry;
                 fileList.add(file);
             }
         }
-
+        System.out.println("before Collections.sort completed");
 		Collections.sort(fileList, new Comparator<File>() {
 
 			public int compare(File f1, File f2) {
@@ -661,13 +661,13 @@ private DataBaseEntry  databaseentry;
 			}
 
 		});
-		System.out.println("Collections.sort completed");
+		System.out.println("after Collections.sort completed");
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("Images/white.jpg");
+		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("Images/WATS_LOGO.JPG");
+		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
         BufferedImage image = null;
@@ -712,7 +712,7 @@ private DataBaseEntry  databaseentry;
         g.drawImage(logo,1012,15,null);
         g.dispose();
         System.out.println("before ImageIO.write");
-        ImageIO.write(image, "jpg", new File("Images/first.jpg"));
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
         BufferedImage image1 = null;
@@ -725,7 +725,7 @@ private DataBaseEntry  databaseentry;
         g1.drawImage(logo,1012,15,null);
         g1.dispose();
 //        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
-        String imgpath2 ="Images/";
+        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
@@ -820,9 +820,9 @@ private DataBaseEntry  databaseentry;
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("Images/white.jpg");
+		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("Images/WATS_LOGO.JPG");
+		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 		
         BufferedImage image = null;
@@ -866,7 +866,7 @@ private DataBaseEntry  databaseentry;
         g.drawString("Execution Time : "+ExecutionTime, 50, 450);
         g.drawImage(logo,1012,15,null);
         g.dispose();
-        ImageIO.write(image, "jpg", new File("Images/first.jpg"));
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
         BufferedImage image1 = null;
@@ -878,9 +878,9 @@ private DataBaseEntry  databaseentry;
         g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
         g1.drawImage(logo,1150,15,null);
         g1.dispose();
-        ImageIO.write(image1, "jpg", new File("Images/last.jpg"));
+        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
-        String imgpath2 ="Images/";
+        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
@@ -978,9 +978,9 @@ private DataBaseEntry  databaseentry;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("Images/white.jpg");
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("Images/WATS_LOGO.JPG");
+			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
 			 BufferedImage image = null;
@@ -1037,11 +1037,11 @@ private DataBaseEntry  databaseentry;
 	         g2.drawString("Execution Time : "+ExecutionTime, 50,425);
 	         g2.drawImage(logo,1012,15,null);
 		     g2.dispose();
-			 ImageIO.write(image2, "jpg", new File("Images/first.jpg"));
+			 ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
 			 //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
-			 String imgpath3 ="Images/first.jpg";
-			 String imgpath2 ="Images/";
-	         ImageIO.write(image, "jpg", new File("Images/"+imagename+".jpg"));
+			 String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+			 String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
 			 //String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 			 //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 	         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
@@ -1154,9 +1154,9 @@ private DataBaseEntry  databaseentry;
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("Images/white.jpg");
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("Images/WATS_LOGO.JPG");
+			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 			
 	        BufferedImage image = null;
@@ -1199,7 +1199,7 @@ private DataBaseEntry  databaseentry;
 ////	    g.drawString("End Time :"+endtime1, 50, 500);
 ////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 	        g.dispose();
-	        ImageIO.write(image, "jpg", new File("Images/"+imagename+".jpg"));
+	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
 	        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 	        
 	        BufferedImage image1 = null;
@@ -1211,7 +1211,7 @@ private DataBaseEntry  databaseentry;
 	        g1.drawImage(logo,1012,14,null);
 	        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
 	        g1.dispose();
-	        ImageIO.write(image1, "jpg", new File("Images/last.jpg"));
+	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
 	        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
 	        
 	        BufferedImage image2 = null;
@@ -1227,9 +1227,9 @@ private DataBaseEntry  databaseentry;
             g2.drawString("Execution Time : "+ExecutionTime, 50,425);
             g2.drawImage(logo,1012,15,null);
 	        g2.dispose();
-	       	ImageIO.write(image2, "jpg", new File("Images/first.jpg"));
-	        String imgpath3 ="Images/first.jpg";
-	        String imgpath2 ="Images/";
+	       	ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+	        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+	        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
 	        
 	        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
 		    //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
@@ -1352,8 +1352,8 @@ private DataBaseEntry  databaseentry;
 						ArrayList<String> linksall = new ArrayList<String>();
 						
 
-						File file = new File("Images/white.jpg");
-						File file1 = new File("Images/WATS_LOGO.JPG");
+						File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+						File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
 						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
 						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 				        BufferedImage image = null;
@@ -1396,7 +1396,7 @@ private DataBaseEntry  databaseentry;
 				        //g.drawString("End Time :"+endtime1, 50, 500);
 				        //g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 				        g.dispose();
-				        ImageIO.write(image, "jpg", new File("Images/"+imagename+".jpg"));
+				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
 				        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 				        
 				        BufferedImage image1 = null;
@@ -1422,11 +1422,11 @@ private DataBaseEntry  databaseentry;
 			            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
 			            g2.drawImage(logo,1012,15,null);
 				        g2.dispose();
-				       ImageIO.write(image2, "jpg", new File("Images/first.jpg"));
+				       ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
 				        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
-				       String imgpath2 ="Images/";
+				       String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
 				        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-				        String imgpath3 ="Images/first.jpg";
+				        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
 				        //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 				        File f11=new File(imgpath2);
 				        File[] f22=f11.listFiles();
@@ -1836,7 +1836,7 @@ private DataBaseEntry  databaseentry;
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			 Image img1 = Image.getInstance("Images/wats_icon.png");
+			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -2708,7 +2708,7 @@ private DataBaseEntry  databaseentry;
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("Images/wats_icon.png");
+			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
