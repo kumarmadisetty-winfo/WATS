@@ -1,6 +1,7 @@
 package com.winfo.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,7 +17,6 @@ import javax.persistence.Table;
 @Table(name="WIN_TA_TEST_SET_BKP")
 public class Testrundata {
 	@Id
-	  @GeneratedValue
 	@Column(name = "TEST_SET_ID")
 	private int testsetid;
 	
@@ -40,14 +40,44 @@ public class Testrundata {
 	private String  effective_to;
 	
 	@Column(name = "PROJECT_ID")
-	private String  projectid;
+	private int  projectid;
 	
 	@Column(name = "TEST_SET_NAME")
 	private String  testsetname;
 	
 	@Column(name = "CONFIGURATION_ID")
-	private String  configurationid;
+	private int  configurationid;
+	
+	@Column(name = "CREATED_BY")
+	private String  createdby;
 
+	@Column(name = "LAST_UPDATED_BY")
+	private String  lastupdatedby;
+	
+	@Column(name = "CREATION_DATE")
+	private Date  creationdate;
+	
+	@Column(name = "UPDATE_DATE")
+	private Date  updatedate;
+	
+	@Column(name = "LAST_EXECUTED_BY")
+	private Date  lastexecuteby;
+	
+	@Column(name = "TS_COMPLETE_FLAG")
+	private String  tscompleteflag;
+	
+	@Column(name = "PASS_PATH")
+	private String  passpath;
+	
+	@Column(name = "FAIL_PATH")
+	private String  failpath;
+	
+	@Column(name = "EXCEPTION_PATH")
+	private String  exceptionpath;
+	
+	@Column(name = "TR_MODE")
+	private String  trmode;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "Testrundata")
 
 	private List<ScriptsData> Scriptsdata = new ArrayList<ScriptsData>();
@@ -56,13 +86,7 @@ public class Testrundata {
 		Scriptsdata.add(scriptsdata);
 		scriptsdata.setTestrundata(this);
 	}
-	public String getProjectid() {
-		return projectid;
-	}
-
-	public void setProjectid(String projectid) {
-		this.projectid = projectid;
-	}
+	
 
 	public String getTestsetname() {
 		return testsetname;
@@ -72,13 +96,127 @@ public class Testrundata {
 		this.testsetname = testsetname;
 	}
 
-	public String getConfigurationid() {
+	
+
+	public int getProjectid() {
+		return projectid;
+	}
+
+
+	public void setProjectid(int projectid) {
+		this.projectid = projectid;
+	}
+
+
+	public int getConfigurationid() {
 		return configurationid;
 	}
 
-	public void setConfigurationid(String configurationid) {
+
+	public void setConfigurationid(int configurationid) {
 		this.configurationid = configurationid;
 	}
+
+
+	public String getCreatedby() {
+		return createdby;
+	}
+
+
+	public void setCreatedby(String createdby) {
+		this.createdby = createdby;
+	}
+
+
+	public String getLastupdatedby() {
+		return lastupdatedby;
+	}
+
+
+	public void setLastupdatedby(String lastupdatedby) {
+		this.lastupdatedby = lastupdatedby;
+	}
+
+
+	public Date getCreationdate() {
+		return creationdate;
+	}
+
+
+	public void setCreationdate(Date creationdate) {
+		this.creationdate = creationdate;
+	}
+
+
+	public Date getUpdatedate() {
+		return updatedate;
+	}
+
+
+	public void setUpdatedate(Date updatedate) {
+		this.updatedate = updatedate;
+	}
+
+
+	public Date getLastexecuteby() {
+		return lastexecuteby;
+	}
+
+
+	public void setLastexecuteby(Date lastexecuteby) {
+		this.lastexecuteby = lastexecuteby;
+	}
+
+
+	public String getTscompleteflag() {
+		return tscompleteflag;
+	}
+
+
+	public void setTscompleteflag(String tscompleteflag) {
+		this.tscompleteflag = tscompleteflag;
+	}
+
+
+	public String getPasspath() {
+		return passpath;
+	}
+
+
+	public void setPasspath(String passpath) {
+		this.passpath = passpath;
+	}
+
+
+	public String getFailpath() {
+		return failpath;
+	}
+
+
+	public void setFailpath(String failpath) {
+		this.failpath = failpath;
+	}
+
+
+	public String getExceptionpath() {
+		return exceptionpath;
+	}
+
+
+	public void setExceptionpath(String exceptionpath) {
+		this.exceptionpath = exceptionpath;
+	}
+
+
+	public String getTrmode() {
+		return trmode;
+	}
+
+
+	public void setTrmode(String trmode) {
+		this.trmode = trmode;
+	}
+
 
 	public List<ScriptsData> getScriptsdata() {
 		return Scriptsdata;

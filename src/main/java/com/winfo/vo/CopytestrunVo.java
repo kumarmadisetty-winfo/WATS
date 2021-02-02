@@ -4,24 +4,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CopytestrunVo {
 private int  testScriptNo;
-	private String project ;
-	private String configuration ;
+	private int project ;
+	private int configuration ;
 	private String newtestrunname;
 	
 
-	public String getProject() {
+	
+
+	public int getProject() {
 		return project;
 	}
 
-	public void setProject(String project) {
+	public void setProject(int project) {
 		this.project = project;
 	}
 
-	public String getConfiguration() {
+	public int getConfiguration() {
 		return configuration;
 	}
 
-	public void setConfiguration(String configuration) {
+	public void setConfiguration(int configuration) {
 		this.configuration = configuration;
 	}
 

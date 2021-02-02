@@ -26,36 +26,60 @@ public class CopyTestRunService {
 	@Transactional
 	public DomGenericResponseBean copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		List<Integer> sequencenumbers=copyTestrunDao.getIds();
+		int testrunid=copyTestrunDao.getIds();
 		Testrundata setTestrundata=new Testrundata();
+		setTestrundata.setTestsetid(testrunid);
 		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
 		setTestrundata.setTest_set_comments(getTestrun.getTest_set_comments());
-		setTestrundata.setEnabled(getTestrun.getEnabled());
+		setTestrundata.setEnabled("Y");
 		setTestrundata.setDescription(getTestrun.getDescription());
 		setTestrundata.setEffective_from(getTestrun.getEffective_from());
 		setTestrundata.setEffective_to(getTestrun.getEffective_to());
 		setTestrundata.setTestsetname(copyTestrunvo.getNewtestrunname());
 		setTestrundata.setConfigurationid(copyTestrunvo.getConfiguration());
 		setTestrundata.setProjectid(copyTestrunvo.getProject());
+		setTestrundata.setCreatedby(createdby);
+		setTestrundata.setLastupdatedby(null);
+		setTestrundata.setCreationdate(creationdate);
+		setTestrundata.setUpdatedate(null);
+		setTestrundata.setTscompleteflag("Active");
+		setTestrundata.setPasspath(getTestrun.getPasspath());
+		setTestrundata.setFailpath(getTestrun.getFailpath());
+		setTestrundata.setExceptionpath(getTestrun.getExceptionpath());
+		setTestrundata.setTrmode("ACTIVE");
+		setTestrundata.setLastexecuteby(null);
+		
+//		copyTestrunDao.saveTestrun(setTestrundata);
 		 List<ScriptsData> listsScriptdata=new ArrayList<>();
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
+			int sectiptid=copyTestrunDao.getscrtiptIds();
 			
 			ScriptsData setScriptdata=new ScriptsData();
+			setScriptdata.setTestsetlineid(getScriptdata.getTestsetlineid());
 			setScriptdata.setScriptid(getScriptdata.getScriptid());
-			setScriptdata.setCreatedby(getScriptdata.getCreatedby());
-			setScriptdata.setCreationdate(getScriptdata.getCreationdate());
-			setScriptdata.setEnabled(getScriptdata.getEnabled());
+			setScriptdata.setCreatedby();
+			setScriptdata.setCreationdate();
+			setScriptdata.setEnabled("Y");
 			setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
 			setScriptdata.setStatus("new");
+			setScriptdata.setLastupdatedby(null);
+			setScriptdata.setUpdateddate(null);
+			setScriptdata.setTestsstlinescriptpath(getScriptdata.getTestsstlinescriptpath());
+			setScriptdata.setExecutedby(null);
+			setScriptdata.setExecutionstarttime(null);
+			setScriptdata.setExecutionendtime(null);
+			
 			setTestrundata.addScriptsdata(setScriptdata);
 			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				ScritplinesData setScriptlinedata=new ScritplinesData();
-	
+				int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
 				String getInputvalues=getScriptlinedata.getInput_value();
-				System.out.println(getScriptlinedata.getInput_parameter().substring(0, 3));
-				if(getScriptlinedata.getInput_parameter().substring(0, 3).contains("(#")) {
-					if(getScriptlinedata.getValidationtype().equalsIgnoreCase("alphanumeric")) {
+				
+				setScriptlinedata.setTestscriptperamid(sectiptlineid);
+				System.out.println(getScriptlinedata.getInput_parameter());
+				if(getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory().equalsIgnoreCase("mandatory")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both")) {
+					if(getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
 						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 						Date dateobj = new Date();
 						String covertDateobj=dateformate.format(dateobj);
@@ -67,7 +91,7 @@ public class CopyTestRunService {
 						hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
 						setScriptlinedata.setInput_value(hexaDecimal);
 					}
-					else if(getScriptlinedata.getValidationtype().equalsIgnoreCase("numeric")) {
+					else {
 						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 						Date dateobj = new Date();
 						String covertDateobj=dateformate.format(dateobj);
@@ -88,7 +112,17 @@ public class CopyTestRunService {
 				setScriptlinedata.setMetadata_id(getScriptlinedata.getMetadata_id());
 				setScriptlinedata.setHint(getScriptlinedata.getHint());
 				setScriptlinedata.setField_type(getScriptlinedata.getField_type());
-				setScriptlinedata.setValidationtype(getScriptlinedata.getValidationtype());
+				setScriptlinedata.setXpathlocation(getScriptlinedata.getXpathlocation());
+				setScriptlinedata.setXpathlocation1(getScriptlinedata.getXpathlocation1());
+				setScriptlinedata.setCreatedby(createdby);
+				setScriptlinedata.setCreationdate(creationdate);
+				setScriptlinedata.setUpdateddate(null);
+				setScriptlinedata.setLastupdatedby(null);
+				setScriptlinedata.setLineexecutionstatues("New");
+				setScriptlinedata.setLineerrormessage(null);
+				setScriptlinedata.setDatatypes(getScriptlinedata.getDatatypes());
+				setScriptlinedata.setUniquemandatory(getScriptlinedata.getUniquemandatory());
+				
 				setScriptdata.addScriptlines(setScriptlinedata);
 				}
 			}

@@ -1,5 +1,6 @@
 package com.winfo.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +28,54 @@ public class CopyTestRunDao {
 //		session.save(setTestrundata);
 	}
 
-	public List<Integer> getIds() {
-		List<Integer> addIds=new ArrayList<Integer>();
+	public int getIds() {
 		Session session = entityManager.unwrap(Session.class);
-		String sql1 = " select script_number from  WIN_TA_SCRIPT_MASTER_BKP4 m WHERE m.process_area=:processArea and m.module=:module ORDER BY m.script_number DESC";
-		
-		SQLQuery query = session.createSQLQuery(sql1);
+		String sql="SELECT WATS_PROD.win_ta_test_set_id_seq.nextval FROM DUAL";
+		SQLQuery query = session.createSQLQuery(sql);
 		
 		List results = query.list();
 		if(results.size()>0) {
-			
-		return null;
+			System.out.println(results.get(0));
+		
+		BigDecimal bigDecimal= (BigDecimal)results.get(0);
+		Integer id=Integer.parseInt(bigDecimal.toString());
+		return id;
+		}else {
+		return 0;
+		}
+	}
+
+	public int getscrtiptIds() {
+		Session session = entityManager.unwrap(Session.class);
+		String sql="SELECT win_ta_test_set_line_seq.NEXTVAL FROM DUAL";
+		SQLQuery query = session.createSQLQuery(sql);
+		
+		List results = query.list();
+		if(results.size()>0) {
+			System.out.println(results.get(0));
+		
+		BigDecimal bigDecimal= (BigDecimal)results.get(0);
+		Integer id=Integer.parseInt(bigDecimal.toString());
+		return id;
+		}else {
+		return 0;
+		}	
+	}
+
+	public int getscrtiptlineIds() {
+		Session session = entityManager.unwrap(Session.class);
+		String sql="SELECT win_ta_param_id_seq.NEXTVAL FROM DUAL";
+		SQLQuery query = session.createSQLQuery(sql);
+		
+		List results = query.list();
+		if(results.size()>0) {
+			System.out.println(results.get(0));
+		
+		BigDecimal bigDecimal= (BigDecimal)results.get(0);
+		Integer id=Integer.parseInt(bigDecimal.toString());
+		return id;
+		}else {
+		return 0;
+		}	
 	}
 }
