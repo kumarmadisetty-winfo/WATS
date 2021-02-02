@@ -101,7 +101,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					try {
 						long starttimeIntermediate = System.currentTimeMillis();	
 						String flag=dataBaseEntry.getTrMode(args,fetchConfigVO);
-					              if(flag.equalsIgnoreCase("STOP")) {
+					              if(flag.equalsIgnoreCase("STOPPED")) {
 										metaData.getValue().clear();
 										executor.shutdown();
 										System.out.println("treminattion is succeed");
@@ -132,7 +132,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						executordependent.execute(() -> {
 							try {
 								String flag=dataBaseEntry.getTrMode(args,fetchConfigVO);
-					              if(flag.equalsIgnoreCase("STOP")) {
+					              if(flag.equalsIgnoreCase("STOPPED")) {
 										metaData.getValue().clear();
 										executor.shutdown();
 										System.out.println("treminattion is succeed");
