@@ -26,6 +26,7 @@ public class CopyTestRunService {
 	@Transactional
 	public DomGenericResponseBean copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		List<Integer> sequencenumbers=copyTestrunDao.getIds();
 		Testrundata setTestrundata=new Testrundata();
 		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
 		setTestrundata.setTest_set_comments(getTestrun.getTest_set_comments());
@@ -46,7 +47,7 @@ public class CopyTestRunService {
 			setScriptdata.setEnabled(getScriptdata.getEnabled());
 			setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
-			setScriptdata.setStatus(getScriptdata.getStatus());
+			setScriptdata.setStatus("new");
 			setTestrundata.addScriptsdata(setScriptdata);
 			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				ScritplinesData setScriptlinedata=new ScritplinesData();
