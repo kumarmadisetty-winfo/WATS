@@ -21,7 +21,7 @@ public class CopyTestrunController {
 	@PostMapping("/copyTestrun")
 	public DomGenericResponseBean copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException {
-		System.out.println(copyTestrunvo.getTestScriptNo());
+		System.out.println(copyTestrunvo.getCreation_date());
 		return service.copyTestrun(copyTestrunvo);
 		
 	}

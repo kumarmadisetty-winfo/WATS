@@ -41,7 +41,7 @@ public class CopyTestRunService {
 		setTestrundata.setProjectid(copyTestrunvo.getProject());
 		setTestrundata.setCreatedby(copyTestrunvo.getCreated_by());
 		setTestrundata.setLastupdatedby(null);
-		setTestrundata.setCreationdate(copyTestrunvo.getCreationdate());
+		setTestrundata.setCreationdate(copyTestrunvo.getCreation_date());
 		setTestrundata.setUpdatedate(null);
 		setTestrundata.setTscompleteflag("Active");
 		setTestrundata.setPasspath(getTestrun.getPasspath());
@@ -59,7 +59,7 @@ public class CopyTestRunService {
 			setScriptdata.setTestsetlineid(sectiptid);
 			setScriptdata.setScriptid(getScriptdata.getScriptid());
 			setScriptdata.setCreatedby(copyTestrunvo.getCreated_by());
-			setScriptdata.setCreationdate(copyTestrunvo.getCreationdate());
+			setScriptdata.setCreationdate(copyTestrunvo.getCreation_date());
 			setScriptdata.setEnabled("Y");
 			setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
@@ -115,7 +115,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setXpathlocation(getScriptlinedata.getXpathlocation());
 				setScriptlinedata.setXpathlocation1(getScriptlinedata.getXpathlocation1());
 				setScriptlinedata.setCreatedby(copyTestrunvo.getCreated_by());
-				setScriptlinedata.setCreationdate(copyTestrunvo.getCreationdate());
+				setScriptlinedata.setCreationdate(copyTestrunvo.getCreation_date());
 				setScriptlinedata.setUpdateddate(null);
 				setScriptlinedata.setLastupdatedby(null);
 				setScriptlinedata.setLineexecutionstatues("New");

@@ -2,6 +2,7 @@ package com.winfo.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CopytestrunVo {
@@ -10,8 +11,8 @@ private int  testScriptNo;
 	private int configuration ;
 	private String newtestrunname;
 	private String created_by;
-	@JsonProperty("creation_date ")
-	private Date creationdate;
+	 @JsonFormat(pattern = "yyyy-MM-dd")
+	private Date creation_date;
 
 	
 
@@ -24,12 +25,13 @@ private int  testScriptNo;
 	}
 
 
-	public Date getCreationdate() {
-		return creationdate;
+
+	public Date getCreation_date() {
+		return creation_date;
 	}
 
-	public void setCreationdate(Date creationdate) {
-		this.creationdate = creationdate;
+	public void setCreation_date(Date creation_date) {
+		this.creation_date = creation_date;
 	}
 
 	public int getProject() {
