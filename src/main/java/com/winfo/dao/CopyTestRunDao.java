@@ -23,6 +23,7 @@ public class CopyTestRunDao {
 
 	public void saveTestrun(Testrundata setTestrundata) {
 		// TODO Auto-generated method stub
+		System.out.println(setTestrundata.toString());
 		entityManager.persist(setTestrundata);
 //		Session session = entityManager.unwrap(Session.class);
 //		session.save(setTestrundata);
@@ -56,6 +57,7 @@ public class CopyTestRunDao {
 		
 		BigDecimal bigDecimal= (BigDecimal)results.get(0);
 		Integer id=Integer.parseInt(bigDecimal.toString());
+		System.out.println("id"+id);
 		return id;
 		}else {
 		return 0;

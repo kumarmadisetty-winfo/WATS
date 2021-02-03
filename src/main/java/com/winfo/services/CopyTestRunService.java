@@ -27,6 +27,7 @@ public class CopyTestRunService {
 	public DomGenericResponseBean copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
 		int testrunid=copyTestrunDao.getIds();
+
 		Testrundata setTestrundata=new Testrundata();
 		setTestrundata.setTestsetid(testrunid);
 		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
@@ -38,9 +39,9 @@ public class CopyTestRunService {
 		setTestrundata.setTestsetname(copyTestrunvo.getNewtestrunname());
 		setTestrundata.setConfigurationid(copyTestrunvo.getConfiguration());
 		setTestrundata.setProjectid(copyTestrunvo.getProject());
-		setTestrundata.setCreatedby(createdby);
+		setTestrundata.setCreatedby(copyTestrunvo.getCreated_by());
 		setTestrundata.setLastupdatedby(null);
-		setTestrundata.setCreationdate(creationdate);
+		setTestrundata.setCreationdate(copyTestrunvo.getCreationdate());
 		setTestrundata.setUpdatedate(null);
 		setTestrundata.setTscompleteflag("Active");
 		setTestrundata.setPasspath(getTestrun.getPasspath());
@@ -55,10 +56,10 @@ public class CopyTestRunService {
 			int sectiptid=copyTestrunDao.getscrtiptIds();
 			
 			ScriptsData setScriptdata=new ScriptsData();
-			setScriptdata.setTestsetlineid(getScriptdata.getTestsetlineid());
+			setScriptdata.setTestsetlineid(sectiptid);
 			setScriptdata.setScriptid(getScriptdata.getScriptid());
-			setScriptdata.setCreatedby();
-			setScriptdata.setCreationdate();
+			setScriptdata.setCreatedby(copyTestrunvo.getCreated_by());
+			setScriptdata.setCreationdate(copyTestrunvo.getCreationdate());
 			setScriptdata.setEnabled("Y");
 			setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
@@ -69,7 +70,6 @@ public class CopyTestRunService {
 			setScriptdata.setExecutedby(null);
 			setScriptdata.setExecutionstarttime(null);
 			setScriptdata.setExecutionendtime(null);
-			
 			setTestrundata.addScriptsdata(setScriptdata);
 			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				ScritplinesData setScriptlinedata=new ScritplinesData();
@@ -114,8 +114,8 @@ public class CopyTestRunService {
 				setScriptlinedata.setField_type(getScriptlinedata.getField_type());
 				setScriptlinedata.setXpathlocation(getScriptlinedata.getXpathlocation());
 				setScriptlinedata.setXpathlocation1(getScriptlinedata.getXpathlocation1());
-				setScriptlinedata.setCreatedby(createdby);
-				setScriptlinedata.setCreationdate(creationdate);
+				setScriptlinedata.setCreatedby(copyTestrunvo.getCreated_by());
+				setScriptlinedata.setCreationdate(copyTestrunvo.getCreationdate());
 				setScriptlinedata.setUpdateddate(null);
 				setScriptlinedata.setLastupdatedby(null);
 				setScriptlinedata.setLineexecutionstatues("New");
