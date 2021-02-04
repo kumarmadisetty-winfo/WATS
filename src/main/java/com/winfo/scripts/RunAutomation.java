@@ -530,16 +530,27 @@ public class RunAutomation extends SeleniumKeyWords {
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
 					 String error_message="Took more than 10 seconds to load the page";
-					if(actionName.equalsIgnoreCase("clickButton") && message != null) {
-                        //String error_message="Took more than 10 seconds to load the page";
-                        dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",message);
-                        }
-                    else
-                    {
-                        dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
-                        //new changes-error_message added to else block
-						fetchConfigVO.setErrormessage(error_message);
-                    }
+						if(actionName.equalsIgnoreCase("clickButton") && message != null) {
+	                        //String error_message="Took more than 10 seconds to load the page";
+	                        dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",message);
+	                        }
+						else if (actionName.equalsIgnoreCase("SendKeys")||actionName.equalsIgnoreCase("textarea")||actionName.equalsIgnoreCase("Table SendKeys")||
+								actionName.equalsIgnoreCase("multiplelinestableSendKeys")||actionName.equalsIgnoreCase("selectByText")) {
+							error_message="Failed at "+actionName+" => Not able to enter the value in "+param1+" and "+param2;
+							 fetchConfigVO.setErrormessage(error_message);
+							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+						}
+						else if (actionName.equalsIgnoreCase("Dropdown Values")||actionName.equalsIgnoreCase("Table Dropdown Values")) {
+							error_message="Failed at "+actionName+" => Not able to select the value from "+param1+" and "+param2;
+							 fetchConfigVO.setErrormessage(error_message);
+							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+						}
+	                    else
+	                    {
+	                        dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
+	                        //new changes-error_message added to else block
+							fetchConfigVO.setErrormessage(error_message);
+	                    }
 
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
