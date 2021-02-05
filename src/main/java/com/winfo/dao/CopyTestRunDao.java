@@ -21,12 +21,12 @@ public class CopyTestRunDao {
 		return getTestrun;
 	}
 
-	public void saveTestrun(Testrundata setTestrundata) {
+	public int saveTestrun(Testrundata setTestrundata) {
 		// TODO Auto-generated method stub
-		System.out.println(setTestrundata.toString());
+		
 		entityManager.persist(setTestrundata);
-//		Session session = entityManager.unwrap(Session.class);
-//		session.save(setTestrundata);
+		System.out.println(setTestrundata.getTestsetid());
+		return setTestrundata.getTestsetid();
 	}
 
 	public int getIds() {

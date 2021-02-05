@@ -24,7 +24,7 @@ public class CopyTestRunService {
 	@Autowired
 	CopyTestRunDao copyTestrunDao;
 	@Transactional
-	public DomGenericResponseBean copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
+	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
 		int testrunid=copyTestrunDao.getIds();
 
@@ -78,8 +78,8 @@ public class CopyTestRunService {
 				
 				setScriptlinedata.setTestscriptperamid(sectiptlineid);
 				System.out.println(getScriptlinedata.getInput_parameter());
-				if(getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory().equalsIgnoreCase("mandatory")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both")) {
-					if(getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
+				if(getScriptlinedata.getUniquemandatory()!="NA"&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
+					if(getScriptlinedata.getDatatypes()!="NA"&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
 						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 						Date dateobj = new Date();
 						String covertDateobj=dateformate.format(dateobj);
@@ -88,7 +88,11 @@ public class CopyTestRunService {
 						int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
 						int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
 						String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
+						if(getInputvalues.length()>5) {
 						hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
+						}else {
+							hexaDecimal=getInputvalues+hexaDecimal;
+						}
 						setScriptlinedata.setInput_value(hexaDecimal);
 					}
 					else {
@@ -126,12 +130,12 @@ public class CopyTestRunService {
 				setScriptdata.addScriptlines(setScriptlinedata);
 				}
 			}
-		copyTestrunDao.saveTestrun(setTestrundata);
+		
 //		setTestrundata.setScriptsdata(listsScriptdata);
 		
 
-		return null;
-	
+		int newtestrun= copyTestrunDao.saveTestrun(setTestrundata);
+	return newtestrun;
 	}
 
 }

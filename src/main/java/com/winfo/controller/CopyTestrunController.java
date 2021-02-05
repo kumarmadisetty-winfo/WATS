@@ -19,10 +19,10 @@ public class CopyTestrunController {
 	@Autowired
 	CopyTestRunService service;
 	@PostMapping("/copyTestrun")
-	public DomGenericResponseBean copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
-			BindingResult bindingResult) throws InterruptedException {
+	public int copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
+		BindingResult bindingResult) throws InterruptedException {
 		System.out.println(copyTestrunvo.getCreation_date());
-		return service.copyTestrun(copyTestrunvo);
-		
+		int newtestrun= service.copyTestrun(copyTestrunvo);
+		return newtestrun;
 	}
 }
