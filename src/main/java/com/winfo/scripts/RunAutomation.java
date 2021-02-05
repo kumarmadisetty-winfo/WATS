@@ -316,11 +316,16 @@ public class RunAutomation extends SeleniumKeyWords {
 						if (dataSource == null)
 							dataSource = new ConnectToSQL();
 						log.info("Navigating to Login into Application Action");
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
 								param3, fetchMetadataVO.getInput_value(),
 								dataSource.getPassword(param, userName, fetchConfigVO));
 						userName = null;
 						break;
+						}
+						else {
+							break;
+						}
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
@@ -336,44 +341,95 @@ public class RunAutomation extends SeleniumKeyWords {
 						logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
 						break;
 					case "SendKeys":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "textarea":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") 
+						{
 						textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "Dropdown Values":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						dropdownValues(driver, param1, param2, param3, fetchMetadataVO.getInput_value(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "Table SendKeys":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "multiplelinestableSendKeys":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "Table Dropdown Values":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "clickLinkAction":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "clickCheckbox":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "clickRadiobutton":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "selectAValue":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "clickTableLink":
 						clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
@@ -411,9 +467,14 @@ public class RunAutomation extends SeleniumKeyWords {
 						tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton Dropdown":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/
 						break;
+						}
+						else {
+							break;
+						}
 					case "mousehover":
 						mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
@@ -442,9 +503,14 @@ public class RunAutomation extends SeleniumKeyWords {
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "selectByText":
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 						selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						}
+						else {
+							break;
+						}
 					case "copy":
 						copy(driver, fetchMetadataVO, fetchConfigVO);
 						break;
@@ -486,7 +552,13 @@ public class RunAutomation extends SeleniumKeyWords {
 						switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "DatePicker":
-						datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+						break;
+						}
+						else {
+							break;
+						}
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",
