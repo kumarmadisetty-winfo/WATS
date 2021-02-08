@@ -16,7 +16,7 @@ import com.winfo.vo.CopyTestrunjson;
 import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestScriptDto;
-import com.winfo.vo.WatsMasterVO;
+
 
 @RestController
 public class CopyTestrunController {
