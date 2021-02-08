@@ -1,4 +1,3 @@
-package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
