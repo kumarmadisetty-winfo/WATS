@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="WIN_TA_TEST_SET_BKP")
+@Table(name="WIN_TA_TEST_SET")
 public class Testrundata {
 	@Id
 	@Column(name = "TEST_SET_ID")

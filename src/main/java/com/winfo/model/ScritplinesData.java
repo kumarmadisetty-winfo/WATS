@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM_BKP")
+@Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM")
 public class ScritplinesData {
 	@Id
 	@Column(name = "TEST_SCRIPT_PARAM_ID")

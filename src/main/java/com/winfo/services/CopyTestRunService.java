@@ -63,7 +63,7 @@ public class CopyTestRunService {
 			setScriptdata.setEnabled("Y");
 			setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
-			setScriptdata.setStatus("new");
+			setScriptdata.setStatus("New");
 			setScriptdata.setLastupdatedby(null);
 			setScriptdata.setUpdateddate(null);
 			setScriptdata.setTestsstlinescriptpath(getScriptdata.getTestsstlinescriptpath());
@@ -78,8 +78,8 @@ public class CopyTestRunService {
 				
 				setScriptlinedata.setTestscriptperamid(sectiptlineid);
 				System.out.println(getScriptlinedata.getInput_parameter());
-				if(getScriptlinedata.getUniquemandatory()!="NA"&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
-					if(getScriptlinedata.getDatatypes()!="NA"&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
+				if((getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
+					if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
 						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 						Date dateobj = new Date();
 						String covertDateobj=dateformate.format(dateobj);
@@ -88,7 +88,10 @@ public class CopyTestRunService {
 						int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
 						int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
 						String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-						if(getInputvalues.length()>5) {
+						if(getInputvalues==null) {
+							hexaDecimal=getInputvalues;
+						}
+						else if(getInputvalues.length()>5) {
 						hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
 						}else {
 							hexaDecimal=getInputvalues+hexaDecimal;
@@ -101,7 +104,11 @@ public class CopyTestRunService {
 						String covertDateobj=dateformate.format(dateobj);
 						Thread.sleep(1);
 						covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
+						if(getInputvalues==null) {
+							setScriptlinedata.setInput_value(getInputvalues);
+						}else {
 						setScriptlinedata.setInput_value(covertDateobj);
+						}
 					}
 					}else {
 						setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
