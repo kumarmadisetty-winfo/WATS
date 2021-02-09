@@ -11,7 +11,7 @@ private int  testScriptNo;
 	private int configuration ;
 	private String newtestrunname;
 	private String created_by;
-	 @JsonFormat(pattern = "yyyy-MM-dd")
+	 @JsonFormat(pattern = "MM/dd/yyyy")
 	private Date creation_date;
 
 	
