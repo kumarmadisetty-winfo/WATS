@@ -23,7 +23,7 @@ public class CentralToCustomerGetRest {
 	@Autowired
 	CentralToCustomerGetService service;
 
-	@RequestMapping("/centralTocustomer")
+	@RequestMapping("/centralTocustomer_central")
 	public String customerRepoData(@RequestBody ScriptAndCustomeridDetails scriptandcustomeriddetails ) throws ParseException {
 		return service.customerRepoData( scriptandcustomeriddetails);
 		

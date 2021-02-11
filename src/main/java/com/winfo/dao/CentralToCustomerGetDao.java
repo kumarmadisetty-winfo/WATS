@@ -50,7 +50,7 @@ public class CentralToCustomerGetDao {
 			String response = result.block();
 			if(response.equals("[]"))
 			{
-				response="[{\"status\":404,\"statusMessage\":\"wrong product version\"}]";
+				response="[{\"status\":404,\"statusMessage\":\"Error,\"description\":\"Wrong Product Version}]";
 			}
 			System.out.println(response);
 			return response;
