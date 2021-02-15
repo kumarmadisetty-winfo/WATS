@@ -1764,7 +1764,7 @@ System.out.println("entered to getFailFileNameListNew");
 	}
 
 	public void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			int passcount1, int failcount1) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
+			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -1806,18 +1806,14 @@ System.out.println("entered to getFailFileNameListNew");
 			}
 			int passcount=fetchConfigVO.getPasscount();
 			int failcount=fetchConfigVO.getFailcount();
-			Date Starttime = fetchConfigVO.getStarttime();
-			Date endtime=fetchConfigVO.getEndtime();
+//			Date Starttime = fetchConfigVO.getStarttime();
+			Date Tendtime=fetchConfigVO.getEndtime();
 			Date TStarttime=fetchConfigVO.getStarttime1();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");			
-			String Starttime1=dateFormat.format(Starttime);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
+			
 			String TStarttime1=dateFormat.format(TStarttime);
-			String endtime1=dateFormat.format(endtime);
-			long diff=endtime.getTime() - Starttime.getTime();
-			 long diffSeconds = diff / 1000 % 60;
-			    long diffMinutes = diff / (60 * 1000) % 60;
-			    long diffHours = diff / (60 * 60 * 1000);
-			    long Tdiff=endtime.getTime() - TStarttime.getTime();
+			String Tendtime1=dateFormat.format(Tendtime);
+			  long Tdiff=Tendtime.getTime() - TStarttime.getTime();
 			    long TdiffSeconds = Tdiff / 1000 % 60;
 			    long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			    long TdiffHours = Tdiff / (60 * 60 * 1000);
@@ -1845,7 +1841,7 @@ System.out.println("entered to getFailFileNameListNew");
 				String TestRun=test_Run_Name;
 //				String ExecutedBy=fetchConfigVO.getApplication_user_name();
 				String StartTime=TStarttime1;
-				String EndTime=endtime1;
+				String EndTime=Tendtime1;
 				String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
 
 				String TR = "Test Run Name";
@@ -2204,6 +2200,12 @@ System.out.println("entered to getFailFileNameListNew");
 //  Start to create Script level passed reports		
 //  Start to add Script level details		
 				if(!("Passed_Report.pdf".equalsIgnoreCase(pdffileName)||"Failed_Report.pdf".equalsIgnoreCase(pdffileName)||"Detailed_Report.pdf".equalsIgnoreCase(pdffileName))){
+					String Starttime1=dateFormat.format(Starttime);
+					String endtime1=dateFormat.format(endtime);
+					long  diff=endtime.getTime() - Starttime.getTime();
+					 long diffSeconds = diff / 1000 % 60;
+					    long diffMinutes = diff / (60 * 1000) % 60;
+					    long diffHours = diff / (60 * 60 * 1000);
 					String TestRun=test_Run_Name;
 					String ScriptNumber=Script_Number;
 					String ScriptNumber1=Scenario_Name;
@@ -2666,7 +2668,7 @@ System.out.println("entered to getFailFileNameListNew");
 	}
 
 	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
+			String pdffileName,Date Starttime,Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -2714,8 +2716,6 @@ System.out.println("entered to getFailFileNameListNew");
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
 			 String Report="Execution Report";
 			 Font fnt = FontFactory.getFont("Arial", 12);
-			 Date Starttime = fetchConfigVO.getStarttime();
-				Date endtime=fetchConfigVO.getEndtime();
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");				String Starttime1=dateFormat.format(Starttime);
 				String endtime1=dateFormat.format(endtime);
 				long diff=endtime.getTime() - Starttime.getTime();

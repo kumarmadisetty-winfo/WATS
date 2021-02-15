@@ -69,8 +69,8 @@ public class RunAutomation extends SeleniumKeyWords {
 //		createFailedPdf(fetchMetadataListVO, fetchConfigVO, "14_OTC.AR.224.pdf");
 //
 		//createFailedPdf(fetchMetadataListVO, fetchConfigVO,fetchMetadataVO, "Detailed_Report.pdf");
-		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",passcount,failcount);
-		createPdf(fetchMetadataListVO, fetchConfigVO, "1_10_Create Manual Invoice Transaction_OTC.AR.203.pdf",passcount,failcount);
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf",passcount,failcount,null);
+//		createPdf(fetchMetadataListVO, fetchConfigVO, "1_10_Create Manual Invoice Transaction_OTC.AR.203.pdf",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO,"Failed_Report.pdf",passcount,failcount);
 //		createPdf(fetchMetadataListVO, fetchConfigVO, "55_OTC.AR.218.pdf",passcount,failcount);
 		
@@ -150,9 +150,9 @@ public class RunAutomation extends SeleniumKeyWords {
 					}
 					executordependent.shutdown();
 				}
-				createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount, failcount);
-				createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount, failcount);
-				createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", passcount, failcount);
+				createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
+				createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
+				createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
 				increment=0;
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
@@ -272,8 +272,8 @@ public class RunAutomation extends SeleniumKeyWords {
 			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-			Date date = new Date();
-			 fetchConfigVO.setStarttime(date);
+			Date startdate = new Date();
+			 fetchConfigVO.setStarttime(startdate);
 			DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
@@ -285,7 +285,7 @@ public class RunAutomation extends SeleniumKeyWords {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO,test_set_id,test_set_line_id);
-				dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id);
+				dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id,startdate);
 				step_description=fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id=fetchMetadataVO.getTest_script_param_id();
@@ -579,13 +579,12 @@ public class RunAutomation extends SeleniumKeyWords {
 						post.setP_exception_path(detailurl);
 						post.setP_test_set_line_path(scripturl);
 						// passcount = passcount+1;
-						 date = new Date();
-						 fetchConfigVO.setEndtime(date);
-						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", passcount,
-								failcount);
+						 Date enddate = new Date();
+						 fetchConfigVO.setEndtime(enddate);
+						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
 						try {
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-						 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
+						 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id,enddate);
 						}catch (Exception e) {
                         System.out.println("e");				
                         }
@@ -634,10 +633,10 @@ public class RunAutomation extends SeleniumKeyWords {
 					post.setP_exception_path(detailurl);
 					post.setP_test_set_line_path(scripturl);
 					failcount = failcount + 1;
-					 date = new Date();
-					 fetchConfigVO.setEndtime(date);
-					 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id);
-					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf");
+					 Date enddate = new Date();
+					 fetchConfigVO.setEndtime(enddate);
+					 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id,enddate);
+					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					

@@ -142,7 +142,7 @@ public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String tes
 	}
 	}
 
-public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String test_set_id) throws ClassNotFoundException, SQLException{
+public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String test_set_id,Date start_time1) throws ClassNotFoundException, SQLException{
 //Added try catch blocks    
 //System.out.println("Start Method");
 	Connection conn=null;
@@ -154,7 +154,6 @@ public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String t
     st = conn.createStatement();
     //DateFormat format = new SimpleDateFormat("MM/DD/YYYY HH24:MI:SS");
     Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
-    Date start_time1=fetchConfigVO.getStarttime();
     String start_time= startformat.format(start_time1);
     //System.out.println(start_time);
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"+start_time+"','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID = "+line_id;
@@ -169,7 +168,7 @@ public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String t
     }
     
 }
-public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test_set_id) throws ClassNotFoundException, SQLException{
+public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test_set_id,Date end_time1) throws ClassNotFoundException, SQLException{
 	//Added try catch blocks
 	Connection conn=null;
 	Statement st=null;
@@ -179,7 +178,6 @@ public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test
             "DB_PASSWORD");
     st = conn.createStatement();
     Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
-    Date end_time1=fetchConfigVO.getEndtime();
     String end_time= startformat.format(end_time1);
     String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_END_TIME=TO_TIMESTAMP('"+end_time+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID ="+line_id;
     st.executeQuery(sqlQuery);
