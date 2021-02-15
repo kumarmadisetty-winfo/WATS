@@ -24,7 +24,7 @@ public class CopyDataPostDao {
 	
 	
 		    session1.save(master);
-		    session1.close();
+		  //  session1.close();
 		    
 			
 			//return response;

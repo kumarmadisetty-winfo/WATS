@@ -39,14 +39,14 @@ import reactor.core.publisher.Mono;
 public class CopyDataDao {
 	
 	
-	public String webClientService(JSONObject json2,List<String> wrong_dependency_scripts) {
+	public String webClientService(JSONObject json2) {
 		
 			WebClient webClient = WebClient.create("http://watsdev01.winfosolutions.com:8080/wats/copyData_post");
 		
 			Mono<String> result = webClient.post().syncBody(json2).retrieve().bodyToMono(String.class);
 			String response = result.block();
 			
-			response=response+wrong_dependency_scripts;
+		//	response=response+wrong_dependency_scripts;
 			System.out.println(response);
 			return response;
 			}
@@ -92,7 +92,7 @@ public class CopyDataDao {
         	  
   			System.out.println(script_Id);
         	Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_number='"+script_num+"'");		
-          	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint   from ScriptMetaData where script_number='"+script_Id+"'");
+          	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint   from ScriptMetaData where script_number='"+script_num+"'");
           
 		List<Object> result = (List<Object>) query.list(); 
 		List<FetchData> finalresult=new ArrayList<FetchData>();
@@ -302,6 +302,6 @@ public class CopyDataDao {
 		 JSONParser parser = new JSONParser(); 
 		 JSONObject json1 = (JSONObject) parser.parse(finalJSONString1);
 		
-	return webClientService(json1,wrong_dependency_scripts);
+	return webClientService(json1);
 	}
 }
