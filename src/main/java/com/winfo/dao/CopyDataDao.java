@@ -90,11 +90,26 @@ public class CopyDataDao {
         	  Integer script_Id=script_Ids.get(i);
         	  String script_num=script_numbers.get(i);
         	  
-  			System.out.println(script_Id);
-        	Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_number='"+script_num+"'");		
-          	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint   from ScriptMetaData where script_number='"+script_num+"'");
-          
-		List<Object> result = (List<Object>) query.list(); 
+  		//	System.out.println(script_Id);
+        //	Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_number='"+script_num+"'");		
+         // 	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint   from ScriptMetaData where script_number='"+script_num+"'");
+        	  Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_number='"+script_num+"' and product_version='"+productVersionOld+"'");       
+              List<Object> result = (List<Object>) query.list();
+              Iterator itr6 = result.iterator();
+              Integer scriptId=null;
+              while(itr6.hasNext()){
+                  Object[] obj1 = (Object[]) itr6.next();
+                  if(!String.valueOf(obj1[0]).equals("null")) {
+                     scriptId=Integer.parseInt(String.valueOf(obj1[0]));
+               
+                  break;
+                  }
+                  break;
+                  }
+             
+              Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint from ScriptMetaData where script_id="+scriptId);
+		//List<Object> result = (List<Object>) query.list(); 
+              List<Object> result1 = (List<Object>) query1.list();
 		List<FetchData> finalresult=new ArrayList<FetchData>();
 		Iterator itr = result.iterator();
 		Iterator itr5 = result.iterator();
@@ -120,7 +135,7 @@ public class CopyDataDao {
         	continue;
         }
       }
-		List<Object> result1 = (List<Object>) query1.list(); 
+		 
 		List<FetchDataMetadata> finalresult1=new ArrayList<FetchDataMetadata>();
 		Iterator itr1 = result1.iterator();
 		while(itr.hasNext()){
