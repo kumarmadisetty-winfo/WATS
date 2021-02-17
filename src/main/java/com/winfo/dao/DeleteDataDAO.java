@@ -31,9 +31,10 @@ public class DeleteDataDAO {
 			Query query=session.createQuery("delete from ScriptMaster where script_id="+script_Id);
 			Query query1=session.createQuery("delete from ScriptMetaData where script_id="+script_Id);
 			//Query query=session.createQuery("delete ScriptMaster from ScriptMaster  INNER JOIN  ScriptMetadata  on  ScriptMster.script_id=ScriptMetaData.script_id where script_id="+script_Id);
-			
+		
+			query1.executeUpdate();
 			query.executeUpdate();
-		query1.executeUpdate();
+	    
 			
 			
 		}
