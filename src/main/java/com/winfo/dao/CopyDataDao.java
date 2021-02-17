@@ -41,7 +41,7 @@ public class CopyDataDao {
 	
 	public String webClientService(JSONObject json2) {
 		
-			WebClient webClient = WebClient.create("http://watsdev01.winfosolutions.com:8080/copyData_post");
+			WebClient webClient = WebClient.create("http://watsdev01.winfosolutions.com:8080/wats/copyData_post");
 		
 			Mono<String> result = webClient.post().syncBody(json2).retrieve().bodyToMono(String.class);
 			String response = result.block();
