@@ -27,7 +27,7 @@ public class CopyTestRunService {
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
 		int testrunid=copyTestrunDao.getIds();
-
+         System.out.println("testrunid"+testrunid);
 		Testrundata setTestrundata=new Testrundata();
 		setTestrundata.setTestsetid(testrunid);
 		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
@@ -54,7 +54,7 @@ public class CopyTestRunService {
 		 List<ScriptsData> listsScriptdata=new ArrayList<>();
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
 			int sectiptid=copyTestrunDao.getscrtiptIds();
-			
+			 System.out.println("sectiptid"+sectiptid);
 			ScriptsData setScriptdata=new ScriptsData();
 			setScriptdata.setTestsetlineid(sectiptid);
 			setScriptdata.setScriptid(getScriptdata.getScriptid());
@@ -74,45 +74,12 @@ public class CopyTestRunService {
 			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				ScritplinesData setScriptlinedata=new ScritplinesData();
 				int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
-				String getInputvalues=getScriptlinedata.getInput_value();
+				 System.out.println("sectiptlineid"+sectiptlineid);
 				
 				setScriptlinedata.setTestscriptperamid(sectiptlineid);
 				System.out.println(getScriptlinedata.getInput_parameter());
-				if((getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
-					if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
-						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-						Date dateobj = new Date();
-						String covertDateobj=dateformate.format(dateobj);
-						Thread.sleep(1);
-						covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
-						int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
-						int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
-						String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-						if(getInputvalues==null) {
-							hexaDecimal=getInputvalues;
-						}
-						else if(getInputvalues.length()>5) {
-						hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
-						}else {
-							hexaDecimal=getInputvalues+hexaDecimal;
-						}
-						setScriptlinedata.setInput_value(hexaDecimal);
-					}
-					else {
-						DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-						Date dateobj = new Date();
-						String covertDateobj=dateformate.format(dateobj);
-						Thread.sleep(1);
-						covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
-						if(getInputvalues==null) {
-							setScriptlinedata.setInput_value(getInputvalues);
-						}else {
-						setScriptlinedata.setInput_value(covertDateobj);
-						}
-					}
-					}else {
-						setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
-					}
+				addInputvalues(getScriptlinedata,setScriptlinedata);
+			
 				setScriptlinedata.setInput_parameter(getScriptlinedata.getInput_parameter());
 				setScriptlinedata.setScript_id(getScriptlinedata.getScript_id());
 				setScriptlinedata.setScript_number(getScriptlinedata.getScript_number());
@@ -139,10 +106,71 @@ public class CopyTestRunService {
 			}
 		
 //		setTestrundata.setScriptsdata(listsScriptdata);
-		
+		System.out.println("before saveTestrun");
 
 		int newtestrun= copyTestrunDao.saveTestrun(setTestrundata);
+		System.out.println("newtestrun 1:"+newtestrun);
 	return newtestrun;
+	}
+	private void addInputvalues(ScritplinesData getScriptlinedata, ScritplinesData setScriptlinedata) throws InterruptedException {
+		String getInputvalues=getScriptlinedata.getInput_value();
+		if((getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
+			if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
+				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+				Date dateobj = new Date();
+				String covertDateobj=dateformate.format(dateobj);
+				Thread.sleep(1);
+				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
+				int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
+				int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
+				String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
+				if(getInputvalues==null) {
+					hexaDecimal=getInputvalues;
+				}
+				else if(getInputvalues.length()>5) {
+				hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
+				}else {
+					hexaDecimal=getInputvalues+hexaDecimal;
+				}
+				setScriptlinedata.setInput_value(hexaDecimal);
+			}
+			else {
+				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+				Date dateobj = new Date();
+				String covertDateobj=dateformate.format(dateobj);
+				Thread.sleep(1);
+				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
+				if(getInputvalues==null) {
+					setScriptlinedata.setInput_value(getInputvalues);
+				}else {
+				setScriptlinedata.setInput_value(covertDateobj);
+				}
+			}
+			}else {
+				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
+			}
+		
+	}
+	@Transactional
+	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
+		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		System.out.println("getTestrun infromation");
+		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
+			String status=getScriptdata.getStatus();
+			if(status.equalsIgnoreCase("fail")) {
+//				getTestrun.addScriptsdata(getScriptdata);
+				for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
+					ScritplinesData setScriptlinedata=new ScritplinesData();
+				addInputvalues(getScriptlinedata,setScriptlinedata);
+				getScriptlinedata.setInput_value(setScriptlinedata.getInput_value());
+//				getScriptdata.addScriptlines(getScriptlinedata);
+				}
+			}
+		}
+		System.out.println("before update");
+		int newtestrun= copyTestrunDao.update(getTestrun);
+		System.out.println("newtestrun 2:"+newtestrun);
+		return newtestrun;
 	}
 
 }

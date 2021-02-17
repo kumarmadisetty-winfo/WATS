@@ -13,8 +13,17 @@ private int  testScriptNo;
 	private String created_by;
 	 @JsonFormat(pattern = "MM/dd/yyyy")
 	private Date creation_date;
-
+	 @JsonProperty("request_type")
+	 private String requesttype;
 	
+
+	public String getRequesttype() {
+		return requesttype;
+	}
+
+	public void setRequesttype(String requesttype) {
+		this.requesttype = requesttype;
+	}
 
 	public String getCreated_by() {
 		return created_by;

@@ -25,7 +25,7 @@ public class CopyTestRunDao {
 		// TODO Auto-generated method stub
 		
 		entityManager.persist(setTestrundata);
-		System.out.println(setTestrundata.getTestsetid());
+		System.out.println("setTestrundata.getTestsetid() 1:"+setTestrundata.getTestsetid());
 		return setTestrundata.getTestsetid();
 	}
 
@@ -79,5 +79,10 @@ public class CopyTestRunDao {
 		}else {
 		return 0;
 		}	
+	}
+	public int update(Testrundata getTestrun) {
+		entityManager.merge(getTestrun);
+		System.out.println("getTestrun.getTestsetid() 2:"+getTestrun.getTestsetid());
+		return getTestrun.getTestsetid();
 	}
 }
