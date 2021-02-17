@@ -41,7 +41,7 @@ public class CopyDataDao {
 	
 	public String webClientService(JSONObject json2) {
 		
-			WebClient webClient = WebClient.create("http://watsdev01.winfosolutions.com:8080/wats/copyData_post");
+			WebClient webClient = WebClient.create("http://watsdev01.winfosolutions.com:8080/copyData_post");
 		
 			Mono<String> result = webClient.post().syncBody(json2).retrieve().bodyToMono(String.class);
 			String response = result.block();
@@ -229,6 +229,14 @@ public class CopyDataDao {
              jsonMaster.put("dependency",slist.getDependency());
          }
          jsonMaster.put("end2end_scenario",slist.getEnd2end_scenario());
+
+         String expected_result=slist.getExpected_result();
+       
+         String str1="\"";
+         String str2="\\\\";
+         String str3=str2+"\"";
+         String replaceQuotes= expected_result.replace(str1,str3);
+         jsonMaster.put("expected_result",replaceQuotes);
          jsonMaster.put("expected_result",slist.getExpected_result());
          jsonMaster.put("selenium_test_script_name",slist.getSelenium_test_script_name());
          jsonMaster.put("selenium_test_method",slist.getSelenium_test_method());
@@ -285,22 +293,37 @@ public class CopyDataDao {
 	  jsonArrayMaster.put(jsonMaster.toString());
 	  responseDetailsJson.put("data", jsonArrayMaster);
 }
-          
+      System.out.println(i);    
 		String str1="\""+"{"+"\"";
       String str2="{"+"\"";
       String str3="\""+"}"+"\"";
       String str4="\""+"}";
       String str5="}"+"\"";
       String str6="}";
-     
+      String str7="\"\"";
+      String str8="\\";
+      String str9="\""+str8+"\"";
+      String str10="\"";
+      String str11=str10+str8+str10;
+      String str12=str8+str7;
+      
+      
       responseDetailsJson.put("data", jsonArrayMaster);
       String replaceSlash=responseDetailsJson.toString().replace("\\","");
       String replaceQuotes= replaceSlash.replace(str1,str2);
        String finalJSONString=replaceQuotes.replace(str3,str4);
        String finalJSONString1=finalJSONString.replace(str5,str6);
-		
+       String finalJSONString2=finalJSONString1.replace(str7,str9);
+       String finalJSONString3=finalJSONString2.replace(str11+" ",str12+" ");
+       String finalJSONString4=finalJSONString3.replace(str11+",",str12+",");
+//       int n=0;
+//	
+//		  for(n=200;n<=300;n++) { System.out.print(finalJSONString3.charAt(n)); }
+//		    
+       System.out.println(finalJSONString1.length()); 
+       
 		 JSONParser parser = new JSONParser(); 
-		 JSONObject json1 = (JSONObject) parser.parse(finalJSONString1);
+		 JSONObject json1 = (JSONObject) parser.parse(finalJSONString4);
 		
 	return webClientService(json1);
 	}
