@@ -141,18 +141,72 @@ public class CopyDataDao {
 		while(itr.hasNext()){
 			   Object[] obj = (Object[]) itr.next();
 			   FetchData fetchData=new FetchData();
+			   if(String.valueOf(obj[1]).equals("null")) {
+				   fetchData.setScript_number(null);
+	           }
+			   else {
 			   fetchData.setScript_number(String.valueOf(obj[1]));
-	           fetchData.setProcess_area(String.valueOf(obj[2]));
-	           fetchData.setSub_process_area(String.valueOf(obj[3]));
-	           fetchData.setModule(String.valueOf(obj[4]));
-	           fetchData.setRole(String.valueOf(obj[5]));
-	           fetchData.setEnd2end_scenario(String.valueOf(obj[6]));
-	           fetchData.setScenario_name(String.valueOf(obj[7]));
-	           fetchData.setScenario_description(String.valueOf(obj[8]));
-	           fetchData.setExpected_result(String.valueOf(obj[9]));
-	           fetchData.setSelenium_test_script_name(String.valueOf(obj[10]));
-	           fetchData.setSelenium_test_method(String.valueOf(obj[11]));
-	           System.out.println(String.valueOf(obj[12]));
+			   }
+			   if(String.valueOf(obj[2]).equals("null")) {
+				   fetchData.setProcess_area(null);
+	           }
+			   else {
+			   fetchData.setProcess_area(String.valueOf(obj[2]));
+			   }
+			   if(String.valueOf(obj[3]).equals("null")) {
+				   fetchData.setSub_process_area(null);
+	           }
+			   else {
+			   fetchData.setSub_process_area(String.valueOf(obj[3]));
+			   }
+			   if(String.valueOf(obj[4]).equals("null")) {
+				   fetchData.setModule(null);
+	           }
+			   else {
+			   fetchData.setModule(String.valueOf(obj[4]));
+			   }
+			   if(String.valueOf(obj[5]).equals("null")) {
+				   fetchData.setRole(null);
+	           }
+			   else {
+			   fetchData.setRole(String.valueOf(obj[5]));
+			   }
+			   if(String.valueOf(obj[6]).equals("null")) {
+				   fetchData.setEnd2end_scenario(null);
+	           }
+			   else {
+			   fetchData.setEnd2end_scenario(String.valueOf(obj[6]));
+			   }
+			   if(String.valueOf(obj[7]).equals("null")) {
+				   fetchData.setScenario_name(null);
+	           }
+			   else {
+			   fetchData.setScenario_name(String.valueOf(obj[7]));
+			   }
+			   if(String.valueOf(obj[8]).equals("null")) {
+				   fetchData.setScenario_name(null);
+	           }
+			   else {
+			   fetchData.setScenario_name(String.valueOf(obj[8]));
+			   }
+			   if(String.valueOf(obj[9]).equals("null")) {
+				   fetchData.setExpected_result(null);
+	           }
+			   else {
+			   fetchData.setExpected_result(String.valueOf(obj[9]));
+			   }
+			   if(String.valueOf(obj[10]).equals("null")) {
+				   fetchData.setSelenium_test_script_name(null);
+	           }
+			   else {
+			   fetchData.setSelenium_test_script_name(String.valueOf(obj[10]));
+			   }
+			   if(String.valueOf(obj[11]).equals("null")) {
+				   fetchData.setSelenium_test_method(null);
+	           }
+			   else {
+			   fetchData.setSelenium_test_method(String.valueOf(obj[11]));
+			   }
 	           if(String.valueOf(obj[12]).equals("null")) {
 	               dependency=0;
 	           }
@@ -167,12 +221,40 @@ public class CopyDataDao {
 	               fetchData.setDependency(Integer.parseInt(String.valueOf(obj[12])));
 	           }
 	           fetchData.setProduct_version(productVersionNew);
-	           fetchData.setStandard_custom(String.valueOf(obj[14]));
-	           fetchData.setTest_script_status(String.valueOf(obj[15]));
-	           fetchData.setAuthor(String.valueOf(obj[16]));
-	           fetchData.setCreated_by(String.valueOf(obj[17]));
+	           if(String.valueOf(obj[14]).equals("null")) {
+				   fetchData.setStandard_custom(null);
+	           }
+			   else {
+			   fetchData.setStandard_custom(String.valueOf(obj[14]));
+			   }
+	           if(String.valueOf(obj[15]).equals("null")) {
+				   fetchData.setTest_script_status(null);
+	           }
+			   else {
+			   fetchData.setTest_script_status(String.valueOf(obj[15]));
+			   }
+	           if(String.valueOf(obj[16]).equals("null")) {
+				   fetchData.setAuthor(null);
+	           }
+			   else {
+			   fetchData.setAuthor(String.valueOf(obj[16]));
+			   }
+	           if(String.valueOf(obj[17]).equals("null")) {
+				   fetchData.setCreated_by(null);
+	           }
+			   else {
+			   fetchData.setCreated_by(String.valueOf(obj[17]));
+			   }
+	           
+	        
 	           fetchData.setCreation_date((Date) ( obj[18]));
-	           fetchData.setUpdated_by(String.valueOf(obj[19]));
+	           if(String.valueOf(obj[19]).equals("null")) {
+				   fetchData.setUpdated_by(null);
+	           }
+			   else {
+			   fetchData.setUpdated_by(String.valueOf(obj[19]));
+			   }
+	           
 	           fetchData.setUpdate_date((Date )(obj[20]));
 	           if(String.valueOf(obj[21]).equals("null")) {
 	               customerId=0;
@@ -181,17 +263,74 @@ public class CopyDataDao {
 	               customerId=1;
 	               fetchData.setCustomer_id(Integer.parseInt(String.valueOf(obj[21])));
 	           }
-	           fetchData.setCustomisation_refrence(String.valueOf(obj[22]));
-	           fetchData.setAttribute1(String.valueOf(obj[23]));
-	           fetchData.setAttribute2(String.valueOf(obj[24]));
-	           fetchData.setAttribute3(String.valueOf(obj[25]));
-	           fetchData.setAttribute4(String.valueOf(obj[26]));
-	           fetchData.setAttribute5(String.valueOf(obj[27]));
-	           fetchData.setAttribute6(String.valueOf(obj[28]));
-	           fetchData.setAttribute7(String.valueOf(obj[29]));
-	           fetchData.setAttribute8(String.valueOf(obj[30]));
-	           fetchData.setAttribute9(String.valueOf(obj[31]));
-	           fetchData.setAttribute10(String.valueOf(obj[32]));
+	           if(String.valueOf(obj[22]).equals("null")) {
+				   fetchData.setCustomisation_refrence(null);
+	           }
+			   else {
+			   fetchData.setCustomisation_refrence(String.valueOf(obj[22]));
+			   }
+	         
+	           if(String.valueOf(obj[23]).equals("null")) {
+				   fetchData.setAttribute1(null);
+	           }
+			   else {
+			   fetchData.setAttribute1(String.valueOf(obj[23]));
+			   }
+	           if(String.valueOf(obj[24]).equals("null")) {
+				   fetchData.setAttribute2(null);
+	           }
+			   else {
+			   fetchData.setAttribute2(String.valueOf(obj[24]));
+			   }
+	           if(String.valueOf(obj[25]).equals("null")) {
+				   fetchData.setAttribute3(null);
+	           }
+			   else {
+			   fetchData.setAttribute3(String.valueOf(obj[25]));
+			   }
+	           if(String.valueOf(obj[26]).equals("null")) {
+				   fetchData.setAttribute4(null);
+	           }
+			   else {
+			   fetchData.setAttribute4(String.valueOf(obj[26]));
+			   }
+	           if(String.valueOf(obj[27]).equals("null")) {
+				   fetchData.setAttribute5(null);
+	           }
+			   else {
+			   fetchData.setAttribute5(String.valueOf(obj[27]));
+			   }
+	           if(String.valueOf(obj[28]).equals("null")) {
+				   fetchData.setAttribute6(null);
+	           }
+			   else {
+			   fetchData.setAttribute6(String.valueOf(obj[28]));
+			   }
+	           if(String.valueOf(obj[29]).equals("null")) {
+				   fetchData.setAttribute7(null);
+	           }
+			   else {
+			   fetchData.setAttribute7(String.valueOf(obj[29]));
+			   }
+	           if(String.valueOf(obj[30]).equals("null")) {
+				   fetchData.setAttribute8(null);
+	           }
+			   else {
+			   fetchData.setAttribute8(String.valueOf(obj[30]));
+			   }
+	           if(String.valueOf(obj[31]).equals("null")) {
+				   fetchData.setAttribute9(null);
+	           }
+			   else {
+			   fetchData.setAttribute9(String.valueOf(obj[31]));
+			   }
+	           if(String.valueOf(obj[32]).equals("null")) {
+				   fetchData.setAttribute10(null);
+	           }
+			   else {
+			   fetchData.setAttribute10(String.valueOf(obj[32]));
+			   }
+	           
 	           fetchData.setPriority(Integer.parseInt(String.valueOf(obj[33])));
 			 
 			   finalresult.add(fetchData);
@@ -201,18 +340,75 @@ public class CopyDataDao {
 			 Object[] obj1 = (Object[]) itr1.next();
 			 FetchDataMetadata fetchDataMetadata=new FetchDataMetadata();
 			 fetchDataMetadata.setLine_number(Integer.parseInt(String.valueOf(obj1[0])));
-          fetchDataMetadata.setInput_parameter(String.valueOf(obj1[1]));
-          fetchDataMetadata.setAction(String.valueOf(obj1[2]));
-          fetchDataMetadata.setXpath_location(String.valueOf(obj1[3]));
-          fetchDataMetadata.setXpath_location1(String.valueOf(obj1[4]));
-          fetchDataMetadata.setCreated_by(String.valueOf(obj1[5]));
-          fetchDataMetadata.setCreation_date((Date) obj1[6]);
-          fetchDataMetadata.setUpdated_by(String.valueOf(obj1[7]));
-          fetchDataMetadata.setUpdate_date(((Date) obj1[8]));
-          fetchDataMetadata.setStep_desc(String.valueOf(obj1[9]));
-          fetchDataMetadata.setField_type(String.valueOf(obj1[10]));
-          fetchDataMetadata.setHint(String.valueOf(obj1[11]));
-          finalresult1.add(fetchDataMetadata);
+			 if(String.valueOf(obj1[1]).equals("null"))
+			 {
+				 fetchDataMetadata.setInput_parameter(null);
+			 }
+			 else {
+       fetchDataMetadata.setInput_parameter(String.valueOf(obj1[1]));
+			 }
+			 if(String.valueOf(obj1[2]).equals("null"))
+			 {
+				 fetchDataMetadata.setAction(null);
+			 }
+			 else {
+       fetchDataMetadata.setAction(String.valueOf(obj1[2]));
+			 }
+			 if(String.valueOf(obj1[3]).equals("null"))
+			 {
+				 fetchDataMetadata.setXpath_location(null);
+			 }
+			 else {
+       fetchDataMetadata.setXpath_location(String.valueOf(obj1[3]));
+			 }
+			 if(String.valueOf(obj1[4]).equals("null"))
+			 {
+				 fetchDataMetadata.setXpath_location1(null);
+			 }
+			 else {
+       fetchDataMetadata.setXpath_location1(String.valueOf(obj1[4]));
+			 }
+			 if(String.valueOf(obj1[5]).equals("null"))
+			 {
+				 fetchDataMetadata.setCreated_by(null);
+			 }
+			 else {
+       fetchDataMetadata.setCreated_by(String.valueOf(obj1[5]));
+			 }
+			
+       fetchDataMetadata.setCreation_date((Date) obj1[6]);
+       if(String.valueOf(obj1[7]).equals("null"))
+			 {
+				 fetchDataMetadata.setUpdated_by(null);
+			 }
+			 else {
+    fetchDataMetadata.setUpdated_by(String.valueOf(obj1[7]));
+			 }
+      
+       fetchDataMetadata.setUpdate_date(((Date) obj1[8]));
+       if(String.valueOf(obj1[9]).equals("null"))
+			 {
+				 fetchDataMetadata.setStep_desc(null);
+			 }
+			 else {
+				 fetchDataMetadata.setStep_desc(String.valueOf(obj1[9]));
+			 }
+       if(String.valueOf(obj1[10]).equals("null"))
+			 {
+				 fetchDataMetadata.setField_type(null);
+			 }
+			 else {
+				 fetchDataMetadata.setField_type(String.valueOf(obj1[10]));
+			 }
+       if(String.valueOf(obj1[11]).equals("null"))
+			 {
+				 fetchDataMetadata.setHint(null);
+			 }
+			 else {
+				 fetchDataMetadata.setHint(String.valueOf(obj1[11]));
+			 }
+
+       finalresult1.add(fetchDataMetadata);
 		}
 
 		for(FetchData slist:finalresult) {
@@ -246,13 +442,18 @@ public class CopyDataDao {
          jsonMaster.put("end2end_scenario",slist.getEnd2end_scenario());
 
          String expected_result=slist.getExpected_result();
-       
-         String str1="\"";
-         String str2="\\\\";
-         String str3=str2+"\"";
-         String replaceQuotes= expected_result.replace(str1,str3);
-         jsonMaster.put("expected_result",replaceQuotes);
-         jsonMaster.put("expected_result",slist.getExpected_result());
+         if(expected_result==null)
+         {
+             jsonMaster.put("expected_result",null);
+         }
+         else {
+           String str1="\"";
+           String str2="\\\\";
+           String str3=str2+"\"";
+           String replaceQuotes= expected_result.replace(str1,str3);
+           jsonMaster.put("expected_result",replaceQuotes);
+         }
+         
          jsonMaster.put("selenium_test_script_name",slist.getSelenium_test_script_name());
          jsonMaster.put("selenium_test_method",slist.getSelenium_test_method());
          jsonMaster.put("author",slist.getAuthor());
@@ -331,11 +532,7 @@ public class CopyDataDao {
        String finalJSONString2=finalJSONString1.replace(str7,str9);
        String finalJSONString3=finalJSONString2.replace(str11+" ",str12+" ");
        String finalJSONString4=finalJSONString3.replace(str11+",",str12+",");
-//       int n=0;
-//	
-//		  for(n=200;n<=300;n++) { System.out.print(finalJSONString3.charAt(n)); }
-//		    
-       System.out.println(finalJSONString1.length()); 
+
        
 		 JSONParser parser = new JSONParser(); 
 		 JSONObject json1 = (JSONObject) parser.parse(finalJSONString4);
