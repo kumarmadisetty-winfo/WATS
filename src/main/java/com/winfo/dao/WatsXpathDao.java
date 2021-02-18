@@ -1,5 +1,7 @@
 package com.winfo.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.SQLQuery;
@@ -20,9 +22,10 @@ public class WatsXpathDao {
   String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_number=:scripNumber and m.input_parameter=:params";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("xpath", xpath);
-		query.setParameter("scripNumber", scripNumber);
+		query.setParameter("scripNumber", scripNumber); 
 		query.setParameter("params", params);
 		int i =query.executeUpdate();
+		//System.out.println("update:::::"+i);
 		return i;
 
 	}
@@ -37,6 +40,23 @@ public class WatsXpathDao {
 		query.setParameter("scripNumber", scripNumber);
 		query.setParameter("params", param1);
 		int i =query.executeUpdate();
-		System.out.println("update:::::"+i);
+		//System.out.println("update:::::"+i);
+	}
+
+	public String checkXpathlocation(String params, String scripNumber) {
+		Session session = entityManager.unwrap(Session.class);
+
+		String sql="select xpath_location from  win_ta_script_metadata where input_parameter=:params and script_number=:scripNumber";
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setParameter("scripNumber", scripNumber);
+		query.setParameter("params", params);
+		List results = query.list();
+		if(results.size()>0) {
+			//System.out.println("xpath::::::"+(String) results.get(0));
+			return (String) results.get(0);
+		}
+		else {
+			return null;
+		}
 	}
 }
