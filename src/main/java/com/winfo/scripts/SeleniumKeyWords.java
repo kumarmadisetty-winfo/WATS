@@ -1866,7 +1866,7 @@ System.out.println("entered to getFailFileNameListNew");
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			 Image img1 = Image.getInstance("Images/wats_icon.png");
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -2744,7 +2744,7 @@ System.out.println("entered to getFailFileNameListNew");
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			 Image img1 = Image.getInstance("Images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
