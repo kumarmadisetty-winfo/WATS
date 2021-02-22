@@ -415,7 +415,7 @@
 											</includes>
 										</resource>
 										<resource>
-											<directory>Images</directory>
+											<directory>Images/</directory>
 											<filtering>false</filtering>
 										</resource>
 									</resources>

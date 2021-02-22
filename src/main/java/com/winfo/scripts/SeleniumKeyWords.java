@@ -1869,9 +1869,9 @@ System.out.println("entered to getFailFileNameListNew");
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
-			System.out.println("before enter Images/wats_icon.png");
-			 Image img1 = Image.getInstance(getClass().getClassLoader().getResource("Images/wats_icon.png"));
-				System.out.println("after enter Images/wats_icon.png");
+			System.out.println("before enter Images/wats_icon.png1");
+			Image img1 = Image.getInstance("Images/wats_icon.png");
+				System.out.println("after enter Images/wats_icon.png1");
 
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
@@ -2751,7 +2751,7 @@ System.out.println("entered to getFailFileNameListNew");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
 				System.out.println("before enter Images/wats_icon.png");
-				 Image img1 = Image.getInstance("Images/wats_icon.png");
+				 Image img1 = Image.getInstance("wats_icon.png");
 					System.out.println("after enter Images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
