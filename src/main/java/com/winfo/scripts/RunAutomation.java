@@ -456,7 +456,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						  clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						    message=getErrorMessages(driver);
 						    String message1=getErrorMessages(driver);
-	                     if(message != null) {
+	                     if(message != null&& !message.startsWith("Example")) {
 	                           fetchConfigVO.setErrormessage(message);
 	                           screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
 	                          throw new IllegalArgumentException("Erroe occured");
