@@ -414,6 +414,10 @@
 												<include>*.properties</include>
 											</includes>
 										</resource>
+										<resource>
+											<directory>Images</directory>
+											<filtering>false</filtering>
+										</resource>
 									</resources>
 								</configuration>
 							</execution>
