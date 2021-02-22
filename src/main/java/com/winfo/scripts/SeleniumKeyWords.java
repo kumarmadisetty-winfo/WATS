@@ -1859,6 +1859,9 @@ System.out.println("entered to getFailFileNameListNew");
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
 			 Font fnt = FontFactory.getFont("Arial", 12);
 			 Font bf12 = FontFactory.getFont("Arial", 23);
+			 Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
+			 Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE,BaseColor.GREEN);
+			 Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE,BaseColor.RED);
 			 Font bfBold = FontFactory.getFont("Arial", 23,BaseColor.WHITE);
 			 DefaultPieDataset dataSet = new DefaultPieDataset();
 			PdfWriter writer = null;
@@ -1866,7 +1869,10 @@ System.out.println("entered to getFailFileNameListNew");
 			Rectangle one = new Rectangle(1360,800);
 	        document.setPageSize(one);
 			document.open();
+			System.out.println("before enter Images/wats_icon.png");
 			 Image img1 = Image.getInstance("Images/wats_icon.png");
+				System.out.println("after enter Images/wats_icon.png");
+
 				img1.scalePercent(65, 68);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
@@ -2061,13 +2067,13 @@ System.out.println("entered to getFailFileNameListNew");
 					 		for (Entry<Integer, Map<String,String>> entry : toc.entrySet()) {
 					 			Map<String,String> str1=entry.getValue();
 					 			for(Entry<String, String> entry1:str1.entrySet()) {
-					 	      Anchor click = new Anchor(String.valueOf(entry.getKey()),bf12);
+					 	      Anchor click = new Anchor(String.valueOf(entry.getKey()),bf15);
 					 		    click.setReference("#"+String.valueOf(entry1.getKey()));
-					 		   Anchor click1 = new Anchor(String.valueOf("(Failed)"),bf12);
+					 		   Anchor click1 = new Anchor(String.valueOf("(Failed)"),bf14);
 					 		   click1.setReference("#"+String.valueOf(entry1.getValue()));
 					 		    Paragraph pr = new Paragraph();
 					 		    int value=entry.getKey();
-					 		   Anchor ca1 = new Anchor(String.valueOf(entry1.getKey()), bf12);
+					 		   Anchor ca1 = new Anchor(String.valueOf(entry1.getKey()), bf15);
 					 		  ca1.setReference("#"+String.valueOf(entry1.getKey()));
 					 		  String compare=entry1.getValue();
 		                     if(!compare.equals("null")) {
@@ -2079,7 +2085,7 @@ System.out.println("entered to getFailFileNameListNew");
 					 		   document.add(Chunk.NEWLINE);
 					 		    document.add(pr);
 		                     }else {
-		                    	 Anchor click2 = new Anchor(String.valueOf("(Passed)"),bf12);
+		                    	 Anchor click2 = new Anchor(String.valueOf("(Passed)"),bf13);
 		                    	 click2.setReference("#"+String.valueOf(entry1.getKey()));
 		                    	 pr.add(ca1);
 		  			 		   pr.add(click2);
@@ -2744,7 +2750,9 @@ System.out.println("entered to getFailFileNameListNew");
 				System.out.println("Folder exist");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
-			 Image img1 = Image.getInstance("Images/wats_icon.png");
+				System.out.println("before enter Images/wats_icon.png");
+				 Image img1 = Image.getInstance("Images/wats_icon.png");
+					System.out.println("after enter Images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
 			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
