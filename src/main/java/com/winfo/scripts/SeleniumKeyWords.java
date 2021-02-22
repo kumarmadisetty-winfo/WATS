@@ -1870,7 +1870,7 @@ System.out.println("entered to getFailFileNameListNew");
 	        document.setPageSize(one);
 			document.open();
 			System.out.println("before enter Images/wats_icon.png");
-			 Image img1 = Image.getInstance("Images/wats_icon.png");
+			 Image img1 = Image.getInstance(getClass().getClassLoader().getResource("Images/wats_icon.png"));
 				System.out.println("after enter Images/wats_icon.png");
 
 				img1.scalePercent(65, 68);
@@ -2336,7 +2336,7 @@ System.out.println("entered to getFailFileNameListNew");
 //			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
 			
 			} catch (Exception e) {
-			System.out.println("Not able to Create pdf");
+			System.out.println("Not able to Create pdf"+e);
 		}
 	}
 	 public  void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
@@ -2885,7 +2885,7 @@ System.out.println("entered to getFailFileNameListNew");
 			document.close();
 			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
 		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf");
+			System.out.println("Not able to upload the pdf"+e);
 		}
 	}
 
