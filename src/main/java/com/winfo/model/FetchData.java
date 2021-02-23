@@ -1,76 +1,88 @@
 package com.winfo.model;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchData {
 	@JsonProperty("script_number")
-    private String script_number;
-    @JsonProperty("module")
-    private String  module;
-    @JsonProperty("scenario_name")
-    private String scenario_name;
-    @JsonProperty("scenario_description")
-    private String scenario_description;
-    @JsonProperty("product_version")
-    private String product_version;
-    @JsonProperty("priority")
-    private Integer priority;
-    @JsonProperty("process_area")
-    private String process_area;
-    @JsonProperty("role")
-    private String role;
-    @JsonProperty("sub_process_area")
-    private String sub_process_area;
-    @JsonProperty("standard_custom")
-    private String standard_custom;
-    @JsonProperty("test_script_status")
-    private String test_script_status;
-    @JsonProperty("customer_id")
-    private Integer customer_id;
-    @JsonProperty("dependency")
-    private Integer dependency;
-    @JsonProperty("end2end_scenario")
-    private String end2end_scenario;
-    @JsonProperty("expected_result")
-    private String expected_result;
-    @JsonProperty("selenium_test_script_name")
-    private String selenium_test_script_name;
-    @JsonProperty("selenium_test_method")
-    private String selenium_test_method;
-    @JsonProperty("author")
-    private String author;
-    @JsonProperty("created_by")
-    private String created_by;
-    @JsonProperty("creation_date")
-    private Date creation_date;
-    @JsonProperty("updated_by")
-    private String updated_by;
-    @JsonProperty("update_date")
-    private Date update_date;
-    @JsonProperty("customisation_refrence")
-    private String customisation_refrence;
-    @JsonProperty("attribute1")
-    private String attribute1;
-    @JsonProperty("attribute2")
-    private String attribute2;
-    @JsonProperty("attribute3")
-    private String attribute3;
-    @JsonProperty("attribute4")
-    private String attribute4;
-    @JsonProperty("attribute5")
-    private String attribute5;
-    @JsonProperty("attribute6")
-    private String attribute6;
-    @JsonProperty("attribute7")
-    private String attribute7;
-    @JsonProperty("attribute8")
-    private String attribute8;
-    @JsonProperty("attribute9")
-    private String attribute9;
-    @JsonProperty("attribute10")
-    private String attribute10;
+	private String script_number;
+	@JsonProperty("module")
+	private String  module;
+	@JsonProperty("scenario_name")
+	private String scenario_name;
+	@JsonProperty("scenario_description")
+	private String scenario_description;
+	@JsonProperty("product_version")
+	private String product_version;
+	@JsonProperty("priority")
+	private Integer priority;
+	@JsonProperty("process_area")
+	private String process_area;
+	@JsonProperty("role")
+	private String role;
+	@JsonProperty("sub_process_area")
+	private String sub_process_area;
+	@JsonProperty("standard_custom")
+	private String standard_custom;
+	@JsonProperty("test_script_status")
+	private String test_script_status;
+	@JsonProperty("customer_id")
+	private Integer customer_id;
+	@JsonProperty("dependency")
+	private Integer dependency;
+	@JsonProperty("end2end_scenario")
+	private String end2end_scenario;
+	@JsonProperty("expected_result")
+	private String expected_result;
+	@JsonProperty("selenium_test_script_name")
+	private String selenium_test_script_name;
+	@JsonProperty("selenium_test_method")
+	private String selenium_test_method;
+	@JsonProperty("author")
+	private String author;
+	@JsonProperty("created_by")
+	private String created_by;
+	@JsonProperty("creation_date")
+	private Date creation_date;
+	@JsonProperty("updated_by")
+	private String updated_by;
+	@JsonProperty("update_date")
+	private Date update_date;
+	@JsonProperty("customisation_refrence")
+	private String customisation_refrence;
+	@JsonProperty("attribute1")
+	private String attribute1;
+	@JsonProperty("attribute2")
+	private String attribute2;
+	@JsonProperty("attribute3")
+	private String attribute3;
+	@JsonProperty("attribute4")
+	private String attribute4;
+	@JsonProperty("attribute5")
+	private String attribute5;
+	@JsonProperty("attribute6")
+	private String attribute6;
+	@JsonProperty("attribute7")
+	private String attribute7;
+	@JsonProperty("attribute8")
+	private String attribute8;
+	@JsonProperty("attribute9")
+	private String attribute9;
+	@JsonProperty("attribute10")
+	private String attribute10;
+	@JsonProperty("DEPENDENT_SCRIPT_NUM")
+    private String dependent_script_num;
+	
+	
+	public String getDependent_script_num() {
+		return dependent_script_num;
+	}
+	public void setDependent_script_num(String dependent_script_num) {
+		this.dependent_script_num = dependent_script_num;
+	}
 	public String getScript_number() {
 		return script_number;
 	}
@@ -222,6 +234,7 @@ public class FetchData {
 		this.attribute2 = attribute2;
 	}
 	public String getAttribute3() {
+
 		return attribute3;
 	}
 	public void setAttribute3(String attribute3) {
@@ -269,6 +282,10 @@ public class FetchData {
 	public void setAttribute10(String attribute10) {
 		this.attribute10 = attribute10;
 	}
-    
 	
-	}
+	
+	
+	
+
+	
+		}

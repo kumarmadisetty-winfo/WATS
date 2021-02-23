@@ -1,5 +1,6 @@
 package com.winfo.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,35 +14,48 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.winfo.vo.DeleteScriptsData;
+import com.winfo.vo.DomGenericResponseBean;
 
 @Repository
 public class DeleteDataDAO {
 
 	@Autowired
 	private EntityManager entityManager;
-	public String deleteData(@RequestBody DeleteScriptsData deletescriptsdata) throws ParseException {
+	public  List<DomGenericResponseBean> deleteData(@RequestBody DeleteScriptsData deletescriptsdata) throws ParseException {
 		Session session = entityManager.unwrap(Session.class);
 		Transaction tx = session.beginTransaction();
-		//String product_version=deletescriptsdata.getProduct_version();
-		List<Integer> script_Ids= deletescriptsdata.getScript_id();
-		int i=0;
-		for(i=0;i<script_Ids.size();i++)
-		{
-			Integer script_Id=script_Ids.get(i);
-			Query query=session.createQuery("delete from ScriptMaster where script_id="+script_Id);
-			Query query1=session.createQuery("delete from ScriptMetaData where script_id="+script_Id);
-			//Query query=session.createQuery("delete ScriptMaster from ScriptMaster  INNER JOIN  ScriptMetadata  on  ScriptMster.script_id=ScriptMetaData.script_id where script_id="+script_Id);
+		int deleted = 0;
+		int deleted1=0;
 		
-			query1.executeUpdate();
-			query.executeUpdate();
-	    
-			
-			
-		}
-		
-		tx.commit();
-		
-		return "{\"status\":200,\"statusMessage\":\"SUCCESS\",\"description\":\"Deleted Successfully\"}";
+		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
+        List<Integer> script_Ids= deletescriptsdata.getScript_id();
+        int i=0;
+        for(i=0;i<script_Ids.size();i++)
+        {
+            Integer script_Id=script_Ids.get(i);
+            Query query=session.createQuery("delete from ScriptMaster where script_id="+script_Id);
+            Query query1=session.createQuery("delete from ScriptMetaData where script_id="+script_Id);
+            
+        
+             deleted =query1.executeUpdate();
+             deleted1 =query.executeUpdate();
+            DomGenericResponseBean response = new DomGenericResponseBean();
+            if(deleted==0 && deleted1==0) {
+            response.setStatus(404);
+            response.setStatusMessage("ERROR");
+            response.setDescription("Script Not Found");
+            response.setScriptID(script_Id);
+            bean.add(response);
+            }
+            else {
+                response.setStatus(200);
+                response.setStatusMessage("SUCCESS");
+                response.setDescription("Script Deleted Successfully");
+                response.setScriptID(script_Id);
+                bean.add(response);
+            }
+        }
+         tx.commit(); 
+         return bean;  
 	}
-
 }

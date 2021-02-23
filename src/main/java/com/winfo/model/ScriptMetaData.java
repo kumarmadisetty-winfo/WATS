@@ -48,14 +48,14 @@ public class ScriptMetaData {
 	private String field_type;
 	@Column(name = "HINT")
 	private String hint;
-
+	//@Column(name = "script_id")
+//	private Integer script_id;
 
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "SCRIPT_ID")
 	private ScriptMaster scriptMaster;
 
 	
-
 	public ScriptMaster getScriptMaster() {
 		return scriptMaster;
 	}

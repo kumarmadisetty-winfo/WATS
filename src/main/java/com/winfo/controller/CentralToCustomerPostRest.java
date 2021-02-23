@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsMasterDataVOList;
-import com.winfo.services.CustomerToCentralPostService;
+import com.winfo.services.CentralToCustomerPostService;
 import com.winfo.vo.WatsMasterVO;
 
 @RestController
-public class CustomerToCentralPostRest {
+public class CentralToCustomerPostRest {
 
 	@Autowired
-	CustomerToCentralPostService service;
+	CentralToCustomerPostService service;
 
-	@PostMapping("/customerTocentral_central")
+	@PostMapping("/centralTocustomer_customer")
 	public List<DomGenericResponseBean> pluginData(@RequestBody WatsMasterDataVOList mastervolist) {
 		return service.centralRepoData(mastervolist);
 		

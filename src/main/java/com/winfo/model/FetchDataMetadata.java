@@ -1,35 +1,37 @@
 package com.winfo.model;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchDataMetadata {
 	
 	@JsonProperty("line_number")
-    private Integer line_number;
-    @JsonProperty("action")
-    private String  action;
-    @JsonProperty("input_parameter")
-    private String input_parameter;
-    @JsonProperty("xpath_location")
-    private String xpath_location;
-    @JsonProperty("xpath_location1")
-    private String xpath_location1;
-    @JsonProperty("created_by")
-    private String created_by;
-    @JsonProperty("creation_date")
-    private Date creation_date;
-    @JsonProperty("updated_by")
-    private String updated_by;
-    @JsonProperty("update_date")
-    private Date update_date;
-    @JsonProperty("step_desc")
-    private String step_desc;
-    @JsonProperty("field_type")
-    private String field_type;
-    @JsonProperty("hint")
-    private String hint;
+	private Integer line_number;
+	@JsonProperty("action")
+	private String  action;
+	@JsonProperty("input_parameter")
+	private String input_parameter;
+	@JsonProperty("xpath_location")
+	private String xpath_location;
+	@JsonProperty("xpath_location1")
+	private String xpath_location1;
+	@JsonProperty("created_by")
+	private String created_by;
+	@JsonProperty("creation_date")
+	private Date creation_date;
+	@JsonProperty("updated_by")
+	private String updated_by;
+	@JsonProperty("update_date")
+	private Date update_date;
+	@JsonProperty("step_desc")
+	private String step_desc;
+	@JsonProperty("field_type")
+	private String field_type;
+	@JsonProperty("hint")
+	private String hint;
 	public Integer getLine_number() {
 		return line_number;
 	}
@@ -102,7 +104,7 @@ public class FetchDataMetadata {
 	public void setHint(String hint) {
 		this.hint = hint;
 	}
-    
-    
 
+	
+	
 }

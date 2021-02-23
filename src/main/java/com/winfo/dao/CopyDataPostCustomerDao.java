@@ -14,7 +14,7 @@ import com.winfo.model.ScriptMaster;
 import com.winfo.vo.DomGenericResponseBean;
 
 @Repository
-public class CopyDataPostDao {
+public class CopyDataPostCustomerDao {
 	@Autowired
 	private EntityManager entityManager;
 	public void copyDataPost(ScriptMaster master) {
@@ -24,9 +24,6 @@ public class CopyDataPostDao {
 	
 	
 		    session1.save(master);
-		  //  session1.close();
-		    
-			
-			//return response;
+		  
 	}
 }

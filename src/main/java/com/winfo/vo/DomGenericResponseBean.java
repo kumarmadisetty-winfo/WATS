@@ -6,13 +6,17 @@ public class DomGenericResponseBean{
 	private String statusMessage;
 	private String description;
 	private String failed_Script;
+	private int scriptID;
 	
 	
-	public String getDescription() {
-		return description;
+	
+	
+	
+	public int getScriptID() {
+		return scriptID;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setScriptID(int scriptID) {
+		this.scriptID = scriptID;
 	}
 	public String getFailed_Script() {
 		return failed_Script;
@@ -20,7 +24,13 @@ public class DomGenericResponseBean{
 	public void setFailed_Script(String failed_Script) {
 		this.failed_Script = failed_Script;
 	}
-	public int getStatus() {
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+		public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
