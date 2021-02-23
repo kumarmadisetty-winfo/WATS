@@ -401,7 +401,7 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>WEB-INF/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
 										<delimiter>#</delimiter>
