@@ -1860,6 +1860,7 @@ System.out.println("entered to getFailFileNameListNew");
 			 Font fnt = FontFactory.getFont("Arial", 12);
 			 Font bf12 = FontFactory.getFont("Arial", 23);
 			 Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
+			 Font bf16 = FontFactory.getFont("Arial", 12, Font.UNDERLINE);
 			 Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE,BaseColor.GREEN);
 			 Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE,BaseColor.RED);
 			 Font bfBold = FontFactory.getFont("Arial", 23,BaseColor.WHITE);
@@ -1870,7 +1871,7 @@ System.out.println("entered to getFailFileNameListNew");
 	        document.setPageSize(one);
 			document.open();
 			System.out.println("before enter Images/wats_icon.png1");
-			Image img1 = Image.getInstance("Images/wats_icon.png");
+			Image img1 = Image.getInstance("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/wats_icon.png");
 				System.out.println("after enter Images/wats_icon.png1");
 
 				img1.scalePercent(65, 68);
@@ -2218,7 +2219,7 @@ System.out.println("entered to getFailFileNameListNew");
                
 				Anchor target = new Anchor(String.valueOf(i));
 			    target.setName(String.valueOf(i));
-				Anchor target1 = new Anchor(String.valueOf("Back to Index"));
+				Anchor target1 = new Anchor(String.valueOf("Back to Index"),bf16);
 				target1.setReference("#"+String.valueOf("details"));
 				Paragraph p=new Paragraph();
 				p.add(target1);
@@ -2751,7 +2752,7 @@ System.out.println("entered to getFailFileNameListNew");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
 				System.out.println("before enter Images/wats_icon.png");
-				 Image img1 = Image.getInstance("wats_icon.png");
+				Image img1 = Image.getInstance("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/wats_icon.png");
 					System.out.println("after enter Images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);
