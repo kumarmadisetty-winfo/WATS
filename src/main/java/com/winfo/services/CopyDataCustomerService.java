@@ -8,17 +8,18 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winfo.dao.CopyDataDao;
+import com.winfo.dao.CopyDataCustomerDao;
 import com.winfo.vo.CopyDataDetails;
+import com.winfo.vo.DomGenericResponseBean;
 @Service
-public class CopyDataService {
+public class CopyDataCustomerService {
 	@Autowired
-	CopyDataDao dao;
+	CopyDataCustomerDao dao;
 
 	 
 	
 	@Transactional
-	public String copyData(CopyDataDetails copyDataDetails ) throws ParseException {
+	public List<DomGenericResponseBean> copyData(CopyDataDetails copyDataDetails ) throws ParseException {
 		return dao.copyData( copyDataDetails);
 
 	}

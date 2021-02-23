@@ -91,6 +91,11 @@ public class ScriptMaster {
 	private String attribute10;
 	@Column(name = "PRIORITY")
 	private Integer priority;
+	@Column(name = "DEPENDENT_SCRIPT_NUM")
+    private String dependent_script_num;
+    @Column(name = "APPR_FOR_MIGRATION")
+    private String appr_for_migration;
+    
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "scriptMaster")
 
@@ -99,6 +104,22 @@ public class ScriptMaster {
 	public void addMetadata(ScriptMetaData metadata) {
 		scriptMetaDatalist.add(metadata);
 		metadata.setScriptMaster(this);
+	}
+
+	public String getDependent_script_num() {
+		return dependent_script_num;
+	}
+
+	public void setDependent_script_num(String dependent_script_num) {
+		this.dependent_script_num = dependent_script_num;
+	}
+
+	public String getAppr_for_migration() {
+		return appr_for_migration;
+	}
+
+	public void setAppr_for_migration(String appr_for_migration) {
+		this.appr_for_migration = appr_for_migration;
 	}
 
 	public Integer getScript_id() {

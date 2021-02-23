@@ -5,15 +5,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ScriptAndCustomeridDetails {
-	
-	@JsonProperty("customer_id")
-	private Integer customer_id;
+public class ScriptId {
 	@JsonProperty("script_id")
 	private List<Integer> script_id= new ArrayList<Integer>();
 	@JsonProperty("product_version")
-    private String product_version;
-	
+	private String product_version;
+	@JsonProperty("customer_id")
+	private Integer customer_id;
+	public List<Integer> getScript_id() {
+		return script_id;
+	}
+	public void setScript_id(List<Integer> script_id) {
+		this.script_id = script_id;
+	}
 	public String getProduct_version() {
 		return product_version;
 	}
@@ -26,18 +30,6 @@ public class ScriptAndCustomeridDetails {
 	public void setCustomer_id(Integer customer_id) {
 		this.customer_id = customer_id;
 	}
-	public List<Integer> getScript_id() {
-		return script_id;
-	}
-	public void setScript_id(List<Integer> script_id) {
-		this.script_id = script_id;
-	}
 	
-	
-	
-	
-	
-	
-	
-
+		
 }
