@@ -401,7 +401,7 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>WEB-INF/classes</outputDirectory>
+									<outputDirectory>target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
 										<delimiter>#</delimiter>
@@ -412,11 +412,8 @@
 											<filtering>true</filtering>
 											<includes>
 												<include>*.properties</include>
+												<include>Images/</include>
 											</includes>
-										</resource>
-										<resource>
-											<directory>Images/</directory>
-											<filtering>false</filtering>
 										</resource>
 									</resources>
 								</configuration>
