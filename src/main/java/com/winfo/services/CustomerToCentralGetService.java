@@ -62,8 +62,7 @@ public class CustomerToCentralGetService {
 		JSONObject json2=new JSONObject();
 		json2=dao.customerRepoData(scriptID);
 		CustomerToCentralGetService service=new CustomerToCentralGetService();
-		Integer customer_id=scriptID.getCustomer_id();
-		Query query4=session.createQuery("select customer_uri from CustomerTable where customer_id="+customer_id);
+		Query query4=session.createQuery("select customer_uri from CustomerTable where customer_name='WATS_CENTRAL'");
 		List<String> result4 = (List<String>) query4.list();
 		String customer_uri=result4.get(0);
 		return service.webClientService(json2,customer_uri);

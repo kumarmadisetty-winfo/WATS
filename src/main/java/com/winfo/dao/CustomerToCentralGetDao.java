@@ -53,7 +53,7 @@ public class CustomerToCentralGetDao {
 		
 		String product_version=scriptID.getProduct_version();
 		List<Integer> script_Ids= scriptID.getScript_id();
-		Integer customer_id=scriptID.getCustomer_id();
+		
 	
 		int i=0;
 			 JSONObject responseDetailsJson = new JSONObject();

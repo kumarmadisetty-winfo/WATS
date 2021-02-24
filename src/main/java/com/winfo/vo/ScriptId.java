@@ -10,8 +10,7 @@ public class ScriptId {
 	private List<Integer> script_id= new ArrayList<Integer>();
 	@JsonProperty("product_version")
 	private String product_version;
-	@JsonProperty("customer_id")
-	private Integer customer_id;
+	
 	public List<Integer> getScript_id() {
 		return script_id;
 	}
@@ -24,12 +23,7 @@ public class ScriptId {
 	public void setProduct_version(String product_version) {
 		this.product_version = product_version;
 	}
-	public Integer getCustomer_id() {
-		return customer_id;
-	}
-	public void setCustomer_id(Integer customer_id) {
-		this.customer_id = customer_id;
-	}
+	
 	
 		
 }
