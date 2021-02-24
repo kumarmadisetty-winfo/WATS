@@ -17,13 +17,12 @@ public class WatsXpathDao {
 
 	public int saveXpathParams(String params, String scripNumber, String xpath) {
 		Session session = entityManager.unwrap(Session.class);
-
-	//	String sql = " select script_number from  WIN_TA_SCRIPT_MASTER_BKP4 m WHERE m.process_area=:processArea and m.module=:module ORDER BY m.script_number DESC";
-  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_number=:scripNumber and m.input_parameter=:params";
+		String params1="%"+params+"%";
+  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_number=:scripNumber and m.input_parameter like :params";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("xpath", xpath);
-		query.setParameter("scripNumber", scripNumber); 
-		query.setParameter("params", params);
+		query.setParameter("scripNumber", scripNumber);
+		query.setParameter("params", params1);
 		int i =query.executeUpdate();
 		//System.out.println("update:::::"+i);
 		return i;
@@ -32,13 +31,12 @@ public class WatsXpathDao {
 
 	public void saveXpathParam1(String param1, String scripNumber, String xpath) {
 		Session session = entityManager.unwrap(Session.class);
-
-	//	String sql = " select script_number from  WIN_TA_SCRIPT_MASTER_BKP4 m WHERE m.process_area=:processArea and m.module=:module ORDER BY m.script_number DESC";
-  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_number=:scripNumber and m.input_parameter=:params";
+		String params1="%"+param1+"%";
+		String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_number=:scripNumber and m.input_parameter like :params";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("xpath", xpath);
 		query.setParameter("scripNumber", scripNumber);
-		query.setParameter("params", param1);
+		query.setParameter("params", params1);
 		int i =query.executeUpdate();
 		//System.out.println("update:::::"+i);
 	}
@@ -59,4 +57,6 @@ public class WatsXpathDao {
 			return null;
 		}
 	}
+
+
 }
