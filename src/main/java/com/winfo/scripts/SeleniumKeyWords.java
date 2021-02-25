@@ -1945,17 +1945,28 @@ System.out.println("entered to getFailFileNameListNew");
 				  for (int k=0;k<cells1.length;k++){
 				     cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
 				  }
-			     insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
-			     insertCell(table, df1.format(passcount),  Element.ALIGN_CENTER, 1, bf12);
-			     insertCell(table,df2.format(pass)+"%",  Element.ALIGN_CENTER, 1, bf12);
-			     
-			     insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
-			     insertCell(table, df1.format(failcount),  Element.ALIGN_CENTER, 1, bf12);
-			     insertCell(table, df2.format(fail)+"%",  Element.ALIGN_CENTER, 1, bf12);
+					if("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {			
+
+					     insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table, df1.format(passcount),  Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table,df2.format(pass)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							}else if("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+					     insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table, df1.format(failcount),  Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table, df2.format(fail)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							}else {
+								insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, df1.format(passcount),  Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table,df2.format(pass)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, df1.format(failcount),  Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, df2.format(fail)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							}
 			     document.setMargins(20, 20, 20, 20);
 			     document.add(table);
 //			End Testrun to add Table
 //			Start Testrun to add piechart 
+			     if("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 			     Chunk ch = new Chunk(pichart, bfBold);
 			     ch.setTextRise(-18);
 			     ch.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
@@ -2011,6 +2022,7 @@ System.out.println("entered to getFailFileNameListNew");
 							chart.draw(graphics2d, rectangle2d);
 							graphics2d.dispose();
 					 		contentByte.addTemplate(template, 400, 100);
+			     }
 //			 End Testrun to add piechart 
 // End Testrun to add Table and piechart 
 //					 		Start to add page heading,all testrun names and states and page numbers	 		
