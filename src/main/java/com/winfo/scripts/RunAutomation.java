@@ -612,7 +612,7 @@ public class RunAutomation extends SeleniumKeyWords {
 							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
 						}
 						else if (actionName.equalsIgnoreCase("Dropdown Values")||actionName.equalsIgnoreCase("Table Dropdown Values")||actionName.equalsIgnoreCase("selectByText")) {
-							error_message="Failed at "+actionName+" =>Not able to Select the Value from "+param2+"dropdownlist";
+							error_message="Failed at "+actionName+" =>Not able to Select the Value from "+param2+" dropdownlist";
 							 fetchConfigVO.setErrormessage(error_message);
 							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO,fetchConfigVO,test_script_param_id,"Fail",error_message);
 						}
