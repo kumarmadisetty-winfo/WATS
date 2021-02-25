@@ -30,8 +30,10 @@ public class DeleteDataDAO {
 		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
         List<Integer> script_Ids= deletescriptsdata.getScript_id();
         int i=0;
+        int count=0;
         for(i=0;i<script_Ids.size();i++)
         {
+        	 count=0;
             Integer script_Id=script_Ids.get(i);
             Query query=session.createQuery("delete from ScriptMaster where script_id="+script_Id);
             Query query1=session.createQuery("delete from ScriptMetaData where script_id="+script_Id);
@@ -39,22 +41,25 @@ public class DeleteDataDAO {
         
              deleted =query1.executeUpdate();
              deleted1 =query.executeUpdate();
-            DomGenericResponseBean response = new DomGenericResponseBean();
+         
             if(deleted==0 && deleted1==0) {
+            	count=1;
+            }
+            }
+        DomGenericResponseBean response = new DomGenericResponseBean();
+            if(count==1) {
             response.setStatus(404);
             response.setStatusMessage("ERROR");
             response.setDescription("Script Not Found");
-            response.setScriptID(script_Id);
             bean.add(response);
             }
             else {
                 response.setStatus(200);
                 response.setStatusMessage("SUCCESS");
                 response.setDescription("Script Deleted Successfully");
-                response.setScriptID(script_Id);
                 bean.add(response);
             }
-        }
+        
          tx.commit(); 
          return bean;  
 	}
