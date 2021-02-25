@@ -48,6 +48,15 @@ public class ScriptMetaData {
 	private String field_type;
 	@Column(name = "HINT")
 	private String hint;
+	@Column(name = "DATATYPES")
+	private String datatypes;
+	@Column(name = "UNIQUE_MANDATORY")
+	private String unique_mandatory;
+	@Column(name = "VALIDATION_TYPE")
+	private String validation_type;
+	@Column(name = "VALIDATION_NAME")
+	private String validation_name;
+
 	//@Column(name = "script_id")
 //	private Integer script_id;
 
@@ -74,6 +83,38 @@ public class ScriptMetaData {
 
 	public String getScript_number() {
 		return script_number;
+	}
+
+	public String getDatatypes() {
+		return datatypes;
+	}
+
+	public void setDatatypes(String datatypes) {
+		this.datatypes = datatypes;
+	}
+
+	public String getUnique_mandatory() {
+		return unique_mandatory;
+	}
+
+	public void setUnique_mandatory(String unique_mandatory) {
+		this.unique_mandatory = unique_mandatory;
+	}
+
+	public String getValidation_type() {
+		return validation_type;
+	}
+
+	public void setValidation_type(String validation_type) {
+		this.validation_type = validation_type;
+	}
+
+	public String getValidation_name() {
+		return validation_name;
+	}
+
+	public void setValidation_name(String validation_name) {
+		this.validation_name = validation_name;
 	}
 
 	public void setScript_number(String script_number) {

@@ -75,7 +75,7 @@ public class CustomerToCentralGetDao {
 			{
 			
 		Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_id="+script_Id);
-		Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint   from ScriptMetaData where script_id="+script_Id);
+		Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name   from ScriptMetaData where script_id="+script_Id);
 		List<Object> result = (List<Object>) query.list(); 
 		List<FetchData> finalresult=new ArrayList<FetchData>();
 		Iterator itr = result.iterator();
@@ -364,6 +364,43 @@ public class CustomerToCentralGetDao {
 			 else {
 				 fetchDataMetadata.setHint(String.valueOf(obj1[11]));
 			 }
+         if(String.valueOf(obj1[12]).equals("null"))
+      		 {
+      			 fetchDataMetadata.setScript_number(null);
+      		 }
+      		 else {
+      fetchDataMetadata.setScript_number(String.valueOf(obj1[12]));
+      		 }
+            if(String.valueOf(obj1[13]).equals("null"))
+      		 {
+      			 fetchDataMetadata.setDatatypes(null);
+      		 }
+      		 else {
+      fetchDataMetadata.setDatatypes(String.valueOf(obj1[13]));
+      		 }
+            if(String.valueOf(obj1[14]).equals("null"))
+      		 {
+      			 fetchDataMetadata.setUnique_mandatory(null);
+      		 }
+      		 else {
+      fetchDataMetadata.setUnique_mandatory(String.valueOf(obj1[14]));
+      		 }
+            if(String.valueOf(obj1[15]).equals("null"))
+      		 {
+      			 fetchDataMetadata.setValidation_type(null);
+      		 }
+      		 else {
+      fetchDataMetadata.setValidation_type(String.valueOf(obj1[15]));
+      		 }
+            if(String.valueOf(obj1[16]).equals("null"))
+      		 {
+      			 fetchDataMetadata.setValidation_name(null);
+      		 }
+      		 else {
+      fetchDataMetadata.setValidation_name(String.valueOf(obj1[16]));
+      		 }
+
+
 
          finalresult1.add(fetchDataMetadata);
 		}
@@ -459,6 +496,12 @@ public class CustomerToCentralGetDao {
 	          jsonMetadata.put("step_desc",slist1.getStep_desc());
 	          jsonMetadata.put("field_type",slist1.getField_type());
 	          jsonMetadata.put("hint",slist1.getHint());
+	          jsonMetadata.put("script_number",slist1.getScript_number());
+	          jsonMetadata.put("datatypes",slist1.getDatatypes());
+	          jsonMetadata.put("unique_mandatory",slist1.getUnique_mandatory());
+	          jsonMetadata.put("validation_type",slist1.getValidation_type());
+	          jsonMetadata.put("validation_name",slist1.getValidation_name());
+	         
 	          jsonArrayMetaData.put(jsonMetadata.toString());
 		  }	 
 		  jsonMaster.put("MetaDataList", jsonArrayMetaData);

@@ -80,6 +80,12 @@ public class CentralToCustomerPostService {
 			metadata.setStep_desc(metadatavo.getStep_desc());
 			metadata.setField_type(metadatavo.getField_type());
 			metadata.setHint(metadatavo.getHint());
+			  metadata.setScript_number(metadatavo.getScript_number());
+	            metadata.setDatatypes(metadatavo.getDatatypes());
+	            metadata.setUnique_mandatory(metadatavo.getUnique_mandatory());
+	            metadata.setValidation_type(metadatavo.getValidation_type());
+	            metadata.setValidation_name(metadatavo.getValidation_name());
+	          
 			master.addMetadata(metadata);
 			
 		}

@@ -34,6 +34,15 @@ public class WatsMetaDataVO {
 	private String field_type;
 	@JsonProperty("hint")
 	private String hint;
+	 @JsonProperty( "datatypes")
+		private String datatypes;
+	    @JsonProperty( "unique_mandatory")
+	    private String unique_mandatory;
+		 @JsonProperty( "validation_type")
+	    private String validation_type;
+	    @JsonProperty( "validation_name")
+	    private String validation_name;
+
 	public Integer getScript_meta_data_id() {
 		return script_meta_data_id;
 	}
@@ -42,6 +51,31 @@ public class WatsMetaDataVO {
 	}
 	public String getScript_number() {
 		return script_number;
+	}
+	
+	public String getDatatypes() {
+		return datatypes;
+	}
+	public void setDatatypes(String datatypes) {
+		this.datatypes = datatypes;
+	}
+	public String getUnique_mandatory() {
+		return unique_mandatory;
+	}
+	public void setUnique_mandatory(String unique_mandatory) {
+		this.unique_mandatory = unique_mandatory;
+	}
+	public String getValidation_type() {
+		return validation_type;
+	}
+	public void setValidation_type(String validation_type) {
+		this.validation_type = validation_type;
+	}
+	public String getValidation_name() {
+		return validation_name;
+	}
+	public void setValidation_name(String validation_name) {
+		this.validation_name = validation_name;
 	}
 	public void setScript_number(String script_number) {
 		this.script_number = script_number;

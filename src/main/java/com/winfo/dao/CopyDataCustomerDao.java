@@ -96,7 +96,7 @@ public class CopyDataCustomerDao {
  			   break;
  			   }
         	
-        	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint from ScriptMetaData where script_id="+scriptId);
+        	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name from ScriptMetaData where script_id="+scriptId);
         	List<Object> result1 = (List<Object>) query1.list();
         	Iterator itr1 = result1.iterator();
 		List<FetchData> finalresult=new ArrayList<FetchData>();
@@ -414,6 +414,43 @@ public class CopyDataCustomerDao {
 			 else {
 				 metadata.setHint(String.valueOf(obj1[11]));
 			 }
+          if(String.valueOf(obj1[12]).equals("null"))
+ 		 {
+ 			 metadata.setScript_number(null);
+ 		 }
+ 		 else {
+ 			 metadata.setScript_number(String.valueOf(obj1[12]));
+ 		 }
+        if(String.valueOf(obj1[13]).equals("null"))
+ 		 {
+     	   metadata.setDatatypes(null);
+ 		 }
+ 		 else {
+ 			 metadata.setDatatypes(String.valueOf(obj1[13]));
+ 		 }
+     if(String.valueOf(obj1[14]).equals("null"))
+ 		 {
+     	metadata.setUnique_mandatory(null);
+ 		 }
+ 		 else {
+ 			 metadata.setUnique_mandatory(String.valueOf(obj1[14]));
+ 		 }
+     if(String.valueOf(obj1[15]).equals("null"))
+ 		 {
+     	metadata.setValidation_type(null);
+ 		 }
+ 		 else {
+ 			 metadata.setValidation_type(String.valueOf(obj1[15]));
+ 		 }
+     if(String.valueOf(obj1[16]).equals("null"))
+ 		 {
+     	metadata.setValidation_name(null);
+ 		 }
+ 		 else {
+     metadata.setValidation_name(String.valueOf(obj1[16]));
+ 		 }
+
+
 
           master.addMetadata(metadata);
 		}

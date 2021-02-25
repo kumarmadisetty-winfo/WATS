@@ -24,7 +24,7 @@ public class CentralToCustomerPostDao {
 	public DomGenericResponseBean centralRepoData(ScriptMaster master, String scriptnumber, String productversion) {
 		Session session = entityManager.unwrap(Session.class);
 		DomGenericResponseBean response = new DomGenericResponseBean();
-		Query query=session.createQuery("select product_version from ScriptMaster where script_id='"+scriptnumber+"'");
+		Query query=session.createQuery("select product_version from ScriptMaster where script_number='"+scriptnumber+"'");
 		List<String> result2 = (List<String>) query.list();
 		
 		int i=0;
@@ -45,7 +45,7 @@ public class CentralToCustomerPostDao {
 	            response.setStatusMessage("ERROR");
 	            response.setDescription("Script Number Already exists");
 	            response.setFailed_Script(scriptnumber);
-			
+			    break;
 		}
 		else
 		{
