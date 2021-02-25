@@ -43,9 +43,11 @@ public class CustomerToCentralGetService {
 	private EntityManager entityManager;
 	public String webClientService(JSONObject json2,String customer_uri) {
 		String uri=customer_uri+"/centralTocustomer_customer";
+		System.out.println("webclient");
 		WebClient webClient = WebClient.create(uri);
 	//  WebClient webClient = WebClient.create("http://localhost:8081/customerTocentral_central");
 			Mono<String> result = webClient.post().syncBody(json2).retrieve().bodyToMono(String.class);
+			System.out.println("webclient response");
 			String response = result.block();
 			if(response.equals("[]"))
 			{
@@ -60,12 +62,13 @@ public class CustomerToCentralGetService {
 	public String customerRepoData(ScriptId scriptID) throws ParseException {
 		Session session = entityManager.unwrap(Session.class);
 		JSONObject json2=new JSONObject();
+	
 		json2=dao.customerRepoData(scriptID);
-		CustomerToCentralGetService service=new CustomerToCentralGetService();
 		Query query4=session.createQuery("select customer_uri from CustomerTable where customer_name='WATS_CENTRAL'");
 		List<String> result4 = (List<String>) query4.list();
 		String customer_uri=result4.get(0);
-		return service.webClientService(json2,customer_uri);
+		System.out.println("customer_uri");
+		return webClientService(json2,customer_uri);
 		
 
 	}
