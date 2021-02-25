@@ -42,8 +42,8 @@ public class CustomerToCentralGetService {
 	@Autowired
 	private EntityManager entityManager;
 	public String webClientService(JSONObject json2,String customer_uri) {
-		String uri=customer_uri+"/centralTocustomer_customer";
-		System.out.println("webclient");
+		String uri=customer_uri+"/customerTocentral_central";
+		System.out.println(uri);
 		WebClient webClient = WebClient.create(uri);
 	//  WebClient webClient = WebClient.create("http://localhost:8081/customerTocentral_central");
 			Mono<String> result = webClient.post().syncBody(json2).retrieve().bodyToMono(String.class);
