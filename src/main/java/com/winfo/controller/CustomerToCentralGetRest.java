@@ -25,6 +25,7 @@ public class CustomerToCentralGetRest {
 
 	@RequestMapping("/customerTocentral_customer")
 	public String customerRepoData(@RequestBody ScriptId scriptID) throws ParseException {
+		System.out.print("service");
 		return service.customerRepoData(scriptID);
 		
 	}

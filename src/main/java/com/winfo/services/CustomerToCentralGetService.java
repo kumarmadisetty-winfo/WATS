@@ -44,7 +44,7 @@ public class CustomerToCentralGetService {
 	public String webClientService(JSONObject json2,String customer_uri) {
 		String uri=customer_uri+"/centralTocustomer_customer";
 		WebClient webClient = WebClient.create(uri);
-	//	WebClient webClient = WebClient.create("http://localhost:8081/customerTocentral_central");
+	//  WebClient webClient = WebClient.create("http://localhost:8081/customerTocentral_central");
 			Mono<String> result = webClient.post().syncBody(json2).retrieve().bodyToMono(String.class);
 			String response = result.block();
 			if(response.equals("[]"))
