@@ -17,6 +17,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -32,9 +33,10 @@ import java.util.Date;
 
 @Service
 public class RunAutomation {
-
+	@Value("${message.default.welcome}")
+	private String instanceName;
 	@Autowired
-	 @Qualifier("udg")
+//	 @Qualifier(instanceName)
 	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface;
 	@Autowired
 	TestCaseDataService dataService;

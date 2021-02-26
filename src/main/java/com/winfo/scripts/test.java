@@ -5,11 +5,21 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class test {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 
+public class test {
+	@Autowired
+	static
+	Environment env;
+	@Value("${message.default.welcome}")
+	private static String instanceName;
 	public static void main(String[] args) throws Exception {
 		String urlStr = "http://192.168.1.201:8080/executeTestScript";
 //		String urlStr = "http://localhost:8080/executeTestScript";
+		String str=env.getProperty("message.default.welcome");
+		System.out.println(instanceName+"instanceName"+str);
 		
 		try {
 			runWithParams(urlStr, "364");
