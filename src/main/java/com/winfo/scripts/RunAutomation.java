@@ -1,7 +1,7 @@
 package com.winfo.scripts;
 
 import java.io.IOException;
-
+import com.winfo.interface1.SeleniumKeyWordsInterface;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,9 +12,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -29,14 +31,17 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
-public class RunAutomation extends SeleniumKeyWords {
+public class RunAutomation {
 
+	@Autowired
+	 @Qualifier("udg")
+	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface;
 	@Autowired
 	TestCaseDataService dataService;
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 	public String c_url = null;
-
+	Logger log = Logger.getLogger("Logger");
 	/*
 	 * public void report() throws IOException, DocumentException,
 	 * com.itextpdf.text.DocumentException {
@@ -150,9 +155,9 @@ public class RunAutomation extends SeleniumKeyWords {
 					}
 					executordependent.shutdown();
 				}
-				createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
-				createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
-				createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
+				SeleniumKeyWordsInterface.createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
+				SeleniumKeyWordsInterface.createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
+				SeleniumKeyWordsInterface.createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
 				increment=0;
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
@@ -274,7 +279,7 @@ public class RunAutomation extends SeleniumKeyWords {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 			Date startdate = new Date();
 			 fetchConfigVO.setStarttime(startdate);
-			DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
+			 SeleniumKeyWordsInterface.DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
@@ -317,7 +322,7 @@ public class RunAutomation extends SeleniumKeyWords {
 							dataSource = new ConnectToSQL();
 						log.info("Navigating to Login into Application Action");
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
+							SeleniumKeyWordsInterface.loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
 								param3, fetchMetadataVO.getInput_value(),
 								dataSource.getPassword(param, userName, fetchConfigVO));
 						userName = null;
@@ -329,20 +334,20 @@ public class RunAutomation extends SeleniumKeyWords {
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
-						navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
+						SeleniumKeyWordsInterface.navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "openTask":
 						log.info("Navigating to openTask Action");
-						openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
+						SeleniumKeyWordsInterface.openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "Logout":
-						logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
+						SeleniumKeyWordsInterface.logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
 						break;
 					case "SendKeys":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -352,7 +357,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					case "textarea":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") 
 						{
-						textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -361,7 +366,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "Dropdown Values":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						dropdownValues(driver, param1, param2, param3, fetchMetadataVO.getInput_value(),
+							SeleniumKeyWordsInterface.dropdownValues(driver, param1, param2, param3, fetchMetadataVO.getInput_value(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
 						}
@@ -370,7 +375,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "Table SendKeys":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -379,7 +384,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "multiplelinestableSendKeys":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -388,7 +393,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "Table Dropdown Values":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -397,7 +402,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "clickLinkAction":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -406,7 +411,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "clickCheckbox":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							SeleniumKeyWordsInterface.clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 						break;
 						}
 						else {
@@ -414,7 +419,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "clickRadiobutton":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -423,7 +428,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						}
 					case "selectAValue":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -431,44 +436,44 @@ public class RunAutomation extends SeleniumKeyWords {
 							break;
 						}
 					case "clickTableLink":
-						clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickLink":
-						clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickNotificationLink":
-						clickNotificationLink(driver, param1, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clickNotificationLink(driver, param1, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickMenu":
-						clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickImage":
-						clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickTableImage":
-						clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+						SeleniumKeyWordsInterface.clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "clickExpandorcollapse":
-						clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton":		  
-						  clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						    message=getErrorMessages(driver);
-						    String message1=getErrorMessages(driver);
+						SeleniumKeyWordsInterface.clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						    message=SeleniumKeyWordsInterface.getErrorMessages(driver);
+						    String message1=SeleniumKeyWordsInterface.getErrorMessages(driver);
 	                     if(message != null&& !message.startsWith("Example")) {
 	                           fetchConfigVO.setErrormessage(message);
-	                           screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
+	                           SeleniumKeyWordsInterface.screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
 	                          throw new IllegalArgumentException("Erroe occured");
 	                        }
-	                     screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+	                     SeleniumKeyWordsInterface.screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						break;
 					case "tableRowSelect":
-						tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton Dropdown":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/
 						break;
 						}
@@ -476,35 +481,35 @@ public class RunAutomation extends SeleniumKeyWords {
 							break;
 						}
 					case "mousehover":
-						mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "scrollUsingElement":
-						scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
+						SeleniumKeyWordsInterface.scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "moveToElement":
-						moveToElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.moveToElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchToDefaultFrame":
-						switchToDefaultFrame(driver);
+						SeleniumKeyWordsInterface.switchToDefaultFrame(driver);
 						break;
 					case "switchToFrame":
-						switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "windowhandle":
-						windowhandle(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.windowhandle(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "dragAnddrop":
-						dragAnddrop(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
+						SeleniumKeyWordsInterface.dragAnddrop(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickFilter":
-						clickFilter(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
+						SeleniumKeyWordsInterface.clickFilter(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "selectByText":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-						selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							SeleniumKeyWordsInterface.selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -512,48 +517,48 @@ public class RunAutomation extends SeleniumKeyWords {
 							break;
 						}
 					case "copy":
-						copy(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.copy(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copynumber":
-						globalValueForSteps = copynumber(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						globalValueForSteps = SeleniumKeyWordsInterface.copynumber(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copyy":
-						copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copytext":
-						copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clear":
-						clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "enter":
-						enter(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.enter(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "tab":
-						tab(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.tab(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "paste":
-						paste(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,
+						SeleniumKeyWordsInterface.paste(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,
 								globalValueForSteps);
 						break;
 					case "uploadFileAutoIT":
-						uploadFileAutoIT(fetchMetadataVO.getField_type(), fetchMetadataVO);
+						SeleniumKeyWordsInterface.uploadFileAutoIT(fetchMetadataVO.getField_type(), fetchMetadataVO);
 						break;
 					case "windowclose":
-						windowclose(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.windowclose(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchDefaultContent":
-						switchDefaultContent(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.switchDefaultContent(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchParentWindow":
-						switchParentWindow(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchToParentWindow":
-						switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
+						SeleniumKeyWordsInterface.switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "DatePicker":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							SeleniumKeyWordsInterface.datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 						break;
 						}
 						else {
@@ -581,7 +586,7 @@ public class RunAutomation extends SeleniumKeyWords {
 						// passcount = passcount+1;
 						 Date enddate = new Date();
 						 fetchConfigVO.setEndtime(enddate);
-						createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
+						 SeleniumKeyWordsInterface.createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
 						try {
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 						 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id,enddate);
@@ -636,7 +641,7 @@ public class RunAutomation extends SeleniumKeyWords {
 					 Date enddate = new Date();
 					 fetchConfigVO.setEndtime(enddate);
 					 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id,enddate);
-					createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
+					 SeleniumKeyWordsInterface.createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					
