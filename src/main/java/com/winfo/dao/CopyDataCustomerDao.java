@@ -182,10 +182,10 @@ public class CopyDataCustomerDao {
 			   master.setScenario_name(String.valueOf(obj[7]));
 			   }
 			   if(String.valueOf(obj[8]).equals("null")) {
-				   master.setScenario_name(null);
+				   master.setScenario_description(null);
 	           }
 			   else {
-			   master.setScenario_name(String.valueOf(obj[8]));
+			   master.setScenario_description(String.valueOf(obj[8]));
 			   }
 			   if(String.valueOf(obj[9]).equals("null")) {
 				   master.setExpected_result(null);

@@ -128,10 +128,10 @@ public class CustomerToCentralGetDao {
 			   fetchData.setScenario_name(String.valueOf(obj[7]));
 			   }
 			   if(String.valueOf(obj[8]).equals("null")) {
-				   fetchData.setScenario_name(null);
+				   fetchData.setScenario_description(null);
 	           }
 			   else {
-			   fetchData.setScenario_name(String.valueOf(obj[8]));
+			   fetchData.setScenario_description(String.valueOf(obj[8]));
 			   }
 			   if(String.valueOf(obj[9]).equals("null")) {
 				   fetchData.setExpected_result(null);
