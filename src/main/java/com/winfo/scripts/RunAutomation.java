@@ -37,11 +37,11 @@ import java.util.Date;
 @RefreshScope
 @Component
 public class RunAutomation {
-//	@Value("${message.default.welcome}")
-//	private String instanceName;
+	@Value("${message.default.welcome}")
+	private String instanceName;
 	@Autowired(required=true)
-	 @Qualifier("${instance}")
 	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface;
+
 	@Autowired
 	TestCaseDataService dataService;
 	@Autowired

@@ -84,9 +84,10 @@ import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
 @Service
-@Component
+//@Component
 //@Qualifier("arlo")
-public abstract class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface{
+@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo")
+public abstract  class ARLOSeleniumKeywords  implements SeleniumKeyWordsInterface {
 
 	 Logger logger = LogManager.getLogger(SeleniumKeyWords.class);
 	/*
