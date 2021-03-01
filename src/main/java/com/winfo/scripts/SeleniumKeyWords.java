@@ -3304,13 +3304,14 @@ System.out.println("entered to getFailFileNameListNew");
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
+
+			String xpath = "//div[contains(@style,'display: block')]//div[normalize-space(text())='param1']";
+			service.saveXpathParams(param1, param2, scripNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
-			String xpath = "//div[contains(@style,'display: block')]//div[normalize-space(text())='param1']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -3326,6 +3327,8 @@ System.out.println("entered to getFailFileNameListNew");
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//div[normalize-space(text())='param1']";
+			service.saveXpathParams(param1, param2, scripNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
