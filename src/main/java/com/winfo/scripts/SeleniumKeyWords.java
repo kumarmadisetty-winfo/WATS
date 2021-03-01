@@ -12280,7 +12280,7 @@ System.out.println(e);
 			System.out.println(e);
 		}
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 			WebElement waittext = driver
 					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
 			driver.switchTo().frame(waittext);
