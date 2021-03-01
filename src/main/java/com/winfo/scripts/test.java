@@ -16,10 +16,10 @@ public class test {
 	@Value("${message.default.welcome}")
 	private static String instanceName;
 	public static void main(String[] args) throws Exception {
-		String urlStr = "http://192.168.1.201:8080/executeTestScript";
-//		String urlStr = "http://localhost:8080/executeTestScript";
-		String str=env.getProperty("message.default.welcome");
-		System.out.println(instanceName+"instanceName"+str);
+//		String urlStr = "http://192.168.1.201:8080/executeTestScript";
+		String urlStr = "http://localhost:8080/executeTestScript";
+//		String str=env.getProperty("message.default.welcome");
+//		System.out.println(instanceName+"instanceName"+str);
 		
 		try {
 			runWithParams(urlStr, "364");

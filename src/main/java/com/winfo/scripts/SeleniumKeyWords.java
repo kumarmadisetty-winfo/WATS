@@ -67,6 +67,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -126,8 +127,8 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
 @Service
-@Component
-@Qualifier("udg")
+//@Component
+@ConditionalOnProperty(name = "message.default.welcome", havingValue = "udg")
 public class SeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 @Autowired
