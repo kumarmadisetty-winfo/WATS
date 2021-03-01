@@ -12249,6 +12249,8 @@ System.out.println(e);
 			Thread.sleep(5000);
 			WebElement waittext = driver
 					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
 			String scripNumber=fetchMetadataVO.getScript_number();
 			String xpath="//h1[normalize-space(text())='inputParam']/following::iframe[1]";
@@ -12260,6 +12262,8 @@ System.out.println(e);
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,'" + inputParam + "')]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
 			String scripNumber=fetchMetadataVO.getScript_number();
 			String xpath="//iframe[contains(@id,'inputParam')]";
@@ -12271,6 +12275,8 @@ System.out.println(e);
 		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver.findElement(By.xpath("//iframe[@title='" + inputParam + "']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
 			String scripNumber=fetchMetadataVO.getScript_number();
 			String xpath="//iframe[@title='inputParam']";
@@ -12282,7 +12288,9 @@ System.out.println(e);
 		try {
 			Thread.sleep(10000);
 			WebElement waittext = driver
-					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
+					.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
 			String scripNumber=fetchMetadataVO.getScript_number();
 			String xpath="//*[normalize-space(text())='inputParam']/following::iframe[1]";
