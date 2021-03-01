@@ -127,8 +127,9 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
 @Service
-//@Component
-@ConditionalOnProperty(name = "message.default.welcome", havingValue = "udg")
+@Component
+//@Qualifier("udg")
+//@ConditionalOnProperty(name = "message.default.welcome", havingValue = "udg")
 public class SeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 @Autowired

@@ -462,16 +462,17 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://localhost:8888</config.server.uri>
+				<!-- <config.server.uri>http://localhost:8888</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hub</profiles>
+				<profiles>hub</profiles> -->
+				<instance>SeleniumKeyWords</instance>
 			</properties>
 		</profile>
 
 
 
 <profile>
-			<id>hub</id>
+			<id>Arlo</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -536,158 +537,14 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://localhost:8888</config.server.uri>
+				<!-- <config.server.uri>http://localhost:8888</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hub</profiles>
+				<profiles>hub</profiles> -->
+				<instance>arlo</instance>
 			</properties>
 
 		</profile>
-	<profile>
-			<id>suport</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<finalName>dap-app-ingestion</finalName>
-
-				<plugins>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>default-resources</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
-									<useDefaultDelimiters>false</useDefaultDelimiters>
-									<delimiters>
-										<delimiter>#</delimiter>
-									</delimiters>
-									<resources>
-										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
-											<includes>
-												<include>*.properties</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-						<configuration>
-							<manifest>
-								<addDefaultImplementationEntries>true
-								</addDefaultImplementationEntries>
-							</manifest>
-							<archive>
-								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
-									</Specification-Version>
-									<Implementation-Version>${build.number}
-									</Implementation-Version>
-								</manifestEntries>
-							</archive>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<properties>
-				<config.server.uri>http://localhost:8888</config.server.uri>
-				<app.name>application</app.name>
-				<profiles>suport</profiles>
-				
-			</properties>
-
-		</profile>
-	<profile>
-			<id>udg</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<finalName>dap-app-ingestion</finalName>
-
-				<plugins>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-clean-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>default-resources</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
-									<useDefaultDelimiters>false</useDefaultDelimiters>
-									<delimiters>
-										<delimiter>#</delimiter>
-									</delimiters>
-									<resources>
-										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
-											<includes>
-												<include>*.properties</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-						<configuration>
-							<manifest>
-								<addDefaultImplementationEntries>true
-								</addDefaultImplementationEntries>
-							</manifest>
-							<archive>
-								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
-									</Specification-Version>
-									<Implementation-Version>${build.number}
-									</Implementation-Version>
-								</manifestEntries>
-							</archive>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<properties>
-				<config.server.uri>http://localhost:8888</config.server.uri>
-				<app.name>application</app.name>
-				<profiles>udg</profiles>
-				
-			</properties>
-
-		</profile> 
+	
 		
 	</profiles>
 </project>

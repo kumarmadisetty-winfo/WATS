@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.WebDriver;
+import org.springframework.stereotype.Service;
 
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
-
+@Service
 public interface SeleniumKeyWordsInterface {
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,

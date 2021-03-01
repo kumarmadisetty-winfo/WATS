@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -34,11 +35,12 @@ import java.util.Date;
 
 @Service
 @RefreshScope
+@Component
 public class RunAutomation {
-	@Value("${message.default.welcome}")
-	private String instanceName;
+//	@Value("${message.default.welcome}")
+//	private String instanceName;
 	@Autowired(required=true)
-	 @Qualifier("${message.default.welcome}")
+	 @Qualifier("${instance}")
 	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface;
 	@Autowired
 	TestCaseDataService dataService;
@@ -93,7 +95,7 @@ public class RunAutomation {
 //			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 //	        LocalDateTime now = LocalDateTime.now();
 //	        String start_time=dtf.format(now);
-			System.out.println("instanceName"+instanceName);
+//			System.out.println("instanceName"+instanceName);
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			//FetchMetadataVO fetchMetadataVO = (FetchMetadataVO) dataService.getFetchMetaData(args, uri);
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;

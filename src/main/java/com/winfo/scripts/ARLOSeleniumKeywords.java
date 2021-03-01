@@ -54,12 +54,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 //import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -82,7 +84,8 @@ import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
 @Service
-@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo")
+@Component
+//@Qualifier("arlo")
 public abstract class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface{
 
 	 Logger logger = LogManager.getLogger(SeleniumKeyWords.class);
