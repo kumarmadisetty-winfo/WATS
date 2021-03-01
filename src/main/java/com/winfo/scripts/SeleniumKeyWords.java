@@ -12285,7 +12285,7 @@ System.out.println(e);
 					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
 			driver.switchTo().frame(waittext);
 			String scripNumber=fetchMetadataVO.getScript_number();
-			String xpath="//h1[normalize-space(text())='inputParam']/following::iframe[1]";
+			String xpath="//*[normalize-space(text())='inputParam']/following::iframe[1]";
 			service.saveXpathParams(inputParam,"",scripNumber,xpath);
 			return;
 		} catch (Exception e) {
