@@ -48,6 +48,7 @@ public class RunAutomation {
 	DataBaseEntry dataBaseEntry;
 	public String c_url = null;
 	Logger log = Logger.getLogger("Logger");
+	
 	/*
 	 * public void report() throws IOException, DocumentException,
 	 * com.itextpdf.text.DocumentException {

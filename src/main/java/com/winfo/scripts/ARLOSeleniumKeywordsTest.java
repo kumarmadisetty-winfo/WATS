@@ -1,7 +1,15 @@
 package com.winfo.scripts;
 
 
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import org.bytedeco.javacpp.avcodec;
+import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.OpenCVFrameConverter;
 import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -14,6 +22,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,17 +44,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -55,6 +67,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 //import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
@@ -67,9 +80,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
@@ -77,20 +87,61 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
+import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
+
+//import blank.FFmpegFrameRecorder;
+//import blank.IplImage;
+//import blank.OpenCVFrameConverter;
+
+import org.apache.log4j.Logger;
+import org.jfree.data.general.DefaultPieDataset;
+import com.itextpdf.text.Rectangle;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.BaseColor;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.block.LineBorder;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
+import com.itextpdf.awt.DefaultFontMapper;
+import java.awt.geom.Rectangle2D;
 
 @Service
 //@Component
 //@Qualifier("arlo")
-@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo1")
-public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
-
-	 Logger logger = LogManager.getLogger(UDGSeleniumKeyWords.class);
+@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo")
+public  class ARLOSeleniumKeywordsTest implements SeleniumKeyWordsInterface{
+	Logger log = Logger.getLogger("Logger");
+	@Autowired
+	private DataBaseEntry  databaseentry;
+	@Autowired
+	ScriptXpathService service;
+//	 Logger logger = LogManager.getLogger(UDGSeleniumKeyWords.class);
 	/*
 	 * private  Integer ElementWait = Integer
 	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
@@ -118,7 +169,7 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 	}
 	
-	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO,
+	public  void openTask(WebDriver driver, FetchConfigVO fetchConfigVO,
 			FetchMetadataVO fetchMetadataVO, String type1, String type2, String param1, String param2,int count) throws Exception {
 		String param3 = "Tasks";
 		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
@@ -139,56 +190,72 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 
 	public  void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO,
 			FetchMetadataVO fetchMetadataVO) {
-		try {
+	try {
 			driver.navigate().to(fetchConfigVO.getApplication_url());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
-			logger.info("Navigated to given Url");
+			String scripNumber = fetchMetadataVO.getScript_number();
+           	log.error("Failed to logout " +scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During Navigation");
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+      	  String scripNumber = fetchMetadataVO.getScript_number();
+	      log.error("failed to do navigate URl " +scripNumber);
+						screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
 	public  void mediumWait(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+	try {
 			int time = StringUtils.convertStringToInteger(inputData, 4);
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Successfully waited for 4 seconds "+scripNumber);
 		} catch (InterruptedException e) {
+	    	String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During meduim wait" +scripNumber);
 			e.printStackTrace();
+			// Restore interrupted state...
+						Thread.currentThread().interrupt();
 		}
 	}
 	
 	public  void shortwait(WebDriver driver, String inputData) {
-		try {
+	try {
 			int time = StringUtils.convertStringToInteger(inputData, 2);
 			int seconds = time * 1000;
+			log.info("Successfully shortwait");
 			Thread.sleep(seconds);
 		} catch (InterruptedException e) {
+			log.error("Failed During shortwait");
 			e.printStackTrace();
+			// Restore interrupted state...
+			Thread.currentThread().interrupt();
 		}
 	}
 	
 	public  void wait(WebDriver driver, String inputData) {
-		try {
+	try {
 			int time = StringUtils.convertStringToInteger(inputData, 8);
 			int seconds = time * 1000;
+			log.info("Successfully wait");
 			Thread.sleep(seconds);
 		} catch (InterruptedException e) {
+			log.error("Failed During wait");
 			e.printStackTrace();
-		}
+			// Restore interrupted state...
+			Thread.currentThread().interrupt();
+		}	
 	}
 	
 	public  void uploadImage(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO){
 		try {
 			String sharepoint = fetchConfigVO.getSharepoint_resp();
 			System.out.println(sharepoint);
-			String accessToken = getAccessToken();
+			String accessToken = getAccessToken(fetchConfigVO);
 			List imageUrlList = new ArrayList();
 			File imageDir = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name());
@@ -227,30 +294,23 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		  }
 	}
 	
-	public  String getAccessToken(){
-		  String acessToken = null;
-		  try {
+	public  String getAccessToken(FetchConfigVO fetchConfigVO){
+		String acessToken = null;  
+		try {
 			  RestTemplate restTemplate = new RestTemplate();
-
 			  HttpHeaders headers = new HttpHeaders();
 			  headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-			  
 			  MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-				
-			  map.add("grant_type", "password");
-			  map.add("client_id", "874400db-4a61-4f17-a697-8b1a3e9228ea");
-			  
-			  map.add("client_secret", "GBLpmY0UP04JOHsixinT9j]B_UKjTM@=");
-			  map.add("scope", "https://graph.microsoft.com/Sites.ReadWrite.All");
+			  map.add("grant_type", "client_credentials");
+			  map.add("client_id", fetchConfigVO.getClient_id());
+			  map.add("client_secret", fetchConfigVO.getClient_secret());
+			  map.add("scope", "https://graph.microsoft.com/.default");
 
-			  map.add("userName", "kaushik.sekaran@winfosolutions.com");
-			  map.add("password", "WatsSelenium@1");
 
 			  HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 			  ResponseEntity<Object> response = restTemplate.exchange(
-					  "https://login.microsoftonline.com/7c51d221-e93b-4397-b4c7-775faf9f6d10/oauth2/v2.0/token",
+					  "https://login.microsoftonline.com/"+fetchConfigVO.getTenant_id()+"/oauth2/v2.0/token",
 					  HttpMethod.POST, entity, Object.class);
-				
 			  System.out.println(response);
 
 			  @SuppressWarnings("unchecked")
@@ -412,22 +472,178 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		return fileNameList;
 	}
 	
-	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-
+	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
+System.out.println("entered to getFailFileNameListNew");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 		File[] listOfFiles = folder.listFiles();
-
+		String video_rec="no";
+		//String video_rec="yes";
 //		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
         List<File> fileList = new ArrayList<>();
         String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+       // String seqNumber = "1";
         for (File file : allFileList) {
             if(file.getName().startsWith(seqNumber+"_")) {
                 fileList.add(file);
             }
         }
+        System.out.println("before Collections.sort completed");
+		Collections.sort(fileList, new Comparator<File>() {
+
+			public int compare(File f1, File f2) {
+
+				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
+
+			}
+
+		});
+		System.out.println("after Collections.sort completed");
+		List<String> fileNameList = new ArrayList<String>();
+		ArrayList<String> linksall = new ArrayList<String>();
+		ArrayList<String> links1 = new ArrayList<String>();
+		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+
+        BufferedImage image = null;
+        image = ImageIO.read(file);
+        BufferedImage logo = null;
+        logo = ImageIO.read(file1);
+        Graphics g = image.getGraphics();
+        g.setColor(Color.black);
+        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+        g.setFont(font);
+        String details= fileList.get(0).getName();
+       //String details= seqList.get(0).getName();
+       	String ScriptNumber = details.split("_")[3];
+		String TestRun = details.split("_")[4];
+		String Status = details.split("_")[6];
+		String status = Status.split("\\.")[0];
+		String Scenario = details.split("_")[2];
+		String imagename=TestRun+ScriptNumber;
+        String TName = fetchMetadataListVO.get(0).getTest_run_name();
+        String no = details.split("_")[0];
+        Date Starttime = fetchConfigVO.getStarttime();
+        Date endtime=fetchConfigVO.getEndtime();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String Starttime1=dateFormat.format(Starttime);
+//Changed the executed by variable
+        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
+        String endtime1=dateFormat.format(endtime);
+        long diff=endtime.getTime() - Starttime.getTime();
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+        String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+        g.drawString("TEST SCRIPT DETAILS",450, 50);
+        g.drawString("Test Run Name : " +  TName, 50, 100);
+        g.drawString("Script Number : " +  ScriptNumber, 50, 150);
+        g.drawString("Scenario Name :"+Scenario, 50, 200);
+        g.drawString("Status : "+status, 50, 250);
+        g.drawString("Executed By :"+ExeBy, 50, 300);
+        g.drawString("Start Time :"+Starttime1, 50, 350);
+        g.drawString("End Time :"+endtime1, 50, 400);
+        g.drawString("Execution Time : "+ExecutionTime, 50, 450);
+        g.drawImage(logo,1012,15,null);
+        g.dispose();
+        System.out.println("before ImageIO.write");
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+        
+        BufferedImage image1 = null;
+        image1 = ImageIO.read(file);
+        Graphics g1 = image1.getGraphics();
+        g1.setColor(Color.red);
+        java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+        g1.setFont(font1);
+        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+        g1.drawImage(logo,1012,15,null);
+        g1.dispose();
+//        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
+        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+        File f11=new File(imgpath2);
+        File[] f22=f11.listFiles();
+        System.out.println("before Failed.jpg");
+		if (fileList.get(0).getName().endsWith("Failed.jpg")) {
+			for(File f33:f22) {
+	        	if(f33.getAbsolutePath().contains("first")) {
+	        		linksall.add(f33.getAbsolutePath());
+	        		linksall.set(0,f33.getAbsolutePath());
+	        	}
+	        	if(f33.getAbsolutePath().contains("last")) {
+	        		linksall.add(f33.getAbsolutePath());
+	        		linksall.add(f33.getAbsolutePath());  
+	        		linksall.set(1,f33.getAbsolutePath());
+
+	        	}}
+			fetchConfigVO.setStatus1("Fail");
+			fileNameList.add(fileList.get(0).getName());
+			links1.add(fileList.get(0).getAbsolutePath());
+            links1.add(linksall.get(1));
+            System.out.println("added links1 list");
+			for (int i = 1; i < fileList.size(); i++) {
+
+				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+					 links1.add(fileList.get(i).getAbsolutePath());
+					fileNameList.add(fileList.get(i).getName());
+
+				} else {
+
+					
+
+				}
+
+			}
+
+			links1.add(linksall.get(0));
+			Collections.reverse(links1);
+			Collections.reverse(fileNameList);
+			 System.out.println("Collections.reverse");
+		}
+
+		// targetFileList.addAll(seqList);
+
+		/*
+		 * for (String fileName : fileNameList) {
+		 * 
+		 * System.out.println("Target File : " + fileName);
+		 * 
+		 * }
+		 */
+		if(video_rec.equalsIgnoreCase("Y")) {
+			String name=no+"_"+ScriptNumber+".mp4";
+			convertJPGtoMovie(null,links1,fetchMetadataListVO,fetchConfigVO,name);
+	          }
+		return fileNameList;
+	}
+
+
+	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
+
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
+
+		File[] listOfFiles = folder.listFiles();
+//		String video_rec=fetchConfigVO.getEnable_video();
+		String video_rec="no";
+//		List<File> fileList = Arrays.asList(listOfFiles);
+		List<File> allFileList = Arrays.asList(listOfFiles);
+        List<File> fileList = new ArrayList<>();
+        String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+        //String seqNumber = "1";
+        for (File file : allFileList) {
+            if(file.getName().startsWith(seqNumber+"_")) {
+                fileList.add(file);
+            }
+        }
+        
 
 		Collections.sort(fileList, new Comparator<File>() {
 
@@ -438,27 +654,103 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			}
 
 		});
-
+		 
 		List<String> fileNameList = new ArrayList<String>();
+		ArrayList<String> linksall = new ArrayList<String>();
+		ArrayList<String> links1 = new ArrayList<String>();
+		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+		
+        BufferedImage image = null;
+        image = ImageIO.read(file);
+        BufferedImage logo = null;
+        logo = ImageIO.read(file1);
+        Graphics g = image.getGraphics();
+        g.setColor(Color.black);
+        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+        g.setFont(font);
+        String details= fileList.get(0).getName();
+        //String details= seqList.get(0).getName();
+        String ScriptNumber = details.split("_")[3];
+ 		String TestRun = details.split("_")[4];
+ 		String Status = details.split("_")[6];
+ 		String status = Status.split("\\.")[0];
+ 		String Scenario = details.split("_")[2];
+ 		String imagename=TestRun+ScriptNumber;
+        String TName = fetchMetadataListVO.get(0).getTest_run_name();
+        String no = details.split("_")[0];
+        Date Starttime = fetchConfigVO.getStarttime();
+        Date endtime=fetchConfigVO.getEndtime();
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String Starttime1=dateFormat.format(Starttime);
+//Changed the executed by variable
+        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
+        String endtime1=dateFormat.format(endtime);
+        long diff=endtime.getTime() - Starttime.getTime();
+        long diffSeconds = diff / 1000 % 60;
+        long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+        String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+        g.drawString("TEST SCRIPT DETAILS",450, 50);
+        g.drawString("Test Run Name : " +  TName, 50, 100);
+        g.drawString("Script Number : " +  ScriptNumber, 50, 150);
+        g.drawString("Scenario Name :"+Scenario, 50, 200);
+        g.drawString("Status : "+status, 50, 250);
+        g.drawString("Executed By :"+ExeBy, 50, 300);
+        g.drawString("Start Time :"+Starttime1, 50, 350);
+        g.drawString("End Time :"+endtime1, 50, 400);
+        g.drawString("Execution Time : "+ExecutionTime, 50, 450);
+        g.drawImage(logo,1012,15,null);
+        g.dispose();
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+        
+        BufferedImage image1 = null;
+        image1 = ImageIO.read(file);
+        Graphics g1 = image1.getGraphics();
+        g1.setColor(Color.red);
+        java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+        g1.setFont(font1);
+        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+        g1.drawImage(logo,1150,15,null);
+        g1.dispose();
+        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
+        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+        File f11=new File(imgpath2);
+        File[] f22=f11.listFiles();
+       
 
-		if (fileList.get(0).getName().endsWith("Failed.png")) {
-
+		if (!fileList.get(0).getName().endsWith("Failed.jpg")) {
+			for(File f33:f22)
+	        {
+	        	if(f33.getAbsolutePath().contains("first")) {
+			  linksall.add(f33.getAbsolutePath());
+	        	}
+	        }
+			fetchConfigVO.setStatus1("Pass");
 			fileNameList.add(fileList.get(0).getName());
-
+			links1.add(fileList.get(0).getAbsolutePath());
 			for (int i = 1; i < fileList.size(); i++) {
 
-				if (!fileList.get(i).getName().endsWith("Failed.png")) {
+				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+					links1.add(fileList.get(i).getAbsolutePath());
 
 					fileNameList.add(fileList.get(i).getName());
 
 				} else {
 
-					break;
+					
 
 				}
 
 			}
 
+			 links1.add(linksall.get(0));
+			 Collections.reverse(links1);
 			Collections.reverse(fileNameList);
 
 		}
@@ -472,85 +764,25 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		 * 
 		 * }
 		 */
-
+		if(video_rec.equalsIgnoreCase("Y")) {
+			String name=no+"_"+ScriptNumber+".mp4";
+			convertJPGtoMovie(null,links1,fetchMetadataListVO,fetchConfigVO,name);
+	          }
 		return fileNameList;
 
 	}
 
-	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-
-//		List<File> fileList = Arrays.asList(listOfFiles);
-		List<File> allFileList = Arrays.asList(listOfFiles);
-        List<File> fileList = new ArrayList<>();
-        String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-        for (File file : allFileList) {
-            if(file.getName().startsWith(seqNumber+"_")) {
-                fileList.add(file);
-            }
-        }
-
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-
-		List<String> fileNameList = new ArrayList<String>();
-
-		if (!fileList.get(0).getName().endsWith("Failed.png")) {
-
-			fileNameList.add(fileList.get(0).getName());
-
-			for (int i = 1; i < fileList.size(); i++) {
-
-				if (!fileList.get(i).getName().endsWith("Failed.png")) {
-
-					fileNameList.add(fileList.get(i).getName());
-
-				} else {
-
-					break;
-
-				}
-
-			}
-
-			Collections.reverse(fileNameList);
-
-		}
-
-		// targetFileList.addAll(seqList);
-
-		/*
-		 * for (String fileName : fileNameList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-
-		return fileNameList;
-
-	}
-
-	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//		File folder = new File("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/");
-		File[] listOfFiles = folder.listFiles();
-
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
-
+		int passcount=0;
+		int failcount=0;
 		for (File file : Arrays.asList(listOfFiles)) {
 
 			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
@@ -566,7 +798,8 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-
+		ArrayList<String> links = new ArrayList<String>();
+		String firstimagelink=null;
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
@@ -580,34 +813,119 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 				}
 
 			});
-
 			List<String> seqFileNameList = new ArrayList<String>();
+			ArrayList<String> links1 = new ArrayList<String>();
+			ArrayList<String> linksall = new ArrayList<String>();
 
-			if (!seqList.get(0).getName().endsWith("Failed.png")) {
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
+			 BufferedImage image = null;
+		     image = ImageIO.read(file);
+		     BufferedImage logo = null;
+		     logo = ImageIO.read(file1);
+		     Graphics g = image.getGraphics();
+		     g.setColor(Color.black);
+		     java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+		     g.setFont(font);
+		      
+		     String details= seqList.get(0).getName();
+		     String ScriptNumber = details.split("_")[3];
+		     String TestRun = details.split("_")[4];
+		     String Status = details.split("_")[6];
+		     String status = Status.split("\\.")[0];
+		     String Scenario = details.split("_")[2];
+		     String imagename=TestRun+ScriptNumber;
+		     String TName = fetchMetadataListVO.get(0).getTest_run_name();
+		     Date endtime=fetchConfigVO.getEndtime();
+		     Date TStarttime=fetchConfigVO.getStarttime1();
+		     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		     String TStarttime1=dateFormat.format(TStarttime);
+//Changed the executed by variable
+		     String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
+		     String endtime1=dateFormat.format(endtime);
+		     long Tdiff=endtime.getTime() - TStarttime.getTime();
+		     long TdiffSeconds = Tdiff / 1000 % 60;
+		     long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+		     long TdiffHours = Tdiff / (60 * 60 * 1000);
+		     String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+		     g.drawString("TEST SCRIPT DETAILS", 450, 50);
+		     g.drawString("Test Run Name : " +  TName, 50, 125);
+		     g.drawString("Script Number : " +  ScriptNumber, 50, 200);
+		     g.drawString("Scenario Name :"+Scenario, 50, 275);
+		     g.drawString("Status : "+status, 50, 350);
+		     g.drawString("Executed By :"+ExeBy, 50, 425);
+		     g.drawImage(logo,1012,15,null);
+////		 g.drawString("Start Time :"+TStarttime1, 50, 425);
+////		 g.drawString("End Time :"+endtime1, 50, 500);
+////		 g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+		     g.dispose();
+		     
+		     BufferedImage image2 = null;
+			 image2 = ImageIO.read(file);
+			 Graphics g2 = image2.getGraphics();
+			 g2.setColor(Color.black);
+			 g2.setFont(font);
+			 g2.drawString("TEST RUN SUMMARY", 450, 50);
+		     g2.drawString("Test Run Name : " +  TName, 50, 125);
+	         g2.drawString("Executed By :"+ExeBy, 50, 200);
+	         g2.drawString("Start Time :"+TStarttime1, 50, 275);
+	         g2.drawString("End Time :"+endtime1, 50, 350);
+	         g2.drawString("Execution Time : "+ExecutionTime, 50,425);
+	         g2.drawImage(logo,1012,15,null);
+		     g2.dispose();
+			 ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+			 //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+			 String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+			 String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+			 //String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
+			 //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+	         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
+	        	        
+	        File f11=new File(imgpath2);
+	        File[] f22=f11.listFiles();
+	        File f44=new File(imgpath3);
+	        firstimagelink=f44.getAbsolutePath();
+
+			
+	        if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
+				passcount++;
+				for(File f33:f22)
+		        {
+					if(f33.getAbsolutePath().contains(imagename)) {
+						  linksall.add(f33.getAbsolutePath());
+				        	}
+		        }
+				links1.add(seqList.get(0).getAbsolutePath());
 				seqFileNameList.add(seqList.get(0).getName());
 
 				for (int i = 1; i < seqList.size(); i++) {
 
-					if (!seqList.get(i).getName().endsWith("Failed.png")) {
-
+					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+						links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
 					} else {
 
-						break;
+						
 
 					}
 
 				}
 
+				links1.add(linksall.get(0));
+				Collections.reverse(links1);
 				Collections.reverse(seqFileNameList);
-
+				links.addAll(links1);
 				targetFileList.addAll(seqFileNameList);
+
 
 			}
 
-//                    targetFileList.addAll(seqList);
+////                    targetFileList.addAll(seqList);
 
 		}
 
@@ -619,19 +937,27 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		 * }
 		 */
 
+		fetchConfigVO.setPasscount(passcount);
+		fetchConfigVO.setFailcount(failcount);
+		if(video_rec.equalsIgnoreCase("yes")) {
+			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Passed_Video.mp4");
+	          }
+		System.out.println(targetFileList.size());
 		return targetFileList;
-
 	}
 
-	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//		File folder = new File("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/");
+	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
+
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-
+		//String video_rec=fetchConfigVO.getVideo_rec();
+		String video_rec="no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
-
+		int failcount=0;
+		int passcount=0;
 		for (File file : Arrays.asList(listOfFiles)) {
 
 			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
@@ -647,7 +973,8 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-
+		ArrayList<String> links = new ArrayList<String>();
+		String firstimagelink=null;
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
@@ -661,31 +988,132 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 				}
 
 			});
+			
 
 			List<String> seqFileNameList = new ArrayList<String>();
+			ArrayList<String> links1 = new ArrayList<String>();
+			ArrayList<String> linksall = new ArrayList<String>();
 
-			if (seqList.get(0).getName().endsWith("Failed.png")) {
+			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+			
+	        BufferedImage image = null;
+	        image = ImageIO.read(file);
+	        BufferedImage logo = null;
+	        logo = ImageIO.read(file1);
+	        Graphics g = image.getGraphics();
+	        g.setColor(Color.black);
+	        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+	        g.setFont(font);
+	        String details= seqList.get(0).getName();
+	        String ScriptNumber = details.split("_")[3];
+			String TestRun = details.split("_")[4];
+			String Status = details.split("_")[6];
+			String status = Status.split("\\.")[0];
+			String Scenario = details.split("_")[2];
+			String imagename=TestRun+ScriptNumber;
+	        String TName = fetchMetadataListVO.get(0).getTest_run_name();
+	        Date endtime=fetchConfigVO.getEndtime();
+	        Date TStarttime=fetchConfigVO.getStarttime1();
+	        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	        String TStarttime1=dateFormat.format(TStarttime);
+//Changed the executed by variable
+	        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
+	        String endtime1=dateFormat.format(endtime);
+	        long Tdiff=endtime.getTime() - TStarttime.getTime();
+	        long TdiffSeconds = Tdiff / 1000 % 60;
+	        long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+	        long TdiffHours = Tdiff / (60 * 60 * 1000);
+	        String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
 
+	        g.drawString("TEST SCRIPT DETAILS", 450, 50);
+	        g.drawString("Test Run Name : " +  TName, 50, 125);
+	        g.drawString("Script Number : " +  ScriptNumber, 50, 200);
+	        g.drawString("Scenario Name :"+Scenario, 50, 275);
+	        g.drawString("Status : "+status, 50, 350);
+	        g.drawString("Executed By :"+ExeBy, 50, 425);
+	        g.drawImage(logo,1150,15,null);
+////	    g.drawString("Start Time :"+TStarttime1, 50, 425);
+////	    g.drawString("End Time :"+endtime1, 50, 500);
+////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+	        g.dispose();
+	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+	        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
+	        
+	        BufferedImage image1 = null;
+	        image1 = ImageIO.read(file);
+	        Graphics g1 = image1.getGraphics();
+	        g1.setColor(Color.red);
+	        java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
+	        g1.setFont(font1);
+	        g1.drawImage(logo,1012,14,null);
+	        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+	        g1.dispose();
+	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+	        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
+	        
+	        BufferedImage image2 = null;
+	        image2 = ImageIO.read(file);
+	        Graphics g2 = image2.getGraphics();
+	        g2.setColor(Color.black);
+	        g2.setFont(font);
+	        g2.drawString("TEST RUN SUMMARY", 50, 50);
+	        g2.drawString("Test Run Name : " +  TName, 50, 125);
+            g2.drawString("Executed By :"+ExeBy, 50, 200);
+            g2.drawString("Start Time :"+TStarttime1, 50, 275);
+            g2.drawString("End Time :"+endtime1, 50, 350);
+            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
+            g2.drawImage(logo,1012,15,null);
+	        g2.dispose();
+	       	ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+	        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+	        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	        
+	        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+		    //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
+	        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+	        File f11=new File(imgpath2);
+	        File[] f22=f11.listFiles();
+	        File f44=new File(imgpath3);
+	        firstimagelink=f44.getAbsolutePath();
+	      
+			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
+				failcount++;
+				for(File f33:f22) {
+		        	if(f33.getAbsolutePath().contains(imagename)) {
+		        		linksall.add(f33.getAbsolutePath());
+		        		linksall.set(0,f33.getAbsolutePath());
+		        	}if(f33.getAbsolutePath().contains("last")) {
+		        		linksall.add(f33.getAbsolutePath());
+		        		linksall.add(f33.getAbsolutePath());  
+		        		linksall.set(1,f33.getAbsolutePath());
+
+	        	}
+		        }
 //                                   System.out.println("SEQ : "+seqEntry.getKey());
-
+				links1.add(seqList.get(0).getAbsolutePath());
+				links1.add(linksall.get(1));
 				seqFileNameList.add(seqList.get(0).getName());
 
 				for (int i = 1; i < seqList.size(); i++) {
 
-					if (!seqList.get(i).getName().endsWith("Failed.png")) {
-
+					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+						  links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
 					} else {
 
-						break;
+						
 
 					}
 
 				}
-
+				links1.add(linksall.get(0));
+				 Collections.reverse(links1);
 				Collections.reverse(seqFileNameList);
-
+				links.addAll(links1);
 				targetFileList.addAll(seqFileNameList);
 
 			}
@@ -693,28 +1121,35 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 //                    targetFileList.addAll(seqList);
 
 		}
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-
+//
+//		/*
+//		 * for (String fileName : targetFileList) {
+//		 * 
+//		 * System.out.println("Target File : " + fileName);
+//		 * 
+//		 * }
+//		 */
+		fetchConfigVO.setPasscount(passcount);
+		fetchConfigVO.setFailcount(failcount);
+		if(video_rec.equalsIgnoreCase("yes")) {
+			convertJPGtoMovie(firstimagelink,links,fetchMetadataListVO,fetchConfigVO,"Failed_Video.mp4");
+	          }
 		return targetFileList;
+
 
 	}
 
-	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-
+//		String video_rec=fetchConfigVO.getEnable_video();
+		 String video_rec="no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
-
+		int failcount=0;
+		int passcount=0;
 		for (File file : Arrays.asList(listOfFiles)) {
 
 			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
@@ -730,11 +1165,13 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-
+		ArrayList<String> finalLinks = new ArrayList<String>();
 		List<String> targetSuccessFileList = new ArrayList<>();
-
+		ArrayList<String> links = new ArrayList<String>();
+		ArrayList<String> links2 = new ArrayList<String>();
 		List<String> targetFailedFileList = new ArrayList<>();
-
+		String firstimagelink = null;
+		String TName = fetchMetadataListVO.get(0).getTest_run_name();
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
@@ -750,76 +1187,211 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			});
 
 			List<String> seqFileNameList = new ArrayList<String>();
+			ArrayList<String> links1 = new ArrayList<String>();
+						
+						ArrayList<String> linksall = new ArrayList<String>();
+						
 
-			if (!seqList.get(0).getName().endsWith("Failed.png")) {
+						File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+						File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
+						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+				        BufferedImage image = null;
+				        image = ImageIO.read(file);
+				        BufferedImage logo = null;
+				        logo = ImageIO.read(file1);
+				        Graphics g = image.getGraphics();
+				        g.setColor(Color.black);
+				        java.awt.Font font=new java.awt.Font("Calibri",  java.awt.Font.PLAIN, 36);
+				        g.setFont(font);
+				      
+				        String details= seqList.get(0).getName();
+				        String ScriptNumber = details.split("_")[3];
+						String TestRun = details.split("_")[4];
+						String Status = details.split("_")[6];
+						String status = Status.split("\\.")[0];
+						String Scenario = details.split("_")[2];
+						String imagename=TestRun+ScriptNumber;
+				      //String TName = fetchMetadataListVO.get(0).getTest_run_name();
+				        Date endtime=fetchConfigVO.getEndtime();
+				        Date TStarttime=fetchConfigVO.getStarttime1();
+				        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+				        String TStarttime1=dateFormat.format(TStarttime);
+//Changed the executed by variable
+				        String ExeBy=fetchMetadataListVO.get(0).getExecuted_by();
+				        String endtime1=dateFormat.format(endtime);
+				        long Tdiff=endtime.getTime() - TStarttime.getTime();
+				        long TdiffSeconds = Tdiff / 1000 % 60;
+				        long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+				        long TdiffHours = Tdiff / (60 * 60 * 1000);
+				        String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+				        g.drawString("TEST SCRIPT DETAILS", 450, 50);
+				        g.drawString("Test Run Name : " +  TName, 50, 125);
+				        g.drawString("Script Number : " +  ScriptNumber, 50, 200);
+				        g.drawString("Scenario Name :"+Scenario, 50, 275);
+				        g.drawString("Status : "+status, 50, 350);
+				        g.drawString("Executed By :"+ExeBy, 50, 425);
+				        g.drawImage(logo,1012,15,null);
+				        //g.drawString("Start Time :"+TStarttime1, 50, 425);
+				        //g.drawString("End Time :"+endtime1, 50, 500);
+				        //g.drawString("Execution Time : "+ExecutionTime, 50, 575);
+				        g.dispose();
+				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+				        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
+				        
+				        BufferedImage image1 = null;
+				        image1 = ImageIO.read(file);
+				        Graphics g1 = image1.getGraphics();
+				        g1.setColor(Color.red);
+				        java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
+				        g1.setFont(font1);
+				        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
+				        g1.drawImage(logo,1012,14,null);
+				        g1.dispose();
+				        
+				        BufferedImage image2 = null;
+				        image2 = ImageIO.read(file);
+				        Graphics g2 = image2.getGraphics();
+				        g2.setColor(Color.black);
+				        g2.setFont(font);
+				        g2.drawString("TEST RUN SUMMARY", 450, 50);
+				        g2.drawString("Test Run Name : " +  TName, 50, 125);
+			            g2.drawString("Executed By :"+ExeBy, 50, 200);
+			            g2.drawString("Start Time :"+TStarttime1, 50, 275);
+			            g2.drawString("End Time :"+endtime1, 50, 350);
+			            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
+			            g2.drawImage(logo,1012,15,null);
+				        g2.dispose();
+				       ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+				        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
+				       String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+				        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
+				        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+				        //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
+				        File f11=new File(imgpath2);
+				        File[] f22=f11.listFiles();
+				        File f44=new File(imgpath3);
+				        firstimagelink=f44.getAbsolutePath();
 
-				seqFileNameList.add(seqList.get(0).getName());
+						if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
+							passcount++;
+							for(File f33:f22)
+					        {
+					        	if(f33.getAbsolutePath().contains(imagename)) {
+							  linksall.add(f33.getAbsolutePath());
+					        	}
+					        }
+							links1.add(seqList.get(0).getAbsolutePath());
 
-//             	                      System.out.println("FIRST S STEP: "+seqList.get(0).getName());
+							seqFileNameList.add(seqList.get(0).getName());
 
-				for (int i = 1; i < seqList.size(); i++) {
+//			             	                      System.out.println("FIRST S STEP: "+seqList.get(0).getName());
 
-					if (!seqList.get(i).getName().endsWith("Failed.png")) {
+							for (int i = 1; i < seqList.size(); i++) {
 
-						seqFileNameList.add(seqList.get(i).getName());
+								if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+									links1.add(seqList.get(i).getAbsolutePath());
 
-//                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
+									seqFileNameList.add(seqList.get(i).getName());
 
-					} else {
+//			                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
 
-						break;
+								} else {
+
+									
+
+								}
+
+							}
+							links1.add(linksall.get(0));
+							Collections.reverse(links1);
+							Collections.reverse(seqFileNameList);
+							links.addAll(links1);
+							targetSuccessFileList.addAll(seqFileNameList);
+
+						} else {
+							failcount++;
+							for(File f33:f22) {
+					        	if(f33.getAbsolutePath().contains(imagename)) {
+					        		linksall.add(f33.getAbsolutePath());
+					        		linksall.set(0,f33.getAbsolutePath());
+					        	}
+					        	if(f33.getAbsolutePath().contains("last")) {
+					        		linksall.add(f33.getAbsolutePath());
+					        		linksall.add(f33.getAbsolutePath());  
+					        		linksall.set(1,f33.getAbsolutePath());
+
+					        	}
+					        }
+//			                                   System.out.println("SEQ : "+seqEntry.getKey());
+							links1.add(seqList.get(0).getAbsolutePath());
+							links1.add(linksall.get(1));
+//			                                   System.out.println("SEQ : "+seqEntry.getKey());
+
+							seqFileNameList.add(seqList.get(0).getName());
+
+//			                                   System.out.println("FIRST F STEP: "+seqList.get(0).getName());
+
+							for (int i = 1; i < seqList.size(); i++) {
+
+								if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
+									links1.add(seqList.get(i).getAbsolutePath());
+
+									seqFileNameList.add(seqList.get(i).getName());
+
+//			                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
+
+								} else {
+
+									
+
+								}
+
+							}
+
+							links1.add(linksall.get(0));
+							 Collections.reverse(links1);
+							Collections.reverse(seqFileNameList);
+							  links2.addAll(links1);
+							targetFailedFileList.addAll(seqFileNameList);
+
+
+						}
+
+//			                    targetFileList.addAll(seqList);
 
 					}
 
-				}
+					finalLinks.addAll(links);
+					finalLinks.addAll(links2);
+					targetFileList.addAll(targetSuccessFileList);
 
-				Collections.reverse(seqFileNameList);
+					targetFileList.addAll(targetFailedFileList);
 
-				targetSuccessFileList.addAll(seqFileNameList);
-
-			} else {
-
-//                                   System.out.println("SEQ : "+seqEntry.getKey());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-//                                   System.out.println("FIRST F STEP: "+seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.png")) {
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-//                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
-
-					} else {
-
-						break;
-
-					}
-
-				}
-
-				Collections.reverse(seqFileNameList);
-
-				targetFailedFileList.addAll(seqFileNameList);
-
-			}
-		}
-		targetFileList.addAll(targetSuccessFileList);
-		targetFileList.addAll(targetFailedFileList);
-		return targetFileList;
-
+					/*
+					 * for (String fileName : targetFileList) {
+					 * 
+					 * System.out.println("Target File : " + fileName);
+					 * 
+					 * }
+					 */
+					fetchConfigVO.setPasscount(passcount);
+					fetchConfigVO.setFailcount(failcount);
+					if(video_rec.equalsIgnoreCase("Y")) {
+						
+						convertJPGtoMovie(firstimagelink,finalLinks,fetchMetadataListVO,fetchConfigVO,TName+".mp4");
+				          }
+					return targetFileList;
 	}
 
 	public void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() +"\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-//			String Folder = "/oci/wats_objects/UDG/UDG/Ireland Aquilant (1711) AP/";
+			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			//String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
+//			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -836,6 +1408,9 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
 			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
 			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
+			//new change add ExecutedBy field
+			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
+			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
 			File theDir = new File(Folder);
 			if (!theDir.exists()) {
 				System.out.println("creating directory: " + theDir.getName());
@@ -850,66 +1425,626 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			} else {
 				System.out.println("Folder exist");
 			}
+			int passcount=fetchConfigVO.getPasscount();
+			int failcount=fetchConfigVO.getFailcount();
+//			Date Starttime = fetchConfigVO.getStarttime();
+			Date Tendtime=fetchConfigVO.getEndtime();
+			Date TStarttime=fetchConfigVO.getStarttime1();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
+			
+			String TStarttime1=dateFormat.format(TStarttime);
+			String Tendtime1=dateFormat.format(Tendtime);
+			  long Tdiff=Tendtime.getTime() - TStarttime.getTime();
+			    long TdiffSeconds = Tdiff / 1000 % 60;
+			    long TdiffMinutes = Tdiff / (60 * 1000) % 60;
+			    long TdiffHours = Tdiff / (60 * 60 * 1000);
+
 			Document document = new Document();
+			String start = "Execution Summary";
+			String pichart = "Pie-Chart";
+			String Report="Execution Report";
+			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
+			 Font fnt = FontFactory.getFont("Arial", 12);
+			 Font bf12 = FontFactory.getFont("Arial", 23);
+			 Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
+			 Font bf16 = FontFactory.getFont("Arial", 12, Font.UNDERLINE);
+			 Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE,BaseColor.GREEN);
+			 Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE,BaseColor.RED);
+			 Font bfBold = FontFactory.getFont("Arial", 23,BaseColor.WHITE);
+			 DefaultPieDataset dataSet = new DefaultPieDataset();
 			PdfWriter writer = null;
 			writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
+			Rectangle one = new Rectangle(1360,800);
+	        document.setPageSize(one);
 			document.open();
-			for (String image : fileNameList) {
-				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() +"\\" +  customer_Name + "\\" + test_Run_Name + "\\" + image);
-//				Image img = Image.getInstance("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/" + image);
+			System.out.println("before enter Images/wats_icon.png1");
+			Image img1 = Image.getInstance("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/wats_icon.png");
+				System.out.println("after enter Images/wats_icon.png1");
 
+				img1.scalePercent(65, 68);
+		         img1.setAlignment(Image.ALIGN_RIGHT);
+//		start to create testrun level reports	
+			if((passcount!=0||failcount!=0) &("Passed_Report.pdf".equalsIgnoreCase(pdffileName)||"Failed_Report.pdf".equalsIgnoreCase(pdffileName)||"Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {			
+//	     Start testrun to add details like start and end time,testrun name 			
+				String TestRun=test_Run_Name;
+//				String ExecutedBy=fetchConfigVO.getApplication_user_name();
+				String StartTime=TStarttime1;
+				String EndTime=Tendtime1;
+				String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+
+				String TR = "Test Run Name";
+				String SN = "Executed By" ;
+				String SN1 = "Start Time";
+				String S1 = "End Time";
+				String Scenarios1 = "Execution Time";
+
+				document.add(img1);
+				document.add(new Paragraph(Report,bfBold12));
+				document.add(Chunk.NEWLINE);
+				PdfPTable table1 = new PdfPTable(2); 
+				 table1.setWidths(new int[]{1, 1});
+				 table1.setWidthPercentage(100f);			 
+				 insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, S1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
+				 document.add(table1);
+//	   End testrun to add details like start and end time,testrun name 	
+ 
+//					Start Testrun to add Table and piechart 		 
+					if(passcount==0) {
+						
+						dataSet.setValue("Fail", failcount);
+					}else if(failcount==0) {
+						dataSet.setValue("Pass", passcount);
+					}
+					else {
+						dataSet.setValue("Pass", passcount);
+						dataSet.setValue("Fail", failcount);
+					}
+					double pass=Math.round((passcount * 100.0) /(passcount + failcount));
+					double fail=Math.round((failcount * 100.0) /(passcount + failcount));
+				
+					
+					 Rectangle one1 = new Rectangle(1360,1000);
+				        document.setPageSize(one1);
+				       
+					 document.newPage();
+					 document.add(img1);
+			        document.add(new Paragraph(start, bfBold12));
+			        document.add(Chunk.NEWLINE);
+			   	 DecimalFormat df1 = new DecimalFormat("0");
+			   	 DecimalFormat df2 = new DecimalFormat("0");
+//			Start Testrun to add Table   	 
+			   	PdfPTable table = new PdfPTable(3); 
+				 table.setWidths(new int[]{1, 1, 1});
+				 table.setWidthPercentage(100f);
+				 insertCell(table, "Status", Element.ALIGN_CENTER, 1, bfBold12);
+			     insertCell(table, "Total", Element.ALIGN_CENTER, 1, bfBold12);
+			     insertCell(table, "Percentage", Element.ALIGN_CENTER, 1, bfBold12);
+			     PdfPCell[] cells1 = table.getRow(0).getCells(); 
+				  for (int k=0;k<cells1.length;k++){
+				     cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
+				  }
+					if("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {			
+
+					     insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table, df1.format(passcount),  Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table,df2.format(pass)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							}else if("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+					     insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table, df1.format(failcount),  Element.ALIGN_CENTER, 1, bf12);
+					     insertCell(table, df2.format(fail)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							}else {
+								insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, df1.format(passcount),  Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table,df2.format(pass)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, df1.format(failcount),  Element.ALIGN_CENTER, 1, bf12);
+							     insertCell(table, df2.format(fail)+"%",  Element.ALIGN_CENTER, 1, bf12);
+							}
+			     document.setMargins(20, 20, 20, 20);
+			     document.add(table);
+//			End Testrun to add Table
+//			Start Testrun to add piechart 
+			     if("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+			     Chunk ch = new Chunk(pichart, bfBold);
+			     ch.setTextRise(-18);
+			     ch.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
+			     
+			     Paragraph p1 = new Paragraph(ch);
+			     p1.setSpacingBefore(50);
+			     document.add(p1);    
+			        
+			     JFreeChart chart = ChartFactory.createPieChart(
+						 " ", dataSet, true, true, false);
+					Color c1=new Color(102, 255, 102);
+					Color c=new Color(253, 32, 32);
+					
+					LegendTitle legend = chart.getLegend();
+					 PiePlot piePlot = (PiePlot) chart.getPlot();
+					 piePlot.setSectionPaint("Pass",c1);
+					 piePlot.setSectionPaint("Fail", c);
+					 piePlot.setBackgroundPaint(Color.WHITE);
+					 piePlot.setOutlinePaint(null);
+					 piePlot.setLabelBackgroundPaint(null);
+					 piePlot.setLabelOutlinePaint(null);
+					 piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
+					 piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
+					 piePlot.setLabelShadowPaint(null);
+					 piePlot.setShadowXOffset(0.0D);
+					 piePlot.setShadowYOffset(0.0D); 
+					 piePlot.setLabelGenerator(null);
+					 piePlot.setBackgroundAlpha(0.4f);
+					 piePlot.setExplodePercent("Pass", 0.05);
+					 piePlot.setSimpleLabels(true);
+				   piePlot.setSectionOutlinesVisible(false);
+				   java.awt.Font f2=new java.awt.Font("", java.awt.Font.PLAIN, 22);
+				   piePlot.setLabelFont(f2);
+				   
+					   PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(
+					    		  "{2}", new DecimalFormat("0"), new DecimalFormat("0%")) ;
+					  piePlot.setLabelGenerator(gen);
+					  legend.setPosition(RectangleEdge.RIGHT);
+					   legend.setVerticalAlignment(VerticalAlignment.CENTER);
+				   piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
+				   legend.setFrame(BlockBorder.NONE);
+				   legend.setFrame(new LineBorder(Color.white, new BasicStroke(20f),
+						    new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
+				   
+				   java.awt.Font pass1=new java.awt.Font("", Font.NORMAL, 22);
+						  legend.setItemFont(pass1);
+						  PdfContentByte contentByte = writer.getDirectContent();
+							PdfTemplate template = contentByte.createTemplate(1000, 900);
+							Graphics2D graphics2d = template.createGraphics(700, 400,
+									new DefaultFontMapper());
+							Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600,
+									400);
+							chart.draw(graphics2d, rectangle2d);
+							graphics2d.dispose();
+					 		contentByte.addTemplate(template, 400, 100);
+			     }
+//			 End Testrun to add piechart 
+// End Testrun to add Table and piechart 
+//					 		Start to add page heading,all testrun names and states and page numbers	 		
+					 		int k=0,l=0;
+							String sno1 = "";
+							Map<Integer, Map<String,String>> toc = new TreeMap<>();
+							
+							Map<String, String> toc2 = new TreeMap<>();
+					 		for (String image : fileNameList) {
+					 			k++;
+					 			String sndo = image.split("_")[0];
+					 			String name = image.split("_")[3];
+					 			if(!sndo.equalsIgnoreCase(sno1)) {
+					 				Map<String, String> toc1 = new TreeMap<>();
+//					 				l=0;
+					 				for (String image1 : fileNameList) {
+					 					String Status = image1.split("_")[6];
+					 					String status = Status.split("\\.")[0];
+//					 					l++;
+					 					if(image1.startsWith(sndo+"_")&&image1.contains("Failed")) {
+					 						
+//					 						toc2.put(sndo,String.valueOf(l-2));	
+					 						toc2.put(sndo,"Failed"+l);	
+					 						l++;
+					 						}
+					 					}
+					 				
+					 				String str=String.valueOf(toc2.get(sndo));
+					 				toc1.put(name, str);
+					 				 toc.put(k,toc1);
+					 				
+					 			}
+					 			if (sndo!=null){
+									sno1=sndo;
+								}	
+					 		}	
+					 		sno1 = "";
+					 		 document.newPage();
+							 document.add(img1);
+//				Start to add page heading 
+					 		Anchor target2 = new Anchor(String.valueOf("Page Numbers"),bfBold);
+						    target2.setName(String.valueOf("details"));
+						    Chunk ch1 = new Chunk(String.format("Script Numbers"), bfBold);
+						    ch1.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);  
+						    Paragraph p2 = new Paragraph();
+						    p2.add(ch1);
+						    p2.add(new Chunk(new VerticalPositionMark()));
+						    p2.add(target2);
+						    document.add(p2);
+						    document.add(Chunk.NEWLINE);
+//				End to add page heading 
+						    
+//			 Start to add all testrun names and states and page numbers	
+					 	   Chunk dottedLine = new Chunk(new DottedLineSeparator());
+					 		for (Entry<Integer, Map<String,String>> entry : toc.entrySet()) {
+					 			Map<String,String> str1=entry.getValue();
+					 			for(Entry<String, String> entry1:str1.entrySet()) {
+					 	      Anchor click = new Anchor(String.valueOf(entry.getKey()),bf15);
+					 		    click.setReference("#"+String.valueOf(entry1.getKey()));
+					 		   Anchor click1 = new Anchor(String.valueOf("(Failed)"),bf14);
+					 		   click1.setReference("#"+String.valueOf(entry1.getValue()));
+					 		    Paragraph pr = new Paragraph();
+					 		    int value=entry.getKey();
+					 		   Anchor ca1 = new Anchor(String.valueOf(entry1.getKey()), bf15);
+					 		  ca1.setReference("#"+String.valueOf(entry1.getKey()));
+					 		  String compare=entry1.getValue();
+		                     if(!compare.equals("null")) {
+					 		   pr.add(ca1);
+					 		  
+					 		  pr.add(click1);
+					 		    pr.add(dottedLine);
+					 		    pr.add(click);
+					 		   document.add(Chunk.NEWLINE);
+					 		    document.add(pr);
+		                     }else {
+		                    	 Anchor click2 = new Anchor(String.valueOf("(Passed)"),bf13);
+		                    	 click2.setReference("#"+String.valueOf(entry1.getKey()));
+		                    	 pr.add(ca1);
+		  			 		   pr.add(click2);
+		  			 		    pr.add(dottedLine);
+		  			 		    pr.add(click);
+		  			 		   document.add(Chunk.NEWLINE);
+		  			 		    document.add(pr);
+		                     }
+					 			}  
+					 		}
+//			 End to add all testrun names and states and page numbers
+//			 End to add page heading,add all testrun names and states and page numbers	
+
+
+//	Start to add script details, screenshoots and pagenumbers and wats icon	
+			int i=0,j=0; 
+			for (String image : fileNameList) {
+						i++;
+				Image img = Image.getInstance(
+						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+//	Start to add script details 
+				String sno = image.split("_")[0];
+				String SNO = "Script Number";
 				String ScriptNumber = image.split("_")[3];
-				String TestRun = image.split("_")[4];
+				String SNM = "Scenario Name";
+				String ScriptName = image.split("_")[2];
+				String testRunName=image.split("_")[4];
+//				String scrtipt=;
+				if(!sno.equalsIgnoreCase(sno1)) {
+					document.setPageSize(img);
+					document.newPage();
+					 document.add(img1);
+					 Anchor target3 = new Anchor("Script Details",bf12);
+					    target3.setName(ScriptNumber);
+					    Paragraph pa=new Paragraph();
+					    pa.add(target3);
+					document.add(pa);
+					document.add(Chunk.NEWLINE);
+					PdfPTable table2 = new PdfPTable(2); 
+					 table2.setWidths(new int[]{1, 1});
+					 table2.setWidthPercentage(100f);
+					 insertCell(table2, SNO, Element.ALIGN_LEFT, 1, bf12);
+					 insertCell(table2, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
+					 insertCell(table2, SNM, Element.ALIGN_LEFT, 1, bf12);
+					 insertCell(table2, ScriptName, Element.ALIGN_LEFT, 1, bf12);
+					 
+					 for(Entry<String, String> entry1:toc.get(i).entrySet()) {
+						 String str=entry1.getValue();
+						 if(!str.equals("null")) {
+								 insertCell(table2, "Status", Element.ALIGN_LEFT, 1, bf12);
+						         insertCell(table2, "Failed", Element.ALIGN_LEFT, 1, bf12);
+					        }else {
+								 insertCell(table2, "Status", Element.ALIGN_LEFT, 1, bf12);
+								 insertCell(table2, "Passed", Element.ALIGN_LEFT, 1, bf12);
+					        }
+					 }
+					
+					 document.add(table2);
+					 
+				}
+				if (sno!=null){
+					sno1=sno;
+				}
+//	End to add script details 
+				
+//	Start to add  screenshoots and pagenumbers and wats icon		 		
+//				String TestRun = image.split("_")[4];
 				String Status = image.split("_")[6];
 				String status = Status.split("\\.")[0];
 				String Scenario = image.split("_")[2];
-				document.setPageSize(img);
-				document.newPage();
-				Font fnt = FontFactory.getFont("Arial", 12);
-				String TR = "Test Run Name:" + " " + TestRun;
-				String SN = "Script Number:" + " " + ScriptNumber;
+
+//				String TR = "Test Run Name:" + " " + TestRun;
+//				String SN = "Script Number:" + " " + ScriptNumber;
 				String S = "Status:" + " " + status;
 				String Scenarios = "Scenario Name :" + "" + Scenario;
-				document.add(new Paragraph(TR, fnt));
-				document.add(new Paragraph(SN, fnt));
+				 String sndo = image.split("_")[0];
+				 img1.scalePercent(65, 68);
+					
+		         img1.setAlignment(Image.ALIGN_RIGHT);
+				 //new change-failed pdf to set pagesize 
+				if(image.startsWith(sndo+"_")&&image.contains("Failed")) {
+//					Rectangle one2 = new Rectangle(1360,1000);
+			        document.setPageSize(one1); 
+				 document.newPage();
+				}	else {
+					
+		         document.setPageSize(img);
+		         document.newPage();
+				}
+		         document.add(img1);
+		         document.add(new Paragraph(Scenarios, fnt));
+		         String Reason = image.split("_")[5];
+
+		         String Message = "Failed at Line Number:" + ""+ Reason;
+				 //new change-database to get error message
+		         String error=databaseentry.getErrorMessage(sndo,ScriptNumber,testRunName,fetchConfigVO);
+					String errorMessage = "Failed Message:" + ""+error; 
+		         Paragraph pr1=new Paragraph();
+		         pr1.add("Status:");
+		       
+			if(image.startsWith(sndo+"_")&&image.contains("Failed")) {
+		        Anchor target1 = new Anchor(status);
+			    target1.setName(String.valueOf(status+j));
+			    j++; 
+		        pr1.add(target1);
+		        document.add(pr1);
+		        document.add(new Paragraph(Message, fnt));
+		        if(error!=null) {
+					document.add(new Paragraph(errorMessage, fnt));
+					}
+					document.add(Chunk.NEWLINE);
+					img.setAlignment(Image.ALIGN_CENTER);
+					img.isScaleToFitHeight();
+					//new change-change page size
+					img.scalePercent(60,60);
+					document.add(img);
+	
+			}else {
+					 Anchor target1 = new Anchor(status);
+					    target1.setName(String.valueOf(status));
+				        pr1.add(target1);
+				        document.add(pr1);
+						img.setAlignment(Image.ALIGN_CENTER);
+						img.isScaleToFitHeight();
+						//new change-change page size
+						img.scalePercent(60,68);
+						document.add(img);
+				}   
+		
+               
+				Anchor target = new Anchor(String.valueOf(i));
+			    target.setName(String.valueOf(i));
+				Anchor target1 = new Anchor(String.valueOf("Back to Index"),bf16);
+				target1.setReference("#"+String.valueOf("details"));
+				Paragraph p=new Paragraph();
+				p.add(target1);
+				p.add(new Chunk(new VerticalPositionMark()));
+				p.add(" page ");
+				p.add(target);
+				p.add(" of "+fileNameList.size());
+//				img.setAlignment(Image.ALIGN_CENTER);
+//				img.isScaleToFitHeight();
+//				img.scalePercent(60, 71);
+//				document.add(img);
+				document.add(p);
+				System.out.println("This Image " + "" + image + "" + "was added to the report");
+//	End to add  screenshots and pagenumbers and wats icon		 		
+//	End to add script details, screenshoots and pagenumbers and wats icon		 		
+//  End to create testrun level reports	
+			}
+			}else {	
+//  Start to create Script level passed reports		
+//  Start to add Script level details		
+				if(!("Passed_Report.pdf".equalsIgnoreCase(pdffileName)||"Failed_Report.pdf".equalsIgnoreCase(pdffileName)||"Detailed_Report.pdf".equalsIgnoreCase(pdffileName))){
+					String Starttime1=dateFormat.format(Starttime);
+					String endtime1=dateFormat.format(endtime);
+					long  diff=endtime.getTime() - Starttime.getTime();
+					 long diffSeconds = diff / 1000 % 60;
+					    long diffMinutes = diff / (60 * 1000) % 60;
+					    long diffHours = diff / (60 * 60 * 1000);
+					String TestRun=test_Run_Name;
+					String ScriptNumber=Script_Number;
+					String ScriptNumber1=Scenario_Name;
+					String Scenario1=fetchConfigVO.getStatus1();
+//					String ExecutedBy=fetchConfigVO.getApplication_user_name();
+					String StartTime=Starttime1;
+					String EndTime=endtime1;
+					String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+				
+				String TR = "Test Run Name";
+				String SN = "Script Number";
+				String SN1 = "Scenario name";
+				String Scenarios1 = "Status ";
+				String EB = "Executed By" ;
+				String ST = "Start Time";
+				String ET = "End Time" ;
+				String EX = "Execution Time";
+				 document.add(img1);
+
+				document.add(new Paragraph(Report,bfBold12));
+				document.add(Chunk.NEWLINE);
+				PdfPTable table1 = new PdfPTable(2); 
+				 table1.setWidths(new int[]{1, 1});
+				 table1.setWidthPercentage(100f);
+			 
+				 insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, EX, Element.ALIGN_LEFT, 1, bf12);
+				 insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
+				 document.add(table1);
+				 document.newPage();	
+//  End to add Script level details
+				 
+//	Start to add screenshoots and pagenumbers and wats icon		 		
+		int i=0;
+			for (String image : fileNameList) {
+//				 Image img = Image.getInstance(
+//				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
+//				 "\\" + image);
+				i++;
+				Image img = Image.getInstance(
+						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+
+				String Status = image.split("_")[6];
+				String status = Status.split("\\.")[0];
+				String Scenario = image.split("_")[2];
+
+				document.setPageSize(img);
+				document.newPage();
+
+				String S = "Status:" + " " + status;
+				String Scenarios = "Scenario Name :" + "" + Scenario;
+				img1.scalePercent(65, 65);
+		         img1.setAlignment(Image.ALIGN_RIGHT);
+		        document.add(img1);
 				document.add(new Paragraph(S, fnt));
 				document.add(new Paragraph(Scenarios, fnt));
 				document.add(Chunk.NEWLINE);
+				
+				Paragraph p=new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
+				p.setAlignment(Element.ALIGN_RIGHT);
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
-				img.scalePercent(65, 65);
+				//new change-change page size
+				img.scalePercent(60, 64);
 				document.add(img);
+				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
+//		End to add screenshoots and pagenumbers and wats icon
+//  End to create Script level passed reports		
+
+			}
+			}
 			}
 			document.close();
 //			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
-		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf");
+			
+			} catch (Exception e) {
+			System.out.println("Not able to Create pdf"+e);
 		}
 	}
+	 public  void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
+	  	   
+	   	  //create a new cell with the specified Text and Font
+	   	  PdfPCell cell = new PdfPCell(new Paragraph(text.trim(), font));
+	   	  cell.setBorder(PdfPCell.NO_BORDER);
+	   	  //set the cell alignment
+	   	 
+	   	  cell.setUseVariableBorders(true);
+	  	  if(text.equalsIgnoreCase("Status")) {
+	  		cell.setBorderWidthLeft(0.3f);
+	  		cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+	  		cell.setBorderWidthTop(0.3f); 
+	  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+	  	    cell.setBorderWidthRight(0.3f);
+	  	 cell.setBorderColorRight(new BaseColor(230, 225, 225));
+	  	    cell.setBorderWidthBottom(0.3f);
+	  	 cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+	   	  }
+	  	  else if(text.equalsIgnoreCase("Total")) {
+	  		 cell.setBorderWidthTop(0.3f); 
+	  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+	  		 cell.setBorderWidthRight(0.3f);
+	  		cell.setBorderColorRight(new BaseColor(230, 225, 225));
+	  	  cell.setBorderWidthBottom(0.3f);
+	  	cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+	  	  }else if(text.equalsIgnoreCase("Percentage")) {
+	  		 cell.setBorderWidthTop(0.3f); 
+	  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+	  		 cell.setBorderWidthRight(0.3f);
+	  		cell.setBorderColorRight(new BaseColor(230, 225, 225));
+	  	  cell.setBorderWidthBottom(0.3f);
+	  	cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+	  	  }
+	  	else if(text.equalsIgnoreCase("Passed")||text.equalsIgnoreCase("Failed")) {
+	  		cell.setBorderWidthLeft(0.3f);
+	  		cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			 cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+		  cell.setBorderWidthBottom(0.3f);
+		 cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		  }
+	  	else if(text.contains("%")) {
+	  	 cell.setBorderWidthRight(0.3f);
+	  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
+	  	    cell.setBorderWidthBottom(0.3f);
+	  	cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+	  	}
+//	  	else if() {
+//	  	 cell.setBorderWidthRight(0.3f);
+//	  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
+//	  		cell.setBorderWidthBottom(0.3f);
+//	  		cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+//	  	}
+	  	else {
+	  		cell.setBorderWidthLeft(0.3f);
+	  		cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+	  		cell.setBorderWidthTop(0.3f); 
+	  		cell.setBorderColorTop(new BaseColor(230, 225, 225));
+	  	    cell.setBorderWidthRight(0.3f);
+	  	 cell.setBorderColorRight(new BaseColor(230, 225, 225));
+	  	    cell.setBorderWidthBottom(0.3f);
+	  	 cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+	  	}
+	  	  
+	  	      cell.setHorizontalAlignment(align);
+	  	
+	   	  cell.setColspan(colspan);
+	   	  //in case there is no text and you wan to create an empty row
+	   	  if(text.trim().equalsIgnoreCase("")){
+	   	   cell.setMinimumHeight(20f);
+	   	  }
+	   	  cell.setFixedHeight(40f);
+	   	  //add the call to the table
+	   	  table.addCell(cell);
+	   	   
+	    
+	}
+
 	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName,Date Starttime,Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() +"\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+//				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
+			} 
+			else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+//				fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
+			}
+			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = getDetailPdfNew(fetchMetadataListVO, fetchConfigVO);
 			} else {
 				fileNameList = getFailFileNameListNew(fetchMetadataListVO, fetchConfigVO);
 			}
+			
 			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
 			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
 			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
+			//new change add ExecutedBy field
+			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();	
+			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
 			File theDir = new File(Folder);
 			if (!theDir.exists()) {
 				System.out.println("creating directory: " + theDir.getName());
@@ -924,50 +2059,147 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			} else {
 				System.out.println("Folder exist");
 			}
+			 Font bf12 = FontFactory.getFont("Arial", 23);
+				System.out.println("before enter Images/wats_icon.png");
+				Image img1 = Image.getInstance("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/wats_icon.png");
+					System.out.println("after enter Images/wats_icon.png");
+			 img1.scalePercent(65, 68);
+	         img1.setAlignment(Image.ALIGN_RIGHT);
+			 Font bfBold12 = FontFactory.getFont("Arial", 23); 
+			 String Report="Execution Report";
+			 Font fnt = FontFactory.getFont("Arial", 12);
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");				String Starttime1=dateFormat.format(Starttime);
+				String endtime1=dateFormat.format(endtime);
+				long diff=endtime.getTime() - Starttime.getTime();
+				 long diffSeconds = diff / 1000 % 60;
+				    long diffMinutes = diff / (60 * 1000) % 60;
+				    long diffHours = diff / (60 * 60 * 1000);
 			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
+			Rectangle one = new Rectangle(1360,800);
+	        document.setPageSize(one);
 			document.open();
-			for (String image : fileNameList) {
-				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() +"\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
-				String ScriptNumber = image.split("_")[3];
-				String TestRun = image.split("_")[4];
-				String Status = image.split("_")[6];
-				String status = Status.split("\\.")[0];
-				String Scenario = image.split("_")[2];
-				String Reason = image.split("_")[5];
-				document.setPageSize(img);
-				document.newPage();
-				Font fnt = FontFactory.getFont("Arial", 12);
-				String TR = "Test Run Name:" + " " + TestRun;
-				String SN = "Script Number:" + " " + ScriptNumber;
-				String S = "Status:" + " " + status;
-				String Scenarios = "Scenario Name :" + "" + Scenario;
-				String Message = "Failed at Line Number:" + ""+ Reason;
-				// String message = "Failed at
-				// :"+fetchMetadataListVO.get(0).getInput_parameter();
-				document.add(new Paragraph(TR, fnt));
-				document.add(new Paragraph(SN, fnt));
-				document.add(new Paragraph(S, fnt));
-				document.add(new Paragraph(Scenarios, fnt));
-				if (status.equalsIgnoreCase("Failed")) {
-					document.add(new Paragraph(Message, fnt));
-				}
-				document.add(Chunk.NEWLINE);
-				img.setAlignment(Image.ALIGN_CENTER);
-				img.isScaleToFitHeight();
-				img.scalePercent(65, 65);
-				document.add(img);
-			}
+			String TestRun=test_Run_Name;
+			String ScriptNumber=Script_Number;
+			String ScriptNumber1=Scenario_Name;
+			String Scenario1=fetchConfigVO.getStatus1();
+//			String ExecutedBy=fetchConfigVO.getApplication_user_name();
+			String StartTime=Starttime1;
+			String EndTime=endtime1;
+			String ExecutionTime=diffHours+":"+diffMinutes+":"+diffSeconds;
+		
+		String TR = "Test Run Name";
+		String SN = "Script Number";
+		String SN1 = "Scenario Name";
+		String Scenarios1 = "Status ";
+		String EB = "Executed By" ;
+		String ST = "Start Time";
+		String ET = "End Time" ;
+		String EX = "Execution Time";
+	
+		 document.add(img1);
+
+		document.add(new Paragraph(Report,bfBold12));
+		document.add(Chunk.NEWLINE);
+		PdfPTable table1 = new PdfPTable(2); 
+		 table1.setWidths(new int[]{1, 1});
+		 table1.setWidthPercentage(100f);
+	 
+		 insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, EX, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
+		 document.add(table1);
+		 document.newPage();	
+//End to add Script level details
+//				Start to add screenshoots and pagenumbers and wats icon		 		
+				int i=0;
+					for (String image : fileNameList) {
+						i++;
+						Image img = Image.getInstance(
+								fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+
+//						String ScriptNumber = image.split("_")[3];
+//						String TestRun = image.split("_")[4];
+						String Status = image.split("_")[6];
+						String status = Status.split("\\.")[0];
+						String Scenario = image.split("_")[2];
+						
+						if (status.equalsIgnoreCase("Failed")) {//							Rectangle one2 = new Rectangle(1360,1000);
+					        document.setPageSize(one); 
+						 document.newPage();
+						}	else {
+							
+				         document.setPageSize(img);
+				         document.newPage();
+						}
+					
+						document.add(img1);
+						String Reason = image.split("_")[5];
+					//						String TR = "Test Run Name:" + " " + TestRun;
+//						String SN = "Script Number:" + " " + ScriptNumber;
+						String S = "Status:" + " " + status;
+//						String Scenarios = "Scenario Name :" + "" + Scenario;
+						String Message = "Failed at Line Number:" + ""+ Reason;
+						String errorMessage = "Failed Message:" + ""+ fetchConfigVO.getErrormessage();
+						// String message = "Failed at
+						// :"+fetchMetadataListVO.get(0).getInput_parameter();
+//						document.add(new Paragraph(TR, fnt));
+//						document.add(new Paragraph(SN, fnt));
+						document.add(new Paragraph(S, fnt));
+//						document.add(new Paragraph(Scenarios, fnt));
+//new change-failed pdf to add pagesize
+						if (status.equalsIgnoreCase("Failed")) {
+							document.add(new Paragraph(Message, fnt));
+							if(fetchConfigVO.getErrormessage()!=null) {
+							document.add(new Paragraph(errorMessage, fnt));
+							}
+							document.add(Chunk.NEWLINE);
+							img.setAlignment(Image.ALIGN_CENTER);
+							img.isScaleToFitHeight();
+							//new change-change page size
+							img.scalePercent(60,60);
+							document.add(img);
+						}else {
+							document.add(Chunk.NEWLINE);
+							img.setAlignment(Image.ALIGN_CENTER);
+							img.isScaleToFitHeight();
+							//new change-change page size
+							img.scalePercent(60,68);
+							document.add(img);
+						}
+						
+										
+						Paragraph p=new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
+						p.setAlignment(Element.ALIGN_RIGHT);
+						
+						
+						document.add(p);
+						System.out.println("This Image " + "" + image + "" + "was added to the report");
+//				End to add screenshoots and pagenumbers and wats icon
+		//  End to create Script level passed reports		
+
+					}
 			document.close();
-//			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
 		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf");
+			System.out.println("Not able to upload the pdf"+e);
 		}
 	}
 	public  void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO){
 		try {
-			  String accessToken = getAccessTokenPdf();
+			  String accessToken = getAccessTokenPdf(fetchConfigVO);
 			  List imageUrlList = new ArrayList();
 			  File imageDir = new File(fetchConfigVO.getPdf_path()+"\\"+fetchMetadataListVO.get(0).getCustomer_name() +"\\" +fetchMetadataListVO.get(0).getTest_run_name()+"\\");
 			  System.out.println(imageDir);
@@ -1023,7 +2255,7 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			  System.out.println(e);
 		  }
 	}
-	public  String getAccessTokenPdf(){
+	public  String getAccessTokenPdf(FetchConfigVO fetchConfigVO){
 		  String acessToken = null;
 		  try {
 			  RestTemplate restTemplate = new RestTemplate();
@@ -1128,13 +2360,17 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			r.keyPress(KeyEvent.VK_C);
 			r.keyRelease(KeyEvent.VK_C);
 			r.keyRelease(KeyEvent.VK_CONTROL);
+			String scripNumber = fetchMetadataVO.getScript_number();	
+			log.info("Successfully Copy is done " +scripNumber);
 
 		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Copy " +scripNumber);
 			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO);
 			e.printStackTrace();
 			throw e;
 		}
-	}
+	}// input[@placeholder='Enter search terms']
 	public void paste(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String globalValueForSteps) throws Exception {
 		try {
@@ -1186,7 +2422,7 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		}
 	}
 	public  void windowclose(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+	try {
 			String mainWindow = driver.getWindowHandle();
 			// It returns no. of windows opened by WebDriver and will return Set of Strings
 			Set<String> set = driver.getWindowHandles();
@@ -1204,11 +2440,13 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
-					logger.info("Window closed Successfully");
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Windowclosed" +scripNumber);
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Failed During WindowClose Acion.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During WindowClose Acion."+scripNumber);
 			screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -1217,9 +2455,11 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 	public  void switchToActiveElement(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.switchTo().activeElement();
-			logger.info("Switched to Element Successfully");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Switched to Element Successfully" +scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During switchToActiveElement Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During switchToActiveElement Action." +scripNumber);
 			screenshotFail(driver, "Failed during switchToActiveElement Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(e.getMessage());
 			throw e;
@@ -1283,7 +2523,7 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -1297,7 +2537,7 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -1314,7 +2554,7 @@ public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -1429,7 +2669,7 @@ public void clickButtonDropdown(WebDriver driver, String param1, String param2,S
 		return;
 	}catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -1475,7 +2715,7 @@ public void clickButtonDropdown(WebDriver driver, String param1, String param2,S
 		return;
 	}catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -1533,7 +2773,7 @@ public void clickButtonDropdown(WebDriver driver, String param1, String param2,S
 		return;
 	}catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	} 
@@ -1638,7 +2878,7 @@ public void clickButtonDropdown(WebDriver driver, String param1, String param2,S
 		return;
 	}catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	} 
@@ -1689,7 +2929,7 @@ public void clickButtonDropdown(WebDriver driver, String param1, String param2,S
 			return keysToSend;	
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -1894,7 +3134,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		return;
 	}catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during click Image Method", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -2390,7 +3630,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -2426,7 +3666,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -2447,7 +3687,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -2469,7 +3709,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click Approve Button.");
+			log.error("Failed during Click Approve Button.");
 			screenshotFail(driver, "Failed during Click Approve Button.", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -2666,7 +3906,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -2704,7 +3944,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		} catch (Exception e) {
 				System.out.println(e);	
 			
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -2882,7 +4122,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -2902,7 +4142,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		return; 
 	}catch(Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -2983,7 +4223,7 @@ public void clickLinkAction(WebDriver driver, String param1,String param2, Strin
 		return; 
 	}catch(Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -3042,7 +4282,7 @@ public String textarea(WebDriver driver, String param1, String param2, String ke
 		return keysToSend;	
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -3259,7 +4499,7 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		return keysToSend;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -3514,7 +4754,7 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		Thread.sleep(500);
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -3534,7 +4774,7 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		}
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		}
 		try {
@@ -3549,7 +4789,7 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.error("Failed during Click action.");
+			log.error("Failed during Click action.");
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
@@ -3623,7 +4863,7 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -3648,7 +4888,7 @@ public String sendValue(WebDriver driver, String param1, String param2, String k
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -3695,7 +4935,7 @@ public void tableDropdownValues(WebDriver driver, String param1, String param2, 
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
-	logger.error("Failed during Click action.");
+	log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
@@ -4070,7 +5310,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		return;
 	}catch (Exception e) {
 		System.out.println(e);
-		logger.error("Failed during Click action.");
+		log.error("Failed during Click action.");
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 		}
@@ -4124,22 +5364,26 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 				WebDriverWait wait = new WebDriverWait(driver, 10);
 				WebElement element = wait.until(ExpectedConditions.elementToBeClickable(waittill));
 				element.click();
-				logger.info("Clicked Expand Succesfully.");
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickFilter"+scripNumber);
 				return;
 			} else {
 				waittill.click();
 				System.out.println("");
-				logger.info("Clicked Expand Succesfully.");
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickFilter"+scripNumber);
 				return;
 			}
 		} catch (StaleElementReferenceException e) {
-			logger.error("Falied During ClickExpand Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  clickFilter"+scripNumber);	
 			WebElement waittill = driver.findElement(By.xpath(xpath1));
 			WebDriverWait wait = new WebDriverWait(driver, 60);
 			wait.until(ExpectedConditions.elementToBeClickable(waittill));
 			waittill.click();
 		} catch (Exception e) {
-			logger.error("Falied During ClickExpand Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  clickFilter"+scripNumber);	
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath1);
 			throw e;
@@ -4147,11 +5391,15 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	}
 	public  String password(WebDriver driver, String inputParam, String keysToSend,
 			FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
-		try { 
-			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'"+inputParam+"')]"));
+		try {
+			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam + "')]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked password"+scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  password"+scripNumber);	
 			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(e);
 			throw e;
@@ -4162,7 +5410,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
 			waittill.clear();
 			waittill.sendKeys(keysToSend);
-			logger.info("clear and typed the given Data");
+			log.info("clear and typed the given Data");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -4171,8 +5419,9 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	public void clearMethod(WebDriver driver, WebElement waittill) {
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
+        waittill.click();
 		waittill.clear();
-		logger.info("clear and typed the given Data");
+		log.info("clear and typed the given Data");
 	}
 	public void scrollUsingElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
@@ -4180,7 +5429,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 				Thread.sleep(3000);
 			WebElement waittill = driver.findElement(By.xpath("(//b[text()='"+inputParam+"'])[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			logger.info("ScrollUsingElement Successfully Done!");
+			log.info("ScrollUsingElement Successfully Done!");
 			return;
 			}
 		}catch(Exception e) {
@@ -4192,7 +5441,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			//	((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 				//	((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4200,7 +5449,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='"+inputParam+"']"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4208,7 +5457,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='"+inputParam+"']"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4216,21 +5465,21 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='"+inputParam+"'])"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
 			}try {
 				WebElement waittill = driver.findElement(By.xpath("(//h3[normalize-space(text())='"+inputParam+"'])[2]"));
 				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-				logger.info("ScrollUsingElement Successfully Done!");
+				log.info("ScrollUsingElement Successfully Done!");
 				return;
 		}catch(Exception e) {
 			System.out.println(inputParam);
 		}try {
 				WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='"+inputParam+"']"));
 				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-				logger.info("ScrollUsingElement Successfully Done!");
+				log.info("ScrollUsingElement Successfully Done!");
 				return;
 		}catch(Exception e) {
 			System.out.println(inputParam);
@@ -4238,7 +5487,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'"+inputParam+"')]"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4246,7 +5495,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("(//table[@summary='"+ inputParam +"']//td//a)[1]"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4254,7 +5503,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("(//label[normalize-space(text())=\""+inputParam+"\"]/following::input)[1]"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4262,7 +5511,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'"+inputParam+"')]"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4270,7 +5519,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='"+inputParam+"']"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4278,7 +5527,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//label[normalize-space(text())=\""+inputParam+"\"]"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4286,7 +5535,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//button[normalize-space(text())='" + inputParam + "']"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
@@ -4294,24 +5543,24 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			try {
 				WebElement waittill = driver.findElement(By.xpath("//img[@title='"+inputParam+"']"));
 					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-					logger.info("ScrollUsingElement Successfully Done!");
+					log.info("ScrollUsingElement Successfully Done!");
 					return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
 			}try {
 				WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='"+inputParam+"']"));
 				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-				logger.info("ScrollUsingElement Successfully Done!");
+				log.info("ScrollUsingElement Successfully Done!");
 				return;
 			}catch(Exception e) {
 				System.out.println(inputParam);
 			}try {
 				WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
 				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-				logger.info("ScrollUsingElement Successfully Done!");
+				log.info("ScrollUsingElement Successfully Done!");
 				return;
 		}catch (Exception e) {
-				logger.error("Failed During scrollUsingElement");
+				log.error("Failed During scrollUsingElement");
 				screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
 				System.out.println(inputParam);
 				e.printStackTrace();
@@ -4319,20 +5568,26 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			}
 		}
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill, FetchMetadataVO fetchMetadataVO) {
-		fetchConfigVO.getMedium_wait();
+fetchConfigVO.getMedium_wait();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-	//	WebElement elements = wait.until(ExpectedConditions.elementToBeClickable(waittill));
+		// WebElement elements =
+		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-	}
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked scrollMethod"+scripNumber);	}
 	public  void tab(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		try {
+	try {
+			Thread.sleep(4000);
 			Actions action = new Actions(driver);
 			action.sendKeys(Keys.TAB).build().perform();
-			logger.info("Successfully Clicked the tab.");
+			Thread.sleep(8000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked tab"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During clicking the tab");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  tab"+scripNumber);	
 			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed to do TAB Action");
 			e.printStackTrace();
@@ -4343,36 +5598,56 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			Actions actions = new Actions(driver);
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//table[@summary='"+param1+"']//tr[1]/following::a)[2]")));
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]")));
 			scrollUsingElement(driver, param1, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(6000);
-			WebElement waittext = driver.findElement(By.xpath("(//table[@summary='"+param1+"']//tr[1]/following::a)[2]"));
+			WebElement waittext = driver
+					.findElement(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]"));
 			actions.moveToElement(waittext).build().perform();
-			clickImage(driver,param2,param1, fetchMetadataVO, fetchConfigVO);
+			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath="(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]";
+					service.saveXpathParams(param1,param2,scripNumber,xpath);
+			log.info("Sucessfully Clicked mousehover"+scripNumber);
 			return;
-		}catch (Exception e) {
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  mousehover"+scripNumber);	
 			System.out.println(e);
-		} try {
-				Actions actions = new Actions(driver); 
-				WebElement waittill = driver.findElement(By.xpath("(//table[@role='presentation']/following::a[normalize-space(text())='"+param1+"'])[1]"));
-				actions.moveToElement(waittill).build().perform();
-				Thread.sleep(5000);
-				System.out.print("Successfully executed Mousehover");
-				return;
-				} catch (Exception e) {
-				System.out.println(e);
-				screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO);
-				throw e;
-				}
+		}
+		try {
+			Actions actions = new Actions(driver);
+			WebElement waittill = driver
+					.findElement(By.xpath("(//table[@role='presentation']/following::a[normalize-space(text())='" + param1 + "'])[1]"));
+			actions.moveToElement(waittill).build().perform();
+			Thread.sleep(5000);
+			System.out.print("Successfully executed Mousehover");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath="(//table[@role='presentation']/following::a[normalize-space(text())='" + param1 + "'])[1]";
+					service.saveXpathParams(param1,param2,scripNumber,xpath);
+			log.info("Sucessfully Clicked mousehover"+scripNumber);
+			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  mousehover"+scripNumber);	
+			System.out.println(e);
+			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO);
+			throw e;
+		}
 		}
 	public void enter(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		try {
-			Thread.sleep(4000);
+	try {
+			Thread.sleep(2000);
 			Actions actionObject = new Actions(driver);
 			actionObject.sendKeys(Keys.ENTER).build().perform();
-			Thread.sleep(3000);
+			Thread.sleep(8000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked enter"+scripNumber);
 		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  enter"+scripNumber);	
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -4387,10 +5662,10 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 						+ fetchMetadataVO.getLine_number() + "_Passed").save(fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name() + "\\"
 						+ fetchMetadataVO.getTest_run_name() + "\\");
-				logger.info("Successfully Screenshot is taken");
+				log.info("Successfully Screenshot is taken");
 				return image_dest;
 			} catch (Exception e) {
-				logger.error("Failed During Taking screenshot");
+				log.error("Failed During Taking screenshot");
 				System.out.println("Exception while taking Screenshot" + e.getMessage());
 				return e.getMessage();
 			}
@@ -4405,10 +5680,10 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 						+ fetchMetadataVO.getLine_number() + "_Failed").save(fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name() + "\\"
 						+ fetchMetadataVO.getTest_run_name() + "\\");
-				logger.info("Successfully Screenshot is taken");
+				log.info("Successfully Screenshot is taken");
 				return image_dest;
 			} catch (Exception e) {
-				logger.error("Failed During Taking screenshot");
+				log.error("Failed During Taking screenshot");
 				System.out.println("Exception while taking Screenshot" + e.getMessage());
 				return e.getMessage();
 			}
@@ -4469,11 +5744,11 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	 * return e.getMessage(); } }
 	 */
 	public  void deleteAllCookies(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
-			driver.manage().deleteAllCookies();
-			logger.info("Successfully Deleted All The Cookies.");
+		try {	
+		driver.manage().deleteAllCookies();
+			log.info("Successfully Deleted All The Cookies.");
 		} catch (Exception e) {
-			logger.error("Failed To Delete All The Cookies.");
+			log.error("Failed To Delete All The Cookies.");
 			screenshotFail(driver, "Failed during deleteAllCookies Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("cookies not deleted");
 			throw e;
@@ -4481,15 +5756,17 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	}
 
 	public void selectCheckBox(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO) {
-		try {
+	try {
 			WebElement element = driver.findElement(By.xpath(xpath));
 			if (element.isSelected()) {
 			} else {
 				element.click();
 			}
-			logger.info("selected Checkbox Successfully");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked selectCheckBox"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed While Selecting Checkbox.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during selectCheckBox"+scripNumber);
 			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null);
 			e.printStackTrace();
 			System.out.println(xpath);
@@ -4516,9 +5793,12 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	}
 	private void selectMethod(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO,
 			WebElement waittext, FetchConfigVO fetchConfigVO) {
+	Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
-		logger.info("selectedBYText Successfully");
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked selectMethod"+scripNumber);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
 	}
@@ -4527,9 +5807,11 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			Select selectBox = new Select(webElement);
 			selectBox.selectByValue(inputData);
-			logger.info("selectedBYValue Successfully");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked selectByValue"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During selectByValue Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during selectByValue"+scripNumber);
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
 			e.printStackTrace();
@@ -4537,11 +5819,11 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		}
 	}
 	public  void switchToDefaultFrame(WebDriver driver) {
-		try {
+	try {
 			driver.switchTo().defaultContent();
-			logger.info("Successfully switched to default Frame");
+			log.info("Successfully switched to default Frame");
 		} catch (Exception e) {
-			logger.error("Failed During Switching to default Action");
+			log.error("Failed During Switching to default Action");
 			throw e;
 		}
 	}
@@ -4564,7 +5846,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			return inputParam;
 			}
 		} catch (Exception e) {
-			logger.error("Failed During copynumber Action");
+			log.error("Failed During copynumber Action");
 			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(inputParam);
 			throw e;
@@ -4578,20 +5860,22 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		System.out.println(num);
 		StringSelection stringSelection = new StringSelection(num);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-		logger.info("Successfully Copied the Number");
+		log.info("Successfully Copied the Number");
 	}
 
 	public  String copyy(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
 			System.out.println(number);
 			String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-			logger.info("Successfully Copied");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked copyy"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During copyy Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copyy"+scripNumber);
 			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
 			throw e;
@@ -4599,7 +5883,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		return xpath;
 	}
 	public  String copytext(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+			try {
 			java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
 			ArrayList<String> texts = new ArrayList<String>();
 			for (WebElement element : webElement) {
@@ -4611,22 +5895,25 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
 			}
-			logger.info("Successfully Copied");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked copytext"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During copytext Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copytext"+scripNumber);
 			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
 			throw e;
 		}
 		return xpath;
-
 	}
 	public void maximize(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().window().maximize();
-			logger.info("Successfully Maximized");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked maximize"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During Maximize Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during maximize"+scripNumber);
 			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not maximize");
 			e.printStackTrace();
@@ -4635,11 +5922,13 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		}
 	}
 	public void switchWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+	try {
 			driver.switchTo().window(Main_Window);
-			logger.info("Successfully Switched to Another Window");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked switchWindow"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During Switching to Window");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during switchWindow"+scripNumber);
 			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not switch to window");
 			e.printStackTrace();
@@ -4650,16 +5939,16 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 	public void switchDefaultContent(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.switchTo().defaultContent();
-			logger.info("Successfully Switched to Default Content");
+			log.info("Successfully Switched to Default Content");
 		} catch (Exception e) {
-			logger.error("Failed During switching to Default Action.");
+			log.error("Failed During switching to Default Action.");
 			screenshotFail(driver, "Failed during switchDefaultContent Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not switch");
 			throw e;
 		}
 	}
 	public  void dragAnddrop(WebDriver driver, String xpath, String xpath1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+	try {
 			WebElement dragElement = driver.findElement(By.xpath(xpath));
 			fromElement = dragElement;
 			WebElement dropElement = driver.findElement(By.xpath(xpath1));
@@ -4667,9 +5956,11 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 			Actions action = new Actions(driver);
 			// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
 			action.dragAndDrop(fromElement, toElement).build().perform();
-			logger.info("Successfully Drag and drop the values");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Successfully Drag and drop the values"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During dragAnddrop Action.");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During dragAnddrop Action."+scripNumber);
 			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
 			e.printStackTrace();
@@ -4677,7 +5968,8 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		}
 	}
 	public  void windowhandle(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		try {
+			try {
+			Thread.sleep(20000);
 			String mainWindow = driver.getWindowHandle();
 			Set<String> set = driver.getWindowHandles();
 			Iterator<String> itr = set.iterator();
@@ -4693,9 +5985,11 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 					driver.switchTo().window(childWindow);
 				}
 			}
-			logger.info("Successfully Handeled the window");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Successfully Handeled the window"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed to Handle the window");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed to Handle the window"+scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
@@ -4771,7 +6065,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
         	return;
       } catch (Exception e) {
             System.out.println(e);
-            logger.error("Failed During switchToFrame Action");
+            log.error("Failed During switchToFrame Action");
             screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
             throw e;
       }
@@ -4782,20 +6076,22 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 //			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fetchConfigVO.getUpload_file_path()+"\\"+filelocation + "\"");
 			Runtime.getRuntime().exec("C:\\Selenium\\Spring\\WinfoAutomation_MultiThread\\File_upload_selenium_webdriver.exe");	
 			Thread.sleep(5000);
-			logger.info("Successfully Uploaded The File");
+			log.info("Successfully Uploaded The File");
 			} catch (Exception e) {
-			logger.error("Failed During uploadFileAutoIT Action.");
+			log.error("Failed During uploadFileAutoIT Action.");
 			System.out.println(filelocation);
 			e.printStackTrace();
 			throw e;
 		}
 }
 	public  void refreshPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		try {
+try {
 			driver.navigate().refresh();
-			logger.info("Successfully refreshed the Page");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked refreshPage"+scripNumber);
 		} catch (Exception e) {
-			logger.error("Failed During refreshPage Action");
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during refreshPage"+scripNumber);
 			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not refresh the page");
 			e.printStackTrace();
@@ -4803,7 +6099,30 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 
 		}
 	}
+public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		if (folder.exists()) {
+		File[] listOfFiles = folder.listFiles();
+		
+//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+//				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//				+ fetchMetadataVO.getLine_number();
+			for (File file : Arrays.asList(listOfFiles)) {
 
+				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+			
+			String seqnum1=fetchMetadataListVO.get(0).getSeq_num();
+			if(seqNum.equalsIgnoreCase(seqnum1)) {
+				Path imagesPath = Paths.get(file.getPath());
+				 Files.delete(imagesPath);
+			}
+		}
+		}
+	}
 	@Override
 	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String param1) throws Exception {
@@ -4902,12 +6221,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		
 	}
 
-	@Override
-	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,

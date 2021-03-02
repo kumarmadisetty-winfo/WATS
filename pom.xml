@@ -462,9 +462,9 @@
 				</plugins>
 			</build>
 			<properties>
-				 <config.server.uri>http://localhost:8888</config.server.uri>
+				<!--  <config.server.uri>http://localhost:8888</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hub</profiles>
+				<profiles>hub</profiles> -->
 				<instance>SeleniumKeyWords</instance>
 			</properties>
 		</profile>
