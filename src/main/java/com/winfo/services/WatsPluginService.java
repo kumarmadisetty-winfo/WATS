@@ -9,6 +9,7 @@ import com.winfo.dao.WatsPluginDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
+import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 import com.winfo.vo.WatsPluginMetaDataVO;
 
@@ -156,6 +157,48 @@ public class WatsPluginService {
 		}
         String scriptnumber=master.getScript_number();
 		return dao.pluginData(master,scriptnumber);
+	}
+	
+	@Transactional
+	public DomGenericResponseBean watslogin(WatsLoginVO loginvo) {
+		DomGenericResponseBean response = new DomGenericResponseBean();
+		String username = loginvo.getUsername();
+		String password = loginvo.getPassword();
+		// TODO Auto-generated method stub
+		String userId = dao.getUserIdValidation(username);
+		if(userId!=null) {
+		String userIdEnd = dao.verifyEndDate(username);
+		String userIdPwdEx = dao.verifyPasswordExpire(username);
+		String userIdActive= dao.verifyUserActive(username);
+		String passwordEncript=dao.getEncriptPassword(username);
+         
+		if(userIdEnd!=null&&userIdPwdEx!=null&&userIdActive!=null) {
+			if(password.equalsIgnoreCase(passwordEncript)) {
+				response.setStatus(200);
+				response.setStatusMessage("Login successfully");
+			}
+			else {
+				response.setStatus(404);
+				response.setStatusMessage("Password is incorrect");
+			}
+		}
+		if(userIdEnd==null) {
+			response.setStatus(404);
+			response.setStatusMessage("User account expired");
+		}
+		if(userIdPwdEx==null) {
+			response.setStatus(404);
+			response.setStatusMessage("User password expired.Please concat your administrator!");
+		}
+		if(userIdActive==null) {
+			response.setStatus(404);
+			response.setStatusMessage("UserId is in-active!");
+		}
+		}else {
+			response.setStatus(404);
+			response.setStatusMessage("User name does not exists");
+		}
+		return response;
 	}
 
 }

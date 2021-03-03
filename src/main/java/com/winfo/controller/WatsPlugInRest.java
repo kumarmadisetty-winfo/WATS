@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.services.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
+import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 
 @RestController
@@ -19,6 +20,10 @@ public class WatsPlugInRest {
 	public DomGenericResponseBean pluginData(@RequestBody WatsPluginMasterVO mastervo) {
 		return service.pluginData(mastervo);
 		
+	}
+	@PostMapping("/login")
+	public DomGenericResponseBean watsLogin(@RequestBody WatsLoginVO loginvo){
+		return service.watslogin(loginvo);
 	}
 
 }

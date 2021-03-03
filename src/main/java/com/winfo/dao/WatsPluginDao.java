@@ -71,5 +71,94 @@ public class WatsPluginDao {
 		}
 		
 	}
+	
+	public String getUserIdValidation(String username) {
+		String userId = username.toUpperCase();
+		Session session = entityManager.unwrap(Session.class);
+		String sql="SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId";
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setParameter("userId", userId);
+		
+		List results = query.list();
+		if(results.size()>0) {
+			System.out.println((String) results.get(0));
+			return (String) results.get(0);
+		}
+		else {
+			return null;
+		}
+	}
+	public String verifyEndDate(String username) {
+		String userId = username.toUpperCase();
+		Session session = entityManager.unwrap(Session.class);
+	String sql=	"SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(END_DATE, SYSDATE) >= SYSDATE";
+	//	String sql="SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId";
+		
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setParameter("userId", userId);
+		
+		List results = query.list();
+		if(results.size()>0) {
+			System.out.println((String) results.get(0));
+			return (String) results.get(0);
+		}
+		else {
+			return null;
+		}
+	}
+	public String verifyPasswordExpire(String username) {
+		String userId = username.toUpperCase();
+		Session session = entityManager.unwrap(Session.class);
+		String sql="SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(PASSWORD_EXPIRY, SYSDATE) >= SYSDATE";
+	//	String sql=	"SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(END_DATE, SYSDATE) >= SYSDATE";
+			
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setParameter("userId", userId);
+			
+			List results = query.list();
+			if(results.size()>0) {
+				System.out.println((String) results.get(0));
+				return (String) results.get(0);
+			}
+			else {
+				return null;
+			}
+	}
+	public String verifyUserActive(String username) {
+		String userId = username.toUpperCase();
+		Session session = entityManager.unwrap(Session.class);
+		String sql="SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and upper(STATUS) = 'ACTIVE'";
+		String sql1="SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(PASSWORD_EXPIRY, SYSDATE) >= SYSDATE";
+			
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setParameter("userId", userId);
+			
+			List results = query.list();
+			if(results.size()>0) {
+				System.out.println((String) results.get(0));
+				return (String) results.get(0);
+			}
+			else {
+				return null;
+			}
+	}
+	public String getEncriptPassword(String username) {
+		String userId = username.toUpperCase();
+		Session session = entityManager.unwrap(Session.class);
+		String sql="SELECT TOOLKIT.DECRYPT(PASSWORD) FROM WIN_TA_USER_ROLE WHERE UPPER(USER_ID) =:userId ";
+		//String sql="SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(PASSWORD_EXPIRY, SYSDATE) >= SYSDATE";
+			
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setParameter("userId", userId);
+			
+			List results = query.list();
+			if(results.size()>0) {
+				return (String) results.get(0);
+			}
+			else {
+				return null;
+			}
+	}
 
 }
