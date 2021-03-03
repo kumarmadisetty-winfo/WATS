@@ -4804,12 +4804,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		}
 	}
 
-	@Override
-	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String param1) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void datePicker(WebDriver driver, String param1, String param2, String keysToSend,
@@ -4818,82 +4813,9 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		
 	}
 
-	@Override
-	public void selectDate(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void selectMonth(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void selectYear(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void openSettings(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String loginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String navigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String menuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String menuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String type1, String type2, String param1, String param2, int count) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String task(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String taskMenu(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO, String type1,
-			String type2, String param1, String param2, int count) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
-			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void switchToParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
