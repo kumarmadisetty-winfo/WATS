@@ -373,28 +373,28 @@ public class CustomerToCentralGetDao {
       		 }
             if(String.valueOf(obj1[13]).equals("null"))
       		 {
-      			 fetchDataMetadata.setDatatypes(null);
+      			 fetchDataMetadata.setDatatypes("NA");
       		 }
       		 else {
       fetchDataMetadata.setDatatypes(String.valueOf(obj1[13]));
       		 }
             if(String.valueOf(obj1[14]).equals("null"))
       		 {
-      			 fetchDataMetadata.setUnique_mandatory(null);
+      			 fetchDataMetadata.setUnique_mandatory("NA");
       		 }
       		 else {
       fetchDataMetadata.setUnique_mandatory(String.valueOf(obj1[14]));
       		 }
             if(String.valueOf(obj1[15]).equals("null"))
       		 {
-      			 fetchDataMetadata.setValidation_type(null);
+      			 fetchDataMetadata.setValidation_type("NA");
       		 }
       		 else {
       fetchDataMetadata.setValidation_type(String.valueOf(obj1[15]));
       		 }
             if(String.valueOf(obj1[16]).equals("null"))
       		 {
-      			 fetchDataMetadata.setValidation_name(null);
+      			 fetchDataMetadata.setValidation_name("NA");
       		 }
       		 else {
       fetchDataMetadata.setValidation_name(String.valueOf(obj1[16]));

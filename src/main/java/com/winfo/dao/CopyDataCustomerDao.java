@@ -423,28 +423,28 @@ public class CopyDataCustomerDao {
  		 }
         if(String.valueOf(obj1[13]).equals("null"))
  		 {
-     	   metadata.setDatatypes(null);
+     	   metadata.setDatatypes("NA");
  		 }
  		 else {
  			 metadata.setDatatypes(String.valueOf(obj1[13]));
  		 }
      if(String.valueOf(obj1[14]).equals("null"))
  		 {
-     	metadata.setUnique_mandatory(null);
+     	metadata.setUnique_mandatory("NA");
  		 }
  		 else {
  			 metadata.setUnique_mandatory(String.valueOf(obj1[14]));
  		 }
      if(String.valueOf(obj1[15]).equals("null"))
  		 {
-     	metadata.setValidation_type(null);
+     	metadata.setValidation_type("NA");
  		 }
  		 else {
  			 metadata.setValidation_type(String.valueOf(obj1[15]));
  		 }
      if(String.valueOf(obj1[16]).equals("null"))
  		 {
-     	metadata.setValidation_name(null);
+     	metadata.setValidation_name("NA");
  		 }
  		 else {
      metadata.setValidation_name(String.valueOf(obj1[16]));
