@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
+import com.winfo.Factory.InstanceFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -37,10 +38,10 @@ import java.util.Date;
 @RefreshScope
 @Component
 public class RunAutomation {
-	@Value("${message.default.welcome}")
-	private String instanceName;
 	@Autowired(required=true)
-	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface;
+	InstanceFactory instanceFactory;
+	@Autowired(required=true)
+	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface=instanceFactory.getInstanceObj("udg");
 
 	@Autowired
 	TestCaseDataService dataService;

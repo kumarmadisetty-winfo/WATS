@@ -6,6 +6,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,10 +27,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -54,10 +61,13 @@ import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -94,7 +104,8 @@ public abstract class SeleniumkeywordsAbstract implements SeleniumKeyWordsInterf
 	@Autowired
 	ScriptXpathService service;
 	Logger log = Logger.getLogger("Logger");
-
+	public WebElement fromElement;
+	public WebElement toElement;
 	public void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
@@ -2496,5 +2507,1448 @@ public abstract class SeleniumkeywordsAbstract implements SeleniumKeyWordsInterf
 					throw e;
 				}
 			}
+			public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) throws Exception {
 
+				try {
+					if (param1.equalsIgnoreCase("Manage Journals") || param1.equalsIgnoreCase("Journal Lines")
+							|| param1.equalsIgnoreCase("Manage Transactions") || param1.equalsIgnoreCase("Manage Receipts")
+							|| param1.equalsIgnoreCase("Prepare Source lines") || param1.equalsIgnoreCase("Contracts")) {
+						Thread.sleep(3000);
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='"
+								+ param1 + "']/following::table[@summary='" + param2 + "']//a)[2]")));
+						Thread.sleep(4000);
+						WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='" + param1
+								+ "']/following::table[@summary='" + param2 + "']//a)[2]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						actions.click(waittext).build().perform();
+						Thread.sleep(8000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked clickTableLink"+scripNumber);				
+			String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+					
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Addresses")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions
+								.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//a)[2]")));
+						Thread.sleep(4000);
+						WebElement waittext = driver.findElement(By.xpath("(//table[@summary='" + param1 + "']//a)[2]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						actions.click(waittext).build().perform();
+						Thread.sleep(8000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked Addresses clickTableLink"+scripNumber);				
+					String xpath = "(//table[@summary='param1']//a)[2]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+			
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Addresses clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					if (param2.equalsIgnoreCase("Approved")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(
+								By.xpath("(//table[@summary='" + param1 + "']//*[normalize-space(text())='" + param2 + "']/following::a)[1]")));
+						Thread.sleep(4000);
+						WebElement waittext = driver.findElement(
+								By.xpath("(//table[@summary='" + param1 + "']//*[normalize-space(text())='" + param2 + "']/following::a)[1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						actions.click(waittext).build().perform();
+						Thread.sleep(8000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked Approved clickTableLink"+scripNumber);				
+					String xpath = "(//table[@summary='param1']//*[normalize-space(text())='param2']/following::a)[1]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+			
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Approved clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Manage Orders")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())='" + param1
+								+ "']/following::table[@summary='" + param2 + "']//a[contains(@title,'Purchase Order')]")));
+						Thread.sleep(4000);
+						WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())='" + param1
+								+ "']/following::table[@summary='" + param2 + "']//a[contains(@title,'Purchase Order')]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						Thread.sleep(2000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked Manage Orders clickTableLink"+scripNumber);				
+						String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a[contains(@title,'Purchase Order')]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Manage Orders clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Manage Receipts")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions
+								.presenceOfElementLocated(By.xpath("(//table[@summary='" + param2 + "']//td)[1]")));
+						WebElement waittext = driver.findElement(By.xpath("(//table[@summary='" + param2 + "']//td)[1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						tab(driver, fetchMetadataVO, fetchConfigVO);
+						enter(driver, fetchMetadataVO, fetchConfigVO);
+						Thread.sleep(2000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked Manage Receipts clickTableLink"+scripNumber);				
+				String xpath = "(//table[@summary='param2']//td)[1]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+				
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Manage Receipts clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("List of Processes Meeting Search Criteria")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions
+								.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//td[2]//span)[1]")));
+						Thread.sleep(4000);
+						WebElement waittext = driver
+								.findElement(By.xpath("(//table[@summary='" + param1 + "']//td[2]//span)[1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						Thread.sleep(2000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink"+scripNumber);				
+						String xpath = "(//table[@summary='param1']//td[2]//span)[1]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during List of Processes Meeting Search Criteria clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					//Changed == to equals method
+					if (param2.equals("")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions
+								.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//a)[1]")));
+						Thread.sleep(4000);
+						WebElement waittext = driver.findElement(By.xpath("(//table[@summary='" + param1 + "']//a)[1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			            screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						Thread.sleep(2000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked  clickTableLink"+scripNumber);				
+					String params = param1;
+						String xpath = "(//table[@summary='param1']//a)[1]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+			
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickTableLink"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+							"//h1[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']/following-sibling::a[1]")));
+					Thread.sleep(4000);
+					WebElement waittext = driver.findElement(By.xpath(
+							"//h1[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']/following-sibling::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(2000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked clickTableLink"+scripNumber);			
+				String xpath = "//h1[normalize-space(text())='param1']/following::img[@title='param2']/following-sibling::a[1]";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+			
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickTableLink"+scripNumber);		}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='"+param1 +"']/following::table[@summary='Main Task List']//a)[2]")));
+					Thread.sleep(4000);
+					WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='"+param1 +"']/following::table[@summary='Main Task List']//a)[2]"));
+					Actions actions = new Actions(driver); 
+					actions.moveToElement(waittext).build().perform();
+					highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		            screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		            Thread.sleep(1000);
+		            clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(2000);
+					return;
+				} catch (Exception e) {
+					System.out.println(e);
+					log.error("Failed during Click action.");
+					screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+
+			}
+			public void highlightElement(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext, FetchConfigVO fetchConfigVO) {
+				try {
+					JavascriptExecutor jse = (JavascriptExecutor) driver;
+					jse.executeScript("arguments[0].style.border='6px solid yellow'", waittext);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			public void clickNotificationLink(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) throws Exception {
+
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::a[1]")));
+					Thread.sleep(4000);
+					WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(2000);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Clicked NotificationLink" +scripNumber); 
+					String params = param1;
+					String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
+					service.saveXpathParams(param1, "", scripNumber, xpath);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During NotificationLink" +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath(("//*[@placeholder='" + param1 + "']/following::a[1]"))));
+					Thread.sleep(4000);
+					WebElement waittext = driver.findElement(By.xpath("//*[@placeholder='" + param1 + "']/following::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(2000);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Clicked NotificationLink" +scripNumber); 
+					String params = param1;
+					String xpath = "//*[@placeholder='param1']/following::a[1]";
+					service.saveXpathParams(param1, "", scripNumber, xpath);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					System.out.println(e);
+					log.error("Failed during NotificationLink" +scripNumber);
+					screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
+			public String clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
+					FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + keysToSend
+									+ "']/following::img[contains(@id,'" + param2 + "')][1]")));
+					Thread.sleep(4000);
+					WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
+							+ keysToSend + "']/following::img[contains(@id,'" + param2 + "')][1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					Thread.sleep(2000);
+					highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
+					Thread.sleep(500);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@id,'param2')][1]";
+							service.saveXpathParams(param1,param2,scripNumber,xpath);
+					log.info("Sucessfully Clicked clickTableImage"+scripNumber);
+					return keysToSend;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickTableImage"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
+							+ "']/following::*[normalize-space(text())='" + keysToSend + "']/following::img[@title='" + param2 + "'][1]")));
+					WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
+							+ keysToSend + "']/following::img[@title='" + param2 + "'][1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					Thread.sleep(2000);
+					highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
+					Thread.sleep(500);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[@title='param2'][1]";
+							service.saveXpathParams(param1,param2,scripNumber,xpath);
+					log.info("Sucessfully Clicked clickTableImage"+scripNumber);
+					return keysToSend;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickTableImage"+scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
+							+ "']/following::*[@value='" + keysToSend + "']/following::img[@title='" + param2 + "'][1]")));
+					WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[@value='"
+							+ keysToSend + "']/following::img[@title='" + param2 + "'][1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					Thread.sleep(2000);
+					highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
+					Thread.sleep(500);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//*[normalize-space(text())='param1']/following::*[@value='keysToSend']/following::img[@title='param2'][1]";
+							service.saveXpathParams(param1,param2,scripNumber,xpath);
+					log.info("Sucessfully Clicked clickTableImage"+scripNumber);
+					return keysToSend;
+				} catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickTableImage"+scripNumber);
+					screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
+			public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					if (param1.equalsIgnoreCase("PDF")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions
+								.presenceOfElementLocated(By.xpath(("(//div[normalize-space(text())='" + param1 + "'])[2]"))));
+						// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("(//div[text()='"
+						// + param1 + "'])[1]")), param1));
+						WebElement waittext = driver
+								.findElement(By.xpath(("(//div[normalize-space(text())='" + param1 + "'])[2]")));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						Thread.sleep(80000);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String params = param1;
+						String xpath = "(//div[normalize-space(text())='param1'])[2]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("failed during ClickMenu " + scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@title='" + param1 + "']")));
+					Thread.sleep(4000);
+					WebElement waittext = driver.findElement(By.xpath("//div[@title='" + param1 + "']"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String params = param1;
+					String xpath = "//div[@title='param1']";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("failed during ClickMenu " + scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())='" + param1 + "']"))));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(
+							By.xpath(("//a[normalize-space(text())='" + param1 + "']")), param1));
+					WebElement waittext = driver.findElement(By.xpath(("//a[normalize-space(text())='" + param1 + "']")));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					String xpath = "//a[normalize-space(text())='param1']";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("failed during ClickMenu " + scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+							("//div[contains(@style,'display: block')]//div[normalize-space(text())='" + param1 + "']"))));
+					WebElement waittext = driver.findElement(By.xpath(
+							("//div[contains(@style,'display: block')]//div[normalize-space(text())='" + param1 + "']")));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					String xpath = "//div[contains(@style,'display: block')]//div[normalize-space(text())='param1']";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.error("failed during ClickMenu " + scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath(("//div[normalize-space(text())='" + param1 + "']"))));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(
+							By.xpath(("//div[normalize-space(text())='" + param1 + "']")), param1));
+					WebElement waittext = driver.findElement(By.xpath(("//div[normalize-space(text())='" + param1 + "']")));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("failed during ClickMenu " + scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath("(//div[contains(@id,'" + param1 + "')])[1]")));
+					WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,'" + param1 + "')])[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String params = param1;
+					String xpath = "(//div[contains(@id,'param1')])[1]";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					System.out.println(e);
+
+				}
+				if(param1.equalsIgnoreCase("Setup and Maintenance")){
+					try { 
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"+param1+"']")));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"+param1+"']"), param1));
+					WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"+param1+"']"));
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					return;
+				} catch (Exception e) {
+						System.out.println(e);
+				}
+				}
+					try { 
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"']")));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"']"), param2));
+					WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"']"));
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("failed during ClickMenu " + scripNumber);
+					screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+					throw e;		
+					}
+			}
+			public void clickButtonDropdown(WebDriver driver, String param1, String param2, String keysToSend,
+					FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					//Changed == to equals method
+					if (param2.equals("")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
+						WebElement waittext = driver.findElement(By.xpath("//a[@title='" + param1 + "']"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String xpath="//a[@title='" + param1 + "']";
+								service.saveXpathParams(param1,param2,scripNumber,xpath);
+						log.info("Successfully Clicked ClickButtonDropdown" +scripNumber); 
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During ClickButtonDropdown " +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					//Changed == to equals method
+					if (param2.equals("")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions
+								.presenceOfElementLocated(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]")));
+						WebElement waittext = driver
+								.findElement(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]"));
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String xpath="//h1[contains(text(),'" + param1 + "')]/following::a[1]";
+								service.saveXpathParams(param1,param2,scripNumber,xpath);
+						log.info("Successfully Clicked ClickButtonDropdown" +scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdown " +scripNumber);
+					System.out.println(e);
+
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(
+							By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::a[@title='" + param2 + "'])[1]")));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("//h1[normalize-space(text())='" + param1 + "']")),
+							param1));
+					Thread.sleep(6000);
+					WebElement waittext = driver
+							.findElement(By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::a[@title='" + param2 + "'])[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//h1[normalize-space(text())='" + param1 + "']/following::a[@title='" + param2 + "'])[1]";
+							service.saveXpathParams(param1,param2,scripNumber,xpath);
+					log.info("Successfully Clicked ClickButtonDropdown" +scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdown " +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					if (param2.equalsIgnoreCase("Publish to Managers")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(
+								By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::a[normalize-space(text())='" + param2 + "'])[2]")));
+						WebElement waittext = driver.findElement(
+								By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::a[normalize-space(text())='" + param2 + "'])[2]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String xpath="(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
+								service.saveXpathParams(param1,param2,scripNumber,xpath);
+						log.info("Successfully Clicked ClickButtonDropdown" +scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdown " +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(
+							By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::a[normalize-space(text())='" + param2 + "'])[1]")));
+					WebElement waittext = driver
+							.findElement(By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::a[normalize-space(text())='" + param2 + "'])[1]"));
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]";
+							service.saveXpathParams(param1,param2,scripNumber,xpath);
+					log.info("Successfully Clicked ClickButtonDropdown" +scripNumber);
+					return;
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+				try {
+					if(param1.equalsIgnoreCase("Approvals") && param2.equalsIgnoreCase("Actions")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"'])[1]")));
+					WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"'])[1]"));
+					Actions actions = new Actions(driver); 
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					return;
+					}
+				}catch (Exception e) {
+					System.out.println(e);
+				}try {
+					if(param1.equalsIgnoreCase("Budget Method") && param2.equalsIgnoreCase("Actions")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"'])[1]")));
+					WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='"+param1+"']/following::a[normalize-space(text())='"+param2+"'])[1]"));
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					return;
+					}
+				}catch (Exception e) {
+					System.out.println(e);
+				}try {if(param1.equalsIgnoreCase("Workforce Compensation") && param2.equalsIgnoreCase("Search")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(text(),'"+param1+"')]/following::a[1]")));
+					WebElement waittext = driver.findElement(By.xpath("//h1[contains(text(),'"+param1+"')]/following::a[1]"));
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					WebElement search = driver.findElement(By.xpath("//li[text()='Search...']"));
+					search.click();
+					WebElement name = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
+					name.sendKeys(keysToSend);
+					enter(driver, fetchMetadataVO, fetchConfigVO);
+					WebElement text = driver.findElement(By.xpath("//*[normalize-space(text())='Search']/following::a[normalize-space(text())='"+keysToSend+"']"));
+					text.click();
+					WebElement button = driver.findElement(By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='o'][1]"));
+					button.click();	
+					return;
+				}
+				}catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdown " +scripNumber);
+					screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
+			public void clickButtonDropdownText(WebDriver driver, String param1, String keysToSend,
+					FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[normalize-space(text())='" + keysToSend + "']")));
+					wait.until(ExpectedConditions
+							.textToBePresentInElementLocated(By.xpath(("//li[normalize-space(text())='" + keysToSend + "']")), keysToSend));
+					Thread.sleep(5000);
+					WebElement waittext = driver.findElement(By.xpath("//li[normalize-space(text())='" + keysToSend + "']"));
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Clicked ClickButtonDropdownText" +scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdownText " +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(
+							By.xpath("//div[contains(@class,'PopupMenuContent')]//td[normalize-space(text())='" + keysToSend + "']")));
+					WebElement waittext = driver.findElement(
+							By.xpath("//div[contains(@class,'PopupMenuContent')]//td[normalize-space(text())='" + keysToSend + "']"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Clicked ClickButtonDropdownText" +scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdownText " +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//td[normalize-space(text())='" + keysToSend + "']")));
+					WebElement waittext = driver.findElement(By.xpath("//td[normalize-space(text())='" + keysToSend + "']"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Clicked ClickButtonDropdownText" +scripNumber);
+					return;
+				} catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During clickButtonDropdownText " +scripNumber);
+					screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
+
+			public void scrollUsingElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) {
+				try {
+					Thread.sleep(2000);
+					WebElement waittill = driver
+							.findElement(By.xpath("//span[normalize-space(text())='" + inputParam + "'][1]"));
+					// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//span[normalize-space(text())='inputParam'][1]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//a[normalize-space(text())='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//h1[normalize-space(text())='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Field during scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//h2[normalize-space(text())='inputParam'])";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver
+							.findElement(By.xpath("(//h3[normalize-space(text())='" + inputParam + "'])[2]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//h3[normalize-space(text())='inputParam'])[2]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//td[normalize-space(text())='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//div[contains(text(),'inputParam')]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//table[@summary='inputParam']//td//a)[1]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(
+							By.xpath("(//label[normalize-space(text())=\"" + inputParam + "\"]/following::input)[1]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//label[normalize-space(text())='inputParam']/following::input)[1]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//a[contains(@id,'inputParam')]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//li[normalize-space(text())='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver
+							.findElement(By.xpath("//label[normalize-space(text())=\"" + inputParam + "\"]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//label[normalize-space(text())='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver
+							.findElement(By.xpath("//button[normalize-space(text())='" + inputParam + "']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//button[normalize-space(text())='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="//img[@title='inputParam']";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='"+inputParam+"']"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					log.info("ScrollUsingElement Successfully Done!");
+					return;
+				}catch(Exception e) {
+					System.out.println(inputParam);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
+					scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath="(//*[@title='inputParam'])[1]";
+							service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  scrollUsingElement" + scripNumber);
+					screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println(inputParam);
+					e.printStackTrace();
+					throw e;
+				}
+			}
+			private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
+					FetchMetadataVO fetchMetadataVO) {
+				fetchConfigVO.getMedium_wait();
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				// WebElement elements =
+				// wait.until(ExpectedConditions.elementToBeClickable(waittill));
+				WebElement element = waittill;
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked scrollMethod"+scripNumber);
+			}
+			public void switchToDefaultFrame(WebDriver driver) {
+				try {
+					driver.switchTo().defaultContent();
+					log.info("Successfully switched to default Frame");
+				} catch (Exception e) {
+					log.error("Failed During Switching to default Action");
+					throw e;
+				}
+			}
+			public void windowhandle(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+					throws Exception {
+				try {
+					Thread.sleep(20000);
+					String mainWindow = driver.getWindowHandle();
+					Set<String> set = driver.getWindowHandles();
+					Iterator<String> itr = set.iterator();
+					while (itr.hasNext()) {
+						String childWindow = itr.next();
+						if (!mainWindow.equals(childWindow)) {
+							driver.switchTo().window(childWindow);
+							System.out.println(driver.switchTo().window(childWindow).getTitle());
+							driver.manage().window().maximize();
+							Thread.sleep(2000);
+							screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+							driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+							driver.switchTo().window(childWindow);
+						}
+					}
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Handeled the window"+scripNumber);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed to Handle the window"+scripNumber);
+					screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println("failed while hadling window");
+					e.printStackTrace();
+					throw e;
+				}
+			}
+			public void dragAnddrop(WebDriver driver, String xpath, String xpath1, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) {
+				try {
+					WebElement dragElement = driver.findElement(By.xpath(xpath));
+					fromElement = dragElement;
+					WebElement dropElement = driver.findElement(By.xpath(xpath1));
+					toElement = dropElement;
+					Actions action = new Actions(driver);
+					// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
+					action.dragAndDrop(fromElement, toElement).build().perform();
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Drag and drop the values"+scripNumber);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During dragAnddrop Action."+scripNumber);
+					screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println(xpath);
+					e.printStackTrace();
+					throw e;
+				}
+			}
+			public void clickFilter(WebDriver driver, String xpath1, String xpath2, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) throws InterruptedException {
+				try {
+					WebElement waittill = driver.findElement(By.xpath(xpath1));
+					WebElement waittill1 = driver.findElement(By.xpath(xpath2));
+					if (waittill1.isDisplayed()) {
+						WebDriverWait wait = new WebDriverWait(driver, 10);
+						WebElement element = wait.until(ExpectedConditions.elementToBeClickable(waittill));
+						element.click();
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked clickFilter"+scripNumber);
+						return;
+					} else {
+						waittill.click();
+						System.out.println("");
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked clickFilter"+scripNumber);
+						return;
+					}
+				} catch (StaleElementReferenceException e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  clickFilter"+scripNumber);	
+					WebElement waittill = driver.findElement(By.xpath(xpath1));
+					WebDriverWait wait = new WebDriverWait(driver, 60);
+					wait.until(ExpectedConditions.elementToBeClickable(waittill));
+					waittill.click();
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  clickFilter"+scripNumber);	
+					screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println(xpath1);
+					throw e;
+				}
+			}
+			public void selectByText(WebDriver driver, String param1, String param2, String inputData,
+					FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+				try {
+					if (param1.equalsIgnoreCase("Address Purposes")) {
+						Thread.sleep(2000);
+						WebElement waittext = driver.findElement(
+								By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
+										+ param2 + "']/following::select[not (@title)]")));
+						selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+
+						String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						log.info("Sucessfully Clicked selectByText" + scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Holds")) {
+						Thread.sleep(2000);
+						WebElement waittext = driver.findElement(
+								By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
+										+ param2 + "']/preceding-sibling::select[@title='']"));
+						selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+
+						String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::select[@title='']";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						log.info("Sucessfully Clicked Holds selectByText" + scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Holds selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					if (param2.equalsIgnoreCase("Batch Status")) {
+						Thread.sleep(2000);
+						WebElement waittext = driver.findElement(By.xpath(
+								("//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
+										+ param2 + "']/preceding-sibling::select[1]")));
+						selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String xpath="//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select[1]";
+								service.saveXpathParams(param1,param2,scripNumber,xpath);
+						log.info("Sucessfully Clicked Batch Status selectByText" + scripNumber);
+						return;
+					}
+
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Batch Status selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Release") && param2.equalsIgnoreCase("Name")) {
+						Thread.sleep(5000);
+						WebElement waittext = driver.findElement(By.xpath(
+								("(//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
+										+ param2 + "']/preceding-sibling::select)[2]")));
+						selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+
+						String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select)[2]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						log.info("Sucessfully Clicked Release selectByText" + scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Release selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					Thread.sleep(2000);
+					WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
+							+ "']/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
+					selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked selectByText" + scripNumber);
+
+					String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::select[1]";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					Thread.sleep(2000);
+					WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
+							+ "']/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
+					selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::select[1]";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.info("Sucessfully Clicked selectByText" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					Thread.sleep(2000);
+					WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
+							+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
+					selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::select[1]";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.info("Sucessfully Clicked selectByText" + scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					if (param2 == "") {
+						WebElement waittext = driver
+								.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::select[1]")));
+						selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+
+						String xpath = "//*[contains(text(),'param1')]/following::select[1]";
+						service.saveXpathParams(param1, param2, scripNumber, xpath);
+						log.info("Sucessfully Clicked selectCheckBox" + scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectByText" + scripNumber);
+					System.out.println(param2);
+				}
+				try {
+					WebElement waittext = driver
+							.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/preceding-sibling::select[1]")));
+					selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					String xpath = "//*[contains(text(),'param1')]/preceding-sibling::select[1]";
+					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					log.info("Sucessfully Clicked selectByText" + scripNumber);
+					return;
+				} catch (Exception e) {
+					System.out.println(param2);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectByText" + scripNumber);
+					screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
+			private void selectMethod(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+					FetchConfigVO fetchConfigVO) {
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				Select selectBox = new Select(waittext);
+				selectBox.selectByVisibleText(inputData);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked selectMethod"+scripNumber);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				return;
+			}
+			public void copy(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					Robot r = new Robot();
+					r.keyPress(KeyEvent.VK_CONTROL);
+					r.keyPress(KeyEvent.VK_C);
+					r.keyRelease(KeyEvent.VK_C);
+					r.keyRelease(KeyEvent.VK_CONTROL);
+					String scripNumber = fetchMetadataVO.getScript_number();	
+					log.info("Successfully Copy is done " +scripNumber);
+
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Copy " +scripNumber);
+					screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO);
+					e.printStackTrace();
+					throw e;
+				}
+			}// input[@placeholder='Enter search terms']
+			public String copyy(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+				try {
+					WebElement webElement = driver.findElement(By.xpath(xpath));
+					String number = webElement.getText();
+					System.out.println(number);
+					String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
+					StringSelection stringSelection = new StringSelection(num);
+					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked copyy"+scripNumber);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during copyy"+scripNumber);
+					screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println(xpath);
+					throw e;
+				}
+				return xpath;
+			}
+			public String copytext(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) {
+				try {
+					java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
+					ArrayList<String> texts = new ArrayList<String>();
+					for (WebElement element : webElement) {
+						String[] text = element.getText().split(":");
+						if (text.length == 2) {
+							texts.add(text[1].trim().toString());
+							System.out.println(texts.get(0));
+							StringSelection stringSelection = new StringSelection(texts.get(0));
+							Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+						}
+					}
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked copytext"+scripNumber);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during copytext"+scripNumber);
+					screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println(xpath);
+					throw e;
+				}
+				return xpath;
+
+			}
+			public void clear(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
+					FetchConfigVO fetchConfigVO) {
+
+				try {
+					if (inputParam1.equalsIgnoreCase("Lines")) {
+						WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + inputParam1
+								+ "\"]/following::label[normalize-space(text())='" + inputParam2
+								+ "']/preceding-sibling::input)[1]"));
+						clearMethod(driver, waittill);
+						Thread.sleep(4000);
+						String scripNumber=fetchMetadataVO.getScript_number();
+						String xpath="(//*[normalize-space(text())='inputParam1']/following::label[normalize-space(text())='inputParam2']/preceding-sibling::input)[1]";
+								service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
+						return;
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+				try {
+					if (inputParam2.equals("Accounting Period")) {
+						Thread.sleep(4000);
+						WebElement waittill = driver
+								.findElement(By.xpath("//label[normalize-space(text())='" + inputParam2 + "']/preceding-sibling::input[1]"));
+						clearMethod(driver, waittill);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Successfully Accounting Period Cleared" +scripNumber);
+						String xpath="//label[normalize-space(text())='inputParam2']/preceding-sibling::input[1]";
+								service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During Accounting Period Clear" +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					WebElement waittill = driver.findElement(
+							By.xpath("(//label[contains(text(),'" + inputParam1 + "')]/preceding-sibling::input)[1]"));
+					clearMethod(driver, waittill);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Cleared" +scripNumber);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During Clear" +scripNumber);
+					System.out.println(e);
+				}
+				try {
+					Thread.sleep(4000);
+					WebElement waittill = driver
+							.findElement(By.xpath("(//*[normalize-space(text())='" + inputParam1 + "']/following::input)[1]"));
+					clearMethod(driver, waittill);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Cleared" +scripNumber);
+					String xpath="(//*[normalize-space(text())='inputParam1']/following::input)[1]";
+							service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
+					return;
+				} catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During Clear" +scripNumber);
+				}
+				try {
+					WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam1 + "')]"));
+					clearMethod(driver, waittill);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Cleared" +scripNumber);
+					String xpath="//*[contains(@placeholder,'inputParam1')]";
+							service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During Clear" +scripNumber);
+					System.out.println(e);
+				}try { 
+					Thread.sleep(2000);
+					WebElement waittill = driver.findElement(By.xpath("(//label[normalize-space(text())='"+inputParam1+"']/following::input)[1]"));
+					clearMethod(driver, waittill);
+					Thread.sleep(2000);
+					return;
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+				try {
+					WebElement waittill = driver
+							.findElement(By.xpath("//*[normalize-space(text())='" + inputParam1 + "']/following::textarea[1]"));
+					clearMethod(driver, waittill);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Successfully Cleared" +scripNumber);
+					String xpath="//*[normalize-space(text())='inputParam1']/following::textarea[1]";
+							service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During Clear" +scripNumber);
+					screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println(e);
+					throw e;
+				}
+			}
+			public void clearMethod(WebDriver driver, WebElement waittill) {
+				WebDriverWait wait = new WebDriverWait(driver, 60);
+				wait.until(ExpectedConditions.elementToBeClickable(waittill));
+				waittill.click();
+				waittill.clear();
+				log.info("clear and typed the given Data");
+			}
+			public void enter(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					Thread.sleep(2000);
+					Actions actionObject = new Actions(driver);
+					actionObject.sendKeys(Keys.ENTER).build().perform();
+					Thread.sleep(8000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked enter"+scripNumber);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  enter"+scripNumber);	
+					System.out.println(e);
+					screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
+			public void tab(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+				try {
+					Thread.sleep(4000);
+					Actions action = new Actions(driver);
+					action.sendKeys(Keys.TAB).build().perform();
+					Thread.sleep(8000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked tab"+scripNumber);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  tab"+scripNumber);	
+					screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println("Failed to do TAB Action");
+					e.printStackTrace();
+					throw e;
+				}
+			}
+			public void windowclose(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+				try {
+					String mainWindow = driver.getWindowHandle();
+					// It returns no. of windows opened by WebDriver and will return Set of Strings
+					Set<String> set = driver.getWindowHandles();
+					// Using Iterator to iterate with in windows
+					Iterator<String> itr = set.iterator();
+					while (itr.hasNext()) {
+						String childWindow = itr.next();
+						// Compare whether the main windows is not equal to child window. If not
+						// equal,we will close.
+						if (!mainWindow.equals(childWindow)) {
+							driver.switchTo().window(childWindow);
+							System.out.println(driver.switchTo().window(childWindow).getTitle());
+							driver.manage().window().maximize();
+							driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+							driver.switchTo().window(childWindow);
+							driver.close();
+							driver.switchTo().window(mainWindow);
+							String scripNumber = fetchMetadataVO.getScript_number();
+							log.info("Successfully Windowclosed" +scripNumber);
+						}
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed During WindowClose Acion."+scripNumber);
+					screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+					throw e;
+				}
+			}
 }

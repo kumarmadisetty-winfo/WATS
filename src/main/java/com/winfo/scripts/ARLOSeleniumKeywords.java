@@ -4824,12 +4824,7 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		
 	}
 
-	@Override
-	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
