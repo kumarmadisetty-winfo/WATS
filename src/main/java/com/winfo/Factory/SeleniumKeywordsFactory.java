@@ -6,19 +6,20 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.winfo.interface1.SeleniumKeyWordsInterface;
-import com.winfo.scripts.ARLOSeleniumKeywordsTest;
-import com.winfo.scripts.UDGSeleniumKeyWordsTest;
+import com.winfo.scripts.ARLOSeleniumKeywords;
+import com.winfo.scripts.UDGSeleniumKeyWords;
+
 @Configuration
 public class SeleniumKeywordsFactory {
 	@Bean
-	@Primary
+//	@Primary
 public SeleniumKeyWordsInterface getInstanceObj(String instanceName) {
 	if(instanceName.equalsIgnoreCase("udg")) {
 		
-//		return new UDGSeleniumKeyWordsTest();
+		return new UDGSeleniumKeyWords();
 	} 
 	else if(instanceName.equalsIgnoreCase("arlo")) {
-//		return new ARLOSeleniumKeywordsTest();
+		return new ARLOSeleniumKeywords();
 	}
 	return null;
 }

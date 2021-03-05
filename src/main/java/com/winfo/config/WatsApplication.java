@@ -18,19 +18,14 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 @EnableAsync
 @EnableScheduling
 @EntityScan("com.winfo.model")
-@ComponentScan("com.winfo.controller;com.winfo.scripts;com.winfo.services;com.winfo.dao;")
+@ComponentScan("com.winfo.controller;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory")
 public class WatsApplication extends SpringBootServletInitializer{
 	
-	@Autowired
-	private ApplicationContext context;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(WatsApplication.class, args);
 		
 	}
-	@Bean
-	public SeleniumKeyWordsInterface commandLineRunner() {
-		SeleniumKeywordsFactory factory=context.getBean(SeleniumKeywordsFactory.class);
-		return factory.getInstanceObj("udg");
-	}
+
 }
