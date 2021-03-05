@@ -7,18 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.scripts.ARLOSeleniumKeywordsTest;
-import com.winfo.scripts.UDGSeleniumKeyWords;
+import com.winfo.scripts.UDGSeleniumKeyWordsTest;
 @Configuration
-public class InstanceFactory {
+public class SeleniumKeywordsFactory {
 	@Bean
 	@Primary
 public SeleniumKeyWordsInterface getInstanceObj(String instanceName) {
-//	if(instanceName.equalsIgnoreCase("udg")) {
-//		return new UDGSeleniumKeyWords();
-//	} 
-//	else if(instanceName.equalsIgnoreCase("arlo")) {
+	if(instanceName.equalsIgnoreCase("udg")) {
+		
+//		return new UDGSeleniumKeyWordsTest();
+	} 
+	else if(instanceName.equalsIgnoreCase("arlo")) {
 //		return new ARLOSeleniumKeywordsTest();
-//	}
-	return new UDGSeleniumKeyWords();
+	}
+	return null;
 }
 }

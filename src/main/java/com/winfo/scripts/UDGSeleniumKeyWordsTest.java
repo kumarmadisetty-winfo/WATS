@@ -130,7 +130,7 @@ import java.awt.geom.Rectangle2D;
 //@Component
 //@Qualifier("udg")
 //@ConditionalOnProperty(name = "message.default.welcome", havingValue = "udg")
-public class UDGSeleniumKeyWords extends SeleniumkeywordsAbstract{
+public class UDGSeleniumKeyWordsTest extends SeleniumkeywordsAbstract{
 //New-changes - added annotation for DatabaseEntry
 @Autowired
 private DataBaseEntry  databaseentry;

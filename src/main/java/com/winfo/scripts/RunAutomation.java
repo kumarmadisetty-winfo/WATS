@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
-import com.winfo.Factory.InstanceFactory;
+import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -39,7 +39,7 @@ import java.util.Date;
 //@Component
 public class RunAutomation {
 //	@Autowired(required=true)
-	InstanceFactory instanceFactory=new InstanceFactory();
+	SeleniumKeywordsFactory instanceFactory=new SeleniumKeywordsFactory();
 	@Autowired(required=true)
 	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface=instanceFactory.getInstanceObj("udg");
 

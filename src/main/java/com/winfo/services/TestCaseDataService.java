@@ -48,7 +48,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 
-import com.winfo.scripts.UDGSeleniumKeyWords;
+import com.winfo.scripts.UDGSeleniumKeyWordsTest;
 
 @Service
 

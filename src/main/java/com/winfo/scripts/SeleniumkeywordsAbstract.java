@@ -98,7 +98,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 
-public abstract class SeleniumkeywordsAbstract implements SeleniumKeyWordsInterface{
+public abstract class SeleniumkeywordsAbstract{
 	@Autowired
 	private DataBaseEntry  databaseentry;
 	@Autowired
