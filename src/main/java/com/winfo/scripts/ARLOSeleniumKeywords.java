@@ -87,8 +87,8 @@ import com.winfo.utils.StringUtils;
 @Service
 //@Component
 //@Qualifier("arlo")
-@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo1")
-public  class ARLOSeleniumKeywords  extends SeleniumkeywordsAbstract {
+//@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo1")
+public  class ARLOSeleniumKeywords {
 
 	 Logger logger = LogManager.getLogger(UDGSeleniumKeyWords.class);
 	/*
@@ -4806,46 +4806,6 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 
 
 
-	@Override
-	public void datePicker(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
-
-
-
-
-	@Override
-	public void switchToParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
-			String input_value, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getErrorMessages(WebDriver driver) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void moveToElement(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 
 }

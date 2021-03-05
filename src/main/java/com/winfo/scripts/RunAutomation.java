@@ -36,10 +36,10 @@ import java.util.Date;
 
 @Service
 @RefreshScope
-@Component
+//@Component
 public class RunAutomation {
-	@Autowired(required=true)
-	InstanceFactory instanceFactory;
+//	@Autowired(required=true)
+	InstanceFactory instanceFactory=new InstanceFactory();
 	@Autowired(required=true)
 	private SeleniumKeyWordsInterface SeleniumKeyWordsInterface=instanceFactory.getInstanceObj("udg");
 
