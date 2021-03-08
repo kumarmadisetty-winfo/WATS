@@ -37,12 +37,9 @@ import java.util.Date;
 
 @Service
 @RefreshScope
-//@Component
 public class RunAutomation {
 	@Autowired
 	ApplicationContextClass applicationContext;
-//	@Autowired(required=true)
-//	instanceFactory.getInstanceObj("udg");
 
 	@Autowired
 	TestCaseDataService dataService;

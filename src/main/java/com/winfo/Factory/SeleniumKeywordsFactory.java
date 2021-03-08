@@ -12,7 +12,6 @@ import com.winfo.scripts.UDGSeleniumKeyWords;
 @Configuration
 public class SeleniumKeywordsFactory {
 	@Bean
-//	@Primary
 public SeleniumKeyWordsInterface getInstanceObj(String instanceName) {
 	if(instanceName.equalsIgnoreCase("udg")) {
 		
