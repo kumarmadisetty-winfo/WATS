@@ -89,7 +89,8 @@ public class RunAutomation {
 	long increment=0;
 	public void run(String args) throws MalformedURLException {
 		System.out.println(args);
-		try {			// Config Webservice
+		try {
+			// Config Webservice
 //			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 //	        LocalDateTime now = LocalDateTime.now();
 //	        String start_time=dtf.format(now);

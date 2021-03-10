@@ -84,11 +84,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
-@Service
-//@Component
-@Qualifier("arlo")
-//@Bean(name="arlo")
-//@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo1")
+@Service("arlo")
 public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 

@@ -124,20 +124,14 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
-@Service
-@Qualifier("udg")
+@Service("udg")
 public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 @Autowired
 private DataBaseEntry  databaseentry;
 @Autowired
 ScriptXpathService service;
-//	public static log log = LogManager.getlog(SeleniumKeyWords.class);
-	/*
-	 * private Integer ElementWait = Integer
-	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
-	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
-	 */
+
 	Logger log = Logger.getLogger("Logger");
 	
 	public String Main_Window = "";

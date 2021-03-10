@@ -15,17 +15,12 @@ import net.bytebuddy.implementation.bytecode.Throw;
 
 @Configuration
 public class SeleniumKeywordsFactory {
-//	@Bean
 	@Autowired
 	private  ApplicationContext context;
 public  SeleniumKeyWordsInterface getInstanceObj(String instanceName) {
 	try {
-	if("udg".equalsIgnoreCase(instanceName)) {
-		return context.getBean(UDGSeleniumKeyWords.class);
-		} 
-	else if("arlo".equalsIgnoreCase(instanceName)) {
-		return context.getBean(ARLOSeleniumKeywords.class);
-	}
+	
+		return context.getBean(instanceName,SeleniumKeyWordsInterface.class);	
 }catch (Exception e) {
 	System.out.println("instance name not found");
 }
