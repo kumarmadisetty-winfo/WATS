@@ -86,11 +86,13 @@ import com.winfo.utils.StringUtils;
 
 @Service
 //@Component
-//@Qualifier("arlo")
+@Qualifier("arlo")
+//@Bean(name="arlo")
 //@ConditionalOnProperty(name = "message.default.welcome", havingValue = "arlo1")
 public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
-	 Logger logger = LogManager.getLogger(ARLOSeleniumKeywords.class);
+
+	Logger logger = LogManager.getLogger(ARLOSeleniumKeywords.class);
 	/*
 	 * private  Integer ElementWait = Integer
 	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.

@@ -66,6 +66,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -124,6 +125,7 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
 @Service
+@Qualifier("udg")
 public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 @Autowired

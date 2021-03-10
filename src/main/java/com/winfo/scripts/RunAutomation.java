@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
-import com.winfo.Factory.ApplicationContextClass;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.services.FetchConfigVO;
@@ -39,7 +38,7 @@ import java.util.Date;
 @RefreshScope
 public class RunAutomation {
 	@Autowired
-	ApplicationContextClass applicationContext;
+	SeleniumKeywordsFactory seleniumFactory;
 
 	@Autowired
 	TestCaseDataService dataService;
@@ -90,8 +89,7 @@ public class RunAutomation {
 	long increment=0;
 	public void run(String args) throws MalformedURLException {
 		System.out.println(args);
-		try {
-			// Config Webservice
+		try {			// Config Webservice
 //			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 //	        LocalDateTime now = LocalDateTime.now();
 //	        String start_time=dtf.format(now);
@@ -161,9 +159,9 @@ public class RunAutomation {
 					}
 					executordependent.shutdown();
 				}
-				applicationContext.commandLineRunner().createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
-				applicationContext.commandLineRunner().createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
-				applicationContext.commandLineRunner().createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
+				seleniumFactory.getInstanceObj("udg").createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
+				seleniumFactory.getInstanceObj("udg").createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
+				seleniumFactory.getInstanceObj("udg").createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
 				increment=0;
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
@@ -285,7 +283,7 @@ public class RunAutomation {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 			Date startdate = new Date();
 			 fetchConfigVO.setStarttime(startdate);
-			 applicationContext.commandLineRunner().DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
+			 seleniumFactory.getInstanceObj("udg").DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
@@ -295,6 +293,7 @@ public class RunAutomation {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
+				String instanceName="";
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO,test_set_id,test_set_line_id);
 				dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id,startdate);
 				step_description=fetchMetadataVO.getStep_description();
@@ -328,7 +327,7 @@ public class RunAutomation {
 							dataSource = new ConnectToSQL();
 						log.info("Navigating to Login into Application Action");
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
+							seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
 								param3, fetchMetadataVO.getInput_value(),
 								dataSource.getPassword(param, userName, fetchConfigVO));
 						userName = null;
@@ -340,20 +339,20 @@ public class RunAutomation {
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
-						applicationContext.commandLineRunner().navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
+						seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "openTask":
 						log.info("Navigating to openTask Action");
-						applicationContext.commandLineRunner().openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
+						seleniumFactory.getInstanceObj(instanceName).openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2,count);
 						break;
 
 					case "Logout":
-						applicationContext.commandLineRunner().logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
+						seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
 						break;
 					case "SendKeys":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -363,7 +362,7 @@ public class RunAutomation {
 					case "textarea":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") 
 						{
-							applicationContext.commandLineRunner().textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -372,7 +371,7 @@ public class RunAutomation {
 						}
 					case "Dropdown Values":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().dropdownValues(driver, param1, param2, param3, fetchMetadataVO.getInput_value(),
+							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3, fetchMetadataVO.getInput_value(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
 						}
@@ -381,7 +380,7 @@ public class RunAutomation {
 						}
 					case "Table SendKeys":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -390,7 +389,7 @@ public class RunAutomation {
 						}
 					case "multiplelinestableSendKeys":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -399,7 +398,7 @@ public class RunAutomation {
 						}
 					case "Table Dropdown Values":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -408,7 +407,7 @@ public class RunAutomation {
 						}
 					case "clickLinkAction":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -417,7 +416,7 @@ public class RunAutomation {
 						}
 					case "clickCheckbox":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 						break;
 						}
 						else {
@@ -425,7 +424,7 @@ public class RunAutomation {
 						}
 					case "clickRadiobutton":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -434,7 +433,7 @@ public class RunAutomation {
 						}
 					case "selectAValue":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -442,44 +441,44 @@ public class RunAutomation {
 							break;
 						}
 					case "clickTableLink":
-						applicationContext.commandLineRunner().clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickLink":
-						applicationContext.commandLineRunner().clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickNotificationLink":
-						applicationContext.commandLineRunner().clickNotificationLink(driver, param1, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickMenu":
-						applicationContext.commandLineRunner().clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickImage":
-						applicationContext.commandLineRunner().clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickTableImage":
-						applicationContext.commandLineRunner().clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+						seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "clickExpandorcollapse":
-						applicationContext.commandLineRunner().clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton":		  
-						applicationContext.commandLineRunner().clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-						    message=applicationContext.commandLineRunner().getErrorMessages(driver);
-						    String message1=applicationContext.commandLineRunner().getErrorMessages(driver);
+						seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						    message=seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
+						    String message1=seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
 	                     if(message != null&& !message.startsWith("Example")) {
 	                           fetchConfigVO.setErrormessage(message);
-	                           applicationContext.commandLineRunner().screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
+	                           seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
 	                          throw new IllegalArgumentException("Erroe occured");
 	                        }
-	                     applicationContext.commandLineRunner().screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+	                     seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						break;
 					case "tableRowSelect":
-						applicationContext.commandLineRunner().tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton Dropdown":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/
 						break;
 						}
@@ -487,35 +486,35 @@ public class RunAutomation {
 							break;
 						}
 					case "mousehover":
-						applicationContext.commandLineRunner().mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "scrollUsingElement":
-						applicationContext.commandLineRunner().scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
+						seleniumFactory.getInstanceObj(instanceName).scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "moveToElement":
-						applicationContext.commandLineRunner().moveToElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).moveToElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchToDefaultFrame":
-						applicationContext.commandLineRunner().switchToDefaultFrame(driver);
+						seleniumFactory.getInstanceObj(instanceName).switchToDefaultFrame(driver);
 						break;
 					case "switchToFrame":
-						applicationContext.commandLineRunner().switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "windowhandle":
-						applicationContext.commandLineRunner().windowhandle(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).windowhandle(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "dragAnddrop":
-						applicationContext.commandLineRunner().dragAnddrop(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
+						seleniumFactory.getInstanceObj(instanceName).dragAnddrop(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickFilter":
-						applicationContext.commandLineRunner().clickFilter(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
+						seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "selectByText":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+							seleniumFactory.getInstanceObj(instanceName).selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 								fetchConfigVO);
 						break;
 						}
@@ -523,48 +522,48 @@ public class RunAutomation {
 							break;
 						}
 					case "copy":
-						applicationContext.commandLineRunner().copy(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copynumber":
-						globalValueForSteps = applicationContext.commandLineRunner().copynumber(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copyy":
-						applicationContext.commandLineRunner().copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "copytext":
-						applicationContext.commandLineRunner().copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clear":
-						applicationContext.commandLineRunner().clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "enter":
-						applicationContext.commandLineRunner().enter(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "tab":
-						applicationContext.commandLineRunner().tab(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "paste":
-						applicationContext.commandLineRunner().paste(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,
+						seleniumFactory.getInstanceObj(instanceName).paste(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,
 								globalValueForSteps);
 						break;
 					case "uploadFileAutoIT":
-						applicationContext.commandLineRunner().uploadFileAutoIT(fetchMetadataVO.getField_type(), fetchMetadataVO);
+						seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(fetchMetadataVO.getField_type(), fetchMetadataVO);
 						break;
 					case "windowclose":
-						applicationContext.commandLineRunner().windowclose(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchDefaultContent":
-						applicationContext.commandLineRunner().switchDefaultContent(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).switchDefaultContent(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchParentWindow":
-						applicationContext.commandLineRunner().switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "switchToParentWindow":
-						applicationContext.commandLineRunner().switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
+						seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver, fetchMetadataVO, fetchConfigVO);
 						break;
 					case "DatePicker":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							applicationContext.commandLineRunner().datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							seleniumFactory.getInstanceObj(instanceName).datePicker(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 						break;
 						}
 						else {
@@ -592,7 +591,7 @@ public class RunAutomation {
 						// passcount = passcount+1;
 						 Date enddate = new Date();
 						 fetchConfigVO.setEndtime(enddate);
-						 applicationContext.commandLineRunner().createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
+						 seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
 						try {
 						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 						 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id,enddate);
@@ -647,7 +646,7 @@ public class RunAutomation {
 					 Date enddate = new Date();
 					 fetchConfigVO.setEndtime(enddate);
 					 dataBaseEntry.updateEndTime(fetchConfigVO,test_set_line_id,test_set_id,enddate);
-					 applicationContext.commandLineRunner().createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
+					 seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",startdate,enddate);
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 	//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					
