@@ -78,7 +78,7 @@ public class CopyTestRunService {
 				
 				setScriptlinedata.setTestscriptperamid(sectiptlineid);
 				System.out.println(getScriptlinedata.getInput_parameter());
-				addInputvalues(getScriptlinedata,setScriptlinedata);
+				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo);
 			
 				setScriptlinedata.setInput_parameter(getScriptlinedata.getInput_parameter());
 				setScriptlinedata.setScript_id(getScriptlinedata.getScript_id());
@@ -112,9 +112,9 @@ public class CopyTestRunService {
 		System.out.println("newtestrun 1:"+newtestrun);
 	return newtestrun;
 	}
-	private void addInputvalues(ScritplinesData getScriptlinedata, ScritplinesData setScriptlinedata) throws InterruptedException {
+	private void addInputvalues(ScritplinesData getScriptlinedata, ScritplinesData setScriptlinedata,CopytestrunVo copyTestrunvo) throws InterruptedException {
 		String getInputvalues=getScriptlinedata.getInput_value();
-		if((getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
+		if("y".equalsIgnoreCase(copyTestrunvo.getIncrement_value())&&(getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
 			if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
 				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 				Date dateobj = new Date();
@@ -161,7 +161,7 @@ public class CopyTestRunService {
 //				getTestrun.addScriptsdata(getScriptdata);
 				for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 					ScritplinesData setScriptlinedata=new ScritplinesData();
-				addInputvalues(getScriptlinedata,setScriptlinedata);
+				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo);
 				getScriptlinedata.setInput_value(setScriptlinedata.getInput_value());
 //				getScriptdata.addScriptlines(getScriptlinedata);
 				}

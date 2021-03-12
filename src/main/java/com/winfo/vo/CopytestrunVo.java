@@ -11,7 +11,9 @@ private int  testScriptNo;
 	private int configuration ;
 	private String newtestrunname;
 	private String created_by;
-	 @JsonFormat(pattern = "MM/dd/yyyy")
+	private String increment_value;
+
+	@JsonFormat(pattern = "MM/dd/yyyy")
 	private Date creation_date;
 	 @JsonProperty("request_type")
 	 private String requesttype;
@@ -23,6 +25,13 @@ private int  testScriptNo;
 
 	public void setRequesttype(String requesttype) {
 		this.requesttype = requesttype;
+	}
+	 public String getIncrement_value() {
+		return increment_value;
+	}
+
+	public void setIncrement_value(String increment_value) {
+		this.increment_value = increment_value;
 	}
 
 	public String getCreated_by() {

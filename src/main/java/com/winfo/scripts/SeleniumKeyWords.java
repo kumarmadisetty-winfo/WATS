@@ -5568,10 +5568,32 @@ System.out.println("entered to getFailFileNameListNew");
 
 	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-
+try {
+	if("Manage Receipts".equalsIgnoreCase(param1)) {
+		Thread.sleep(3000);
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='"
+				+ param1 + "']/following::table[@summary='" + param2 + "']//a)[2]/parent::span")));
+		Thread.sleep(4000);
+		WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='" + param1
+				+ "']/following::table[@summary='" + param2 + "']//a)[2]/parent::span"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		actions.click(waittext).build().perform();
+		Thread.sleep(8000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked clickTableLink"+scripNumber);				
+String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]/parent::span";
+		service.saveXpathParams(param1, param2, scripNumber, xpath);
+	
+		return;
+	}
+}catch (Exception e) {
+	// TODO: handle exception
+}
 		try {
 			if (param1.equalsIgnoreCase("Manage Journals") || param1.equalsIgnoreCase("Journal Lines")
-					|| param1.equalsIgnoreCase("Manage Transactions") || param1.equalsIgnoreCase("Manage Receipts")
+					|| param1.equalsIgnoreCase("Manage Transactions") 
 					|| param1.equalsIgnoreCase("Prepare Source lines") || param1.equalsIgnoreCase("Contracts")) {
 				Thread.sleep(3000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -11848,7 +11870,7 @@ System.out.println(e);
 
 				WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
 
-						+ "']/following::label[contains(text(),'" + inputParam2 + "')]"));
+						+ "']/following::*[contains(text(),'" + inputParam2 + "')]"));
 
 				Actions actions = new Actions(driver);
 
@@ -11856,7 +11878,7 @@ System.out.println(e);
 
 				value = copyInt(webElement);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath="//div[normalize-space(text())='inputParam1']/following::label[contains(text(),'inputParam2')]";
+				String xpath="//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
