@@ -25,6 +25,7 @@ public class DriverConfiguration {
 		WebDriver driver = null;
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
+			System.setProperty("java.awt.headless", "false");
 	//		System.setProperty(DriverConstants.CHROME_DRIVER.value, "C:\\Users\\watsadmin\\Documents\\Selenium Grid\\chromedriver.exe");
 			Map<String, Object> prefs = new HashMap<String, Object>();
 			prefs.put("profile.default_content_settings.popups", 0);
@@ -32,7 +33,7 @@ public class DriverConfiguration {
 			ChromeOptions options = new ChromeOptions();
 //			options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
 			options.setBinary("/usr/bin/google-chrome");
-			options.addArguments("headless");
+//			options.addArguments("headless");
 			options.addArguments("start-maximized");
 			options.addArguments("--enable-automation");
 			options.addArguments("test-type=browser");

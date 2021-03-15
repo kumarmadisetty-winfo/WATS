@@ -1,5 +1,7 @@
 package com.winfo.services;
 
+import java.util.Date;
+
 public class FetchConfigVO {
 	
 	private String browser;
@@ -32,11 +34,72 @@ public class FetchConfigVO {
 	private String client_id;
 	private String client_secret;
 	private String tenant_id;
+	private Date starttime;
+	private Date Starttime1;
+	private Date endtime;
+	private int passcount;
+	private int failcount;
+	private String status1;
+	private String errormessage;
+//changed the name from Enable_video to enable_video
+	private String enable_video;
 	
-	
-	
-	
-	
+
+//New - change
+	public String getEnable_video() {
+		return enable_video;
+	}
+
+	public void setEnable_video(String enable_video) {
+		this.enable_video = enable_video;
+	}
+
+
+
+
+	public String getErrormessage() {
+		return errormessage;
+	}
+	public void setErrormessage(String errormessage) {
+		this.errormessage = errormessage;
+	}
+	public Date getStarttime1() {
+		return Starttime1;
+	}
+	public void setStarttime1(Date starttime1) {
+		Starttime1 = starttime1;
+	}
+	public Date getStarttime() {
+		return starttime;
+	}
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+
+	public Date getEndtime() {
+		return endtime;
+	}
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+	public int getPasscount() {
+		return passcount;
+	}
+	public void setPasscount(int passcount) {
+		this.passcount = passcount;
+	}
+	public int getFailcount() {
+		return failcount;
+	}
+	public void setFailcount(int failcount) {
+		this.failcount = failcount;
+	}
+	public String getStatus1() {
+		return status1;
+	}
+	public void setStatus1(String status1) {
+		this.status1 = status1;
+	}
 	public String getDb_host() {
 		return db_host;
 	}

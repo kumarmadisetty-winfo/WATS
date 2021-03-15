@@ -22,15 +22,18 @@ public class ConnectToSQL {
 			throws SQLException, ClassNotFoundException {
 
 		String password = null;
-
+		Connection conn=null;
+		Statement st=null;
+		ResultSet rs=null;
+		try {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
 //                           Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),fetchConfigVO.getDb_password());
 
-		Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-				"Winfo_123");
+		 conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+				"DB_PASSWORD");
 
-		Statement st = conn.createStatement();
+		 st = conn.createStatement();
 
 //                           String sqlStr = "SELECT TOOLKIT.DECRYPT(PASSWORD) PASSWORD FROM WIN_TA_CONFIG WHERE CONFIGURATION_ID = (SELECT CONFIGURATION_ID FROM WIN_TA_TEST_SET WHERE TEST_SET_ID = "+args+")";
 
@@ -38,7 +41,7 @@ public class ConnectToSQL {
 				+ args + " and (upper(users.user_name) = upper('" + userId + "') or ('" + userId
 				+ "' is null and users.default_user = 'Y')) and rownum = 1";
 
-		ResultSet rs = st.executeQuery(sqlStr);
+		 rs = st.executeQuery(sqlStr);
 
 		System.out.println(rs);
 
@@ -49,10 +52,15 @@ public class ConnectToSQL {
 			System.out.println(password);
 
 		}
+		}catch (Exception e) {
+			System.out.println(e);
+		}finally {
+			conn.close();
+			 st.close();
+			rs.close();
 
-		rs.close();
+		}
 
-		conn.close();
 
 		return password;
 
