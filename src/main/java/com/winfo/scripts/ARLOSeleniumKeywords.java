@@ -84,7 +84,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
-@Service("arlo")
+@Service("ARLO")
 public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 

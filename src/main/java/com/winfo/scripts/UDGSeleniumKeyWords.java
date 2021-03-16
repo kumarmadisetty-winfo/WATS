@@ -124,7 +124,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
-@Service("udg")
+@Service("UDG")
 public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 @Autowired

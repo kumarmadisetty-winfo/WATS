@@ -160,9 +160,9 @@ public class RunAutomation {
 					}
 					executordependent.shutdown();
 				}
-				seleniumFactory.getInstanceObj("udg").createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
-				seleniumFactory.getInstanceObj("udg").createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
-				seleniumFactory.getInstanceObj("udg").createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null,null);
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
 				increment=0;
 //				uploadPDF(fetchMetadataListVO, fetchConfigVO);
 			} catch (InterruptedException e) {
@@ -284,7 +284,8 @@ public class RunAutomation {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
 			Date startdate = new Date();
 			 fetchConfigVO.setStarttime(startdate);
-			 seleniumFactory.getInstanceObj("udg").DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
+			 String instanceName=fetchConfigVO.getInstance_name();
+			 seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO,fetchConfigVO);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
@@ -294,7 +295,6 @@ public class RunAutomation {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
-				String instanceName="";
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO,test_set_id,test_set_line_id);
 				dataBaseEntry.updateStartTime(fetchConfigVO,test_set_line_id,test_set_id,startdate);
 				step_description=fetchMetadataVO.getStep_description();

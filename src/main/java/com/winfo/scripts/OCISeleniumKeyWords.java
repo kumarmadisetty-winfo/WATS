@@ -126,7 +126,7 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.awt.DefaultFontMapper;
 import java.awt.geom.Rectangle2D;
 
-@Service("oci")
+@Service("OCI")
 public class OCISeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
@@ -9066,7 +9066,6 @@ public class OCISeleniumKeyWords implements SeleniumKeyWordsInterface{
 try {
 			System.out.println("Entered mousehover");
 			Thread.sleep(3000);
-			param1="HELLO_WORLD";
 //			String textHello = getExactPathWhenMultiElementFound(driver,"(//div[contains(text(),'Hello World')])[1]");
 //			WebElement hello = driver.findElement(By.xpath("(//div[contains(text(),'Hello World')])[1]"));
 //		Actions a = new Actions(driver);
@@ -9081,7 +9080,7 @@ try {
 			System.out.println("Mouse Moved");
 			Thread.sleep(5000);
 //to click the run button
-			WebElement waittext = driver.findElement(By.xpath("//div[@title='Run']"));
+			WebElement waittext = driver.findElement(By.xpath("//div[@title='"+param1+"']"));
 			waittext.click();
 			System.out.println("Clicked Run");
 		/*
@@ -9093,7 +9092,7 @@ try {
 			 * waittext); Thread.sleep(1000); waittext.click();
 			 */screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
-			String xpath = "//div[@title='Run']";
+			String xpath = "//div[@title='"+param1+"']";
 			service.saveXpathParams(param1, param2, scripNumber, xpath);
 			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
