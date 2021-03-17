@@ -43,12 +43,22 @@ public class FetchConfigVO {
 	private String errormessage;
 //changed the name from Enable_video to enable_video
 	private String enable_video;
-	
+	private String instance_name;
 
 //New - change
 	public String getEnable_video() {
 		return enable_video;
 	}
+
+	public String getInstance_name() {
+		return instance_name;
+	}
+
+	public void setInstance_name(String instance_name) {
+		this.instance_name = instance_name;
+	}
+
+
 
 	public void setEnable_video(String enable_video) {
 		this.enable_video = enable_video;

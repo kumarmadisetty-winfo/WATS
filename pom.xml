@@ -37,6 +37,25 @@
 
 
 	<dependencies>
+	<!-- https://mvnrepository.com/artifact/com.assertthat/selenium-shutterbug -->
+        <dependency>
+            <groupId>com.assertthat</groupId>
+            <artifactId>selenium-shutterbug</artifactId>
+            <version>0.9</version>
+        </dependency>
+	<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -376,7 +395,17 @@
     		<version>1.2</version>
 		</dependency>
 	</dependencies>
-
+<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<profiles>
 		<profile>
 			<id>rest</id>
@@ -432,7 +461,90 @@
 					</plugin>
 				</plugins>
 			</build>
+			<properties>
+				<!--  <config.server.uri>http://localhost:8888</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>hub</profiles> -->
+				<instance>SeleniumKeyWords</instance>
+			</properties>
+		</profile>
+
+
+
+<profile>
+			<id>Arlo</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>winfoautiomation-ubuntu</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<!-- <config.server.uri>http://localhost:8888</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>hub</profiles> -->
+				<instance>arlo</instance>
+			</properties>
 
 		</profile>
+	
+		
 	</profiles>
 </project>
