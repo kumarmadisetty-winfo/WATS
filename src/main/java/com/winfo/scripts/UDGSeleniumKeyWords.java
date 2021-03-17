@@ -66,7 +66,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -131,7 +130,12 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 private DataBaseEntry  databaseentry;
 @Autowired
 ScriptXpathService service;
-
+//	public static log log = LogManager.getlog(SeleniumKeyWords.class);
+	/*
+	 * private Integer ElementWait = Integer
+	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
+	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
+	 */
 	Logger log = Logger.getLogger("Logger");
 	
 	public String Main_Window = "";
@@ -696,9 +700,9 @@ System.out.println("entered to getFailFileNameListNew");
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		File file = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		File file1 = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
         BufferedImage image = null;
@@ -743,7 +747,7 @@ System.out.println("entered to getFailFileNameListNew");
         g.drawImage(logo,1012,15,null);
         g.dispose();
         System.out.println("before ImageIO.write");
-        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
         BufferedImage image1 = null;
@@ -756,7 +760,7 @@ System.out.println("entered to getFailFileNameListNew");
         g1.drawImage(logo,1012,15,null);
         g1.dispose();
 //        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
-        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+        String imgpath2 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/";
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
@@ -851,9 +855,9 @@ System.out.println("entered to getFailFileNameListNew");
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+		File file = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/white.jpg");
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+		File file1 = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/WATS_LOGO.JPG");
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 		
         BufferedImage image = null;
@@ -897,7 +901,7 @@ System.out.println("entered to getFailFileNameListNew");
         g.drawString("Execution Time : "+ExecutionTime, 50, 450);
         g.drawImage(logo,1012,15,null);
         g.dispose();
-        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
         BufferedImage image1 = null;
@@ -909,9 +913,9 @@ System.out.println("entered to getFailFileNameListNew");
         g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
         g1.drawImage(logo,1150,15,null);
         g1.dispose();
-        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/last.jpg"));
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
-        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+        String imgpath2 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/";
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
@@ -1009,9 +1013,9 @@ System.out.println("entered to getFailFileNameListNew");
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			File file = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			File file1 = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
 			 BufferedImage image = null;
@@ -1068,11 +1072,11 @@ System.out.println("entered to getFailFileNameListNew");
 	         g2.drawString("Execution Time : "+ExecutionTime, 50,425);
 	         g2.drawImage(logo,1012,15,null);
 		     g2.dispose();
-			 ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+			 ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg"));
 			 //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
-			 String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
-			 String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
-	         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+			 String imgpath3 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg";
+			 String imgpath2 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/";
+	         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/"+imagename+".jpg"));
 			 //String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 			 //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 	         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
@@ -1185,9 +1189,9 @@ System.out.println("entered to getFailFileNameListNew");
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
+			File file = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/white.jpg");
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+			File file1 = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/WATS_LOGO.JPG");
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 			
 	        BufferedImage image = null;
@@ -1230,7 +1234,7 @@ System.out.println("entered to getFailFileNameListNew");
 ////	    g.drawString("End Time :"+endtime1, 50, 500);
 ////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 	        g.dispose();
-	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/"+imagename+".jpg"));
 	        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 	        
 	        BufferedImage image1 = null;
@@ -1242,7 +1246,7 @@ System.out.println("entered to getFailFileNameListNew");
 	        g1.drawImage(logo,1012,14,null);
 	        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
 	        g1.dispose();
-	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
+	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/last.jpg"));
 	        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
 	        
 	        BufferedImage image2 = null;
@@ -1258,9 +1262,9 @@ System.out.println("entered to getFailFileNameListNew");
             g2.drawString("Execution Time : "+ExecutionTime, 50,425);
             g2.drawImage(logo,1012,15,null);
 	        g2.dispose();
-	       	ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
-	        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
-	        String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+	       	ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg"));
+	        String imgpath3 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg";
+	        String imgpath2 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/";
 	        
 	        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
 		    //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
@@ -1383,8 +1387,8 @@ System.out.println("entered to getFailFileNameListNew");
 						ArrayList<String> linksall = new ArrayList<String>();
 						
 
-						File file = new File("/u01/oracle/selenium/temp/VideoRecord/white.jpg");
-						File file1 = new File("/u01/oracle/selenium/temp/VideoRecord/WATS_LOGO.JPG");
+						File file = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/white.jpg");
+						File file1 = new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/WATS_LOGO.JPG");
 						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
 						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 				        BufferedImage image = null;
@@ -1427,7 +1431,7 @@ System.out.println("entered to getFailFileNameListNew");
 				        //g.drawString("End Time :"+endtime1, 50, 500);
 				        //g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 				        g.dispose();
-				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/"+imagename+".jpg"));
+				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/"+imagename+".jpg"));
 				        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 				        
 				        BufferedImage image1 = null;
@@ -1453,11 +1457,11 @@ System.out.println("entered to getFailFileNameListNew");
 			            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
 			            g2.drawImage(logo,1012,15,null);
 				        g2.dispose();
-				       ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/first.jpg"));
+				       ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg"));
 				        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
-				       String imgpath2 ="/u01/oracle/selenium/temp/VideoRecord/";
+				       String imgpath2 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/";
 				        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-				        String imgpath3 ="/u01/oracle/selenium/temp/VideoRecord/first.jpg";
+				        String imgpath3 ="/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/Images/first.jpg";
 				        //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 				        File f11=new File(imgpath2);
 				        File[] f22=f11.listFiles();
@@ -5565,10 +5569,32 @@ System.out.println("entered to getFailFileNameListNew");
 
 	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-
+try {
+	if("Manage Receipts".equalsIgnoreCase(param1)) {
+		Thread.sleep(3000);
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='"
+				+ param1 + "']/following::table[@summary='" + param2 + "']//a)[2]/parent::span")));
+		Thread.sleep(4000);
+		WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='" + param1
+				+ "']/following::table[@summary='" + param2 + "']//a)[2]/parent::span"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		actions.click(waittext).build().perform();
+		Thread.sleep(8000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked clickTableLink"+scripNumber);				
+String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]/parent::span";
+		service.saveXpathParams(param1, param2, scripNumber, xpath);
+	
+		return;
+	}
+}catch (Exception e) {
+	// TODO: handle exception
+}
 		try {
 			if (param1.equalsIgnoreCase("Manage Journals") || param1.equalsIgnoreCase("Journal Lines")
-					|| param1.equalsIgnoreCase("Manage Transactions") || param1.equalsIgnoreCase("Manage Receipts")
+					|| param1.equalsIgnoreCase("Manage Transactions") 
 					|| param1.equalsIgnoreCase("Prepare Source lines") || param1.equalsIgnoreCase("Contracts")) {
 				Thread.sleep(3000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -11845,7 +11871,7 @@ System.out.println(e);
 
 				WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
 
-						+ "']/following::label[contains(text(),'" + inputParam2 + "')]"));
+						+ "']/following::*[contains(text(),'" + inputParam2 + "')]"));
 
 				Actions actions = new Actions(driver);
 
@@ -11853,7 +11879,7 @@ System.out.println(e);
 
 				value = copyInt(webElement);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath="//div[normalize-space(text())='inputParam1']/following::label[contains(text(),'inputParam2')]";
+				String xpath="//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
