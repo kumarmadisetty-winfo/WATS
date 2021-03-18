@@ -308,6 +308,8 @@ public class RunAutomation {
 				String type2 = null;
 				String type3 = null;
 				String message=null;
+				String value1=null;
+				String value2=null;
 				int count=0;
 				if (screenParameter != null) {
 					param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
@@ -317,6 +319,9 @@ public class RunAutomation {
 					type1 = actionType != null ? actionType.split(">").length > 0 ? actionType.split(">")[0] : "" : "";
 					type2 = actionType != null ? actionType.split(">").length > 1 ? actionType.split(">")[1] : "" : "";
 					type3 = actionType != null ? actionType.split(">").length > 2 ? actionType.split(">")[2] : "" : "";
+					String getValue = fetchMetadataVO.getInput_value();
+	                value1 = getValue!=null ? getValue.split(">").length > 0 ? getValue.split(">")[0] : "" : "";
+	                value2 = getValue!=null ? getValue.split(">").length > 1 ? getValue.split(">")[1] : "" : "";
 				
 				}
 				try {
@@ -397,6 +402,7 @@ public class RunAutomation {
 						else {
 							break;
 						}
+						
 					case "Table Dropdown Values":
 						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
@@ -570,6 +576,24 @@ public class RunAutomation {
 						else {
 							break;
 						}
+					case "refreshPage":
+						seleniumFactory.getInstanceObj(instanceName).refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+						break;
+					case "navigateToBackPage":
+						seleniumFactory.getInstanceObj(instanceName).navigateToBackPage(driver, fetchMetadataVO, fetchConfigVO);
+						break;
+					case "openPdf":
+						seleniumFactory.getInstanceObj(instanceName).openPdf(driver, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+						break;
+					case "openFile":
+						seleniumFactory.getInstanceObj(instanceName).openFile(driver, fetchMetadataVO, fetchConfigVO);
+						break;
+					case "actionApprove":
+						seleniumFactory.getInstanceObj(instanceName).actionApprove(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						break;
+					case "multipleSendKeys" :
+						seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1, param2, value1, value2,fetchMetadataVO, fetchConfigVO);
+						break;
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",

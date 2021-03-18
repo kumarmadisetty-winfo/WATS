@@ -116,6 +116,15 @@ public interface SeleniumKeyWordsInterface {
 				String type1, String type2, String param1, String param2, int count) throws Exception;
 		public void datePicker(WebDriver driver, String param1, String param2, String input_value,
 				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
+		public void refreshPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO);
+		public void navigateToBackPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO);
+		public void openPdf(WebDriver driver, String input_value, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO);
+		public void openFile(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO);
+		public void actionApprove(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO)throws Exception;
+		public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
+				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
 
