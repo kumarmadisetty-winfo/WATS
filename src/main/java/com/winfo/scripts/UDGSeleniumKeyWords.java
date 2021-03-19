@@ -12399,4 +12399,37 @@ System.out.println(e);
         }
         return null;
     }
+
+	@Override
+	public void navigateToBackPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void openPdf(WebDriver driver, String input_value, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void openFile(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionApprove(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
