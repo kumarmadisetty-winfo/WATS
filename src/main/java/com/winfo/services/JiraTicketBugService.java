@@ -101,7 +101,7 @@ public class JiraTicketBugService {
 				
 				//	  	  File	  filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
 			
-					  	  	  File filenew=new File("/objstore/watsuat/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
+					  	  	  File filenew=new File("/objstore/watsuat/UAT Testing/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
 					
 				  
 					 
