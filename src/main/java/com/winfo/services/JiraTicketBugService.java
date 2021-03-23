@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.dao.JiraTicketBugDao;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
+import com.winfo.scripts.SeleniumKeyWords;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DeleteScriptsData;
 import com.winfo.vo.DomGenericResponseBean;
@@ -53,7 +54,9 @@ import reactor.core.publisher.Mono;
 @Service
 @RefreshScope
 public class JiraTicketBugService {
-	
+	@Autowired
+private TestCaseDataService testRunService;
+ 
 	@Autowired
 	JiraTicketBugDao dao;
 	@Autowired
@@ -62,6 +65,7 @@ public class JiraTicketBugService {
 	private String userName;
 	@Value("${jira.password}")
 	private String password;
+	
 
 	public String webClient(String jiraissueurl,JSONObject jsonobject ) {
 		
@@ -75,14 +79,14 @@ public class JiraTicketBugService {
 	
 					
 					
-					  public String webClient1(String jiraattachmenturl,String testrunname,Integer seqnum,String scriptnumber) {
+					  public String webClient1(String jiraattachmenturl,String testrunname,Integer seqnum,String scriptnumber,Integer testsetid) {
 						
 	//public String webClient1(String jiraattachmenturl) {
 					  final WebClient webClient = webClientBuilder.defaultHeaders(httpHeaders ->
 					  httpHeaders.setBasicAuth(userName, password)).defaultHeader("X-Atlassian-Token", "no-check").build();
 					  Mono<String> result=webClient.post() .uri(jiraattachmenturl)
 					  .contentType(MediaType.MULTIPART_FORM_DATA) 
-					  .body(BodyInserters.fromMultipartData(fromFile(testrunname, seqnum, scriptnumber))) .retrieve()
+					  .body(BodyInserters.fromMultipartData(fromFile(testrunname, seqnum, scriptnumber,testsetid))) .retrieve()
 					
 				//	  .body(BodyInserters.fromMultipartData(fromFile ()))
 				//	  .retrieve()
@@ -92,16 +96,16 @@ public class JiraTicketBugService {
 					  
 					  
 					  } 
-					  public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname,Integer seqnum,String scriptnumber) {
+					  public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname,Integer seqnum,String scriptnumber,Integer testsetid) {
 						
 				//	  public MultiValueMap<String, HttpEntity<?>> fromFile() {
 						  MultipartBodyBuilder builder = new MultipartBodyBuilder(); 
 					 
-					
+						  FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(testsetid.toString());
 				
 				//	  	  File	  filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
 			
-					  	  	  File filenew=new File("/objstore/watsuat/UAT Testing/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
+					  	  	  File filenew=new File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
 					
 				  
 					 
@@ -255,7 +259,7 @@ public class JiraTicketBugService {
 											 if(issuekey!=null){
 												 String jiraattachmenturl=jiraissueurl+issuekey+"/attachments";
 									
-												 		 String jiraattachemtresponse= webClient1(jiraattachmenturl,slist.getTest_set_name(),slist.getSeq_num(),slist.getScript_number());
+												 		 String jiraattachemtresponse= webClient1(jiraattachmenturl,slist.getTest_set_name(),slist.getSeq_num(),slist.getScript_number(),slist.getTest_set_id());
 											 
 										//	 String jiraattachemtresponse= webClient1(jiraissueurlattachment);
 												
