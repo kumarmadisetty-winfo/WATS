@@ -18,7 +18,6 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
-@RefreshScope
+
 public class RunAutomation {
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
