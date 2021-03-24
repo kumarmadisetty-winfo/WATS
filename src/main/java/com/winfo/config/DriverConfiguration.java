@@ -51,7 +51,7 @@ public class DriverConfiguration {
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			//driver = new ChromeDriver(cap);
-			driver=new RemoteWebDriver(new URL("config_url"), cap); 
+			driver=new RemoteWebDriver(new URL("http://watsarlodev01.winfosolutions.com:4444/wd/hub"), cap); 
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 			
 			
