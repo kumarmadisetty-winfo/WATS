@@ -188,13 +188,13 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			System.out.println(sharepoint);
 			String accessToken = getAccessToken();
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name());
+			File imageDir = new File(System.getProperty("user.dir") + "/" + "Screenshot/"
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name());
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
 				System.out.println(imageFileName);
 				imageUrlList.add(imageFileName);
-				BufferedImage bImage = ImageIO.read(new File(imageDir + "\\" + imageFileName));
+				BufferedImage bImage = ImageIO.read(new File(imageDir + "/" + imageFileName));
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				ImageIO.write(bImage, "png", bos);
 				byte[] data = bos.toByteArray();
@@ -263,7 +263,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO,FetchConfigVO fetchConfigVO)throws IOException {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(System.getProperty("user.dir")+"/"+"Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -293,7 +293,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(System.getProperty("user.dir")+"/"+"Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -323,7 +323,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(System.getProperty("user.dir")+"/"+"Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -354,7 +354,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	public  List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
 
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(System.getProperty("user.dir")+"/"+"Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -383,7 +383,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public  List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir")+"\\"+"Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(System.getProperty("user.dir")+"/"+"Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>(){
             public int compare(File f1, File f2)
@@ -412,8 +412,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 
 		File[] listOfFiles = folder.listFiles();
 
@@ -477,8 +477,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() +  fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 
 		File[] listOfFiles = folder.listFiles();
 
@@ -542,8 +542,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\"+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 //		File folder = new File("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/");
 		File[] listOfFiles = folder.listFiles();
 
@@ -623,8 +623,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 //		File folder = new File("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/");
 		File[] listOfFiles = folder.listFiles();
 
@@ -706,8 +706,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 
 		File[] listOfFiles = folder.listFiles();
 
@@ -815,8 +815,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() +"\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 //			String Folder = "/oci/wats_objects/UDG/UDG/Ireland Aquilant (1711) AP/";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
@@ -854,7 +854,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			document.open();
 			for (String image : fileNameList) {
 				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() +"\\" +  customer_Name + "\\" + test_Run_Name + "\\" + image);
+						fetchConfigVO.getScreenshot_path() +  customer_Name + "/" + test_Run_Name + "/" + image);
 //				Image img = Image.getInstance("/u01/app/tomcat/Screenshot/UDG/Ireland Aquilant (1711) AP/" + image);
 
 				String ScriptNumber = image.split("_")[3];
@@ -890,8 +890,8 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			String pdffileName,Date Starttime,Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() +"\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			String Folder = (fetchConfigVO.getPdf_path()  + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -927,7 +927,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			document.open();
 			for (String image : fileNameList) {
 				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() +"\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
+						fetchConfigVO.getScreenshot_path()  + customer_Name + "/" + test_Run_Name + "/" + image);
 				String ScriptNumber = image.split("_")[3];
 				String TestRun = image.split("_")[4];
 				String Status = image.split("_")[6];
@@ -967,13 +967,13 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			  String accessToken = getAccessTokenPdf();
 			  List imageUrlList = new ArrayList();
-			  File imageDir = new File(fetchConfigVO.getPdf_path()+"\\"+fetchMetadataListVO.get(0).getCustomer_name() +"\\" +fetchMetadataListVO.get(0).getTest_run_name()+"\\");
+			  File imageDir = new File(fetchConfigVO.getPdf_path()+fetchMetadataListVO.get(0).getCustomer_name() +"/" +fetchMetadataListVO.get(0).getTest_run_name()+"/");
 			  System.out.println(imageDir);
 			  for(File imageFile : imageDir.listFiles()){
 				  String imageFileName = imageFile.getName();
 				  System.out.println(imageFileName);
 				  imageUrlList.add(imageFileName);
-				  File pdfFile = new File(imageDir+"\\"+imageFileName);
+				  File pdfFile = new File(imageDir+"/"+imageFileName);
 				  System.out.println(pdfFile);
 				  FileInputStream input = new FileInputStream(pdfFile);
 				  ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -1058,7 +1058,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			  System.out.println(number);
 	//		  String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 	//		  System.out.println(num);
-			  driver.get(fetchConfigVO.getDownlod_file_path()+"\\"+number+".log");
+			  driver.get(fetchConfigVO.getDownlod_file_path()+"/"+number+".log");
 			  Thread.sleep(2000);
 			  screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			  driver.navigate().back();
@@ -4383,8 +4383,8 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 				Shutterbug.shootPage(driver,ScrollStrategy.BOTH_DIRECTIONS,500,true).withName(fetchMetadataVO.getSeq_num() + "_"
 						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-						+ fetchMetadataVO.getLine_number() + "_Passed").save(fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name() + "\\"
-						+ fetchMetadataVO.getTest_run_name() + "\\");
+						+ fetchMetadataVO.getLine_number() + "_Passed").save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+						+ fetchMetadataVO.getTest_run_name() + "/");
 				logger.info("Successfully Screenshot is taken");
 				return image_dest;
 			} catch (Exception e) {
@@ -4401,8 +4401,8 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 				Shutterbug.shootPage(driver,ScrollStrategy.BOTH_DIRECTIONS,500,true).withName(fetchMetadataVO.getSeq_num() + "_"
 						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-						+ fetchMetadataVO.getLine_number() + "_Failed").save(fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name() + "\\"
-						+ fetchMetadataVO.getTest_run_name() + "\\");
+						+ fetchMetadataVO.getLine_number() + "_Failed").save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+						+ fetchMetadataVO.getTest_run_name() + "/");
 				logger.info("Successfully Screenshot is taken");
 				return image_dest;
 			} catch (Exception e) {
