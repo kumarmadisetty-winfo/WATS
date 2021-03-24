@@ -23,6 +23,7 @@ public class DriverConfiguration {
 
 	public static WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
 		WebDriver driver = null;
+		 String os = System.getProperty("os.name").toLowerCase();
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
 			System.setProperty("java.awt.headless", "false");
@@ -31,8 +32,15 @@ public class DriverConfiguration {
 			prefs.put("profile.default_content_settings.popups", 0);
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
+		     if(os.indexOf("win") >= 0) {
+					options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+ 
+		     }else {
+					options.setBinary("/usr/bin/google-chrome"); 
+		     }
+
 //			options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
-			options.setBinary("/usr/bin/google-chrome");
+//			options.setBinary("/usr/bin/google-chrome");
 //			options.addArguments("headless");
 			options.addArguments("start-maximized");
 			options.addArguments("--enable-automation");
