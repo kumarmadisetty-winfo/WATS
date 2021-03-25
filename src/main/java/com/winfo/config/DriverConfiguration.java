@@ -32,9 +32,10 @@ public class DriverConfiguration {
 			prefs.put("profile.default_content_settings.popups", 0);
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
+			DesiredCapabilities cap = DesiredCapabilities.chrome();
 		     if(os.indexOf("win") >= 0) {
 //					options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
- 
+		    	 cap.setCapability("chrome.binary", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 		     }else {
 					options.setBinary("/usr/bin/google-chrome"); 
 		     }
@@ -47,9 +48,11 @@ public class DriverConfiguration {
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
 			options.setExperimentalOption("prefs", prefs);
-			DesiredCapabilities cap = DesiredCapabilities.chrome();
+			
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
+			
+
 			//driver = new ChromeDriver(cap);
 			driver=new RemoteWebDriver(new URL("config_url"), cap); 
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
