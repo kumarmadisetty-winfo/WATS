@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -21,8 +22,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Table(name = "WIN_TA_SCRIPT_MASTER")
 public class ScriptMaster {
 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "master_generator")
+	@SequenceGenerator(name = "master_generator", sequenceName = "WIN_TA_SCRIPT_MASTER_SEQ", allocationSize = 1)
 	@Id
-	@GeneratedValue
+	//@GeneratedValue
 	@Column(name = "SCRIPT_ID")
 	private Integer script_id;
 	@Column(name = "SCRIPT_NUMBER")

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -19,8 +20,10 @@ import javax.persistence.UniqueConstraint;
 
 public class ScriptMetaData {
 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metadata_generator")
+	@SequenceGenerator(name = "metadata_generator", sequenceName = "WIN_TA_SCRIPT_METADATA_SEQ", allocationSize = 1)
 	@Id
-	@GeneratedValue
+//	@GeneratedValue
 	@Column(name = "SCRIPT_META_DATA_ID")
 	private Integer script_meta_data_id;
 	@Column(name = "SCRIPT_NUMBER")
