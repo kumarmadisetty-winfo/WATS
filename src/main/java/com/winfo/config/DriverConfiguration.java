@@ -33,7 +33,7 @@ public class DriverConfiguration {
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
 		     if(os.indexOf("win") >= 0) {
-					options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+//					options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
  
 		     }else {
 					options.setBinary("/usr/bin/google-chrome"); 
@@ -51,7 +51,7 @@ public class DriverConfiguration {
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			//driver = new ChromeDriver(cap);
-			driver=new RemoteWebDriver(new URL("http://watsarlodev01.winfosolutions.com:4444/wd/hub"), cap); 
+			driver=new RemoteWebDriver(new URL("config_url"), cap); 
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 			
 			
