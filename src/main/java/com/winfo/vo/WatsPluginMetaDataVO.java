@@ -28,7 +28,7 @@ public class WatsPluginMetaDataVO {
 	private String updated_by;
 	@JsonProperty("UPDATE_DATE")
 	private Date update_date;
-	@JsonProperty("STEP_DESC")
+	@JsonProperty("STEP DESCRIPTION")
 	private String step_desc;
 	@JsonProperty("FIELD_TYPE")
 	private String field_type;

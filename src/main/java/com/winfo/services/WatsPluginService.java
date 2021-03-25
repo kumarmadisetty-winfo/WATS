@@ -100,6 +100,7 @@ public class WatsPluginService {
 			metadata.setAction(metadatavo.getAction());
 			metadata.setLine_number(metadatavo.getLine_number());
 			metadata.setInput_parameter(metadatavo.getInput_parameter());
+			metadata.setStep_desc(metadatavo.getStep_desc());
 			metadata.setScript_number(newScriptNumber);
 			master.addMetadata(metadata);
 			
