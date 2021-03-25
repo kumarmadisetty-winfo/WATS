@@ -291,6 +291,28 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		  System.out.println(acessToken);
 		  return acessToken;
 	  }
+	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+		List<String> fileNameList = new ArrayList<String>();
+		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File[] listOfFiles = folder.listFiles();
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				System.out.println("File " + listOfFiles[i].getName());
+				String fileName = listOfFiles[i].getName();
+				String[] fileNameArr = fileName.split("\\.");
+				String fileExt = fileNameArr[fileNameArr.length - 1];
+				String[] _arr = fileName.split("_");
+				String currentScriptNumber = _arr[2];
+				String Status = _arr[6];
+				String status = Status.split("\\.")[0];
+				if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
+					fileNameList.add(fileName);
+				}
+			}
+		}
+		return fileNameList;
+	}
 	public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
 			throws IOException {
 		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
@@ -3819,6 +3841,7 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		Actions actions = new Actions(driver); 
 		actions.moveToElement(waittext).build().perform();
 		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		
 		return;
 	} catch (Exception e) {
 		System.out.println(e);
