@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -4809,11 +4812,29 @@ public void dropdownValues(WebDriver driver, String param1, String param2,String
 		
 	}
 
-	@Override
-	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
+	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		if (folder.exists()) {
+		File[] listOfFiles = folder.listFiles();
 		
+//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+//				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//				+ fetchMetadataVO.getLine_number();
+			for (File file : Arrays.asList(listOfFiles)) {
+
+				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+			
+			String seqnum1=fetchMetadataListVO.get(0).getSeq_num();
+			if(seqNum.equalsIgnoreCase(seqnum1)) {
+				Path imagesPath = Paths.get(file.getPath());
+				 Files.delete(imagesPath);
+			}
+		}
+		}
 	}
 
 	@Override
