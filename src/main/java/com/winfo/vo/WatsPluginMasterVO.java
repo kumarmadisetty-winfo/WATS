@@ -76,6 +76,9 @@ public class WatsPluginMasterVO {
 	private String attribute10;
 	@JsonProperty("PRIORITY")
 	private Integer priority;
+	@JsonProperty("MODULE_SRT")
+	private String module_srt;
+	
 
 	@JsonProperty("MetaDataList")
 	private List<WatsPluginMetaDataVO> MetaDataList= new ArrayList<WatsPluginMetaDataVO>();
@@ -361,6 +364,15 @@ public class WatsPluginMasterVO {
 	public void setMetaDataList(List<WatsPluginMetaDataVO> metaDataList) {
 		MetaDataList = metaDataList;
 	}
+
+	public String getModule_srt() {
+		return module_srt;
+	}
+
+	public void setModule_srt(String module_srt) {
+		this.module_srt = module_srt;
+	}
+	
 	
 	
 }
