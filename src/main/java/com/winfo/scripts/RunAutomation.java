@@ -163,7 +163,9 @@ public class RunAutomation {
 				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null,null);
 				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null,null);
 				increment=0;
-//				uploadPDF(fetchMetadataListVO, fetchConfigVO);
+				if("ARLO".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO, fetchConfigVO);
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				  // Restore interrupted state...

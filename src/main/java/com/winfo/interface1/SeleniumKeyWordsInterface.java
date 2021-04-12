@@ -125,6 +125,7 @@ public interface SeleniumKeyWordsInterface {
 				FetchConfigVO fetchConfigVO)throws Exception;
 		public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
 				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
+		public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO);
 
 
 
