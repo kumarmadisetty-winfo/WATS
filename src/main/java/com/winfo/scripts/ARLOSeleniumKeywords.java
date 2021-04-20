@@ -1021,7 +1021,13 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 						  System.out.println("response : " + response);
 			  }
 		} catch (Exception e) {
-			  System.out.println(e);
+			for(int i=0;i<5;i++) {
+				if(i<3) {
+				uploadPDF(fetchMetadataListVO,fetchConfigVO);
+				}else {
+					 System.out.println(e);
+				}
+			}
 		  }
 	}
 	public  String getAccessTokenPdf(){
