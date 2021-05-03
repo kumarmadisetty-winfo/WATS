@@ -39,7 +39,7 @@ public class CentralToCustomerPostDao {
 		else {
 			for(i=0;i<result2.size();i++) {
 				String product_version_db=result2.get(i);
-		if(productversion.equals(product_version_db))
+				if(result2.contains(product_version_db) && product_version_db.equals(productversion))
 		{
 			 response.setStatus(400);
 	            response.setStatusMessage("ERROR");
@@ -53,7 +53,7 @@ public class CentralToCustomerPostDao {
 	            response.setStatus(200);
 	            response.setStatusMessage("SUCCESS");
 	            response.setDescription("Script Copied Successfully");
-
+                 break;
 			
 		}
 	}
