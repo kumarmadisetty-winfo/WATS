@@ -10,8 +10,6 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,12 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-//import org.springframework.web.multipart.MultipartRequest;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -38,16 +30,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.dao.JiraTicketBugDao;
-import com.winfo.model.TestSet;
-import com.winfo.model.TestSetLines;
-import com.winfo.scripts.SeleniumKeyWords;
 import com.winfo.vo.BugDetails;
-import com.winfo.vo.DeleteScriptsData;
-import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.DomGenericResponseBean1;
 import com.winfo.vo.TestRunVO;
-import com.winfo.vo.WatsMasterVO;
-import com.winfo.vo.WatsMetaDataVO;
 
 import reactor.core.publisher.Mono;
 
