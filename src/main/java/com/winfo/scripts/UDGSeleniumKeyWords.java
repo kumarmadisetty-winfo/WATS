@@ -1,19 +1,17 @@
 package com.winfo.scripts;
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
-import org.bytedeco.javacpp.avcodec;
-import org.bytedeco.javacpp.opencv_core.IplImage;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
-import org.bytedeco.javacv.OpenCVFrameConverter;
+import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,14 +40,35 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
-import org.apache.commons.io.FileUtils;
 
+//import blank.FFmpegFrameRecorder;
+//import blank.IplImage;
+//import blank.OpenCVFrameConverter;
+
+import org.apache.log4j.Logger;
+import org.bytedeco.javacpp.avcodec;
+import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.block.LineBorder;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -75,54 +94,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
-
-//import blank.FFmpegFrameRecorder;
-//import blank.IplImage;
-//import blank.OpenCVFrameConverter;
-
-import org.apache.log4j.Logger;
-import org.jfree.data.general.DefaultPieDataset;
-import com.itextpdf.text.Rectangle;
-
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BaseColor;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.block.LineBorder;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.title.LegendTitle;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.VerticalAlignment;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfTemplate;
-import com.itextpdf.awt.DefaultFontMapper;
-import java.awt.geom.Rectangle2D;
 @Service("UDG")
 public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
@@ -130,6 +128,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 private DataBaseEntry  databaseentry;
 @Autowired
 ScriptXpathService service;
+@Autowired
+DynamicRequisitionNumber dynamicnumber;
 //	public static log log = LogManager.getlog(SeleniumKeyWords.class);
 	/*
 	 * private Integer ElementWait = Integer
@@ -3022,6 +3022,19 @@ System.out.println("entered to getFailFileNameListNew");
 
 					.findElement(By.xpath("//label[text()='" + inputParam + "']/following::input[1]"));
 
+			//to get Dynamic copynumber
+			String testParamId=fetchMetadataVO.getTest_script_param_id();
+			String testSetId=fetchMetadataVO.getTest_set_line_id();
+
+			String inputValue=fetchMetadataVO.getInput_value();
+		
+			   String[] arrOfStr = inputValue.split(">", 5);
+			   String Testrun_name=arrOfStr[0];
+			   String seq=arrOfStr[1];
+			  // String Script_num=arrOfStr[2];
+			   String line_number=arrOfStr[2];
+			  String copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
+		     
 			String value = globalValueForSteps;
 
 //          String value = copynumber(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO)
@@ -3030,7 +3043,7 @@ System.out.println("entered to getFailFileNameListNew");
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-			jse.executeScript("arguments[0].value='" + value + "';", waittill);
+			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
 			/*
 			 * 
@@ -3048,6 +3061,7 @@ System.out.println("entered to getFailFileNameListNew");
 			String scripNumber=fetchMetadataVO.getScript_number();
 			String xpath="//label[text()='inputParam']/following::input[1]";
 					service.saveXpathParams(inputParam,"",scripNumber,xpath);
+
 			return;
 
 		} catch (Exception e) {
@@ -3060,19 +3074,33 @@ System.out.println("entered to getFailFileNameListNew");
 
 			WebElement waittill = driver.findElement(By.xpath("//input[@placeholder='" + inputParam + "']"));
 
+			//to get Dynamic copynumber
+			String testParamId=fetchMetadataVO.getTest_script_param_id();
+			String testSetId=fetchMetadataVO.getTest_set_line_id();
+
+			String inputValue=fetchMetadataVO.getInput_value();
+		
+			   String[] arrOfStr = inputValue.split(">", 5);
+			   String Testrun_name=arrOfStr[0];
+			   String seq=arrOfStr[1];
+			   String line_number=arrOfStr[2];
+			   //String Script_num=arrOfStr[3];
+			  String copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
+		     
 			String value = globalValueForSteps;
 
 			waittill.click();
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-			jse.executeScript("arguments[0].value='" + value + "';", waittill);
+			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
 			Thread.sleep(3000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Successfully paste is done " +scripNumber);
 	String xpath="//input[@placeholder='inputParam']";
 					service.saveXpathParams(inputParam,"",scripNumber,xpath);
+					
 
 			return;
 
@@ -11859,9 +11887,13 @@ System.out.println(e);
 
 				actions.moveToElement(webElement).build().perform();
 				value = copyNegative(webElement);
+
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath="//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
+						String testParamId=fetchMetadataVO.getTest_script_param_id();
+						String testSetId=fetchMetadataVO.getTest_set_line_id();
+						dynamicnumber.saveCopyNumber(value,testParamId,testSetId);
 				log.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
 				return value;
 
@@ -11893,7 +11925,9 @@ System.out.println(e);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath="//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
-
+						String testParamId=fetchMetadataVO.getTest_script_param_id();
+						String testSetId=fetchMetadataVO.getTest_set_line_id();
+						dynamicnumber.saveCopyNumber(value,testParamId,testSetId);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
 				return value;
@@ -11927,7 +11961,10 @@ System.out.println(e);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath="//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
-				log.info("Sucessfully Clicked  copynumber" + scripNumber);
+						String testParamId=fetchMetadataVO.getTest_script_param_id();
+						String testSetId=fetchMetadataVO.getTest_set_line_id();
+						dynamicnumber.saveCopyNumber(value,testParamId,testSetId);
+						log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
 				return value;
 
@@ -11957,6 +11994,9 @@ System.out.println(e);
 				String xpath="(//div[contains(@title,'inputParam1')])[1]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
 
+						String testParamId=fetchMetadataVO.getTest_script_param_id();
+						String testSetId=fetchMetadataVO.getTest_set_line_id();
+						dynamicnumber.saveCopyNumber(value,testParamId,testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
 				return value;
@@ -11985,7 +12025,9 @@ System.out.println(e);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath="//img[@title='In Balance ']/following::td[1]";
 						service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath);
-
+						String testParamId=fetchMetadataVO.getTest_script_param_id();
+						String testSetId=fetchMetadataVO.getTest_set_line_id();
+						dynamicnumber.saveCopyNumber(value,testParamId,testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
 				return value;
