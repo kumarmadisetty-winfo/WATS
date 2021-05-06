@@ -29,7 +29,8 @@ import javax.script.ScriptException;
 import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpEntity;
 
 import org.springframework.http.HttpHeaders;
@@ -48,12 +49,14 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 
-
 @Service
-
+@RefreshScope
 public class TestCaseDataService {
 
 	Logger logger = LogManager.getLogger(TestCaseDataService.class);
+
+	@Value("${configvO.config_url1}")
+	private  String config_url;
 
 	public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
@@ -149,7 +152,7 @@ public class TestCaseDataService {
 //		final String uri = "https://watsdev01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/"
 //				+ parameter;
 
-		final String uri = "config_url" + parameter;
+		final String uri = config_url + parameter;
 
 // 	                          final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/taconfig/data/" + parameter;
 

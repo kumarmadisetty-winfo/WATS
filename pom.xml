@@ -409,9 +409,9 @@
 
 	<profiles>
 		<profile>
-			<id>rest</id>
+			<id>dev</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -444,6 +444,11 @@
 												<include>*.properties</include>
 												<include>Images/</include>
 											</includes>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+									
 										</resource>
 									</resources>
 								</configuration>
@@ -463,17 +468,17 @@
 				</plugins>
 			</build>
 			<properties>
-				<!--  <config.server.uri>http://localhost:8888</config.server.uri>
+				 <config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hub</profiles> -->
-				<instance>SeleniumKeyWords</instance>
+				<profiles>dev</profiles> 
+				<instance>dev</instance>
 			</properties>
 		</profile>
 
 
 
 <profile>
-			<id>Arlo</id>
+			<id>hub</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -538,14 +543,233 @@
 				</plugins>
 			</build>
 			<properties>
-				<!-- <config.server.uri>http://localhost:8888</config.server.uri>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hub</profiles> -->
-				<instance>arlo</instance>
+				<profiles>hub</profiles>
+				<instance>hub</instance>
 			</properties>
 
 		</profile>
-	
+	<profile>
+			<id>prd</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>winfoautiomation-ubuntu</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>prd</profiles>
+				<instance>prd</instance>
+			</properties>
+
+		</profile>
+		<profile>
+			<id>uat</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>winfoautiomation-ubuntu</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>uat</profiles>
+				<instance>uat</instance>
+			</properties>
+
+		</profile>
+		<profile>
+			<id>rep</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>winfoautiomation-ubuntu</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>rep</profiles>
+				<instance>rep</instance>
+			</properties>
+
+		</profile>
 		
 	</profiles>
+	
 </project>

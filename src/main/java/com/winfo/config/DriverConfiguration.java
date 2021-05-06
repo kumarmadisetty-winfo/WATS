@@ -14,13 +14,18 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
 import com.winfo.services.FetchConfigVO;
-
+@RefreshScope
 public class DriverConfiguration {
-
+	
+	@Value("${configvO.config_url}")
+private static String config_url;
+	
 	public static WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
 		WebDriver driver = null;
 		 String os = System.getProperty("os.name").toLowerCase();
@@ -55,7 +60,7 @@ public class DriverConfiguration {
 			
 
 			//driver = new ChromeDriver(cap);
-			driver=new RemoteWebDriver(new URL("config_url"), cap); 
+			driver=new RemoteWebDriver(new URL(config_url), cap); 
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 			
 			

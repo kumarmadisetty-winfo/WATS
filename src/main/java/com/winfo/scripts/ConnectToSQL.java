@@ -10,12 +10,17 @@ import java.sql.SQLException;
 
 import java.sql.Statement;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+
 import com.winfo.services.FetchConfigVO;
 
 import com.winfo.services.TestCaseDataService;
-
+@RefreshScope
 public class ConnectToSQL {
-
+	@Value("${database.dbpassword}")
+	private  String dbPassword;
+	
 	TestCaseDataService web = new TestCaseDataService();
 
 	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
@@ -31,7 +36,7 @@ public class ConnectToSQL {
 //                           Connection conn = DriverManager.getConnection(fetchConfigVO.getDb_host(),fetchConfigVO.getDb_username(),fetchConfigVO.getDb_password());
 
 		 conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
-				"DB_PASSWORD");
+				 dbPassword);
 
 		 st = conn.createStatement();
 
