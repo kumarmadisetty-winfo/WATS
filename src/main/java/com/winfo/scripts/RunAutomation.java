@@ -474,7 +474,7 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 						    message=seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
 						    String message1=seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-	                     if(message != null&& !message.startsWith("Example")) {
+	                     if(message != null&& !message.startsWith("Example")&&!message.startsWith("Batch")) {
 	                           fetchConfigVO.setErrormessage(message);
 	                           seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO, fetchConfigVO);
 	                          throw new IllegalArgumentException("Erroe occured");

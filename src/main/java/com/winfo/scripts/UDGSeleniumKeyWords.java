@@ -497,14 +497,14 @@ ScriptXpathService service;
 			Thread.sleep(3000);
 			if (param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(
-						By.xpath("//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='" + param1 + "']"));
+						By.xpath("//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='" + param2 + "']"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Successfully menuNavigationButton is done " +scripNumber);
-				 xpath="//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param1']";
+				 xpath="//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param2']";
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
 				return xpath;
 				
@@ -4352,6 +4352,52 @@ System.out.println("entered to getFailFileNameListNew");
 
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param2.equalsIgnoreCase("Save and Close")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver.findElement(By.xpath(("//span[text()='S']")));
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(15000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Create Time Card clickButton"+scripNumber);
+				String xpath="//span[text()='S']";
+						service.saveXpathParams(param1,param2,scripNumber,xpath);
+
+				return;
+			}
+
+		}catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Create Time Card clickButton"+scripNumber);
+
+			System.out.println(e);
+		}
+		try {
+			if (param1.equalsIgnoreCase("Expend")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver.findElement(By.xpath(("//div[contains(@class,’Overflow’)]//div[@role=’button’]")));
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(15000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Create Time Card clickButton"+scripNumber);
+				String xpath="//div[contains(@class,’Overflow’)]//div[@role=’button’]";
+						service.saveXpathParams(param1,param2,scripNumber,xpath);
+
+				return;
+			}
+
+		}catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Create Time Card clickButton"+scripNumber);
+
+			System.out.println(e);
+		}
 		try {
 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("OK")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
