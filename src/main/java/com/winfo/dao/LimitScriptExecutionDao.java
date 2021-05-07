@@ -66,17 +66,32 @@ public class LimitScriptExecutionDao {
 	public String getMailId(String name) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "select EMAIL from WIN_TA_USERS where USER_ID='"+name+"'";
-		NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
+		NativeQuery<String> query = session.createSQLQuery(sql);
 
-		List<BigDecimal> results = query.list();
+		List<String> results = query.list();
 		String mailId =null;
 		if (results != null && !results.isEmpty()) {
 			System.out.println(results.get(0));
 			logger.info("result" + results.get(0));
-			BigDecimal bigDecimal = results.get(0);
-			mailId = bigDecimal.toString();
+			mailId = results.get(0);
 		}
 		return mailId;
+	}
+
+
+	public String getCCmailId(String testRunId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "	SELECT PROJECT_MANAGER_EMAIL FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS TP WHERE TS.PROJECT_ID = TP.PROJECT_ID AND TS.TEST_SET_ID = :"+testRunId+"";
+		NativeQuery<String> query = session.createSQLQuery(sql);
+
+		List<String> results = query.list();
+		String mailId =null;
+		if (results != null && !results.isEmpty()) {
+			System.out.println(results.get(0));
+			logger.info("result" + results.get(0));
+			mailId = results.get(0);
+		}
+		return mailId;		
 	}
 
 }
