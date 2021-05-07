@@ -27,6 +27,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
+import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.scripts.DataBaseEntry;
 import java.time.format.DateTimeFormatter;  
@@ -36,6 +37,8 @@ import java.util.Date;
 @Service
 
 public class RunAutomation {
+	Logger log = Logger.getLogger("Logger");
+	
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
 
@@ -44,7 +47,10 @@ public class RunAutomation {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 	public String c_url = null;
-	Logger log = Logger.getLogger("Logger");
+
+	
+	@Autowired
+	LimitScriptExecutionService limitScriptExecutionService;
 	
 	/*
 	 * public void report() throws IOException, DocumentException,
@@ -101,6 +107,19 @@ public class RunAutomation {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
+			
+			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
+			int scriptsCount=limitScriptExecutionService.getPassedScriptsCount();
+			int inprogressandInqueueCount=limitScriptExecutionService.getInprogressAndInqueueCount();
+			int percentageCount=Math.round((limitedExecutionCount*(80.0f/100.0f)));
+			scriptsCount=scriptsCount+metaDataMap.size()+inprogressandInqueueCount;
+			if(percentageCount<=scriptsCount && limitedExecutionCount > scriptsCount ){
+           	 limitScriptExecutionService.sendmail(fetchMetadataListVO.get(0).getExecuted_by(),fetchMetadataListVO.get(0).getSmtp_from_mail()); 
+            }else if(limitedExecutionCount < scriptsCount) {
+            	 throw new IOException("Maximum number of scripts limited is completed");
+             }
+			
+			
 			Date date = new Date();
 			 fetchConfigVO.setStarttime1(date);
 			System.out.println(metaDataMap.toString());
