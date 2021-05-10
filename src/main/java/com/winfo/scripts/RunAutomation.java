@@ -299,6 +299,7 @@ public class RunAutomation {
 		String test_set_id = null;
 		String test_set_line_id = null;
 		String script_id = null;
+		String script_id1 = null;
 		String script_Number = null;
 		String line_number = null;
 		String seq_num = null;
@@ -334,6 +335,7 @@ public class RunAutomation {
 				actionName = fetchMetadataVO.getAction();
 				test_set_id = fetchMetadataVO.getTest_set_id();
 				test_set_line_id = fetchMetadataVO.getTest_set_line_id();
+				script_id1=fetchMetadataVO.getScript_id();
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
@@ -681,14 +683,16 @@ public class RunAutomation {
 						// passcount = passcount+1;
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
 						try {
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 						} catch (Exception e) {
 							System.out.println("e");
 						}
+						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
+								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO,fetchMetadataListVO,script_id1,script_Number,"pass",startdate,enddate);
+
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
@@ -742,12 +746,12 @@ public class RunAutomation {
 					failcount = failcount + 1;
 					Date enddate = new Date();
 					fetchConfigVO.setEndtime(enddate);
+					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + ".pdf", startdate, enddate);
-					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
-
+					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO,fetchMetadataListVO,script_id1,script_Number,"Fail",startdate,enddate);
 					throw e;
 				}
 			}
