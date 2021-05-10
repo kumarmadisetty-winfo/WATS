@@ -112,12 +112,12 @@ public class RunAutomation {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
-
-			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
-			int scriptsCount = limitScriptExecutionService.getPassedScriptsCount();
-			int inprogressandInqueueCount = limitScriptExecutionService.getInprogressAndInqueueCount();
-			int percentageCount = Math.round((limitedExecutionCount * (80.0f / 100.0f)));
-			scriptsCount = scriptsCount + metaDataMap.size() + inprogressandInqueueCount;
+			int limitedExecutionCount = fetchConfigVO.getMax_num_scripts();
+//			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
+			int scriptsCount=limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
+			int inprogressandInqueueCount=limitScriptExecutionService.getInprogressAndInqueueCount();
+			int percentageCount=Math.round((limitedExecutionCount*(80.0f/100.0f)));
+			scriptsCount=scriptsCount+metaDataMap.size()+inprogressandInqueueCount;
 			if (percentageCount <= scriptsCount && limitedExecutionCount > scriptsCount) {
 				limitScriptExecutionService.sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);

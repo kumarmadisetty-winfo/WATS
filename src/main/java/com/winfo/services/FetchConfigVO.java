@@ -44,8 +44,36 @@ public class FetchConfigVO {
 //changed the name from Enable_video to enable_video
 	private String enable_video;
 	private String instance_name;
+	private int max_num_scripts;
+	private String start_date;
+	private String end_date;
 
-//New - change
+
+public int getMax_num_scripts() {
+		return max_num_scripts;
+	}
+
+	public void setMax_num_scripts(int max_num_scripts) {
+		this.max_num_scripts = max_num_scripts;
+	}
+
+	public String getStart_date() {
+		return start_date;
+	}
+
+	public void setStart_date(String start_date) {
+		this.start_date = start_date;
+	}
+
+	public String getEnd_date() {
+		return end_date;
+	}
+
+	public void setEnd_date(String end_date) {
+		this.end_date = end_date;
+	}
+
+	//New - change
 	public String getEnable_video() {
 		return enable_video;
 	}

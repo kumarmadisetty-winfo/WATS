@@ -1,6 +1,7 @@
 package com.winfo.services;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -80,7 +81,7 @@ public class LimitScriptExecutionService {
 	@Transactional
 	public void sendAlertmail(String name, String fromMail, String testRunId){
 		try {
-		String toMail = limitScriptExecutionDao.getMailId(name);
+		String toMail = limitScriptExecutionDao.getToMailId(name);
 		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
 		Properties props = System.getProperties();
 		props.put("mail.smtp.host", "localhost");
@@ -107,7 +108,7 @@ public class LimitScriptExecutionService {
 	@Transactional
 	public void sendExceptionmail(String name, String fromMail, String testRunId) {
 		try {
-		String toMail = limitScriptExecutionDao.getMailId(name);
+		String toMail = limitScriptExecutionDao.getToMailId(name);
 		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
 		Properties props = System.getProperties();
 		props.put("mail.smtp.host", "localhost");
@@ -133,9 +134,23 @@ public class LimitScriptExecutionService {
 	}
 
 	@Transactional
-	public int getPassedScriptsCount() {
+	public int getPassedScriptsCount(String startDate, String endDate) {
 
-		return limitScriptExecutionDao.getPassedScriptsCount();
+		String startDate1 = null;
+		String endDate1 = null;
+		try {
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy");
+		Date date1 = inputFormat.parse(startDate);
+		Date date2 = inputFormat.parse(endDate);
+		startDate1= outputFormat.format(date1);
+		endDate1= outputFormat.format(date2);
+		System.out.println(startDate1+"enddate"+endDate1);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return limitScriptExecutionDao.getPassedScriptsCount(startDate1,endDate1);
 	}
 
 	@Transactional

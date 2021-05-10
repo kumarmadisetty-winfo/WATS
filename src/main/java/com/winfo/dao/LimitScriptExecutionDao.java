@@ -45,9 +45,9 @@ public class LimitScriptExecutionDao {
 
 	}
 
-	public int getPassedScriptsCount() {
+	public int getPassedScriptsCount(String startDate, String endDate) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "select count(STATUS) from WIN_TA_EXECUTION_AUDIT where status='pass'and execution_end_time BETWEEN '06-02-2021 10:04:02:AM' AND '28-04-2021 11:04:02:AM'";
+		String sql = "select count(STATUS) from WIN_TA_EXECUTION_AUDIT where status='pass'and execution_end_time BETWEEN '"+startDate+"' AND '"+endDate+"'";
 		NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
 
 		List<BigDecimal> results = query.list();
@@ -63,7 +63,8 @@ public class LimitScriptExecutionDao {
 	}
 
 
-	public String getMailId(String name) {
+
+	public String getToMailId(String name) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "select EMAIL from WIN_TA_USERS where USER_ID='"+name+"'";
 		NativeQuery<String> query = session.createSQLQuery(sql);
