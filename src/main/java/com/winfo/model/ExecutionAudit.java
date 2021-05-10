@@ -15,19 +15,19 @@ public class ExecutionAudit {
 	private String executionAuditId;
 
 	@Column(name = "TEST_SET_ID")
-	private String testsetid;
+	private String testSetId;
 
 	@Column(name = "SCRIPT_ID")
-	private String scriptid;
+	private String scriptId;
 
 	@Column(name = "SCRIPT_NUMBER")
-	private String scriptnumber;
+	private String scriptNumber;
 
 	@Column(name = "EXECUTION_Start_Time")
-	private String executionstarttime;
+	private Date executionStartTime;
 
 	@Column(name = "EXECUTION_END_TIME")
-	private Date executionendtime;
+	private Date executionEndTime;
 
 	@Column(name = "STATUS")
 	private String status;
@@ -42,47 +42,47 @@ public class ExecutionAudit {
 	}
 
 	public String getTestsetid() {
-		return testsetid;
+		return testSetId;
 	}
 
 	public void setTestsetid(String testsetid) {
-		this.testsetid = testsetid;
+		this.testSetId = testsetid;
 	}
 
 	public String getScriptid() {
-		return scriptid;
+		return scriptId;
 	}
 
 	public void setScriptid(String scriptid) {
-		this.scriptid = scriptid;
+		this.scriptId = scriptid;
 	}
 
 	public String getScriptnumber() {
-		return scriptnumber;
+		return scriptNumber;
 	}
 
 	public void setScriptnumber(String scriptnumber) {
-		this.scriptnumber = scriptnumber;
+		this.scriptNumber = scriptnumber;
 	}
 
 
 
-	public String getExecutionstarttime() {
-		return executionstarttime;
+	public Date getExecutionstarttime() {
+		return executionStartTime;
 	}
 
-	public void setExecutionstarttime(String executionstarttime) {
-		this.executionstarttime = executionstarttime;
+	public void setExecutionstarttime(Date executionstarttime) {
+		this.executionStartTime = executionstarttime;
 	}
 
 	
 
 	public Date getExecutionendtime() {
-		return executionendtime;
+		return executionEndTime;
 	}
 
 	public void setExecutionendtime(Date executionendtime) {
-		this.executionendtime = executionendtime;
+		this.executionEndTime = executionendtime;
 	}
 
 	public String getStatus() {

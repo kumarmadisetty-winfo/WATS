@@ -112,21 +112,22 @@ public class RunAutomation {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
-			int limitedExecutionCount = fetchConfigVO.getMax_num_scripts();
+			
+			int maxLimitExecutionCount = fetchConfigVO.getMax_num_scripts();
 //			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
-			int scriptsCount=limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
+			int scriptsPassCount=limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
 			int inprogressandInqueueCount=limitScriptExecutionService.getInprogressAndInqueueCount();
-			int percentageCount=Math.round((limitedExecutionCount*(80.0f/100.0f)));
-			scriptsCount=scriptsCount+metaDataMap.size()+inprogressandInqueueCount;
-			if (percentageCount <= scriptsCount && limitedExecutionCount > scriptsCount) {
+			int percentageCount=Math.round((maxLimitExecutionCount*(80.0f/100.0f)));
+			scriptsPassCount=scriptsPassCount+metaDataMap.size()+inprogressandInqueueCount;
+			if (percentageCount <= scriptsPassCount && maxLimitExecutionCount > scriptsPassCount) {
 				limitScriptExecutionService.sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-			} else if (limitedExecutionCount < scriptsCount) {
+			} else if (maxLimitExecutionCount < scriptsPassCount) {
 				limitScriptExecutionService.sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
 				executeTestrunVo.setStatuescode(400);
 				executeTestrunVo.setStatus("fail");
-				executeTestrunVo.setMessgae("Maximum number of scripts limited is completed");
+				executeTestrunVo.setMessgae("Your request could not be processed as you have reached the scripts execution threshold. You can run only run <> more scripts. Reach out to the WATS support team to enhance the limit..");
 				return executeTestrunVo;
 			}
 

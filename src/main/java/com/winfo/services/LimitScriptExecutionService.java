@@ -56,17 +56,10 @@ public class LimitScriptExecutionService {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
 			String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
-			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
-
-			String starttime = dateFormat.format(startDate);
-			String endtime = dateFormat.format(endDate);
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
-			executionAudit.setExecutionstarttime(starttime);
+			executionAudit.setExecutionstarttime(startDate);
 			executionAudit.setExecutionendtime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
@@ -88,21 +81,21 @@ public class LimitScriptExecutionService {
 		props.put("mail.smtp.port", "25");
 		props.put("mail.debug", "true");
 		Session session = Session.getDefaultInstance(props);
-		String subnect = "Warning - 80% Limit Completed";
+		String subject = "Warning - 80% Limit Completed";
 		String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
-				+ "        <br><br>As per your Licence, 80% of your test scripts have been executed. Can you please fallback to Winfo to extend your license?<br><br>"
+				+ "        <br><br>You have reached 80% of your threshold limit for the number of script execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
 				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(new InternetAddress("wats.cloud@winfosolutions.com"));
 		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
 		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
-		message.setSubject(subnect);
+		message.setSubject(subject);
 		message.setText(htmlBody); // as "text/plain"
 		message.setSentDate(new Date());
 		Transport.send(message);
 		}catch (Exception e) {
-			System.out.println("testrun data not added " + e);
-			log.error("testrun data not added " + e);
+			System.out.println("respect alert mail not sent  " + e);
+			log.error("respect alert mail not sent" + e);
 		}
 	}
 	@Transactional
@@ -117,7 +110,7 @@ public class LimitScriptExecutionService {
 		Session session = Session.getDefaultInstance(props);
 		String subnect = "Error - 100% Limit Completed";
 		String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
-				+ "        <br><br>As per your Licence, 100% of your test scripts have been executed. You can no longer use WATS until you update your license. Can you please fallback to Winfo to extend your license?<br><br>"
+				+ "        <br><br>You have exceeded your threshold limit for the number of scripts execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
 				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(new InternetAddress("wats.cloud@winfosolutions.com"));
@@ -128,8 +121,8 @@ public class LimitScriptExecutionService {
 		message.setSentDate(new Date());
 		Transport.send(message);
 		}catch (Exception e) {
-			System.out.println("testrun data not added " + e);
-			log.error("testrun data not added " + e);
+			System.out.println("respect execuption mail not sent " + e);
+			log.error("respect execuption mail not sent  " + e);
 		}
 	}
 
