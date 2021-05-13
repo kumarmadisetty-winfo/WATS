@@ -1,26 +1,27 @@
 package com.winfo.vo;
 
 public class ExecuteTestrunVo {
-private String Status;
-private String Messgae;
-private int statuescode;
-public String getStatus() {
-	return Status;
+private int statusCode;
+private String statusMesage;
+private String statusDescr;
+public int getStatusCode() {
+	return statusCode;
 }
-public void setStatus(String status) {
-	Status = status;
+public void setStatusCode(int statusCode) {
+	this.statusCode = statusCode;
 }
-public String getMessgae() {
-	return Messgae;
+public String getStatusMesage() {
+	return statusMesage;
 }
-public void setMessgae(String messgae) {
-	Messgae = messgae;
+public void setStatusMesage(String statusMesage) {
+	this.statusMesage = statusMesage;
 }
-public int getStatuescode() {
-	return statuescode;
+public String getStatusDescr() {
+	return statusDescr;
 }
-public void setStatuescode(int statuescode) {
-	this.statuescode = statuescode;
+public void setStatusDescr(String statusDescr) {
+	this.statusDescr = statusDescr;
 }
+
 
 }

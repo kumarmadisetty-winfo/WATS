@@ -113,21 +113,22 @@ public class RunAutomation {
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
 			
-			int maxLimitExecutionCount = fetchConfigVO.getMax_num_scripts();
+			int threshold = fetchConfigVO.getMax_num_scripts();
 //			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
 			int scriptsPassCount=limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
 			int inprogressandInqueueCount=limitScriptExecutionService.getInprogressAndInqueueCount();
-			int percentageCount=Math.round((maxLimitExecutionCount*(80.0f/100.0f)));
+			int percentageCount=Math.round((threshold*(80.0f/100.0f)));
 			scriptsPassCount=scriptsPassCount+metaDataMap.size()+inprogressandInqueueCount;
-			if (percentageCount <= scriptsPassCount && maxLimitExecutionCount > scriptsPassCount) {
+			if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
 				limitScriptExecutionService.sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-			} else if (maxLimitExecutionCount < scriptsPassCount) {
+			} else if (threshold < scriptsPassCount) {
+				int remaingScriptsCount=threshold-(scriptsPassCount+inprogressandInqueueCount);
 				limitScriptExecutionService.sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-				executeTestrunVo.setStatuescode(400);
-				executeTestrunVo.setStatus("fail");
-				executeTestrunVo.setMessgae("Your request could not be processed as you have reached the scripts execution threshold. You can run only run <> more scripts. Reach out to the WATS support team to enhance the limit..");
+				executeTestrunVo.setStatusCode(404);
+				executeTestrunVo.setStatusMesage("ERROR");
+				executeTestrunVo.setStatusMesage("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+remaingScriptsCount+" more scripts. Reach out to the WATS support team to enhance the limit..");
 				return executeTestrunVo;
 			}
 
@@ -201,9 +202,10 @@ public class RunAutomation {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 							fetchConfigVO);
 				}
-				executeTestrunVo.setStatuescode(200);
-				executeTestrunVo.setStatus("pass");
-				executeTestrunVo.setMessgae("sucesses");
+				executeTestrunVo.setStatusCode(200);
+				executeTestrunVo.setStatusMesage("SUCCESS");
+				executeTestrunVo.setStatusMesage("SUCCESSFULLY");
+				return executeTestrunVo;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				// Restore interrupted state...
@@ -214,9 +216,9 @@ public class RunAutomation {
 			System.out.println("Error in Block 1");
 			FetchScriptVO post = new FetchScriptVO();
 			post.setP_status("Fail");
-			executeTestrunVo.setStatuescode(400);
-			executeTestrunVo.setStatus("Fail");
-			executeTestrunVo.setMessgae("failed");
+			executeTestrunVo.setStatusCode(404);
+			executeTestrunVo.setStatusMesage("ERROR");
+			executeTestrunVo.setStatusMesage("ERROR");
 			dataService.updateTestCaseStatus(post, args, null);
 		}
 		return executeTestrunVo;

@@ -43,6 +43,15 @@ public class LimitScriptExecutionService {
 	@Autowired
 	private VmInstanceDAO vmInstanceDao;
 
+	@Value("${smpt.host}")
+	private String host;
+	
+	@Value("${smpt.port}")
+	private String port;
+	
+	@Value("${smpt.from.mail}")
+	private String fromMail;
+	
 	@Transactional
 	public int getLimitedCountForConfiguration(String testRunNo) {
 		log.info("goto limitScriptExecutionDao class");
@@ -77,8 +86,8 @@ public class LimitScriptExecutionService {
 		String toMail = limitScriptExecutionDao.getToMailId(name);
 		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
 		Properties props = System.getProperties();
-		props.put("mail.smtp.host", "localhost");
-		props.put("mail.smtp.port", "25");
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.port", port);
 		props.put("mail.debug", "true");
 		Session session = Session.getDefaultInstance(props);
 		String subject = "Warning - 80% Limit Completed";
@@ -86,7 +95,7 @@ public class LimitScriptExecutionService {
 				+ "        <br><br>You have reached 80% of your threshold limit for the number of script execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
 				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress("wats.cloud@winfosolutions.com"));
+		message.setFrom(new InternetAddress(fromMail));
 		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
 		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
 		message.setSubject(subject);
@@ -104,8 +113,8 @@ public class LimitScriptExecutionService {
 		String toMail = limitScriptExecutionDao.getToMailId(name);
 		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
 		Properties props = System.getProperties();
-		props.put("mail.smtp.host", "localhost");
-		props.put("mail.smtp.port", "25");
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.port", port);
 		props.put("mail.debug", "true");
 		Session session = Session.getDefaultInstance(props);
 		String subnect = "Error - 100% Limit Completed";
@@ -113,7 +122,7 @@ public class LimitScriptExecutionService {
 				+ "        <br><br>You have exceeded your threshold limit for the number of scripts execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
 				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress("wats.cloud@winfosolutions.com"));
+		message.setFrom(new InternetAddress(fromMail));
 		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
 		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
 		message.setSubject(subnect);
