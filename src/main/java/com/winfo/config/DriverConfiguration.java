@@ -23,8 +23,8 @@ import com.winfo.services.FetchConfigVO;
 @RefreshScope
 public class DriverConfiguration {
 
-	// @Value("${configvO.config_url}")
-	private static String config_url="http://watsdev01.winfosolutions.com:4444/wd/hub";
+	 @Value("${configvO.config_url}")
+	private static String config_url;
 	
 	public static WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
 		WebDriver driver = null;
