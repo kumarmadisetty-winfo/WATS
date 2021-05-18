@@ -468,7 +468,7 @@
 				</plugins>
 			</build>
 			<properties>
-				 <config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				 <config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>dev</profiles> 
 				<instance>dev</instance>
