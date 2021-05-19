@@ -44,6 +44,9 @@ public class RunAutomation {
 	SeleniumKeywordsFactory seleniumFactory;
 
 	@Autowired
+	DriverConfiguration deriverConfiguration;
+
+	@Autowired
 	TestCaseDataService dataService;
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -112,23 +115,27 @@ public class RunAutomation {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
-			
+
 			int threshold = fetchConfigVO.getMax_num_scripts();
 //			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
-			int scriptsPassCount=limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
-			int inprogressandInqueueCount=limitScriptExecutionService.getInprogressAndInqueueCount();
-			int percentageCount=Math.round((threshold*(80.0f/100.0f)));
-			scriptsPassCount=scriptsPassCount+metaDataMap.size()+inprogressandInqueueCount;
+			int scriptsPassCount = limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),
+					fetchConfigVO.getEnd_date());
+			int inprogressandInqueueCount = limitScriptExecutionService.getInprogressAndInqueueCount();
+			int percentageCount = Math.round((threshold * (80.0f / 100.0f)));
+			scriptsPassCount = scriptsPassCount + metaDataMap.size() + inprogressandInqueueCount;
 			if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
 				limitScriptExecutionService.sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
 			} else if (threshold < scriptsPassCount) {
-				int remaingScriptsCount=threshold-(scriptsPassCount+inprogressandInqueueCount);
+				int remaingScriptsCount = threshold - (scriptsPassCount + inprogressandInqueueCount);
 				limitScriptExecutionService.sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
 						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
 				executeTestrunVo.setStatusCode(404);
 				executeTestrunVo.setStatusMesage("ERROR");
-				executeTestrunVo.setStatusMesage("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+remaingScriptsCount+" more scripts. Reach out to the WATS support team to enhance the limit..");
+				executeTestrunVo.setStatusMesage(
+						"Your request could not be processed as you have reached the scripts execution threshold. You can run only run "
+								+ remaingScriptsCount
+								+ " more scripts. Reach out to the WATS support team to enhance the limit..");
 				return executeTestrunVo;
 			}
 
@@ -254,7 +261,7 @@ public class RunAutomation {
 		boolean isDriverError = true;
 		try {
 
-			driver = DriverConfiguration.getWebDriver(fetchConfigVO);
+			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
@@ -338,7 +345,7 @@ public class RunAutomation {
 				actionName = fetchMetadataVO.getAction();
 				test_set_id = fetchMetadataVO.getTest_set_id();
 				test_set_line_id = fetchMetadataVO.getTest_set_line_id();
-				script_id1=fetchMetadataVO.getScript_id();
+				script_id1 = fetchMetadataVO.getScript_id();
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
@@ -694,7 +701,8 @@ public class RunAutomation {
 						}
 						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
-						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO,fetchMetadataListVO,script_id1,script_Number,"pass",startdate,enddate);
+						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+								script_id1, script_Number, "pass", startdate, enddate);
 
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
@@ -754,7 +762,8 @@ public class RunAutomation {
 					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + ".pdf", startdate, enddate);
 					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
-					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO,fetchMetadataListVO,script_id1,script_Number,"Fail",startdate,enddate);
+					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
+							script_Number, "Fail", startdate, enddate);
 					throw e;
 				}
 			}
