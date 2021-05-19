@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.scripts.RunAutomation;
+import com.winfo.vo.ExecuteTestrunVo;
 import com.winfo.vo.TestScriptDto;
 
 @CrossOrigin("*")
@@ -31,13 +32,13 @@ public class JobController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript")
-	public String executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
+	public ExecuteTestrunVo executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
 			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-
+		ExecuteTestrunVo status = null;
 		if(testScriptDto !=null && testScriptDto.getTestScriptNo() != null) {
 			System.out.println("Parameter test script # : "+testScriptDto.getTestScriptNo());
 			try {
-				runAutomation.run(testScriptDto.getTestScriptNo());
+				status=runAutomation.run(testScriptDto.getTestScriptNo());
 			//runAutomation.report();
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -48,6 +49,6 @@ public class JobController {
 //		runAutomation.run(parameters.getTestScriptNo());
 		System.out.println("Test script # : ");
 
-		return "{status : 20}";
+		return status;
 	}
 }

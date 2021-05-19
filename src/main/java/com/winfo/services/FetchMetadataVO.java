@@ -36,8 +36,17 @@ public class FetchMetadataVO implements Serializable {
 	private String test_script_param_id;
 //added executed_by
     private String executed_by;
+	private String smtp_from_mail;
+	
+ public String getSmtp_from_mail() {
+		return smtp_from_mail;
+	}
 
- //added set and get method   
+	public void setSmtp_from_mail(String smtp_from_mail) {
+		this.smtp_from_mail = smtp_from_mail;
+	}
+
+	//added set and get method   
 	public String getExecuted_by() {
 		return executed_by;
 	}
