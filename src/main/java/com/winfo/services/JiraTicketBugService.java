@@ -84,26 +84,29 @@ public class JiraTicketBugService {
 
 	}
 
-	public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname, Integer seqnum, String scriptnumber,
-			Integer testsetid) {
-		MultipartBodyBuilder builder = null;
-		try {
-			// public MultiValueMap<String, HttpEntity<?>> fromFile() {
-			builder = new MultipartBodyBuilder();
-
-			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(testsetid.toString());
-
-			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-
-			File filenew = new File(fetchConfigVO.getPdf_path() + "/" + testrunname + "/" + seqnum.toString() + "_"
-					+ scriptnumber + ".pdf");
-
-			builder.part("file", new FileSystemResource(filenew));
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return builder.build();
-	}
+	  public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname,Integer seqnum,String scriptnumber,Integer testsetid) {
+			
+			//	  public MultiValueMap<String, HttpEntity<?>> fromFile() {
+					  MultipartBodyBuilder builder = new MultipartBodyBuilder(); 
+				 try {
+					 String args=testsetid.toString();
+					  FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
+					  final String uri = fetchConfigVO.getUri_test_scripts() + args;
+						List<FetchMetadataVO> fetchMetadataListVO =  testRunService.getFetchMetaData(args, uri);
+				 
+						//	  File	  filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
+				  //	  File	  filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
+		
+				  	  	//  File filenew=new File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
+					 	  File filenew=new File(fetchConfigVO.getPdf_path()+fetchMetadataListVO.get(0).getCustomer_name()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
+			  
+				 System.out.println("jira pdf path= " + filenew );
+				  builder.part("file", new  FileSystemResource(filenew));
+				 }catch (Exception e) {
+                   System.out.println(e);
+}
+					  return builder.build();
+					  }
 
 	@Transactional
 	public List<DomGenericResponseBean1> createJiraTicket(BugDetails bugdetails) throws ParseException {
