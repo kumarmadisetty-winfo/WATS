@@ -222,6 +222,7 @@ public class RunAutomation {
 			post.setP_status("Fail");
 			dataService.updateTestCaseStatus(post, args, null);
 		}
+		return executeTestrunVo;
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
