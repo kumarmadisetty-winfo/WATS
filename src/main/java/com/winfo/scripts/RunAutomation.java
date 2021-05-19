@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -116,28 +117,24 @@ public class RunAutomation {
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
 
-			int threshold = fetchConfigVO.getMax_num_scripts();
-//			int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
-			int scriptsPassCount = limitScriptExecutionService.getPassedScriptsCount(fetchConfigVO.getStart_date(),
-					fetchConfigVO.getEnd_date());
-			int inprogressandInqueueCount = limitScriptExecutionService.getInprogressAndInqueueCount();
-			int percentageCount = Math.round((threshold * (80.0f / 100.0f)));
-			scriptsPassCount = scriptsPassCount + metaDataMap.size() + inprogressandInqueueCount;
-			if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
-				limitScriptExecutionService.sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
-						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-			} else if (threshold < scriptsPassCount) {
-				int remaingScriptsCount = threshold - (scriptsPassCount + inprogressandInqueueCount);
-				limitScriptExecutionService.sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
-						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-				executeTestrunVo.setStatusCode(404);
-				executeTestrunVo.setStatusMesage("ERROR");
-				executeTestrunVo.setStatusMesage(
-						"Your request could not be processed as you have reached the scripts execution threshold. You can run only run "
-								+ remaingScriptsCount
-								+ " more scripts. Reach out to the WATS support team to enhance the limit..");
-				return executeTestrunVo;
+			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
+					fetchMetadataListVO, metaDataMap, args);
+
+			for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
+				if (entryMap.getValue()) {
+					executeTestrunVo.setStatusCode(404);
+					executeTestrunVo.setStatusMessage("ERROR");
+					if(entryMap.getKey()>0) {
+					executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+entryMap.getKey()+" more scripts. Reach out to the WATS support team to enhance the limit..");
+					}else {
+						executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
+	
+					}
+					return executeTestrunVo;
+
+				}
 			}
+
 
 			Date date = new Date();
 			fetchConfigVO.setStarttime1(date);
@@ -210,8 +207,8 @@ public class RunAutomation {
 							fetchConfigVO);
 				}
 				executeTestrunVo.setStatusCode(200);
-				executeTestrunVo.setStatusMesage("SUCCESS");
-				executeTestrunVo.setStatusMesage("SUCCESSFULLY");
+				executeTestrunVo.setStatusMessage("SUCCESS");
+				executeTestrunVo.setStatusDescr("SUCCESS");
 				return executeTestrunVo;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -223,12 +220,8 @@ public class RunAutomation {
 			System.out.println("Error in Block 1");
 			FetchScriptVO post = new FetchScriptVO();
 			post.setP_status("Fail");
-			executeTestrunVo.setStatusCode(404);
-			executeTestrunVo.setStatusMesage("ERROR");
-			executeTestrunVo.setStatusMesage("ERROR");
 			dataService.updateTestCaseStatus(post, args, null);
 		}
-		return executeTestrunVo;
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,

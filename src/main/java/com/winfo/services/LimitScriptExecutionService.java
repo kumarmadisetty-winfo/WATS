@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -52,6 +55,35 @@ public class LimitScriptExecutionService {
 	@Value("${smpt.from.mail}")
 	private String fromMail;
 	
+	public Map<Integer, Boolean> getLimitedCoundiationExaption(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO, LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap, String args) {
+		boolean flag=false;
+		int remaingScriptsCount=0;
+		 Map<Integer, Boolean> mutableMap=new TreeMap<Integer, Boolean>();
+		try {
+		int threshold = fetchConfigVO.getMax_num_scripts();
+//		int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
+		int scriptsPassCount=getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
+		int inprogressandInqueueCount=getInprogressAndInqueueCount();
+		int percentageCount=Math.round((threshold*(80.0f/100.0f)));
+		scriptsPassCount=scriptsPassCount+metaDataMap.size()+inprogressandInqueueCount;
+		if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
+			sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
+					fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
+		} else if (threshold < scriptsPassCount) {
+			remaingScriptsCount=threshold-(scriptsPassCount+inprogressandInqueueCount);
+			sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
+					fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
+			flag=true;
+		
+		}
+		}catch (Exception e) {
+			System.out.println("limited sctipt condiation filed " + e);
+			log.error("limited sctipt condiation filed " + e);
+		}
+		mutableMap.put(remaingScriptsCount,flag);
+		return mutableMap;
+	}
+	
 	@Transactional
 	public int getLimitedCountForConfiguration(String testRunNo) {
 		log.info("goto limitScriptExecutionDao class");
@@ -81,7 +113,7 @@ public class LimitScriptExecutionService {
 	}
 
 	@Transactional
-	public void sendAlertmail(String name, String fromMail, String testRunId){
+	public void sendAlertmail(String name, String fromMail1, String testRunId){
 		try {
 		String toMail = limitScriptExecutionDao.getToMailId(name);
 		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
@@ -108,7 +140,7 @@ public class LimitScriptExecutionService {
 		}
 	}
 	@Transactional
-	public void sendExceptionmail(String name, String fromMail, String testRunId) {
+	public void sendExceptionmail(String name, String fromMail1, String testRunId) {
 		try {
 		String toMail = limitScriptExecutionDao.getToMailId(name);
 		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);

@@ -82,7 +82,7 @@ public class LimitScriptExecutionDao {
 
 	public String getCCmailId(String testRunId) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "	SELECT PROJECT_MANAGER_EMAIL FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS TP WHERE TS.PROJECT_ID = TP.PROJECT_ID AND TS.TEST_SET_ID = :"+testRunId+"";
+		String sql = "SELECT PROJECT_MANAGER_EMAIL FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS TP WHERE TS.PROJECT_ID = TP.PROJECT_ID AND TS.TEST_SET_ID = '"+testRunId+"'";
 		NativeQuery<String> query = session.createSQLQuery(sql);
 
 		List<String> results = query.list();
