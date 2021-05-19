@@ -51,7 +51,8 @@ public class WatsPluginDao {
          return response;
 	}
 
-	public String getScriptNumber(String processArea, String module) {
+	@SuppressWarnings("deprecation")
+	public List<String> getScriptNumber(String processArea, String module) {
 		//select script_number from win_ta_script_master where process_area='RTR' and module='General Ledger' ORDER BY script_number DESC ;
 
 		Session session = entityManager.unwrap(Session.class);
@@ -62,16 +63,16 @@ public class WatsPluginDao {
 		query.setParameter("processArea", processArea);
 		query.setParameter("module", module);
 		
-		List results = query.list();
+		List<String> results = query.list();
 		if(results.size()>0) {
-			return (String) results.get(0);
+//			return (String) results.get(0);
+			return results;
 		}
 		else {
 			return null;
 		}
 		
-	}
-	
+	}	
 	public String getUserIdValidation(String username) {
 		String userId = username.toUpperCase();
 		Session session = entityManager.unwrap(Session.class);

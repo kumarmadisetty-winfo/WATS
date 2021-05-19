@@ -1,5 +1,9 @@
 package com.winfo.services;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,7 @@ public class WatsPluginService {
 	public DomGenericResponseBean pluginData(WatsPluginMasterVO mastervo) {
 		String module=mastervo.getModule();
 		String processArea=mastervo.getProcess_area();
-		String scriptNumber=dao.getScriptNumber(processArea,module);
+		List<String> scriptNumbers=dao.getScriptNumber(processArea,module);
 		
 		String newmodule = mastervo.getModule_srt();
 //		if(module.equals("Purchasing")) {
@@ -70,10 +74,17 @@ public class WatsPluginService {
 //			newmodule="IC";
 //		}
 		String newScriptNumber=null;
-		if(scriptNumber!=null) {
-			Integer i = Integer.parseInt(scriptNumber.replaceAll("[\\D]", ""));
-			Integer j=i+1;
-			 newScriptNumber=processArea+"."+newmodule+"."+j;
+		ArrayList<Integer> slist = new ArrayList<Integer>();
+		if(scriptNumbers!=null) {
+			for(String snumber:scriptNumbers) {
+				Integer i = Integer.parseInt(snumber.replaceAll("[\\D]", ""));
+				
+				slist.add(i);
+			}
+			 int max = Collections.max(slist);
+//			Integer i = Integer.parseInt(scriptNumber.replaceAll("[\\D]", ""));
+			int snum=max+1;
+			 newScriptNumber=processArea+"."+newmodule+"."+snum;
 			System.out.println(newScriptNumber);
 
 		}
