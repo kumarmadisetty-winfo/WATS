@@ -411,7 +411,7 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -543,7 +543,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>hub</profiles>
 				<instance>hub</instance>
@@ -616,7 +616,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>prd</profiles>
 				<instance>prd</instance>
@@ -689,7 +689,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>uat</profiles>
 				<instance>uat</instance>
@@ -762,7 +762,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server</config.server.uri>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>rep</profiles>
 				<instance>rep</instance>
