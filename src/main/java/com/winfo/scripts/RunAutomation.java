@@ -326,7 +326,6 @@ public class RunAutomation {
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf";
 
 			String userName = null;
-			ConnectToSQL dataSource = null;
 			String globalValueForSteps = null;
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 			Date startdate = new Date();
@@ -378,14 +377,12 @@ public class RunAutomation {
 
 					case "Login into Application":
 						userName = fetchMetadataVO.getInput_value();
-						if (dataSource == null)
-							dataSource = new ConnectToSQL();
 						log.info("Navigating to Login into Application Action");
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
 									fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 									fetchMetadataVO.getInput_value(),
-									dataSource.getPassword(param, userName, fetchConfigVO));
+									dataBaseEntry.getPassword(param, userName, fetchConfigVO));
 							userName = null;
 							break;
 						} else {
