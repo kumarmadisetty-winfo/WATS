@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 public class ExecutionAudit {
 	@Id
 	@Column(name = "EXECUTION_AUDIT_ID")
-	private String executionAuditId;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	private int executionAuditId;
 
 	@Column(name = "TEST_SET_ID")
 	private String testSetId;
@@ -33,11 +36,11 @@ public class ExecutionAudit {
 	private String status;
 
 	
-	public String getExecutionAuditId() {
+	public int getExecutionAuditId() {
 		return executionAuditId;
 	}
 
-	public void setExecutionAuditId(String executionAuditId) {
+	public void setExecutionAuditId(int executionAuditId) {
 		this.executionAuditId = executionAuditId;
 	}
 
