@@ -229,7 +229,6 @@ public class RunAutomation {
 			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
-		ConnectToSQL sql = null;
 //		//String start_time=null;
 //		String end_time=null;
 //		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
