@@ -109,6 +109,9 @@ public class RunAutomation {
 //	        String start_time=dtf.format(now);
 //			System.out.println("instanceName"+instanceName);
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
+			fetchConfigVO.setScreenshot_path("C:\\Users\\winfo83\\Documents\\wats\\jars\\screen\\");
+			fetchConfigVO.setPdf_path("C:\\Users\\winfo83\\Documents\\wats\\jars\\padf\\");
+			fetchConfigVO.setChrome_driver_path("C:\\Users\\winfo83\\Documents\\wats\\chormedriver\\chromedriver.exe");
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;

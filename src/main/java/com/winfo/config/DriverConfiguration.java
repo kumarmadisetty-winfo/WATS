@@ -29,6 +29,7 @@ public class DriverConfiguration {
 	@Value("${configvO.config_url}")
 	private String config_url;
 
+	@SuppressWarnings("deprecation")
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
@@ -65,8 +66,8 @@ public class DriverConfiguration {
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 
-			// driver = new ChromeDriver(cap);
-			driver = new RemoteWebDriver(new URL(config_url), cap);
+			 driver = new ChromeDriver(cap);
+//			driver = new RemoteWebDriver(new URL(config_url), cap);
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 
 		} else if (BrowserConstants.FIREFOX.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {

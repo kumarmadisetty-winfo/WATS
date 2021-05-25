@@ -411,7 +411,7 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -443,10 +443,6 @@
 											<includes>
 												<include>*.properties</include>
 												<include>Images/</include>
-											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>oci/</include>
 											</includes>
 									
 										</resource>
