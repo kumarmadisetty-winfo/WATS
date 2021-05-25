@@ -119,7 +119,16 @@ public class RunAutomation {
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
+			Date startdate=new Date();
+			fetchConfigVO.setStarttime(startdate);
+			fetchConfigVO.setEndtime(startdate);
+			seleniumFactory.getInstanceObj("UDG").createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+					"55_OTC.AR.218.pdf", startdate, startdate);
+			int c=0;
+if(c==0) {
+	return executeTestrunVo; 
 
+}
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
 
