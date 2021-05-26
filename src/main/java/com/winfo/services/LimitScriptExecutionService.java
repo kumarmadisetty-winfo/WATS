@@ -126,12 +126,12 @@ public class LimitScriptExecutionService {
 		String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
 				+ "        <br><br>You have reached 80% of your threshold limit for the number of script execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
 				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
-		MimeMessage message = new MimeMessage(session);
+		Message message = new MimeMessage(session);
 		message.setFrom(new InternetAddress(fromMail));
 		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
 		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
 		message.setSubject(subject);
-		message.setText(htmlBody); // as "text/plain"
+		message.setContent(htmlBody,"text/html");
 		message.setSentDate(new Date());
 		Transport.send(message);
 		}catch (Exception e) {
@@ -153,12 +153,12 @@ public class LimitScriptExecutionService {
 		String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
 				+ "        <br><br>You have exceeded your threshold limit for the number of scripts execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
 				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
-		MimeMessage message = new MimeMessage(session);
+		Message message = new MimeMessage(session);
 		message.setFrom(new InternetAddress(fromMail));
 		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
 		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
 		message.setSubject(subnect);
-		message.setText(htmlBody); // as "text/plain"
+		message.setContent(htmlBody,"text/html");
 		message.setSentDate(new Date());
 		Transport.send(message);
 		}catch (Exception e) {
