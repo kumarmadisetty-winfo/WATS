@@ -787,13 +787,9 @@ System.out.println("entered to getFailFileNameListNew");
         g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
         g1.drawImage(logo,1012,15,null);
         g1.dispose();
-<<<<<<< HEAD
-        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
-        String imgpath2 ="/u01/oracle/selenium/temp/images/";
-=======
+
         ImageIO.write(image1, "jpg", new File(folder1+"/last.jpg"));
         String imgpath2 =folder1+"/";
->>>>>>> april_toslovelogo-issues
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
