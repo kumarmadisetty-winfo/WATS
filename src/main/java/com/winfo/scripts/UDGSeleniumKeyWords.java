@@ -85,6 +85,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -122,6 +125,7 @@ import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 @Service("UDG")
+@RefreshScope
 public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface{
 //New-changes - added annotation for DatabaseEntry
 @Autowired
@@ -130,6 +134,16 @@ private DataBaseEntry  databaseentry;
 ScriptXpathService service;
 @Autowired
 DynamicRequisitionNumber dynamicnumber;
+
+@Value("${configvO.watslogo}")
+private String watslogo;
+
+@Value("${configvO.watsvediologo}")
+private String watsvediologo;
+
+@Value("${configvO.whiteimage}")
+private String whiteimage;
+
 //	public static log log = LogManager.getlog(SeleniumKeyWords.class);
 	/*
 	 * private Integer ElementWait = Integer
@@ -700,9 +714,9 @@ System.out.println("entered to getFailFileNameListNew");
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/u01/oracle/selenium/temp/images/white.jpg");
+		File file = new ClassPathResource(whiteimage).getFile();
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/u01/oracle/selenium/temp/images/WATS_LOGO.JPG");
+		File file1 = new ClassPathResource(watsvediologo).getFile();
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
         BufferedImage image = null;
@@ -747,7 +761,21 @@ System.out.println("entered to getFailFileNameListNew");
         g.drawImage(logo,1012,15,null);
         g.dispose();
         System.out.println("before ImageIO.write");
-        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/images/first.jpg"));
+        File folder1 = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+		if (!folder1.exists()) {
+			System.out.println("creating directory: " + folder1.getName());
+			boolean result = false;
+			try {
+				folder1.mkdirs();
+				result = true;
+			} catch (SecurityException se) {
+				// handle it
+				System.out.println(se.getMessage());
+			}
+		} else {
+			System.out.println("Folder exist");
+		}
+        ImageIO.write(image, "jpg", new File(folder1+"/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
         BufferedImage image1 = null;
@@ -759,8 +787,13 @@ System.out.println("entered to getFailFileNameListNew");
         g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
         g1.drawImage(logo,1012,15,null);
         g1.dispose();
+<<<<<<< HEAD
         ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/VideoRecord/last.jpg"));
         String imgpath2 ="/u01/oracle/selenium/temp/images/";
+=======
+        ImageIO.write(image1, "jpg", new File(folder1+"/last.jpg"));
+        String imgpath2 =folder1+"/";
+>>>>>>> april_toslovelogo-issues
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
@@ -855,9 +888,9 @@ System.out.println("entered to getFailFileNameListNew");
 		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new File("/u01/oracle/selenium/temp/images/white.jpg");
+		File file = new ClassPathResource(whiteimage).getFile();
 		//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new File("/u01/oracle/selenium/temp/images/WATS_LOGO.JPG");
+		File file1 = new ClassPathResource(watsvediologo).getFile();
 		//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 		
         BufferedImage image = null;
@@ -901,7 +934,22 @@ System.out.println("entered to getFailFileNameListNew");
         g.drawString("Execution Time : "+ExecutionTime, 50, 450);
         g.drawImage(logo,1012,15,null);
         g.dispose();
-        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/images/first.jpg"));
+        File folder1 = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+		if (!folder1.exists()) {
+			System.out.println("creating directory: " + folder1.getName());
+			boolean result = false;
+			try {
+				folder1.mkdirs();
+				result = true;
+			} catch (SecurityException se) {
+				// handle it
+				System.out.println(se.getMessage());
+			}
+		} else {
+			System.out.println("Folder exist");
+		}
+
+        ImageIO.write(image, "jpg", new File(folder1+"/first.jpg"));
         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
         
         BufferedImage image1 = null;
@@ -913,9 +961,9 @@ System.out.println("entered to getFailFileNameListNew");
         g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
         g1.drawImage(logo,1150,15,null);
         g1.dispose();
-        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/images/last.jpg"));
+        ImageIO.write(image1, "jpg", new File(folder1+"/last.jpg"));
         //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
-        String imgpath2 ="/u01/oracle/selenium/temp/images/";
+        String imgpath2 =folder1+"/";
         //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
         File f11=new File(imgpath2);
         File[] f22=f11.listFiles();
@@ -1013,9 +1061,9 @@ System.out.println("entered to getFailFileNameListNew");
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/u01/oracle/selenium/temp/images/white.jpg");
+			File file = new ClassPathResource(whiteimage).getFile();
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/u01/oracle/selenium/temp/images/WATS_LOGO.JPG");
+			File file1 = new ClassPathResource(watsvediologo).getFile();
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
 			 BufferedImage image = null;
@@ -1072,11 +1120,26 @@ System.out.println("entered to getFailFileNameListNew");
 	         g2.drawString("Execution Time : "+ExecutionTime, 50,425);
 	         g2.drawImage(logo,1012,15,null);
 		     g2.dispose();
-			 ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/images/first.jpg"));
+		        File folder1 = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+				if (!folder1.exists()) {
+					System.out.println("creating directory: " + folder1.getName());
+					boolean result = false;
+					try {
+						folder1.mkdirs();
+						result = true;
+					} catch (SecurityException se) {
+						// handle it
+						System.out.println(se.getMessage());
+					}
+				} else {
+					System.out.println("Folder exist");
+				}
+
+			 ImageIO.write(image2, "jpg", new File(folder1+"/first.jpg"));
 			 //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
-			 String imgpath3 ="/u01/oracle/selenium/temp/images/first.jpg";
-			 String imgpath2 ="/u01/oracle/selenium/temp/images/";
-	         ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/images/"+imagename+".jpg"));
+			 String imgpath3 =folder1+"/first.jpg";
+			 String imgpath2 =folder1+"/";
+	         ImageIO.write(image, "jpg", new File(folder1+"/"+imagename+".jpg"));
 			 //String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 			 //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 	         //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
@@ -1189,9 +1252,9 @@ System.out.println("entered to getFailFileNameListNew");
 			ArrayList<String> links1 = new ArrayList<String>();
 			ArrayList<String> linksall = new ArrayList<String>();
 
-			File file = new File("/u01/oracle/selenium/temp/images/white.jpg");
+			File file =  new ClassPathResource(whiteimage).getFile();
 			//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new File("/u01/oracle/selenium/temp/images/WATS_LOGO.JPG");
+			File file1 =  new ClassPathResource(watsvediologo).getFile();
 			//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 			
 	        BufferedImage image = null;
@@ -1234,7 +1297,22 @@ System.out.println("entered to getFailFileNameListNew");
 ////	    g.drawString("End Time :"+endtime1, 50, 500);
 ////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 	        g.dispose();
-	        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/images/"+imagename+".jpg"));
+	        File folder1 = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+			if (!folder1.exists()) {
+				System.out.println("creating directory: " + folder1.getName());
+				boolean result = false;
+				try {
+					folder1.mkdirs();
+					result = true;
+				} catch (SecurityException se) {
+					// handle it
+					System.out.println(se.getMessage());
+				}
+			} else {
+				System.out.println("Folder exist");
+			}
+
+	        ImageIO.write(image, "jpg", new File(folder1+"/"+imagename+".jpg"));
 	        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 	        
 	        BufferedImage image1 = null;
@@ -1246,7 +1324,7 @@ System.out.println("entered to getFailFileNameListNew");
 	        g1.drawImage(logo,1012,14,null);
 	        g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
 	        g1.dispose();
-	        ImageIO.write(image1, "jpg", new File("/u01/oracle/selenium/temp/images/last.jpg"));
+	        ImageIO.write(image1, "jpg", new File(folder1+"/last.jpg"));
 	        //ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\last.jpg"));
 	        
 	        BufferedImage image2 = null;
@@ -1262,9 +1340,9 @@ System.out.println("entered to getFailFileNameListNew");
             g2.drawString("Execution Time : "+ExecutionTime, 50,425);
             g2.drawImage(logo,1012,15,null);
 	        g2.dispose();
-	       	ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/images/first.jpg"));
-	        String imgpath3 ="/u01/oracle/selenium/temp/images/first.jpg";
-	        String imgpath2 ="/u01/oracle/selenium/temp/images/";
+	       	ImageIO.write(image2, "jpg", new File(folder1+"/first.jpg"));
+	        String imgpath3 =folder1+"/first.jpg";
+	        String imgpath2 =folder1+"/";
 	        
 	        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
 		    //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
@@ -1387,8 +1465,8 @@ System.out.println("entered to getFailFileNameListNew");
 						ArrayList<String> linksall = new ArrayList<String>();
 						
 
-						File file = new File("/u01/oracle/selenium/temp/images/white.jpg");
-						File file1 = new File("/u01/oracle/selenium/temp/images/WATS_LOGO.JPG");
+						File file = new ClassPathResource(whiteimage).getFile();
+						File file1 = new ClassPathResource(watsvediologo).getFile();
 						//File file = new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\white.jpg");
 						//File file1=new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 				        BufferedImage image = null;
@@ -1431,7 +1509,22 @@ System.out.println("entered to getFailFileNameListNew");
 				        //g.drawString("End Time :"+endtime1, 50, 500);
 				        //g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 				        g.dispose();
-				        ImageIO.write(image, "jpg", new File("/u01/oracle/selenium/temp/images/"+imagename+".jpg"));
+				        File folder1 = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+						if (!folder1.exists()) {
+							System.out.println("creating directory: " + folder1.getName());
+							boolean result = false;
+							try {
+								folder1.mkdirs();
+								result = true;
+							} catch (SecurityException se) {
+								// handle it
+								System.out.println(se.getMessage());
+							}
+						} else {
+							System.out.println("Folder exist");
+						}
+
+				        ImageIO.write(image, "jpg", new File(folder1+"/"+imagename+".jpg"));
 				        //ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 				        
 				        BufferedImage image1 = null;
@@ -1457,11 +1550,11 @@ System.out.println("entered to getFailFileNameListNew");
 			            g2.drawString("Execution Time : "+ExecutionTime, 50,425);
 			            g2.drawImage(logo,1012,15,null);
 				        g2.dispose();
-				       ImageIO.write(image2, "jpg", new File("/u01/oracle/selenium/temp/images/first.jpg"));
+				       ImageIO.write(image2, "jpg", new File(folder1+"/first.jpg"));
 				        //ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg"));
-				       String imgpath2 ="/u01/oracle/selenium/temp/images/";
+				       String imgpath2 =folder1+"/";
 				        //String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-				        String imgpath3 ="/u01/oracle/selenium/temp/images/first.jpg";
+				        String imgpath3 =folder1+"/first.jpg";
 				        //String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 				        File f11=new File(imgpath2);
 				        File[] f22=f11.listFiles();
@@ -1872,7 +1965,7 @@ System.out.println("entered to getFailFileNameListNew");
 	        document.setPageSize(one);
 			document.open();
 			System.out.println("before enter Images/wats_icon.png1");
-			Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+			Image img1 = Image.getInstance(watslogo);
 				System.out.println("after enter Images/wats_icon.png1");
 
 				img1.scalePercent(65, 68);
@@ -2765,7 +2858,7 @@ System.out.println("entered to getFailFileNameListNew");
 			}
 			 Font bf12 = FontFactory.getFont("Arial", 23);
 				System.out.println("before enter Images/wats_icon.png");
-				Image img1 = Image.getInstance("/u01/oracle/selenium/temp/images/wats_icon.png");
+				Image img1 = Image.getInstance(watslogo);
 					System.out.println("after enter Images/wats_icon.png");
 			 img1.scalePercent(65, 68);
 	         img1.setAlignment(Image.ALIGN_RIGHT);

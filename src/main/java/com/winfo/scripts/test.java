@@ -13,12 +13,12 @@ public class test {
 
 	public static void main(String[] args) throws Exception {
 //		String urlStr = "http://192.168.1.201:8080/executeTestScript";
-		String urlStr = "http://localhost:8080/executeTestScript";
+		String urlStr = "http://localhost:8082/executeTestScript";
 //		String str=env.getProperty("message.default.welcome");
 //		System.out.println(instanceName+"instanceName"+str);
 		
 		try {
-			runWithParams(urlStr, "364");
+			runWithParams(urlStr, "2310");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
