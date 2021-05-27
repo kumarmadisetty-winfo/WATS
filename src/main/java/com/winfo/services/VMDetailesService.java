@@ -26,17 +26,20 @@ import com.oracle.bmc.core.ComputeClient;
 import com.oracle.bmc.core.ComputeManagementClient;
 import com.oracle.bmc.core.ComputeWaiters;
 import com.oracle.bmc.core.model.Instance;
+import com.oracle.bmc.core.model.InstancePoolSummary;
 import com.oracle.bmc.core.model.InstanceSummary;
 import com.oracle.bmc.core.model.UpdateInstancePoolDetails;
 import com.oracle.bmc.core.requests.GetInstancePoolRequest;
 import com.oracle.bmc.core.requests.GetInstanceRequest;
 import com.oracle.bmc.core.requests.InstanceActionRequest;
 import com.oracle.bmc.core.requests.ListInstancePoolInstancesRequest;
+import com.oracle.bmc.core.requests.ListInstancePoolsRequest;
 import com.oracle.bmc.core.requests.UpdateInstancePoolRequest;
 import com.oracle.bmc.core.responses.GetInstancePoolResponse;
 import com.oracle.bmc.core.responses.GetInstanceResponse;
 import com.oracle.bmc.core.responses.InstanceActionResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolInstancesResponse;
+import com.oracle.bmc.core.responses.ListInstancePoolsResponse;
 import com.oracle.bmc.core.responses.UpdateInstancePoolResponse;
 import com.winfo.dao.AuditLogsDao;
 import com.winfo.dao.VmInstanceDAO;
@@ -50,8 +53,14 @@ public class VMDetailesService {
 	@Autowired
 	private VmInstanceDAO vmInstanceDao;
 	
-	@Value("${instancePool.instancePoolId}")
-    private String instancePoolId;
+	@Value("${instancePool.compementId}")
+    private String compementId;
+	
+	@Value("${instancePool.configLocation}")
+    private String configLocation;
+	
+	@Value("${instance.displayName}")
+    private String displayName;
 	
 	@Value("${instance.maxNoOfBrowsersForVm}")
     private int maxNoOfBrowsersForVm;
@@ -65,12 +74,12 @@ public class VMDetailesService {
 		ListInstancePoolInstancesResponse listresponse = null;
 		ConfigFileAuthenticationDetailsProvider provider = null;
 		try {
-			ConfigFile configFile = ConfigFileReader.parse("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/oci/config", configProfileName);
+			ConfigFile configFile = ConfigFileReader.parse(configLocation, configProfileName);
 
 			provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			ComputeManagementClient client = new ComputeManagementClient(provider);
 
-			listresponse=getListOfInstancesResponse(provider,client,instancePoolId);
+			listresponse=getListOfInstancesResponse(provider,client,compementId);
 			int numberOfVms = 0;
 			
 			for (InstanceSummary instanceSummary : listresponse.getItems()) {
@@ -93,7 +102,7 @@ public class VMDetailesService {
 
 				        UpdateInstancePoolRequest updateRequest =
 				                UpdateInstancePoolRequest.builder()
-				                        .instancePoolId(instancePoolId)
+				                        .instancePoolId(compementId)
 				                        .updateInstancePoolDetails(updateInstancePoolDetails)
 				                        .build();
 
@@ -103,7 +112,7 @@ public class VMDetailesService {
 						
 						while(!"Running".equalsIgnoreCase(fistVmStatus)) {
 							Thread.sleep(5000);
-							listresponse=getListOfInstancesResponse(provider,client,instancePoolId);	
+							listresponse=getListOfInstancesResponse(provider,client,compementId);	
 						for (InstanceSummary instanceSummary : listresponse.getItems()) {
 							if("Running".equalsIgnoreCase(instanceSummary.getState())) {
 								fistVmStatus="Running";
@@ -123,10 +132,10 @@ public class VMDetailesService {
 		ConfigFileAuthenticationDetailsProvider provider=null;
 		ListInstancePoolInstancesResponse listresponse = null;
 		try {
-			ConfigFile configFile = ConfigFileReader.parse("/u01/oracle/selenium/apache-tomcat-8.5.60/webapps/wats/WEB-INF/classes/oci/config", configProfileName);
+			ConfigFile configFile = ConfigFileReader.parse(configLocation, configProfileName);
 			provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			ComputeManagementClient client = new ComputeManagementClient(provider);
-			listresponse=getListOfInstancesResponse(provider,client,instancePoolId);
+			listresponse=getListOfInstancesResponse(provider,client,compementId);
 
 			for (InstanceSummary instanceSummary : listresponse.getItems()) {
 				if ("Running".equalsIgnoreCase(instanceSummary.getState())) {					
@@ -135,16 +144,16 @@ public class VMDetailesService {
 
 				        UpdateInstancePoolRequest updateRequest =
 				                UpdateInstancePoolRequest.builder()
-				                        .instancePoolId(instancePoolId)
+				                        .instancePoolId(compementId)
 				                        .updateInstancePoolDetails(updateInstancePoolDetails)
 				                        .build();
 				        UpdateInstancePoolResponse updateResponse = client.updateInstancePool(updateRequest);
                     
                       
-  						listresponse=getListOfInstancesResponse(provider,client,instancePoolId);
+  						listresponse=getListOfInstancesResponse(provider,client,compementId);
                     	  while(!"Terminated".equalsIgnoreCase(listresponse.getItems().get(0).getState())) {
                     		  Thread.sleep(7000);
-  							listresponse=getListOfInstancesResponse(provider,client,instancePoolId);
+  							listresponse=getListOfInstancesResponse(provider,client,compementId);
                     	  }
 
 				        System.out.println("all vms are stoped and wait 2mits"+updateResponse.getInstancePool().getSize());
@@ -158,16 +167,39 @@ public class VMDetailesService {
 	}
 	public ListInstancePoolInstancesResponse getListOfInstancesResponse(ConfigFileAuthenticationDetailsProvider provider, ComputeManagementClient client, String instancePoolId) {
 		try {
-			client.setRegion(Region.AP_MUMBAI_1);
-			GetInstancePoolRequest getInstancePoolRequest = GetInstancePoolRequest.builder().instancePoolId(instancePoolId)
-					.build();
-			GetInstancePoolResponse response = client.getInstancePool(getInstancePoolRequest);
+			
+			
+		    ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
+//		    		.compartmentId("ocid1.compartment.oc1..aaaaaaaajjwpka4io7jfmafg26qf35iiivfkjhsvlgu2b4f644chnbw4wxza")
+		    		.compartmentId(instancePoolId)
+		    		.displayName(displayName)
+		    		.limit(719)
+//		    		.page("EXAMPLE-page-Value")
+		    		.sortBy(ListInstancePoolsRequest.SortBy.Displayname)
+		    		.sortOrder(ListInstancePoolsRequest.SortOrder.Desc)
+		    		.lifecycleState(InstancePoolSummary.LifecycleState.Running)
+		    		.build();
+
+		    ListInstancePoolsResponse response = client.listInstancePools(listInstancePoolsRequest);
+			System.out.println("instanceSummary");
 			ListInstancePoolInstancesRequest listInstancePoolInstancesRequest = ListInstancePoolInstancesRequest
-					.builder().compartmentId(response.getInstancePool().getCompartmentId())
-					.instancePoolId(response.getInstancePool().getId())
-					.displayName(response.getInstancePool().getDisplayName()).limit(122)
+					.builder().compartmentId(response.getItems().get(0).getCompartmentId())
+					.instancePoolId(response.getItems().get(0).getId())
+					.displayName(response.getItems().get(0).getDisplayName()).limit(122)
 					.sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
 					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
+
+			
+//			client.setRegion(Region.AP_MUMBAI_1);
+//			GetInstancePoolRequest getInstancePoolRequest = GetInstancePoolRequest.builder().instancePoolId(instancePoolId)
+//					.build();
+//			GetInstancePoolResponse response = client.getInstancePool(getInstancePoolRequest);
+//			ListInstancePoolInstancesRequest listInstancePoolInstancesRequest = ListInstancePoolInstancesRequest
+//					.builder().compartmentId(response.getInstancePool().getCompartmentId())
+//					.instancePoolId(response.getInstancePool().getId())
+//					.displayName(response.getInstancePool().getDisplayName()).limit(122)
+//					.sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
+//					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
 			    return client.listInstancePoolInstances(listInstancePoolInstancesRequest);
 		} catch (Exception e) {
 			System.out.println("Exception"+e);

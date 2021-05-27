@@ -38,6 +38,18 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.oci.sdk</groupId>
+			<artifactId>oci-java-sdk-filestorage</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.oci.sdk</groupId>
+			<artifactId>oci-java-sdk-objectstorage</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-audit</artifactId>
 		</dependency>
@@ -406,26 +418,25 @@
 			<version>1.2</version>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.oracle.oci.sdk</groupId>
-				<artifactId>oci-java-sdk-bom</artifactId>
-				<!-- replace the version below with your required version -->
-				<version>1.5.2</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+<dependencyManagement>
+<dependencies>
+	<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-dependencies</artifactId>
+		<version>${spring-cloud.version}</version>
+		<type>pom</type>
+		<scope>import</scope>
+	</dependency>
+	<dependency>
+		<groupId>com.oracle.oci.sdk</groupId>
+		<artifactId>oci-java-sdk-bom</artifactId>
+		<!-- replace the version below with your required version -->
+		<version>1.23.3</version>
+		<type>pom</type>
+		<scope>import</scope>
+	</dependency>
+</dependencies>
+</dependencyManagement>
 
 	<profiles>
 		<profile>
@@ -463,6 +474,10 @@
 											<includes>
 												<include>*.properties</include>
 												<include>Images/</include>
+											</includes>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
 											</includes>
 
 										</resource>
@@ -530,7 +545,13 @@
 											<filtering>true</filtering>
 											<includes>
 												<include>*.properties</include>
+												<include>Images/</include>
 											</includes>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -603,7 +624,13 @@
 											<filtering>true</filtering>
 											<includes>
 												<include>*.properties</include>
+												<include>Images/</include>
 											</includes>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -676,7 +703,13 @@
 											<filtering>true</filtering>
 											<includes>
 												<include>*.properties</include>
+												<include>Images/</include>
 											</includes>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -749,7 +782,13 @@
 											<filtering>true</filtering>
 											<includes>
 												<include>*.properties</include>
+												<include>Images/</include>
 											</includes>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
