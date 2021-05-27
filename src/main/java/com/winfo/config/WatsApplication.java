@@ -18,7 +18,7 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 @EnableAsync
 @EnableScheduling
 @EntityScan("com.winfo.model")
-@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory")
+@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;")
 public class WatsApplication extends SpringBootServletInitializer{
 	
 	

@@ -37,7 +37,6 @@ public class StartInstancesInterceptor extends HandlerInterceptorAdapter {
 			logger.debug("audit logging for the request " + request.getRequestURL() + " Started at ::"
 					+ System.currentTimeMillis());
 			
-System.out.println(request.getRequestURL().toString().substring(request.getRequestURL().toString().lastIndexOf('/') + 1));
 			Enumeration<String> parameterNames = request.getParameterNames();
 			String service = request.getRequestURL().toString()
 					.substring(request.getRequestURL().toString().lastIndexOf('/') + 1);
@@ -48,6 +47,7 @@ System.out.println(request.getRequestURL().toString().substring(request.getReque
 		
 			if (service.equalsIgnoreCase("executeTestScript")) {
 					    BufferedReader reader = request.getReader();
+//					    BufferedReader reader = request.getReader();
 					    while ((line = reader.readLine()) != null)
 					      jb.append(line);
 					 String paramValue= jb.toString().replaceAll("[^0-9]", "");
@@ -60,6 +60,7 @@ System.out.println(request.getRequestURL().toString().substring(request.getReque
 		} catch (Exception e) {
 			System.out.println("Exception" + e);
 			logger.error("Exception" + e);
+			return true;
 		}
 		logger.debug("prehandle  " + request.getRequestURL() + " end " + System.currentTimeMillis());
 		return true;

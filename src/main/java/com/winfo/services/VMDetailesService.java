@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.oracle.bmc.ConfigFileReader;
@@ -74,12 +75,23 @@ public class VMDetailesService {
 		ListInstancePoolInstancesResponse listresponse = null;
 		ConfigFileAuthenticationDetailsProvider provider = null;
 		try {
-			ConfigFile configFile = ConfigFileReader.parse(configLocation, configProfileName);
+			
+			ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource("Images/config").getInputStream(), configProfileName);
 
 			provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			ComputeManagementClient client = new ComputeManagementClient(provider);
+		    ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
+		    		.compartmentId(compementId)
+		    		.displayName(displayName)
+		    		.limit(719)
+//		    		.page("EXAMPLE-page-Value")
+		    		.sortBy(ListInstancePoolsRequest.SortBy.Displayname)
+		    		.sortOrder(ListInstancePoolsRequest.SortOrder.Desc)
+		    		.lifecycleState(InstancePoolSummary.LifecycleState.Running)
+		    		.build();
+		    ListInstancePoolsResponse response = client.listInstancePools(listInstancePoolsRequest);
 
-			listresponse=getListOfInstancesResponse(provider,client,compementId);
+			listresponse=getListOfInstancesResponse(response,client,compementId);
 			int numberOfVms = 0;
 			
 			for (InstanceSummary instanceSummary : listresponse.getItems()) {
@@ -102,7 +114,7 @@ public class VMDetailesService {
 
 				        UpdateInstancePoolRequest updateRequest =
 				                UpdateInstancePoolRequest.builder()
-				                        .instancePoolId(compementId)
+				                        .instancePoolId(response.getItems().get(0).getId())
 				                        .updateInstancePoolDetails(updateInstancePoolDetails)
 				                        .build();
 
@@ -112,7 +124,7 @@ public class VMDetailesService {
 						
 						while(!"Running".equalsIgnoreCase(fistVmStatus)) {
 							Thread.sleep(5000);
-							listresponse=getListOfInstancesResponse(provider,client,compementId);	
+							listresponse=getListOfInstancesResponse(response,client,compementId);	
 						for (InstanceSummary instanceSummary : listresponse.getItems()) {
 							if("Running".equalsIgnoreCase(instanceSummary.getState())) {
 								fistVmStatus="Running";
@@ -123,7 +135,7 @@ public class VMDetailesService {
 
 		} catch (Exception e) {
 			log.error("failed at sart the vms" + e);
-			System.out.println("Exception"+e);
+			e.printStackTrace();
 		}
 
 	}
@@ -135,7 +147,18 @@ public class VMDetailesService {
 			ConfigFile configFile = ConfigFileReader.parse(configLocation, configProfileName);
 			provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			ComputeManagementClient client = new ComputeManagementClient(provider);
-			listresponse=getListOfInstancesResponse(provider,client,compementId);
+		    ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
+		    		.compartmentId(compementId)
+		    		.displayName(displayName)
+		    		.limit(719)
+//		    		.page("EXAMPLE-page-Value")
+		    		.sortBy(ListInstancePoolsRequest.SortBy.Displayname)
+		    		.sortOrder(ListInstancePoolsRequest.SortOrder.Desc)
+		    		.lifecycleState(InstancePoolSummary.LifecycleState.Running)
+		    		.build();
+		    ListInstancePoolsResponse response = client.listInstancePools(listInstancePoolsRequest);
+
+			listresponse=getListOfInstancesResponse(response,client,compementId);
 
 			for (InstanceSummary instanceSummary : listresponse.getItems()) {
 				if ("Running".equalsIgnoreCase(instanceSummary.getState())) {					
@@ -144,16 +167,16 @@ public class VMDetailesService {
 
 				        UpdateInstancePoolRequest updateRequest =
 				                UpdateInstancePoolRequest.builder()
-				                        .instancePoolId(compementId)
+				                        .instancePoolId(response.getItems().get(0).getId())
 				                        .updateInstancePoolDetails(updateInstancePoolDetails)
 				                        .build();
 				        UpdateInstancePoolResponse updateResponse = client.updateInstancePool(updateRequest);
                     
                       
-  						listresponse=getListOfInstancesResponse(provider,client,compementId);
+  						listresponse=getListOfInstancesResponse(response,client,compementId);
                     	  while(!"Terminated".equalsIgnoreCase(listresponse.getItems().get(0).getState())) {
                     		  Thread.sleep(7000);
-  							listresponse=getListOfInstancesResponse(provider,client,compementId);
+  							listresponse=getListOfInstancesResponse(response,client,compementId);
                     	  }
 
 				        System.out.println("all vms are stoped and wait 2mits"+updateResponse.getInstancePool().getSize());
@@ -165,22 +188,20 @@ public class VMDetailesService {
 			System.out.println("Exception"+e);
 		}
 	}
-	public ListInstancePoolInstancesResponse getListOfInstancesResponse(ConfigFileAuthenticationDetailsProvider provider, ComputeManagementClient client, String instancePoolId) {
+	public ListInstancePoolInstancesResponse getListOfInstancesResponse(ListInstancePoolsResponse response, ComputeManagementClient client, String instancePoolId) {
 		try {
 			
 			
-		    ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
-//		    		.compartmentId("ocid1.compartment.oc1..aaaaaaaajjwpka4io7jfmafg26qf35iiivfkjhsvlgu2b4f644chnbw4wxza")
-		    		.compartmentId(instancePoolId)
-		    		.displayName(displayName)
-		    		.limit(719)
-//		    		.page("EXAMPLE-page-Value")
-		    		.sortBy(ListInstancePoolsRequest.SortBy.Displayname)
-		    		.sortOrder(ListInstancePoolsRequest.SortOrder.Desc)
-		    		.lifecycleState(InstancePoolSummary.LifecycleState.Running)
-		    		.build();
+//		    ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
+//		    		.compartmentId(instancePoolId)
+//		    		.displayName(displayName)
+//		    		.limit(719)
+////		    		.page("EXAMPLE-page-Value")
+//		    		.sortBy(ListInstancePoolsRequest.SortBy.Displayname)
+//		    		.sortOrder(ListInstancePoolsRequest.SortOrder.Desc)
+//		    		.lifecycleState(InstancePoolSummary.LifecycleState.Running)
+//		    		.build();
 
-		    ListInstancePoolsResponse response = client.listInstancePools(listInstancePoolsRequest);
 			System.out.println("instanceSummary");
 			ListInstancePoolInstancesRequest listInstancePoolInstancesRequest = ListInstancePoolInstancesRequest
 					.builder().compartmentId(response.getItems().get(0).getCompartmentId())
@@ -190,16 +211,6 @@ public class VMDetailesService {
 					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
 
 			
-//			client.setRegion(Region.AP_MUMBAI_1);
-//			GetInstancePoolRequest getInstancePoolRequest = GetInstancePoolRequest.builder().instancePoolId(instancePoolId)
-//					.build();
-//			GetInstancePoolResponse response = client.getInstancePool(getInstancePoolRequest);
-//			ListInstancePoolInstancesRequest listInstancePoolInstancesRequest = ListInstancePoolInstancesRequest
-//					.builder().compartmentId(response.getInstancePool().getCompartmentId())
-//					.instancePoolId(response.getInstancePool().getId())
-//					.displayName(response.getInstancePool().getDisplayName()).limit(122)
-//					.sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
-//					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
 			    return client.listInstancePoolInstances(listInstancePoolInstancesRequest);
 		} catch (Exception e) {
 			System.out.println("Exception"+e);
