@@ -111,6 +111,9 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
+//			fetchConfigVO.setChrome_driver_path("C:\\Users\\winfo83\\Documents\\wats\\chormedriver\\chromedriver.exe");
+//			fetchConfigVO.setDownlod_file_path("C:\\Users\\winfo83\\Documents\\wats\\jars\\padf\\");
+//			fetchConfigVO.setScreenshot_path("C:\\Users\\winfo83\\Documents\\wats\\jars\\screen\\");
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
