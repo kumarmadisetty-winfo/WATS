@@ -3,12 +3,14 @@ package com.winfo.scripts;
 import java.io.IOException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -122,8 +124,13 @@ public class RunAutomation {
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
 
+			Date date = new Date();
+			  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+			  sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+			  Date startDate=sdf.parse(fetchConfigVO.getStart_date());
+			Date endDate=sdf.parse(fetchConfigVO.getEnd_date());
 			for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
-				if (entryMap.getValue()) {
+				if (entryMap.getValue()||date.after(endDate)||date.before(startDate)) {
 					executeTestrunVo.setStatusCode(404);
 					executeTestrunVo.setStatusMessage("ERROR");
 					if(entryMap.getKey()>0) {
@@ -138,7 +145,6 @@ public class RunAutomation {
 			}
 
 
-			Date date = new Date();
 			fetchConfigVO.setStarttime1(date);
 			System.out.println(metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
