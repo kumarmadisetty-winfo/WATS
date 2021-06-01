@@ -135,7 +135,10 @@ public class RunAutomation {
 					executeTestrunVo.setStatusMessage("ERROR");
 					if(entryMap.getKey()>0) {
 					executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+entryMap.getKey()+" more scripts. Reach out to the WATS support team to enhance the limit..");
-					}else {
+					}else if(date.after(endDate)||date.before(startDate)){
+						executeTestrunVo.setStatusDescr("Your request could not be processed the Testrun, please check with the Start and End Date");
+	
+					}else{
 						executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
 	
 					}
