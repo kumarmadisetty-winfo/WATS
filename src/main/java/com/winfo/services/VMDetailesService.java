@@ -103,7 +103,7 @@ public class VMDetailesService {
 			int testrunScriptsCount = vmInstanceDao.getNumberOfTestscriptsforTestRunId(testRunId);
 			int total = inprogressandInqueueCount + testrunScriptsCount - maxNoOfBrowsersForVm * numberOfVms;
             int maxNoOfBrowsersForConfig=vmInstanceDao.getMaxNoOfBrowsersForConfiguration(testRunId);
-            int increageBrowserscount=0;
+            int increageBrowserscount=0+ maxNoOfBrowsersForVm * numberOfVms;
 					while (total > 0 && maxNoOfBrowsersForConfig>increageBrowserscount) {
 						numberOfVms++;
 						total = total - maxNoOfBrowsersForVm;
