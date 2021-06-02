@@ -4491,7 +4491,28 @@ System.out.println("entered to getFailFileNameListNew");
 			log.error("Failed during Create Time Card clickButton"+scripNumber);
 
 			System.out.println(e);
-		}
+		}try {
+            if (param1.equalsIgnoreCase("Notifications")) {
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                wait.until(
+                        ExpectedConditions.presenceOfElementLocated(By.xpath(("//h1[normalize-space(text())='Notifications']/following::button[text()='" + param2 + "'][1]"))));
+                WebElement waittext = driver.findElement(By.xpath(("//h1[normalize-space(text())='Notifications']/following::button[text()='" + param2 + "'][1]")));
+            //    screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+                Actions actions = new Actions(driver);
+                actions.moveToElement(waittext).build().perform();
+                clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+                Thread.sleep(15000);
+                String scripNumber = fetchMetadataVO.getScript_number();
+                log.info("Sucessfully Clicked Members clickButton"+scripNumber);
+                String xpath="//button[@title='param2']";
+                        service.saveXpathParams(param1,param2,scripNumber,xpath);
+                return;
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScript_number();
+            log.error("Failed during Members clickButton"+scripNumber);
+            System.out.println(e);
+        }
 		try {
 			if (param1.equalsIgnoreCase("Expend")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7410,7 +7431,30 @@ String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summar
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during Password sendValue"+scripNumber);	
 			System.out.println(e);
-		}
+		}try {
+            if (param1.equalsIgnoreCase("Reports and Analytics") || param1.equalsIgnoreCase("Notifications") && param2.equalsIgnoreCase("Search")) {
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//*[normalize-space(text())='" + param1 + "']/following::input[@placeholder='" + param2 + "'][1]")));
+                WebElement waittill = driver.findElement(
+                        By.xpath("//*[normalize-space(text())='" + param1 + "']/following::input[@placeholder='" + param2 + "'][1]"));
+                Actions actions = new Actions(driver);
+                actions.moveToElement(waittill).build().perform();
+                typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+                Thread.sleep(1000);
+                String scripNumber = fetchMetadataVO.getScript_number();
+                log.info("Sucessfully Clicked Reports and Analytics or Search sendValue"+scripNumber);
+            String xpath = "//*[normalize-space(text())=' param1 ']/following::input[@placeholder=' param2 '][1]";
+                service.saveXpathParams(param1, param2, scripNumber, xpath);
+   
+                return keysToSend;
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScript_number();
+            log.error("Failed during Reports and Analytics or Search  sendValue"+scripNumber);   
+            System.out.println(e);
+        }
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
