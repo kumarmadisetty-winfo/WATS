@@ -3104,8 +3104,27 @@ System.out.println("entered to getFailFileNameListNew");
 			String globalValueForSteps)
 
 			throws Exception {
-
+		
 		try {
+            if(inputParam.equalsIgnoreCase("Notifications")){
+            WebElement waittill = driver.findElement(By.xpath("//h1[text()='" + inputParam + "']/following::input[@placeholder='Search']"));
+            String value = globalValueForSteps;
+            waittill.click();
+            JavascriptExecutor jse = (JavascriptExecutor) driver;
+            jse.executeScript("arguments[0].value='" + value + "';", waittill);
+            Thread.sleep(3000);
+            String scripNumber = fetchMetadataVO.getScript_number();
+            log.info("Successfully paste is done " +scripNumber);
+    String xpath="//input[@placeholder='inputParam']";
+                    service.saveXpathParams(inputParam,"",scripNumber,xpath);
+            return;
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScript_number();
+            log.error("Failed during Paste Method");
+            screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+            throw e;
+        }try {
 
 			WebElement waittill = driver
 
