@@ -31,48 +31,7 @@ public class WatsPluginService {
 		List<String> scriptNumbers=dao.getScriptNumber(processArea,module);
 		
 		String newmodule = mastervo.getModule_srt();
-//		if(module.equals("Purchasing")) {
-//			newmodule="PO";
-//		}else if(module.equals("General Ledger")) {
-//			newmodule="GL";
-//		}else if(module.equals("Fixed Assets")) {
-//			newmodule="FA";
-//		}else if(module.equals("Accounts Payable")) {
-//			newmodule="AP";
-//		}else if(module.equals("Accounts Receivable")) {
-//			newmodule="AR";
-//		}else if(module.equals("Cash Management")) {
-//			newmodule="CM";
-//		}
-//		else if(module.equals("Project Portfolio Management")) {
-//			newmodule="PM";
-//		}else if(module.equals("Project Financial Management")) {
-//			newmodule="PF";
-//		}else if(module.equals("Procurement Contracts")) {
-//			newmodule="POC";
-//		}else if(module.equals("Sourcing")) {
-//			newmodule="SO";
-//		}else if(module.equals("Tax")) {
-//			newmodule="TX";
-//		}else if(module.equals("Projects")) {
-//			newmodule="PA";
-//		}else if(module.equals("Expenses")) {
-//			newmodule="Ex";
-//		}else if(module.equals("ADM")) {
-//			newmodule="ADM";
-//		}else if(module.equals("CWB")) {
-//			newmodule="CWB";
-//		}else if(module.equals("ESS")) {
-//			newmodule="ESS";
-//		}else if(module.equals("Compensation Workbench")) {
-//			newmodule="CWD";
-//		}else if(module.equals("MSS")) {
-//			newmodule="MSS";
-//		}else if(module.equals("Goal")) {
-//			newmodule="Goal";
-//		}else if(module.equals("Intercompany")) {
-//			newmodule="IC";
-//		}
+
 		String newScriptNumber=null;
 		ArrayList<Integer> slist = new ArrayList<Integer>();
 		if(scriptNumbers!=null) {
@@ -82,7 +41,6 @@ public class WatsPluginService {
 				slist.add(i);
 			}
 			 int max = Collections.max(slist);
-//			Integer i = Integer.parseInt(scriptNumber.replaceAll("[\\D]", ""));
 			int snum=max+1;
 			 newScriptNumber=processArea+"."+newmodule+"."+snum;
 			System.out.println(newScriptNumber);
@@ -160,6 +118,11 @@ public class WatsPluginService {
 			response.setStatusMessage("User name does not exists");
 		}
 		return response;
+	}
+	@Transactional
+	public List<String> getTestrunData() {
+		// TODO Auto-generated method stub
+		return dao.getTestrunData();
 	}
 
 }
