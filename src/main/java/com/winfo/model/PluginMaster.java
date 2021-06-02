@@ -1,96 +1,128 @@
-package com.winfo.vo;
+package com.winfo.model;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-public class WatsPluginMasterVO {
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-	@JsonProperty("SCRIPT ID")
+@Entity
+@Table(name = "WIN_TA_SCRIPT_MASTER")
+public class PluginMaster {
+
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "master_generator")
+//	@SequenceGenerator(name = "master_generator", sequenceName = "WIN_TA_SCRIPT_MASTER_SEQ", allocationSize = 1)
+	@Id
+	//@GeneratedValue
+	@Column(name = "SCRIPT_ID")
 	private Integer script_id;
-	@JsonProperty("SCRIPT NUMBER")
+	@Column(name = "SCRIPT_NUMBER")
 	private String script_number;
-	@JsonProperty("PROCESS AREA")
+	@Column(name = "PROCESS_AREA")
 	private String process_area;
-	@JsonProperty("SUB PROCESS AREA")
+	@Column(name = "SUB_PROCESS_AREA")
 	private String sub_process_area;
-	@JsonProperty("MODULE")
+	@Column(name = "MODULE")
 	private String module;
-	@JsonProperty("ROLE")
+	@Column(name = "ROLE")
 	private String role;
-	@JsonProperty("END2END SCENARIO")
+	@Column(name = "END2END_SCENARIO")
 	private String end2end_scenario;
-	@JsonProperty("SCENARIO NAME")
+	@Column(name = "SCENARIO_NAME")
 	private String scenario_name;
-	@JsonProperty("SCENARIO DESCRIPTION")
+	@Column(name = "SCENARIO_DESCRIPTION")
 	private String scenario_description;
-	@JsonProperty("EXPECTED RESULT")
+	@Column(name = "EXPECTED_RESULT")
 	private String expected_result;
-	@JsonProperty("SELENIUM TEST SCRIPT NAME")
+	@Column(name = "SELENIUM_TEST_SCRIPT_NAME")
 	private String selenium_test_script_name;
-	@JsonProperty("SELENIUM_TEST_METHOD")
+	@Column(name = "SELENIUM_TEST_METHOD")
 	private String selenium_test_method;
-	@JsonProperty("DEPENDENCY")
-	private String dependency;
-	@JsonProperty("PRODUCT VERSION")
+	@Column(name = "DEPENDENCY")
+	private Integer dependency;
+	@Column(name = "PRODUCT_VERSION")
 	private String product_version;
-	@JsonProperty("STANDARD CUSTOM")
+	@Column(name = "STANDARD_CUSTOM")
 	private String standard_custom;
-	@JsonProperty("TEST SCRIPT STATUS")
+	@Column(name = "TEST_SCRIPT_STATUS")
 	private String test_script_status;
-	@JsonProperty("AUTHOR")
+	@Column(name = "AUTHOR")
 	private String author;
-	@JsonProperty("CREATED_BY")
+	@Column(name = "CREATED_BY")
 	private String created_by;
-	@JsonProperty("CREATION_DATE")
+	@Column(name = "CREATION_DATE")
 	private Date creation_date;
-	@JsonProperty("UPDATED_BY")
+	@Column(name = "UPDATED_BY")
 	private String updated_by;
-	@JsonProperty("UPDATE_DATE")
+	@Column(name = "UPDATE_DATE")
 	private Date update_date;
-	@JsonProperty("CUSTOMER_ID")
+	@Column(name = "CUSTOMER_ID")
 	private Integer customer_id;
-	@JsonProperty("CUSTOMISATION_REFERENCE")
+	@Column(name = "CUSTOMISATION_REFERENCE")
 	private String customisation_reference;
-	@JsonProperty("ATTRIBUTE1")
+	@Column(name = "ATTRIBUTE1")
 	private String attribute1;
-	@JsonProperty("ATTRIBUTE2")
+	@Column(name = "ATTRIBUTE2")
 	private String attribute2;
-	@JsonProperty("ATTRIBUTE3")
+	@Column(name = "ATTRIBUTE3")
 	private String attribute3;
-	@JsonProperty("ATTRIBUTE4")
+	@Column(name = "ATTRIBUTE4")
 	private String attribute4;
-	@JsonProperty("ATTRIBUTE5")
+	@Column(name = "ATTRIBUTE5")
 	private String attribute5;
-	@JsonProperty("ATTRIBUTE6")
+	@Column(name = "ATTRIBUTE6")
 	private String attribute6;
-	@JsonProperty("ATTRIBUTE7")
+	@Column(name = "ATTRIBUTE7")
 	private String attribute7;
-	@JsonProperty("ATTRIBUTE8")
+	@Column(name = "ATTRIBUTE8")
 	private String attribute8;
-	@JsonProperty("ATTRIBUTE9")
+	@Column(name = "ATTRIBUTE9")
 	private String attribute9;
-	@JsonProperty("ATTRIBUTE10")
+	@Column(name = "ATTRIBUTE10")
 	private String attribute10;
-	@JsonProperty("PRIORITY")
+	@Column(name = "PRIORITY")
 	private Integer priority;
-	@JsonProperty("MODULE_SRT")
-	private String module_srt;
-	@JsonProperty("TestrunName")
-	private String TestrunName;
-	
-	
-	@JsonProperty("MetaDataList")
-	private List<WatsPluginMetaDataVO> MetaDataList= new ArrayList<WatsPluginMetaDataVO>();
+	@Column(name = "DEPENDENT_SCRIPT_NUM")
+    private String dependent_script_num;
+    @Column(name = "APPR_FOR_MIGRATION")
+    private String appr_for_migration;
+    
 
-	public String getTestrunName() {
-		return TestrunName;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "scriptMaster")
+
+	private List<PluginMetadata> scriptMetaDatalist = new ArrayList<PluginMetadata>();
+
+	public void addMetadata(PluginMetadata metadata) {
+		scriptMetaDatalist.add(metadata);
+		metadata.setScriptMaster(this);
 	}
 
-	public void setTestrunName(String testrunName) {
-		TestrunName = testrunName;
+	public String getDependent_script_num() {
+		return dependent_script_num;
+	}
+
+	public void setDependent_script_num(String dependent_script_num) {
+		this.dependent_script_num = dependent_script_num;
+	}
+
+	public String getAppr_for_migration() {
+		return appr_for_migration;
+	}
+
+	public void setAppr_for_migration(String appr_for_migration) {
+		this.appr_for_migration = appr_for_migration;
 	}
 
 	public Integer getScript_id() {
@@ -99,6 +131,14 @@ public class WatsPluginMasterVO {
 
 	public void setScript_id(Integer script_id) {
 		this.script_id = script_id;
+	}
+
+	public List<PluginMetadata> getScriptMetaDatalist() {
+		return scriptMetaDatalist;
+	}
+
+	public void setScriptMetaDatalist(List<PluginMetadata> scriptMetaDatalist) {
+		this.scriptMetaDatalist = scriptMetaDatalist;
 	}
 
 	public String getScript_number() {
@@ -189,13 +229,11 @@ public class WatsPluginMasterVO {
 		this.selenium_test_method = selenium_test_method;
 	}
 
-
-
-	public String getDependency() {
+	public Integer getDependency() {
 		return dependency;
 	}
 
-	public void setDependency(String dependency) {
+	public void setDependency(Integer dependency) {
 		this.dependency = dependency;
 	}
 
@@ -367,22 +405,4 @@ public class WatsPluginMasterVO {
 		this.priority = priority;
 	}
 
-	public List<WatsPluginMetaDataVO> getMetaDataList() {
-		return MetaDataList;
-	}
-
-	public void setMetaDataList(List<WatsPluginMetaDataVO> metaDataList) {
-		MetaDataList = metaDataList;
-	}
-
-	public String getModule_srt() {
-		return module_srt;
-	}
-
-	public void setModule_srt(String module_srt) {
-		this.module_srt = module_srt;
-	}
-	
-	
-	
 }

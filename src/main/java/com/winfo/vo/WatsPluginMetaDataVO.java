@@ -34,6 +34,15 @@ public class WatsPluginMetaDataVO {
 	private String field_type;
 	@JsonProperty("HINT")
 	private String hint;
+	@JsonProperty("INPUT VALUE")
+	private String input_value;
+	
+	public String getInput_value() {
+		return input_value;
+	}
+	public void setInput_value(String input_value) {
+		this.input_value = input_value;
+	}
 	public Integer getScript_meta_data_id() {
 		return script_meta_data_id;
 	}
