@@ -520,7 +520,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>winfoautiomation-ubuntu</finalName>
+				<finalName>wats</finalName>
 
 				<plugins>
 
@@ -599,7 +599,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>winfoautiomation-ubuntu</finalName>
+				<finalName>wats</finalName>
 
 				<plugins>
 
@@ -678,7 +678,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>winfoautiomation-ubuntu</finalName>
+				<finalName>wats</finalName>
 
 				<plugins>
 
@@ -757,7 +757,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>winfoautiomation-ubuntu</finalName>
+				<finalName>wats</finalName>
 
 				<plugins>
 
