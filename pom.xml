@@ -41,26 +41,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-filestorage</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-objectstorage</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-audit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-database</artifactId>
-		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/com.assertthat/selenium-shutterbug -->
 		<dependency>
 			<groupId>com.assertthat</groupId>
