@@ -195,12 +195,28 @@ public class RunAutomation {
 								} else {
 									executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 								}
-							} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
+							}  catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							} catch (Exception e) {
+								
+							}finally {
+								try {
+								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
+										fetchConfigVO, "Passed_Report.pdf", null, null);
+								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
+										fetchConfigVO, "Failed_Report.pdf", null, null);
+								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
+										fetchConfigVO, "Detailed_Report.pdf", null, null);
+								increment = 0;
+								if ("ARLO".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+									seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
+											fetchConfigVO);
+								}
+							}  catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
+								
+							}
 							}
 						});
 					}
@@ -220,7 +236,6 @@ public class RunAutomation {
 				executeTestrunVo.setStatusCode(200);
 				executeTestrunVo.setStatusMessage("SUCCESS");
 				executeTestrunVo.setStatusDescr("SUCCESS");
-				return executeTestrunVo;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				// Restore interrupted state...
