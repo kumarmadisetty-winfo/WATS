@@ -95,4 +95,31 @@ public class LimitScriptExecutionDao {
 		return mailId;		
 	}
 
+	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "SELECT NVL(RUN_COUNT,0)+1 from win_ta_test_set_lines where TEST_SET_LINE_ID=:"+testSetLineId+" AND TEST_SET_ID=:"+testSetId+"";
+		NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
+
+		List<BigDecimal> results = query.list();
+		Integer id = 0;
+		if (results != null && !results.isEmpty()) {
+			System.out.println(results.get(0));
+			logger.info("result" + results.get(0));
+			BigDecimal bigDecimal = results.get(0);
+			id = Integer.parseInt(bigDecimal.toString());
+		}
+
+		return id;
+	}
+
+
+	public void updateFailedScriptRunCount(int failedScriptRunCount, String testSetLineId, String testSetId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=:"+failedScriptRunCount+" WHERE TEST_SET_LINE_ID=:"+testSetLineId+" AND TEST_SET_ID=:"+testSetId+"";
+		System.out.println(sql);
+		session.update(sql);
+		logger.info("Sucessfully updated");
+	}
+
+
 }

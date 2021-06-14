@@ -775,8 +775,13 @@ public class RunAutomation {
 					fetchConfigVO.setEndtime(enddate);
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
+							test_set_id);
 					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-							seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+							seq_num + "_" + script_Number + "_run" + failedScriptRunCount + ".pdf", startdate, enddate);
+
+					limitScriptExecutionService.updateFailedScriptRunCount(failedScriptRunCount, test_set_line_id,
+							test_set_id);
 					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
 							script_Number, "Fail", startdate, enddate);
