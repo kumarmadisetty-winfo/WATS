@@ -66,6 +66,10 @@ public class ScriptsData {
 	@Column(name = "EXECUTION_END_TIME")
 	private Date executionendtime;
 	
+	@Column(name = "RUN_COUNT")
+	private int runCount;
+	
+	
 	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_ID")
 	private Testrundata Testrundata;
@@ -103,7 +107,12 @@ public class ScriptsData {
 	public int getScriptid() {
 		return scriptid;
 	}
-
+	public int getRunCount() {
+		return runCount;
+	}
+	public void setRunCount(int runCount) {
+		this.runCount = runCount;
+	}
 	public void setScriptid(int scriptid) {
 		this.scriptid = scriptid;
 	}

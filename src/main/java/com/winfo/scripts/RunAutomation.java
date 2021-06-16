@@ -113,9 +113,9 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver_win32\\chromedriver.exe");
-			fetchConfigVO.setDownlod_file_path("E:\\wats-chakradhar\\pdfpatrh\\");
-			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
+//			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver_win32\\chromedriver.exe");
+//			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
+//			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
@@ -129,26 +129,28 @@ public class RunAutomation {
 			  sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 			  Date startDate=sdf.parse(fetchConfigVO.getStart_date());
 			Date endDate=sdf.parse(fetchConfigVO.getEnd_date());
-//			for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
-//				if (entryMap.getValue()||date.after(endDate)||date.before(startDate)) {
-//					executeTestrunVo.setStatusCode(404);
-//					executeTestrunVo.setStatusMessage("ERROR");
-//					if(entryMap.getKey()>0) {
-//					executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+entryMap.getKey()+" more scripts. Reach out to the WATS support team to enhance the limit..");
-//					}else if(date.after(endDate)||date.before(startDate)){
-//						executeTestrunVo.setStatusDescr("Your request could not be processed the Testrun, please check with the Start and End Date");
-//	
-//					}else{
-//						executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
-//	
-//					}
-//					return executeTestrunVo;
-//
-//				}
-//			}
+	
+						for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
+				if (entryMap.getValue()||date.after(endDate)||date.before(startDate)) {
+					executeTestrunVo.setStatusCode(404);
+					executeTestrunVo.setStatusMessage("ERROR");
+					if(entryMap.getKey()>0) {
+					executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+entryMap.getKey()+" more scripts. Reach out to the WATS support team to enhance the limit..");
+					}else if(date.after(endDate)||date.before(startDate)){
+						executeTestrunVo.setStatusDescr("Your request could not be processed the Testrun, please check with the Start and End Date");
+	
+					}else{
+						executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
+	
+					}
+					return executeTestrunVo;
+
+				}
+			}
 
 
 			fetchConfigVO.setStarttime1(date);
+			
 			System.out.println(metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
@@ -778,10 +780,8 @@ public class RunAutomation {
 					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
 							test_set_id);
 					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-							seq_num + "_" + script_Number + "_run" + failedScriptRunCount + ".pdf", startdate, enddate);
+							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
 
-					limitScriptExecutionService.updateFailedScriptRunCount(failedScriptRunCount, test_set_line_id,
-							test_set_id);
 					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
 							script_Number, "Fail", startdate, enddate);

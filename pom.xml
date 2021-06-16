@@ -498,7 +498,7 @@
 		<profile>
 			<id>hub</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -613,10 +613,10 @@
 												<include>*.properties</include>
 												<include>Images/</include>
 											</includes>
-											<includes>
+											<!-- <includes>
 												<include>*.properties</include>
 												<include>oci/</include>
-											</includes>
+											</includes> -->
 
 										</resource>
 									</resources>
@@ -692,10 +692,10 @@
 												<include>*.properties</include>
 												<include>Images/</include>
 											</includes>
-											<includes>
+										<!-- 	<includes>
 												<include>*.properties</include>
 												<include>oci/</include>
-											</includes>
+											</includes> --> 
 
 										</resource>
 									</resources>
@@ -771,11 +771,11 @@
 												<include>*.properties</include>
 												<include>Images/</include>
 											</includes>
-											<includes>
+											<!-- <includes>
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-
+ -->
 										</resource>
 									</resources>
 								</configuration>

@@ -2988,7 +2988,8 @@ System.out.println("entered to getFailFileNameListNew");
 			document.close();
 			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
 		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf"+e);
+			System.out.println("Not able to upload the pdf");
+			e.printStackTrace();
 		}
 	}
 

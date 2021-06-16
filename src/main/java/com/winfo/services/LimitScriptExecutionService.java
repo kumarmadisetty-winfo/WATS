@@ -198,14 +198,6 @@ public class LimitScriptExecutionService {
 		// TODO Auto-generated method stub
 		return limitScriptExecutionDao.getFailedScriptRunCount(testSetLineId,testSetId);
 	}
-	@Transactional
-	public void updateFailedScriptRunCount(int failedScriptRunCount,String testSetLineId, String testSetId) {
-		try { 
-		limitScriptExecutionDao.updateFailedScriptRunCount(failedScriptRunCount,testSetLineId,testSetId);
-		}catch (Exception e) {
-			System.out.println("updated count failed " + e);
-			log.error("updated count failed " + e);
-		}
-	}
+	
 
 }
