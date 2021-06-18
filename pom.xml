@@ -534,10 +534,10 @@
 												<include>*.properties</include>
 												<include>Images/</include>
 											</includes>
-											<includes>
+											<!-- <includes>
 												<include>*.properties</include>
 												<include>oci/</include>
-											</includes>
+											</includes> -->
 
 										</resource>
 									</resources>
