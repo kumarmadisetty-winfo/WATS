@@ -2,6 +2,7 @@ package com.winfo.dao;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,8 +13,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.winfo.model.ScriptsData;
 @Transactional
@@ -91,5 +95,49 @@ public class VmInstanceDAO {
 			id= Integer.parseInt(bigDecimal.toString());
 		}
 		return id;
+	}
+	public Map<Date,Long> getStarttimeandExecutiontime(String testSetid) {
+		Map<Date,Long> timeslist=new TreeMap<>();
+		try {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "select e.START_TIME,e.DURATION from win_ta_test_set e where e.TEST_SET_ID="+testSetid;
+		Query  query = session.createSQLQuery(sql);
+		 List<Object[]> results= (List<Object[]>)query.list();
+		 for(Object[] user: results) {
+			System.out.println(results.get(0));
+			log.info("result"+results.get(0));
+			BigDecimal bigDecimal = (BigDecimal) user[1];
+			 long id= Long.parseLong(bigDecimal.toString());
+			timeslist.put((Date)user[0], id);
+		}
+		 } catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		 return timeslist;
+	}
+	public void updateTestrunTimes(Date tStarttime, Date tendtime, long tdiffMinutes, String testSetid) {
+		Session session = entityManager.unwrap(Session.class);
+		try {
+			String sql1 = "UPDATE win_ta_test_set SET START_TIME=TO_TIMESTAMP('"+tStarttime+"','YYYY-MM-DD HH24:MI:SS.FF'),END_TIME=TO_TIMESTAMP('"+tendtime+"','YYYY-MM-DD HH24:MI:SS.FF'),DURATION="+tdiffMinutes+" WHERE TEST_SET_ID=" + testSetid;
+			Query query = session.createSQLQuery(sql1);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	public void updateTestrunTimes1(Date tendtime, long tdiffMinutes, String testSetid) {
+		Session session = entityManager.unwrap(Session.class);
+		try {
+			String sql1 = "UPDATE win_ta_test_set SET END_TIME=TO_TIMESTAMP('"+tendtime+"','YYYY-MM-DD HH24:MI:SS.FF'),DURATION="+tdiffMinutes+" WHERE TEST_SET_ID=" + testSetid;
+			Query query = session.createSQLQuery(sql1);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}		
 	}
 }

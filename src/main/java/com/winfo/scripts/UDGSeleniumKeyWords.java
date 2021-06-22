@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -121,6 +122,7 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
+import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
@@ -134,6 +136,8 @@ private DataBaseEntry  databaseentry;
 ScriptXpathService service;
 @Autowired
 DynamicRequisitionNumber dynamicnumber;
+@Autowired
+LimitScriptExecutionService limitScriptExecutionService;
 
 @Value("${configvO.watslogo}")
 private String watslogo;
@@ -1938,9 +1942,7 @@ System.out.println("entered to getFailFileNameListNew");
 			String TStarttime1=dateFormat.format(TStarttime);
 			String Tendtime1=dateFormat.format(Tendtime);
 			  long Tdiff=Tendtime.getTime() - TStarttime.getTime();
-			    long TdiffSeconds = Tdiff / 1000 % 60;
-			    long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			    long TdiffHours = Tdiff / (60 * 60 * 1000);
+			   
 
 			Document document = new Document();
 			String start = "Execution Summary";
@@ -1968,13 +1970,39 @@ System.out.println("entered to getFailFileNameListNew");
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 //		start to create testrun level reports	
 			if((passcount!=0||failcount!=0) &("Passed_Report.pdf".equalsIgnoreCase(pdffileName)||"Failed_Report.pdf".equalsIgnoreCase(pdffileName)||"Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {			
-//	     Start testrun to add details like start and end time,testrun name 			
-				String TestRun=test_Run_Name;
-//				String ExecutedBy=fetchConfigVO.getApplication_user_name();
-				String StartTime=TStarttime1;
+//	     Start testrun to add details like start and end time,testrun name
+				String TestRun= TestRun=test_Run_Name;;
+				String StartTime=null;
 				String EndTime=Tendtime1;
-				String ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+				String ExecutionTime=null;
+				Date date= new Date();		
+				 Timestamp startTimestamp = new Timestamp(TStarttime.getTime());
+				 Timestamp endTimestamp = new Timestamp(Tendtime.getTime());
 
+				Map<Date,Long> timeslist=limitScriptExecutionService.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
+				if(timeslist.size()==0) {
+				 StartTime=TStarttime1;
+				 long TdiffSeconds = Tdiff / 1000 % 60;
+				    long TdiffMinutes = Tdiff / (60 * 1000)% 60 ;
+				    long TdiffHours = Tdiff / (60 * 60 * 1000);
+				     ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;
+				     if("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+				     limitScriptExecutionService.updateTestrunTimes(startTimestamp,endTimestamp,Tdiff,fetchMetadataListVO.get(0).getTest_set_id());
+				     }
+				     }else {
+					for(Entry<Date,Long> entryMap:timeslist.entrySet()) {
+					StartTime=dateFormat.format(entryMap.getKey());
+					 long totalTime=Tdiff+entryMap.getValue();
+					 long TdiffSeconds = totalTime / 1000 % 60;
+					    long TdiffMinutes = totalTime / (60 * 1000)% 60 ;
+					    long TdiffHours = totalTime/ (60 * 60 * 1000);
+					     ExecutionTime=TdiffHours+":"+TdiffMinutes+":"+TdiffSeconds;		
+					     if("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+
+					     limitScriptExecutionService.updateTestrunTimes1(endTimestamp,totalTime,fetchMetadataListVO.get(0).getTest_set_id());
+					     }
+					     }
+				}
 				String TR = "Test Run Name";
 				String SN = "Executed By" ;
 				String SN1 = "Start Time";

@@ -18,7 +18,7 @@ public class test {
 //		System.out.println(instanceName+"instanceName"+str);
 		
 		try {
-			runWithParams(urlStr, "2310");
+			runWithParams(urlStr, "1508");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

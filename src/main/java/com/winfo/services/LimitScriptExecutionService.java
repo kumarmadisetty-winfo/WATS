@@ -1,6 +1,7 @@
 package com.winfo.services;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -191,6 +192,21 @@ public class LimitScriptExecutionService {
 	public int getInprogressAndInqueueCount() {
 		return vmInstanceDao.getInprogressAndInqueueCount();
 
+	}
+	@Transactional
+	public Map<Date,Long> getStarttimeandExecutiontime(String testSetid) {
+		return vmInstanceDao.getStarttimeandExecutiontime(testSetid);	
+	}
+	@Transactional
+
+	public void updateTestrunTimes(Date tStarttime, Date tendtime, long tdiffMinutes, String testSetid) {
+		 vmInstanceDao.updateTestrunTimes(tStarttime,tendtime,tdiffMinutes,testSetid);		
+	}
+	@Transactional
+
+	public void updateTestrunTimes1(Date tendtime, long tdiffMinutes, String testSetid) {
+		 vmInstanceDao.updateTestrunTimes1(tendtime,tdiffMinutes,testSetid);		
+		
 	}
 
 }
