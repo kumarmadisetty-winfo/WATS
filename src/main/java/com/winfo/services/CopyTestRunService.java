@@ -124,8 +124,10 @@ public class CopyTestRunService {
 				int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
 				int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
 				String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-				if(getInputvalues==null) {
+				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					hexaDecimal=getInputvalues;
+				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					setScriptlinedata.setInput_value(null);
 				}
 				else if(getInputvalues.length()>5) {
 				hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
@@ -140,14 +142,24 @@ public class CopyTestRunService {
 				String covertDateobj=dateformate.format(dateobj);
 				Thread.sleep(1);
 				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
-				if(getInputvalues==null) {
+				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					setScriptlinedata.setInput_value(getInputvalues);
+				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					setScriptlinedata.setInput_value(null);
 				}else {
 				setScriptlinedata.setInput_value(covertDateobj);
 				}
 			}
 			}else {
+				if("copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+					setScriptlinedata.setInput_value(null);
+
+				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					setScriptlinedata.setInput_value(null);
+				}
+				else {
 				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
+				}
 			}
 		
 	}
