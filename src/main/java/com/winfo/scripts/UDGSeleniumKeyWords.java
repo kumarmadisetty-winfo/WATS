@@ -3100,128 +3100,163 @@ System.out.println("entered to getFailFileNameListNew");
 		}
 	}// input[@placeholder='Enter search terms']
 
-	public void paste(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String globalValueForSteps)
+	 public void paste(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+				String globalValueForSteps)
 
-			throws Exception {
-		
-		try {
-            if(inputParam.equalsIgnoreCase("Notifications")){
-            WebElement waittill = driver.findElement(By.xpath("//h1[text()='" + inputParam + "']/following::input[@placeholder='Search']"));
-            String value = globalValueForSteps;
-            waittill.click();
-            JavascriptExecutor jse = (JavascriptExecutor) driver;
-            jse.executeScript("arguments[0].value='" + value + "';", waittill);
-            Thread.sleep(3000);
-            String scripNumber = fetchMetadataVO.getScript_number();
-            log.info("Successfully paste is done " +scripNumber);
-    String xpath="//input[@placeholder='inputParam']";
-                    service.saveXpathParams(inputParam,"",scripNumber,xpath);
-            return;
-            }
-        } catch (Exception e) {
-            String scripNumber = fetchMetadataVO.getScript_number();
-            log.error("Failed during Paste Method");
-            screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
-            throw e;
-        }try {
+				throws Exception {
+			
+			try {
+	            if(inputParam.equalsIgnoreCase("Notifications")){
+	            WebElement waittill = driver.findElement(By.xpath("//h1[text()='" + inputParam + "']/following::input[@placeholder='Search']"));
+	          //to get Dynamic copynumber
+				String testParamId=fetchMetadataVO.getTest_script_param_id();
+				String testSetId=fetchMetadataVO.getTest_set_line_id();
+				String copynumberValue;
+				String inputValue=fetchMetadataVO.getInput_value();
+			
+				   String[] arrOfStr = inputValue.split(">", 5);
+				   if(arrOfStr.length<2) {
+					   copynumberValue=inputValue;
+				   }
+				   else {
+					   String Testrun_name=arrOfStr[0];
+					   String seq=arrOfStr[1];
+					  // String Script_num=arrOfStr[2];
+					   String line_number=arrOfStr[2];
+					   copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
+				   }
+				   System.out.println("copynumberValue:::"+copynumberValue);
 
-			WebElement waittill = driver
+	            String value = globalValueForSteps;
+	            waittill.click();
+	            JavascriptExecutor jse = (JavascriptExecutor) driver;
+	            jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+	            Thread.sleep(3000);
+	            String scripNumber = fetchMetadataVO.getScript_number();
+	            log.info("Successfully paste is done " +scripNumber);
+	    String xpath="//input[@placeholder='inputParam']";
+		String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath);
 
-					.findElement(By.xpath("//label[text()='" + inputParam + "']/following::input[1]"));
+	                  //  service.saveXpathParams(inputParam,"",scripNumber,xpath);
+	            return;
+	            }
+	        } catch (Exception e) {
+	            String scripNumber = fetchMetadataVO.getScript_number();
+	            log.error("Failed during Paste Method");
+	            screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+	            throw e;
+	        }try {
 
-			//to get Dynamic copynumber
-			String testParamId=fetchMetadataVO.getTest_script_param_id();
-			String testSetId=fetchMetadataVO.getTest_set_line_id();
+				WebElement waittill = driver
 
-			String inputValue=fetchMetadataVO.getInput_value();
-		
-			   String[] arrOfStr = inputValue.split(">", 5);
-			   String Testrun_name=arrOfStr[0];
-			   String seq=arrOfStr[1];
-			  // String Script_num=arrOfStr[2];
-			   String line_number=arrOfStr[2];
-			  String copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
-		     
-			String value = globalValueForSteps;
+						.findElement(By.xpath("//label[text()='" + inputParam + "']/following::input[1]"));
 
-//          String value = copynumber(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO)
+				//to get Dynamic copynumber
+				String testParamId=fetchMetadataVO.getTest_script_param_id();
+				String testSetId=fetchMetadataVO.getTest_set_line_id();
+				String copynumberValue;
+				String inputValue=fetchMetadataVO.getInput_value();
+			
+				   String[] arrOfStr = inputValue.split(">", 5);
+				   if(arrOfStr.length<2) {
+					   copynumberValue=inputValue;
+				   }
+				   else {
+					   String Testrun_name=arrOfStr[0];
+					   String seq=arrOfStr[1];
+					  // String Script_num=arrOfStr[2];
+					   String line_number=arrOfStr[2];
+					   copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
+				   }
 
-			waittill.click();
+				   System.out.println("copynumberValue:::"+copynumberValue);
 
-			JavascriptExecutor jse = (JavascriptExecutor) driver;
+				String value = globalValueForSteps;
 
-			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+//	          String value = copynumber(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO)
 
-			/*
-			 * 
-			 * Actions action = new Actions(driver);
-			 * 
-			 * action.click(waittill).build().perform();
-			 * 
-			 * action.doubleClick(waittill).build().perform();
-			 * 
-			 * action.sendKeys(value).build().perform();
-			 * 
-			 */
+				waittill.click();
 
-			Thread.sleep(3000);
-			String scripNumber=fetchMetadataVO.getScript_number();
-			String xpath="//label[text()='inputParam']/following::input[1]";
-					service.saveXpathParams(inputParam,"",scripNumber,xpath);
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-			return;
+				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
-		} catch (Exception e) {
+				/*
+				 * 
+				 * Actions action = new Actions(driver);
+				 * 
+				 * action.click(waittill).build().perform();
+				 * 
+				 * action.doubleClick(waittill).build().perform();
+				 * 
+				 * action.sendKeys(value).build().perform();
+				 * 
+				 */
 
-			System.out.println(e);
+				Thread.sleep(3000);
+				String scripNumber=fetchMetadataVO.getScript_number();
+				String xpath="//label[text()='inputParam']/following::input[1]";
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath);
+			
+//				service.saveXpathParams(inputParam,"",scripNumber,xpath);
 
-		}
+				return;
 
-		try {
+			} catch (Exception e) {
 
-			WebElement waittill = driver.findElement(By.xpath("//input[@placeholder='" + inputParam + "']"));
+				System.out.println(e);
 
-			//to get Dynamic copynumber
-			String testParamId=fetchMetadataVO.getTest_script_param_id();
-			String testSetId=fetchMetadataVO.getTest_set_line_id();
+			}
 
-			String inputValue=fetchMetadataVO.getInput_value();
-		
-			   String[] arrOfStr = inputValue.split(">", 5);
-			   String Testrun_name=arrOfStr[0];
-			   String seq=arrOfStr[1];
-			   String line_number=arrOfStr[2];
-			   //String Script_num=arrOfStr[3];
-			  String copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
-		     
-			String value = globalValueForSteps;
+			try {
 
-			waittill.click();
+				WebElement waittill = driver.findElement(By.xpath("//input[@placeholder='" + inputParam + "']"));
 
-			JavascriptExecutor jse = (JavascriptExecutor) driver;
+				//to get Dynamic copynumber
+				String testParamId=fetchMetadataVO.getTest_script_param_id();
+				String testSetId=fetchMetadataVO.getTest_set_line_id();
+				String copynumberValue;
+				String inputValue=fetchMetadataVO.getInput_value();
+			
+				   String[] arrOfStr = inputValue.split(">", 5);
+				   if(arrOfStr.length<2) {
+					   copynumberValue=inputValue;
+				   }
+				   else {
+					   String Testrun_name=arrOfStr[0];
+					   String seq=arrOfStr[1];
+					  // String Script_num=arrOfStr[2];
+					   String line_number=arrOfStr[2];
+					   copynumberValue= dynamicnumber.getCopynumber(Testrun_name,seq,line_number,testParamId,testSetId);
+				   }		     
+				String value = globalValueForSteps;
+	System.out.println("copynumberValue:::"+copynumberValue);
+				waittill.click();
 
-			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-			Thread.sleep(3000);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Successfully paste is done " +scripNumber);
-	String xpath="//input[@placeholder='inputParam']";
-					service.saveXpathParams(inputParam,"",scripNumber,xpath);
+				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+
+				Thread.sleep(3000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Successfully paste is done " +scripNumber);
+		String xpath="//input[@placeholder='inputParam']";
+		String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath);
 					
+//		service.saveXpathParams(inputParam,"",scripNumber,xpath);
+						
 
-			return;
+				return;
 
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Paste Method");
-			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
-			throw e;
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Paste Method");
+				screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+				throw e;
+
+			}
 
 		}
-
-	}
-
 	public void clear(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 
