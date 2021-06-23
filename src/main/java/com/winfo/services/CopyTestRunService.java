@@ -127,7 +127,7 @@ public class CopyTestRunService {
 				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					hexaDecimal=getInputvalues;
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(null);
+					hexaDecimal=null;
 				}
 				else if(getInputvalues.length()>5) {
 				hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
