@@ -64,7 +64,7 @@ public class ScriptsData {
 	private Date executionstarttime;
 	
 	@Column(name = "EXECUTION_END_TIME")
-	private Date executionendtime;
+	private Date executionendtime;	
 	
 	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_ID")

@@ -45,7 +45,7 @@ public class DriverConfiguration {
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
 			if (os.contains("win")) {
 				System.out.println("windows location");
-				options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
+				options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
 																										// "C:\\Program
 																										// Files
 																										// (x86)\\Google\\Chrome\\Application\\chrome.exe");

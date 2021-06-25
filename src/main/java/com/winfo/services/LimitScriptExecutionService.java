@@ -209,4 +209,11 @@ public class LimitScriptExecutionService {
 		
 	}
 
+	@Transactional
+	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {
+		// TODO Auto-generated method stub
+		return limitScriptExecutionDao.getFailedScriptRunCount(testSetLineId,testSetId);
+	}
+	
+
 }

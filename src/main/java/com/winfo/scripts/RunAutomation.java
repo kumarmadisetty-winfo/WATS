@@ -113,7 +113,7 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-//			fetchConfigVO.setChrome_driver_path("C:\\Users\\chakradhar\\Downloads\\chromedriver_win32\\chromedriver.exe");
+//			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver_win32\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
 			final String uri = fetchConfigVO.getUri_test_scripts() + args;
@@ -129,7 +129,8 @@ public class RunAutomation {
 			  sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 			  Date startDate=sdf.parse(fetchConfigVO.getStart_date());
 			Date endDate=sdf.parse(fetchConfigVO.getEnd_date());
-			for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
+	
+						for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
 				if (entryMap.getValue()||date.after(endDate)||date.before(startDate)) {
 					executeTestrunVo.setStatusCode(404);
 					executeTestrunVo.setStatusMessage("ERROR");
@@ -149,8 +150,10 @@ public class RunAutomation {
 
 
 			fetchConfigVO.setStarttime1(date);
+			
 			System.out.println(metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
+		   try {
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
 					try {
@@ -176,6 +179,10 @@ public class RunAutomation {
 				});
 			}
 			executor.shutdown();
+		   } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			try {
 				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 				if (executor.isTerminated()) {
@@ -544,7 +551,7 @@ public class RunAutomation {
 								fetchMetadataVO, fetchConfigVO);
 						message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
 						String message1 = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")) {
+						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") ) {
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);
@@ -775,8 +782,11 @@ public class RunAutomation {
 					fetchConfigVO.setEndtime(enddate);
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
+							test_set_id);
 					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-							seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
+
 					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
 							script_Number, "Fail", startdate, enddate);
