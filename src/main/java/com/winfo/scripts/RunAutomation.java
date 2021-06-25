@@ -153,6 +153,7 @@ public class RunAutomation {
 			
 			System.out.println(metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
+		   try {
 			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
 					try {
@@ -178,6 +179,10 @@ public class RunAutomation {
 				});
 			}
 			executor.shutdown();
+		   } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			try {
 				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 				if (executor.isTerminated()) {
@@ -546,7 +551,7 @@ public class RunAutomation {
 								fetchMetadataVO, fetchConfigVO);
 						message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
 						String message1 = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")) {
+						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") ) {
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);

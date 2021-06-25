@@ -64,11 +64,7 @@ public class ScriptsData {
 	private Date executionstarttime;
 	
 	@Column(name = "EXECUTION_END_TIME")
-	private Date executionendtime;
-	
-	@Column(name = "RUN_COUNT")
-	private int runCount;
-	
+	private Date executionendtime;	
 	
 	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_ID")
@@ -107,12 +103,7 @@ public class ScriptsData {
 	public int getScriptid() {
 		return scriptid;
 	}
-	public int getRunCount() {
-		return runCount;
-	}
-	public void setRunCount(int runCount) {
-		this.runCount = runCount;
-	}
+
 	public void setScriptid(int scriptid) {
 		this.scriptid = scriptid;
 	}
