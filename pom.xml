@@ -575,7 +575,7 @@
 
 		</profile>
 		<profile>
-			<id>prd</id>
+			<id>prod</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -648,7 +648,7 @@
 			<properties>
 				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>prd</profiles>
+				<profiles>prod</profiles>
 				<instance>prd</instance>
 			</properties>
 
@@ -808,6 +808,322 @@
 				<app.name>application</app.name>
 				<profiles>rep</profiles>
 				<instance>rep</instance>
+			</properties>
+
+		</profile>
+		<profile>
+			<id>arlodev</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>wats</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>Images/</include>
+											</includes>
+											<!-- <includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes> -->
+
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>arlodev</profiles>
+				<instance>arlodev</instance>
+			</properties>
+
+		</profile>
+		<profile>
+			<id>arlop</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>wats</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>Images/</include>
+											</includes>
+											<!-- <includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes> -->
+
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>arlop</profiles>
+				<instance>arlop</instance>
+			</properties>
+
+		</profile>
+		<profile>
+			<id>udgs</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>wats</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>Images/</include>
+											</includes>
+											<!-- <includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes> -->
+
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>udgs</profiles>
+				<instance>udgs</instance>
+			</properties>
+
+		</profile>
+		<profile>
+			<id>verisure</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>wats</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>Images/</include>
+											</includes>
+											<!-- <includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes> -->
+
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://watsprd01.winfosolutions.com:8087/config-server/</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>verisure</profiles>
+				<instance>verisure</instance>
 			</properties>
 
 		</profile>
