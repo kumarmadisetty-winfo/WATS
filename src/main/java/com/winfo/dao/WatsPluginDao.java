@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -11,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.PluginMaster;
+import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.TestSet;
 import com.winfo.model.Testrundata;
 import com.winfo.vo.DomGenericResponseBean;
 
@@ -330,6 +337,30 @@ public class WatsPluginDao {
 		response.setStatus(200);
 		response.setStatusMessage("NewScriptNumber:"+scriptnumber);
          return response;
+	}
+
+	public List<String> getTestrunDataPVerson(String productverson) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql="select TEST_SET_NAME from win_ta_test_set where project_id in (select PROJECT_ID from win_ta_projects where product_version=:productverson)";
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setParameter("productverson", productverson);
+			List results = query.list();
+				
+				return (List<String>) results;
+					
+			
+//			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//			CriteriaQuery<TestSet> query = cb.createQuery(TestSet.class);
+//			Root<Project> root = query.from(Project.class);
+//			Join<TestSet, Project> qualityJoin = root.join("projectId",JoinType.INNER);
+//			qualityJoin.on(cb.equal(qualityJoin.get("Project").get("projectId"), root.get("project_id")));
+//			query.multiselect (qualityJoin);
+//			query.where(cb.equal(root.get("productVersion"),productverson));
+//			List<TestSet> list=entityManager.createQuery(query).getResultList();
+//			
+//			System.out.println("list::"+list);
+//
+//			return null;
 	}
 
 }
