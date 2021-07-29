@@ -125,4 +125,9 @@ public class WatsPluginService {
 		return dao.getTestrunData();
 	}
 
+	public List<String> getTestrunDataPVerson(String productverson) {
+		// TODO Auto-generated method stub
+		return dao.getTestrunDataPVerson(productverson);
+	}
+
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,10 +34,16 @@ public class WatsPlugInRest {
 	public DomGenericResponseBean watsLogin(@RequestBody WatsLoginVO loginvo){
 		return service.watslogin(loginvo);
 	}
-	@GetMapping("/testrunNames")
-	public List<String> getTestrunData(){
-	
-		return service.getTestrunData();
+//	@GetMapping("/testrunNames")
+//	public List<String> getTestrunData(){
+//	
+//		return service.getTestrunData();
+//	}
+	@GetMapping("/testrunNames/{productverson}")
+	public List<String> getTestrunData(@PathVariable String productverson){
+	      System.out.println(productverson);
+	      System.out.println(service.getTestrunDataPVerson(productverson));
+		return service.getTestrunDataPVerson(productverson);
 	}
 	@PostMapping("/testrunData")
 	public DomGenericResponseBean updateTestrun(@RequestBody WatsPluginMasterVO mastervo){
