@@ -1,50 +1,21 @@
 package com.winfo.services;
 
-import java.io.IOException;
-
-import java.nio.charset.StandardCharsets;
-
-import java.nio.file.Files;
-
-import java.nio.file.Paths;
-
 import java.util.ArrayList;
-
-import java.util.HashMap;
-
 import java.util.LinkedHashMap;
-
 import java.util.List;
-
 import java.util.Map;
-
-import javax.script.Invocable;
-
-import javax.script.ScriptEngine;
-
-import javax.script.ScriptEngineManager;
-
-import javax.script.ScriptException;
+import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
-
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.http.HttpEntity;
-
 import org.springframework.http.HttpHeaders;
-
 import org.springframework.http.MediaType;
-
-import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
-
-import org.springframework.util.LinkedMultiValueMap;
-
-import org.springframework.util.MultiValueMap;
-
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
@@ -148,40 +119,55 @@ public class TestCaseDataService {
 	}
 
 	public FetchConfigVO getFetchConfigVO(String parameter) {
-
-//		final String uri = "https://watsdev01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/"
-//				+ parameter;
+		JSONParser jsonParser = new JSONParser();
+//		 String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/CONFIG_GET/data";
 
 		final String uri = config_url + parameter;
 
 // 	                          final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/taconfig/data/" + parameter;
+		try {
+			System.out.println(uri);
 
-		System.out.println(uri);
+			RestTemplate restTemplate = new RestTemplate();
 
-		RestTemplate restTemplate = new RestTemplate();
+			System.out.println(restTemplate);
 
-		System.out.println(restTemplate);
+			String result = restTemplate.getForObject(uri, String.class);
 
-		String result = restTemplate.getForObject(uri, String.class);
+			System.out.println(result);
 
-		System.out.println(result);
+			JSONObject obj = (JSONObject) jsonParser.parse(result);
 
-		// convert Java Objects into their JSON and viz
+			System.out.println(restTemplate);
 
-		Gson g = new Gson();
-
-		FetchConfigMetaVO MetaList = g.fromJson(result, FetchConfigMetaVO.class);
-
-		if (MetaList != null) {
-
-			return MetaList.getItemconfig().get(0);
-
-		} else {
-
-			return null;
-
+			JSONArray employeeList = (JSONArray) obj.get("items");
+			System.out.println(employeeList);
+			Map<String, String> map = new TreeMap<>();
+			// Iterate over employee array
+			employeeList.forEach(emp -> parseEmployeeObject((JSONObject) emp, map));
+			JSONObject jsno = new JSONObject(map);
+			Gson g = new Gson();
+			FetchConfigVO vo = g.fromJson(jsno.toString(), FetchConfigVO.class);
+			System.out.println(jsno.toString());
+			return vo;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
+	}
 
+	public void parseEmployeeObject(JSONObject employee, Map<String, String> map) {
+		// Get employee object within list
+//	        JSONObject employeeObject = (JSONObject) employee.get("items");
+
+		// Get employee first name
+		String firstName = (String) employee.get("key_name");
+		System.out.println(firstName);
+
+		// Get employee last name
+		String lastName = (String) employee.get("value_name");
+		System.out.println(lastName);
+		map.put(firstName, lastName);
 	}
 
 	public void updateTestCaseStatus(FetchScriptVO request, String parameter, FetchConfigVO fetchConfigVO) {
