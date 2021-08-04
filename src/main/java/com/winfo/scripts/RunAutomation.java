@@ -116,7 +116,7 @@ public class RunAutomation {
 //			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver_win32\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
-			final String uri = fetchConfigVO.getUri_test_scripts() + args;
+			final String uri = fetchConfigVO.getMETADATA_URL() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService

@@ -8,8 +8,8 @@ import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -174,7 +174,7 @@ public class TestCaseDataService {
 
 		try {
 
-			final String uri = fetchConfigVO.getUri_test_scripts() + parameter + "?p_script_id="
+			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id="
 					+ request.getP_script_id() + "&p_status=" + request.getP_status() + "&p_test_set_id="
 					+ request.getP_test_set_id() + "&p_test_set_line_id=" + request.getP_test_set_line_id()
 					+ "&p_pass_path=" + request.getP_pass_path() + "&p_fail_path=" + request.getP_fail_path()
