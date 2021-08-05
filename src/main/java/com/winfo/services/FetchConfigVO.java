@@ -1,4 +1,4 @@
-package com.winfo.services;
+			package com.winfo.services;
 
 import java.util.Date;
 
@@ -140,94 +140,7 @@ public class FetchConfigVO {
 //	@JsonProperty("BROWSER")
 	private String errormessage;
 	
-	
-public String getBROWSER() {
-		return BROWSER;
-	}
 
-	public void setBROWSER(String bROWSER) {
-		BROWSER = bROWSER;
-	}
-
-	public Integer getWAIT_TIME() {
-		return WAIT_TIME;
-	}
-
-	public void setWAIT_TIME(Integer wAIT_TIME) {
-		WAIT_TIME = wAIT_TIME;
-	}
-
-	public String getAPPLICATION_URL() {
-		return APPLICATION_URL;
-	}
-
-	public void setAPPLICATION_URL(String aPPLICATION_URL) {
-		APPLICATION_URL = aPPLICATION_URL;
-	}
-
-	public String getAPPLICATION_USER_NAME() {
-		return APPLICATION_USER_NAME;
-	}
-
-	public void setAPPLICATION_USER_NAME(String aPPLICATION_USER_NAME) {
-		APPLICATION_USER_NAME = aPPLICATION_USER_NAME;
-	}
-
-	public String getCHROME_DRIVER_PATH() {
-		return CHROME_DRIVER_PATH;
-	}
-
-	public void setCHROME_DRIVER_PATH(String cHROME_DRIVER_PATH) {
-		CHROME_DRIVER_PATH = cHROME_DRIVER_PATH;
-	}
-
-	public String getIE_DRIVER_PATH() {
-		return IE_DRIVER_PATH;
-	}
-
-	public void setIE_DRIVER_PATH(String iE_DRIVER_PATH) {
-		IE_DRIVER_PATH = iE_DRIVER_PATH;
-	}
-
-	public String getFIREFOX_DRIVER_PATH() {
-		return FIREFOX_DRIVER_PATH;
-	}
-
-	public void setFIREFOX_DRIVER_PATH(String fIREFOX_DRIVER_PATH) {
-		FIREFOX_DRIVER_PATH = fIREFOX_DRIVER_PATH;
-	}
-
-	public String getDOWNLOD_FILE_PATH() {
-		return DOWNLOD_FILE_PATH;
-	}
-
-	public void setDOWNLOD_FILE_PATH(String dOWNLOD_FILE_PATH) {
-		DOWNLOD_FILE_PATH = dOWNLOD_FILE_PATH;
-	}
-
-	public String getUPLOAD_FILE_PATH() {
-		return UPLOAD_FILE_PATH;
-	}
-
-	public void setUPLOAD_FILE_PATH(String uPLOAD_FILE_PATH) {
-		UPLOAD_FILE_PATH = uPLOAD_FILE_PATH;
-	}
-
-	public String getURI_TEST_SCRIPTS() {
-		return URI_TEST_SCRIPTS;
-	}
-
-	public void setURI_TEST_SCRIPTS(String uRI_TEST_SCRIPTS) {
-		URI_TEST_SCRIPTS = uRI_TEST_SCRIPTS;
-	}
-
-	public String getSHORT_WAIT() {
-		return SHORT_WAIT;
-	}
-
-	public void setSHORT_WAIT(String sHORT_WAIT) {
-		SHORT_WAIT = sHORT_WAIT;
-	}
 
 	public String getAPI_BASE_URL() {
 		return API_BASE_URL;
@@ -269,13 +182,7 @@ public String getBROWSER() {
 		METADATA_URL = mETADATA_URL;
 	}
 
-	public String getMEDIUM_WAIT() {
-		return MEDIUM_WAIT;
-	}
 
-	public void setMEDIUM_WAIT(String mEDIUM_WAIT) {
-		MEDIUM_WAIT = mEDIUM_WAIT;
-	}
 
 	public String getLong_WAIT() {
 		return long_WAIT;
@@ -285,21 +192,6 @@ public String getBROWSER() {
 		this.long_WAIT = long_WAIT;
 	}
 
-	public String getIMG_URL() {
-		return IMG_URL;
-	}
-
-	public void setIMG_URL(String iMG_URL) {
-		IMG_URL = iMG_URL;
-	}
-
-	public String getSHAREPOINT_RESP() {
-		return SHAREPOINT_RESP;
-	}
-
-	public void setSHAREPOINT_RESP(String sHAREPOINT_RESP) {
-		SHAREPOINT_RESP = sHAREPOINT_RESP;
-	}
 
 	public String getSHAREPOINT_USERNAME() {
 		return SHAREPOINT_USERNAME;
@@ -317,37 +209,6 @@ public String getBROWSER() {
 		SHAREPOINT_PASSWORD = sHAREPOINT_PASSWORD;
 	}
 
-	public int getPARALLEL_INDEPENDENT() {
-		return PARALLEL_INDEPENDENT;
-	}
-
-	public void setPARALLEL_INDEPENDENT(int pARALLEL_INDEPENDENT) {
-		PARALLEL_INDEPENDENT = pARALLEL_INDEPENDENT;
-	}
-
-	public int getPARALLEL_DEPENDENT() {
-		return PARALLEL_DEPENDENT;
-	}
-
-	public void setPARALLEL_DEPENDENT(int pARALLEL_DEPENDENT) {
-		PARALLEL_DEPENDENT = pARALLEL_DEPENDENT;
-	}
-
-	public String getSCREENSHOT_PATH() {
-		return SCREENSHOT_PATH;
-	}
-
-	public void setSCREENSHOT_PATH(String sCREENSHOT_PATH) {
-		SCREENSHOT_PATH = sCREENSHOT_PATH;
-	}
-
-	public String getPDF_PATH() {
-		return PDF_PATH;
-	}
-
-	public void setPDF_PATH(String pDF_PATH) {
-		PDF_PATH = pDF_PATH;
-	}
 
 	public String getJIRA_ISSUE_URL() {
 		return JIRA_ISSUE_URL;
@@ -355,22 +216,6 @@ public String getBROWSER() {
 
 	public void setJIRA_ISSUE_URL(String jIRA_ISSUE_URL) {
 		JIRA_ISSUE_URL = jIRA_ISSUE_URL;
-	}
-
-	public String getDB_HOST() {
-		return DB_HOST;
-	}
-
-	public void setDB_HOST(String dB_HOST) {
-		DB_HOST = dB_HOST;
-	}
-
-	public String getDB_USERNAME() {
-		return DB_USERNAME;
-	}
-
-	public void setDB_USERNAME(String dB_USERNAME) {
-		DB_USERNAME = dB_USERNAME;
 	}
 
 	public String getDB_PASSWORD() {
@@ -381,77 +226,6 @@ public String getBROWSER() {
 		DB_PASSWORD = dB_PASSWORD;
 	}
 
-	public String getSHAREPOINT_DRIVE_ID() {
-		return SHAREPOINT_DRIVE_ID;
-	}
-
-	public void setSHAREPOINT_DRIVE_ID(String sHAREPOINT_DRIVE_ID) {
-		SHAREPOINT_DRIVE_ID = sHAREPOINT_DRIVE_ID;
-	}
-
-	public String getSHAREPOINT_ITEM_ID() {
-		return SHAREPOINT_ITEM_ID;
-	}
-
-	public void setSHAREPOINT_ITEM_ID(String sHAREPOINT_ITEM_ID) {
-		SHAREPOINT_ITEM_ID = sHAREPOINT_ITEM_ID;
-	}
-
-	public String getCLIENT_ID() {
-		return CLIENT_ID;
-	}
-
-	public void setCLIENT_ID(String cLIENT_ID) {
-		CLIENT_ID = cLIENT_ID;
-	}
-
-	public String getCLIENT_SECRET() {
-		return CLIENT_SECRET;
-	}
-
-	public void setCLIENT_SECRET(String cLIENT_SECRET) {
-		CLIENT_SECRET = cLIENT_SECRET;
-	}
-
-	public String getTENANT_ID() {
-		return TENANT_ID;
-	}
-
-	public void setTENANT_ID(String tENANT_ID) {
-		TENANT_ID = tENANT_ID;
-	}
-
-	public String getENABLE_VIDEO() {
-		return ENABLE_VIDEO;
-	}
-
-	public void setENABLE_VIDEO(String eNABLE_VIDEO) {
-		ENABLE_VIDEO = eNABLE_VIDEO;
-	}
-
-	public String getINSTANCE_NAME() {
-		return INSTANCE_NAME;
-	}
-
-	public void setINSTANCE_NAME(String iNSTANCE_NAME) {
-		INSTANCE_NAME = iNSTANCE_NAME;
-	}
-
-	public int getMAX_NUM_SCRIPTS() {
-		return MAX_NUM_SCRIPTS;
-	}
-
-	public void setMAX_NUM_SCRIPTS(int mAX_NUM_SCRIPTS) {
-		MAX_NUM_SCRIPTS = mAX_NUM_SCRIPTS;
-	}
-
-	public String getSTART_DATE() {
-		return START_DATE;
-	}
-
-	public void setSTART_DATE(String sTART_DATE) {
-		START_DATE = sTART_DATE;
-	}
 
 	public String getSHAREPOINT_PATH() {
 		return SHAREPOINT_PATH;
@@ -459,14 +233,6 @@ public String getBROWSER() {
 
 	public void setSHAREPOINT_PATH(String sHAREPOINT_PATH) {
 		SHAREPOINT_PATH = sHAREPOINT_PATH;
-	}
-
-	public String getEND_DATE() {
-		return END_DATE;
-	}
-
-	public void setEND_DATE(String eND_DATE) {
-		END_DATE = eND_DATE;
 	}
 
 	public int getLOOP_COUNT() {
@@ -485,29 +251,7 @@ public String getBROWSER() {
 		SCRIPT_TO_WAIT = sCRIPT_TO_WAIT;
 	}
 
-	public String getPASSWORD() {
-		return PASSWORD;
-	}
 
-	public void setPASSWORD(String pASSWORD) {
-		PASSWORD = pASSWORD;
-	}
-
-	public String getURI_CONFIG() {
-		return URI_CONFIG;
-	}
-
-	public void setURI_CONFIG(String uRI_CONFIG) {
-		URI_CONFIG = uRI_CONFIG;
-	}
-
-	public String getURI_RESULTS() {
-		return URI_RESULTS;
-	}
-
-	public void setURI_RESULTS(String uRI_RESULTS) {
-		URI_RESULTS = uRI_RESULTS;
-	}
 
 public int getMax_num_scripts() {
 		return MAX_NUM_SCRIPTS;

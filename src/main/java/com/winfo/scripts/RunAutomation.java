@@ -116,8 +116,9 @@ public class RunAutomation {
 //			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver_win32\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
-			final String uri = fetchConfigVO.getMETADATA_URL() + args;
-			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
+			final String uri = "https://watsdev01.winfosolutions.com:4443/wats/wats_workspace_prod/ta_aut/TestData/" + args;
+			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
+		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO);
