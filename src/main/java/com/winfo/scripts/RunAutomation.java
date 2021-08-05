@@ -528,7 +528,7 @@ public class RunAutomation {
 								fetchConfigVO);
 						break;
 					case "clickNotificationLink":
-						seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1,
+						seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickMenu":

@@ -2893,8 +2893,9 @@ public void clickImage(WebDriver driver, String param1, String param2, FetchMeta
 		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		throw e;
 	}
-}public void clickNotificationLink(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-	
+}	public void clickNotificationLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+		FetchConfigVO fetchConfigVO) throws Exception {
+
 
 	try {
 		WebDriverWait wait = new WebDriverWait(driver,fetchConfigVO.getWait_time());

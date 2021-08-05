@@ -47,7 +47,7 @@ public interface SeleniumKeyWordsInterface {
 				FetchConfigVO fetchConfigVO) throws Exception;
 		public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
-		public void clickNotificationLink(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+		public void clickNotificationLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
 		public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
