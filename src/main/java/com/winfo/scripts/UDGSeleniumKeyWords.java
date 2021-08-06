@@ -2153,12 +2153,15 @@ System.out.println("entered to getFailFileNameListNew");
 					 			k++;
 					 			String sndo = image.split("_")[0];
 					 			String name = image.split("_")[3];
+					 			
 					 			if(!sndo.equalsIgnoreCase(sno1)) {
 					 				Map<String, String> toc1 = new TreeMap<>();
 //					 				l=0;
 					 				for (String image1 : fileNameList) {
 					 					String Status = image1.split("_")[6];
 					 					String status = Status.split("\\.")[0];
+
+                                       
 //					 					l++;
 					 					if(image1.startsWith(sndo+"_")&&image1.contains("Failed")) {
 					 						
@@ -2290,8 +2293,9 @@ System.out.println("entered to getFailFileNameListNew");
 
 //				String TR = "Test Run Name:" + " " + TestRun;
 //				String SN = "Script Number:" + " " + ScriptNumber;
-				String S = "Status:" + " " + status;
+				
 				String Scenarios = "Scenario Name :" + "" + Scenario;
+
 				 String sndo = image.split("_")[0];
 				 img1.scalePercent(65, 68);
 					
@@ -2309,7 +2313,7 @@ System.out.println("entered to getFailFileNameListNew");
 		         document.add(img1);
 		         document.add(new Paragraph(Scenarios, fnt));
 		         String Reason = image.split("_")[5];
-
+					String step = "Step No :" + "" + Reason;
 		         String Message = "Failed at Line Number:" + ""+ Reason;
 				 //new change-database to get error message
 		         String error=databaseentry.getErrorMessage(sndo,ScriptNumber,testRunName,fetchConfigVO);
@@ -2335,6 +2339,7 @@ System.out.println("entered to getFailFileNameListNew");
 					document.add(img);
 	
 			}else {
+				  document.add(new Paragraph(step, fnt));
 					 Anchor target1 = new Anchor(status);
 					    target1.setName(String.valueOf(status));
 				        pr1.add(target1);
@@ -2435,17 +2440,19 @@ System.out.println("entered to getFailFileNameListNew");
 				String Status = image.split("_")[6];
 				String status = Status.split("\\.")[0];
 				String Scenario = image.split("_")[2];
-
+				String steps = image.split("_")[5];
 				document.setPageSize(img);
 				document.newPage();
 
 				String S = "Status:" + " " + status;
 				String Scenarios = "Scenario Name :" + "" + Scenario;
+				String step = "Step No :" + "" + steps;
 				img1.scalePercent(65, 65);
 		         img1.setAlignment(Image.ALIGN_RIGHT);
 		        document.add(img1);
 				document.add(new Paragraph(S, fnt));
 				document.add(new Paragraph(Scenarios, fnt));
+				document.add(new Paragraph(step, fnt));
 				document.add(Chunk.NEWLINE);
 				
 				Paragraph p=new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
@@ -2453,7 +2460,7 @@ System.out.println("entered to getFailFileNameListNew");
 				img.setAlignment(Image.ALIGN_CENTER);
 				img.isScaleToFitHeight();
 				//new change-change page size
-				img.scalePercent(60, 64);
+				img.scalePercent(60, 62);
 				document.add(img);
 				document.add(p);
 				System.out.println("This Image " + "" + image + "" + "was added to the report");
@@ -2902,6 +2909,7 @@ System.out.println("entered to getFailFileNameListNew");
 			document.open();
 			String TestRun=test_Run_Name;
 			String ScriptNumber=Script_Number;
+			String error=fetchConfigVO.getErrormessage();
 			String ScriptNumber1=Scenario_Name;
 			String Scenario1=fetchConfigVO.getStatus1();
 //			String ExecutedBy=fetchConfigVO.getApplication_user_name();
@@ -2913,6 +2921,7 @@ System.out.println("entered to getFailFileNameListNew");
 		String SN = "Script Number";
 		String SN1 = "Scenario Name";
 		String Scenarios1 = "Status ";
+		String showErrorMessage = "	ErrorMessage ";
 		String EB = "Executed By" ;
 		String ST = "Start Time";
 		String ET = "End Time" ;
@@ -2934,6 +2943,8 @@ System.out.println("entered to getFailFileNameListNew");
 		 insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
 		 insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
 		 insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, showErrorMessage, Element.ALIGN_LEFT, 1, bf12);
+		 insertCell(table1, error, Element.ALIGN_LEFT, 1, bf12);
 		 insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
 		 insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
 		 insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
@@ -2972,7 +2983,8 @@ System.out.println("entered to getFailFileNameListNew");
 					//						String TR = "Test Run Name:" + " " + TestRun;
 //						String SN = "Script Number:" + " " + ScriptNumber;
 						String S = "Status:" + " " + status;
-//						String Scenarios = "Scenario Name :" + "" + Scenario;
+						String step = "Step No :" + "" + Reason;
+						String Scenarios = "Scenario Name :" + "" + Scenario;
 						String Message = "Failed at Line Number:" + ""+ Reason;
 						String errorMessage = "Failed Message:" + ""+ fetchConfigVO.getErrormessage();
 						// String message = "Failed at
@@ -2980,7 +2992,7 @@ System.out.println("entered to getFailFileNameListNew");
 //						document.add(new Paragraph(TR, fnt));
 //						document.add(new Paragraph(SN, fnt));
 						document.add(new Paragraph(S, fnt));
-//						document.add(new Paragraph(Scenarios, fnt));
+						document.add(new Paragraph(Scenarios, fnt));
 //new change-failed pdf to add pagesize
 						if (status.equalsIgnoreCase("Failed")) {
 							document.add(new Paragraph(Message, fnt));
@@ -2991,14 +3003,15 @@ System.out.println("entered to getFailFileNameListNew");
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
 							//new change-change page size
-							img.scalePercent(60,60);
+							img.scalePercent(60,58);
 							document.add(img);
 						}else {
+							document.add(new Paragraph(step, fnt));
 							document.add(Chunk.NEWLINE);
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
 							//new change-change page size
-							img.scalePercent(60,68);
+							img.scalePercent(60,64);
 							document.add(img);
 						}
 						

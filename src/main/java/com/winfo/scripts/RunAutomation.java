@@ -113,7 +113,7 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-//			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver_win32\\chromedriver.exe");
+//			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
@@ -784,9 +784,20 @@ public class RunAutomation {
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
-							test_set_id);
-					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
+							test_set_id);					if(failedScriptRunCount==1) {
+								seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+										seq_num + "_" + script_Number +".pdf", startdate, enddate);
+
+							}else if(failedScriptRunCount==2) {
+								limitScriptExecutionService.renameFailedFile(fetchMetadataListVO, fetchConfigVO,
+										seq_num + "_" + script_Number +".pdf",failedScriptRunCount);
+								seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+										seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
+
+							}else {
+							seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+									seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
+							}
 
 					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
