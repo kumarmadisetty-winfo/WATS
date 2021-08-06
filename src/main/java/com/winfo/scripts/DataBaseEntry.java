@@ -83,7 +83,7 @@ public  void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchC
 			+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
     File file=new File(folder);
     InputStream in = new FileInputStream(file);
-    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE=?,Failed_Image=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
+    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE=?,SCREENSHOT=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
     st.setString(1, error_message);
     st.setBinaryStream(2,in,(int)file.length());   
     st.executeUpdate();
