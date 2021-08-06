@@ -46,19 +46,8 @@ public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchC
     Class.forName("oracle.jdbc.driver.OracleDriver");
     conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
     		dbPassword);
-    String folder = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
 
-			+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-
-			+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-
-			+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-
-			+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
-    File file=new File(folder);
-    InputStream in = new FileInputStream(file);
-    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Pass',SCREENSHOT=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
-    st.setBinaryStream(1,in,(int)file.length());   
+    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Pass' where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
     st.executeUpdate();
     }
     catch (Exception e) {
@@ -292,6 +281,38 @@ public String getPassword(String args, String userId, FetchConfigVO fetchConfigV
 
 	return password;
 
+}
+public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+		String test_script_param_id) throws SQLException {
+	 // Added try catch blocks
+		Connection conn=null;
+		PreparedStatement st=null; 
+		try {
+	    Class.forName("oracle.jdbc.driver.OracleDriver");
+	    conn = DriverManager.getConnection(fetchConfigVO.getDb_host(), fetchConfigVO.getDb_username(),
+	    		dbPassword);
+	    String folder = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+
+				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+
+				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+				+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
+	    File file=new File(folder);
+	    InputStream in = new FileInputStream(file);
+	    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
+	    st.setBinaryStream(0,in,(int)file.length());   
+	    st.executeUpdate();
+	    }
+	    catch (Exception e) {
+			System.out.println(e);
+		}finally {
+			conn.close();
+			 st.close();
+	    }
+	
 }
 
 }
