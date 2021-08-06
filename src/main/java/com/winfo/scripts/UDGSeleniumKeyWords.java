@@ -3011,7 +3011,7 @@ System.out.println("entered to getFailFileNameListNew");
 							img.setAlignment(Image.ALIGN_CENTER);
 							img.isScaleToFitHeight();
 							//new change-change page size
-							img.scalePercent(60,64);
+							img.scalePercent(60,62);
 							document.add(img);
 						}
 						
