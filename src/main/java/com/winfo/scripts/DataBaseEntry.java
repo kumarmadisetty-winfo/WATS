@@ -57,7 +57,7 @@ public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchC
 			+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
     File file=new File(folder);
     InputStream in = new FileInputStream(file);
-    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Pass',Failed_Image=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
+    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Pass',SCREENSHOT=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
     st.setBinaryStream(1,in,(int)file.length());   
     st.executeUpdate();
     }
