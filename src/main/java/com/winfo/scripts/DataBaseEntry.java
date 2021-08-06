@@ -303,7 +303,7 @@ public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fe
 	    File file=new File(folder);
 	    InputStream in = new FileInputStream(file);
 	    st= conn.prepareStatement("Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT=? where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'");
-	    st.setBinaryStream(0,in,(int)file.length());   
+	    st.setBinaryStream(1,in,(int)file.length());   
 	    st.executeUpdate();
 	    }
 	    catch (Exception e) {
