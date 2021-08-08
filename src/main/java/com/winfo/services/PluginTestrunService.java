@@ -68,6 +68,8 @@ public class PluginTestrunService {
 		master.setSub_process_area(mastervo.getSub_process_area());
 		master.setStandard_custom(mastervo.getStandard_custom());
 		master.setTest_script_status(mastervo.getTest_script_status());
+		master.setCreated_by(mastervo.getCreated_by());
+		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
 		
 		for(WatsPluginMetaDataVO metadatavo:mastervo.getMetaDataList()) {
 			PluginMetadata metadata = new PluginMetadata();
@@ -82,6 +84,8 @@ public class PluginTestrunService {
 			metadata.setValidation_name("NA");
 			metadata.setUnique_mandatory("NA");
 			metadata.setDatatypes("NA");
+			metadata.setCreated_by(mastervo.getCreated_by());
+			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
 			master.addMetadata(metadata);
 			
 			ScritplinesData setScriptlinedata=new ScritplinesData();
