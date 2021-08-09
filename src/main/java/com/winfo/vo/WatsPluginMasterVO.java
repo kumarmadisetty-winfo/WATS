@@ -45,7 +45,7 @@ public class WatsPluginMasterVO {
 	@JsonProperty("CREATED_BY")
 	private String created_by;
 	@JsonProperty("CREATION_DATE")
-	private Date creation_date;
+	private String creation_date;
 	@JsonProperty("UPDATED_BY")
 	private String updated_by;
 	@JsonProperty("UPDATE_DATE")
@@ -239,11 +239,13 @@ public class WatsPluginMasterVO {
 		this.created_by = created_by;
 	}
 
-	public Date getCreation_date() {
+
+
+	public String getCreation_date() {
 		return creation_date;
 	}
 
-	public void setCreation_date(Date creation_date) {
+	public void setCreation_date(String creation_date) {
 		this.creation_date = creation_date;
 	}
 
