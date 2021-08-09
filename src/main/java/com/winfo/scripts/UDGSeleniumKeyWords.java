@@ -2548,7 +2548,13 @@ System.out.println("entered to getFailFileNameListNew");
 	   	  if(text.trim().equalsIgnoreCase("")){
 	   	   cell.setMinimumHeight(20f);
 	   	  }
-	   	  cell.setFixedHeight(40f);
+	   	  if(text.length()>103) {
+	   		cell.setFixedHeight(80f);
+	   	  }else if(text.length()>53) {
+	   		cell.setFixedHeight(60f);
+	   	  }else {
+	   		cell.setFixedHeight(40f); 
+	   	  }
 	   	  //add the call to the table
 	   	  table.addCell(cell);
 	   	   
