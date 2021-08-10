@@ -657,7 +657,7 @@ public class RunAutomation {
 								fetchConfigVO);
 						break;
 					case "switchParentWindow":
-						seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver, fetchMetadataVO,
+						seleniumFactory.getInstanceObj(instanceName).switchParentWindow(driver, fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "switchToParentWindow":
