@@ -240,6 +240,11 @@ public class LimitScriptExecutionService {
 	            System.out.println("Operation Failed");
 	        }
 	}
+	@Transactional
+	public void updateFaileScriptscount(String testSetLineId, String testSetId) {
+		limitScriptExecutionDao.updateFaileScriptscount(testSetLineId,testSetId);
+		
+	}
 	
 
 }

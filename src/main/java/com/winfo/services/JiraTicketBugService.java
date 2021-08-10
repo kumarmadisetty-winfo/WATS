@@ -171,6 +171,11 @@ public class JiraTicketBugService {
 			} else {
 				testrunvo.setScript_number(String.valueOf(obj[8]));
 			}
+			if (String.valueOf(obj[9]).equals("null")) {
+				testrunvo.setScenario_name(null);
+			} else {
+				testrunvo.setScenario_name(String.valueOf(obj[9]));
+			}
 
 			finalresult.add(testrunvo);
 		}

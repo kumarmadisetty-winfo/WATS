@@ -132,5 +132,21 @@ public class LimitScriptExecutionDao {
 		return failedScriptRunCount;
 	}
 
+	public void updateFaileScriptscount(String testSetLineId, String testSetId) {
+		int failedScriptRunCount=0;
+		Session session = entityManager.unwrap(Session.class);
+		try {
+			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
+					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
+			Query query = session.createSQLQuery(sql1);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
+	}
+
 	
 }
