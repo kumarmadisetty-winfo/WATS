@@ -32,8 +32,19 @@ public class TestRunVO
 
 	@JsonProperty("script_number")
 	private String script_number;
+	
+	@JsonProperty("scenario_name")
+	private String scenario_name;
 
 	
+
+	public String getScenario_name() {
+		return scenario_name;
+	}
+
+	public void setScenario_name(String scenario_name) {
+		this.scenario_name = scenario_name;
+	}
 
 	public String getStatus() {
 		return status;

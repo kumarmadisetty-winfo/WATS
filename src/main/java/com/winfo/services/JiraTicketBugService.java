@@ -116,6 +116,7 @@ public class JiraTicketBugService {
 
 		List<Integer> scriptIds = bugdetails.getScript_id();
 		List<Integer> scriptId = new ArrayList<Integer>();
+		List<String> scriptNumber = new ArrayList<String>();
 		int count = 0;
 
 		List<Object> result = dao.createJiraTicket(testsetid, scriptIds);
@@ -179,9 +180,8 @@ public class JiraTicketBugService {
 			if (slist.getIssue_key() == null && slist.getStatus().equalsIgnoreCase("FAIL")) {
 
 				List fields = new ArrayList();
-				String summary = "TestSetID=" + slist.getTest_set_id().toString() + " ScriptID="
-						+ slist.getScript_id().toString() + " Seqnumber=" + slist.getSeq_num().toString()
-						+ " Testsetname=" + slist.getTest_set_name();
+				String summary = "Test run name=" + slist.getTest_set_name().toString() +  " Seqnumber=" + slist.getSeq_num().toString()+" Script Number="
+						+ slist.getScript_number().toString()+"Scenario Name"+slist.getScenario_name().toString();
 
 				JSONArray jsonarray = new JSONArray();
 				JSONObject jsonobject = new JSONObject();
@@ -257,6 +257,7 @@ public class JiraTicketBugService {
 
 					count = dao.updateIssueKey(issue_key, slist, count);
 					scriptId.add(slist.getScript_id());
+					scriptNumber.add(slist.getScript_number());
 				}
 			}
 
@@ -268,7 +269,7 @@ public class JiraTicketBugService {
 		if (count > 0) {
 			response.setStatus(200);
 			response.setStatusMessage("SUCCESS");
-			response.setDescription("Issue Created Successfully for script ID " + scriptId.toString());
+			response.setDescription("Issue Created Successfully for script number " + scriptNumber.toString());
 			bean.add(response);
 		} else {
 			response.setStatus(400);
