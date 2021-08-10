@@ -1,19 +1,19 @@
 package com.winfo.services;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
-
-import java.util.Map.Entry;
-import com.oracle.bmc.Region;
 
 import org.apache.log4j.Logger;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -22,28 +22,19 @@ import org.springframework.stereotype.Service;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.ConfigFileReader.ConfigFile;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
-import com.oracle.bmc.core.ComputeClient;
 import com.oracle.bmc.core.ComputeManagementClient;
-import com.oracle.bmc.core.ComputeWaiters;
-import com.oracle.bmc.core.model.Instance;
 import com.oracle.bmc.core.model.InstancePoolSummary;
 import com.oracle.bmc.core.model.InstanceSummary;
 import com.oracle.bmc.core.model.UpdateInstancePoolDetails;
-import com.oracle.bmc.core.requests.GetInstancePoolRequest;
-import com.oracle.bmc.core.requests.GetInstanceRequest;
-import com.oracle.bmc.core.requests.InstanceActionRequest;
 import com.oracle.bmc.core.requests.ListInstancePoolInstancesRequest;
 import com.oracle.bmc.core.requests.ListInstancePoolsRequest;
 import com.oracle.bmc.core.requests.UpdateInstancePoolRequest;
-import com.oracle.bmc.core.responses.GetInstancePoolResponse;
-import com.oracle.bmc.core.responses.GetInstanceResponse;
-import com.oracle.bmc.core.responses.InstanceActionResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolInstancesResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolsResponse;
 import com.oracle.bmc.core.responses.UpdateInstancePoolResponse;
-import com.winfo.dao.AuditLogsDao;
+import com.winfo.constants.BrowserConstants;
+import com.winfo.constants.DriverConstants;
 import com.winfo.dao.VmInstanceDAO;
-import com.winfo.vo.TestScriptDto;
 
 @Service
 @RefreshScope
@@ -55,6 +46,12 @@ public class VMDetailesService {
 	
 	@Value("${instancePool.compementId}")
     private String compementId;
+	
+	@Autowired
+	TestCaseDataService dataService;
+	
+	@Value("${configvO.config_url}")
+	private String config_url;
 	
 	@Value("${instancePool.configLocation}")
     private String configLocation;
@@ -119,6 +116,8 @@ public class VMDetailesService {
 							}
 						}
 						}
+						FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testRunId);
+			               getWebDriver(fetchConfigVO);
 				        log.info("no of vms lanched"+updateResponse.getInstancePool().getSize());
 
 		} catch (Exception e) {
@@ -127,6 +126,60 @@ public class VMDetailesService {
 		}
 
 	}
+    private void getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException, InterruptedException {
+		WebDriver driver = null;
+		String os = System.getProperty("os.name").toLowerCase();
+		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
+			System.setProperty("java.awt.headless", "false");
+			// System.setProperty(DriverConstants.CHROME_DRIVER.value,
+			// "C:\\Users\\watsadmin\\Documents\\Selenium Grid\\chromedriver.exe");
+			Map<String, Object> prefs = new HashMap<String, Object>();
+			prefs.put("profile.default_content_settings.popups", 0);
+			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
+			ChromeOptions options = new ChromeOptions();
+			DesiredCapabilities cap = DesiredCapabilities.chrome();
+			if (os.contains("win")) {
+				System.out.println("windows location");
+				options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
+																										// "C:\\Program
+																										// Files
+																										// (x86)\\Google\\Chrome\\Application\\chrome.exe");
+			} else {
+				System.out.println("linex location");
+				options.setBinary("/usr/bin/google-chrome");
+			}
+
+//			options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+//			options.setBinary("/usr/bin/google-chrome");
+//			options.addArguments("headless");
+			options.addArguments("start-maximized");
+			options.addArguments("--enable-automation");
+			options.addArguments("test-type=browser");
+			options.addArguments("disable-infobars");
+			options.setExperimentalOption("prefs", prefs);
+
+			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+			cap.setCapability(ChromeOptions.CAPABILITY, options);
+
+
+				try {
+				driver = new RemoteWebDriver(new URL(config_url), cap);
+				
+				driver.quit();
+				}
+		 catch (Exception e) {
+			Thread.sleep(3* 60 * 1000);
+			getWebDriver(fetchConfigVO);
+
+			log.error("failed at stop the vms" + e);
+			e.printStackTrace();
+		}
+			}
+
+
+	}
+
     @Transactional
 	public void stopInstance() throws Exception {
 		ConfigFileAuthenticationDetailsProvider provider=null;
