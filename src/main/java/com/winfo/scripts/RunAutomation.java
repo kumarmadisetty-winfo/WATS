@@ -657,7 +657,7 @@ public class RunAutomation {
 								fetchConfigVO);
 						break;
 					case "switchParentWindow":
-						seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver, fetchMetadataVO,
+						seleniumFactory.getInstanceObj(instanceName).switchParentWindow(driver, fetchMetadataVO,
 								fetchConfigVO);
 						break;
 					case "switchToParentWindow":
@@ -727,7 +727,8 @@ public class RunAutomation {
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 								script_id1, script_Number, "pass", startdate, enddate);
-
+						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
+								test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
 					System.out.println("Successfully Executed the" + "" + actionName);
