@@ -73,7 +73,7 @@ public class JiraTicketBugDao {
 		if(scriptIds.size()>0)
 		{
 			String sql="select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.script_id in (:scriptidlist)";
-			fetchsummary=session.createQuery("select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.test_set_line_id in (:scriptidlist)");
+			fetchsummary=session.createQuery("select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.script_id in (:scriptidlist)");
 			fetchsummary.setParameter("testsetId", testsetid);
             fetchsummary.setParameterList("scriptidlist", scriptIds);
 		}
