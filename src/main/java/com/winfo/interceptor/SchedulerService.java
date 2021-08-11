@@ -21,7 +21,7 @@ public class SchedulerService {
 	private VmInstanceDAO vmInstanceDAO;
 	@Autowired
 	private VMDetailesService vmDetaliesService;
-  @Scheduled(cron = "${scheduling.job.cron}")
+//  @Scheduled(cron = "${scheduling.job.cron}")
    @Transactional
    public void schedulingToStopVm() throws Exception {
 	   try {

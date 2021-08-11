@@ -16,6 +16,7 @@ import org.json.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -29,7 +30,9 @@ public class StartInstancesInterceptor extends HandlerInterceptorAdapter {
 	static final Logger logger = Logger.getLogger(StartInstancesInterceptor.class);
 	@Autowired
 	private VMDetailesService vmDetailesService;
-
+	@Value("${costoptimisationFlag}")
+	private boolean flag; 
+	
 	@Override
 	@Transactional
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -46,7 +49,7 @@ System.out.println(request.getRequestURL().toString().substring(request.getReque
 			  String line = null;
 			
 		
-			if (service.equalsIgnoreCase("executeTestScript")) {
+			if (service.equalsIgnoreCase("executeTestScript")&&flag) {
 					    BufferedReader reader = request.getReader();
 					    while ((line = reader.readLine()) != null)
 					      jb.append(line);
