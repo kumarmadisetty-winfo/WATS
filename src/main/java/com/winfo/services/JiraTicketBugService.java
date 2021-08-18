@@ -113,13 +113,13 @@ public class JiraTicketBugService {
 
 		List<DomGenericResponseBean1> bean = new ArrayList<DomGenericResponseBean1>();
 		Integer testsetid = bugdetails.getTest_set_id();
-
+		int testSetLineId=bugdetails.getTestSetLineId();
 		List<Integer> scriptIds = bugdetails.getScript_id();
 		List<Integer> scriptId = new ArrayList<Integer>();
 		List<String> scriptNumber = new ArrayList<String>();
 		int count = 0;
 
-		List<Object> result = dao.createJiraTicket(testsetid, scriptIds);
+		List<Object> result = dao.createJiraTicket(testsetid, scriptIds,testSetLineId);
 		List<TestRunVO> finalresult = new ArrayList<TestRunVO>();
 		Iterator itr = result.iterator();
 		while (itr.hasNext()) {

@@ -65,11 +65,11 @@ public class JiraTicketBugDao {
 	private EntityManager entityManager;
 	
 	
-	public   List<Object> createJiraTicket(Integer testsetid,List<Integer> scriptIds) throws ParseException
+	public   List<Object> createJiraTicket(Integer testsetid,List<Integer> scriptIds, int testSetLineId) throws ParseException
 	
 	{
 		Session session = entityManager.unwrap(Session.class);
-		Query fetchsummary;
+		Query fetchsummary = null;
 		if(scriptIds.size()>0)
 		{
 			String sql="select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.script_id in (:scriptidlist)";
@@ -77,12 +77,16 @@ public class JiraTicketBugDao {
 			fetchsummary.setParameter("testsetId", testsetid);
             fetchsummary.setParameterList("scriptidlist", scriptIds);
 		}
-		else
+		else if(testSetLineId!=0)
 		{
 			String sql="select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id ="+testsetid;
 
-			fetchsummary=session.createQuery(sql);
+			fetchsummary=session.createQuery("select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.test_set_line_id = (:testsetlineid)");
+			fetchsummary.setParameter("testsetId", testsetid);
+            fetchsummary.setParameter("testsetlineid", testSetLineId);
 		}	 
+	
+ 
 	
 		
 		List<Object> summaryresult = (List<Object>) fetchsummary.list(); 
