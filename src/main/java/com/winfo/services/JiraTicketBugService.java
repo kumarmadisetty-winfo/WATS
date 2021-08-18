@@ -51,6 +51,9 @@ public class JiraTicketBugService {
 	@Value("${jira.password}")
 	private String password;
 
+	@Autowired
+	TestCaseDataService dataService;
+
 	public String webClient(String jiraissueurl, JSONObject jsonobject) {
 
 		WebClient webClient = WebClient.builder().baseUrl(jiraissueurl)
@@ -84,42 +87,45 @@ public class JiraTicketBugService {
 
 	}
 
-	  public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname,Integer seqnum,String scriptnumber,Integer testsetid) {
-			
-			//	  public MultiValueMap<String, HttpEntity<?>> fromFile() {
-					  MultipartBodyBuilder builder = new MultipartBodyBuilder(); 
-				 try {
-					 String args=testsetid.toString();
-					  FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
-					  final String uri = fetchConfigVO.getUri_test_scripts() + args;
-						List<FetchMetadataVO> fetchMetadataListVO =  testRunService.getFetchMetaData(args, uri);
-				 
-						//	  File	  filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-				  //	  File	  filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-		
-				  	  	//  File filenew=new File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-					 	  File filenew=new File(fetchConfigVO.getPdf_path()+fetchMetadataListVO.get(0).getCustomer_name()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-			  
-				 System.out.println("jira pdf path= " + filenew );
-				  builder.part("file", new  FileSystemResource(filenew));
-				 }catch (Exception e) {
-                   System.out.println(e);
-}
-					  return builder.build();
-					  }
+	public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname, Integer seqnum, String scriptnumber,
+			Integer testsetid) {
+
+		// public MultiValueMap<String, HttpEntity<?>> fromFile() {
+		MultipartBodyBuilder builder = new MultipartBodyBuilder();
+		try {
+			String args = testsetid.toString();
+			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
+			final String uri = fetchConfigVO.getUri_test_scripts() + args;
+			List<FetchMetadataVO> fetchMetadataListVO = testRunService.getFetchMetaData(args, uri);
+
+			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
+			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
+
+			// File filenew=new
+			// File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
+			File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
+
+			System.out.println("jira pdf path= " + filenew);
+			builder.part("file", new FileSystemResource(filenew));
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return builder.build();
+	}
 
 	@Transactional
 	public List<DomGenericResponseBean1> createJiraTicket(BugDetails bugdetails) throws ParseException {
 
 		List<DomGenericResponseBean1> bean = new ArrayList<DomGenericResponseBean1>();
 		Integer testsetid = bugdetails.getTest_set_id();
-		int testSetLineId=bugdetails.getTestSetLineId();
+		int testSetLineId = bugdetails.getTestSetLineId();
 		List<Integer> scriptIds = bugdetails.getScript_id();
 		List<Integer> scriptId = new ArrayList<Integer>();
 		List<String> scriptNumber = new ArrayList<String>();
 		int count = 0;
 
-		List<Object> result = dao.createJiraTicket(testsetid, scriptIds,testSetLineId);
+		List<Object> result = dao.createJiraTicket(testsetid, scriptIds, testSetLineId);
 		List<TestRunVO> finalresult = new ArrayList<TestRunVO>();
 		Iterator itr = result.iterator();
 		while (itr.hasNext()) {
@@ -185,8 +191,9 @@ public class JiraTicketBugService {
 			if (slist.getIssue_key() == null && slist.getStatus().equalsIgnoreCase("FAIL")) {
 
 				List fields = new ArrayList();
-				String summary = "Test run name=" + slist.getTest_set_name().toString() +  " Seqnumber=" + slist.getSeq_num().toString()+" Script Number="
-						+ slist.getScript_number().toString()+" Scenario Name="+slist.getScenario_name().toString();
+				String summary = "Test run name=" + slist.getTest_set_name().toString() + " Seqnumber="
+						+ slist.getSeq_num().toString() + " Script Number=" + slist.getScript_number().toString()
+						+ " Scenario Name=" + slist.getScenario_name().toString();
 
 				JSONArray jsonarray = new JSONArray();
 				JSONObject jsonobject = new JSONObject();
@@ -221,9 +228,10 @@ public class JiraTicketBugService {
 
 				JSONParser parser = new JSONParser();
 				JSONObject finalJSONObject = (JSONObject) parser.parse(JSONString2);
-				List<String> result3 = dao.getJiraIssueUrl(slist.getConfiguration_id());
-				String jiraissueurl = result3.get(0);
-
+//				List<String> result3 = dao.getJiraIssueUrl(slist.getConfiguration_id());
+//				String jiraissueurl = result3.get(0);
+				FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testsetid.toString());
+				String jiraissueurl = fetchConfigVO.getJIRA_ISSUE_URL();
 				String jiraticketresponse = webClient(jiraissueurl, finalJSONObject);
 
 				String issuekey = null;
