@@ -1962,7 +1962,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Font fnt = FontFactory.getFont("Arial", 12);
 			Font bf12 = FontFactory.getFont("Arial", 23);
 			Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
-			Font bf16 = FontFactory.getFont("Arial", 12, Font.UNDERLINE);
+			Font bf16 = FontFactory.getFont("Arial", 12);
 			Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.GREEN);
 			Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.RED);
 			Font bfBold = FontFactory.getFont("Arial", 23, BaseColor.WHITE);
@@ -2226,7 +2226,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						String str = String.valueOf(toc2.get(sndo));
-						toc1.put(name, str);
+						toc1.put(sndo+"_"+name, str);
 						toc.put(k, toc1);
 
 					}

@@ -273,7 +273,8 @@ public class VMDetailesService {
 			ListInstancePoolInstancesRequest listInstancePoolInstancesRequest = ListInstancePoolInstancesRequest
 					.builder().compartmentId(response.getItems().get(0).getCompartmentId())
 					.instancePoolId(response.getItems().get(0).getId())
-					.displayName(response.getItems().get(0).getDisplayName()).limit(122)
+//					.displayName(response.getItems().get(0).getDisplayName())
+					.limit(122)
 					.sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
 					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
 

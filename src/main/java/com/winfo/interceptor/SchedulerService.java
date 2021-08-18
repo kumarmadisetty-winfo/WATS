@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +22,15 @@ public class SchedulerService {
 	private VmInstanceDAO vmInstanceDAO;
 	@Autowired
 	private VMDetailesService vmDetaliesService;
-//  @Scheduled(cron = "${scheduling.job.cron}")
+	@Value("${costoptimisationFlag}")
+	private boolean flag; 
+	
+  @Scheduled(cron = "${scheduling.job.cron}")
    @Transactional
    public void schedulingToStopVm() throws Exception {
 	   try {
 	    Boolean scriptsActive=vmInstanceDAO.isAnyScriptsInprogresOrInqueue();
-	    if(!scriptsActive) {
+	    if(!scriptsActive&&flag) {
 	    	vmDetaliesService.stopInstance();
 	    	log.info("all vms are stooped");
 	    }
