@@ -226,7 +226,7 @@ public class VMDetailesService {
 		ConfigFileAuthenticationDetailsProvider provider = null;
 		ListInstancePoolInstancesResponse listresponse = null;
 		try {
-			ConfigFile configFile = ConfigFileReader.parse(configLocation, configProfileName);
+			ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource(configLocation).getInputStream(), configProfileName);
 			provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			ComputeManagementClient client = new ComputeManagementClient(provider);
 			ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
