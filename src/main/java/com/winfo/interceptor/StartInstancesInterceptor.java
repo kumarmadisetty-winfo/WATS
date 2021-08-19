@@ -42,22 +42,20 @@ public class StartInstancesInterceptor extends HandlerInterceptorAdapter {
 			
 System.out.println(request.getRequestURL().toString().substring(request.getRequestURL().toString().lastIndexOf('/') + 1));
 			Enumeration<String> parameterNames = request.getParameterNames();
-			String service = request.getRequestURL().toString()
-					.substring(request.getRequestURL().toString().lastIndexOf('/') + 1);
-			
-			StringBuffer jb = new StringBuffer();
-			  String line = null;
-			
-		
-			if (service.equalsIgnoreCase("executeTestScript")&&flag) {
-					    BufferedReader reader = request.getReader();
-					    while ((line = reader.readLine()) != null)
-					      jb.append(line);
-					 String paramValue= jb.toString().replaceAll("[^0-9]", "");
-					
+			while (parameterNames.hasMoreElements()) {
+				String paramName = parameterNames.nextElement();
+				System.out.println(paramName);
+				System.out.println("n");
+				String[] paramValues = request.getParameterValues(paramName);
+				for (int i = 0; i < paramValues.length; i++) {
+					String paramValue = paramValues[i];
+					String service = request.getRequestURL().toString()
+							.substring(request.getRequestURL().toString().lastIndexOf('/') + 1);
+					if (service.equalsIgnoreCase("executeTestScript")) {
 						vmDetailesService.startInstance(paramValue);
 						logger.info("vms are started");
-				
+					}
+				}
 			}
 
 		} catch (Exception e) {
