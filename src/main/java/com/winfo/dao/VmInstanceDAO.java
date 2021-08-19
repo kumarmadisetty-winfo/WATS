@@ -64,16 +64,11 @@ public class VmInstanceDAO {
 	public Boolean isAnyScriptsInprogresOrInqueue() {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "select count(STATUS) from win_ta_test_set_lines WHERE STATUS='IN-QUEUE' or STATUS='IN-PROGRESS'";
-		NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
+		Query query = session.createSQLQuery(sql);
 
-		List<BigDecimal> results = query.list();
-		Integer id = 0;
-		if (results != null && !results.isEmpty()){
-			System.out.println(results.get(0));
-			log.info("result"+results.get(0));
-
-			BigDecimal bigDecimal = results.get(0);
-			 id = Integer.parseInt(bigDecimal.toString());
+		BigDecimal bigDecimal =  (BigDecimal) query.getSingleResult();
+		Integer id =Integer.parseInt(bigDecimal.toString());
+		if (id != 0 ){
 			return true;
 		} else {
 			return false;
