@@ -3,6 +3,7 @@ package com.winfo.services;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,6 @@ import com.winfo.model.ScriptsData;
 import com.winfo.model.ScritplinesData;
 import com.winfo.model.Testrundata;
 import com.winfo.vo.CopytestrunVo;
-import com.winfo.vo.DomGenericResponseBean;
 
 @Service
 public class CopyTestRunService {
@@ -65,6 +65,7 @@ public class CopyTestRunService {
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
 			setScriptdata.setStatus("New");
 			setScriptdata.setLastupdatedby(null);
+			setScriptdata.setScriptUpadated("N");
 			setScriptdata.setUpdateddate(null);
 			setScriptdata.setTestsstlinescriptpath(getScriptdata.getTestsstlinescriptpath());
 			setScriptdata.setExecutedby(null);
@@ -78,7 +79,7 @@ public class CopyTestRunService {
 				
 				setScriptlinedata.setTestscriptperamid(sectiptlineid);
 				System.out.println(getScriptlinedata.getInput_parameter());
-				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo);
+				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,setScriptdata);
 			
 				setScriptlinedata.setInput_parameter(getScriptlinedata.getInput_parameter());
 				setScriptlinedata.setScript_id(getScriptlinedata.getScript_id());
@@ -112,8 +113,12 @@ public class CopyTestRunService {
 		System.out.println("newtestrun 1:"+newtestrun);
 	return newtestrun;
 	}
-	private void addInputvalues(ScritplinesData getScriptlinedata, ScritplinesData setScriptlinedata,CopytestrunVo copyTestrunvo) throws InterruptedException {
+	private void addInputvalues(ScritplinesData getScriptlinedata, ScritplinesData setScriptlinedata,CopytestrunVo copyTestrunvo, ScriptsData setScriptdata) throws InterruptedException {
 		String getInputvalues=getScriptlinedata.getInput_value();
+		String[] actios= {"clearandtype" ,"textarea", "selectAValue", "clickCheckbox","selectByText","clickButton Dropdown", "clickLinkAction","Table Dropdown Values",
+				"Table SendKeys", "enterIntoTable" ,"SendKeys", "Login into Application", "Dropdown Values","typeAtPosition" ,"clickAndTypeAtPosition",
+				"clickRadiobutton","clickCheckbox" ,"multipleSendKeys","multiplelinestableSendKeys","DatePicker","copynumber","copytext","paste"}; 
+		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
 		if("y".equalsIgnoreCase(copyTestrunvo.getIncrement_value())&&(getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
 			if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
 				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
@@ -126,6 +131,9 @@ public class CopyTestRunService {
 				String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
 				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					hexaDecimal=getInputvalues;
+					if(actionsList.contains(getScriptlinedata.getAction())){
+						setScriptdata.setScriptUpadated("Y");
+					}
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					hexaDecimal=null;
 				}
@@ -144,15 +152,21 @@ public class CopyTestRunService {
 				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
 				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					setScriptlinedata.setInput_value(getInputvalues);
+					if(actionsList.contains(getScriptlinedata.getAction())){
+						setScriptdata.setScriptUpadated("Y");
+					}
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					setScriptlinedata.setInput_value(null);
 				}else {
 				setScriptlinedata.setInput_value(covertDateobj);
 				}
 			}
-			}else {
-				if("copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+			}else if(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Mandatory")) {
+				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					setScriptlinedata.setInput_value(null);
+					if(actionsList.contains(getScriptlinedata.getAction())){
+						setScriptdata.setScriptUpadated("Y");
+					}
 
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					setScriptlinedata.setInput_value(null);
@@ -160,7 +174,17 @@ public class CopyTestRunService {
 				else {
 				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
 				}
-			}
+			}else {
+					if("copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+						setScriptlinedata.setInput_value(null);
+
+					}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+						setScriptlinedata.setInput_value(null);
+					}
+					else {
+					setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
+					}
+				}
 		
 	}
 	@Transactional
@@ -173,7 +197,7 @@ public class CopyTestRunService {
 //				getTestrun.addScriptsdata(getScriptdata);
 				for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 					ScritplinesData setScriptlinedata=new ScritplinesData();
-				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo);
+				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,getScriptdata);
 				getScriptlinedata.setInput_value(setScriptlinedata.getInput_value());
 //				getScriptdata.addScriptlines(getScriptlinedata);
 				}

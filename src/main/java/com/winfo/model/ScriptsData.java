@@ -29,6 +29,9 @@ public class ScriptsData {
 	@Column(name = "SCRIPT_NUMBER")
 	private String scriptnumber;
 	
+	@Column(name = "SCRIPT_UPDATED")
+	private String scriptUpadated;
+	
 	@Column(name = "STATUS")
 	private String status;
 	
@@ -88,6 +91,12 @@ public class ScriptsData {
 
 
 
+	public String getScriptUpadated() {
+		return scriptUpadated;
+	}
+	public void setScriptUpadated(String scriptUpadated) {
+		this.scriptUpadated = scriptUpadated;
+	}
 	public String getScriptnumber() {
 		return scriptnumber;
 	}
