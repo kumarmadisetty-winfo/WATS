@@ -4918,7 +4918,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			if (param1.equalsIgnoreCase("Expend")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver
-						.findElement(By.xpath(("//div[contains(@class,’Overflow’)]//div[@role=’button’]")));
+						.findElement(By.xpath(("//div[contains(@class,'Overflow')]//div[@role='button']")));
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -4926,7 +4926,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
-				String xpath = "//div[contains(@class,’Overflow’)]//div[@role=’button’]";
+				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
 				service.saveXpathParams(param1, param2, scripNumber, xpath);
 
 				return;
