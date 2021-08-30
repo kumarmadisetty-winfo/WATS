@@ -466,7 +466,8 @@ public class CopyDataCustomerDao {
 	if(count!=0) {
 	response.setStatus(200);
 	response.setStatusMessage("SUCCESS");
-	response.setDescription(i+" Script Copied Successfully");
+	response.setDescription(i+" Script'(s) Copied" + " to " +  productVersionNew + " Successfully");
+	
 	bean.add(response);
 	}
 	else {
