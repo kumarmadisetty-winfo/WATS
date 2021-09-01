@@ -135,7 +135,7 @@ public class CopyTestRunService {
 						setScriptdata.setScriptUpadated("Y");
 					}
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					hexaDecimal=null;
+					hexaDecimal=getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname());
 				}
 				else if(getInputvalues.length()>5) {
 				hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
@@ -156,7 +156,7 @@ public class CopyTestRunService {
 						setScriptdata.setScriptUpadated("Y");
 					}
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(null);
+					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}else {
 				setScriptlinedata.setInput_value(covertDateobj);
 				}
@@ -169,7 +169,7 @@ public class CopyTestRunService {
 					}
 
 				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(null);
+					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}
 				else {
 				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
@@ -179,7 +179,7 @@ public class CopyTestRunService {
 						setScriptlinedata.setInput_value(null);
 
 					}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-						setScriptlinedata.setInput_value(null);
+						setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 					}
 					else {
 					setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
