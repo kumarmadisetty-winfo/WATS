@@ -287,7 +287,7 @@ public class JiraTicketBugService {
 		} else {
 			response.setStatus(400);
 			response.setStatusMessage("ERROR");
-			response.setDescription("Issue already exists for script ID");
+			response.setDescription("Issue already exists for script number " + scriptNumber.toString());
 			bean.add(response);
 
 		}
