@@ -1962,7 +1962,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Font fnt = FontFactory.getFont("Arial", 12);
 			Font bf12 = FontFactory.getFont("Arial", 23);
 			Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
-			Font bf16 = FontFactory.getFont("Arial", 12);
+			Font bf16 = FontFactory.getFont("Arial", 12,Font.UNDERLINE);
 			Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.GREEN);
 			Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.RED);
 			Font bfBold = FontFactory.getFont("Arial", 23, BaseColor.WHITE);
@@ -2064,7 +2064,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					document.newPage();
 					document.add(img1);
 					Paragraph executionSummery=new Paragraph(start, bfBold12);
-					executionSummery.setAlignment(Element.ALIGN_CENTER);
+//					executionSummery.setAlignment(Element.ALIGN_CENTER);
 					document.add(executionSummery);
 					document.add(Chunk.NEWLINE);
 					DecimalFormat df1 = new DecimalFormat("0");
@@ -2091,7 +2091,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				} else if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 					document.add(Chunk.NEWLINE);
 					Paragraph executionSummery=new Paragraph(start, bfBold12);
-					executionSummery.setAlignment(Element.ALIGN_CENTER);
+//					executionSummery.setAlignment(Element.ALIGN_CENTER);
 					document.add(executionSummery);
 					document.add(Chunk.NEWLINE);
 					DecimalFormat df1 = new DecimalFormat("0");
@@ -2117,7 +2117,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				} else {
 					document.add(Chunk.NEWLINE);
 					Paragraph executionSummery=new Paragraph(start, bfBold12);
-					executionSummery.setAlignment(Element.ALIGN_CENTER);
+//					executionSummery.setAlignment(Element.ALIGN_CENTER);
 					document.add(executionSummery);
 					document.add(Chunk.NEWLINE);
 					DecimalFormat df1 = new DecimalFormat("0");
@@ -2309,7 +2309,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						target3.setName(ScriptNumber);
 						Paragraph pa = new Paragraph();
 						pa.add(target3);
-						pa.setAlignment(Element.ALIGN_CENTER);
+//						pa.setAlignment(Element.ALIGN_CENTER);
 						document.add(pa);
 						document.add(Chunk.NEWLINE);
 						PdfPTable table2 = new PdfPTable(2);
