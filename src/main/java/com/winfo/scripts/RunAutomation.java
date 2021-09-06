@@ -1,9 +1,9 @@
 package com.winfo.scripts;
 
 import java.io.IOException;
-import com.winfo.interface1.SeleniumKeyWordsInterface;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -19,24 +19,18 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
+import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.vo.ExecuteTestrunVo;
-import com.winfo.scripts.DataBaseEntry;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 
@@ -45,7 +39,8 @@ public class RunAutomation {
 
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
-
+	@Autowired
+	ErrorMessagesHandler errorMessagesHandler;
 	@Autowired
 	DriverConfiguration deriverConfiguration;
 
@@ -743,33 +738,8 @@ public class RunAutomation {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
-					String error_message = "Took more than 10 seconds to load the page";
-					if (actionName.equalsIgnoreCase("clickButton") && message != null) {
-						// String error_message="Took more than 10 seconds to load the page";
-						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Fail", message);
-					} else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
-							|| actionName.equalsIgnoreCase("Table SendKeys")
-							|| actionName.equalsIgnoreCase("multiplelinestableSendKeys")) {
-						error_message = "Failed at " + actionName + " => Not able to enter the value in " + param1
-								+ " and " + param2;
-						fetchConfigVO.setErrormessage(error_message);
-						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Fail", error_message);
-					} else if (actionName.equalsIgnoreCase("Dropdown Values")
-							|| actionName.equalsIgnoreCase("Table Dropdown Values")
-							|| actionName.equalsIgnoreCase("selectByText")) {
-						error_message = "Failed at " + actionName + " =>Not able to Select the Value from " + param2
-								+ " dropdownlist";
-						fetchConfigVO.setErrormessage(error_message);
-						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Fail", error_message);
-					} else {
-						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Fail", error_message);
-						// new changes-error_message added to else block
-						fetchConfigVO.setErrormessage(error_message);
-					}
+					errorMessagesHandler.getError(actionName,fetchMetadataVO, fetchConfigVO, test_script_param_id,message,param1,param2);
+
 
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);

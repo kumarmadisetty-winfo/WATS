@@ -272,6 +272,8 @@ public class JiraTicketBugService {
 					scriptId.add(slist.getScript_id());
 					scriptNumber.add(slist.getScript_number());
 				}
+			}else {
+				scriptNumber.add(slist.getScript_number());
 			}
 
 		}
