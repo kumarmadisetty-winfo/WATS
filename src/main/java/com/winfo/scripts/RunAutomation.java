@@ -264,19 +264,19 @@ public class RunAutomation {
 //        LocalDateTime now = LocalDateTime.now();
 
 		String test_set_id = fetchMetadataListVO.get(0).getTest_set_id();
-		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String test_set_line_id = fetchMetadataListVO.get(0).getTest_set_line_id();
 		// start_time=dtf.format(now);
 
+		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
+                + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
+                + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
 		String detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
+                + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
 		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num() + "_"
-				+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+                + fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
+                + "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="+fetchConfigVO.getImg_url();
 		System.out.println(passurl);
 		System.out.println(failurl);
 		System.out.println(detailurl);
@@ -343,15 +343,15 @@ public class RunAutomation {
 
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
-			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
-			failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
-			detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
-			scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
-					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+            passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+            failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+            detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+            scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
+                    + "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="+fetchConfigVO.getImg_url();
 
 			String userName = null;
 			String globalValueForSteps = null;
