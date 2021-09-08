@@ -170,6 +170,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		navigateUrl(driver, fetchConfigVO, fetchMetadataVO);
 		String xpath1 = loginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 		String xpath2 = loginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
+		if("null".equalsIgnoreCase(xpath2)) {
+			throw new IOException("Failed during login page");  
+		}
 		String scripNumber = fetchMetadataVO.getScript_number();
 		String xpath = xpath1 + ";" + xpath2;
 		service.saveXpathParams("User ID", "", scripNumber, xpath);
@@ -377,6 +380,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		String xpath = null;
 		try {
 			if (param1.equalsIgnoreCase("password")) {
+				String title1 = driver.getTitle();
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='" + param1 + "']")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -384,6 +388,11 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(3000);
+				String title2= driver.getTitle();
+				if(title1.equalsIgnoreCase(title2)) {
+					throw new IOException("Failed during login page");  
+				}
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//input[@type='param1']";
