@@ -170,7 +170,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		navigateUrl(driver, fetchConfigVO, fetchMetadataVO);
 		String xpath1 = loginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 		String xpath2 = loginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
-		if("null".equalsIgnoreCase(xpath2)) {
+		if(xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");  
 		}
 		String scripNumber = fetchMetadataVO.getScript_number();
