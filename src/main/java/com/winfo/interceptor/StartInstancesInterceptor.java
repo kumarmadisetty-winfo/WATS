@@ -51,7 +51,7 @@ System.out.println(request.getRequestURL().toString().substring(request.getReque
 					String paramValue = paramValues[i];
 					String service = request.getRequestURL().toString()
 							.substring(request.getRequestURL().toString().lastIndexOf('/') + 1);
-					if (service.equalsIgnoreCase("executeTestScript")) {
+					if (service.equalsIgnoreCase("executeTestScript")&&flag) {
 						vmDetailesService.startInstance(paramValue);
 						logger.info("vms are started");
 					}

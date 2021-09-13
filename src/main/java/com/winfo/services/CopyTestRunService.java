@@ -161,7 +161,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setInput_value(covertDateobj);
 				}
 			}
-			}else if(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Mandatory")) {
+			}else if("Mandatory".equalsIgnoreCase(getScriptlinedata.getUniquemandatory())){
 				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 					setScriptlinedata.setInput_value(null);
 					if(actionsList.contains(getScriptlinedata.getAction())){
