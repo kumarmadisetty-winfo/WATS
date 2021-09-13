@@ -11,7 +11,7 @@ public class ErrorMessagesHandler {
 	private DataBaseEntry dataBaseEntry;
 
 	public void getError(String actionName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String message, String param1, String param2) {
+			String test_script_param_id, String message, String param1, String param2, String password) {
 		try {
 			String error_message = "Took more than 10 seconds to load the page";
 			if (actionName.equalsIgnoreCase("clickButton") && message != null) {
@@ -214,7 +214,7 @@ public class ErrorMessagesHandler {
 						error_message);
 
 			} else if (actionName.equalsIgnoreCase("Login into Application")) {
-				error_message = "Failed at Login into Application =>Please provide valid username and password "
+				error_message = "Failed at Login into Application =>Please provide valid "+fetchMetadataVO.getInput_value()+" and "+password+""
 						+ param1;
 				fetchConfigVO.setErrormessage(error_message);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
