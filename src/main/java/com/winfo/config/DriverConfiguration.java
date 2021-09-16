@@ -20,9 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
-import com.winfo.interface1.IWebDriverAction;
 import com.winfo.services.FetchConfigVO;
-import com.winfo.services.WebDriverActionExecutor;
 
 @Component
 @RefreshScope
@@ -67,15 +65,9 @@ public class DriverConfiguration {
 
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
-			final RemoteWebDriver[] rwd = new RemoteWebDriver[1];
-	        new WebDriverActionExecutor().execute(new IWebDriverAction() {
-	            @Override
-	            public void execute() throws MalformedURLException {
-	                rwd[0] = new RemoteWebDriver(new URL(config_url), cap);
-	            }
-	        });
+
 //			 driver = new ChromeDriver(cap);
-//			driver = new RemoteWebDriver(new URL(config_url), cap);
+			driver = new RemoteWebDriver(new URL(config_url), cap);
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 
 		} else if (BrowserConstants.FIREFOX.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
