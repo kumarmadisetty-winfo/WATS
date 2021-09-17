@@ -34,6 +34,7 @@ public class FetchMetadataVO implements Serializable {
 	private String step_description;
 	private String script_description;
 	private String test_script_param_id;
+	private String conditional_popup;
 //added executed_by
     private String executed_by;
 	private String smtp_from_mail;
@@ -41,6 +42,14 @@ public class FetchMetadataVO implements Serializable {
  public String getSmtp_from_mail() {
 		return smtp_from_mail;
 	}
+
+	public String getConditional_popup() {
+	return conditional_popup;
+}
+
+public void setConditional_popup(String conditional_popup) {
+	this.conditional_popup = conditional_popup;
+}
 
 	public void setSmtp_from_mail(String smtp_from_mail) {
 		this.smtp_from_mail = smtp_from_mail;

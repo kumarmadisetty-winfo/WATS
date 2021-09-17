@@ -71,6 +71,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -4729,6 +4730,19 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+			Alert alert = driver.switchTo().alert();
+			String alertText = alert.getText();
+			if(fetchMetadataVO.getConditional_popup().equalsIgnoreCase("yes")) {
+			alert.accept();
+			} else {
+			alert.dismiss();
+			} 
+			log.info("alertText"+alertText);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		try {
+				
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath("//input[@value='Apply']"));
