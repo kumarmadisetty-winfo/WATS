@@ -127,6 +127,8 @@ public interface SeleniumKeyWordsInterface {
 				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 		public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO);
 		public void switchParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)throws Exception;
+		public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception;
 
 
 
