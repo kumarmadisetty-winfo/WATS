@@ -4726,21 +4726,19 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throw e;
 		}
 	}
-
-	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			Alert alert = driver.switchTo().alert();
-			String alertText = alert.getText();
-			if(fetchMetadataVO.getConditional_popup().equalsIgnoreCase("yes")) {
-			alert.accept();
-			} else {
-			alert.dismiss();
-			} 
-			log.info("alertText"+alertText);
+			if("yes".equalsIgnoreCase(fetchMetadataVO.getConditional_popup())) {
+			enter(driver, fetchMetadataVO, fetchConfigVO);
+			log.info("alertText clicked ");
+			}
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
+	}
+	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 				
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
