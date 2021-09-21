@@ -71,6 +71,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -1972,7 +1973,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Font fnt = FontFactory.getFont("Arial", 12);
 			Font bf12 = FontFactory.getFont("Arial", 23);
 			Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
-			Font bf16 = FontFactory.getFont("Arial", 12,Font.UNDERLINE);
+			Font bf16 = FontFactory.getFont("Arial", 12,Font.UNDERLINE,new BaseColor(66, 245, 236));
 			Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.GREEN);
 			Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.RED);
 			Font bfBold = FontFactory.getFont("Arial", 23, BaseColor.WHITE);
@@ -4722,10 +4723,21 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throw e;
 		}
 	}
-
+	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if("yes".equalsIgnoreCase(fetchMetadataVO.getConditional_popup())) {
+			enter(driver, fetchMetadataVO, fetchConfigVO);
+			log.info("alertText clicked ");
+			}
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+				
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath("//input[@value='Apply']"));

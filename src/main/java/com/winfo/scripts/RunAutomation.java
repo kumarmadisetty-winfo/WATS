@@ -547,8 +547,9 @@ public class RunAutomation {
 								fetchMetadataVO, fetchConfigVO);
 						message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
 						String message1 = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-//						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
-//								fetchMetadataVO, fetchConfigVO);
+
+						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
+								fetchMetadataVO, fetchConfigVO);
 
 						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") ) {
 							fetchConfigVO.setErrormessage(message);
