@@ -122,9 +122,9 @@ public class TestCaseDataService {
 		JSONParser jsonParser = new JSONParser();
 //		 String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/CONFIG_GET/data";
 
-		final String uri = config_url + parameter;
+//		final String uri = config_url + parameter;
 
-// 	                          final String uri = "http://winfoux01.winfosolutions.com:8080/apex/test_automation/taconfig/data/" + parameter;
+ 	                          final String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 		try {
 			System.out.println(uri);
 
