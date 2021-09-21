@@ -176,7 +176,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		String scripNumber = fetchMetadataVO.getScript_number();
 		String xpath = xpath1 + ";" + xpath2;
-		service.saveXpathParams("User ID", "", scripNumber, xpath);
+		String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number();service.saveXpathParams("User ID", "", scripNumber, xpath,action,lineNumber);
 //		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
 //		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
 //		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
@@ -193,7 +193,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				count);
 		String scripNumber = fetchMetadataVO.getScript_number();
 		String xpaths = xpath + ">" + xpath1 + ">" + xpath2;
-		service.saveXpathParams(param1, param2, scripNumber, xpaths);
+		String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpaths,action,lineNumber);
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
@@ -208,7 +208,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		String xpath1 = taskMenu(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2, count);
 		String xpaths = xpath + ";" + xpath1;
 		String scripNumber = fetchMetadataVO.getScript_number();
-		service.saveXpathParams(param1, param2, scripNumber, xpaths);
+		String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpaths,action,lineNumber);
+
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
@@ -496,12 +497,12 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(showmore).build().perform();
 			actions.moveToElement(showmore).click().build().perform();
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show Less']"));
 			actions.moveToElement(showless).build().perform();
 			actions.moveToElement(showless).click().build().perform();
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -526,7 +527,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		String xpath = null;
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 			if (param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(By.xpath(
 						"//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='"
@@ -3247,9 +3248,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Successfully paste is done " + scripNumber);
 				String xpath = "//input[@placeholder='inputParam']";
-				String action = fetchMetadataVO.getAction();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(inputParam, "", scripNumber, xpath);
+			
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);
 
 				// service.saveXpathParams(inputParam,"",scripNumber,xpath);
 				return;
@@ -3310,9 +3310,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(3000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//label[text()='inputParam']/following::input[1]";
-			String action = fetchMetadataVO.getAction();
-			String lineNumber = fetchMetadataVO.getLine_number();
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
+								String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);
 
 //				service.saveXpathParams(inputParam,"",scripNumber,xpath);
 
@@ -3356,9 +3354,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Successfully paste is done " + scripNumber);
 			String xpath = "//input[@placeholder='inputParam']";
-			String action = fetchMetadataVO.getAction();
-			String lineNumber = fetchMetadataVO.getLine_number();
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
+								String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);
 
 //		service.saveXpathParams(inputParam,"",scripNumber,xpath);
 
@@ -3374,6 +3370,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	}
 
+	
 	public void clear(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 
@@ -3386,7 +3383,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//*[normalize-space(text())='inputParam1']/following::label[normalize-space(text())='inputParam2']/preceding-sibling::input)[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -3401,7 +3398,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Successfully Accounting Period Cleared" + scripNumber);
 				String xpath = "//label[normalize-space(text())='inputParam2']/preceding-sibling::input[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -3429,7 +3426,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='inputParam1']/following::input)[1]";
-			service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -3442,7 +3439,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "//*[contains(@placeholder,'inputParam1')]";
-			service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -3456,7 +3453,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "//*[normalize-space(text())='inputParam1']/following::textarea[1]";
-			service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -3531,7 +3528,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String params = param1;
 				String xpath = "(//div[normalize-space(text())='param1'])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 				return;
 			}
@@ -3552,7 +3549,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String params = param1;
 			String xpath = "//div[@title='param1']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3574,7 +3571,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//a[normalize-space(text())='param1']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3595,7 +3592,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//div[contains(@style,'display: block')]//div[normalize-space(text())='param1']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3617,7 +3614,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//div[normalize-space(text())='param1']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3637,7 +3634,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String params = param1;
 			String xpath = "(//div[contains(@id,'param1')])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3692,7 +3689,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Successfully Clicked NotificationLink" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-				service.saveXpathParams(param1, "", scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -3716,7 +3713,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Successfully Clicked NotificationLink" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -3738,7 +3735,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Successfully Clicked NotificationLink" + scripNumber);
 			String params = param1;
 			String xpath = "//*[@placeholder='param1']/following::a[1]";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -3764,7 +3761,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//a[@title='" + param1 + "']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
@@ -3786,7 +3783,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//h1[contains(text(),'" + param1 + "')]/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
@@ -3812,7 +3809,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//h1[normalize-space(text())='" + param1 + "']/following::a[@title='" + param2 + "'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3834,7 +3831,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
@@ -3854,7 +3851,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -3955,7 +3952,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//h1[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Process Monitor ClickExpand or Collapse" + scripNumber);
 				return;
 			}
@@ -3986,7 +3983,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//h2[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
@@ -4022,7 +4019,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 
 		} catch (Exception e) {
@@ -4045,7 +4042,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//span[contains(text(),'param1')])[1]/preceding::a[3][@title='param2'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -4106,7 +4103,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
@@ -4141,7 +4138,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
@@ -4171,7 +4168,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::img[@title='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4195,7 +4192,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::img[@title='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4217,7 +4214,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4238,7 +4235,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4259,7 +4256,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -4289,7 +4286,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@id,'param2')][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
@@ -4313,7 +4310,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[@title='param2'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
@@ -4335,7 +4332,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[@value='keysToSend']/following::img[@title='param2'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
@@ -4363,7 +4360,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::img[@title='param2'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4386,7 +4383,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Report clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param2')/following::input[1]]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4409,7 +4406,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[@title='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4431,7 +4428,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Customer clickImage" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::a[@title='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4452,7 +4449,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Add to Selected clickImage" + scripNumber);
 				String xpath = "//a[@title='param1']//img[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4474,7 +4471,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Go to Member Selection clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::input[@title='param2'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4497,7 +4494,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Provider or Receiver clickImage" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4520,7 +4517,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[contains(@id,'param1')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4543,7 +4540,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//a[@title='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4563,7 +4560,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Back clickImage" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/preceding::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+                String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4589,7 +4586,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4609,7 +4606,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::img[@title='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4630,7 +4627,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4654,7 +4651,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::div[@role='button'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4676,7 +4673,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[contains(@id,'param2')]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4697,7 +4694,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::img[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4717,7 +4714,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[contains(@aria-label,'param1')]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -4753,7 +4750,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//input[@value='Apply']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -4777,7 +4774,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "(//span[text()='S'])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -4806,7 +4803,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='Create Address']/following::*[text()='K'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4829,7 +4826,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='Submit or text()='S']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -4854,7 +4851,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//span[text()='S']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -4879,7 +4876,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "(//span[text()='o'])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4902,7 +4899,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//span[text()='o']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4927,7 +4924,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Members clickButton" + scripNumber);
 				String xpath = "//button[@title='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -4948,7 +4945,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -4974,7 +4971,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='Create Time Card']/following::span[text()='K']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -5002,7 +4999,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Edit Line clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::span[normalize-space(text())='K']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5024,7 +5021,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Members clickButton" + scripNumber);
 				String xpath = "//button[@title='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5047,7 +5044,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Address Contacts clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='" + param1 + "']/following::button[@title='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5074,7 +5071,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//div[contains(@id,'RejectPopup::content')]//span[text()='K']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5101,7 +5098,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param1']/following::*[not (@aria-disabled) and text()='OK'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5125,7 +5122,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//[contains(text(),'param1')]/following::span[text()='K']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5150,7 +5147,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Select clickButton" + scripNumber);
 				String xpath = "(//input[contains(@value,'param1') and (@type)]/following::button[contains(text(),'param2')])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5173,7 +5170,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[contains(@id,'tAccountPopup::content')]//*[text()='o']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5198,7 +5195,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//input[@value='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5222,7 +5219,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[text()='ne']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Approval and Notification History")
 					&& param2.equalsIgnoreCase("Done")) {
@@ -5241,7 +5238,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Approval and Notification History or Done clickButton" + scripNumber);
 				String xpath = "//div[contains(text(),'param1')]/following::span[text()='o']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Done")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5259,7 +5256,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::span[text()='o']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Submit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5275,7 +5272,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//span[text()='m']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Submit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5294,7 +5291,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='m']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Distributions")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5308,7 +5305,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Distributions clickButton" + scripNumber);
 				String xpath = "//span[text()='istributions']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if ((param1.equalsIgnoreCase("Manage Distributions") || param1.equalsIgnoreCase("Manage Holds"))
 					&& param2.equalsIgnoreCase("Save and Close")) {
@@ -5329,7 +5326,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Manage Holds or Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::button[text()='Save and Close']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Save and Close")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5348,7 +5345,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='S']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Next")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5364,7 +5361,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Next clickButton" + scripNumber);
 				String xpath = "//span[text()='x']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Next")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5382,7 +5379,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Next clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Yes")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5405,7 +5402,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Yes clickButton" + scripNumber);
 				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::span[text()='Y']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("OK")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5423,7 +5420,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 				String xpath = "//button[@_afrpdo='ok' and @accesskey='K']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} // Here adding code for Advanced Button AP.452
 
@@ -5455,7 +5452,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String xpath = "//button[@accesskey='d']";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			} else if (param1.equalsIgnoreCase("Save and Close")) {
@@ -5471,7 +5468,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//span[text()='S']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Continue")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5486,7 +5483,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Continue clickButton" + scripNumber);
 				String xpath = "//span[text()='u']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Continue")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5501,7 +5498,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Continue clickButton" + scripNumber);
 				String xpath = "//button[text()='Contin']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5514,7 +5511,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Close clickButton" + scripNumber);
 				String xpath = "//button[text()='Cl']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Adjustment")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5530,7 +5527,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Adjustment clickButton" + scripNumber);
 				String xpath = "(//span[text()='param1'])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Cancel")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5543,7 +5540,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Cancel clickButton" + scripNumber);
 				String xpath = "//span[text()='C']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Save")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5558,7 +5555,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save clickButton" + scripNumber);
 				String xpath = "//span[text()='ave']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Apply")) {
 				Thread.sleep(8000);
@@ -5574,7 +5571,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//span[text()='l']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Apply")) {
 				Thread.sleep(4000);
@@ -5594,7 +5591,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='l']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param2.equalsIgnoreCase("Accept")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5612,7 +5609,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Accept clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='p']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5638,7 +5635,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5661,7 +5658,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked add Application clickButton" + scripNumber);
 					String xpath = "//span[text()='A']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+											String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				} catch (Exception e) {
 					WebElement expand = driver
 							.findElement(By.xpath(("//a[text()='Application']/following::div[@role='button'][2]")));
@@ -5676,7 +5673,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					log.error("Failed during add Application clickButton" + scripNumber);
 					String xpath = "//a[text()='Application']/following::div[@role='button'][2]" + ">"
 							+ "//span[text()='A']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+											String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				}
 				return;
 			}
@@ -5703,7 +5700,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Unapply Application clickButton" + scripNumber);
 					String xpath = "//button[text()='param1']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+											String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				} catch (Exception e) {
 					WebElement expand = driver
 							.findElement(By.xpath(("//a[text()='Application']/following::div[@role='button'][2]")));
@@ -5717,7 +5714,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.error("Failed during Unapply Application clickButton" + scripNumber);
 					String xpath = "//a[text()='Application']/following::div[@role='button'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+											String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				}
 				return;
 			}
@@ -5764,7 +5761,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5791,7 +5788,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
 				String xpath = "(//td[normalize-space(text())='param1'])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5814,7 +5811,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  Add to Document Builder clickButton" + scripNumber);
 				String xpath = "//button[text()='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5838,7 +5835,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  Freeze clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_FREEZE')]//td[text()='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Unfreeze")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5855,7 +5852,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  Unfreeze clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_UNFREEZE')]//td[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5872,7 +5869,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Close clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_CLOSE')]//td[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Reopen")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5889,7 +5886,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Reopen clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_REOPEN')]//td[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			} else if (param1.equalsIgnoreCase("Edit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5906,7 +5903,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Edit clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_EDIT')]//td[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5930,7 +5927,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Edit clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'commandMenuItem')]//td[text()='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5953,7 +5950,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Reverse clickButton" + scripNumber);
 				String xpath = "//div[@class='AFPopupMenuPopup']//td[(normalize-space(text())='param1')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5975,7 +5972,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
 				String xpath = "//td[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -5998,7 +5995,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//button[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6021,7 +6018,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//*[text()='" + param1 + "']/following::*[text()='K'][2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6046,7 +6043,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//span[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6070,7 +6067,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//td[(normalize-space(text())='param1')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6095,7 +6092,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//button[text()='param1'and not(@style='display:none')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6119,7 +6116,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//div[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6143,7 +6140,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'PopupMenu')]/following::*[text()='" + param1 + "']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+										String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6162,7 +6159,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and not(@_afrpdo)])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+									String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -6181,7 +6178,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+									String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -6200,7 +6197,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+									String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -6223,7 +6220,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='param2'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+									String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -6256,7 +6253,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+									String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -6286,7 +6283,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]/parent::span";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6311,7 +6308,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6334,7 +6331,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//a)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6359,7 +6356,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='\" +param1+ \"']//a[not (contains(@title,'Required information'))])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6383,7 +6380,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Approved clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//*[normalize-space(text())='param2']/following::a)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6408,7 +6405,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Manage Orders clickTableLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a[contains(@title,'Purchase Order')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6431,7 +6428,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Manage Receipts clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param2']//td)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6474,7 +6471,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String xpath = "//h2[text()='param1']//following::table[@summary='param2']//a[1]";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 
@@ -6502,7 +6499,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//td[2]//span)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -6526,7 +6523,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked  clickTableLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//table[@summary='param1']//a)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6549,7 +6546,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 			String xpath = "//h1[normalize-space(text())='param1']/following::img[@title='param2']/following-sibling::a[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+									String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -6582,7 +6579,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 				String xpath = "(//div[@class='AFDetectExpansion']/following::span[normalize-space(text())='param1']/following::table//span[text()])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -6628,7 +6625,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked Here1 came tableRowSelect" + scripNumber);
 			String xpath = "(//table[@summary='param1']//td)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -6649,7 +6646,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param1'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -6670,7 +6667,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::tr[1]/td[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -6689,7 +6686,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::tr[1]/td[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+						String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -6734,8 +6731,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String xpath = "//span[text()='param2']/following::span[text() > '0'][1]";
 
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
-
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 					return;
 
 				}
@@ -6761,7 +6757,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String xpath = "//input[@value='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -6784,7 +6780,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Home clickLink" + scripNumber);
 				String xpath = "(//a[contains(@id,'UIShome')])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -6809,7 +6805,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Financials Details or Invoices clickLink" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[text()='param1')[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -6833,7 +6829,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -6862,7 +6858,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
 				String xpath = "//label[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -6887,7 +6883,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -6911,7 +6907,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				Thread.sleep(5000);
 				return;
@@ -6937,7 +6933,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Project clickLink" + scripNumber);
 					String xpath = "//a[normalize-space(text())='param1']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 					Thread.sleep(5000);
 				} catch (Exception e) {
@@ -6983,7 +6979,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Financial Reporting Center clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param2'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7012,7 +7008,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Receivables clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7037,7 +7033,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
 				String xpath = "//table[@summary='param1']//span[text()='Approved']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7061,7 +7057,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
 				String xpath = "//table[@summary='param1']//span[text()='Approved']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7085,7 +7081,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Details" + scripNumber);
 
 				String xpath = "(//*[contains(text(),'param1')]/following::*[text()='param2'])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7115,7 +7111,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7145,7 +7141,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Journal clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7196,7 +7192,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked View clickLink" + scripNumber);
 				String xpath = "//a[text()='param1'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7242,7 +7238,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					log.info("Sucessfully Clicked clickLink" + scripNumber);
 					String params = param1;
 					String xpath = "//a[text()='param1'][1]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 					return;
 				}
 			} catch (Exception e) {
@@ -7273,7 +7269,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[normalize-space(text())='param1'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7297,7 +7293,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Reports and Analytics clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7323,7 +7319,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Attachment or Invoice Summary clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7347,8 +7343,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::span)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -7370,7 +7365,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[contains(text(),'param1')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7393,7 +7388,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//a[contains(@id,'param1')])[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7416,7 +7411,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//div[@title='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7439,7 +7434,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String params = param1;
 				String xpath = "//a[@title='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7462,7 +7457,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//*[contains(@title,'param1')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7486,7 +7481,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//div[contains(text(),'param1')])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7508,7 +7503,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[@role='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7529,7 +7524,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -7564,7 +7559,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[text()='param2']/following::label[normalize-space(text())='keysToSend'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -7585,7 +7580,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -7605,7 +7600,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend']/preceding-sibling::input[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -7642,7 +7637,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Item Description clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[contains(@id,'Label')][1]";
-				service.saveXpathParams(param1, "", scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7673,7 +7668,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-				service.saveXpathParams(param1, "", scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 
 				return;
 			}
@@ -7703,7 +7698,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Scenario clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::input[1]";
-				service.saveXpathParams(param1, "", scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7732,7 +7727,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']/preceding::input[1]";
-				service.saveXpathParams(param1, "", scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7781,7 +7776,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Match Invoice Lines clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::label[contains(@id,'Label')][1]";
-				service.saveXpathParams(param1, "", scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -7806,7 +7801,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[text()='param1']/following::span[text()='keysToSend']/preceding::label[1]";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -7834,7 +7829,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::label[1]";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -7861,7 +7856,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -7888,7 +7883,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -7912,8 +7907,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='keysToSend']";
-			service.saveXpathParams(param1, "", scripNumber, xpath);
-
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1, "", scripNumber, xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -7949,7 +7943,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -7971,7 +7965,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 				return;
 			}
@@ -7996,7 +7990,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//*[normalize-space(text())='keysToSend']/following::td[normalize-space(text())='param1']/following::table[1]//div)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 				return;
 			}
@@ -8020,7 +8014,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -8043,7 +8037,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -8077,7 +8071,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::textarea[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -8104,7 +8098,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::textarea)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -8124,7 +8118,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//body[@dir='ltr']";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -8149,7 +8143,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Password sendValue" + scripNumber);
 				String xpath = "//input[@type='param1']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8189,7 +8183,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "//*[text()='" + param1 + "']//following::*[contains(text(),'" + param2
 						+ "')]/preceding::input[2]";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 
@@ -8226,7 +8220,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String xpath = " //label[@title='param1']/following::input[1]";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 
@@ -8257,7 +8251,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
 				String xpath = "//h1[text()='param1']//following::label[text()='param2']//following::input[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8289,7 +8283,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String xpath = " //label[@title='param1']/following::input[2]";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 
@@ -8320,7 +8314,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())=' param1 ']/following::input[@placeholder=' param2 '][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8343,7 +8337,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Report sendValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param2')]/following::input[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8370,7 +8364,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'" + param1 + "')]/following::label[contains(text(),'" + param2
 						+ "')]/following::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				return keysToSend;
@@ -8396,7 +8390,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "//*[text()='Create Bank Account']/following::label[text()='" + param2 + "'][2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				return keysToSend;
@@ -8421,7 +8415,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Phone or Mobile sendValue" + scripNumber);
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[3]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return keysToSend;
 			}
 		} catch (Exception e) {
@@ -8444,7 +8438,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Line or Name sendValue" + scripNumber);
 				String xpath = "(//div[normalize-space(text())=' param1 ']/following::label[normalize-space(text())=' param2 ']/following::input)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8471,7 +8465,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Time Card or Person Name sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::span[text()='param2']//input[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return keysToSend;
 
 			}
@@ -8500,7 +8494,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Lines or Query By Example sendValue" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::*[@title='param2']/following::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return keysToSend;
 			}
 		} catch (Exception e) {
@@ -8530,7 +8524,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Unapply Accounting Date sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return keysToSend;
 			}
 		} catch (Exception e) {
@@ -8550,7 +8544,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 
 					String xpath = "//*[contains(@id,'PeriodName::content')]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 					Thread.sleep(2000);
 				} catch (Exception e) {
@@ -8593,7 +8587,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Manage Accounting Periods sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::*[@title='param2']/following::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8617,7 +8611,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())=' param1 ']/following::input[@placeholder=' param2 '][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8643,7 +8637,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = "(//*[contains(text(),'param2')]/following::input)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8669,7 +8663,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Daily Rates  sendValue" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[not (@type='hidden')][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8693,7 +8687,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return keysToSend;
 			}
@@ -8720,7 +8714,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input[@type='text'])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				return keysToSend;
@@ -8751,8 +8745,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//h2[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -8779,8 +8772,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked sendValue" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -8802,7 +8794,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "//*[contains(@placeholder,'param1')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return keysToSend;
 			}
 		} catch (Exception e) {
@@ -8828,7 +8820,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+		String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(5000);
@@ -8858,7 +8850,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return keysToSend;
 		} catch (Exception e) {
@@ -8886,7 +8878,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+							String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -8908,7 +8900,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return keysToSend;
 		} catch (Exception e) {
@@ -8933,7 +8925,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::img[@title='param2']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -9243,7 +9235,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[text()=\"" + param1
 
 						+ "\"]/following::label[text()='" + param2 + "']/preceding-sibling::input)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+  		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				log.info("Sucessfully Clicked Time Entry multiplelinestableSendKeys" + scripNumber);
 
@@ -9276,7 +9268,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[8]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -9300,7 +9292,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9322,7 +9314,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9343,7 +9335,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9364,7 +9356,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[12]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9384,7 +9376,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9404,7 +9396,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9437,7 +9429,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[8]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
 
 				return;
@@ -9461,7 +9453,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
 
 				return;
@@ -9483,7 +9475,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9504,7 +9496,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9526,7 +9518,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[12]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9547,7 +9539,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9567,7 +9559,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9597,7 +9589,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[6]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9619,7 +9611,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[7]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -9660,7 +9652,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Thu multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
@@ -9682,7 +9674,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Fri multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
@@ -9703,7 +9695,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Sat multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
@@ -9724,7 +9716,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Sunday multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
@@ -9752,7 +9744,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//span[text()='" + param2 + "']/following::input[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -9774,7 +9766,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='" + param1 + "']/following::label[text()='" + param2
 						+ "']/preceding-sibling::input[not(@type='hidden')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -9800,7 +9792,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9830,7 +9822,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Associated Projects or FProject Number tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::span[1]/input";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9860,7 +9852,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Associated Projects or Task Number tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::div[text()='Autocompletes on TAB']/preceding::input[1])[4]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9889,7 +9881,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Time Entry tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9916,7 +9908,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Mon tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9936,7 +9928,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Tue tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9957,7 +9949,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Wed tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[3]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9978,7 +9970,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Thu tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[4]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -9999,7 +9991,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Fri tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[5]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -10019,7 +10011,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Sat tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[6]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -10039,7 +10031,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Sunday tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[7]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -10064,7 +10056,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Quantity tableSendKeys" + scripNumber);
 					String xpath = "(//text()='param1']/preceding-sibling::input[ not (@value)])[1]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				} catch (Exception e) {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10099,7 +10091,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Lines or Price tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[contains(@name,'AmountAsPrice')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -10120,7 +10112,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Lines or Expenditure Item Date tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -10142,7 +10134,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -10162,7 +10154,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Application Reference tableSendKeys" + scripNumber);
 				String xpath = "(//h1[text()='param1']/following::*[text()='param2']/following::input)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -10195,7 +10187,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String xpath = "(//span[text()='param1']/preceding::input[@type='text'])[2]";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 
@@ -10224,7 +10216,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::*[text()='param2']/preceding-sibling::input)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 				return;
 			}
@@ -10249,7 +10241,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10267,7 +10259,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::*[text()='param2']/preceding-sibling::input[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10285,7 +10277,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='Assets']/following::span[text()='Description']/preceding::input[contains(@id,'descColumn::content')]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10306,7 +10298,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[text()='param1']/following::span[text()='param2']/preceding::input[contains(@id,'journalBatch::content')]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10325,7 +10317,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10343,7 +10335,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+			    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10361,7 +10353,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::textarea)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10380,7 +10372,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[text()='param1']/following::table[@summary='param2']//*[text()='param3']/following::input[contains(@id,'NewBdgtPctLst')][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -10401,7 +10393,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//table[@summary='param1']//label[text()='param2']/preceding-sibling::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -10601,7 +10593,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "(//a[contains(@id,'projectRole')]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 				return;
 			}
@@ -10624,7 +10616,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "(//*[text()='param1']/following::a[contains(@id,'param2')])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -10649,7 +10641,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Billing tableDropdownValues" + scripNumber);
 				return;
 			}
@@ -10673,7 +10665,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::a[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -10695,7 +10687,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//table[@summary='param1']//input/following-sibling::a[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -10717,7 +10709,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[text()='param1']/following::input[contains(@id,'param2')][1]/following::a[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -10776,7 +10768,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
@@ -10801,7 +10793,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				try {
 					actions.click(waittext).build().perform();
 					Thread.sleep(10000);
@@ -10864,7 +10856,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "//label[text()='All']" + ";"
 						+ "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
 				return;
 			}
@@ -10902,7 +10894,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "//h2[normalize-space(text())='Search']/following::label[text()='Name']/following::input[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				return;
 			}
 		} catch (Exception ex) {
@@ -10946,7 +10938,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Create Bank Account or Country dropdownValues" + scripNumber);
 				return;
 			}
@@ -11024,7 +11016,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//button[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::button[text()='OK'][1]";
 
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Create Address or Country dropdownValues" + scripNumber);
 				return;
 			}
@@ -11060,7 +11052,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[text()='param1']/following::a[@role='button'][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Assets dropdownValues" + scripNumber);
 				return;
 
@@ -11087,7 +11079,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::a)[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Create Request dropdownValues" + scripNumber);
 				return;
 			}
@@ -11118,7 +11110,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
 						+ "//span[text()='keysToSend']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
 				return;
 			}
@@ -11164,7 +11156,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Procurement BU or Business Unit dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Requisition BU")) {
@@ -11192,7 +11184,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Name']/following::div[text()='" + keysToSend + "']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Requisition BU dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Supplier Name")) {
@@ -11224,7 +11216,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 								+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
 								+ "//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"
 								+ ";" + "//span[text()='Name']/following::button[text()='OK'][3]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 						log.info("Sucessfully  Supplier Name Clicked dropdownValues" + scripNumber);
 
 						return;
@@ -11270,7 +11262,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Period Name dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Legal Entity")) {
@@ -11294,7 +11286,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//div[@class='listbox']//span[contains(text(),'Search')]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
 				}
@@ -11342,7 +11334,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Customer Name")) {
@@ -11370,7 +11362,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[@type='text'][1]"
 							+ ";" + "//*[text()='Value']/following::div[contains(text(),'" + keysToSend + "')]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
 					return;
 				}
@@ -11500,7 +11492,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 
@@ -11555,7 +11547,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 					log.info("Sucessfully Clicked Request Name dropdownValues" + scripNumber);
 
@@ -11619,7 +11611,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 
@@ -11675,7 +11667,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "(//span[text()='Name']/following::input[@type='text'])" + ";"
 						+ "//b[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 						+ "//div[text()='Search']/following::button[text()='OK']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 				return;
 			}
@@ -11719,7 +11711,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Report dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Ledger")) {
@@ -11745,7 +11737,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Request Name")) {
@@ -11771,7 +11763,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Requistion Business Unit")) {
@@ -11797,7 +11789,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Status")) {
@@ -11822,7 +11814,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][1]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][3]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Status dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Req. Business Unit") || param2.equalsIgnoreCase("Client BU")) {
@@ -11847,7 +11839,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Req. Business Unit dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Legal Entity")) {
@@ -11873,7 +11865,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Customer Name")) {
@@ -11899,7 +11891,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Business Unit")) {
@@ -11912,7 +11904,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='keysToSend'][1]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 						log.info("Sucessfully Clicked Business Unit dropdownValues" + scripNumber);
 						return;
 					} else {
@@ -11939,7 +11931,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 								+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 								+ "//div[text()='Search']/following::button[text()='OK']";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 						return;
 					}
@@ -11952,7 +11944,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 						log.info("Sucessfully Clicked Supplier Name dropdownValues" + scripNumber);
 						return;
 					} else {
@@ -11980,7 +11972,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 								+ "//*[normalize-space(text())='Value']/following::div[normalize-space(text())='keysToSend']"
 								+ ";" + "//div[text()='Search']/following::button[text()='OK']";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 						return;
 					}
@@ -12036,7 +12028,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 							+ ";" + "(//span[contains(text(),'keysToSend')])[1]" + ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked Basic Options or Ledger dropdownValues" + scripNumber);
 				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScript_number();
@@ -12083,7 +12075,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ ";" + "//span[text()='param2']/following::span[contains(text(),'keysToSend')][1]" + ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
 
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScript_number();
@@ -12121,7 +12113,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							String xpath = "//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]"
 									+ ";" + "(//span[contains(text(),'keysToSend')])[1]" + ";"
 									+ "//*[text()='Search']/following::*[text()='param2']/following::*[text()='OK'][1]";
-							service.saveXpathParams(param1, param2, scripNumber, xpath);
+			    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 
 						}
 					}
@@ -12152,7 +12144,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception ex) {
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -12166,7 +12158,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						// String xpath="//div[@class='AFDetectExpansion']";
 						String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					} catch (Exception ex1) {
 						for (int i = 0; i <= 2; i++) {
 							actions.click(waittext).build().perform();
@@ -12178,7 +12170,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						actions.release();
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					}
 				} catch (Exception ex2) {
 					WebElement popup1 = driver.findElement(By.xpath("//div[@class='AFDetectExpansion']"));
@@ -12186,7 +12178,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					actions.release();
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-					service.saveXpathParams(param1, param2, scripNumber, xpath);
+	    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				}
 			}
 			return;
@@ -12214,7 +12206,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -12228,7 +12220,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						actions.release();
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					}
 				}
 
@@ -12243,7 +12235,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//div[contains(@id,'dropdownPopup::content')][1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -12256,7 +12248,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						String xpath = "//div[contains(@id,'dropdownPopup::content')][1]";
-						service.saveXpathParams(param1, param2, scripNumber, xpath);
+		    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 					}
 				}
 
@@ -12281,8 +12273,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12302,8 +12293,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12322,8 +12312,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -12365,8 +12354,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 					+ ";" + "(//span[normalize-space(text())='keysToSend'])[1]" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[text()='K'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12393,8 +12381,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
 					+ ";" + "//span[normalize-space(text())='keysToSend']" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12409,8 +12396,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='OK'][1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12437,8 +12423,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='keysToSend']/following::input)[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during  dropdownValues" + scripNumber);
@@ -12458,7 +12443,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//a[contains(@id,'param1')]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+    		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -12584,8 +12569,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//span[normalize-space(text())='inputParam'][1]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12598,8 +12582,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//a[normalize-space(text())='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12611,8 +12594,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//h1[normalize-space(text())='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12624,8 +12606,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//h2[normalize-space(text())='inputParam'])";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12638,8 +12619,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//h3[normalize-space(text())='inputParam'])[2]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(inputParam);
@@ -12649,8 +12629,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//td[normalize-space(text())='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(inputParam);
@@ -12660,8 +12639,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//div[contains(text(),'inputParam')]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12673,8 +12651,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//table[@summary='inputParam']//td//a)[1]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12687,8 +12664,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//label[normalize-space(text())='inputParam']/following::input)[1]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(inputParam);
@@ -12698,8 +12674,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//a[contains(@id,'inputParam')]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12711,8 +12686,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//li[normalize-space(text())='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12725,8 +12699,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//label[normalize-space(text())='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12739,8 +12712,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//button[normalize-space(text())='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12752,8 +12724,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//img[@title='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12765,8 +12736,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//*[@title='inputParam'])[1]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12825,8 +12795,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked mousehover" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -12842,8 +12811,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.print("Successfully executed Mousehover");
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "(//table[@role='presentation']/following::a[normalize-space(text())='" + param1 + "'])[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked mousehover" + scripNumber);
+		      String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2,scripNumber,xpath,action,lineNumber);			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -13127,7 +13095,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				log.info("Sucessfully Clicked selectByText" + scripNumber);
 				return;
 			}
@@ -13146,7 +13114,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::select[@title='']";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Holds selectByText" + scripNumber);
 				return;
 			}
@@ -13164,7 +13132,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Batch Status selectByText" + scripNumber);
 				return;
 			}
@@ -13184,7 +13152,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select)[2]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				log.info("Sucessfully Clicked Release selectByText" + scripNumber);
 				return;
 			}
@@ -13202,8 +13170,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::select[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			return;
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during selectByText" + scripNumber);
@@ -13217,8 +13184,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/preceding::select[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked selectByText" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -13233,8 +13199,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::select[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked selectByText" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -13249,8 +13214,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::select[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
-			log.info("Sucessfully Clicked selectByText" + scripNumber);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -13265,7 +13229,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[contains(text(),'param1')]/following::select[1]";
-				service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 				log.info("Sucessfully Clicked selectCheckBox" + scripNumber);
 				return;
 			}
@@ -13281,7 +13245,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 
 			String xpath = "//*[contains(text(),'param1')]/preceding-sibling::select[1]";
-			service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(param1,param2, scripNumber, xpath,action,lineNumber);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
@@ -13356,8 +13320,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
@@ -13390,8 +13353,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				value = copyInt(webElement);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
@@ -13426,8 +13388,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				value = copyInt(webElement);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
@@ -13458,8 +13419,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				value = copyMethod(webElement, value);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//div[contains(@title,'inputParam1')])[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
@@ -13491,8 +13451,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				value = copyMethod(webElement, value);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//div[contains(text(),'inputParam1')])[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
@@ -13525,8 +13484,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				value = copyMethod(webElement, value);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//label[text()='inputParam1']/following::td[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
@@ -13556,8 +13514,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				value = copyMethod(webElement, value);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "//img[@title='In Balance ']/following::td[1]";
-				service.saveXpathParams(inputParam1, inputParam2, scripNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam1,inputParam2,scripNumber,xpath,action,lineNumber);				String testParamId = fetchMetadataVO.getTest_script_param_id();
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
@@ -13901,7 +13858,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			driver.switchTo().frame(waittext);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//h1[normalize-space(text())='inputParam']/following::iframe[1]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);
 
 			return;
 		} catch (Exception e) {
@@ -13914,8 +13871,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			driver.switchTo().frame(waittext);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//iframe[contains(@id,'inputParam')]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			return;
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			return;
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -13927,8 +13883,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			driver.switchTo().frame(waittext);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//iframe[@title='inputParam']";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			return;
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			return;
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -13941,8 +13896,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			driver.switchTo().frame(waittext);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//*[normalize-space(text())='inputParam']/following::iframe[1]";
-			service.saveXpathParams(inputParam, "", scripNumber, xpath);
-			return;
+			String action=fetchMetadataVO.getAction(); String lineNumber=fetchMetadataVO.getLine_number(); service.saveXpathParams(inputParam,"",scripNumber,xpath,action,lineNumber);			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			log.error("Failed During switchToFrame Action");
