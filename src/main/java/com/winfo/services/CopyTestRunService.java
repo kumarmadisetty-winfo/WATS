@@ -175,7 +175,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
 				}
 			}else {
-					if("copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+					if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 						setScriptlinedata.setInput_value(null);
 
 					}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
