@@ -140,7 +140,16 @@ public class FetchConfigVO {
 //	@JsonProperty("BROWSER")
 	private String errormessage;
 	
+    private String PDF_LOCATION;
 
+    
+	public String getPDF_LOCATION() {
+		return PDF_LOCATION;
+	}
+
+	public void setPDF_LOCATION(String pDF_LOCATION) {
+		PDF_LOCATION = pDF_LOCATION;
+	}
 
 	public String getAPI_BASE_URL() {
 		return API_BASE_URL;
