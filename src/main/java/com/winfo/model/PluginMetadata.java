@@ -60,9 +60,12 @@ public class PluginMetadata {
 	private String validation_type;
 	@Column(name = "VALIDATION_NAME")
 	private String validation_name;
+	@Column(name = "CONDITIONAL_POPUP")
+	private String conditional_popup;
 
 	//@Column(name = "script_id")
 //	private Integer script_id;
+
 
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "SCRIPT_ID")
@@ -77,6 +80,13 @@ public class PluginMetadata {
 		this.scriptMaster = scriptMaster;
 	}
 
+	public String getConditional_popup() {
+		return conditional_popup;
+	}
+
+	public void setConditional_popup(String conditional_popup) {
+		this.conditional_popup = conditional_popup;
+	}
 	public Integer getScript_meta_data_id() {
 		return script_meta_data_id;
 	}
