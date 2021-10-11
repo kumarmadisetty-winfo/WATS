@@ -84,6 +84,7 @@ public class PluginTestrunService {
 			metadata.setValidation_name("NA");
 			metadata.setUnique_mandatory("NA");
 			metadata.setDatatypes("NA");
+			metadata.setConditional_popup("NA");
 			metadata.setCreated_by(mastervo.getCreated_by());
 			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
 			master.addMetadata(metadata);
