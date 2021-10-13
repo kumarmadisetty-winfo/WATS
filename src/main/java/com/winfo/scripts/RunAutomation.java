@@ -110,13 +110,13 @@ public class RunAutomation {
 //	        String start_time=dtf.format(now);
 //			System.out.println("instanceName"+instanceName);
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
-			fetchConfigVO.setParallel_independent(3);
-			fetchConfigVO.setChrome_driver_path("C:\\wats\\chromdriver\\chromedriver.exe");
-			fetchConfigVO.setDownlod_file_path("C:\\wats\\wats_stand\\download_path");
-			fetchConfigVO.setPdf_path("C:\\wats\\wats_stand\\pdf_path");
-			fetchConfigVO.setScreenshot_path("C:\\wats\\wats_stand\\screenshot_path");
-			fetchConfigVO.setUpload_file_path("C:\\wats\\wats_stand\\upload_path");
-			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
+//			fetchConfigVO.setParallel_independent(3);
+//			fetchConfigVO.setChrome_driver_path("C:\\wats\\chromdriver\\chromedriver.exe");
+//			fetchConfigVO.setDownlod_file_path("C:\\wats\\wats_stand\\download_path");
+//			fetchConfigVO.setPdf_path("C:\\wats\\wats_stand\\pdf_path");
+//			fetchConfigVO.setScreenshot_path("C:\\wats\\wats_stand\\screenshot_path");
+//			fetchConfigVO.setUpload_file_path("C:\\wats\\wats_stand\\upload_path");
+//			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
 //			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
