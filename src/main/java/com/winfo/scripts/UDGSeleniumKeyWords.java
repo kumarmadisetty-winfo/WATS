@@ -391,9 +391,10 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(3000);
+				Thread.sleep(5000);
 				String title2= driver.getTitle();
 				if(title1.equalsIgnoreCase(title2)) {
+					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 					throw new IOException("Failed during login page");  
 				}
 				String scripNumber = fetchMetadataVO.getScript_number();
