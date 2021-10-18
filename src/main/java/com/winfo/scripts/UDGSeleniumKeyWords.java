@@ -403,6 +403,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				return xpath;
 			}
 		} catch (Exception e) {
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed to enter password " + scripNumber);
 			System.out.println(e);
