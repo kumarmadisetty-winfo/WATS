@@ -504,12 +504,12 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(showmore).build().perform();
 			actions.moveToElement(showmore).click().build().perform();
-			Thread.sleep(5000);
+			Thread.sleep(8000);
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show Less']"));
 			actions.moveToElement(showless).build().perform();
 			actions.moveToElement(showless).click().build().perform();
-			Thread.sleep(5000);
+			Thread.sleep(8000);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
