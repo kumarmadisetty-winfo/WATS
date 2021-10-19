@@ -17,7 +17,7 @@ public class ScriptXpathService {
 	
 	@Transactional
 	public void saveXpathParams(String scriptID, String metadataID, String xpath) {
-		dao.saveXpathParams(scriptID,metadataID,xpath);
+//		dao.saveXpathParams(scriptID,metadataID,xpath);
 	}
 	@Transactional
 	public String getXpathParams(String scriptID, String metadataID) {

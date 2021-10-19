@@ -176,7 +176,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		String scripNumber = fetchMetadataVO.getScript_number();
 		String xpath = xpath1 + ";" + xpath2;
-		                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		                       String scriptID=fetchMetadataVO.getScript_id();
+		                       String metadataID=fetchMetadataVO.getScript_meta_data_id();
+		                       service.saveXpathParams(scriptID,metadataID,xpath);
 //		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
 //		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
 //		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
@@ -391,7 +393,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 				String title2= driver.getTitle();
 				if(title1.equalsIgnoreCase(title2)) {
 					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
