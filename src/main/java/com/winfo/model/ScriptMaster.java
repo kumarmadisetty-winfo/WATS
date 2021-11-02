@@ -98,6 +98,8 @@ public class ScriptMaster {
     private String dependent_script_num;
     @Column(name = "APPR_FOR_MIGRATION")
     private String appr_for_migration;
+    @Column(name = "PLUGIN_FLAG")
+    private boolean plugin_flag;
     
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "scriptMaster")
@@ -107,6 +109,14 @@ public class ScriptMaster {
 	public void addMetadata(ScriptMetaData metadata) {
 		scriptMetaDatalist.add(metadata);
 		metadata.setScriptMaster(this);
+	}
+
+	public boolean isPlugin_flag() {
+		return plugin_flag;
+	}
+
+	public void setPlugin_flag(boolean plugin_flag) {
+		this.plugin_flag = plugin_flag;
 	}
 
 	public String getDependent_script_num() {

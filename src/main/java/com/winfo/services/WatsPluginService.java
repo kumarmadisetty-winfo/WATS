@@ -63,7 +63,9 @@ public class WatsPluginService {
 		master.setSub_process_area(mastervo.getSub_process_area());
 		master.setStandard_custom(mastervo.getStandard_custom());
 		master.setTest_script_status(mastervo.getTest_script_status());
-		
+		master.setCreated_by(mastervo.getCreated_by());
+		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
+		master.setPlugin_flag(true);
 		for(WatsPluginMetaDataVO metadatavo:mastervo.getMetaDataList()) {
 			ScriptMetaData metadata = new ScriptMetaData();
 			metadata.setAction(metadatavo.getAction());
@@ -71,6 +73,14 @@ public class WatsPluginService {
 			metadata.setInput_parameter(metadatavo.getInput_parameter());
 			metadata.setStep_desc(metadatavo.getStep_desc());
 			metadata.setScript_number(newScriptNumber);
+			metadata.setValidation_type("NA");
+			metadata.setValidation_name("NA");
+			metadata.setUnique_mandatory("NA");
+			metadata.setDatatypes("NA");
+			metadata.setConditional_popup("NA");
+			metadata.setCreated_by(mastervo.getCreated_by());
+			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
+			metadata.setMetadata_inputvalue(metadatavo.getInput_value());
 			master.addMetadata(metadata);
 			
 		}
