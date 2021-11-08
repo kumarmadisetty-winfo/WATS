@@ -509,7 +509,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>dev</profiles>
 				<instance>dev</instance>
@@ -594,7 +594,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>hub</profiles>
 				<instance>hub</instance>
@@ -678,10 +678,13 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>prod</profiles>
 				<instance>prd</instance>
+				
+				
+				
 			</properties>
 
 		</profile>
@@ -762,7 +765,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>uat</profiles>
 				<instance>uat</instance>
@@ -845,7 +848,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>rep</profiles>
 				<instance>rep</instance>
@@ -928,7 +931,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>arlodev</profiles>
 				<instance>arlodev</instance>
@@ -1013,7 +1016,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>arlop</profiles>
 				<instance>arlop</instance>
@@ -1097,7 +1100,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>udgs</profiles>
 				<instance>udgs</instance>
@@ -1181,7 +1184,7 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://watsprd01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
 				<profiles>verisure</profiles>
 				<instance>verisure</instance>
