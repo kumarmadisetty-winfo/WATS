@@ -10880,6 +10880,42 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
+		//--------------------------(including new change here)<------------------------------
+		try {
+			if (param1.equalsIgnoreCase("Create Order") && param2.equalsIgnoreCase("Search: Bill-to Account")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + param1+"')]/following::a[@title='" + param2 +"'][1]")));
+				WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" + param1+"')]/following::a[@title='" + param2 +"'][1]"));
+				Actions actions = new Actions(driver);
+				actions.click(waittext).build().perform();
+				Thread.sleep(4000);
+				WebElement search = driver.findElement(By.xpath("//a[text()='Search...']"));
+				search.click();
+				Thread.sleep(2000);
+				WebElement Value = driver.findElement(By.xpath("//div[text()='Search and Select: Bill-to Account']/following::label[text()='Account Number']/following::input[1]"));
+				typeIntoValidxpath(driver, keysToSend, Value, fetchConfigVO, fetchMetadataVO);
+			    enter(driver, fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(1000);
+				WebElement clickok = driver.findElement(By.xpath("//h1[text()='Search']/following::button[text()='OK'][1]"));
+				clickok.click();
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+
+				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
+						+ ";" + "//label[text()='All']" + ";"
+						+ "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
+				//service.saveXpathParams(param1, param2, scripNumber, xpath);
+				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				
+				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		
+		//--------------------------------------------(ends here)-------------------------------------
+		
 		try {
 			if (param1.equalsIgnoreCase("Create Contract in Wizard") && param2.equalsIgnoreCase("Primary Party")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
