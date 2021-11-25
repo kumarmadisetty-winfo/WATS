@@ -496,8 +496,16 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
 			wait.until(ExpectedConditions.elementToBeClickable(
 					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+			/*
+			 * WebElement waittext = driver
+			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" +
+			 * param1 + "']"));
+			 */
+			
+			// ------------------------(New Change)-----------------------
+			
 			WebElement waittext = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']"));
+					.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']//div[2]/a/*[name()='svg'][1]"));
 
 			WebElement showmore = driver
 					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show More']"));
