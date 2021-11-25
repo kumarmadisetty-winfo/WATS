@@ -13622,34 +13622,99 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	}
 
+	/*
+	 * private String copyInt(WebElement webElement) {
+	 * 
+	 * String num = null;
+	 * 
+	 * try {
+	 * 
+	 * // System.out.println(value);
+	 * 
+	 * String number = webElement.getText().toString();
+	 * 
+	 * System.out.println(number);
+	 * 
+	 * num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
+	 * 
+	 * System.out.println(num);
+	 * 
+	 * log.info("Successfully Copied the Number");
+	 * 
+	 * } catch (Exception e) {
+	 * 
+	 * System.out.println(e);
+	 * 
+	 * }
+	 * 
+	 * return num;
+	 * 
+	 * }
+	 * 
+	 */
+	
+	
 	private String copyInt(WebElement webElement) {
 
+
+
 		String num = null;
+		String num1 = null;
 
 		try {
+		String number = webElement.getText().toString();
+		System.out.println(number);
+		num = number.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
+		num1 = num.replaceAll("[().$#@!*&^\\/\\\\]", "");
+		String num2= num1.trim();
+		System.out.println(num2);
+		Thread.sleep(2000);
+		log.info("Successfully Copied the Number");
+		return num2;
+		} catch (Exception e) {
+		System.out.println(e);
+		}
+		try {
 
-//         System.out.println(value);
+		String number = webElement.getText().toString();
 
-			String number = webElement.getText().toString();
 
-			System.out.println(number);
 
-			num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
+		System.out.println(number);
 
-			System.out.println(num);
 
-			log.info("Successfully Copied the Number");
+
+		num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
+
+
+
+		System.out.println(num);
+
+
+
+		log.info("Successfully Copied the Number");
+
+
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+
+
+		System.out.println(e);
+
+
 
 		}
 
+
+
 		return num;
 
-	}
 
+
+		}
+
+	
 	private String copyNegative(WebElement webElement) {
 
 		String num = null;
