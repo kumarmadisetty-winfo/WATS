@@ -129,10 +129,10 @@ import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
-@Service("UDG")
-//@Service("WATS")
+//@Service("UDG")
+@Service("WATS")
 @RefreshScope
-public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
+public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
 	private DataBaseEntry databaseentry;
