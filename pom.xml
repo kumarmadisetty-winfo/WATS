@@ -692,7 +692,7 @@
 	
 		
 		<profile>
-			<id>DH</id>
+			<id>dh</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -770,8 +770,8 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>DH</profiles>
-				<instance>DH</instance>
+				<profiles>dh</profiles>
+				<instance>dh</instance>
 				
 				
 				
@@ -781,7 +781,7 @@
 		
 		
 		<profile>
-			<id>WATS</id>
+			<id>wats</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -859,8 +859,8 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>WATS</profiles>
-				<instance>WATS</instance>
+				<profiles>wats</profiles>
+				<instance>wats</instance>
 				
 				
 				
