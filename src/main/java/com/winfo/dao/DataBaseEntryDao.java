@@ -14,6 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.stereotype.Repository;
 
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
@@ -21,6 +23,8 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 
+@Repository
+@RefreshScope
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
@@ -83,7 +87,7 @@ public class DataBaseEntryDao {
 		return errorMessage;
 	}
 	public  void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status) throws ClassNotFoundException, SQLException {
-		TestSetScriptParam scriptParam=em.find(TestSetScriptParam.class,test_script_param_id);
+		TestSetScriptParam scriptParam=em.find(TestSetScriptParam.class,Integer.parseInt(test_script_param_id));
 		if(scriptParam==null) {
 			throw new RuntimeException();
 		}
@@ -91,7 +95,7 @@ public class DataBaseEntryDao {
 		em.merge(scriptParam);
 	}
 	public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String test_set_id,String test_set_line_id) throws ClassNotFoundException, SQLException {
-		TestSetLines testLines=em.find(TestSetLines.class, test_set_line_id);
+		TestSetLines testLines=em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
 		if(testLines==null) {
 			throw new RuntimeException();
 		}
@@ -107,7 +111,7 @@ public class DataBaseEntryDao {
 		
 	}
 	public String getTrMode(String args,FetchConfigVO fetchConfigVO) throws SQLException {
-		TestSet testSet=em.find(TestSet.class,args);
+		TestSet testSet=em.find(TestSet.class,Integer.parseInt(args));
 		if(testSet==null) {
 			throw new RuntimeException();
 		}
