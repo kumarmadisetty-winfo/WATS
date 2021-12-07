@@ -32,7 +32,7 @@ import com.winfo.services.FetchMetadataVO;
 
 @Service
 @RefreshScope
-public class DataBaseEntry {
+public class DataBaseEntry0 {
 
 	@Value("${database.dbpassword}")
 	private  String dbPassword;
