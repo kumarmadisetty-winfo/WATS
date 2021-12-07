@@ -6,14 +6,18 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
 
 @Service
+@RefreshScope
 @Transactional
 public class DataBaseEntry {
+	@Autowired
 	DataBaseEntryDao dao;
 	
 	public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
@@ -47,7 +51,7 @@ public class DataBaseEntry {
 	}
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id) throws SQLException {
-		
+			dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 	}
 }
 
