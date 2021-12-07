@@ -1,5 +1,9 @@
 package com.winfo.dao;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -31,12 +35,31 @@ public class DataBaseEntryDao {
 				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 				+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
 		TestSetScriptParam scriptParam=em.find(TestSetScriptParam.class,test_script_param_id);
+		
 		if(scriptParam==null) {
 			throw new RuntimeException();
 		}
-		scriptParam.setLine_execution_statues(status);
-		scriptParam.setLine_error_message(error_message);
-		em.merge(scriptParam);
+		File file=new File(folder);
+		byte[] screenshotArray=new byte[(int)file.length()];
+		 try {
+			FileInputStream fileInputStream = new FileInputStream(file);
+			fileInputStream.read(screenshotArray);
+			fileInputStream.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//scriptParam.setLine_execution_statues(status);
+		//scriptParam.setLine_error_message(error_message);
+		String sql = "Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
+		Session session= em.unwrap(Session.class);
+		Query query=session.createSQLQuery(sql);
+		query.setParameter("error",error_message);
+		query.setParameter("screenshot",screenshotArray);
+		query.executeUpdate();
 	}
 	public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {	
 		String errorMessage="";
@@ -111,8 +134,33 @@ public class DataBaseEntryDao {
 	}
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id) throws SQLException {
+		String folder = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+
+				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+
+				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+				+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
 		
-		
+		 File file=new File(folder);
+		 byte[] screenshotArray=new byte[(int)file.length()];
+		 try {
+			FileInputStream fileInputStream = new FileInputStream(file);
+			fileInputStream.read(screenshotArray);
+			fileInputStream.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String sql="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
+		Query query=em.unwrap(Session.class).createSQLQuery(sql);
+		query.setParameter("screenshot",screenshotArray);
+		query.executeUpdate();
 	}
 }
 
