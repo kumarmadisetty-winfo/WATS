@@ -214,8 +214,7 @@ public class ErrorMessagesHandler {
 						error_message);
 
 			} else if (actionName.equalsIgnoreCase("Login into Application")) {
-				error_message = "Failed at Login into Application =>Please provide valid username and password"
-						+ param1;
+				error_message = "Failed at Login into Application =>Please provide valid username and password";
 				fetchConfigVO.setErrormessage(error_message);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						error_message);
