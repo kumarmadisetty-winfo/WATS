@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
+import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;

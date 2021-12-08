@@ -116,6 +116,7 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.ScriptXpathService;

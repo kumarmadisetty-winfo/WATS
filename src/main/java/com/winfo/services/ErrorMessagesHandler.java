@@ -3,7 +3,7 @@ package com.winfo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winfo.scripts.DataBaseEntry;
+
 
 @Service
 public class ErrorMessagesHandler {
@@ -214,8 +214,7 @@ public class ErrorMessagesHandler {
 						error_message);
 
 			} else if (actionName.equalsIgnoreCase("Login into Application")) {
-				error_message = "Failed at Login into Application =>Please provide valid username and password"
-						+ param1;
+				error_message = "Failed at Login into Application =>Please provide valid username and password";
 				fetchConfigVO.setErrormessage(error_message);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						error_message);
