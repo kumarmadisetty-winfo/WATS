@@ -62,7 +62,7 @@ public class DataBaseEntryDao {
 		String sql = "Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
 		Session session= em.unwrap(Session.class);
 		Query query=session.createSQLQuery(sql);
-		query.setParameter("error",error_message);
+		query.setParameter("error_message",error_message);
 		query.setParameter("screenshot",screenshotArray);
 		query.executeUpdate();
 	
@@ -109,7 +109,7 @@ public class DataBaseEntryDao {
 		try {
 		TestSetLines testLines=em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
 		
-		  if(testLines==null) { throw new RuntimeException(); }
+		/* if(testLines==null) { throw new RuntimeException(); } */
 		 
 		testLines.setStatus("IN-PROGRESS");
 		em.merge(testLines);
