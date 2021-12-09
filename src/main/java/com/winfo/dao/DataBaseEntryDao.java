@@ -43,12 +43,7 @@ public class DataBaseEntryDao {
 				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 				+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
-		try {
-		TestSetScriptParam scriptParam=em.find(TestSetScriptParam.class,Integer.parseInt(test_script_param_id));
 		
-		if(scriptParam==null) {
-			throw new RuntimeException();
-		}
 		File file=new File(folder);
 		byte[] screenshotArray=new byte[(int)file.length()];
 		 try {
@@ -70,10 +65,7 @@ public class DataBaseEntryDao {
 		query.setParameter("error",error_message);
 		query.setParameter("screenshot",screenshotArray);
 		query.executeUpdate();
-	}catch(Exception e) {
-		System.out.println("Cant update failed script line status");
-		System.out.println(e);
-	}
+	
 }
 	public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {	
 		String errorMessage="";
