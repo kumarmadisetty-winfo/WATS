@@ -98,8 +98,10 @@ public class DataBaseEntryDao {
 		/*
 		 * if(scriptParam==null) { throw new RuntimeException(); }
 		 */
+		if(scriptParam!=null) {
 		scriptParam.setLine_execution_statues(status);
 		em.merge(scriptParam);
+		}
 		}catch(Exception e) {
 			System.out.println("cant update inprogress scriptLine status");
 			System.out.println(e);
@@ -110,9 +112,10 @@ public class DataBaseEntryDao {
 		TestSetLines testLines=em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
 		
 		/* if(testLines==null) { throw new RuntimeException(); } */
-		 
+		if(testLines!=null) { 
 		testLines.setStatus("IN-PROGRESS");
 		em.merge(testLines);
+		}
 		}catch(Exception e) {
 			System.out.println("cant update in progress script status");
 			System.out.println(e);
