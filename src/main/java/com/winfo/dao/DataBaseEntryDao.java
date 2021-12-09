@@ -43,12 +43,7 @@ public class DataBaseEntryDao {
 				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 				+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
-		try {
-		TestSetScriptParam scriptParam=em.find(TestSetScriptParam.class,Integer.parseInt(test_script_param_id));
 		
-		if(scriptParam==null) {
-			throw new RuntimeException();
-		}
 		File file=new File(folder);
 		byte[] screenshotArray=new byte[(int)file.length()];
 		 try {
@@ -67,13 +62,10 @@ public class DataBaseEntryDao {
 		String sql = "Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
 		Session session= em.unwrap(Session.class);
 		Query query=session.createSQLQuery(sql);
-		query.setParameter("error",error_message);
+		query.setParameter("error_message",error_message);
 		query.setParameter("screenshot",screenshotArray);
 		query.executeUpdate();
-	}catch(Exception e) {
-		System.out.println("Cant update failed script line status");
-		System.out.println(e);
-	}
+	
 }
 	public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {	
 		String errorMessage="";
@@ -106,8 +98,10 @@ public class DataBaseEntryDao {
 		/*
 		 * if(scriptParam==null) { throw new RuntimeException(); }
 		 */
+		if(scriptParam!=null) {
 		scriptParam.setLine_execution_statues(status);
 		em.merge(scriptParam);
+		}
 		}catch(Exception e) {
 			System.out.println("cant update inprogress scriptLine status");
 			System.out.println(e);
@@ -117,10 +111,11 @@ public class DataBaseEntryDao {
 		try {
 		TestSetLines testLines=em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
 		
-		  if(testLines==null) { throw new RuntimeException(); }
-		 
+		/* if(testLines==null) { throw new RuntimeException(); } */
+		if(testLines!=null) { 
 		testLines.setStatus("IN-PROGRESS");
 		em.merge(testLines);
+		}
 		}catch(Exception e) {
 			System.out.println("cant update in progress script status");
 			System.out.println(e);
