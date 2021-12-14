@@ -116,8 +116,9 @@ public class RunAutomation {
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
+			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
-					.prepareTestcasedata(fetchMetadataListVO);
+					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
 
@@ -185,10 +186,12 @@ public class RunAutomation {
 				if (executor.isTerminated()) {
 					ExecutorService executordependent = Executors
 							.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
-					LinkedHashMap<String, List<FetchMetadataVO>> dependantmetaDataMap = dataService
-							.getDependentScriptMap();
-					System.out.println(dependantmetaDataMap.toString());
-					for (Entry<String, List<FetchMetadataVO>> metaData : dependantmetaDataMap.entrySet()) {
+					/*
+					 * LinkedHashMap<String, List<FetchMetadataVO>> dependantmetaDataMap =
+					 * dataService .getDependentScriptMap();
+					 */
+					System.out.println(dependentScriptMap.toString());
+					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						executordependent.execute(() -> {
 							try {
 								String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
