@@ -392,7 +392,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				//if("password".equalsIgnoreCase(param1))
-				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -401,7 +401,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 					throw new IOException("Failed during login page");  
 				}
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//input[@type='param1']";
