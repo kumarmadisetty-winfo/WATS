@@ -29,9 +29,9 @@ public class TestCaseDataService {
 	@Value("${configvO.config_url1}")
 	private  String config_url;
 
-	public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
+	//public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
-	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list) {
+	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
 
 		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
 
@@ -65,13 +65,15 @@ public class TestCaseDataService {
 
 	}
 
-	public LinkedHashMap<String, List<FetchMetadataVO>> getDependentScriptMap() {
-
-		return dependentScriptMap;
-
-	}
-
-	private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+	/*
+	 * 
+	 * public LinkedHashMap<String, List<FetchMetadataVO>> getDependentScriptMap() {
+	 * 
+	 * return dependentScriptMap;
+	 * 
+	 * }
+	 */ 
+ private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
 			String test_line_id) {
 
 		if (testCaseMap.containsKey(test_line_id)) {
@@ -112,7 +114,7 @@ public class TestCaseDataService {
 
 		FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
 
-		prepareTestcasedata(MetaList.getItems());
+		//prepareTestcasedata(MetaList.getItems());
 
 		return MetaList.getItems();
 
