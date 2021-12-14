@@ -35,7 +35,7 @@ public class TestCaseDataService {
 
 		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
 
-		dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+		//dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
 
 		if (list != null) {
 
