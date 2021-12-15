@@ -392,7 +392,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				//if("password".equalsIgnoreCase(param1))
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -12911,6 +12911,85 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
 
 					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
+
+			System.out.println(image_dest);
+
+			File destination = new File(image_dest);
+
+			if (!destination.exists()) {
+
+				System.out.println("creating directory: " + destination.getName());
+
+				boolean result = false;
+
+				try {
+
+					destination.mkdirs();
+
+					result = true;
+
+				} catch (SecurityException se) {
+
+					// handle it
+
+					System.out.println(se.getMessage());
+
+				}
+
+			} else {
+
+				System.out.println("Folder exist");
+
+			}
+
+			// FileUtils.copyFile(source, destination);
+
+//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+
+			Files.copy(source.toPath(),
+
+					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
+
+					StandardCopyOption.REPLACE_EXISTING);
+
+			log.info("Successfully Screenshot is taken");
+
+			return image_dest;
+
+		} catch (Exception e) {
+
+			log.error("Failed During Taking screenshot");
+
+			System.out.println("Exception while taking Screenshot" + e.getMessage());
+
+			return e.getMessage();
+
+		}
+
+	}
+	
+	
+	public String loginScreenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
+
+			FetchConfigVO fetchConfigVO) {
+
+		String image_dest = null;
+
+		try {
+
+			TakesScreenshot ts = (TakesScreenshot) driver;
+
+			File source = ts.getScreenshotAs(OutputType.FILE);
+
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+
+					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+
+					+ 5 + "_" + fetchMetadataVO.getScenario_name() + "_"
 
 					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 
