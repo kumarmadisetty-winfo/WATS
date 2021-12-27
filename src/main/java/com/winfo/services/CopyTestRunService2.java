@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.CopyTestRunDao2;
+import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.model.ScriptsData;
 import com.winfo.model.ScritplinesData;
 import com.winfo.model.Testrundata;
@@ -55,7 +59,7 @@ public class CopyTestRunService2 {
 		 List<ScriptsData> listsScriptdata=new ArrayList<>();
 		 int seqNumber=1;
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
-			Object[] obj = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),setTestrundata.getProjectid());
+			ScriptMaster obj = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),setTestrundata.getProjectid());
 			
 			int sectiptid=copyTestrunDao.getscrtiptIds();
 			System.out.println("sectiptid"+sectiptid);
@@ -63,12 +67,14 @@ public class CopyTestRunService2 {
 			if(obj!=null) {
 			setScriptdata.setTestsetlineid(sectiptid);
 			//setScriptdata.setScriptid(getScriptdata.getScriptid());
-			setScriptdata.setScriptid((Integer)obj[0]);
+			//setScriptdata.setScriptid((Integer)obj[0]);
+			setScriptdata.setScriptid(obj.getScript_id());
 			setScriptdata.setCreatedby(copyTestrunvo.getCreated_by());
 			setScriptdata.setCreationdate(copyTestrunvo.getCreation_date());
 			setScriptdata.setEnabled("Y");
 			//setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
-			setScriptdata.setScriptnumber((String)obj[1]);
+			//setScriptdata.setScriptnumber((String)obj[1]);
+			setScriptdata.setScriptnumber(obj.getScript_number());
 			//setScriptdata.setSeqnum(getScriptdata.getSeqnum());
 			setScriptdata.setSeqnum(seqNumber++);
 			setScriptdata.setStatus("New");
@@ -83,8 +89,9 @@ public class CopyTestRunService2 {
 			else {
 				continue;
 			}
-			int scriptParamSeq=0;
-			List<Object[]>metadataList=copyTestrunDao.getScriptMetadataInfo(setScriptdata.getScriptid());
+			int newScriptParamSeq=0;
+			int oldScriptParamSeq=0;
+			List<ScriptMetaData>metadataList=copyTestrunDao.getScriptMetadataInfo(setScriptdata.getScriptid());
 			/*for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				
 				ScritplinesData setScriptlinedata=new ScritplinesData();
@@ -118,45 +125,104 @@ public class CopyTestRunService2 {
 				
 				setScriptdata.addScriptlines(setScriptlinedata);
 				}*/
-				for(Object[] metadata:metadataList) {
-					ScritplinesData getScriptlinedata=getScriptdata.getScriptslinedata().get(scriptParamSeq);
+				List<ScritplinesData> scriptLineList = getScriptdata.getScriptslinedata();
+				Comparator<ScritplinesData> comparator = (ScritplinesData s1, ScritplinesData s2)->s1.getLine_number()-s2.getLine_number();
+				Collections.sort(scriptLineList, comparator);
+				//int oldScriptSeqHolder=0;
+				//int newScriptSeqHolder=0;
+				while(newScriptParamSeq > metadataList.size() || oldScriptParamSeq > scriptLineList.size() ) {
+					ScriptMetaData metadata=metadataList.get(newScriptParamSeq);
+					ScritplinesData getScriptlinedata=scriptLineList.get(oldScriptParamSeq);
 					
 					ScritplinesData setScriptlinedata=new ScritplinesData();
 					int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
 					 System.out.println("sectiptlineid"+sectiptlineid);
-					 setScriptlinedata.setInput_parameter((String)metadata[4]);
+					 setScriptlinedata.setTestscriptperamid(sectiptlineid);
+					 //setScriptlinedata.setInput_parameter((String)metadata[4]);
+					 setScriptlinedata.setInput_parameter(metadata.getInput_parameter());
 					 setScriptlinedata.setScript_id(setScriptdata.getScriptid());
 					 setScriptlinedata.setScript_number(setScriptdata.getScriptnumber());
-					 setScriptlinedata.setLine_number((Integer)metadata[3]);
-					 setScriptlinedata.setAction((String)metadata[5]);
+					 //setScriptlinedata.setLine_number((Integer)metadata[3]);
+					 setScriptlinedata.setLine_number(metadata.getLine_number());
+					 //setScriptlinedata.setAction((String)metadata[5]);
+					 setScriptlinedata.setAction(metadata.getAction());
 					 //setScriptlinedata.setTest_run_param_desc(getScriptlinedata.getTest_run_param_desc());
 					 //setScriptlinedata.setTest_run_param_name(getScriptlinedata.getTest_run_param_name());
-					 setScriptlinedata.setMetadata_id((Integer)metadata[0]);
-					 setScriptlinedata.setHint((String)metadata[14]);
-					 setScriptlinedata.setField_type((String)metadata[13]);
-					 setScriptlinedata.setXpathlocation((String)metadata[6]);
-					 setScriptlinedata.setXpathlocation1((String)metadata[7]);
+					 //setScriptlinedata.setMetadata_id((Integer)metadata[0]);
+					 //setScriptlinedata.setHint((String)metadata[14]);
+					 //setScriptlinedata.setField_type((String)metadata[13]);
+					 //setScriptlinedata.setXpathlocation((String)metadata[6]);
+					 //setScriptlinedata.setXpathlocation1((String)metadata[7]);
+					 setScriptlinedata.setMetadata_id(metadata.getScript_meta_data_id());
+					 setScriptlinedata.setHint(metadata.getHint());
+					 setScriptlinedata.setField_type(metadata.getField_type());
+					 setScriptlinedata.setXpathlocation(metadata.getXpath_location());
+					 setScriptlinedata.setXpathlocation1(metadata.getXpath_location1());
 					 setScriptlinedata.setCreatedby(copyTestrunvo.getCreated_by());
 					 setScriptlinedata.setCreationdate(copyTestrunvo.getCreation_date());
 					 setScriptlinedata.setUpdateddate(null);
 					 setScriptlinedata.setLastupdatedby(null);
 					 setScriptlinedata.setLineexecutionstatues("New");
 					 setScriptlinedata.setLineerrormessage(null);
-					 setScriptlinedata.setDatatypes((String)metadata[18]);
-					 setScriptlinedata.setUniquemandatory((String)metadata[17]);
-					 
-					 if(setScriptlinedata.getAction().equalsIgnoreCase(getScriptlinedata.getAction()) && setScriptlinedata.getInput_parameter().equalsIgnoreCase(getScriptlinedata.getInput_parameter()) && setScriptlinedata.getLine_number()== getScriptlinedata.getLine_number() ) {
+					 setScriptlinedata.setDatatypes(metadata.getDatatypes());
+					 setScriptlinedata.setUniquemandatory(metadata.getUnique_mandatory());
+					 if(setScriptlinedata.getInput_parameter()!=null && getScriptlinedata.getInput_parameter()!=null ) {
+						 if(setScriptlinedata.getAction().equalsIgnoreCase(getScriptlinedata.getAction()) && setScriptlinedata.getInput_parameter().equalsIgnoreCase(getScriptlinedata.getInput_parameter()) && setScriptlinedata.getLine_number()== getScriptlinedata.getLine_number() ) {
 						 //setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
-						 addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,setScriptdata);
+							 addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,setScriptdata);
+						 }
+						 else {
+							 setScriptlinedata.setInput_value(null);
+						 }
+					 }
+					 else {
+						 setScriptlinedata.setInput_value(null);
+					 }
+					 if(setScriptlinedata.getLine_number() >= getScriptlinedata.getLine_number()) {
+						 oldScriptParamSeq++;
+					 }
+					 if(getScriptlinedata.getLine_number() >= setScriptlinedata.getLine_number()) {
+						 newScriptParamSeq++;
 					 }
 					 
-					 if(setScriptlinedata.getLine_number() >= getScriptlinedata.getLine_number()) {
-						 scriptParamSeq++;
-					 }
 					 //addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,setScriptdata);
 					 
 					 setScriptdata.addScriptlines(setScriptlinedata);
 				
+				}
+				newScriptParamSeq++;
+				while(newScriptParamSeq > metadataList.size()) {
+					ScriptMetaData metadata=metadataList.get(newScriptParamSeq);
+					ScritplinesData setScriptlinedata=new ScritplinesData();
+					int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
+					 System.out.println("sectiptlineid"+sectiptlineid);
+					 setScriptlinedata.setTestscriptperamid(sectiptlineid);
+					 setScriptlinedata.setInput_parameter(metadata.getInput_parameter());
+					 setScriptlinedata.setScript_id(setScriptdata.getScriptid());
+					 setScriptlinedata.setScript_number(setScriptdata.getScriptnumber());
+					 //setScriptlinedata.setLine_number((Integer)metadata[3]);
+					 setScriptlinedata.setLine_number(metadata.getLine_number());
+					 //setScriptlinedata.setAction((String)metadata[5]);
+					 setScriptlinedata.setAction(metadata.getAction());
+					 
+					 setScriptlinedata.setMetadata_id(metadata.getScript_meta_data_id());
+					 setScriptlinedata.setHint(metadata.getHint());
+					 setScriptlinedata.setField_type(metadata.getField_type());
+					 setScriptlinedata.setXpathlocation(metadata.getXpath_location());
+					 setScriptlinedata.setXpathlocation1(metadata.getXpath_location1());
+					 setScriptlinedata.setCreatedby(copyTestrunvo.getCreated_by());
+					 setScriptlinedata.setCreationdate(copyTestrunvo.getCreation_date());
+					 setScriptlinedata.setUpdateddate(null);
+					 setScriptlinedata.setLastupdatedby(null);
+					 setScriptlinedata.setLineexecutionstatues("New");
+					 setScriptlinedata.setLineerrormessage(null);
+					 setScriptlinedata.setDatatypes(metadata.getDatatypes());
+					 setScriptlinedata.setUniquemandatory(metadata.getUnique_mandatory());
+					 
+					 setScriptlinedata.setInput_value(null);
+					 
+					 newScriptParamSeq++;
+					 
 				}
 			
 			}

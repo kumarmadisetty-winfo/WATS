@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.model.Testrundata;
 @Repository
 public class CopyTestRunDao2 {
@@ -110,10 +111,10 @@ public class CopyTestRunDao2 {
 	
 	
 	
-	public Object[] getScriptMasterInfo(String scriptNumber,Integer project_id) {
+	public Object[] getScriptMasterInfo1(String scriptNumber,Integer project_id) {
 		Session session = entityManager.unwrap(Session.class);
 		String product_version=getProductVersion(project_id);
-		String sql="Select * from win_ta_script_master where script_number="+scriptNumber+" and product_version="+product_version;
+		String sql="Select * from win_ta_script_master where script_number='"+scriptNumber+"' and product_version='"+product_version+"'";
 		Query query = session.createSQLQuery(sql);
 		List<Object[]> rows = query.getResultList();
 		//ScriptMaster master=new ScriptMaster();
@@ -127,14 +128,44 @@ public class CopyTestRunDao2 {
 		
 	}
 	
+	public ScriptMaster getScriptMasterInfo(String scriptNumber,Integer project_id) {
+		Session session = entityManager.unwrap(Session.class);
+		String product_version=getProductVersion(project_id);
+		String sql="from ScriptMaster where script_number='"+scriptNumber+"' and product_version='"+product_version+"'";
+		//Query query = session.createSQLQuery(sql);
+		//List<Object[]> rows = query.getResultList();
+		Query query=entityManager.createQuery(sql);
+		List<ScriptMaster> rows=query.getResultList();
+		//ScriptMaster master=new ScriptMaster();
+		if(rows!=null) {
+			if(rows.size()>0) {
+				return rows.get(0);
+			}
+		}
+		return null;
+		
+		
+	}
 	
 	
 	
-	public List<Object[]> getScriptMetadataInfo(int script_id) {
+	public List<Object[]> getScriptMetadataInfo1(int script_id) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql="Select * from win_ta_script_metadata where script_id ="+script_id;
 		Query query = session.createSQLQuery(sql);
 		List<Object[]> metadata = query.getResultList();
+		if(metadata!=null) {
+					return metadata;
+		}
+		return null;
+		
+	}
+	
+	public List<ScriptMetaData> getScriptMetadataInfo(int script_id) {
+		//Session session = entityManager.unwrap(Session.class);
+		String sql="from ScriptMetaData S where script_id ="+script_id+" order by S.line_number";
+		Query query = entityManager.createQuery(sql);
+		List<ScriptMetaData> metadata = query.getResultList();
 		if(metadata!=null) {
 					return metadata;
 		}

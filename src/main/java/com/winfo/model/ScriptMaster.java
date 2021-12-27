@@ -99,7 +99,7 @@ public class ScriptMaster {
     @Column(name = "APPR_FOR_MIGRATION")
     private String appr_for_migration;
     @Column(name = "PLUGIN_FLAG")
-    private boolean plugin_flag;
+    private Boolean plugin_flag;
     
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "scriptMaster")
@@ -111,11 +111,11 @@ public class ScriptMaster {
 		metadata.setScriptMaster(this);
 	}
 
-	public boolean isPlugin_flag() {
+	public Boolean isPlugin_flag() {
 		return plugin_flag;
 	}
 
-	public void setPlugin_flag(boolean plugin_flag) {
+	public void setPlugin_flag(Boolean plugin_flag) {
 		this.plugin_flag = plugin_flag;
 	}
 
