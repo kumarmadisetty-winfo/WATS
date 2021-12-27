@@ -130,7 +130,15 @@ public class CopyTestRunDao2 {
 	
 	
 	
-	public void getScriptMetadataInfo(int script_id) {
+	public List<Object[]> getScriptMetadataInfo(int script_id) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql="Select * from win_ta_script_metadata where script_id ="+script_id;
+		Query query = session.createSQLQuery(sql);
+		List<Object[]> metadata = query.getResultList();
+		if(metadata!=null) {
+					return metadata;
+		}
+		return null;
 		
 	}
 	
