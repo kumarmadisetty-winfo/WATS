@@ -89,8 +89,8 @@ public class CopyTestRunService2 {
 			else {
 				continue;
 			}
-			int newScriptParamSeq=0;
-			int oldScriptParamSeq=0;
+			Integer newScriptParamSeq=0;
+			Integer oldScriptParamSeq=0;
 			List<ScriptMetaData>metadataList=copyTestrunDao.getScriptMetadataInfo(setScriptdata.getScriptid());
 			/*for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				
@@ -130,11 +130,17 @@ public class CopyTestRunService2 {
 				Collections.sort(scriptLineList, comparator);
 				//int oldScriptSeqHolder=0;
 				//int newScriptSeqHolder=0;
-				while(newScriptParamSeq > metadataList.size() || oldScriptParamSeq > scriptLineList.size() ) {
-					ScriptMetaData metadata=metadataList.get(newScriptParamSeq);
-					ScritplinesData getScriptlinedata=scriptLineList.get(oldScriptParamSeq);
+				ScriptMetaData metadata=null;
+				Integer check=null;
+				ScritplinesData getScriptlinedata=null;
+				ScritplinesData setScriptlinedata=null;
+				while(newScriptParamSeq < metadataList.size() && oldScriptParamSeq < scriptLineList.size() ) {
+					metadata=metadataList.get(newScriptParamSeq);
 					
-					ScritplinesData setScriptlinedata=new ScritplinesData();
+					getScriptlinedata=scriptLineList.get(oldScriptParamSeq);
+					
+					if(!(newScriptParamSeq.equals(check))) {
+					setScriptlinedata=new ScritplinesData();
 					int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
 					 System.out.println("sectiptlineid"+sectiptlineid);
 					 setScriptlinedata.setTestscriptperamid(sectiptlineid);
@@ -146,7 +152,7 @@ public class CopyTestRunService2 {
 					 setScriptlinedata.setLine_number(metadata.getLine_number());
 					 //setScriptlinedata.setAction((String)metadata[5]);
 					 setScriptlinedata.setAction(metadata.getAction());
-					 //setScriptlinedata.setTest_run_param_desc(getScriptlinedata.getTest_run_param_desc());
+					 setScriptlinedata.setTest_run_param_desc(metadata.getStep_desc());
 					 //setScriptlinedata.setTest_run_param_name(getScriptlinedata.getTest_run_param_name());
 					 //setScriptlinedata.setMetadata_id((Integer)metadata[0]);
 					 //setScriptlinedata.setHint((String)metadata[14]);
@@ -166,6 +172,8 @@ public class CopyTestRunService2 {
 					 setScriptlinedata.setLineerrormessage(null);
 					 setScriptlinedata.setDatatypes(metadata.getDatatypes());
 					 setScriptlinedata.setUniquemandatory(metadata.getUnique_mandatory());
+					 check=newScriptParamSeq.intValue();
+					}
 					 if(setScriptlinedata.getInput_parameter()!=null && getScriptlinedata.getInput_parameter()!=null ) {
 						 if(setScriptlinedata.getAction().equalsIgnoreCase(getScriptlinedata.getAction()) && setScriptlinedata.getInput_parameter().equalsIgnoreCase(getScriptlinedata.getInput_parameter()) && setScriptlinedata.getLine_number()== getScriptlinedata.getLine_number() ) {
 						 //setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
@@ -180,9 +188,11 @@ public class CopyTestRunService2 {
 					 }
 					 if(setScriptlinedata.getLine_number() >= getScriptlinedata.getLine_number()) {
 						 oldScriptParamSeq++;
+						 
 					 }
 					 if(getScriptlinedata.getLine_number() >= setScriptlinedata.getLine_number()) {
 						 newScriptParamSeq++;
+						 
 					 }
 					 
 					 //addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,setScriptdata);
@@ -191,9 +201,9 @@ public class CopyTestRunService2 {
 				
 				}
 				newScriptParamSeq++;
-				while(newScriptParamSeq > metadataList.size()) {
-					ScriptMetaData metadata=metadataList.get(newScriptParamSeq);
-					ScritplinesData setScriptlinedata=new ScritplinesData();
+				while(newScriptParamSeq < metadataList.size()) {
+					metadata=metadataList.get(newScriptParamSeq);
+					setScriptlinedata=new ScritplinesData();
 					int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
 					 System.out.println("sectiptlineid"+sectiptlineid);
 					 setScriptlinedata.setTestscriptperamid(sectiptlineid);
