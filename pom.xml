@@ -602,7 +602,7 @@
 
 		</profile>
 		<profile>
-			<id>prod</id>
+			<id>prd</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -680,7 +680,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>prod</profiles>
+				<profiles>prd</profiles>
 				<instance>prd</instance>
 				
 				
