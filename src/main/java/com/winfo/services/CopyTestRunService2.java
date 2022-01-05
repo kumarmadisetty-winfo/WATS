@@ -250,8 +250,8 @@ public class CopyTestRunService2 {
 				"Table SendKeys", "enterIntoTable" ,"SendKeys", "Login into Application", "Dropdown Values","typeAtPosition" ,"clickAndTypeAtPosition",
 				"clickRadiobutton","clickCheckbox" ,"multipleSendKeys","multiplelinestableSendKeys","DatePicker","copynumber","copytext","paste"}; 
 		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
-		if("y".equalsIgnoreCase(copyTestrunvo.getIncrement_value())&&(getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
-			if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
+		if("y".equalsIgnoreCase(copyTestrunvo.getIncrement_value())&&(setScriptlinedata.getUniquemandatory()!=null&&setScriptlinedata.getUniquemandatory()!="NA")&&(setScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||setScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
+			if((setScriptlinedata.getDatatypes()!=null&&setScriptlinedata.getDatatypes()!="NA")&&setScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
 				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 				Date dateobj = new Date();
 				String covertDateobj=dateformate.format(dateobj);
@@ -260,12 +260,12 @@ public class CopyTestRunService2 {
 				int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
 				int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
 				String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+				if(getInputvalues==null||"copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
 					hexaDecimal=getInputvalues;
-					if(actionsList.contains(getScriptlinedata.getAction())){
+					if(actionsList.contains(setScriptlinedata.getAction())){
 						setScriptdata.setScriptUpadated("Y");
 					}
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+				}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					hexaDecimal=getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname());
 				}
 				else if(getInputvalues.length()>5) {
@@ -281,21 +281,21 @@ public class CopyTestRunService2 {
 				String covertDateobj=dateformate.format(dateobj);
 				Thread.sleep(1);
 				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
-				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+				if(getInputvalues==null||"copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
 					setScriptlinedata.setInput_value(getInputvalues);
-					if(actionsList.contains(getScriptlinedata.getAction())){
+					if(actionsList.contains(setScriptlinedata.getAction())){
 						setScriptdata.setScriptUpadated("Y");
 					}
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+				}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}else {
 				setScriptlinedata.setInput_value(covertDateobj);
 				}
 			}
-			}else if("Mandatory".equalsIgnoreCase(getScriptlinedata.getUniquemandatory())){
-				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+			}else if("Mandatory".equalsIgnoreCase(setScriptlinedata.getUniquemandatory())){
+				if(getInputvalues==null||"copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
 					setScriptlinedata.setInput_value(null);
-					if(actionsList.contains(getScriptlinedata.getAction())){
+					if(actionsList.contains(setScriptlinedata.getAction())){
 						setScriptdata.setScriptUpadated("Y");
 					}
 
