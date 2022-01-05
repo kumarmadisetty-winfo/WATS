@@ -54,9 +54,10 @@ public class CopyTestRunService2 {
 		setTestrundata.setExceptionpath(getTestrun.getExceptionpath());
 		setTestrundata.setTrmode("ACTIVE");
 		setTestrundata.setLastexecuteby(null);
-		
+		Comparator<ScriptsData> scriptComparator = (ScriptsData s1,ScriptsData s2)->s1.getSeqnum()-s2.getSeqnum(); 
 //		copyTestrunDao.saveTestrun(setTestrundata);
-		 List<ScriptsData> listsScriptdata=new ArrayList<>();
+		 //List<ScriptsData> listsScriptdata=new ArrayList<>();
+		Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
 		 int seqNumber=1;
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
 			ScriptMaster obj = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),setTestrundata.getProjectid());
@@ -299,17 +300,17 @@ public class CopyTestRunService2 {
 						setScriptdata.setScriptUpadated("Y");
 					}
 
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+				}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}
 				else {
 				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
 				}
 			}else {
-					if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
+					if(getInputvalues==null||"copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
 						setScriptlinedata.setInput_value(null);
 
-					}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 						setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 					}
 					else {
