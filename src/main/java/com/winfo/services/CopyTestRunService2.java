@@ -58,7 +58,7 @@ public class CopyTestRunService2 {
 //		copyTestrunDao.saveTestrun(setTestrundata);
 		 //List<ScriptsData> listsScriptdata=new ArrayList<>();
 		Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
-		 int seqNumber=1;
+		 
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
 			ScriptMaster obj = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),setTestrundata.getProjectid());
 			
@@ -77,7 +77,7 @@ public class CopyTestRunService2 {
 			//setScriptdata.setScriptnumber((String)obj[1]);
 			setScriptdata.setScriptnumber(obj.getScript_number());
 			//setScriptdata.setSeqnum(getScriptdata.getSeqnum());
-			setScriptdata.setSeqnum(seqNumber++);
+			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
 			setScriptdata.setStatus("New");
 			setScriptdata.setLastupdatedby(null);
 			setScriptdata.setScriptUpadated("N");
@@ -88,7 +88,7 @@ public class CopyTestRunService2 {
 			setScriptdata.setExecutionendtime(null);
 			setTestrundata.addScriptsdata(setScriptdata);}
 			else {
-				seqNumber++;
+				
 				continue;
 			}
 			Integer newScriptParamSeq=0;
