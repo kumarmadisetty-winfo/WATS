@@ -205,6 +205,32 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
+	public String getNodeOs(Integer test_set_line_id) {
+		// TODO Auto-generated method stub
+		int count=0;
+		String os=null;
+		try {
+		String sql ="select count(*) from win_ta_test_set_script_param where test_set_line_Id = :test_set_line_id and action = 'Upload File Auto IT'";
+		Query query=em.unwrap(Session.class).createSQLQuery(sql);
+		query.setParameter("test_set_line_id",test_set_line_id);
+		
+		count =(Integer) query.getSingleResult();
+		
+		//String os;
+		if(count>0) {
+			os="windows";
+		}
+		else {
+			os="linux";
+		}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+		return os;
+		}
+	}
+	
 }
 
 
