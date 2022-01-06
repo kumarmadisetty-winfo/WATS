@@ -88,6 +88,7 @@ public class CopyTestRunService2 {
 			setScriptdata.setExecutionendtime(null);
 			setTestrundata.addScriptsdata(setScriptdata);}
 			else {
+				seqNumber++;
 				continue;
 			}
 			Integer newScriptParamSeq=0;
@@ -267,7 +268,7 @@ public class CopyTestRunService2 {
 						setScriptdata.setScriptUpadated("Y");
 					}
 				}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					hexaDecimal=getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()).replace(getInputvalues.split(">")[1],setScriptdata.getSeqnum()+"" );
+					hexaDecimal=getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname());
 				}
 				else if(getInputvalues.length()>5) {
 				hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
@@ -288,7 +289,7 @@ public class CopyTestRunService2 {
 						setScriptdata.setScriptUpadated("Y");
 					}
 				}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()).replace(getInputvalues.split(">")[1],setScriptdata.getSeqnum()+"" ));
+					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}else {
 				setScriptlinedata.setInput_value(covertDateobj);
 				}
@@ -301,7 +302,7 @@ public class CopyTestRunService2 {
 					}
 
 				}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()).replace(getInputvalues.split(">")[1],setScriptdata.getSeqnum()+"" ));
+					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}
 				else {
 				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
@@ -311,7 +312,7 @@ public class CopyTestRunService2 {
 						setScriptlinedata.setInput_value(null);
 
 					}else if("paste".equalsIgnoreCase(setScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-						setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()).replace(getInputvalues.split(">")[1],setScriptdata.getSeqnum()+"" ));
+						setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 					}
 					else {
 					setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
