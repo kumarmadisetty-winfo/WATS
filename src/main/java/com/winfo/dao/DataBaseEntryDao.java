@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -214,8 +215,8 @@ public class DataBaseEntryDao {
 		Query query=em.unwrap(Session.class).createSQLQuery(sql);
 		query.setParameter("test_set_line_id",test_set_line_id);
 		
-		count =(Integer) query.getSingleResult();
-		
+		BigDecimal bigDecimalCount =(BigDecimal) query.getSingleResult();
+		count=bigDecimalCount.intValue();
 		//String os;
 		if(count>0) {
 			os="windows";
