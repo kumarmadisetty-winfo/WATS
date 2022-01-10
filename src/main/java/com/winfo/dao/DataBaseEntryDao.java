@@ -210,7 +210,7 @@ public class DataBaseEntryDao {
 		int count=0;
 		String os=null;
 		try {
-		String sql ="select count(*) from win_ta_test_set_script_param where test_set_line_Id = :test_set_line_id and action = 'Upload File Auto IT'";
+		String sql ="select count(*) from win_ta_test_set_script_param where test_set_line_Id = :test_set_line_id and action = 'uploadFileAutoIT'";
 		Query query=em.unwrap(Session.class).createSQLQuery(sql);
 		query.setParameter("test_set_line_id",test_set_line_id);
 		
