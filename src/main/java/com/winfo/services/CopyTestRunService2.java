@@ -233,6 +233,8 @@ public class CopyTestRunService2 {
 					 
 					 setScriptlinedata.setInput_value(null);
 					 
+					 setScriptdata.addScriptlines(setScriptlinedata);
+					 
 					 newScriptParamSeq++;
 					 
 				}
