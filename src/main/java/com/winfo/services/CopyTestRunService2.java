@@ -54,10 +54,10 @@ public class CopyTestRunService2 {
 		setTestrundata.setExceptionpath(getTestrun.getExceptionpath());
 		setTestrundata.setTrmode("ACTIVE");
 		setTestrundata.setLastexecuteby(null);
-		Comparator<ScriptsData> scriptComparator = (ScriptsData s1,ScriptsData s2)->s1.getSeqnum()-s2.getSeqnum(); 
+		//Comparator<ScriptsData> scriptComparator = (ScriptsData s1,ScriptsData s2)->s1.getSeqnum()-s2.getSeqnum(); 
 //		copyTestrunDao.saveTestrun(setTestrundata);
 		 //List<ScriptsData> listsScriptdata=new ArrayList<>();
-		Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
+		//Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
 		 
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
 			ScriptMaster obj = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),setTestrundata.getProjectid());
