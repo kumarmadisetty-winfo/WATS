@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.SQLQuery;
@@ -17,7 +18,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.Testrundata;
 @Repository
 public class CopyTestRunDao2 {
-	@Autowired
+	@PersistenceContext
 	private EntityManager entityManager;
 	public Testrundata getdata(int testScriptNo) {
 		Testrundata getTestrun=entityManager.find(Testrundata.class, testScriptNo);
@@ -128,9 +129,9 @@ public class CopyTestRunDao2 {
 		
 	}
 	
-	public ScriptMaster getScriptMasterInfo(String scriptNumber,Integer project_id) {
+	public ScriptMaster getScriptMasterInfo(String scriptNumber,String product_version) {
 		Session session = entityManager.unwrap(Session.class);
-		String product_version=getProductVersion(project_id);
+		//String product_version=getProductVersion(project_id);
 		String sql="from ScriptMaster where script_number='"+scriptNumber+"' and product_version='"+product_version+"'";
 		//Query query = session.createSQLQuery(sql);
 		//List<Object[]> rows = query.getResultList();

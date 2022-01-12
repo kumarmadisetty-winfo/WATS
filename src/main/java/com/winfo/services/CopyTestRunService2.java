@@ -31,10 +31,10 @@ public class CopyTestRunService2 {
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		int testrunid=copyTestrunDao.getIds();
-         System.out.println("testrunid"+testrunid);
+		//int testrunid=copyTestrunDao.getIds();
+         //System.out.println("testrunid"+testrunid);
 		Testrundata setTestrundata=new Testrundata();
-		setTestrundata.setTestsetid(testrunid);
+		//setTestrundata.setTestsetid(testrunid);
 		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
 		setTestrundata.setTest_set_comments(getTestrun.getTest_set_comments());
 		setTestrundata.setEnabled("Y");
@@ -54,28 +54,29 @@ public class CopyTestRunService2 {
 		setTestrundata.setExceptionpath(getTestrun.getExceptionpath());
 		setTestrundata.setTrmode("ACTIVE");
 		setTestrundata.setLastexecuteby(null);
+		String product_version=copyTestrunDao.getProductVersion(setTestrundata.getProjectid());
 		//Comparator<ScriptsData> scriptComparator = (ScriptsData s1,ScriptsData s2)->s1.getSeqnum()-s2.getSeqnum(); 
 //		copyTestrunDao.saveTestrun(setTestrundata);
 		 //List<ScriptsData> listsScriptdata=new ArrayList<>();
 		//Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
 		 
 		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
-			ScriptMaster obj = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),setTestrundata.getProjectid());
 			
-			int sectiptid=copyTestrunDao.getscrtiptIds();
-			System.out.println("sectiptid"+sectiptid);
+			ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(), product_version);
+			
+			//int sectiptid=copyTestrunDao.getscrtiptIds();
+			//System.out.println("sectiptid"+sectiptid);
 			ScriptsData setScriptdata=new ScriptsData();
-			if(obj!=null) {
-			setScriptdata.setTestsetlineid(sectiptid);
-			//setScriptdata.setScriptid(getScriptdata.getScriptid());
-			//setScriptdata.setScriptid((Integer)obj[0]);
-			setScriptdata.setScriptid(obj.getScript_id());
+			if(scriptMaster!=null) {
+				//	setScriptdata.setTestsetlineid(sectiptid);
+			
+			setScriptdata.setScriptid(scriptMaster.getScript_id());
 			setScriptdata.setCreatedby(copyTestrunvo.getCreated_by());
 			setScriptdata.setCreationdate(copyTestrunvo.getCreation_date());
 			setScriptdata.setEnabled("Y");
 			//setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
 			//setScriptdata.setScriptnumber((String)obj[1]);
-			setScriptdata.setScriptnumber(obj.getScript_number());
+			setScriptdata.setScriptnumber(scriptMaster.getScript_number());
 			//setScriptdata.setSeqnum(getScriptdata.getSeqnum());
 			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
 			setScriptdata.setStatus("New");
@@ -93,7 +94,8 @@ public class CopyTestRunService2 {
 			}
 			Integer newScriptParamSeq=0;
 			Integer oldScriptParamSeq=0;
-			List<ScriptMetaData>metadataList=copyTestrunDao.getScriptMetadataInfo(setScriptdata.getScriptid());
+			//List<ScriptMetaData>metadataList=copyTestrunDao.getScriptMetadataInfo(setScriptdata.getScriptid());
+			List<ScriptMetaData>metadataList=scriptMaster.getScriptMetaDatalist();
 			/*for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
 				
 				ScritplinesData setScriptlinedata=new ScritplinesData();
@@ -128,14 +130,17 @@ public class CopyTestRunService2 {
 				setScriptdata.addScriptlines(setScriptlinedata);
 				}*/
 				List<ScritplinesData> scriptLineList = getScriptdata.getScriptslinedata();
-				Comparator<ScritplinesData> comparator = (ScritplinesData s1, ScritplinesData s2)->s1.getLine_number()-s2.getLine_number();
-				Collections.sort(scriptLineList, comparator);
+				Comparator<ScritplinesData> scriptLineComparator = (ScritplinesData s1, ScritplinesData s2)->s1.getLine_number()-s2.getLine_number();
+				Comparator<ScriptMetaData> metaDataComparator = (ScriptMetaData s1, ScriptMetaData s2)->s1.getLine_number()-s2.getLine_number();
+				Collections.sort(scriptLineList,scriptLineComparator);
+				Collections.sort(metadataList,metaDataComparator);
 				//int oldScriptSeqHolder=0;
 				//int newScriptSeqHolder=0;
 				ScriptMetaData metadata=null;
 				Integer check=null;
 				ScritplinesData getScriptlinedata=null;
 				ScritplinesData setScriptlinedata=null;
+				//for (iterate on  script of new Product version )
 				while(newScriptParamSeq < metadataList.size() && oldScriptParamSeq < scriptLineList.size() ) {
 					metadata=metadataList.get(newScriptParamSeq);
 					
@@ -143,9 +148,9 @@ public class CopyTestRunService2 {
 					
 					if(!(newScriptParamSeq.equals(check))) {
 					setScriptlinedata=new ScritplinesData();
-					int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
-					 System.out.println("sectiptlineid"+sectiptlineid);
-					 setScriptlinedata.setTestscriptperamid(sectiptlineid);
+					//int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
+					 //System.out.println("sectiptlineid"+sectiptlineid);
+					 //setScriptlinedata.setTestscriptperamid(sectiptlineid);
 					 //setScriptlinedata.setInput_parameter((String)metadata[4]);
 					 setScriptlinedata.setInput_parameter(metadata.getInput_parameter());
 					 setScriptlinedata.setScript_id(setScriptdata.getScriptid());
@@ -206,9 +211,9 @@ public class CopyTestRunService2 {
 				while(newScriptParamSeq < metadataList.size()) {
 					metadata=metadataList.get(newScriptParamSeq);
 					setScriptlinedata=new ScritplinesData();
-					int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
-					 System.out.println("sectiptlineid"+sectiptlineid);
-					 setScriptlinedata.setTestscriptperamid(sectiptlineid);
+					//int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
+					 //System.out.println("sectiptlineid"+sectiptlineid);
+					 //setScriptlinedata.setTestscriptperamid(sectiptlineid);
 					 setScriptlinedata.setInput_parameter(metadata.getInput_parameter());
 					 setScriptlinedata.setScript_id(setScriptdata.getScriptid());
 					 setScriptlinedata.setScript_number(setScriptdata.getScriptnumber());
