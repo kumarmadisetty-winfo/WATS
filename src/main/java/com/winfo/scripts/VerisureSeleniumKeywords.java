@@ -4017,6 +4017,34 @@ public class VerisureSeleniumKeywords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// label[contains(text(),'Enter Cost Centre')]/following::input[1]
 		try {
+			if (param1.equalsIgnoreCase("Provider") || param1.equalsIgnoreCase("Receiver")) {
+				Thread.sleep(4000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "'][2]")));
+				WebElement waittext = driver.findElement(
+						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "'][2]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Provider or Receiver clickImage"+scripNumber);
+				String xpath ="//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
+                String action=fetchMetadataVO.getAction();
+                String lineNumber=fetchMetadataVO.getLine_number();
+                String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Provider or Receiver clickImag"+scripNumber);
+			System.out.println(e);
+		}
+		
+		
+		
+		try {
 			if (param1.equalsIgnoreCase("Report")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -4135,31 +4163,31 @@ public class VerisureSeleniumKeywords implements SeleniumKeyWordsInterface {
 			log.error("Failed during Go to Member Selection clickImag"+scripNumber);
 			System.out.println(e);
 		}
-		try {
-			if (param1.equalsIgnoreCase("Provider") || param1.equalsIgnoreCase("Receiver")) {
-				Thread.sleep(4000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "'][2]")));
-				WebElement waittext = driver.findElement(
-						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "'][2]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked Provider or Receiver clickImage"+scripNumber);
-				String xpath ="//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
-                String action=fetchMetadataVO.getAction();
-                String lineNumber=fetchMetadataVO.getLine_number();
-                String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-				return;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Provider or Receiver clickImag"+scripNumber);
-			System.out.println(e);
-		}
+		/*
+		 * try { if (param1.equalsIgnoreCase("Provider") ||
+		 * param1.equalsIgnoreCase("Receiver")) { Thread.sleep(4000); WebDriverWait wait
+		 * = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		 * wait.until(ExpectedConditions.presenceOfElementLocated(
+		 * By.xpath("//*[normalize-space(text())='" + param1 +
+		 * "']/following::img[@title='" + param2 + "'][2]"))); WebElement waittext =
+		 * driver.findElement( By.xpath("//*[normalize-space(text())='" + param1 +
+		 * "']/following::img[@title='" + param2 + "'][2]")); Actions actions = new
+		 * Actions(driver); actions.moveToElement(waittext).build().perform();
+		 * clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		 * screenshot(driver, "", fetchMetadataVO, fetchConfigVO); String scripNumber =
+		 * fetchMetadataVO.getScript_number();
+		 * log.info("Sucessfully Clicked Provider or Receiver clickImage"+scripNumber);
+		 * String xpath
+		 * ="//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
+		 * String action=fetchMetadataVO.getAction(); String
+		 * lineNumber=fetchMetadataVO.getLine_number(); String
+		 * scriptID=fetchMetadataVO.getScript_id();String
+		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
+		 * scriptID,metadataID,xpath); return; } } catch (Exception e) { String
+		 * scripNumber = fetchMetadataVO.getScript_number();
+		 * log.error("Failed during Provider or Receiver clickImag"+scripNumber);
+		 * System.out.println(e); }
+		 */
 		try {
 			//Changed == to equals method
 			if (param2.equals("")) {
