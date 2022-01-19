@@ -181,15 +181,22 @@ public class RunAutomation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		   
 			try {
 				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-				if (executor.isTerminated()) {
+				/*
+				 * ExecutorService executordependent = Executors
+				 * .newFixedThreadPool(fetchConfigVO.getParallel_dependent());
+				 */
+				if (executor.isTerminated() && dependentScriptMap.size()>0) {
 					ExecutorService executordependent = Executors
 							.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
 					/*
 					 * LinkedHashMap<String, List<FetchMetadataVO>> dependantmetaDataMap =
 					 * dataService .getDependentScriptMap();
 					 */
+					//int[] iteration= {1};
+					//System.out.println(iteration);
 					System.out.println(dependentScriptMap.toString());
 					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						executordependent.execute(() -> {
@@ -207,27 +214,30 @@ public class RunAutomation {
 								e.printStackTrace();
 								
 							}finally {
-								try {
-								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-										fetchConfigVO, "Passed_Report.pdf", null, null);
-								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-										fetchConfigVO, "Failed_Report.pdf", null, null);
-								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-										fetchConfigVO, "Detailed_Report.pdf", null, null);
-								increment = 0;
-								if ("ARLO".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
-									seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
-											fetchConfigVO);
-								}
-							}  catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								
-							}
+								/*
+								 * try { if(iteration[0]>=dependentScriptMap.size()) {
+								 * seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(
+								 * fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
+								 * seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(
+								 * fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
+								 * seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(
+								 * fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
+								 * increment = 0; if ("ARLO".equalsIgnoreCase(fetchConfigVO.getInstance_name()))
+								 * { seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(
+								 * fetchMetadataListVO, fetchConfigVO); } iteration[0]++;
+								 * System.out.println(iteration); }
+								 * 
+								 * } catch (Exception e) { // TODO Auto-generated catch block
+								 * e.printStackTrace();
+								 * 
+								 * }
+								 */
 							}
 						});
 					}
 					executordependent.shutdown();
+					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+					
 				}
 				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
 						fetchConfigVO, "Passed_Report.pdf", null, null);
