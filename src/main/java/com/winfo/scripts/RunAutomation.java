@@ -109,9 +109,9 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-//			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver.exe");
-//			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
-//			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
+			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
+			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -292,7 +292,7 @@ public class RunAutomation {
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			String os=dataBaseEntry.getNodeOs(Integer.parseInt(fetchMetadataListsVO.get(0).getTest_set_line_id()));
 			if(os!=null) {
-				driver = deriverConfiguration.getWebDriver(fetchConfigVO,os);
+				driver = deriverConfiguration.getWebDriver(fetchConfigVO,"windows");
 			}
 			else {
 				isDriverError=true;
