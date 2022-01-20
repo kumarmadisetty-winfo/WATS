@@ -2335,7 +2335,7 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.newPage();
 						document.add(img1);
 						Anchor target3 = new Anchor("Script Details", bf12);
-						target3.setName(ScriptNumber);
+						target3.setName(sno+"_"+ScriptNumber);
 						Paragraph pa = new Paragraph();
 						pa.add(target3);
 //						pa.setAlignment(Element.ALIGN_CENTER);
