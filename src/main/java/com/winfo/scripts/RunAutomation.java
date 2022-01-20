@@ -287,9 +287,18 @@ public class RunAutomation {
 		boolean isDriverError = true;
 		try {
 
-			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
+			//driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
+			String os=dataBaseEntry.getNodeOs(Integer.parseInt(fetchMetadataListsVO.get(0).getTest_set_line_id()));
+			if(os!=null) {
+				driver = deriverConfiguration.getWebDriver(fetchConfigVO,os);
+			}
+			else {
+				isDriverError=true;
+				throw new Exception();
+			}
+			//isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
 
 		} catch (Exception e) {
