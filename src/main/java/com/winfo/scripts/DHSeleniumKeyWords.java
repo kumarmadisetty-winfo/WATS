@@ -13575,7 +13575,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			if (webElement.isDisplayed() == true) {
 
-				value = copyMethod(webElement, value);
+				value = copyInt(webElement);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				String xpath = "(//div[contains(@title,'inputParam1')])[1]";
                        String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
@@ -13772,7 +13772,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		System.out.println(number);
 		num = number.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 		num1 = num.replaceAll("[().$#@!*&^\\/\\\\]", "");
-		String num2= num1.trim();
+		//String num2= num1.trim();
+		String num2= num1.replaceAll("[^a-zA-Z0-9]","").trim();
 		System.out.println(num2);
 		Thread.sleep(2000);
 		log.info("Successfully Copied the Number");
