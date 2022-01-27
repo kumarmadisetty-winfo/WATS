@@ -6312,7 +6312,7 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if ("Manage Receipts".equalsIgnoreCase(param1)) {
+			if (param1.equalsIgnoreCase("Manage Receipts") || param1.equalsIgnoreCase("Manage Customers") ) {
 				Thread.sleep(3000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='"
@@ -12554,7 +12554,7 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickFilter(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + param1 + "']/following::*[text()='"
+			WebElement waittill = driver.findElement(By.xpath("(//img[@title='" + param1 + "']/following::*[text()='"
 					+ param2 + "']/preceding::input[@type='text'])[3]"));
 
 			waittill.click();
@@ -12570,7 +12570,7 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ "']/preceding::input[@type='text'])[3]");
 		}
 		try {
-			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + param1 + "'][1]"));
+			WebElement waittill = driver.findElement(By.xpath("(//img[@title='" + param1 + "'])[1]"));
 
 			waittill.click();
 			Thread.sleep(2000);

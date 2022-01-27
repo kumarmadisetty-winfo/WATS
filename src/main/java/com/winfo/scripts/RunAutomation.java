@@ -555,7 +555,7 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 
-						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") ) {
+						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") ) {
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);
@@ -607,7 +607,7 @@ public class RunAutomation {
 						break;
 					case "clickFilter":
 						seleniumFactory.getInstanceObj(instanceName).clickFilter(driver,
-								fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
+								param1,param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "selectByText":
