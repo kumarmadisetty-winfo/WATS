@@ -4364,6 +4364,28 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		
+		try {if (param1.equals("Republish")) {
+			Thread.sleep(3000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath("//img[contains(@title,'" + param1 + "')]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked clickImage" + scripNumber);
+			String params = param1;
+			String xpath = "//img[contains(@title,'param1')]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickImag" + scripNumber);
+			System.out.println(e);
+			}
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Provider") || param1.equalsIgnoreCase("Receiver")) {
 				Thread.sleep(4000);
@@ -10186,6 +10208,24 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during Clicked Lines or Item  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
+		try {
+			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'"+param1+"')]/following::*[text()='"+param2+"']//preceding::input[contains(@id,'Filter')])[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			Thread.sleep(4000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
+			String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
+			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+			return;
+
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Clicked Lines or Item tableSendKeys" + scripNumber);
+			System.out.println(e);
+			}
 		try {
 			if (param2.equalsIgnoreCase("Application Reference")) {
 				Thread.sleep(4000);
