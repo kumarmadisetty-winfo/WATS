@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +21,7 @@ import org.hibernate.Session;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
@@ -230,6 +234,20 @@ public class DataBaseEntryDao {
 		finally {
 		return os;
 		}
+	}
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, List<Integer> dependentList) {
+		// TODO Auto-generated method stub
+		String sql = "Select script_id,dependent_script_num from ScriptMaster where script_id in (:dependentList)";
+		Query query = em.unwrap(Session.class).createQuery(sql).setParameterList("dependentList",dependentList);
+		
+		List<Object[]> scriptList = query.getResultList();
+		//Object[] objectArray = scriptList.toArray();
+		
+		for(Entry<String, List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
+			
+			
+		}
+		
 	}
 	
 }

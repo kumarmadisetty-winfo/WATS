@@ -1,7 +1,11 @@
 package com.winfo.services;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -65,6 +69,17 @@ public class DataBaseEntry {
 		
 		return dao.getNodeOs(test_set_line_id);
 		
+	}
+	
+	@Transactional
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+		List<Integer> dependentList = new ArrayList();
+		for(Entry<String,List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
+			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
+		}
+		
+		
+		dao.getDependentScriptNumbers(dependentScriptMap,dependentList);
 	}
 }
 

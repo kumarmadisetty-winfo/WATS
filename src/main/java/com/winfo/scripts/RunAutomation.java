@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,6 +124,16 @@ public class RunAutomation {
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
 
+			
+			
+			LinkedList<Entry<String,List<FetchMetadataVO>>> dependentList = new LinkedList<Entry<String,List<FetchMetadataVO>> >();
+			
+			for(Entry<String,List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
+				dependentList.add(element);
+			}
+			
+			dataBaseEntry.getDependentScriptNumbers(dependentScriptMap);
+			
 			Date date = new Date();
 			  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 			  sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -198,43 +210,11 @@ public class RunAutomation {
 					//int[] iteration= {1};
 					//System.out.println(iteration);
 					System.out.println(dependentScriptMap.toString());
-					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
-						executordependent.execute(() -> {
-							try {
-								String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
-								if (flag.equalsIgnoreCase("STOPPED")) {
-									metaData.getValue().clear();
-									executor.shutdown();
-									System.out.println("treminattion is succeed");
-								} else {
-									executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
-								}
-							}  catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								
-							}finally {
-								/*
-								 * try { if(iteration[0]>=dependentScriptMap.size()) {
-								 * seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(
-								 * fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
-								 * seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(
-								 * fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
-								 * seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(
-								 * fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
-								 * increment = 0; if ("ARLO".equalsIgnoreCase(fetchConfigVO.getInstance_name()))
-								 * { seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(
-								 * fetchMetadataListVO, fetchConfigVO); } iteration[0]++;
-								 * System.out.println(iteration); }
-								 * 
-								 * } catch (Exception e) { // TODO Auto-generated catch block
-								 * e.printStackTrace();
-								 * 
-								 * }
-								 */
-							}
-						});
-					}
+					
+				    Iterator<Entry<String, List<FetchMetadataVO>>> iterator = dependentList.iterator();
+				    while(iterator.hasNext()) {
+				    	
+				    }
 					executordependent.shutdown();
 					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 					
@@ -302,7 +282,7 @@ public class RunAutomation {
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			String os=dataBaseEntry.getNodeOs(Integer.parseInt(fetchMetadataListsVO.get(0).getTest_set_line_id()));
 			if(os!=null) {
-				driver = deriverConfiguration.getWebDriver(fetchConfigVO,os);
+				driver = deriverConfiguration.getWebDriver(fetchConfigVO,"windows");
 			}
 			else {
 				isDriverError=true;
