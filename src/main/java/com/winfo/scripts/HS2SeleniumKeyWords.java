@@ -6680,7 +6680,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			Thread.sleep(6000);
-			System.out.println("Here1 came");
+			//System.out.println("Here1 came");
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//td)[1]")));
@@ -6688,7 +6688,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(10000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked Here1 came tableRowSelect" + scripNumber);
@@ -10213,6 +10213,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 		try {
+			Thread.sleep(4000);
 			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'"+param1+"')]/following::*[text()='"+param2+"']//preceding::input[contains(@id,'Filter')])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
