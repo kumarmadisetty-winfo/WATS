@@ -4858,6 +4858,84 @@ public class WATS01SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			System.out.println(e);
 		}
+		//DH fix 4
+				try {
+					// Changed == to equals method
+					if (param2.equalsIgnoreCase("OK")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					Thread.sleep(3000);
+					//wait.until(ExpectedConditions
+					//.presenceOfElementLocated(By.xpath(("//div[text()='" + param1 + "']/following::button[text()='" + param2 + "'][1]"))));
+					WebElement waittext = driver.findElement(By.xpath(("//div[text()='" + param1 + "']/following::button[text()='" + param2 + "'][1]")));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(5000);
+					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked clickButton" + scripNumber);
+					String xpath = "//div[normalize-space(text())='param1']";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickButton" + scripNumber);
+					System.out.println(e);
+					}
+				
+				//DH fix 4
+				try {
+				if (param1.equalsIgnoreCase("Transactions")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver
+				.findElement(By.xpath(("//*[text()='"+param1+"']/following::span[text()='o']")));
+				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(1000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
+				//service.saveXpathParams(param1, param2, scripNumber, xpath); return;
+				} } catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Create Time Card clickButton" + scripNumber); System.out.println(e);
+				}
+
+
+				//DH fix4
+				try {
+					if (param1.equalsIgnoreCase("Accounts")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver
+					.findElement(By.xpath("//*[contains(text(),'" + param1 + "')]/following::td[text()='" + param2 + "'][2]"));
+					// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(1000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+					String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+
+
+
+					return;
+					}
+
+
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Create Time Card clickButton" + scripNumber);
+
+
+
+					System.out.println(e);
+					}
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
 			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("OK")) {
@@ -6363,6 +6441,30 @@ public class WATS01SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		//new DH Script 4
+				try {
+				if (param1.equalsIgnoreCase("Accounts")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + param1 + "')]/following::table[@summary='" + param2 + "']//span[@title]")));
+				Thread.sleep(4000);
+				WebElement waittext = driver
+				.findElement(By.xpath("//*[contains(text(),'" + param1 + "')]/following::table[@summary='" + param2 + "']//span[@title]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+				String xpath = "(//table[@summary='param1']//td[2]//span)[1]";
+				//service.saveXpathParams(param1, param2, scripNumber, xpath);
+				return;
+				}
+				} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+				System.out.println(e);
+				}
 		try {
 			if (param1.equalsIgnoreCase("Manage Journals") || param1.equalsIgnoreCase("Journal Lines")
 					|| param1.equalsIgnoreCase("Manage Transactions") || param1.equalsIgnoreCase("Prepare Source lines")
@@ -6818,6 +6920,34 @@ public class WATS01SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				System.out.println(e);
 
 			}
+			//DH fix
+			try {
+				if (param1.equalsIgnoreCase("Accounts")) {
+				Thread.sleep(70000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				// wait.until(ExpectedConditions
+				// .presenceOfElementLocated(By.xpath("//a[normalize-space(text())='" + param1 + "']")));
+				WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" + param1 + "')]/following::*[text()='" + param2 + "'][1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// actions.moveToElement(Keys.PAGE_DOWN).build().perform();
+				waittext.click();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
+				String xpath = "//a[normalize-space(text())='param1']";
+				//service.saveXpathParams(param1, param2, scripNumber, xpath);
+
+
+
+				Thread.sleep(5000);
+				return;
+				}
+				} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Export clickLink" + scripNumber);
+				System.out.println(e);
+				}
 			if (param1.equalsIgnoreCase("Report") && param2.equalsIgnoreCase("Apply")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@value='" + param2 + "']")));
@@ -9849,6 +9979,71 @@ public class WATS01SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
+		//DH changes
+				try {
+					
+					WebElement waittill = driver
+					.findElement(By.xpath("(//*[contains(text(),'" + param1 + "')]/following::*[text()='" + param2 + "']//preceding::input[contains(@id,'Filter')])[3]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					// waittill.sendKeys(keysToSend);
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+					String xpath = "//*[text()='" + param1 + "']/following::label[text()='" + param2
+					+ "']/preceding-sibling::input[not(@type='hidden')]";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					return;
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during tableSendKeys" + scripNumber);
+					System.out.println(e);
+					}
+				//DH changes
+				try {
+
+
+
+					if ((param1.equalsIgnoreCase("Receipt Details") && param2.equalsIgnoreCase("Application Reference"))) {
+					WebElement waittill = driver.findElement(By.xpath("//h1[text()='"+param1+"']/following::input[contains(@id,'trxNumberList')]/following::a[@title='Search']/preceding-sibling::input[1]"));
+
+
+
+					Actions actions = new Actions(driver);
+
+
+
+					actions.moveToElement(waittill).build().perform();
+
+
+
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+
+
+
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
+					String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[1]";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+
+
+
+					return;
+					}
+
+
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Associated Projects or Funded Amount tableSendKeys" + scripNumber);
+					System.out.println(e);
+
+
+
+					}
 		try {
 
 			if ((param1.equalsIgnoreCase("Associated Projects") && param2.equalsIgnoreCase("Funded Amount"))
