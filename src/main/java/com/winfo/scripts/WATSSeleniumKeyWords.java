@@ -4826,9 +4826,57 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			System.out.println(e);
 		}
+		// DH changes 6
+				try {
+					if (param1.equalsIgnoreCase("Issue Refund")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver
+					.findElement(By.xpath("//div[text()='"+param1+"']/following::*[text()='K']"));
+					// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(1000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+					String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+
+					return;
+					}
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Issue Refund ok clickButton" + scripNumber);
+
+					System.out.println(e);
+					}
+				//DH changes 6
+				try {
+					if (param1.equalsIgnoreCase("Create Bank Account")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='S']"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(1000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+					String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+
+					return;
+					}
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Issue Refund ok clickButton" + scripNumber);
+
+					System.out.println(e);
+					}
 		try {
-			if (param2.equalsIgnoreCase("Save and Close") && (param1.equalsIgnoreCase("Manage Expenditure Types")
-					|| param1.equalsIgnoreCase("Manage Rate Schedules"))) {
+			if ((param2.equalsIgnoreCase("Save and Close") && param1.equalsIgnoreCase("Manage Expenditure Types"))
+					|| param1.equalsIgnoreCase("Manage Rate Schedules") || param2.equalsIgnoreCase("Save and Close") ) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath(("(//span[text()='S'])[2]")));
 //                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -9973,7 +10021,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		//DH changes
 				try {
-					
+					if (param1.equalsIgnoreCase("Review Distributions")&& param2.equalsIgnoreCase("Account Class")) {
 					WebElement waittill = driver
 					.findElement(By.xpath("(//*[contains(text(),'" + param1 + "')]/following::*[text()='" + param2 + "']//preceding::input[contains(@id,'Filter')])[3]"));
 					Actions actions = new Actions(driver);
@@ -9987,7 +10035,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ "']/preceding-sibling::input[not(@type='hidden')]";
 					//service.saveXpathParams(param1, param2, scripNumber, xpath);
 					return;
-
+					}
 					} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.error("Failed during tableSendKeys" + scripNumber);
@@ -10039,7 +10087,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 
 			if ((param1.equalsIgnoreCase("Associated Projects") && param2.equalsIgnoreCase("Funded Amount"))
-					|| param2.equalsIgnoreCase("Amount")) {
+					|| param2.equalsIgnoreCase("Amount")|| param1.equalsIgnoreCase("Review Distributions") && param2.equalsIgnoreCase("Distribution")) {
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\"" + param1
 
 						+ "\"]/following::label[text()='" + param2 + "']/preceding-sibling::input[1]"));
@@ -12791,6 +12839,28 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickFilter(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		//Dh changes 6
+		try {
+			if (param1.equalsIgnoreCase("Review Distributions")) {
+			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" +param1+ "')]/following::*[text()='Account Class']//preceding::input[contains(@id,'Filter')])[3]"));
+
+			waittill.click();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+
+
+
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickFilter" + scripNumber);
+			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
+			+ "']/preceding::input[@type='text'])[3]");
+			}
+		
+		
+		
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//img[@title='" + param1 + "']/following::*[text()='"
 					+ param2 + "']/preceding::input[@type='text'])[3]"));
@@ -12822,8 +12892,26 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("//img[@title='" + param1 + "'][1]");
-			throw e;
+			//throw e;
 		}
+		//DH Changes 6
+				try {
+					WebElement waittill = driver.findElement(By.xpath("(//img[@title='" + param2 + "'])[1]"));
+
+					waittill.click();
+					Thread.sleep(3000);
+					//WebElement waittill1 = driver.findElement(By.xpath("(//img[@title='" + param1 + "']/following::*[text()='"
+						//	+ param2 + "']/preceding::input[@type='text'])[3]"));
+					//waittill1.click();
+					//Thread.sleep(2000);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  clickFilter" + scripNumber);
+					screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+					System.out.println("//img[@title='" + param1 + "'][1]");
+					throw e;
+				}
 	}
 
 	public String password(WebDriver driver, String inputParam, String keysToSend, FetchConfigVO fetchConfigVO,
