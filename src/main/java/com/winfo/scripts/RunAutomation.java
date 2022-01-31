@@ -36,6 +36,7 @@ import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.vo.Status;
 
 @Service
 
@@ -120,7 +121,7 @@ public class RunAutomation {
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
-			Map<Integer,String> status = new HashMap<Integer,String>();
+			Map<Integer,Status> scriptStatus = new HashMap<Integer,Status>();
 			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
@@ -135,7 +136,7 @@ public class RunAutomation {
 				dependentQueue.add(element);
 			}
 			
-			dataBaseEntry.getDependentScriptNumbers(dependentScriptMap,status);
+			dataBaseEntry.getDependentScriptNumbers(dependentScriptMap);
 			
 			Date date = new Date();
 			  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -177,7 +178,7 @@ public class RunAutomation {
 							executor.shutdown();
 							System.out.println("treminattion is succeed");
 						} else {
-							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,status);
+							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,scriptStatus);
 						}
 						long i = System.currentTimeMillis() - starttimeIntermediate;
 						increment = increment + i;
@@ -217,8 +218,8 @@ public class RunAutomation {
 				   while(!dependentQueue.isEmpty()) {
 					   Entry<String, List<FetchMetadataVO>> metadata =  dependentQueue.poll();
 					   Integer dependentScriptNo = metadata.getValue().get(0).getDependencyScriptNumber();
-					   if(status.containsKey(dependentScriptNo)) {
-					   if(status.get(dependentScriptNo).equalsIgnoreCase("Pass")) {
+					   if(scriptStatus.containsKey(dependentScriptNo)) {
+					   if(scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Pass")) {
 						   
 						   
 						   executordependent.execute(() -> {
@@ -229,7 +230,7 @@ public class RunAutomation {
 										executor.shutdown();
 										System.out.println("treminattion is succeed");
 									} else {
-										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metadata,status);
+										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metadata,scriptStatus);
 									}
 								}  catch (Exception e) {
 									// TODO Auto-generated catch block
@@ -237,18 +238,34 @@ public class RunAutomation {
 									
 								}
 						   });
-					   }else if(!status.get(dependentScriptNo).equalsIgnoreCase("Fail")){
+					   }else if(!scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Fail")){
 						   dependentQueue.add(metadata);
 					   }
 				   }else {
-					   String scriptStatus=dataBaseEntry.getStatus(dependentScriptNo,Integer.parseInt(metadata.getValue().get(0).getTest_set_id()));
+					   dataBaseEntry.getStatus(dependentScriptNo,Integer.parseInt(metadata.getValue().get(0).getTest_set_id()),scriptStatus);
 					   
-					   if(scriptStatus.equalsIgnoreCase("Pass")) {
-						   dependentQueue.add(metadata);
-						   status.put(dependentScriptNo, scriptStatus);
+					   if(scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Pass")) {
+						   
+						   executordependent.execute(() -> {
+								try {
+									String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
+									if (flag.equalsIgnoreCase("STOPPED")) {
+										metadata.getValue().clear();
+										executor.shutdown();
+										System.out.println("treminattion is succeed");
+									} else {
+										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metadata,scriptStatus);
+									}
+								}  catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+									
+								}
+						   });
+						   
 					   }
-					   else {
-						   status.put(dependentScriptNo,"Fail");
+					   else if(!scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Fail")){
+						   dependentQueue.add(metadata);
 					   }
 					   
 					    
@@ -289,7 +306,7 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData, Map<Integer, String> status) throws Exception {
+			Entry<String, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 //		//String start_time=null;
@@ -329,7 +346,7 @@ public class RunAutomation {
 				throw new Exception();
 			}
 			//isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,status);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,scriptStatus);
 
 		} catch (Exception e) {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO, "0", inputParam);
@@ -360,7 +377,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<FetchMetadataVO> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO, Map<Integer, String> status) throws Exception {
+			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus) throws Exception {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -414,7 +431,7 @@ public class RunAutomation {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
-				status.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"In-Progress");
+				//scriptStatus.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"In-Progress");
 				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
 				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
@@ -762,9 +779,19 @@ public class RunAutomation {
 						fetchConfigVO.setEndtime(enddate);
 						try {
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-							
-							if(!status.get(Integer.parseInt(fetchMetadataVO.getScript_id())).equalsIgnoreCase("fail")) {
-								status.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"Pass");
+							if(fetchMetadataVO.getDependency().equalsIgnoreCase("Y")) {
+								if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
+									Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+									if(!s.getStatus().equalsIgnoreCase("Fail")) {
+										int awaitCounter=s.getInExecutionCount();
+										s.setInExecutionCount(--awaitCounter);
+										if(awaitCounter<=0) {
+											s.setStatus("Pass");
+										}
+										
+											
+									}
+								}
 							}
 							
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
@@ -796,8 +823,21 @@ public class RunAutomation {
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
 					errorMessagesHandler.getError(actionName,fetchMetadataVO, fetchConfigVO, test_script_param_id,message,param1,param2,dataBaseEntry.getPassword(param, userName, fetchConfigVO));
-					status.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"Fail");
+					//scriptStatus.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"Fail");
 
+					/*
+					 * if(fetchMetadataVO.getDependency().equalsIgnoreCase("Y")) {
+					 * if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))
+					 * ) { Status s
+					 * =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+					 * if(!s.getStatus().equalsIgnoreCase("Fail")) { int
+					 * awaitCounter=s.getInExecutionCount(); s.setInExecutionCount(--awaitCounter);
+					 * if(awaitCounter<=0) { s.setStatus("Pass"); }
+					 * 
+					 * 
+					 * } } }
+					 */
+					
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");

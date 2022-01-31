@@ -29,6 +29,7 @@ import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
+import com.winfo.vo.Status;
 
 @Repository
 @RefreshScope
@@ -256,18 +257,34 @@ public class DataBaseEntryDao {
 		}
 		
 	}
-	public String getStatus(Integer dependentScriptNo,Integer test_set_id) {
+	public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus) {
 		// TODO Auto-generated method stub
 		String sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
 		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
 		query.setParameter("test_set_id",test_set_id);
 		query.setParameter("dependentScriptNo",dependentScriptNo);
 		List<String>list =	query.getResultList();
+		Status status=new Status();
+		int awaitCount=0;
+		if(!(list.contains("Fail") || list.contains("FAIL"))) {
 		if((list.contains("In-Progress") || list.contains("IN-PROGRESS")) || (list.contains("New")||list.contains("NEW")) || (list.contains("Fail")||list.contains("FAIL")) || (list.contains("In-Queue")||list.contains("IN-QUEUE"))) {
-			return "Fail";
-			
+			status.setStatus("Wait");
+			for(String stat:list) {
+				if(!stat.equalsIgnoreCase("Pass")) {
+					awaitCount++;
+				}
+			}
+			status.setInExecutionCount(awaitCount);
+			scriptStatus.put(dependentScriptNo, status);
+		}else {
+		status.setStatus("Pass");
+		scriptStatus.put(dependentScriptNo, status);
 		}
-		return "Pass";
+		}else {
+			status.setStatus("Fail");
+			scriptStatus.put(dependentScriptNo, status);
+		}
+		
 		
 	}
 	
