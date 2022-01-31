@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
@@ -72,14 +73,28 @@ public class DataBaseEntry {
 	}
 	
 	@Transactional
-	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, Map<Integer, String> status) {
 		List<Integer> dependentList = new ArrayList();
 		for(Entry<String,List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
 			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
+			
 		}
 		
 		
 		dao.getDependentScriptNumbers(dependentScriptMap,dependentList);
+		for(Entry<String,List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
+			//dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
+			status.put(Integer.parseInt(element.getValue().get(0).getScript_id()),"New");
+			/*
+			 * if(element.getValue().get(0).getDependencyScriptNumber()!=null) {
+			 * status.put(element.getValue().get(0).getDependencyScriptNumber(),"New"); }
+			 */
+		}
+		
+	}
+	public String getStatus(Integer dependentScriptNo, Integer test_set_id) {
+		// TODO Auto-generated method stub
+		return dao.getStatus(dependentScriptNo,test_set_id);
 	}
 }
 

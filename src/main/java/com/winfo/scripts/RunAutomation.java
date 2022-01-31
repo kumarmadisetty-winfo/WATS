@@ -6,12 +6,14 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -111,13 +113,14 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-//			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
-//			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-//			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
+			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
+			Map<Integer,String> status = new HashMap<Integer,String>();
 			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
@@ -126,13 +129,13 @@ public class RunAutomation {
 
 			
 			
-			LinkedList<Entry<String,List<FetchMetadataVO>>> dependentList = new LinkedList<Entry<String,List<FetchMetadataVO>> >();
+			Queue<Entry<String,List<FetchMetadataVO>>> dependentQueue = new LinkedList<Entry<String,List<FetchMetadataVO>> >();
 			
 			for(Entry<String,List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
-				dependentList.add(element);
+				dependentQueue.add(element);
 			}
 			
-			dataBaseEntry.getDependentScriptNumbers(dependentScriptMap);
+			dataBaseEntry.getDependentScriptNumbers(dependentScriptMap,status);
 			
 			Date date = new Date();
 			  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -160,7 +163,7 @@ public class RunAutomation {
 
 
 			fetchConfigVO.setStarttime1(date);
-			
+			//Map<Integer,String> status = new HashMap<Integer,String>();
 			System.out.println(metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 		   try {
@@ -174,7 +177,7 @@ public class RunAutomation {
 							executor.shutdown();
 							System.out.println("treminattion is succeed");
 						} else {
-							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,status);
 						}
 						long i = System.currentTimeMillis() - starttimeIntermediate;
 						increment = increment + i;
@@ -211,10 +214,47 @@ public class RunAutomation {
 					//System.out.println(iteration);
 					System.out.println(dependentScriptMap.toString());
 					
-				    Iterator<Entry<String, List<FetchMetadataVO>>> iterator = dependentList.iterator();
-				    while(iterator.hasNext()) {
-				    	
-				    }
+				   while(!dependentQueue.isEmpty()) {
+					   Entry<String, List<FetchMetadataVO>> metadata =  dependentQueue.poll();
+					   Integer dependentScriptNo = metadata.getValue().get(0).getDependencyScriptNumber();
+					   if(status.containsKey(dependentScriptNo)) {
+					   if(status.get(dependentScriptNo).equalsIgnoreCase("Pass")) {
+						   
+						   
+						   executordependent.execute(() -> {
+								try {
+									String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
+									if (flag.equalsIgnoreCase("STOPPED")) {
+										metadata.getValue().clear();
+										executor.shutdown();
+										System.out.println("treminattion is succeed");
+									} else {
+										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metadata,status);
+									}
+								}  catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+									
+								}
+						   });
+					   }else if(!status.get(dependentScriptNo).equalsIgnoreCase("Fail")){
+						   dependentQueue.add(metadata);
+					   }
+				   }else {
+					   String scriptStatus=dataBaseEntry.getStatus(dependentScriptNo,Integer.parseInt(metadata.getValue().get(0).getTest_set_id()));
+					   
+					   if(scriptStatus.equalsIgnoreCase("Pass")) {
+						   dependentQueue.add(metadata);
+						   status.put(dependentScriptNo, scriptStatus);
+					   }
+					   else {
+						   status.put(dependentScriptNo,"Fail");
+					   }
+					   
+					    
+				   }
+					   
+				  }
 					executordependent.shutdown();
 					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 					
@@ -249,7 +289,7 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
+			Entry<String, List<FetchMetadataVO>> metaData, Map<Integer, String> status) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 //		//String start_time=null;
@@ -289,7 +329,7 @@ public class RunAutomation {
 				throw new Exception();
 			}
 			//isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,status);
 
 		} catch (Exception e) {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO, "0", inputParam);
@@ -320,7 +360,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<FetchMetadataVO> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, Map<Integer, String> status) throws Exception {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -374,6 +414,7 @@ public class RunAutomation {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
+				status.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"In-Progress");
 				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
 				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
@@ -721,6 +762,11 @@ public class RunAutomation {
 						fetchConfigVO.setEndtime(enddate);
 						try {
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+							
+							if(!status.get(Integer.parseInt(fetchMetadataVO.getScript_id())).equalsIgnoreCase("fail")) {
+								status.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"Pass");
+							}
+							
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 						} catch (Exception e) {
 							System.out.println("e");
@@ -750,7 +796,7 @@ public class RunAutomation {
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
 					errorMessagesHandler.getError(actionName,fetchMetadataVO, fetchConfigVO, test_script_param_id,message,param1,param2,dataBaseEntry.getPassword(param, userName, fetchConfigVO));
-
+					status.put(Integer.parseInt(fetchMetadataVO.getScript_id()),"Fail");
 
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);

@@ -48,10 +48,12 @@ public class TestCaseDataService {
 				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
 
 					prepareTestData(testCaseMap, testcase, test_line_id);
+					//status.put(Integer.parseInt(testcase.getScript_id()),"New");
 
 				} else {
 
 					prepareTestData(dependentScriptMap, testcase, test_line_id);
+					//status.put(Integer.parseInt(testcase.getScript_id()),"New");
 
 				}
 

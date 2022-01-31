@@ -9,8 +9,10 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
@@ -237,16 +239,35 @@ public class DataBaseEntryDao {
 	}
 	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, List<Integer> dependentList) {
 		// TODO Auto-generated method stub
-		String sql = "Select script_id,dependent_script_num from ScriptMaster where script_id in (:dependentList)";
+		String sql = "Select script_id,dependency from ScriptMaster where script_id in (:dependentList)";
 		Query query = em.unwrap(Session.class).createQuery(sql).setParameterList("dependentList",dependentList);
 		
 		List<Object[]> scriptList = query.getResultList();
 		//Object[] objectArray = scriptList.toArray();
+		Map<Integer,Integer> map =new HashMap<Integer,Integer>();
+		
+		for(Object[] obj:scriptList) {
+			map.put((Integer)obj[0],(Integer)obj[1]);
+		}
 		
 		for(Entry<String, List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
-			
+			element.getValue().get(0).setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
 			
 		}
+		
+	}
+	public String getStatus(Integer dependentScriptNo,Integer test_set_id) {
+		// TODO Auto-generated method stub
+		String sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
+		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
+		query.setParameter("test_set_id",test_set_id);
+		query.setParameter("dependentScriptNo",dependentScriptNo);
+		List<String>list =	query.getResultList();
+		if((list.contains("In-Progress") || list.contains("IN-PROGRESS")) || (list.contains("New")||list.contains("NEW")) || (list.contains("Fail")||list.contains("FAIL")) || (list.contains("In-Queue")||list.contains("IN-QUEUE"))) {
+			return "Fail";
+			
+		}
+		return "Pass";
 		
 	}
 	
