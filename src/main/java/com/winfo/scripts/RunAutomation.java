@@ -241,6 +241,38 @@ public class RunAutomation {
 					   }else if(!scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Fail")){
 						   dependentQueue.add(metadata);
 					   }
+					   else {
+						  String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+				          String  failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+				          String  detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+				          String  scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
+				                    + "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+
+						   FetchMetadataVO fd = metadata.getValue().get(0);
+						   FetchScriptVO post = new FetchScriptVO();
+							post.setP_test_set_id(fd.getTest_set_id());
+							post.setP_status("Fail");
+							post.setP_script_id(fd.getScript_id());
+							post.setP_test_set_line_id(fd.getTest_set_line_id());
+							post.setP_pass_path(passurl);
+							post.setP_fail_path(failurl);
+							post.setP_exception_path(detailurl);
+							post.setP_test_set_line_path(scripturl);
+							failcount = failcount + 1;
+							Date enddate = new Date();
+							fetchConfigVO.setEndtime(enddate);
+							dataService.updateTestCaseStatus(post, args, fetchConfigVO);
+							dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(), enddate);
+						   if(scriptStatus.containsKey(Integer.parseInt(metadata.getValue().get(0).getScript_id()))) {
+								Status s =scriptStatus.get(Integer.parseInt(metadata.getValue().get(0).getScript_id()));
+								s.setStatus("Fail");
+							}
+						   
+					   }
 				   }else {
 					   dataBaseEntry.getStatus(dependentScriptNo,Integer.parseInt(metadata.getValue().get(0).getTest_set_id()),scriptStatus);
 					   
@@ -266,6 +298,37 @@ public class RunAutomation {
 					   }
 					   else if(!scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Fail")){
 						   dependentQueue.add(metadata);
+					   }else {
+						   String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+				          String  failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+				          String  detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+				          String  scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				                    + fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
+				                    + "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="+fetchConfigVO.getImg_url();
+
+						   FetchMetadataVO fd = metadata.getValue().get(0);
+						   FetchScriptVO post = new FetchScriptVO();
+							post.setP_test_set_id(fd.getTest_set_id());
+							post.setP_status("Fail");
+							post.setP_script_id(fd.getScript_id());
+							post.setP_test_set_line_id(fd.getTest_set_line_id());
+							post.setP_pass_path(passurl);
+							post.setP_fail_path(failurl);
+							post.setP_exception_path(detailurl);
+							post.setP_test_set_line_path(scripturl);
+							failcount = failcount + 1;
+							Date enddate = new Date();
+							fetchConfigVO.setEndtime(enddate);
+							dataService.updateTestCaseStatus(post, args, fetchConfigVO);
+							dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(), enddate);
+						   if(scriptStatus.containsKey(Integer.parseInt(metadata.getValue().get(0).getScript_id()))) {
+								Status s =scriptStatus.get(Integer.parseInt(metadata.getValue().get(0).getScript_id()));
+								s.setStatus("Fail");
+							}
+						   
 					   }
 					   
 					    
@@ -837,7 +900,10 @@ public class RunAutomation {
 					 * 
 					 * } } }
 					 */
-					
+					if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
+							Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+							s.setStatus("Fail");
+						}
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
