@@ -10079,7 +10079,31 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
+		
 		}
+		//Dh changes 7
+				try {
+					if (param1.equalsIgnoreCase("Journals") && param2.equalsIgnoreCase("Journal Batch")) {
+						WebElement waittill = driver
+								.findElement(By.xpath("//*[text()='"+param1+"']/following::input[contains(@id,'journalBatch')][1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittill).build().perform();
+//		        waittill.sendKeys(keysToSend);
+						Thread.sleep(1000);
+						typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+						String xpath = "//span[text()='" + param2 + "']/following::input[1]";
+		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  tableSendKeys" + scripNumber);
+					System.out.println(e);
+				}
+		
 		try {
 			if (param1.equalsIgnoreCase("Add Project Customer")) {
 				WebElement waittill = driver
