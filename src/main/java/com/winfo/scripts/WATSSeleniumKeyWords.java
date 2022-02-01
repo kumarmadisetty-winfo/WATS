@@ -4801,6 +4801,89 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		//Dh changes 7
+				try {
+					if (param2.equalsIgnoreCase("OK")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='K'][1]"))));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(
+					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::span[text()='K'][1]"), "K"));
+					WebElement waittext = driver.findElement(
+					By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='K'][1]")));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(4000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked OK clickButton" + scripNumber);
+					String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K'][1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					return;
+					}
+					} catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during OK clickButton" + scripNumber);
+					}
+
+
+					//SCE.SCP.512 Analyze Supply Plan
+
+					try {
+					if (param2.equalsIgnoreCase("OK")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath(("//*[normalize-space(text())='" + param1 +"']/following::span[text()='O'][1]"))));
+					wait.until(ExpectedConditions.textToBePresentInElementLocated(
+					By.xpath("//*[normalize-space(text())='" + param1 +"']/following::span[text()='O'][1]"), "O"));
+					WebElement waittext = driver.findElement(
+					By.xpath(("//*[normalize-space(text())='" + param1 +"']/following::span[text()='O'][1]")));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(4000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked OK clickButton" + scripNumber);
+					String xpath = "//*[normalize-space(text())='param1']/following::span[text()='O'][1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					return;
+					}
+					} catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during OK clickButton" + scripNumber);
+					}
+				
+				
+				try {
+					if (param1.equalsIgnoreCase("Finish")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath(("//span[text()='i'][1]")));
+					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(3000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+					String xpath = "//span[text()='i'][1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Create Time Card clickButton" + scripNumber);
+					}
+
+		
+		
 		try {
 				
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
