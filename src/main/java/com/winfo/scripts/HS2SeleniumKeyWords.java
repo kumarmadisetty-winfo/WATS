@@ -4804,6 +4804,35 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		//Dh changes 7
+				
+				
+				try {
+					if (param1.equalsIgnoreCase("Finish")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath(("//span[text()='i'][1]")));
+					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(3000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+					String xpath = "//span[text()='i'][1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Create Time Card clickButton" + scripNumber);
+					}
+
+		
+		
+		
 		try {
 				
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
@@ -10000,6 +10029,28 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
+		//Dh changes 8
+				try {
+					if (param1.equalsIgnoreCase("Journals") && param2.equalsIgnoreCase("journalBatch")) {
+						WebElement waittill = driver
+								.findElement(By.xpath("//*[text()='"+param1+"']/following::input[contains(@id,'"+param2+"')][1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittill).build().perform();
+//		        waittill.sendKeys(keysToSend);
+						Thread.sleep(1000);
+						typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+						String xpath = "//span[text()='" + param2 + "']/following::input[1]";
+		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  tableSendKeys" + scripNumber);
+					System.out.println(e);
+				}
 		try {
 			if (param1.equalsIgnoreCase("Add Project Customer")) {
 				WebElement waittill = driver
@@ -10916,6 +10967,26 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//dh 8
+		try {if (param2.equalsIgnoreCase("Type")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+param2+"']/preceding::input[2]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+param2+"']/preceding::input[2]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(3000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			return;
+			}
+			} catch (Exception e) {
+			System.out.println(e);
+			}
+		
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Add Project Customer")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
