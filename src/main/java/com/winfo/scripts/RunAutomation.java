@@ -841,7 +841,7 @@ public class RunAutomation {
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
 						try {
-							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+							//dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							if(fetchMetadataVO.getDependency().equalsIgnoreCase("Y")) {
 								if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
 									Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
@@ -856,6 +856,7 @@ public class RunAutomation {
 									}
 								}
 							}
+							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 						} catch (Exception e) {
@@ -882,6 +883,10 @@ public class RunAutomation {
 						System.out.println("e");
 					}
 				} catch (Exception e) {
+					if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
+						Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+						s.setStatus("Fail");
+					}
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
@@ -900,10 +905,7 @@ public class RunAutomation {
 					 * 
 					 * } } }
 					 */
-					if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
-							Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
-							s.setStatus("Fail");
-						}
+					
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
