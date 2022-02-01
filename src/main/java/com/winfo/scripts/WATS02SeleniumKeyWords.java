@@ -4804,60 +4804,6 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		//Dh changes 7
-				try {
-					if (param2.equalsIgnoreCase("OK")) {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-					wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='K'][1]"))));
-					wait.until(ExpectedConditions.textToBePresentInElementLocated(
-					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::span[text()='K'][1]"), "K"));
-					WebElement waittext = driver.findElement(
-					By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='K'][1]")));
-					Actions actions = new Actions(driver);
-					actions.moveToElement(waittext).build().perform();
-					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					Thread.sleep(4000);
-					String scripNumber = fetchMetadataVO.getScript_number();
-					log.info("Sucessfully Clicked OK clickButton" + scripNumber);
-					String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K'][1]";
-					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-					return;
-					}
-					} catch (Exception e) {
-					System.out.println(e);
-					String scripNumber = fetchMetadataVO.getScript_number();
-					log.error("Failed during OK clickButton" + scripNumber);
-					}
-
-
-					//SCE.SCP.512 Analyze Supply Plan
-
-					try {
-					if (param2.equalsIgnoreCase("OK")) {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-					wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath(("//*[normalize-space(text())='" + param1 +"']/following::span[text()='O'][1]"))));
-					wait.until(ExpectedConditions.textToBePresentInElementLocated(
-					By.xpath("//*[normalize-space(text())='" + param1 +"']/following::span[text()='O'][1]"), "O"));
-					WebElement waittext = driver.findElement(
-					By.xpath(("//*[normalize-space(text())='" + param1 +"']/following::span[text()='O'][1]")));
-					Actions actions = new Actions(driver);
-					actions.moveToElement(waittext).build().perform();
-					// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					Thread.sleep(4000);
-					String scripNumber = fetchMetadataVO.getScript_number();
-					log.info("Sucessfully Clicked OK clickButton" + scripNumber);
-					String xpath = "//*[normalize-space(text())='param1']/following::span[text()='O'][1]";
-					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-					return;
-					}
-					} catch (Exception e) {
-					System.out.println(e);
-					String scripNumber = fetchMetadataVO.getScript_number();
-					log.error("Failed during OK clickButton" + scripNumber);
-					}
 				
 				
 				try {
@@ -10081,11 +10027,11 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
-		//Dh changes 7
+		//Dh changes 8
 				try {
-					if (param1.equalsIgnoreCase("Journals") && param2.equalsIgnoreCase("Journal Batch")) {
+					if (param1.equalsIgnoreCase("Journals") && param2.equalsIgnoreCase("journalBatch")) {
 						WebElement waittill = driver
-								.findElement(By.xpath("//*[text()='"+param1+"']/following::input[contains(@id,'journalBatch')][1]"));
+								.findElement(By.xpath("//*[text()='"+param1+"']/following::input[contains(@id,'"+param1+"')][1]"));
 						Actions actions = new Actions(driver);
 						actions.moveToElement(waittill).build().perform();
 //		        waittill.sendKeys(keysToSend);
@@ -11020,6 +10966,25 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//dh 8
+		try {if (param2.equalsIgnoreCase("Type")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+param2+"']/preceding::input[2]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+param2+"']/preceding::input[2]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(3000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			return;
+			}
+			} catch (Exception e) {
+			System.out.println(e);
+			}
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Add Project Customer")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
