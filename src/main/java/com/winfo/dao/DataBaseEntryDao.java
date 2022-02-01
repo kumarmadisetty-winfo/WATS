@@ -261,26 +261,22 @@ public class DataBaseEntryDao {
 	}
 	public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus) {
 		// TODO Auto-generated method stub
-		String sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo and (status in (:statusList) or enabled="+"'Y'"+")";
-		String sql2 = "select Count(*) from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
-		String[] states = {"Pass","Fail"};
-		Query query = em.unwrap(Session.class).createSQLQuery(sq1).setParameterList("statusList",Arrays.asList(states));
+		String sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
+		
+		
+		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
 		query.setParameter("test_set_id",test_set_id);
 		query.setParameter("dependentScriptNo",dependentScriptNo);
 		//query.setPara
 		
 		List<String>list =	query.getResultList();
 		
-		Query query2 = em.unwrap(Session.class).createSQLQuery(sql2);
-		query2.setParameter("test_set_id",test_set_id);
-		query2.setParameter("dependentScriptNo",dependentScriptNo);
-		BigDecimal bigDecimal = (BigDecimal)query2.getSingleResult();
-		int numberOfScripts = bigDecimal.intValue();
+		
 		Status status=new Status();
 		int awaitCount=0;
-		if(list!=null && numberOfScripts>0) {
-		if((!(list.contains("Fail") || list.contains("FAIL"))) && (list.size()==numberOfScripts)) {
-		if((list.contains("In-Progress") || list.contains("IN-PROGRESS")) || (list.contains("New")||list.contains("NEW")) || (list.contains("Fail")||list.contains("FAIL")) || (list.contains("In-Queue")||list.contains("IN-QUEUE"))) {
+		if(list!=null) {
+		if((!(list.contains("Fail") || list.contains("FAIL"))) && (!(list.contains("New")||list.contains("NEW")))) {
+		if((list.contains("In-Progress") || list.contains("IN-PROGRESS")) || (list.contains("In-Queue")||list.contains("IN-QUEUE"))) {
 			status.setStatus("Wait");
 			for(String stat:list) {
 				if(!stat.equalsIgnoreCase("Pass")) {
