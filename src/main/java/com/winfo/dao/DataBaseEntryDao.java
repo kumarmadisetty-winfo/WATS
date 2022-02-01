@@ -275,7 +275,7 @@ public class DataBaseEntryDao {
 		Status status=new Status();
 		int awaitCount=0;
 		if(list!=null) {
-		if((!(list.contains("Fail") || list.contains("FAIL"))) && (!(list.contains("New")||list.contains("NEW")))) {
+		if((list.size()>0)&&(!(list.contains("Fail") || list.contains("FAIL"))) && (!(list.contains("New")||list.contains("NEW")))) {
 		if((list.contains("In-Progress") || list.contains("IN-PROGRESS")) || (list.contains("In-Queue")||list.contains("IN-QUEUE"))) {
 			status.setStatus("Wait");
 			for(String stat:list) {
