@@ -14147,5 +14147,9 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		}
 	}
-
+	@Override
+	public  ArrayList<String> ebsActions(FetchMetadataVO fetchMetadataVO, String testRunId,String actionName) throws Exception
+	{
+		return null;
+	}
 }

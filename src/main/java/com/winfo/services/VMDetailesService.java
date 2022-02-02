@@ -63,6 +63,7 @@ import com.oracle.bmc.core.responses.InstanceActionResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolInstancesResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolsResponse;
 import com.oracle.bmc.core.responses.UpdateInstancePoolResponse;
+import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
 import com.winfo.dao.AuditLogsDao;

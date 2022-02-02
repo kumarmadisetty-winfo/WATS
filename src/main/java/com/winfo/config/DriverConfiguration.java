@@ -45,10 +45,9 @@ public class DriverConfiguration {
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
 			if (os.contains("win")) {
 				System.out.println("windows location");
-				options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
-																										// "C:\\Program
-																										// Files
-																										// (x86)\\Google\\Chrome\\Application\\chrome.exe");
+				options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+			//	options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+				//cap.setCapability("chrome.binary", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
 			} else {
 				System.out.println("linex location");
 				options.setBinary("/usr/bin/google-chrome");
@@ -66,8 +65,9 @@ public class DriverConfiguration {
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 
-//			 driver = new ChromeDriver(cap);
-			driver = new RemoteWebDriver(new URL(config_url), cap);
+			// driver = new ChromeDriver(cap);
+			
+		driver = new RemoteWebDriver(new URL(config_url), cap);
 //			http://watsudgs01.winfosolutions.com:4444/wd/hub
 
 		} else if (BrowserConstants.FIREFOX.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {

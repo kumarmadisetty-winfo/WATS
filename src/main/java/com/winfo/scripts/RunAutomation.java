@@ -1,11 +1,22 @@
 package com.winfo.scripts;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +26,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
+import com.winfo.dao.ActionsRepository;
+import com.winfo.dao.CodeLinesRepository;
+import com.winfo.model.Actions;
+import com.winfo.model.CodeLines;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -53,7 +72,12 @@ public class RunAutomation {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
+	
+	@Autowired
+	CodeLinesRepository codeLineRepo;
 
+	@Autowired
+	ActionsRepository actionRepo;
 	/*
 	 * public void report() throws IOException, DocumentException,
 	 * com.itextpdf.text.DocumentException {
@@ -112,6 +136,13 @@ public class RunAutomation {
 //			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
+			//fetchConfigVO.setChrome_driver_path("C:\\Users\\Winfo solutions\\Priya\\cromeDriver\\chromedriver_win32\\chromedriver.exe");
+			//fetchConfigVO.setPdf_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\padf\\\\");
+			//fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\screen\\\\");
+		//	fetchConfigVO.setChrome_driver_path("C:\\EBS-Automation\\EBS Automation-POC\\Driver\\chromedriver.exe");
+			//fetchConfigVO.setPdf_path("C:\\EBS-Automation\\WATS_Files\\pdf\\");
+			//fetchConfigVO.setScreenshot_path("C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\");
+
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -125,26 +156,26 @@ public class RunAutomation {
 			Date date = new Date();
 			  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 			  sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-			  Date startDate=sdf.parse(fetchConfigVO.getStart_date());
-			Date endDate=sdf.parse(fetchConfigVO.getEnd_date());
-	
-						for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
-				if (entryMap.getValue()||date.after(endDate)||date.before(startDate)) {
-					executeTestrunVo.setStatusCode(404);
-					executeTestrunVo.setStatusMessage("ERROR");
-					if(entryMap.getKey()>0) {
-					executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+entryMap.getKey()+" more scripts. Reach out to the WATS support team to enhance the limit..");
-					}else if(date.after(endDate)||date.before(startDate)){
-						executeTestrunVo.setStatusDescr("Your request could not be processed the Testrun, please check with the Start and End Date");
-	
-					}else{
-						executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
-	
-					}
-					return executeTestrunVo;
-
-				}
-			}
+			//  Date startDate=sdf.parse(fetchConfigVO.getStart_date());
+		//	Date endDate=sdf.parse(fetchConfigVO.getEnd_date());
+//	
+//						for(Entry<Integer, Boolean> entryMap:mutableMap.entrySet()) {
+//				if (entryMap.getValue()||date.after(endDate)||date.before(startDate)) {
+//					executeTestrunVo.setStatusCode(404);
+//					executeTestrunVo.setStatusMessage("ERROR");
+//					if(entryMap.getKey()>0) {
+//					executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. You can run only run "+entryMap.getKey()+" more scripts. Reach out to the WATS support team to enhance the limit..");
+//					}else if(date.after(endDate)||date.before(startDate)){
+//						executeTestrunVo.setStatusDescr("Your request could not be processed the Testrun, please check with the Start and End Date");
+//	
+//					}else{
+//						executeTestrunVo.setStatusDescr("Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
+//	
+//					}
+//					return executeTestrunVo;
+//
+//				}
+//			}
 
 
 			fetchConfigVO.setStarttime1(date);
@@ -341,10 +372,11 @@ public class RunAutomation {
 		String seq_num = null;
 		String step_description = null;
 		String test_script_param_id = null;
-
+		ArrayList<String> robotCodeLines;
+		ArrayList<String> listOfRobotCodeLines= new ArrayList<>();
 		// String start_time=null;
 		// String end_time=null;
-
+	
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
             passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -364,7 +396,67 @@ public class RunAutomation {
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
+			if(instanceName.equalsIgnoreCase("EBS"))
+			{
+			List<Actions> listOfActions=actionRepo.findByActionTypeOrderById("default");
+			List<CodeLines>listOfCodeLines=codeLineRepo.findByActionIdInOrderByActionIdAscCodeLineIdAsc(listOfActions);
+			for(CodeLines codeLine:listOfCodeLines)
+			{ 
+				if(codeLine.getParam_values()==null)
+				{
+					listOfRobotCodeLines.add(codeLine.getRobot_line());
+				}
+				if(codeLine.getParam_values()!=null)
+				{
+					String param_value=codeLine.getParam_values();
+					HashMap<String, Object> result=null;
+					String dbValue="";
+					String key ;
+					String value;
+					String defaultCodeLine=codeLine.getRobot_line();
+					try {
+						result = new ObjectMapper().readValue(param_value, HashMap.class);
+						
+						for (Map.Entry<String,Object> entry : result.entrySet())
+						{
+				            System.out.println("Key = " + entry.getKey() +
+				                             ", Value = " + entry.getValue());
+				             key =entry.getKey();
+							 value=(String)entry.getValue();
+							if(value.equalsIgnoreCase("<Pick from Config Table>"))
+							{
+								dbValue=	codeLineRepo.findByConfigurationId(Integer.parseInt(fetchMetadataListVO.get(0).getTest_set_id()),key);
+							}
+							if(value.equalsIgnoreCase("<Pick from Java>"))
+							{
+								String	image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"+ fetchMetadataListVO.get(0).getTest_run_name();
 
+							//	String path=fetchMetadataVO.getCustomer_name() + "/"+ fetchMetadataVO.getTest_run_name() + "/";
+								dbValue=image_dest;
+								
+							}
+							
+							defaultCodeLine= defaultCodeLine.replace("${"+key+"}", dbValue);
+							System.out.println(defaultCodeLine);
+						}
+						
+					} catch (JsonMappingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonProcessingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//String defaultCodeLine=codeLine.getRobot_line();
+					
+				//	defaultCodeLine= defaultCodeLine.replace("${"+(String) result.keySet().toArray()[0]+"}", dbValue);
+				//	System.out.println(defaultCodeLine);
+					listOfRobotCodeLines.add(defaultCodeLine);
+				}
+			}
+				
+			}
+			String parentName="";
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -374,6 +466,7 @@ public class RunAutomation {
 				script_Number = fetchMetadataVO.getScript_number();
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
+			
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
 				step_description = fetchMetadataVO.getStep_description();
@@ -405,9 +498,21 @@ public class RunAutomation {
 
 				}
 				try {
+					if(instanceName.equalsIgnoreCase("EBS"))
+					{
+						robotCodeLines=seleniumFactory.getInstanceObj(instanceName).ebsActions(fetchMetadataVO,fetchMetadataVO.getTest_set_id(),actionName);
+						listOfRobotCodeLines.addAll(robotCodeLines);
+						
+						String	image_dest = ("C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\"+ fetchMetadataVO.getTest_run_name() + "\\\\" + fetchMetadataVO.getSeq_num() + "_"+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
+						String screenshotStep="    Screenshot.Take Screenshot    "+image_dest;
+						listOfRobotCodeLines.add(screenshotStep);
+					}
+					else
+					{
 					switch (actionName) {
 
 					case "Login into Application":
+						
 						userName = fetchMetadataVO.getInput_value();
 						log.info("Navigating to Login into Application Action");
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
@@ -420,24 +525,30 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
+						
 						seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO, fetchMetadataVO,
 								type1, type2, param1, param2, count);
 						break;
+						
 
 					case "openTask":
 						log.info("Navigating to openTask Action");
+						
 						seleniumFactory.getInstanceObj(instanceName).openTask(driver, fetchConfigVO, fetchMetadataVO,
 								type1, type2, param1, param2, count);
 						break;
-
+						
 					case "Logout":
 						seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO, fetchMetadataVO,
 								type1, type2, type3, param1, param2, param3);
 						break;
 					case "SendKeys":
+						
+						
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2,
 									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
@@ -445,7 +556,9 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 					case "textarea":
+						
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2,
 									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
@@ -453,6 +566,7 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 					case "Dropdown Values":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
@@ -462,6 +576,7 @@ public class RunAutomation {
 							break;
 						}
 					case "Table SendKeys":
+						
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).tableSendKeys(driver, param1, param2, param3,
 									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
@@ -469,6 +584,7 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 					case "multiplelinestableSendKeys":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1,
@@ -487,13 +603,14 @@ public class RunAutomation {
 							break;
 						}
 					case "clickLinkAction":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+												if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2,
 									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 							break;
 						} else {
 							break;
 						}
+						
 					case "clickCheckbox":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1,
@@ -519,13 +636,17 @@ public class RunAutomation {
 							break;
 						}
 					case "clickTableLink":
+						
 						seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
+						
 					case "clickLink":
+					
 						seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2, fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						
 					case "clickNotificationLink":
 						seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
@@ -546,7 +667,9 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
+						
 					case "clickButton":
+						
 						seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
@@ -564,6 +687,7 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						
 					case "tableRowSelect":
 						seleniumFactory.getInstanceObj(instanceName).tableRowSelect(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
@@ -593,13 +717,16 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).switchToDefaultFrame(driver);
 						break;
 					case "switchToFrame":
+						
 						seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver,
 								fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
 						break;
+						
 					case "windowhandle":
 						seleniumFactory.getInstanceObj(instanceName).windowhandle(driver, fetchMetadataVO,
 								fetchConfigVO);
 						break;
+					
 					case "dragAnddrop":
 						seleniumFactory.getInstanceObj(instanceName).dragAnddrop(driver,
 								fetchMetadataVO.getXpath_location(), fetchMetadataVO.getXpath_location1(),
@@ -638,11 +765,15 @@ public class RunAutomation {
 								fetchConfigVO);
 						break;
 					case "enter":
+						
 						seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO, fetchConfigVO);
 						break;
+						
 					case "tab":
+						
 						seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO, fetchConfigVO);
 						break;
+						
 					case "paste":
 						seleniumFactory.getInstanceObj(instanceName).paste(driver, fetchMetadataVO.getInput_parameter(),
 								fetchMetadataVO, fetchConfigVO, globalValueForSteps);
@@ -652,9 +783,11 @@ public class RunAutomation {
 								fetchMetadataVO);
 						break;
 					case "windowclose":
+						
 						seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						
 					case "switchDefaultContent":
 						seleniumFactory.getInstanceObj(instanceName).switchDefaultContent(driver, fetchMetadataVO,
 								fetchConfigVO);
@@ -676,9 +809,13 @@ public class RunAutomation {
 							break;
 						}
 					case "refreshPage":
+						
 						seleniumFactory.getInstanceObj(instanceName).refreshPage(driver, fetchMetadataVO,
 								fetchConfigVO);
 						break;
+						
+					case "wait":
+						
 					case "navigateToBackPage":
 						seleniumFactory.getInstanceObj(instanceName).navigateToBackPage(driver, fetchMetadataVO,
 								fetchConfigVO);
@@ -704,10 +841,52 @@ public class RunAutomation {
 						// fetchMetadataListVO, fetchConfigVO);
 						break;
 					}
+					}
 					i++;
 
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
+						if(instanceName.equalsIgnoreCase("EBS"))
+						{
+							String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+									+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
+							
+							//String Folder = "C:\\EBS-Automation\\EBS Automation-POC\\robot files\\";
+							File theDir = new File(Folder);
+							if (!theDir.exists()) {
+								System.out.println("creating directory: " + theDir.getName());
+								boolean result = false;
+								try {
+									theDir.mkdirs();
+									result = true;
+								} catch (SecurityException se) {
+									// handle it
+									System.out.println(se.getMessage());
+								}
+							} else {
+								System.out.println("Folder exist");
+							}
+						FileWriter writer;
+						try {
+							String robotFileName=seq_num+"_"+fetchMetadataListVO.get(0).getScript_number()+".robot";
+							String completePath=Folder+robotFileName;
+						//	writer = new FileWriter("C:\\Users\\Winfo solutions\\Priya\\Documents\\createInvoice.robot");
+							writer = new FileWriter(completePath);
+							for(String codeline:listOfRobotCodeLines)
+					    	  {
+					    		//String code=codeline.getRobot_line();  
+					    		writer.write(codeline + System.lineSeparator());
+					    	  }
+						//	writer.write(robotCodeLine + System.lineSeparator());
+					      writer.close();
+					      robotFileTransfer( completePath, robotFileName);
+					     String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number());
+					   //  System.out.println(response);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						}
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Pass");
@@ -738,15 +917,16 @@ public class RunAutomation {
 								test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
-					System.out.println("Successfully Executed the" + "" + actionName);
+				//	System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
 								"Pass");
-						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+						//dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 					} catch (Exception e) {
 						System.out.println("e");
 					}
 				} catch (Exception e) {
+					
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
@@ -797,5 +977,98 @@ public class RunAutomation {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 			throw e;
 		}
+	}
+	public String callLocalRobot(String fileName)
+	{
+		HttpURLConnection conn = null;
+    DataOutputStream os = null;
+    String output="";
+    try{
+        URL url = new URL("http://192.168.1.203:8080/EBSAutomation/api/v3/localRobotJob"); //important to add the trailing slash after add
+    //   URL url = new URL("http://localhost:8080/api/v3/localRobotJob"); //important to add the trailing slash after add
+
+     String input1="{\"Data\":  \"";
+     String finalInput=input1+fileName+"\"}";
+       // String[] inputData = {"{\"Data\": [{ \"SUBJECT\": \"invoiceDesktop\"}]}"};
+     String[] inputData= {finalInput};
+        for(String input: inputData){
+            byte[] postData = input.getBytes(StandardCharsets.UTF_8);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+           // conn.setRequestProperty( "charset", "utf-8");
+            conn.setRequestProperty("Content-Length", Integer.toString(input.length()));
+            os = new DataOutputStream(conn.getOutputStream());
+            os.write(postData);
+            os.flush();
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+           
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+            }
+            conn.disconnect();
+        }
+} catch (MalformedURLException e) {
+    e.printStackTrace();
+}catch (IOException e){
+    e.printStackTrace();
+}finally
+    {
+        if(conn != null)
+        {
+            conn.disconnect();
+        }
+    }
+    return "File Executed"; 
+}
+	public void robotFileTransfer(String filePath,String robotFileName)
+	{
+		 String server = "192.168.1.203";
+	        int port = 21;
+	        String user = "wats_ebs";
+	        String pass = "2020@Winfo";
+
+	        FTPClient ftpClient = new FTPClient();
+	        try {
+
+	            ftpClient.connect(server, port);
+	            ftpClient.login(user, pass);
+	            ftpClient.enterLocalPassiveMode();
+
+	        
+	            File firstLocalFile = new File(filePath);
+
+	            String firstRemoteFile = robotFileName;
+	            InputStream inputStream = new FileInputStream(firstLocalFile);
+
+	            System.out.println("Start uploading first file");
+	            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
+	            inputStream.close();
+	            if (done) {
+	                System.out.println("The first file is uploaded successfully.");
+	            }
+	        }catch (IOException ex) {
+	            System.out.println("Error: " + ex.getMessage());
+	            ex.printStackTrace();
+	        } finally {
+	            try {
+	                if (ftpClient.isConnected()) {
+	                    ftpClient.logout();
+	                    ftpClient.disconnect();
+	                }
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
 	}
 }

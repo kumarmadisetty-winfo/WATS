@@ -6857,7 +6857,11 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 		// TODO Auto-generated method stub
 		
 	}
-
+	@Override
+	public  ArrayList<String> ebsActions( FetchMetadataVO fetchMetadataVO, String testRunId,String actionName) throws Exception
+	{
+		return null;
+	}
 
 
 

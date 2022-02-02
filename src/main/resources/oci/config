@@ -13,7 +13,7 @@ user=ocid1.user.oc1..aaaaaaaasmdw6yucjx6z3fof3l2ylka5sp4424z2zsfamilptx3p4u5bd2m
 fingerprint=bd:7d:cc:41:df:3e:b3:70:72:b0:09:37:fc:b0:fc:8b
 tenancy=ocid1.tenancy.oc1..aaaaaaaa334y2rtopxbcy7vhakwbgtbkrh36waziibyheeni63lnbwenbkqa
 region=uk-london-1
-key_file=/u01/oracle/selenium/temp/oci-param/oci_api_key_wats.pem
+key_file=C:\\u01\\app\\selenium\\oci_api_key_wats.pem
 
 [WATS_WINFOERP]
 compartment-id=ocid1.tenancy.oc1..aaaaaaaar7xiy2foczxdmh4j7zr3iwtouaumndva3wvs5omx2neaz6m775dq
@@ -21,4 +21,4 @@ user=ocid1.user.oc1..aaaaaaaanbaacsu3dxbpbthpgbdi7wqrd2wnxxbadlk6cq4cbll5jytli2z
 fingerprint=bd:7d:cc:41:df:3e:b3:70:72:b0:09:37:fc:b0:fc:8b
 tenancy=ocid1.tenancy.oc1..aaaaaaaar7xiy2foczxdmh4j7zr3iwtouaumndva3wvs5omx2neaz6m775dq
 region=uk-london-1
-key_file=/u01/oracle/selenium/temp/oci-param/oci_api_key_wats.pem
+key_file=C:\\u01\\app\\selenium\\oci_api_key_wats.pem

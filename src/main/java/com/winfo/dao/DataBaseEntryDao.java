@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -59,7 +62,7 @@ public class DataBaseEntryDao {
 		}
 		//scriptParam.setLine_execution_statues(status);
 		//scriptParam.setLine_error_message(error_message);
-		String sql = "Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
+		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
 		Session session= em.unwrap(Session.class);
 		Query query=session.createSQLQuery(sql);
 		query.setParameter("error_message",error_message);
@@ -126,7 +129,7 @@ public class DataBaseEntryDao {
 		String start_time= startformat.format(start_time1);
 		try {
 		Session session = em.unwrap(Session.class);
-		Query query=session.createSQLQuery("Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"+start_time+"','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID = "+line_id);
+		Query query=session.createSQLQuery("Update WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"+start_time+"','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID = "+line_id);
 		query.executeUpdate();
 		}catch(Exception e) {
 			System.out.println("cant update starttime");
@@ -163,7 +166,7 @@ public class DataBaseEntryDao {
 		
 		try {
 		Session session=em.unwrap(Session.class);
-		String sqlQuery="Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_END_TIME=TO_TIMESTAMP('"+end_time+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID ="+line_id;
+		String sqlQuery="Update WIN_TA_TEST_SET_LINES  SET EXECUTION_END_TIME=TO_TIMESTAMP('"+end_time+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID ="+line_id;
 		Query query=session.createSQLQuery(sqlQuery);
 		query.executeUpdate();
 		}catch(Exception e) {
@@ -197,13 +200,48 @@ public class DataBaseEntryDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String sql="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
+		String sql="Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
 		Query query=em.unwrap(Session.class).createSQLQuery(sql);
 		query.setParameter("screenshot",screenshotArray);
 		query.executeUpdate();
 		}catch(Exception e) {
 			System.out.println(e);
 		}
+	}
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
+		// TODO Auto-generated method stub
+		//FetchMetadataVO metadataVO=new FetchMetadataVO();
+		Map<String,Map<String,TestSetScriptParam>> map=new HashMap<String,Map<String,TestSetScriptParam>> ();
+		String sql="from TestSetLines where testSet=:testSet";
+		Integer test_run_id2=Integer.parseInt(test_run_id);
+		Query query = em.createQuery(sql);
+		query.setParameter("testSet",em.find(TestSet.class,test_run_id2) );
+		List<TestSetLines> test_set_lines_list = query.getResultList();
+		for(TestSetLines test_set_line:test_set_lines_list) {
+			Map<String,TestSetScriptParam> map2	= getTestScriptMap(test_set_line);
+			map.put(String.valueOf(test_set_line.getSeq_num()),map2);
+				
+		}
+		return map;
+		
+	}
+	
+	
+	public Map<String,TestSetScriptParam> getTestScriptMap(TestSetLines test_set_line) {
+		String sql="from TestSetScriptParam where testSetLines=:testSetLines";
+		Query query = em.createQuery(sql);
+		query.setParameter("testSetLines",test_set_line);
+		List<TestSetScriptParam> testScriptParamList=query.getResultList();
+		Map<String,TestSetScriptParam> map2 = new HashMap<String,TestSetScriptParam>();
+		for(TestSetScriptParam scriptParam:testScriptParamList) {
+			map2.put(String.valueOf(scriptParam.getLine_number()), scriptParam);
+		}
+		//map.put(String.valueOf(test_set_line.getSeq_num()),map2);
+		return map2;
+	}
+	public TestSetLines getTestSetLine(String test_set_line_id) {
+		// TODO Auto-generated method stub
+		return em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
 	}
 }
 

@@ -1,11 +1,13 @@
 package com.winfo.interface1;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Service;
+
 
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -129,7 +131,7 @@ public interface SeleniumKeyWordsInterface {
 		public void switchParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)throws Exception;
 		public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
-
+		public  ArrayList<String> ebsActions(FetchMetadataVO fetchMetadataVO, String testRunId,String actionName) throws Exception;
 
 
 
