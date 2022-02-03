@@ -4852,7 +4852,7 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		//DH 10
 		try {
 
-            if (param1.equalsIgnoreCase("Done")) {
+            if (param2.equalsIgnoreCase("Done")) {
 
             WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 

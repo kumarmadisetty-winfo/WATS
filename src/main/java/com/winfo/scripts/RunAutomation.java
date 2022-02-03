@@ -555,7 +555,7 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 
-						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group")) {
+						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group") && !message.startsWith("item")) {
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);
