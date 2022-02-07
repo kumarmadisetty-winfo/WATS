@@ -4216,6 +4216,32 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
+		
+		//DH 15
+		try {
+			if(param1.equalsIgnoreCase("Absences") && param2.equalsIgnoreCase("Absence Type")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::span[text()='" + keysToSend+ "']/following::img[contains(@title,'" + param2 + "')][1]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1 + "']/following::span[text()='" + keysToSend+ "']/following::img[contains(@title,'" + param2 + "')][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(2000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked selectAValue" + scripNumber);
+			String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
+			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+			return;
+			}
+			} catch (Exception e) {
+			System.out.println(e);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during selectAValue" + scripNumber);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			//throw e;
+			}
+		
 		try {
 			Thread.sleep(5000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4280,7 +4306,10 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			throw e;
+			
 		}
+		
+		
 	}
 
 	public String clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
@@ -4362,6 +4391,30 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		
+		//DH 15
+		try {
+			if(param2.equalsIgnoreCase("Back")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/preceding::a[1]")));
+			WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())='"+param1+"']/preceding::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			return;
+			}
+			}catch (Exception e) {
+			System.out.println(e);
+			}
+		
+		
+		
+		
+		
 		
 		//Dh 9
 		try {
@@ -4848,6 +4901,78 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		//DH 16
+				try {
+					if (param1.equalsIgnoreCase("Approval")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath(("//div[contains(@id,'popup-container')]//td[text()='" + param1 + "']//preceding-sibling::td[1]")));// screenshot(driver,
+					// "",
+					// fetchMetadataVO,
+					// fetchConfigVO);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					waittext.click();
+					Thread.sleep(15000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+					String xpath = "//div[contains(@id,'popup-container')]//td[text()='param1']//preceding-sibling::td[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+
+
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickButton" + scripNumber);
+
+
+
+					System.out.println(e);
+					}
+
+
+
+
+
+					try {
+					if (param1.equalsIgnoreCase("Initiate")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath(("(//div[contains(@class,'PopupMenuContent')])[2]//td[text()='" + param1 + "']")));// screenshot(driver,
+					// "",
+					// fetchMetadataVO,
+					// fetchConfigVO);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(15000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+					String xpath = "(//div[contains(@class,'PopupMenuContent')])[2]//td[text()='param1']";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+
+
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickButton" + scripNumber);
+
+
+
+					System.out.println(e);
+					}
+		
+		
+		
 		//DH 10
 		try {
 
@@ -9307,6 +9432,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during sendValue" + scripNumber);
 		}
+		
 		try {
 			if (param1.equalsIgnoreCase("Create Expense Item") && param2.equalsIgnoreCase("Amount")) {
 				Thread.sleep(10000);
@@ -9335,7 +9461,55 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
-		try {
+		//DH 15
+				try { if(param1.equalsIgnoreCase("Manage Divisions")){
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" + param1+"']/following::label[text()='" + param2+"']/following::input[contains(@id,'qry') and not (@role)])[1]")));
+					Thread.sleep(1000);
+					WebElement waittill = driver.findElement(By.xpath("(//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'qry') and not (@role)])[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					Thread.sleep(500);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked sendValue" + scripNumber);
+					String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					return keysToSend;
+				}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during sendValue" + scripNumber);
+					System.out.println(e);
+					}
+				//DH 15
+				try {
+					if(param2.equalsIgnoreCase("Start Date and Time") || param2.equalsIgnoreCase("End Date and Time")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" + param1+"']/following::label[text()='" + param2+"']/following::input[@placeholder='dd/mm/yy h:mm a'])[1]")));
+					Thread.sleep(1000);
+					WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1+"']/following::label[text()='" + param2+"']/following::input[@placeholder='dd/mm/yy h:mm a'])[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					Thread.sleep(500);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked sendValue" + scripNumber);
+					String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+				}
+
+
+					return keysToSend;
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during sendValue" + scripNumber);
+					System.out.println(e);
+					//throw e;
+					}
+				
+				
+				try {
 			Thread.sleep(10000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h2[contains(text(),'" + param1
@@ -9545,6 +9719,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
+		
+		
 	}
 
 	public void dropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
