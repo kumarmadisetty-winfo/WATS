@@ -95,8 +95,8 @@ public class JiraTicketBugService {
 		try {
 			String args = testsetid.toString();
 			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
-			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			//fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+			//fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
 			final String uri = fetchConfigVO.getMETADATA_URL() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = testRunService.getFetchMetaData(args, uri);
 
