@@ -4454,7 +4454,39 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					}
 				
-		try {if (param1.equals("Republish")) {
+		
+				//DH 19
+				try {
+					if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Add")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::div[@role='button'])[1]")));
+					Thread.sleep(2000);
+					WebElement waittext = driver.findElement(
+					By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::div[@role='button'])[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(3000);
+					WebElement add = driver.findElement(
+					By.xpath("//h1[normalize-space(text())='" + param1 + "']/following::span[text()='" + param2 + "']"));
+					clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked clickImage" + scripNumber);
+					String xpath = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during clickImag" + scripNumber);
+					System.out.println(e);
+					}
+				
+				
+				
+				try {if (param1.equals("Republish")) {
 			Thread.sleep(3000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			WebElement waittext = driver.findElement(By.xpath("//img[contains(@title,'" + param1 + "')]"));
