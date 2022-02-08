@@ -12213,8 +12213,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 
 		}
+		//DH 20
 		try {
-			if (param1.equalsIgnoreCase("Create Request") || param2.equalsIgnoreCase("CIP Budget Code")) {
+			if (param1.equalsIgnoreCase("Create Request") || param2.equalsIgnoreCase("CIP Budget Code") || param1.equalsIgnoreCase("Demographic Info")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),'" + param1
 						+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::a)[1]")));
