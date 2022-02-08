@@ -4393,6 +4393,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) throws Exception {
 		
 		
+		
+		
+		
 		//DH 15
 		try {
 			if(param2.equalsIgnoreCase("Back")) {
@@ -4460,6 +4463,36 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 
 			}
+		
+		//DH 19
+		try {
+			if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Add")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+			By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::div[@role='button'])[1]")));
+			Thread.sleep(2000);
+			WebElement waittext = driver.findElement(
+			By.xpath("(//h1[normalize-space(text())='" + param1 + "']/following::div[@role='button'])[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(3000);
+			WebElement add = driver.findElement(
+			By.xpath("//h1[normalize-space(text())='" + param1 + "']/following::span[text()='" + param2 + "']"));
+			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked clickImage" + scripNumber);
+			String xpath = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
+			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickImag" + scripNumber);
+			System.out.println(e);
+			}
+		
 		
 		
 		
@@ -8754,6 +8787,25 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		
+		try {
+			if(param1.equalsIgnoreCase("Create Note")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//body[@dir='ltr']")));
+			Thread.sleep(1000);
+			WebElement waittill = driver.findElement(By.xpath("//body[@dir='ltr']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(500);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			System.out.println(e);
+			}
+		
+		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='" + param1
@@ -12161,8 +12213,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 
 		}
+		//DH 20
 		try {
-			if (param1.equalsIgnoreCase("Create Request") || param2.equalsIgnoreCase("CIP Budget Code")) {
+			if (param1.equalsIgnoreCase("Create Request") || param2.equalsIgnoreCase("CIP Budget Code") || param1.equalsIgnoreCase("Demographic Info")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),'" + param1
 						+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::a)[1]")));
