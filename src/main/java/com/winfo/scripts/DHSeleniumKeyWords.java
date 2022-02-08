@@ -9430,7 +9430,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 			}
-		//DH 15
+		//DH 18
 		try {
 			if(param2.equalsIgnoreCase("Start Date and Time") || param2.equalsIgnoreCase("End Date and Time")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9445,10 +9445,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
 			//service.saveXpathParams(param1, param2, scripNumber, xpath);
-		}
-
-
 			return keysToSend;
+			}
+
+
+			//return keysToSend;
 			} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during sendValue" + scripNumber);
