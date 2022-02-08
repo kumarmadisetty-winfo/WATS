@@ -4493,6 +4493,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 			}
 		
+		
+		
+		
 		try {if (param1.equals("Republish")) {
 			Thread.sleep(3000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8784,6 +8787,25 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		
+		try {
+			if(param1.equalsIgnoreCase("Create Note")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//body[@dir='ltr']")));
+			Thread.sleep(1000);
+			WebElement waittill = driver.findElement(By.xpath("//body[@dir='ltr']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(500);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			System.out.println(e);
+			}
+		
+		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='" + param1
