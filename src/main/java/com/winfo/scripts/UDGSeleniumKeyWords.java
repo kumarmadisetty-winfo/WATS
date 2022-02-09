@@ -4241,7 +4241,30 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			//throw e;
 			}
-		
+		//DH 21
+		try {
+			if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Action")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + keysToSend+ "')]/following::*[@title='" + param2 + "'][1]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" + keysToSend+ "')]/following::*[@title='" + param2 + "'][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(2000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked selectAValue" + scripNumber);
+			String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
+			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+			return;
+			}
+			} catch (Exception e) {
+			System.out.println(e);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during selectAValue" + scripNumber);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			//throw e;
+			}
 		try {
 			Thread.sleep(5000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8796,7 +8819,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			WebElement waittill = driver.findElement(By.xpath("//body[@dir='ltr']"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
-			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			waittill.sendKeys(keysToSend);
+		//	typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			return keysToSend;
@@ -12223,7 +12247,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::a)[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
