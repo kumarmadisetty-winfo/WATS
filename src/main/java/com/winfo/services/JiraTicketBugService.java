@@ -95,7 +95,9 @@ public class JiraTicketBugService {
 		try {
 			String args = testsetid.toString();
 			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
-			final String uri = fetchConfigVO.getUri_test_scripts() + args;
+			//fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+			//fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			final String uri = fetchConfigVO.getMETADATA_URL() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = testRunService.getFetchMetaData(args, uri);
 
 			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
@@ -103,10 +105,30 @@ public class JiraTicketBugService {
 
 			// File filenew=new
 			// File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-			File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
+			
+			File imageFolder =new File(fetchConfigVO.getScreenshot_path()+fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ testrunname);
+			File[] images = imageFolder.listFiles();
+			String failedImageToAttach=null;
+			for(File image:images) {
+				String imageName = image.getName();
+				Integer imageSeq=Integer.parseInt(imageName.split("_")[0]);
+				String status = imageName.split("_")[6];
+				String status2 = status.split("\\.")[0];
+				if(imageSeq.equals(seqnum) ){
+					if(status2.equalsIgnoreCase("Failed")) {
+						failedImageToAttach=imageName;
+						break;
+					}
+				}
+			}
+			File filenew = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ testrunname + "/" + failedImageToAttach);
+			
+			/*File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");*/
 
-			System.out.println("jira pdf path= " + filenew);
+			System.out.println("jira image path= " + filenew);
 			builder.part("file", new FileSystemResource(filenew));
 		} catch (Exception e) {
 			System.out.println(e);
