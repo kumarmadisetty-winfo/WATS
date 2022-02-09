@@ -109,9 +109,9 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-//			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
-//			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-//			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+	//		fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
+	//		fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+	//		fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -555,7 +555,7 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 
-						if (message != null && !message.startsWith("Example") && !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group") && !message.startsWith("item") && !message.startsWith("Select Subinventories") && !message.startsWith("Comments")) {
+						if (message != null && !message.startsWith("Example") && !message.startsWith("Add Collaborator Type")&& !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group") && !message.startsWith("item") && !message.startsWith("Select Subinventories") && !message.startsWith("Comments")) {
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);
