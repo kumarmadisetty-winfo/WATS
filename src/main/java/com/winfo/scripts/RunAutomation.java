@@ -404,7 +404,7 @@ public class RunAutomation {
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			String os=dataBaseEntry.getNodeOs(Integer.parseInt(fetchMetadataListsVO.get(0).getTest_set_line_id()));
 			if(os!=null) {
-				driver = deriverConfiguration.getWebDriver(fetchConfigVO,"windows");
+				driver = deriverConfiguration.getWebDriver(fetchConfigVO,os);
 			}
 			else {
 				isDriverError=true;
