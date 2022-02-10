@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.vo.Status;
 
 @Service
@@ -120,4 +122,30 @@ public class DataBaseEntry {
 		// TODO Auto-generated method stub
 		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus);
 	}
+	
+	
+	
+	@Transactional
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
+		try {
+			Map<String, Map<String, TestSetScriptParam>>map =  dao.getTestRunMap(test_run_id);
+			return map;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Transactional
+	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id){
+			TestSetLines testSetLine  =	dao.getTestSetLine(test_set_line_id);
+			return dao.getTestScriptMap(testSetLine);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

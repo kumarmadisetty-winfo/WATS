@@ -119,6 +119,7 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -2018,7 +2019,11 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Date date = new Date();
 				Timestamp startTimestamp = new Timestamp(TStarttime.getTime());
 				Timestamp endTimestamp = new Timestamp(Tendtime.getTime());
+				
 
+				Map<String, Map<String, TestSetScriptParam>> descriptionList = databaseentry.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
+				
+				
 				Map<Date, Long> timeslist = limitScriptExecutionService
 						.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
 				if (timeslist.size() == 0) {
@@ -2399,6 +2404,17 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					// new change-database to get error message
 					String error = databaseentry.getErrorMessage(sndo, ScriptNumber, testRunName, fetchConfigVO);
 					String errorMessage = "Failed Message:" + "" + error;
+					
+					String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
+					String inputParam = descriptionList.get(sno).get(Reason).getInput_parameter();
+					//String inputValue = fetchMetadataListVO.get(metadataCounter).getInput_value();
+					String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+					//metadataCounter++;
+					
+					
+					
+					
 					Paragraph pr1 = new Paragraph();
 					pr1.add("Status:");
 
@@ -2412,6 +2428,15 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						if (error != null) {
 							document.add(new Paragraph(errorMessage, fnt));
 						}
+						if(stepDescription!=null) {
+							document.add(new Paragraph("Step Description :"+stepDescription, fnt));
+						}
+						if(inputParam!=null) {
+							document.add(new Paragraph("Input Parameter :"+inputParam, fnt));
+							if(inputValue!=null) {
+								document.add(new Paragraph("Input Value :"+inputValue, fnt));
+							}
+						}
 						document.add(Chunk.NEWLINE);
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
@@ -2421,6 +2446,15 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					} else {
 						document.add(new Paragraph(step, fnt));
+						if(stepDescription!=null) {
+							document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+						}
+						if(inputParam!=null) {
+							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+							if(inputValue!=null) {
+								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+							}
+						}
 						Anchor target1 = new Anchor(status);
 						target1.setName(String.valueOf(status));
 						pr1.add(target1);
@@ -2464,6 +2498,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					long diffSeconds = diff / 1000 % 60;
 					long diffMinutes = diff / (60 * 1000) % 60;
 					long diffHours = diff / (60 * 60 * 1000);
+					
+					Map<String, TestSetScriptParam> map = databaseentry.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
+					
 					String TestRun = test_Run_Name;
 					String ScriptNumber = Script_Number;
 					String ScriptNumber1 = Scenario_Name;
@@ -2529,12 +2566,27 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						String S = "Status:" + " " + status;
 						String Scenarios = "Scenario Name :" + "" + Scenario;
 						String step = "Step No :" + "" + steps;
+						String stepDescription = map.get(steps).getTest_run_param_desc(); 
+						//String inputParam = fetchMetadataListVO.get(metaDataCounter).getInput_parameter();
+						String inputParam = map.get(steps).getInput_parameter();
+						//String inputValue = fetchMetadataListVO.get(metaDataCounter).getInput_value();
+						String inputValue = map.get(steps).getInput_value();
+					
 						img1.scalePercent(65, 65);
 						img1.setAlignment(Image.ALIGN_RIGHT);
 						document.add(img1);
 						document.add(new Paragraph(S, fnt));
 						document.add(new Paragraph(Scenarios, fnt));
 						document.add(new Paragraph(step, fnt));
+						if(stepDescription!=null) {
+							document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+						}
+						if(inputParam!=null) {
+							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+							if(inputValue!=null) {
+								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+							}
+						}
 						document.add(Chunk.NEWLINE);
 
 						Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
@@ -3041,6 +3093,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
 			document.add(table1);
 			document.newPage();
+			
+			Map<String, TestSetScriptParam> map = databaseentry.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
+			
 //End to add Script level details
 //				Start to add screenshoots and pagenumbers and wats icon		 		
 			int i = 0;
@@ -3073,6 +3128,10 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String Scenarios = "Scenario Name :" + "" + Scenario;
 				String Message = "Failed at Line Number:" + "" + Reason;
 				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
+				String stepDescription = map.get(Reason).getTest_run_param_desc();
+				String inputParam = map.get(Reason).getInput_parameter();
+				String inputValue = map.get(Reason).getInput_value();
+				
 				// String message = "Failed at
 				// :"+fetchMetadataListVO.get(0).getInput_parameter();
 //						document.add(new Paragraph(TR, fnt));
@@ -3085,6 +3144,19 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					if (fetchConfigVO.getErrormessage() != null) {
 						document.add(new Paragraph(errorMessage, fnt));
 					}
+					if(stepDescription!=null) {
+						document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+					}
+
+					if(inputParam!=null) {
+							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+						    if(inputValue!=null) {
+								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+							}
+					}
+					if (fetchConfigVO.getErrormessage() != null) {
+						document.add(new Paragraph(errorMessage, fnt));
+					}
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
@@ -3093,6 +3165,19 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
+					if (fetchConfigVO.getErrormessage() != null) {
+						document.add(new Paragraph(errorMessage, fnt));
+					}
+					if(stepDescription!=null) {
+						document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+					}
+
+					if(inputParam!=null) {
+							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+						    if(inputValue!=null) {
+								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+							}
+					}
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
