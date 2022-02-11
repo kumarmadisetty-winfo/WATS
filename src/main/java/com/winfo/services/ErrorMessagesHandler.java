@@ -305,6 +305,63 @@ public class ErrorMessagesHandler {
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
 			
 			}
+	//new addition		
+			else if(actionName.equalsIgnoreCase("Navigate")) {
+				error_message = "Failed to Navigate to "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			else if(actionName.equalsIgnoreCase("openTask")) {
+				error_message = "Failed to Open Task menu";
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
+			else if(actionName.equalsIgnoreCase("clickLinkAction")) {
+				error_message = "Failed during Click Link Action => Not able click the link "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
+			else if(actionName.equalsIgnoreCase("clickRadiobutton")) {
+				error_message = "Failed during Click Radio Button => Not able to click Radio Button "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
+			else if(actionName.equalsIgnoreCase("clickTableImage")) {
+				error_message = "Failed during Click Table Image => Not able to click image from "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			else if(actionName.equalsIgnoreCase("clickButton Dropdown")) {
+				error_message = "Failed during Click Button Dropdown => cannot click button dropdown at "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
+			else if(actionName.equalsIgnoreCase("moveToElement")) {
+				error_message = "Failed during Move To Element => cannot move to element "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			else if(actionName.equalsIgnoreCase("copy")) {
+				error_message = "Failed during Copy => cannot copy element at "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
+			
+			
+//new addition			
 			else if (actionName.equalsIgnoreCase("clickButton") && message != null) {
 				// String error_message="Took more than 10 seconds to load the page";
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
