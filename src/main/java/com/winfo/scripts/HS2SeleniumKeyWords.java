@@ -8391,6 +8391,42 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		
+		
+		//DH 23
+		try {
+			if (param1.equalsIgnoreCase("Correct Unmatched Invoices")) {
+			Thread.sleep(2000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1 + "']/following::span[text()='" + keysToSend + "']/following::label[1]")));
+
+			WebElement waittext = driver.findElement(By.xpath("//*[text()='" + param1 + "']/following::span[text()='" + keysToSend + "']/following::label[1]"));
+			Thread.sleep(1000);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(500);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+			String params = param1;
+			String xpath = "//*[text()='param1']/following::span[text()='keysToSend']/following::label[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+
+
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			System.out.println(e);
+			}
+		
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Item Description")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -11809,7 +11845,51 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		System.out.println(e);
 		}
 		
-		
+
+		//DH 23
+		try {
+		if (param1.equalsIgnoreCase("Pay Groups")) {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+		By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2+ "']")));
+		WebElement waittext = driver
+		.findElement(By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2+ "']"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		Thread.sleep(2000);
+		WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')]"));
+		clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
+		Thread.sleep(5000);
+		WebElement values = driver.findElement(By.xpath(
+		"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
+		+ param2 + "']/following::input[1]"));
+		typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+		enter(driver, fetchMetadataVO, fetchConfigVO);
+		WebElement select = driver
+		.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
+		+ keysToSend + "')][1]"));
+		clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+		WebElement searchok = driver
+		.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
+		+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
+		clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Thread.sleep(5000);
+		String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']/following::*[@title='param2']"
+		+ ";" + "//a[contains(text(),'Search')]" + ";"
+		+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
+		+ ";"
+		+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+		return;
+		}
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+		System.out.println(e);
+		}
 		
 		
 		
