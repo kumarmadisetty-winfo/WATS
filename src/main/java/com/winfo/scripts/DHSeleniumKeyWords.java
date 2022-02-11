@@ -5098,7 +5098,44 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					//Action: Click Button
+				//DH 22
+				try {
 
+					if (param1.equalsIgnoreCase("Update Address")&&param2.equalsIgnoreCase("OK")) {
+
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+					WebElement waittext = driver.findElement(By.xpath(("(//div[contains(@id,'popup-container')]//button[@accesskey='K'])[2]")));
+
+					Actions actions = new Actions(driver);
+
+					actions.moveToElement(waittext).build().perform();
+
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+
+					Thread.sleep(15000);
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					log.info("Sucessfully Clicked OK clickButton" + scripNumber);
+
+					String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='K'])[1]";
+
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+					return;
+
+					}
+
+					} catch (Exception e) {
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+					log.error("Failed during clickButton" + scripNumber);
+
+					System.out.println(e);
+
+					}
 					try {
 
 					if (param2.equalsIgnoreCase("OK")) {
@@ -9287,6 +9324,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during Lines or Query By Example  sendValue" + scripNumber);
 			System.out.println(e);
 		}
+		
 		try {
 			if (param2.equalsIgnoreCase("Unapply Accounting Date")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
