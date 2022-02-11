@@ -11833,9 +11833,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 				
 				
-				//DH 23
+				//DH 24
 				try {
-				if (param1.equalsIgnoreCase("Pay Groups")) {
+				if (param1.equalsIgnoreCase("Pay Groups") || param1.equalsIgnoreCase("Sources")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2+ "']")));
