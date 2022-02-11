@@ -7390,8 +7390,28 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
-			throw e;
+			//throw e;
 		}
+		//New Code for NTA.SO.4
+				try {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@summary,'" + param1 + "')]")));
+				WebElement waittext = driver.findElement(By.xpath("//*[contains(@summary,'" + param1 + "')]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
+				String xpath = "//*[contains(@summary,'param1')]";
+				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+				} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during tableRowSelect" + scripNumber);
+				System.out.println(e);
+				throw e;
+				}
 	}
 
 	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
@@ -8384,6 +8404,64 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		
+		//DH 25
+				try {
+				if (param1.equalsIgnoreCase("Supplier Contact")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.xpath(("(//*[normalize-space(text())='" + param1 + "']/following::input[@type='checkbox'])[1]"))));
+				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='" + param1 + "']/following::input[@type='checkbox'])[1]"));
+				Thread.sleep(1000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(500);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				String params = param1;
+				String xpath = "(//*[normalize-space(text())='param1']/following::input[@type='checkbox'])[1]";
+				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+				}
+				} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during clickCheckbox" + scripNumber);
+				System.out.println(e);
+				screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+				}
+
+				
+
+				// po.511
+				try {
+				if (param1.equalsIgnoreCase("Internal Responder")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.xpath(("(//*[normalize-space(text())='" + param1 + "']/following::input[@type='checkbox'])[2]"))));
+				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='" + param1 + "']/following::input[@type='checkbox'])[2]"));
+				Thread.sleep(1000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(500);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				String params = param1;
+				String xpath = "(//*[normalize-space(text())='param1']/following::input[@type='checkbox'])[2]";
+				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+				}
+				}
+				catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during clickCheckbox" + scripNumber);
+				System.out.println(e);
+				screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+				}
+
+		
+		
+		
 		//DH 23
 				try {
 					if (param1.equalsIgnoreCase("Correct Unmatched Invoices")) {
@@ -8717,8 +8795,37 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			throw e;
+//			throw e;
 		}
+		
+		//New code for PTP.Ex.111
+				try {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+
+
+				wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.xpath(("(//*[contains(text(),'" + param1 + "')]/following::input[@type='checkbox'])[1]"))));
+
+				WebElement waittext = driver.findElement(By.xpath("(//*[contains(text(),'" + param1 + "')]/following::input[@type='checkbox'])[1]"));
+				Thread.sleep(1000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(500);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				String params = param1;
+				String xpath = "(//*[contains(text(),'param1')]/following::input[@type='checkbox'])[1]";
+				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+				} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during clickCheckbox" + scripNumber);
+				System.out.println(e);
+				screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+				throw e;
+				}
 	}
 
 	public void clickLinkAction(WebDriver driver, String param1, String param2, String keysToSend,
@@ -10631,6 +10738,30 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//New Code for PTP.PO.511
+		try {
+		if (param1.equalsIgnoreCase("Suppliers") && param2.equalsIgnoreCase("Internal Responder")) {
+		WebElement waittill = driver
+		.findElement(By.xpath("//*[text()='" + param1 + "']/following::input[contains(@id,'internalResponder')][1]"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittill).build().perform();
+		// waittill.sendKeys(keysToSend);
+		Thread.sleep(1000);
+		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+		String xpath = "//*[text()='param1']/following::input[contains(@id,'internalResponder')][1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return;
+		}
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during tableSendKeys" + scripNumber);
+		System.out.println(e);
+		}
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Assigned Sets")) {
 				WebElement waittill = driver
