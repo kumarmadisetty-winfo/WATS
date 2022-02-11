@@ -358,6 +358,26 @@ public class ErrorMessagesHandler {
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
 			
 			}
+			else if(actionName.equalsIgnoreCase("copynumber")) {
+				error_message = "Failed during Copy Number => cannot copy element at "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			else if(actionName.equalsIgnoreCase("copytext")) {
+				error_message = "Failed during Copy Text => cannot copy element at "+param1;
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
+			else if(actionName.equalsIgnoreCase("navigateToBackPage")) {
+				error_message = "Failed during Navigate To Back Page";
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Fail", error_message);
+			
+			}
+			
 			
 			
 			
