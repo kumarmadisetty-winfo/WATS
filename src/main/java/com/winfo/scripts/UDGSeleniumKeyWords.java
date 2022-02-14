@@ -1998,6 +1998,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			PdfWriter writer = null;
 			writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
 			Rectangle one = new Rectangle(1360, 800);
+			Rectangle two = new Rectangle(950,700);
 			document.setPageSize(one);
 			document.open();
 			System.out.println("before enter Images/wats_icon.png1");
@@ -2393,7 +2394,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.newPage();
 					} else {
 
-						document.setPageSize(img);
+						document.setPageSize(two);
 						document.newPage();
 					}
 					document.add(img1);
@@ -2441,7 +2442,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
 						// new change-change page size
-						img.scalePercent(52,50);
+						img.scalePercent(76,68);
 						document.add(img);
 
 					} else {
@@ -2462,7 +2463,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
 						// new change-change page size
-						img.scalePercent(54, 52);
+						img.scalePercent(56, 56);
 						document.add(img);
 					}
 
@@ -2594,7 +2595,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
 						// new change-change page size
-						img.scalePercent(54,52);
+						img.scalePercent(56,56);
 						document.add(img);
 						document.add(p);
 						System.out.println("This Image " + "" + image + "" + "was added to the report");
