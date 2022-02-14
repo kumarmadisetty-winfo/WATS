@@ -2546,7 +2546,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					document.add(table1);
 					document.newPage();
 //  End to add Script level details
-
+					//Rectangle two1 = new Rectangle(950,700);
 //	Start to add screenshoots and pagenumbers and wats icon		 		
 					int i = 0;
 					for (String image : fileNameList) {
@@ -2561,7 +2561,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						String status = Status.split("\\.")[0];
 						String Scenario = image.split("_")[2];
 						String steps = image.split("_")[5];
-						document.setPageSize(img);
+						document.setPageSize(two);
 						document.newPage();
 
 						String S = "Status:" + " " + status;
