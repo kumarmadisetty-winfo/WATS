@@ -3162,7 +3162,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(66, 66);
+					img.scalePercent(76, 68);
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
