@@ -3161,7 +3161,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(60, 58);
+					img.scalePercent(52, 50);
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
