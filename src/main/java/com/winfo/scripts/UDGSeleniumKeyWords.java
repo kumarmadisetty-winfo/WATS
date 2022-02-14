@@ -3167,9 +3167,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
-					if (fetchConfigVO.getErrormessage() != null) {
-						document.add(new Paragraph(errorMessage, fnt));
-					}
+					
 					if(stepDescription!=null) {
 						document.add(new Paragraph("Step Description: "+stepDescription, fnt));
 					}
