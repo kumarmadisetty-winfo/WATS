@@ -3156,9 +3156,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 								document.add(new Paragraph("Input Value: "+inputValue, fnt));
 							}
 					}
-					if (fetchConfigVO.getErrormessage() != null) {
-						document.add(new Paragraph(errorMessage, fnt));
-					}
+					
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
