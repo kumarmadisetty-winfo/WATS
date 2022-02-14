@@ -3043,6 +3043,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
 			Rectangle one = new Rectangle(1360, 1200);
+			Rectangle two = new Rectangle(950,600);
 			document.setPageSize(one);
 			document.open();
 			String TestRun = test_Run_Name;
@@ -3115,7 +3116,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					document.newPage();
 				} else {
 
-					document.setPageSize(img);
+					document.setPageSize(two);
 					document.newPage();
 				}
 
@@ -3161,7 +3162,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(58, 56);
+					img.scalePercent(62, 60);
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
