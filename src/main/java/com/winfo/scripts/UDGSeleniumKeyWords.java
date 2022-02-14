@@ -3042,7 +3042,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long diffHours = diff / (60 * 60 * 1000);
 			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
-			Rectangle one = new Rectangle(1360, 800);
+			Rectangle one = new Rectangle(1360, 950);
 			document.setPageSize(one);
 			document.open();
 			String TestRun = test_Run_Name;
@@ -3161,7 +3161,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(52, 50);
+					img.scalePercent(52, 52);
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
@@ -3182,7 +3182,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(54, 52);
+					img.scalePercent(54, 54);
 					document.add(img);
 				}
 
