@@ -2394,7 +2394,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.newPage();
 					} else {
 
-						document.setPageSize(two);
+						document.setPageSize(img);
 						document.newPage();
 					}
 					document.add(img1);
@@ -2442,7 +2442,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
 						// new change-change page size
-						img.scalePercent(76,68);
+						img.scalePercent(48,46);
 						document.add(img);
 
 					} else {
@@ -2561,7 +2561,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						String status = Status.split("\\.")[0];
 						String Scenario = image.split("_")[2];
 						String steps = image.split("_")[5];
-						document.setPageSize(two);
+						document.setPageSize(img);
 						document.newPage();
 
 						String S = "Status:" + " " + status;
@@ -3044,7 +3044,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Document document = new Document();
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
 			Rectangle one = new Rectangle(1360, 800);
-			Rectangle two = new Rectangle(950,700);
+			//Rectangle two = new Rectangle(950,700);
 			document.setPageSize(one);
 			document.open();
 			String TestRun = test_Run_Name;
@@ -3117,7 +3117,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					document.newPage();
 				} else {
 
-					document.setPageSize(two);
+					document.setPageSize(img);
 					document.newPage();
 				}
 
@@ -3161,7 +3161,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(76, 68);
+					img.scalePercent(48, 46);
 					document.add(img);
 				} else {
 					document.add(new Paragraph(step, fnt));
