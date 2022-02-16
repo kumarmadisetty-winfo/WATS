@@ -12687,8 +12687,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
+		//DH 27
 		try {
-			if (param1.equalsIgnoreCase("FIN-7056-Generate Customer Statements")
+			if ((param1.equalsIgnoreCase("FIN-7056-Generate Customer Statements") || param1.equalsIgnoreCase("FIN-7077-Customer Statement"))
 					&& (param2.equalsIgnoreCase("Legal Entity") || param2.equalsIgnoreCase("Customer Name"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				Thread.sleep(10000);
@@ -12851,15 +12852,16 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					enter(driver, fetchMetadataVO, fetchConfigVO);
 
 					Thread.sleep(10000);
-
+//					DH 27
 					WebElement select = driver.findElement(By
 
-							.xpath("//*[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
+							.xpath("//*[text()='Name']/following:*[normalize-space(text())='" + keysToSend + "']"));
 
 //								clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO); 
 
 					select.click();
-
+//					DH 27
+					Thread.sleep(1000);
 					WebElement searchok = driver
 
 							.findElement(By.xpath("//span[text()='Name']/following::a[text()='OK']"));
@@ -12908,10 +12910,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					enter(driver, fetchMetadataVO, fetchConfigVO);
 
 					Thread.sleep(6000);
-
+//					DH 27
 					WebElement select = driver.findElement(By
 
-							.xpath("//*[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
+							.xpath("//*[text()='Name']/following::*[normalize-space(text())='" + keysToSend + "']"));
 
 					// clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 
