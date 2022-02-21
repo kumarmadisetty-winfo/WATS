@@ -7214,9 +7214,9 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//a)[1]")));
+						.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//a[not (@title)])[1]")));
 				Thread.sleep(4000);
-				WebElement waittext = driver.findElement(By.xpath("(//table[@summary='" + param1 + "']//a)[1]"));
+				WebElement waittext = driver.findElement(By.xpath("(//table[@summary='" + param1 + "']//a[not (@title)])[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -7224,7 +7224,7 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickTableLink" + scripNumber);
 				String params = param1;
-				String xpath = "(//table[@summary='param1']//a)[1]";
+				String xpath = "(//table[@summary='param1']//a[not (@title)])[1]";
 		                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 
 				return;
