@@ -42,6 +42,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -4944,6 +4946,161 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		//DH 31
+				try {
+
+
+
+					if (param1.equalsIgnoreCase("Create Baseline")) {
+
+
+
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+
+
+					WebElement waittext = driver.findElement(By.xpath(("//*[text()='aseline']")));
+
+
+
+					Actions actions = new Actions(driver);
+
+
+
+					actions.moveToElement(waittext).build().perform();
+
+
+
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+
+
+
+					Thread.sleep(15000);
+
+
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+
+
+					log.info("Sucessfully Clicked Create Baseline clickButton" + scripNumber);
+
+
+
+					String xpath = "//*[text()='aseline']";
+
+
+
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+
+
+
+					}
+
+
+
+					} catch (Exception e) {
+
+
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+
+
+					log.error("Failed during clickButton" + scripNumber);
+
+
+
+					System.out.println(e);
+
+
+
+					}
+				
+				
+				
+				
+				
+				//DH 31
+				
+				try {
+
+
+
+					if (param1.equalsIgnoreCase("Search")) {
+
+
+
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+
+
+					WebElement waittext = driver.findElement(By.xpath(("//*[text()='Sea']")));
+
+
+
+					Actions actions = new Actions(driver);
+
+
+
+					actions.moveToElement(waittext).build().perform();
+
+
+
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+
+
+
+					Thread.sleep(15000);
+
+
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+
+
+					log.info("Sucessfully Clicked Search clickButton" + scripNumber);
+
+
+
+					String xpath = "//*[text()='Sea']";
+
+
+
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+
+
+
+					}
+
+
+
+					} catch (Exception e) {
+
+
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+
+
+
+					log.error("Failed during clickButton" + scripNumber);
+
+
+
+					System.out.println(e);
+
+
+
+					}
+
 		//New code for PTP.PO.511
 				//DH 29
 				try {
@@ -8456,7 +8613,69 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		
+		//DH 31
+				try {
+					if (param1.equalsIgnoreCase("Bank Statement Lines")) {
+					Thread.sleep(2000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" + param1 + "']/following::span[text()='"+ keysToSend + "'])[1]/preceding::label[1]")));
+
+
+
+					WebElement waittext = driver.findElement(By.xpath("(//*[text()='" + param1 + "']/following::span[text()='" + keysToSend + "'])[1]/preceding::label[1]"));
+					Thread.sleep(1000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					tab(driver, fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(500);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+					String params = param1;
+					String xpath = "(//*[text()='param1']/following::span[text()='keysToSend'])[1]/preceding::label[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+					System.out.println(e);
+					}
+				
+				
+				//DH 31
+				try {
+					if (param1.equalsIgnoreCase("System Transactions")) {
+					Thread.sleep(2000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" + param1 + "']/following::span[text()='"+ keysToSend + "'])[2]/preceding::label[1]")));
+
+
+
+					WebElement waittext = driver.findElement(By.xpath("(//*[text()='" + param1 + "']/following::span[text()='"+ keysToSend + "'])[2]/preceding::label[1]"));
+					Thread.sleep(1000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					tab(driver, fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(500);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+					String params = param1;
+					String xpath = "(//*[text()='param1']/following::span[text()='keysToSend'])[2]/preceding::label[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+					System.out.println(e);
+					}
+
 		//DH 25
 				try {
 				if (param1.equalsIgnoreCase("Supplier Contact")) {
@@ -14913,12 +15132,76 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throw e;
 		}
 	}
-
+	//DH 31
+		private String copyNumbers(String value) {
+			Pattern p = Pattern.compile("(\\b[Payment]+\\s[\\d]+)"); // the pattern to search for
+			Matcher m = p.matcher(value);
+			String theGroup = null;
+			// if we find a match, get the group
+			if (m.find())
+			{
+			// we're only looking for one group, so get it
+			theGroup = m.group(1);
+			theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
+			theGroup = theGroup.replaceAll(" ", "");
+			// print the group out for verification
+			System.out.format(theGroup);
+			}
+			return theGroup;
+			}
+		
+	
 	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
 
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+		//DH 31
+				try {if (inputParam1.equalsIgnoreCase("Confirmation") && inputParam2.equalsIgnoreCase("Payment")) {
+					Thread.sleep(5000);
+
+
+
+					WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1 + "']/following::*[contains(text(),'" + inputParam2 + "')][1]"));
+
+
+
+					Actions actions = new Actions(driver);
+
+
+
+					actions.moveToElement(webElement).build().perform();
+					String stringToSearch = webElement.getText() ;
+					System.out.println(stringToSearch);
+					value = copyNumbers(stringToSearch);
+
+
+
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')][1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); String testParamId = fetchMetadataVO.getTest_script_param_id();
+					String testSetId = fetchMetadataVO.getTest_set_line_id();
+					dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+					log.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
+					return value;
+
+
+
+					}
+
+
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Totals or Total copynumber" + scripNumber);
+
+
+
+					System.out.println(inputParam2);
+
+
+
+					}
 
 		try {
 
