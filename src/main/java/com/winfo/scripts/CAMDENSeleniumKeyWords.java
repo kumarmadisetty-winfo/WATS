@@ -8573,6 +8573,31 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickRadiobutton(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//DH 32
+		try {
+			if (param1.equalsIgnoreCase("Select Learning Item")) {	
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+		By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + keysToSend + "']/preceding::input[@type='radio']"))));
+		WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + keysToSend + "']/preceding::input[@type='radio']")));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		Thread.sleep(500);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
+		String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::input[@type='radio']";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); return;
+			}
+		} catch (Exception e) {
+		System.out.println(e);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during clickRadiobutton" + scripNumber);
+		screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+		}
+
+		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -8624,27 +8649,6 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			System.out.println(e);
 		}
-		//DH 32
-				try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + keysToSend + "']/preceding::input[@type='radio']"))));
-				WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + keysToSend + "']/preceding::input[@type='radio']")));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
-				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::input[@type='radio']";
-				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); return;
-				} catch (Exception e) {
-				System.out.println(e);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during clickRadiobutton" + scripNumber);
-				screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-				}
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9386,6 +9390,30 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//DH 32
+		try {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]")));
+		WebElement waittill = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittill).build().perform();
+		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Thread.sleep(1000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[1]";
+		String scriptID=fetchMetadataVO.getScript_id();
+		String metadataID=fetchMetadataVO.getScript_meta_data_id();
+		service.saveXpathParams(scriptID,metadataID,xpath);
+		return keysToSend;
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during Close Date sendValue" + scripNumber);
+		System.out.println(e);
+		}
+
+		
 		//DH 12
 				try {
 					if (param2.equalsIgnoreCase("Close Date: Fixed")) {
@@ -10243,30 +10271,7 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
-		//DH 32
 				try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]")));
-				WebElement waittill = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittill).build().perform();
-				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
-				String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[1]";
-				String scriptID=fetchMetadataVO.getScript_id();
-				String metadataID=fetchMetadataVO.getScript_meta_data_id();
-				service.saveXpathParams(scriptID,metadataID,xpath);
-				return keysToSend;
-				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Close Date sendValue" + scripNumber);
-				System.out.println(e);
-				}
-
-		try {
 			Thread.sleep(5000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='" + param1
@@ -12268,6 +12273,30 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//DH 32
+				try {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+				"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]")));
+				WebElement waittext = driver.findElement(By.xpath(
+				"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				waittext.click();
+				Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+				} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Event Type dropdownValues" + scripNumber);
+				System.out.println(e);
+				}
+
+
 		//DH 29
 				try {
 					if (param1.equalsIgnoreCase("Create Event") && (param2.equalsIgnoreCase("Event Type"))) {
@@ -14228,28 +14257,6 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
-		//DH 32
-				try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-				"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]")));
-				WebElement waittext = driver.findElement(By.xpath(
-				"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				waittext.click();
-				Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String metadataID = fetchMetadataVO.getScript_meta_data_id();
-				service.saveXpathParams(scriptID, metadataID, xpath);
-				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-				return;
-				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Event Type dropdownValues" + scripNumber);
-				System.out.println(e);
-				}
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
