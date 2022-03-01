@@ -131,7 +131,17 @@ public interface SeleniumKeyWordsInterface {
 				FetchConfigVO fetchConfigVO) throws Exception;
 
 
-
+		public void typeIntoCell() throws Exception;
+		
+		public void loginToExcel() throws Exception;
+		
+		public void openExcelFileWithSheet() throws Exception;
+		
+		public void addRow() throws Exception;
+		
+		public void menuItemOfExcel() throws Exception;
+		
+		public void closeExcel() throws Exception;
 
 
 

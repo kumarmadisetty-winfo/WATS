@@ -16025,4 +16025,40 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	@Override
+	public void typeIntoCell() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginToExcel() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void openExcelFileWithSheet() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addRow() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void menuItemOfExcel() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void closeExcel() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
