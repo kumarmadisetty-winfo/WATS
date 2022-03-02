@@ -112,9 +112,10 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-	//		fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
-	//		fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-	//		fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
+			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			fetchConfigVO.setInstance_name("DH");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -367,6 +368,7 @@ public class RunAutomation {
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			Integer addRowCounter =1;
+			boolean journalScript = false;
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
 			List<String>excellSteps = new ArrayList<String>();
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
@@ -719,7 +721,7 @@ public class RunAutomation {
 					case "CloseExcel":
 						String closeExcell = seleniumFactory.getInstanceObj(instanceName).closeExcel();
 						excellSteps.add(closeExcell);
-						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
+						//this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
 						
 						
 						
@@ -730,11 +732,12 @@ public class RunAutomation {
 						excellSteps.add(typeCell);
 						break;
 					case "AddRow":
-						seleniumFactory.getInstanceObj(instanceName).addRow(addRowCounter);
+						addRowCounter = seleniumFactory.getInstanceObj(instanceName).addRow(addRowCounter);
 						break;
 					case "OpenExcelFileWithSheet":
-						List<String> openExcell = seleniumFactory.getInstanceObj(instanceName).openExcelFileWithSheet(driver, param1, param2, instanceName, instanceName, fetchMetadataVO, fetchConfigVO);
+						List<String> openExcell = seleniumFactory.getInstanceObj(instanceName).openExcelFileWithSheet(driver, param1, param2,value1,value2, fetchMetadataVO, fetchConfigVO);
 						excellSteps.addAll(openExcell);
+						journalScript = true;
 						break;
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
@@ -747,6 +750,11 @@ public class RunAutomation {
 
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
+						
+						if(journalScript) {
+						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
+						}
+						else {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Pass");
@@ -776,7 +784,10 @@ public class RunAutomation {
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
 								test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
+						}
 					}
+					
+					if(!journalScript) {
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
@@ -784,6 +795,7 @@ public class RunAutomation {
 						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 					} catch (Exception e) {
 						System.out.println("e");
+					}
 					}
 				} catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);

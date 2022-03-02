@@ -144,7 +144,7 @@ public interface SeleniumKeyWordsInterface {
 		public String closeExcel() throws Exception;
 		public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception;
-		public void addRow(Integer addrow) throws Exception;
+		public Integer addRow(Integer addrow) throws Exception;
 		
 		public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;

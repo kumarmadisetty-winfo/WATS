@@ -16134,9 +16134,9 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 
 	@Override
-	public void addRow(Integer addrow) throws Exception {
+	public Integer addRow(Integer addrow) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
