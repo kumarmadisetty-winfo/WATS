@@ -16112,40 +16112,82 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	
+
 	@Override
-	public void typeIntoCell() throws Exception {
+	public String loginToExcel(WebDriver driver, String param1,String param2,String username,String password, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
+		String s ="    Login To Excel    "+username+"    "+password;
+		return s;
+	}
+
+	
+
+	@Override
+	public void addRow(Integer addrow) throws Exception {
+		// TODO Auto-generated method stub
+		int a = addrow.intValue();
+		a++;
+		addrow=a;
 		
 	}
 
 	@Override
-	public void loginToExcel() throws Exception {
+	public String menuItemOfExcel(WebDriver driver, String param1,FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
+		String s ="    Select Menu Item Of Excel    "+param1;
+		return s;
+	}
+
+	@Override
+	public String closeExcel() throws Exception {
+		// TODO Auto-generated method stub
+		String s ="    Close Excel";
+		return s;
+	}
+
+	@Override
+	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
+			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		List<String> openExcelSteps = new ArrayList<String>();
+		String s ="*** Settings ***";
+	    openExcelSteps.add(s);
+	    s="Library    RPA.Desktop";
+	    openExcelSteps.add(s);
+	    s="Library    RPA.Desktop.Windows";
+	    openExcelSteps.add(s);
+	    s="Resource    CustomKeyword.robot";
+	    openExcelSteps.add(s);
+	    s="Variables    excelinfo.yaml";
+	    openExcelSteps.add(s);
+	    s="*** Tasks ***";
+	    openExcelSteps.add(s);
+	    s="Create Journal Entry";
+	    openExcelSteps.add(s);
+	    s="    [Setup]    Set Automation Speed    slow";
+	    openExcelSteps.add(s);
+		
+		
+		s="    Open Excel File With Sheet    "+fileName+"    "+sheetName;
+		openExcelSteps.add(s);
+		return openExcelSteps;
 		
 	}
 
 	@Override
-	public void openExcelFileWithSheet() throws Exception {
+	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,Integer addrowCounter) throws Exception {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addRow() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void menuItemOfExcel() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void closeExcel() throws Exception {
-		// TODO Auto-generated method stub
-		
+		String s ="";
+		if(addrowCounter>1) {
+		s="    Type Into Cell    "+param1+"    "+value1+"    "+addrowCounter;
+		}
+		else {
+			s="    Type Into Cell    "+param1+"    "+value1;	
+		}
+		return s;
 	}
 
 }

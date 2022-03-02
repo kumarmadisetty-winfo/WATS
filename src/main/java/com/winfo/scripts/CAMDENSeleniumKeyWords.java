@@ -16113,40 +16113,44 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+		@Override
+	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
+			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
-	public void typeIntoCell() throws Exception {
+	public String closeExcel() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addRow(Integer addrow) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void loginToExcel() throws Exception {
+	public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void openExcelFileWithSheet() throws Exception {
+	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addRow() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void menuItemOfExcel() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void closeExcel() throws Exception {
-		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 }

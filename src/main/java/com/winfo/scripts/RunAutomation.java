@@ -1,5 +1,7 @@
 package com.winfo.scripts;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
+import com.winfo.services.FetchMetadataListVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
@@ -363,8 +366,9 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
+			Integer addRowCounter =1;
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
-
+			List<String>excellSteps = new ArrayList<String>();
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -453,6 +457,7 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 					case "Dropdown Values":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
@@ -698,11 +703,45 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1, param2, value1,
 								value2, fetchMetadataVO, fetchConfigVO);
 						break;
+					
+					
+					
+					
+					case "LoginToExcel":
+						userName = fetchMetadataVO.getInput_value();
+						String login = seleniumFactory.getInstanceObj(instanceName).loginToExcel(driver, param1, param2,userName,dataBaseEntry.getPassword(param, userName, fetchConfigVO), fetchMetadataVO, fetchConfigVO);
+						excellSteps.add(login);
+						break;
+					case "SelectMenuItemOfExcel":
+						String selectMenu = seleniumFactory.getInstanceObj(instanceName).menuItemOfExcel(driver, param1, fetchMetadataVO, fetchConfigVO);
+						excellSteps.add(selectMenu);
+						break;
+					case "CloseExcel":
+						String closeExcell = seleniumFactory.getInstanceObj(instanceName).closeExcel();
+						excellSteps.add(closeExcell);
+						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
+						
+						
+						
+						
+						break;
+					case "TypeIntoCell":
+						String typeCell = seleniumFactory.getInstanceObj(instanceName).typeIntoCell(driver, param1, value1, fetchMetadataVO, fetchConfigVO, addRowCounter);
+						excellSteps.add(typeCell);
+						break;
+					case "AddRow":
+						seleniumFactory.getInstanceObj(instanceName).addRow(addRowCounter);
+						break;
+					case "OpenExcelFileWithSheet":
+						List<String> openExcell = seleniumFactory.getInstanceObj(instanceName).openExcelFileWithSheet(driver, param1, param2, instanceName, instanceName, fetchMetadataVO, fetchConfigVO);
+						excellSteps.addAll(openExcell);
+						break;
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",
 						// fetchMetadataListVO, fetchConfigVO);
 						break;
+						
 					}
 					i++;
 
@@ -797,5 +836,43 @@ public class RunAutomation {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 			throw e;
 		}
+	}
+	public void createRobot(FetchConfigVO fetchConfigVO,List<FetchMetadataVO> fetchMetadataListVO,String seq_num ,List<String>excelSteps) {
+		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
+		
+		File theDir = new File(Folder);
+		if (!theDir.exists()) {
+			System.out.println("creating directory: " + theDir.getName());
+			boolean result = false;
+			try {
+				theDir.mkdirs();
+				result = true;
+			} catch (SecurityException se) {
+				// handle it
+				System.out.println(se.getMessage());
+			}
+		} else {
+			System.out.println("Folder exist");
+		}
+		FileWriter writer;
+		try {
+			String robotFileName=seq_num+"_"+fetchMetadataListVO.get(0).getScript_number()+".robot";
+			String completePath=Folder+robotFileName;
+		//	writer = new FileWriter("C:\\Users\\Winfo solutions\\Priya\\Documents\\createInvoice.robot");
+			writer = new FileWriter(completePath);
+			for(String codeline:excelSteps)
+	    	  {
+	    		//String code=codeline.getRobot_line();  
+	    		writer.write(codeline + System.lineSeparator());
+	    	  }
+		//	writer.write(robotCodeLine + System.lineSeparator());
+	      writer.close();
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
