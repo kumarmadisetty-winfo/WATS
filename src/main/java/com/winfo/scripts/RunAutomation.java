@@ -1,5 +1,8 @@
 package com.winfo.scripts;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -15,27 +18,41 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itextpdf.text.log.SysoCounter;
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
@@ -69,7 +86,14 @@ public class RunAutomation {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 	public String c_url = null;
+	@Value("${configvO.watslogo}")
+	private String watslogo;
 
+	@Value("${configvO.watsvediologo}")
+	private String watsvediologo;
+
+	@Value("${configvO.whiteimage}")
+	private String whiteimage;
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
 	
@@ -136,10 +160,10 @@ public class RunAutomation {
 //			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
-			//fetchConfigVO.setChrome_driver_path("C:\\Users\\Winfo solutions\\Priya\\cromeDriver\\chromedriver_win32\\chromedriver.exe");
-			//fetchConfigVO.setPdf_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\padf\\\\");
-			//fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\screen\\\\");
-		//	fetchConfigVO.setChrome_driver_path("C:\\EBS-Automation\\EBS Automation-POC\\Driver\\chromedriver.exe");
+	//		fetchConfigVO.setChrome_driver_path("C:\\Users\\Winfo solutions\\Priya\\cromeDriver\\chromedriver_win32\\chromedriver.exe");
+//			fetchConfigVO.setPdf_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\padf\\\\");
+//			fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\screen\\\\");
+	//		fetchConfigVO.setChrome_driver_path("C:\\EBS-Automation\\EBS Automation-POC\\Driver\\chromedriver.exe");
 			//fetchConfigVO.setPdf_path("C:\\EBS-Automation\\WATS_Files\\pdf\\");
 			//fetchConfigVO.setScreenshot_path("C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\");
 
@@ -147,11 +171,15 @@ public class RunAutomation {
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
-			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
-			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
+//			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
+//			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
+//					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
+			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap=new TreeMap<Integer, List<FetchMetadataVO>>();
+			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
-			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
-					fetchMetadataListVO, metaDataMap, args);
+			
+//			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
+//					fetchMetadataListVO, metaDataMap, args);
 
 			Date date = new Date();
 			  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -181,9 +209,10 @@ public class RunAutomation {
 			fetchConfigVO.setStarttime1(date);
 			
 			System.out.println(metaDataMap.toString());
+	
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 		   try {
-			for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
+			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				executor.execute(() -> {
 					try {
 						long starttimeIntermediate = System.currentTimeMillis();
@@ -193,6 +222,7 @@ public class RunAutomation {
 							executor.shutdown();
 							System.out.println("treminattion is succeed");
 						} else {
+							System.out.println(metaData.getKey());
 							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 						}
 						long i = System.currentTimeMillis() - starttimeIntermediate;
@@ -222,7 +252,7 @@ public class RunAutomation {
 					 * dataService .getDependentScriptMap();
 					 */
 					System.out.println(dependentScriptMap.toString());
-					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
+					for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						executordependent.execute(() -> {
 							try {
 								String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
@@ -290,7 +320,7 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
+			Entry<Integer, List<FetchMetadataVO>> metaData) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 //		//String start_time=null;
@@ -318,7 +348,7 @@ public class RunAutomation {
 		boolean isDriverError = true;
 		try {
 
-			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
+		//	driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
@@ -344,7 +374,7 @@ public class RunAutomation {
 			}
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
-			driver.quit();
+			//driver.quit();
 		}
 	}
 
@@ -428,8 +458,16 @@ public class RunAutomation {
 								dbValue=	codeLineRepo.findByConfigurationId(Integer.parseInt(fetchMetadataListVO.get(0).getTest_set_id()),key);
 							}
 							if(value.equalsIgnoreCase("<Pick from Java>"))
-							{
-								String	image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"+ fetchMetadataListVO.get(0).getTest_run_name();
+							{String	image_dest="";
+								if(defaultCodeLine.contains("[TearDown]"))
+								{
+										image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"+ fetchMetadataListVO.get(0).getTest_run_name()+"	"+fetchMetadataListVO.get(0).getSeq_num();
+								}
+								else
+								{
+										image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"+ fetchMetadataListVO.get(0).getTest_run_name();
+
+								}
 
 							//	String path=fetchMetadataVO.getCustomer_name() + "/"+ fetchMetadataVO.getTest_run_name() + "/";
 								dbValue=image_dest;
@@ -472,8 +510,8 @@ public class RunAutomation {
 				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id = fetchMetadataVO.getTest_script_param_id();
-				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-						"In-Progress");
+//				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
+//						"In-Progress");
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -851,7 +889,7 @@ public class RunAutomation {
 							String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 									+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
 							
-							//String Folder = "C:\\EBS-Automation\\EBS Automation-POC\\robot files\\";
+						//	String Folder = "C:\\EBS-Automation\\EBS Automation-POC\\robot files\\";
 							File theDir = new File(Folder);
 							if (!theDir.exists()) {
 								System.out.println("creating directory: " + theDir.getName());
@@ -879,14 +917,200 @@ public class RunAutomation {
 					    	  }
 						//	writer.write(robotCodeLine + System.lineSeparator());
 					      writer.close();
+					      String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\ebs\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
 					      robotFileTransfer( completePath, robotFileName);
-					     String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number());
-					   //  System.out.println(response);
+					     String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
+							JSONObject jsonobj= new JSONObject(response);
+						String jsonResponse="";
+							for(Iterator iterator = jsonobj.keySet().iterator(); iterator.hasNext();) {
+							    String key = (String) iterator.next();
+							    System.out.println(jsonobj.get(key));
+							  //  System.out.println();
+							    if(!(key.equalsIgnoreCase("status")))
+							    {
+							    	String value=(String) jsonobj.get(key);
+							    	seleniumFactory.getInstanceObj(instanceName).updateCopyValue(key,value,test_set_line_id,test_set_id);
+							    }
+							    if ((key.equalsIgnoreCase("status")))
+							     {
+							    	String value=(String) jsonobj.get(key);
+							    	jsonResponse=value;
+							    	 
+							 
+							     }
+							    List<String> fileNameList = new ArrayList<String>();
+							    File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+
+								File[] listOfFiles = folder.listFiles();
+								List<File> allFileList = Arrays.asList(listOfFiles);
+								List<File> fileList = new ArrayList<>();
+								String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+								// String seqNumber = "1";
+								for (File file : allFileList) {
+									if (file.getName().startsWith(seqNumber + "_")) {
+										fileList.add(file);
+									}
+								}
+
+								Collections.sort(fileList, new Comparator<File>() {
+
+									public int compare(File f1, File f2) {
+
+										return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
+
+									}
+
+								});
+								for(File f:fileList) {
+								fileNameList.add(f.getName());
+								}
+//							    fileNameList = seleniumFactory.getInstanceObj(instanceName).getFileNameListNew(fetchMetadataListVO, fetchConfigVO);
+					System.out.println("screenshot list first entry :");
+								String name=fileNameList.get(0);
+								System.out.println(name);
+					String arr[]=name.split("_", 0);
+				String lastScreenshotSeqNum=arr[1];
+				int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
+				System.out.println("line num:");
+					System.out.println(lastScreenshotSeqNum);
+				String lastSeqNum=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getSeq_num();
+				System.out.println("fetch metadatavo last eleemnt line number:");
+				System.out.println(lastSeqNum);
+				if(jsonResponse.equalsIgnoreCase("pass"))
+				{
+					for(FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO)
+					{
+						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO1, fetchConfigVO, fetchMetadataVO1.getTest_script_param_id(),"Pass");
+
+					}
+					FetchScriptVO post = new FetchScriptVO();
+					post.setP_test_set_id(test_set_id);
+					post.setP_status("Pass");
+					post.setP_script_id(script_id);
+					post.setP_test_set_line_id(test_set_line_id);
+					post.setP_pass_path(passurl);
+					post.setP_fail_path(failurl);
+					post.setP_exception_path(detailurl);
+					post.setP_test_set_line_path(scripturl);
+					// passcount = passcount+1;
+					Date enddate = new Date();
+					fetchConfigVO.setEndtime(enddate);
+					try {
+						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+					} catch (Exception e) {
+						System.out.println("e");
+					}
+					seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
+							seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+					if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
+								fetchConfigVO);
+					}
+					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+							script_id1, script_Number, "pass", startdate, enddate);
+//					limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
+//							test_set_id);
+				}
+				if(jsonResponse.equalsIgnoreCase("fail"))
+				{
+					System.out.println("inside fail :");
+					for(FetchMetadataVO fetchMetadataVO11 : fetchMetadataListVO)
+					{
+						//int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
+						int currentSeqNum =Integer.parseInt(fetchMetadataVO11.getLine_number());
+						System.out.println("currentSeqNum: "+currentSeqNum);
+						System.out.println("lastPassedSeq: "+lastPassedSeq);
+						if(currentSeqNum<=lastPassedSeq)
+						{
+						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(),"Pass");
+						}
+						else
+						{
+							message="EBS Execution Failed";
+							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(), "Fail",
+									message);
+							fetchConfigVO.setErrormessage(message);
+							FetchScriptVO post = new FetchScriptVO();
+							post.setP_test_set_id(test_set_id);
+							post.setP_status("Fail");
+							post.setP_script_id(script_id);
+							post.setP_test_set_line_id(test_set_line_id);
+							post.setP_pass_path(passurl);
+							post.setP_fail_path(failurl);
+							post.setP_exception_path(detailurl);
+							post.setP_test_set_line_path(scripturl);
+							failcount = failcount + 1;
+							Date enddate = new Date();
+							fetchConfigVO.setEndtime(enddate);
+							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+							
+//							File source = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images/last.jpg");
+					//	File dest = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				//					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg");
+//							try {
+//							    FileUtils.copyFile(source, dest);
+//							} catch (IOException e) {
+//							    e.printStackTrace();
+//							}
+							File file = new ClassPathResource(whiteimage).getFile();
+							// File file = new File("C:\\Users\\Winfo
+							// Solutions\\Desktop\\Add_On\\white.jpg");
+							File file1 = new ClassPathResource(watsvediologo).getFile();
+							// File file1=new File("C:\\Users\\Winfo
+							// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+
+							BufferedImage image = null;
+							image = ImageIO.read(file);
+							BufferedImage logo = null;
+							logo = ImageIO.read(file1);
+							BufferedImage image1 = null;
+							image1 = ImageIO.read(file);
+							Graphics g1 = image1.getGraphics();
+							g1.setColor(Color.red);
+							java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+							g1.setFont(font1);
+							g1.drawString("FAILED IN THIS STEP!!", 400, 300);
+							g1.drawImage(logo, 1012, 15, null);
+							g1.dispose();
+
+							ImageIO.write(image1, "jpg",  new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+									+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg"));
+							seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+								seq_num + "_" + script_Number +".pdf", startdate, enddate);
+
+								
+									
+							limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
+									script_Number, "Fail", startdate, enddate);
+							break;
+						}
+						
+					}
+				}
+//							    for(String name:fileNameList)
+//						{
+//							System.out.println(name);
+//							String arr[]=name.split("_", 1);
+//							String lineNum=arr[1];
+//							System.out.println(lineNum);
+//						String lastLineNumber=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getLine_number();
+//						
+//						}
+						
+							}
+					       System.out.println(response);
+					     
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						//	throw new Exception("Script failed");
 						}
 						}
+						else
+						{
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Pass");
@@ -917,10 +1141,10 @@ public class RunAutomation {
 								test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					}
+					}
 				//	System.out.println("Successfully Executed the" + "" + actionName);
 					try {
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Pass");
+						//dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass");
 						//dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 					} catch (Exception e) {
 						System.out.println("e");
@@ -978,19 +1202,23 @@ public class RunAutomation {
 			throw e;
 		}
 	}
-	public String callLocalRobot(String fileName)
+	public String callLocalRobot(String fileName,String path)
 	{
 		HttpURLConnection conn = null;
     DataOutputStream os = null;
     String output="";
+    String response="";
     try{
         URL url = new URL("http://192.168.1.203:8080/EBSAutomation/api/v3/localRobotJob"); //important to add the trailing slash after add
     //   URL url = new URL("http://localhost:8080/api/v3/localRobotJob"); //important to add the trailing slash after add
 
-     String input1="{\"Data\":  \"";
-     String finalInput=input1+fileName+"\"}";
-       // String[] inputData = {"{\"Data\": [{ \"SUBJECT\": \"invoiceDesktop\"}]}"};
-     String[] inputData= {finalInput};
+   //  String input1="{\"Data\":  \"";
+    // String finalInput=input1+fileName+"\"}";
+     //   String[] inputData = {"{\"Data\": [{ \"SUBJECT\": \"invoiceDesktop\"}]}"};
+        String input1="{\"Data\": [{ \"SUBJECT\": \"";
+        String finalInput=input1+fileName+"\",\"PATH\":\"";
+        String finalInput2=finalInput+path+"\"}]}";
+        String[] inputData= {finalInput2};
         for(String input: inputData){
             byte[] postData = input.getBytes(StandardCharsets.UTF_8);
             conn = (HttpURLConnection) url.openConnection();
@@ -1011,10 +1239,14 @@ public class RunAutomation {
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     (conn.getInputStream())));
 
-           
+           System.out.println("response message");
+           System.out.println(conn.getResponseMessage());
+           System.out.println(conn.getResponseMessage());           
             System.out.println("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
                 System.out.println(output);
+                response=response+output;
+
             }
             conn.disconnect();
         }
@@ -1029,7 +1261,20 @@ public class RunAutomation {
             conn.disconnect();
         }
     }
-    return "File Executed"; 
+    System.out.println("returned Val");
+    System.out.println(response);
+
+    try {
+		JSONObject jsonobj= new JSONObject(response);
+		String val= (String) jsonobj.get("status");
+		System.out.println("json Object Val "+val);
+		
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+    return response; 
 }
 	public void robotFileTransfer(String filePath,String robotFileName)
 	{
@@ -1071,4 +1316,5 @@ public class RunAutomation {
 	            }
 	        }
 	}
+	
 }

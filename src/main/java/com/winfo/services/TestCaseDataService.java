@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -31,31 +32,63 @@ public class TestCaseDataService {
 
 	//public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
-	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+//	public SortedMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+//
+//		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new Tr<String, List<FetchMetadataVO>>();
+//
+//		//dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+//
+//		if (list != null) {
+//
+//			for (FetchMetadataVO testcase : list) {
+//
+//				String test_line_id = testcase.getTest_set_line_id();
+//
+//				String dependency = testcase.getDependency();
+//
+//				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
+//
+//					prepareTestData(testCaseMap, testcase, test_line_id);
+//
+//				} else {
+//
+//					prepareTestData(dependentScriptMap, testcase, test_line_id);
+//
+//				}
+//
+//			}
+//
+//		}
+//
+//		System.out.println(testCaseMap);
+//
+//		return testCaseMap;
+//
+//	}
+	public SortedMap<Integer, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap) {
 
-		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
-
-		//dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+		SortedMap<Integer, List<FetchMetadataVO>> testCaseMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 
 		if (list != null) {
 
-			for (FetchMetadataVO testcase : list) {
+		for (FetchMetadataVO testcase : list) {
 
-				String test_line_id = testcase.getTest_set_line_id();
+		String test_line_id = testcase.getTest_set_line_id();
 
-				String dependency = testcase.getDependency();
+		Integer seq = Integer.parseInt(testcase.getSeq_num());
 
-				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
+		String dependency = testcase.getDependency();
+		if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
 
-					prepareTestData(testCaseMap, testcase, test_line_id);
+		prepareTestData(testCaseMap, testcase,seq);
 
-				} else {
+		} else {
 
-					prepareTestData(dependentScriptMap, testcase, test_line_id);
+		prepareTestData(dependentScriptMap, testcase, seq);
 
-				}
+		}
 
-			}
+		}
 
 		}
 
@@ -63,7 +96,9 @@ public class TestCaseDataService {
 
 		return testCaseMap;
 
-	}
+
+
+		}
 
 	/*
 	 * 
@@ -73,29 +108,51 @@ public class TestCaseDataService {
 	 * 
 	 * }
 	 */ 
- private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
-			String test_line_id) {
+// private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+//			String test_line_id) {
+//
+//		if (testCaseMap.containsKey(test_line_id)) {
+//
+//			List<FetchMetadataVO> testcasedata = testCaseMap.get(test_line_id);
+//
+//			testcasedata.add(testcase);
+//
+//			testCaseMap.put(test_line_id, testcasedata);
+//
+//		} else {
+//
+//			List<FetchMetadataVO> testcasedata = new ArrayList<FetchMetadataVO>();
+//
+//			testcasedata.add(testcase);
+//
+//			testCaseMap.put(test_line_id, testcasedata);
+//
+//		}
+//
+//	}
 
-		if (testCaseMap.containsKey(test_line_id)) {
+	private void prepareTestData(SortedMap<Integer, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+			Integer seq) {
 
-			List<FetchMetadataVO> testcasedata = testCaseMap.get(test_line_id);
+			if (testCaseMap.containsKey(seq)) {
+
+			List<FetchMetadataVO> testcasedata = testCaseMap.get(seq);
 
 			testcasedata.add(testcase);
 
-			testCaseMap.put(test_line_id, testcasedata);
+			testCaseMap.put(seq, testcasedata);
 
-		} else {
+			} else {
 
 			List<FetchMetadataVO> testcasedata = new ArrayList<FetchMetadataVO>();
 
 			testcasedata.add(testcase);
 
-			testCaseMap.put(test_line_id, testcasedata);
+			testCaseMap.put(seq, testcasedata);
 
-		}
+			}
 
-	}
-
+			}
 	public List<FetchMetadataVO> getFetchMetaData(String parameter, String uri) {
 
 		System.out.println(uri);
@@ -128,29 +185,29 @@ public class TestCaseDataService {
 
 // 	                          final String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 		try {
-			System.out.println(uri);
+		//	System.out.println(uri);
 
 			RestTemplate restTemplate = new RestTemplate();
 
-			System.out.println(restTemplate);
+			//System.out.println(restTemplate);
 
 			String result = restTemplate.getForObject(uri, String.class);
 
-			System.out.println(result);
+		//	System.out.println(result);
 
 			JSONObject obj = (JSONObject) jsonParser.parse(result);
 
-			System.out.println(restTemplate);
+			//System.out.println(restTemplate);
 
 			JSONArray employeeList = (JSONArray) obj.get("items");
-			System.out.println(employeeList);
+			//System.out.println(employeeList);
 			Map<String, String> map = new TreeMap<>();
 			// Iterate over employee array
 			employeeList.forEach(emp -> parseEmployeeObject((JSONObject) emp, map));
 			JSONObject jsno = new JSONObject(map);
 			Gson g = new Gson();
 			FetchConfigVO vo = g.fromJson(jsno.toString(), FetchConfigVO.class);
-			System.out.println(jsno.toString());
+		//	System.out.println(jsno.toString());
 			return vo;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,11 +221,11 @@ public class TestCaseDataService {
 
 		// Get employee first name
 		String firstName = (String) employee.get("key_name");
-		System.out.println(firstName);
+	//	System.out.println(firstName);
 
 		// Get employee last name
 		String lastName = (String) employee.get("value_name");
-		System.out.println(lastName);
+		//System.out.println(lastName);
 		map.put(firstName, lastName);
 	}
 
@@ -183,7 +240,7 @@ public class TestCaseDataService {
 					+ "&p_exception_path=" + request.getP_exception_path() + "&p_test_set_line_path="
 					+ request.getP_test_set_line_path();
 
-			System.out.println(uri);
+			//System.out.println(uri);
 
 			RestTemplate restTemplate = new RestTemplate();
 

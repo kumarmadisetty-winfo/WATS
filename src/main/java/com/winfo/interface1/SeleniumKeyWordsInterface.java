@@ -132,6 +132,7 @@ public interface SeleniumKeyWordsInterface {
 		public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
 		public  ArrayList<String> ebsActions(FetchMetadataVO fetchMetadataVO, String testRunId,String actionName) throws Exception;
+		public void updateCopyValue(String key,String value,String test_set_line_id,String test_set_id);
 
 
 

@@ -17,7 +17,7 @@ import org.apache.commons.net.ftp.FTPClient;
  */
 public class FTPCOnnc {
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         String server = "192.168.1.203";
         int port = 21;
         String user = "wats_ebs";
@@ -80,6 +80,12 @@ public class FTPCOnnc {
             }
         }
     }
-
+    public static void main(String[] args) {
+    	String name="2_80_Requisition Summary_PTP.PO.2027-Demo1_TestEbs2P_80_Passed.jpg";
+    	String arr[]=name.split("_", 0);
+		String lineNum=arr[1];
+		System.out.println("line num:");
+			System.out.println(lineNum);
+    }
 }
 

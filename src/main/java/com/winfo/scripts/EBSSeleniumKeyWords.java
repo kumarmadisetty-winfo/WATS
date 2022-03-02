@@ -3077,9 +3077,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							document.add(new Paragraph("Step Description :"+stepDescription, fnt));
 						}
 						if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter :"+inputParam, fnt));
+							document.add(new Paragraph("Test Parameter :"+inputParam, fnt));
 							if(inputValue!=null) {
-								document.add(new Paragraph("Input Value :"+inputValue, fnt));
+								document.add(new Paragraph("Test Value :"+inputValue, fnt));
 							}
 						}
 						document.add(Chunk.NEWLINE);
@@ -3100,9 +3100,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							document.add(new Paragraph("Step Description: "+stepDescription, fnt));
 						}
 						if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+							document.add(new Paragraph("Test Parameter: "+inputParam, fnt));
 							if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+								document.add(new Paragraph("Test Value: "+inputValue, fnt));
 							}
 						}
 						img.setAlignment(Image.ALIGN_CENTER);
@@ -3225,9 +3225,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							document.add(new Paragraph("Step Description: "+stepDescription, fnt));
 						}
 						if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+							document.add(new Paragraph("Test Parameter: "+inputParam, fnt));
 							if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+								document.add(new Paragraph("Test Value: "+inputValue, fnt));
 							}
 						}
 						document.add(Chunk.NEWLINE);
@@ -3984,9 +3984,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+							document.add(new Paragraph("Test Input Parameter: "+inputParam, fnt));
 						    if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+								document.add(new Paragraph("Test Value: "+inputValue, fnt));
 							}
 					}
 					
@@ -4005,9 +4005,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+							document.add(new Paragraph("Test Input Parameter: "+inputParam, fnt));
 						    if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
+								document.add(new Paragraph("Test Value: "+inputValue, fnt));
 							}
 					}
 					
@@ -4029,7 +4029,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			}
 			document.close();
-			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
+			//compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
 		} catch (Exception e) {
 			System.out.println("Not able to upload the pdf");
 			e.printStackTrace();
@@ -15182,18 +15182,47 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 					if(value.equalsIgnoreCase("<Pick from Input Value>"))
 					{
+						
 						dbValue=	codeLineRepo.findByTestRunScriptId(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 						codeLine= codeLine.replace("${"+key+"}", dbValue);
+						
 					}
 					
-//					if(value.equalsIgnoreCase("<Pick from Java>"))
-//					{
-//						String	image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\"+ fetchMetadataVO.getTest_run_name();
-//
-//					//	String path=fetchMetadataVO.getCustomer_name() + "/"+ fetchMetadataVO.getTest_run_name() + "/";
-//						dbValue=image_dest;
-//						codeLine= codeLine.replace("${"+key+"}", dbValue);
-//					}
+					if(value.equalsIgnoreCase("<Pick from Java>"))
+					{
+						if(actionName.equalsIgnoreCase("ebsPasteValue"))
+						{
+							String copynumberValue;
+							dbValue=	codeLineRepo.findByTestRunScriptId(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
+							String[] arrOfStr = dbValue.split(">", 5);
+							if (arrOfStr.length < 2) {
+								copynumberValue = dbValue;
+							} else {
+								String Testrun_name = arrOfStr[0];
+								String seq = arrOfStr[1];
+								String line_number = arrOfStr[2];
+								if(Testrun_name.equalsIgnoreCase(fetchMetadataVO.getTest_run_name())&&seq.equalsIgnoreCase(fetchMetadataVO.getSeq_num()))
+								{
+									copynumberValue = dynamicnumber.getCopynumberInputParameter(Testrun_name, seq, line_number, null,null);
+									codeLine= codeLine.replace(key, copynumberValue);
+								}
+								else
+								{
+									copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, null,
+											null);
+									codeLine= codeLine.replace("${"+key+"}", copynumberValue);
+								}								
+							}
+						}
+						else
+						{
+						String	image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\"+ fetchMetadataVO.getTest_run_name();
+
+					//	String path=fetchMetadataVO.getCustomer_name() + "/"+ fetchMetadataVO.getTest_run_name() + "/";
+						dbValue=image_dest;
+						codeLine= codeLine.replace("${"+key+"}", dbValue);
+						}
+					}
 					if(value.equalsIgnoreCase("<Pick from Input Parameter>"))
 					{
 						dbValue=	codeLineRepo.findByTestRunScriptIdInputParam(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
@@ -15240,6 +15269,12 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 									listOfRobotCodeLines.add(waitLine);
 									listOfRobotCodeLines.add(leafLevel);
 								}
+								else if(arrOfStr[arrOfStr.length-1].equalsIgnoreCase(arrOfStr[arrOfStr.length-3]))
+								{
+									String leafLevel=constantPathValueStart+arrOfStr[arrOfStr.length-2]+"\"]//following::div[text()=\""+arrOfStr[arrOfStr.length-1]+"\"][1])";
+									listOfRobotCodeLines.add(waitLine);
+									listOfRobotCodeLines.add(leafLevel);
+								}
 								else
 								{
 									String leafLevel=constantPathValueStart+arrOfStr[arrOfStr.length-1]+"\"])[1]";
@@ -15283,5 +15318,10 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			}
 		}
 			return listOfRobotCodeLines;
+	}
+	public void updateCopyValue(String key,String value,String test_set_line_id,String test_set_id)
+	{
+		dynamicnumber.getTestSetParamIdWithCopyAction( key,value, test_set_line_id, test_set_id);
+		
 	}
 }

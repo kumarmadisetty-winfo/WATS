@@ -31,7 +31,7 @@ public class CopyTestRunDao {
 
 	public int getIds() {
 		Session session = entityManager.unwrap(Session.class);
-		String sql="SELECT WATS_PROD.win_ta_test_set_id_seq.nextval FROM DUAL";
+		String sql="SELECT win_ta_test_set_id_seq.nextval FROM DUAL";
 		SQLQuery query = session.createSQLQuery(sql);
 		
 		List results = query.list();

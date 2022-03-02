@@ -134,7 +134,7 @@ public class CopyTestRunService {
 					if(actionsList.contains(getScriptlinedata.getAction())){
 						setScriptdata.setScriptUpadated("Y");
 					}
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+				}else if(("paste".equalsIgnoreCase(getScriptlinedata.getAction())||"ebsPasteValue".equalsIgnoreCase(getScriptlinedata.getAction()))&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					hexaDecimal=getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname());
 				}
 				else if(getInputvalues.length()>5) {
@@ -155,7 +155,7 @@ public class CopyTestRunService {
 					if(actionsList.contains(getScriptlinedata.getAction())){
 						setScriptdata.setScriptUpadated("Y");
 					}
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+				}else if(("paste".equalsIgnoreCase(getScriptlinedata.getAction())||"ebsPasteValue".equalsIgnoreCase(getScriptlinedata.getAction()))&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}else {
 				setScriptlinedata.setInput_value(covertDateobj);
@@ -168,7 +168,7 @@ public class CopyTestRunService {
 						setScriptdata.setScriptUpadated("Y");
 					}
 
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+				}else if(("paste".equalsIgnoreCase(getScriptlinedata.getAction())||"ebsPasteValue".equalsIgnoreCase(getScriptlinedata.getAction()))&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				}
 				else {
@@ -178,7 +178,7 @@ public class CopyTestRunService {
 					if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
 						setScriptlinedata.setInput_value(null);
 
-					}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					}else if(("paste".equalsIgnoreCase(getScriptlinedata.getAction())||"ebsPasteValue".equalsIgnoreCase(getScriptlinedata.getAction()))&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
 						setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 					}
 					else {
