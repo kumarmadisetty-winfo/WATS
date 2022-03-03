@@ -160,9 +160,9 @@ public class RunAutomation {
 //			fetchConfigVO.setChrome_driver_path("E:\\downloads-chakradhar\\chromedriver.exe");
 //			fetchConfigVO.setPdf_path("E:\\wats-chakradhar\\pdfpatrh\\");
 //			fetchConfigVO.setScreenshot_path("E:\\wats-chakradhar\\Scroonshootpath\\");
-	//		fetchConfigVO.setChrome_driver_path("C:\\Users\\Winfo solutions\\Priya\\cromeDriver\\chromedriver_win32\\chromedriver.exe");
-//			fetchConfigVO.setPdf_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\padf\\\\");
-//			fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\screen\\\\");
+		//	fetchConfigVO.setChrome_driver_path("C:\\Users\\Winfo solutions\\Priya\\cromeDriver\\chromedriver_win32\\chromedriver.exe");
+		//	fetchConfigVO.setPdf_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\padf\\\\");
+		//	fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\Winfo solutions\\\\Priya\\\\softwares\\\\wats\\\\jars\\\\screen\\\\");
 	//		fetchConfigVO.setChrome_driver_path("C:\\EBS-Automation\\EBS Automation-POC\\Driver\\chromedriver.exe");
 			//fetchConfigVO.setPdf_path("C:\\EBS-Automation\\WATS_Files\\pdf\\");
 			//fetchConfigVO.setScreenshot_path("C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\");
@@ -175,8 +175,7 @@ public class RunAutomation {
 //			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 //					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap=new TreeMap<Integer, List<FetchMetadataVO>>();
-			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService
-					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
+			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
 			
 //			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
 //					fetchMetadataListVO, metaDataMap, args);
@@ -347,7 +346,17 @@ public class RunAutomation {
 		System.out.println(detailurl);
 		boolean isDriverError = true;
 		try {
-
+			if(fetchConfigVO.getInstance_name().equalsIgnoreCase("EBS"))
+			{
+				if(fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")||fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))
+				{
+					driver = deriverConfiguration.getWebDriver(fetchConfigVO);
+				}
+			}
+			else
+			{
+				driver = deriverConfiguration.getWebDriver(fetchConfigVO);
+			}
 		//	driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
@@ -374,7 +383,17 @@ public class RunAutomation {
 			}
 		} finally {
 			System.out.println("Execution is completed with" + "" + fetchMetadataListVO.get(0).getScript_id());
-			//driver.quit();
+			if(fetchConfigVO.getInstance_name().equalsIgnoreCase("EBS"))
+			{
+				if(fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")||fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))
+				{
+					driver.quit();
+				}
+			}
+			else
+			{
+				driver.quit();
+			}
 		}
 	}
 
@@ -426,7 +445,7 @@ public class RunAutomation {
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
-			if(instanceName.equalsIgnoreCase("EBS"))
+			if(instanceName.equalsIgnoreCase("EBS")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))))
 			{
 			List<Actions> listOfActions=actionRepo.findByActionTypeOrderById("default");
 			List<CodeLines>listOfCodeLines=codeLineRepo.findByActionIdInOrderByActionIdAscCodeLineIdAsc(listOfActions);
@@ -510,8 +529,7 @@ public class RunAutomation {
 				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id = fetchMetadataVO.getTest_script_param_id();
-//				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-//						"In-Progress");
+
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -536,7 +554,7 @@ public class RunAutomation {
 
 				}
 				try {
-					if(instanceName.equalsIgnoreCase("EBS"))
+					if(instanceName.equalsIgnoreCase("EBS")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))))
 					{
 						robotCodeLines=seleniumFactory.getInstanceObj(instanceName).ebsActions(fetchMetadataVO,fetchMetadataVO.getTest_set_id(),actionName);
 						listOfRobotCodeLines.addAll(robotCodeLines);
@@ -547,6 +565,7 @@ public class RunAutomation {
 					}
 					else
 					{
+						dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"In-Progress");
 					switch (actionName) {
 
 					case "Login into Application":
@@ -556,8 +575,8 @@ public class RunAutomation {
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
 									fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-									fetchMetadataVO.getInput_value(),
-									dataBaseEntry.getPassword(param, userName, fetchConfigVO));
+									fetchMetadataVO.getInput_value(),"welcome123");
+									//dataBaseEntry.getPassword(param, userName, fetchConfigVO));
 							userName = null;
 							break;
 						} else {
@@ -790,6 +809,10 @@ public class RunAutomation {
 						globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver, param1,
 								param2, fetchMetadataVO, fetchConfigVO);
 						break;
+					case "ebsCopyValue":
+						globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver, param1,
+								param2, fetchMetadataVO, fetchConfigVO);
+						break;
 					case "copyy":
 						seleniumFactory.getInstanceObj(instanceName).copyy(driver, fetchMetadataVO.getXpath_location(),
 								fetchMetadataVO, fetchConfigVO);
@@ -811,11 +834,20 @@ public class RunAutomation {
 						
 						seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO, fetchConfigVO);
 						break;
+					case "ebsTabKey":
+						
+						seleniumFactory.getInstanceObj(instanceName).ebsTabKey(driver, fetchMetadataVO, fetchConfigVO);
+						break;
 						
 					case "paste":
 						seleniumFactory.getInstanceObj(instanceName).paste(driver, fetchMetadataVO.getInput_parameter(),
 								fetchMetadataVO, fetchConfigVO, globalValueForSteps);
 						break;
+					case "ebsPasteValue":
+						seleniumFactory.getInstanceObj(instanceName).paste(driver, fetchMetadataVO.getInput_parameter(),
+								fetchMetadataVO, fetchConfigVO, globalValueForSteps);
+						break;
+						
 					case "uploadFileAutoIT":
 						seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(fetchMetadataVO.getField_type(),
 								fetchMetadataVO);
@@ -825,7 +857,10 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
 								fetchConfigVO);
 						break;
-						
+					case "selectByIndex":
+						seleniumFactory.getInstanceObj(instanceName).selectByIndex( driver,  param1,  param2, 
+								 fetchMetadataVO,  fetchConfigVO);
+						break;
 					case "switchDefaultContent":
 						seleniumFactory.getInstanceObj(instanceName).switchDefaultContent(driver, fetchMetadataVO,
 								fetchConfigVO);
@@ -873,6 +908,9 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1, param2, value1,
 								value2, fetchMetadataVO, fetchConfigVO);
 						break;
+					case "selectRadioButton":
+						seleniumFactory.getInstanceObj(instanceName).selectRadioButton(driver, param1,  fetchMetadataVO, fetchConfigVO);
+						break;
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",
@@ -884,7 +922,7 @@ public class RunAutomation {
 
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
-						if(instanceName.equalsIgnoreCase("EBS"))
+						if(instanceName.equalsIgnoreCase("EBS")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))))
 						{
 							String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 									+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
@@ -1108,7 +1146,8 @@ public class RunAutomation {
 							e.printStackTrace();
 						//	throw new Exception("Script failed");
 						}
-						}
+						
+}
 						else
 						{
 						FetchScriptVO post = new FetchScriptVO();
@@ -1144,8 +1183,8 @@ public class RunAutomation {
 					}
 				//	System.out.println("Successfully Executed the" + "" + actionName);
 					try {
-						//dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass");
-						//dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass");
+						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 					} catch (Exception e) {
 						System.out.println("e");
 					}

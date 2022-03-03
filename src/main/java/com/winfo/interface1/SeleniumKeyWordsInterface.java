@@ -133,6 +133,12 @@ public interface SeleniumKeyWordsInterface {
 				FetchConfigVO fetchConfigVO) throws Exception;
 		public  ArrayList<String> ebsActions(FetchMetadataVO fetchMetadataVO, String testRunId,String actionName) throws Exception;
 		public void updateCopyValue(String key,String value,String test_set_line_id,String test_set_id);
+		public void selectRadioButton(WebDriver driver, String param1,FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception;
+		public void ebsTabKey(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
+		public void selectByIndex(WebDriver driver, String param1, String param2,
+				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) ;
+
 
 
 

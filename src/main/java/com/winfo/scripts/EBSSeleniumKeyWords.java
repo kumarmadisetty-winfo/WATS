@@ -408,9 +408,11 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String title1 = driver.getTitle();
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='" + param1 + "']")));
-				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
+//				JavascriptExecutor jse = (JavascriptExecutor) driver;
+//				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				//if("password".equalsIgnoreCase(param1))
+				WebElement waittill = driver.findElement(By.xpath("//input[@type='" + param1 + "']"));
+				waittill.sendKeys(keysToSend);
 				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
@@ -436,8 +438,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
-					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'" + param1 + "')]")));
-			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + param1 + "')]"));
+					.presenceOfElementLocated(By.xpath("//input[@id='usernameField']")));
+			WebElement waittill = driver.findElement(By.xpath("//input[@id='usernameField']"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -911,8 +913,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 
 		File[] listOfFiles = folder.listFiles();
@@ -1075,8 +1077,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
 		// String video_rec=fetchConfigVO.getVideo_rec();
@@ -1265,8 +1267,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
 		// String video_rec=fetchConfigVO.getVideo_rec();
@@ -1476,8 +1478,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
 //		String video_rec=fetchConfigVO.getEnable_video();
@@ -2584,8 +2586,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");			
+			
 			// String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 			String FILE = (Folder + pdffileName);
@@ -4150,7 +4153,40 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String globalValueForSteps)
 
 			throws Exception {
-
+		try {
+			if (inputParam.equalsIgnoreCase("Express Receive")) {
+				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String copynumberValue1;
+				String inputValue = fetchMetadataVO.getInput_value();
+				String[] arrOfStr = inputValue.split(">", 5);
+				if (arrOfStr.length < 2) {
+					copynumberValue1 = inputValue;
+				} else {
+					String Testrun_name = arrOfStr[0];
+					String seq = arrOfStr[1];
+					// String Script_num=arrOfStr[2];
+					String line_number = arrOfStr[2];
+					copynumberValue1 = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
+							testSetId);
+				}
+				WebElement waittext = driver.findElement(
+						By.xpath("(//span[text()='"+copynumberValue1+ "']/following::*[@title='Express Receive'])[1]"));
+				
+				waittext.click();
+				Thread.sleep(2000);
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickImage" + scripNumber);
+				String xpath = "(//span[text()='\"+copynumberValue1+ \"']/following::*[@title='Express Receive'])[1]\")";
+                                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickImag" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			if (inputParam.equalsIgnoreCase("Notifications")) {
 				WebElement waittill = driver.findElement(
@@ -5280,6 +5316,27 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		try {
+			if (param1.equalsIgnoreCase("Express Receive")) {
+				
+				WebElement waittext = driver.findElement(
+						By.xpath("(//span[text()='16749']/following::*[@title='Express Receive'])[1]"));
+				
+				waittext.click();
+				Thread.sleep(2000);
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickImage" + scripNumber);
+				String xpath = "(//span[text()='16749']/following::*[@title='Express Receive'])[1]";
+                                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickImag" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			if (param2.equalsIgnoreCase("Add Row")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5670,6 +5727,64 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if(param1.equalsIgnoreCase("Next")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//button[text()='Next']"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Select")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//button[text()='Select']"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Add to Cart")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("(//button[text()='Add to Cart'])[1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("View Cart and Checkout")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//button[text()='View Cart and Checkout'][1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Edit")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//button[text()='Edit'][1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Save")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("(//button[text()='ave'])[1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Continue with Checkout")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("(//button[text()='Continue with Checkout'])[1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Submit")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("(//button[text()='Sub'])[1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Continue Shopping")) {
+				Thread.sleep(5000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("(//button[text()='Continue Shopping'])[1]"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Logout")) {
+				Thread.sleep(5000);
+				WebElement waittext = driver.findElement(By.xpath("(//img[@title='Logout'])[2]"));
+				waittext.click();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			}
+			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed clickButton" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 				
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
@@ -7631,9 +7746,71 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throw e;
 		}
 	}
+	
+	public void selectRadioButton(WebDriver driver, String param1,FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if(param1.equalsIgnoreCase("Yes, I already have a specific supplier in mind")) {
+				Thread.sleep(5000);
+				screenshot(driver, param1, fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//*[text()='Yes, I already have a specific supplier in mind']"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Advanced Network Devices")) {
+				Thread.sleep(5000);
+				screenshot(driver, param1, fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//input[@value='0']"));
+				waittext.click();
+			}
+			return;
+		} catch (Exception e) {
+			System.out.println(e);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clicking the Radio button" + scripNumber);
+			screenshotFail(driver, "Failed during clicking the Radio button", fetchMetadataVO, fetchConfigVO);
+			throw e;
+		}
+	}
 
 	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		try {
+			
+			if(param1.equalsIgnoreCase("iProcurement")) {
+				Thread.sleep(5000);
+				WebElement waittext = driver.findElement(By.xpath("//div[text()='iProcurement']"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("iProcurement Home Page")) {
+				Thread.sleep(2000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//div[text()='iProcurement Home Page']"));
+				waittext.click();
+			}else if(param1.equalsIgnoreCase("Non-Catalog Request")) {
+				Thread.sleep(2000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//div[text()='iProcurement Home Page']"));
+				waittext.click();
+			}
+			else if(param1.equalsIgnoreCase("Show Delivery and Billing")) {
+				Thread.sleep(2000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//a[text()='Show Delivery and Billing']"));
+				waittext.click();
+			}
+			else if(param1.equalsIgnoreCase("Receiving")) {
+				Thread.sleep(2000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				WebElement waittext = driver.findElement(By.xpath("//a[text()='Receiving']"));
+				waittext.click();
+				}
+			return;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		
+		
+		
 		try {
 			// Here adding code for Scanned invoices in AP.453
 
@@ -8987,24 +9164,16 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='" + param1
-					+ "']/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='Non-Catalog Request']/following::*[normalize-space (text()='Item Description')]/following::textarea)[1]")));
 			Thread.sleep(1000);
-			wait.until(
-					ExpectedConditions
-							.textToBePresentInElementLocated(
-									By.xpath("//*[normalize-space(text())='" + param1
-											+ "']/following::label[normalize-space(text())='" + param2 + "']"),
-									param2));
-			WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
-					+ "']/following::label[normalize-space(text())='" + param2 + "']/following::textarea[1]"));
+			WebElement waittill = driver.findElement(By.xpath("(//*[text()='Non-Catalog Request']/following::*[normalize-space (text()='Item Description')]/following::textarea)[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
-			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::textarea[1]";
+			String xpath = "(//*[text()='Non-Catalog Request']/following::*[normalize-space (text()='Item Description')]/following::textarea)[1]";
                        String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -9065,6 +9234,33 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		
+		try {
+			if(param1.equalsIgnoreCase("Non-Catalog Request") && param2.equalsIgnoreCase("Amount")) {
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='Non-Catalog Request']/following::*[normalize-space (text()='Amount')]/following::input[@name='Amount'][1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				waittill.sendKeys(keysToSend);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			}else if(param1.equalsIgnoreCase("Non-Catalog Request") && param2.equalsIgnoreCase("Category")) {
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='Non-Catalog Request']/following::*[normalize-space(text()='Category')]/following::input[@id='Category'][1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				waittill.sendKeys(keysToSend);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			}else if(param1.equalsIgnoreCase("Find your Supplier") && param2.equalsIgnoreCase("Supplier Name")) {
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='Find your Supplier']/following::*[normalize-space(text()='Supplier Name')]/following::input[@id='SupplierOnNonCat'][1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				waittill.sendKeys(keysToSend);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			}
+			return keysToSend;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Password")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13750,7 +13946,23 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throw e;
 		}
 	}
-
+	public void ebsTabKey(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			Thread.sleep(4000);
+			Actions action = new Actions(driver);
+			action.sendKeys(Keys.TAB).build().perform();
+			Thread.sleep(8000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked tab" + scripNumber);
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  tab" + scripNumber);
+			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
+			System.out.println("Failed to do TAB Action");
+			e.printStackTrace();
+			throw e;
+		}
+	}
 	public void mousehover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
@@ -13823,9 +14035,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-
-					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
+					+ fetchMetadataVO.getTest_run_name() + "\\" + fetchMetadataVO.getSeq_num() + "_"
 
 					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 
@@ -13977,8 +14188,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			String currenttime = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime());
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
+					+ fetchMetadataVO.getTest_run_name() + "\\" + fetchMetadataVO.getSeq_num() + "_"
 					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 					+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
@@ -14215,15 +14426,14 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(param2);
 		}
 		try {
-			Thread.sleep(2000);
-			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
-					+ "']/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
+			Thread.sleep(5000);
+			WebElement waittext = driver.findElement(By.xpath(("(//*[text()='Non-Catalog Request']/following::*[normalize-space (text()='What do you need to request?')]/following::select)[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
-
-			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::select[1]";
-			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			return;
+			String xpath = "(//*[text()='Non-Catalog Request']/following::*[normalize-space (text()='What do you need to request?')]/following::select)[1]";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			
+			                       return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during selectByText" + scripNumber);
@@ -14355,6 +14565,37 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+		
+		try {
+
+			if (inputParam1.equalsIgnoreCase("Confirmation")) {
+
+				Thread.sleep(10000);
+
+				WebElement webElement = driver.findElement(By.xpath("//*[normalize-space(text())='Confirmation']/following::*[contains(text(),'Requisition')][1]"));
+
+				Actions actions = new Actions(driver);
+
+				actions.moveToElement(webElement).build().perform();
+
+				value = copyInt(webElement);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//*[normalize-space(text())='param1']/following::*[contains(text(),'param2')][1]";
+                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+				log.info("Sucessfully Clicked  copynumber" + scripNumber);
+
+				return value;
+
+			}
+
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+
+		}
 
 		try {
 
@@ -14968,6 +15209,45 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void switchToFrame(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+			Thread.sleep(10000);
+			WebElement waittext = driver.findElement(By.xpath("//iframe[@id='iframelovPopUp_SupplierOnNonCat' and not(@src='')]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			driver.switchTo().frame(waittext);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//iframe[@id='iframelovPopUp_SupplierOnNonCat' and not(@src='')]";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			
+			                       return;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		try {
+			Thread.sleep(10000);
+			WebElement waittext = driver.findElement(By.xpath("//iframe[@id='iframedefaultDialogPopup' and not(@src='')]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			driver.switchTo().frame(waittext);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//iframe[@id='iframedefaultDialogPopup' and not(@src='')]";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			
+			                       return;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		try {
+			Thread.sleep(10000);
+			WebElement waittext = driver.findElement(By.xpath("//*[@id='iframeShoppingCartPopup']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			driver.switchTo().frame(waittext);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[@id='iframeShoppingCartPopup']";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			
+			                       return;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver
 					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
@@ -15146,7 +15426,26 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 	
+	public void selectByIndex(WebDriver driver, String param1, String param2,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			try {
+			if(param1.equalsIgnoreCase("Billing")) {
 
+			WebElement waittext = driver.findElement(By.xpath("//table[@id='HeaderDescTableLayout']//table[@id='CheckoutSummaryTableLayout']//table[@id='BillingLabeledFieldLayout']//select[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			Select selectBox = new Select(waittext);
+			selectBox.selectByIndex(0);
+			return;
+			}
+			} catch (Exception e) {
+			System.out.println(param2);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during selectByIndex" + scripNumber);
+			screenshotFail(driver, "Failed during selectByIndex Method", fetchMetadataVO, fetchConfigVO);
+			throw e;
+			}
+			}
 	public  ArrayList<String> ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId,String actionName) throws Exception
 	{
 		SeleniumEbsMapping selEbsMapping=ebsMappingRepo.findBySeleniumActionName(actionName);
@@ -15182,9 +15481,30 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 					if(value.equalsIgnoreCase("<Pick from Input Value>"))
 					{
+						if(actionName.equalsIgnoreCase("ebsSelectMenu"))
+						{		
+							dbValue=	codeLineRepo.findByTestRunScriptId(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 						
-						dbValue=	codeLineRepo.findByTestRunScriptId(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-						codeLine= codeLine.replace("${"+key+"}", dbValue);
+							if(dbValue.contains(">"))
+							{
+								String[] arrOfStr = dbValue.split(">", 5);
+								if (arrOfStr.length < 2) {
+									//copynumberValue = dbValue;
+								} else {
+									String menu = arrOfStr[0];
+									String subMenu = arrOfStr[1];
+									String menu_link = menu+"    "+subMenu;
+									codeLine= codeLine.replace("${"+key+"}", menu_link);
+									}
+						}
+						}
+						else
+						{
+							dbValue=	codeLineRepo.findByTestRunScriptId(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
+							codeLine= codeLine.replace("${"+key+"}", dbValue);
+						}
+						
+						
 						
 					}
 					

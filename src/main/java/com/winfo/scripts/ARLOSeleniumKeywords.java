@@ -6862,8 +6862,16 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 	{
 		return null;
 	}
+
 	@Override
 	public void updateCopyValue(String key,String value,String test_set_line_id,String test_set_id) {}
-
+	@Override
+	public void selectRadioButton(WebDriver driver, String param1,FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception{}
+	@Override
+	public  void ebsTabKey(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {}
+	@Override
+	public void selectByIndex(WebDriver driver, String param1, String param2,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {}
 
 }
