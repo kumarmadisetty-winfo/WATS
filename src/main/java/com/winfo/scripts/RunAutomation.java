@@ -782,7 +782,7 @@ public class RunAutomation {
 						if(journalScript) {
 						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
 						//robotFileTransfer( completePath, robotFileName);
-						String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\ebs\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
+						String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
 					    String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
 					    //String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
 						JSONObject jsonobj= new JSONObject(response);

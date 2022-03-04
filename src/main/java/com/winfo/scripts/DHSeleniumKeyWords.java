@@ -16168,8 +16168,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	    openExcelSteps.add(s);
 	    s="    [Setup]    Set Automation Speed    slow";
 	    openExcelSteps.add(s);
-		
-		
+		s = "    [TearDown]    Capture And Upload Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\TestEBS    "+fetchMetadataVO.getSeq_num();
+		openExcelSteps.add(s);
 		s="    Open Excel File With Sheet    "+fileName+"    "+sheetName;
 		openExcelSteps.add(s);
 		return openExcelSteps;
