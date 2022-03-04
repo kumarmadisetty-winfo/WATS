@@ -16158,6 +16158,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	    openExcelSteps.add(s);
 	    s="Library    RPA.Desktop.Windows";
 	    openExcelSteps.add(s);
+	    
+	    
+	    s="Library    Screenshot";
+	    openExcelSteps.add(s);
+	    
 	    s="Resource    CustomKeyword.robot";
 	    openExcelSteps.add(s);
 	    s="Variables    excelinfo.yaml";
