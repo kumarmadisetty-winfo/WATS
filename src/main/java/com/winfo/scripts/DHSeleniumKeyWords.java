@@ -16163,11 +16163,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	    s="Library    Screenshot";
 	    openExcelSteps.add(s);
 	    
-	    s="Library OperatingSystem";
+	    s="Library    OperatingSystem";
 	    openExcelSteps.add(s);
 	    
 	    
-	    s="Resource    C:\\\\EBS-Automation\\\\EBS Automation-POC\\\\robot files\\\\CustomKeyword.robot";
+	    s="Resource    C:\\\\EBS-Automation\\\\EBS Automation-POC\\\\robot files\\\\CustomKeywords.robot";
 	    openExcelSteps.add(s);
 	    
 	    
