@@ -742,14 +742,14 @@ public class RunAutomation {
 						userName = fetchMetadataVO.getInput_value();
 						String login = seleniumFactory.getInstanceObj(instanceName).loginToExcel(driver, param1, param2,userName,dataBaseEntry.getPassword(param, userName, fetchConfigVO), fetchMetadataVO, fetchConfigVO);
 						excellSteps.add(login);
-						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScript_description()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
 						excellSteps.add(journalScreenshot);
 						
 						break;
 					case "SelectMenuItemOfExcel":
 						String selectMenu = seleniumFactory.getInstanceObj(instanceName).menuItemOfExcel(driver, param1, fetchMetadataVO, fetchConfigVO);
 						excellSteps.add(selectMenu);
-						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScript_description()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
 						excellSteps.add(journalScreenshot);
 						
 						break;
@@ -765,7 +765,7 @@ public class RunAutomation {
 					case "TypeIntoCell":
 						String typeCell = seleniumFactory.getInstanceObj(instanceName).typeIntoCell(driver, param1, value1, fetchMetadataVO, fetchConfigVO, addRowCounter);
 						excellSteps.add(typeCell);
-						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScript_description()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
 						excellSteps.add(journalScreenshot);
 						
 						break;
@@ -776,7 +776,7 @@ public class RunAutomation {
 						List<String> openExcell = seleniumFactory.getInstanceObj(instanceName).openExcelFileWithSheet(driver, param1, param2,value1,value2, fetchMetadataVO, fetchConfigVO);
 						excellSteps.addAll(openExcell);
 						
-						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScript_description()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
 						excellSteps.add(journalScreenshot);
 						
 						journalScript = true;

@@ -16163,18 +16163,33 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	    s="Library    Screenshot";
 	    openExcelSteps.add(s);
 	    
-	    s="Resource    CustomKeyword.robot";
+	    s="Library OperatingSystem";
 	    openExcelSteps.add(s);
-	    s="Variables    excelinfo.yaml";
+	    
+	    
+	    s="Resource    C:\\\\EBS-Automation\\\\EBS Automation-POC\\\\robot files\\\\CustomKeyword.robot";
 	    openExcelSteps.add(s);
+	    
+	    
+	    
+	    
+	    s="Variables    C:\\\\EBS-Automation\\\\EBS Automation-POC\\\\robot files\\\\excelinfo.yaml";
+	    openExcelSteps.add(s);
+	    
+	    
 	    s="*** Tasks ***";
 	    openExcelSteps.add(s);
 	    s="Create Journal Entry";
 	    openExcelSteps.add(s);
 	    s="    [Setup]    Set Automation Speed    slow";
 	    openExcelSteps.add(s);
-		s = "    [TearDown]    Capture And Upload Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\TestEBS    "+fetchMetadataVO.getSeq_num();
+		s = "    [TearDown]    Capture And Upload Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"+fetchMetadataVO.getTest_run_name()+"    "+fetchMetadataVO.getSeq_num();
 		openExcelSteps.add(s);
+		
+		s = "    OperatingSystem.Create Directory    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"+fetchMetadataVO.getTest_run_name();
+		openExcelSteps.add(s);
+		
+		
 		s="    Open Excel File With Sheet    "+fileName+"    "+sheetName;
 		openExcelSteps.add(s);
 		return openExcelSteps;
