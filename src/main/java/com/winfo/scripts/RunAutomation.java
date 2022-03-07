@@ -794,14 +794,42 @@ public class RunAutomation {
 					if (fetchMetadataListVO.size() == i) {
 						
 						if(journalScript) {
-						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
-						//robotFileTransfer( completePath, robotFileName);
-						String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
-					    String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
-					    //String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
-						JSONObject jsonobj= new JSONObject(response);
-						String jsonResponse="";
-						
+							String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+									+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
+							
+						//	String Folder = "C:\\EBS-Automation\\EBS Automation-POC\\robot files\\";
+							File theDir = new File(Folder);
+							if (!theDir.exists()) {
+								System.out.println("creating directory: " + theDir.getName());
+								boolean result = false;
+								try {
+									theDir.mkdirs();
+									result = true;
+								} catch (SecurityException se) {
+									// handle it
+									System.out.println(se.getMessage());
+								}
+							} else {
+								System.out.println("Folder exist");
+							}
+							FileWriter writer;
+							try {
+								String robotFileName=seq_num+"_"+fetchMetadataListVO.get(0).getScript_number()+".robot";
+								String completePath=Folder+robotFileName;
+							//	writer = new FileWriter("C:\\Users\\Winfo solutions\\Priya\\Documents\\createInvoice.robot");
+								writer = new FileWriter(completePath);
+								for(String codeline:excellSteps)
+						    	  {
+						    		//String code=codeline.getRobot_line();  
+						    		writer.write(codeline + System.lineSeparator());
+						    	  }
+							//	writer.write(robotCodeLine + System.lineSeparator());
+						      writer.close();
+						      String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
+						      robotFileTransfer( completePath, robotFileName);
+						      String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
+								JSONObject jsonobj= new JSONObject(response);
+							String jsonResponse="";
 						for(Iterator iterator = jsonobj.keySet().iterator(); iterator.hasNext();) {
 						    String key = (String) iterator.next();
 						    System.out.println(jsonobj.get(key));
@@ -855,7 +883,7 @@ public class RunAutomation {
 			System.out.println("line num:");
 				System.out.println(lastScreenshotSeqNum);
 			String lastSeqNum=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getSeq_num();
-			System.out.println("fetch metadatavo last eleemnt line number:");
+			System.out.println("fetch metadatavo last element line number:");
 			System.out.println(lastSeqNum);
 			if(jsonResponse.equalsIgnoreCase("pass"))
 			{
@@ -908,7 +936,7 @@ public class RunAutomation {
 					}
 					else
 					{
-						message="EBS Execution Failed";
+						message="Journal Execution Failed";
 						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(), "Fail",
 								message);
 						fetchConfigVO.setErrormessage(message);
@@ -983,11 +1011,11 @@ public class RunAutomation {
 						}
 				       System.out.println(response);
 				     
-					}/*catch (IOException e) {
+					}catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					//	throw new Exception("Script failed");
-					}*/
+					}
 					}
 						
 						
@@ -1038,7 +1066,7 @@ public class RunAutomation {
 						System.out.println("e");
 					}
 					}
-					}
+					}}
 				 catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
@@ -1136,7 +1164,7 @@ public class RunAutomation {
     String output="";
     String response="";
     try{
-        URL url = new URL("http://192.168.1.203:8080/EBSAutomation/api/v3/localRobotJob"); //important to add the trailing slash after add
+        URL url = new URL("http://192.168.1.244:8080/EBSAutomation/api/v3/localRobotJob"); //important to add the trailing slash after add
     //   URL url = new URL("http://localhost:8080/api/v3/localRobotJob"); //important to add the trailing slash after add
 
    //  String input1="{\"Data\":  \"";
@@ -1206,10 +1234,10 @@ public class RunAutomation {
 	
 	public void robotFileTransfer(String filePath,String robotFileName)
 	{
-		 String server = "192.168.1.246";
+		 String server = "192.168.1.203";
 	        int port = 21;
-	        String user = "Administrator";
-	        String pass = "Winfo@2020";
+	        String user = "wats_ebs";
+	        String pass = "2020@Winfo";
 
 	        FTPClient ftpClient = new FTPClient();
 	        try {
