@@ -743,6 +743,9 @@ public class RunAutomation {
 						String login = seleniumFactory.getInstanceObj(instanceName).loginToExcel(driver, param1, param2,userName,dataBaseEntry.getPassword(param, userName, fetchConfigVO), fetchMetadataVO, fetchConfigVO);
 						excellSteps.add(login);
 						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						
 						excellSteps.add(journalScreenshot);
 						
 						break;
@@ -750,13 +753,15 @@ public class RunAutomation {
 						String selectMenu = seleniumFactory.getInstanceObj(instanceName).menuItemOfExcel(driver, param1, fetchMetadataVO, fetchConfigVO);
 						excellSteps.add(selectMenu);
 						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
 						excellSteps.add(journalScreenshot);
 						
 						break;
 					case "CloseExcel":
 						String closeExcell = seleniumFactory.getInstanceObj(instanceName).closeExcel();
 						excellSteps.add(closeExcell);
-						//this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
+						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
 						
 						
 						
@@ -766,6 +771,9 @@ public class RunAutomation {
 						String typeCell = seleniumFactory.getInstanceObj(instanceName).typeIntoCell(driver, screenParameter, value1, fetchMetadataVO, fetchConfigVO, addRowCounter);
 						excellSteps.add(typeCell);
 						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						
 						excellSteps.add(journalScreenshot);
 						
 						break;
@@ -777,6 +785,9 @@ public class RunAutomation {
 						excellSteps.addAll(openExcell);
 						
 						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						
 						excellSteps.add(journalScreenshot);
 						
 						journalScript = true;
@@ -825,6 +836,7 @@ public class RunAutomation {
 						    	  }
 							//	writer.write(robotCodeLine + System.lineSeparator());
 						      writer.close();
+						      //String screenshotPath="D:\\\\\\\\Adfdi\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
 						      String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
 						      robotFileTransfer( completePath, robotFileName);
 						      String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
@@ -1234,10 +1246,10 @@ public class RunAutomation {
 	
 	public void robotFileTransfer(String filePath,String robotFileName)
 	{
-		 String server = "192.168.1.203";
+		 String server = "192.168.1.244";
 	        int port = 21;
-	        String user = "wats_ebs";
-	        String pass = "2020@Winfo";
+	        String user = "wats_user";
+	        String pass = "2022@Winfo";
 
 	        FTPClient ftpClient = new FTPClient();
 	        try {
