@@ -143,7 +143,7 @@ public class RunAutomation {
 			//fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
 			//fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
 			//fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
-			fetchConfigVO.setInstance_name("DH");
+			//fetchConfigVO.setInstance_name("DH");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -1067,7 +1067,7 @@ public class RunAutomation {
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
 						}
 					
-					
+					}
 					if(!journalScript) {
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
@@ -1078,7 +1078,7 @@ public class RunAutomation {
 						System.out.println("e");
 					}
 					}
-					}}
+					}
 				 catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
