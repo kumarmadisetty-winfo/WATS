@@ -11082,6 +11082,38 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//DH 34
+				try {
+					if (param1.equalsIgnoreCase("Budget Lines")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					//WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
+					
+					WebElement waittill = driver.findElement(By.xpath("(//table[@summary=\"Budget Lines\"]//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+					
+					Thread.sleep(1000);
+					// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+					// param2));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+					String xpath = "(//*[text()='param1'])[1]/following::label[text()='param2']/preceding::input[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during tableSendKeys" + scripNumber);
+					System.out.println(e);
+					}
+		
+		
+		
 		//DH 29
 				try {
 					if (param1.equalsIgnoreCase("Associated Projects")) {
@@ -15356,39 +15388,45 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		}
 
-		try {
+		//DH 34
+				try {
 
-			if (inputParam1.equalsIgnoreCase("Confirmation") || inputParam2.equalsIgnoreCase("adjustment")
-					|| inputParam1.equalsIgnoreCase("Information")) {
+					if (inputParam1.equalsIgnoreCase("Confirmation") || inputParam2.equalsIgnoreCase("adjustment")
+							|| inputParam1.equalsIgnoreCase("Information")) {
 
-				Thread.sleep(5000);
+						Thread.sleep(5000);
 
-				WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
+						//WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
+		//
+//								+ "']/following::*[contains(text(),'" + inputParam2 + "')]"));
 
-						+ "']/following::*[contains(text(),'" + inputParam2 + "')]"));
+						WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
 
-				Actions actions = new Actions(driver);
+								+ "']/following::*[contains(text(),'" + inputParam2 + "')][1]"));
+						
+						
+						Actions actions = new Actions(driver);
 
-				actions.moveToElement(webElement).build().perform();
+						actions.moveToElement(webElement).build().perform();
 
-				value = copyInt(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
-                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
-				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				log.info("Sucessfully Clicked  copynumber" + scripNumber);
+						value = copyInt(webElement);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
+		                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);				String testParamId = fetchMetadataVO.getTest_script_param_id();
+						String testSetId = fetchMetadataVO.getTest_set_line_id();
+						dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+						log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
-				return value;
+						return value;
 
-			}
+					}
 
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during copynumber" + scripNumber);
+					System.out.println(inputParam2);
 
-		}
+				}
 
 		try {
 
