@@ -9426,8 +9426,8 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		//DH 32
 		try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]")));
-		WebElement waittill = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]"));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
+		WebElement waittill = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittill).build().perform();
 		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -9435,7 +9435,7 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		Thread.sleep(1000);
 		String scripNumber = fetchMetadataVO.getScript_number();
 		log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
-		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[1]";
+		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
 		String scriptID=fetchMetadataVO.getScript_id();
 		String metadataID=fetchMetadataVO.getScript_meta_data_id();
 		service.saveXpathParams(scriptID,metadataID,xpath);
@@ -11132,6 +11132,39 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		
+		//DH 34
+		try {
+			if (param1.equalsIgnoreCase("Budget Lines")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			//WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
+			
+			WebElement waittill = driver.findElement(By.xpath("(//table[@summary=\"Budget Lines\"]//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+			
+			Thread.sleep(1000);
+			// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+			// param2));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+			String xpath = "(//*[text()='param1'])[1]/following::label[text()='param2']/preceding::input[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+			}
+
+		
+		
+		
 		//DH 29
 				try {
 					if (param1.equalsIgnoreCase("Associated Projects")) {
@@ -12317,14 +12350,14 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]")));
+		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
 		WebElement waittext = driver.findElement(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[1]"));
+		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittext).build().perform();
 		waittext.click();
 		Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
-		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[1]";
+		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
 		String scriptID = fetchMetadataVO.getScript_id();
 		String metadataID = fetchMetadataVO.getScript_meta_data_id();
 		service.saveXpathParams(scriptID, metadataID, xpath);
@@ -15431,6 +15464,7 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		}
 
+		//DH 34
 		try {
 
 			if (inputParam1.equalsIgnoreCase("Confirmation") || inputParam2.equalsIgnoreCase("adjustment")
@@ -15438,10 +15472,15 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				Thread.sleep(5000);
 
+				//WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
+//
+//						+ "']/following::*[contains(text(),'" + inputParam2 + "')]"));
+
 				WebElement webElement = driver.findElement(By.xpath("//div[normalize-space(text())='" + inputParam1
 
-						+ "']/following::*[contains(text(),'" + inputParam2 + "')]"));
-
+						+ "']/following::*[contains(text(),'" + inputParam2 + "')][1]"));
+				
+				
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(webElement).build().perform();
