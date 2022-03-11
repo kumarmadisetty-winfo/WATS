@@ -121,6 +121,7 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -2021,6 +2022,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Timestamp startTimestamp = new Timestamp(TStarttime.getTime());
 				Timestamp endTimestamp = new Timestamp(Tendtime.getTime());
 
+				Map<String, Map<String, TestSetScriptParam>> descriptionList = databaseentry.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
+
+				
 				Map<Date, Long> timeslist = limitScriptExecutionService
 						.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
 				if (timeslist.size() == 0) {
@@ -2329,6 +2333,18 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String SNM = "Scenario Name";
 					String ScriptName = image.split("_")[2];
 					String testRunName = image.split("_")[4];
+					
+					
+					
+					//String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
+					//String inputParam = descriptionList.get(sno).get(Reason).getInput_parameter();
+					//String inputValue = fetchMetadataListVO.get(metadataCounter).getInput_value();
+					//String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+					//metadataCounter++;
+					
+					
+					
 //				String scrtipt=;
 					if (!sno.equalsIgnoreCase(sno1)) {
 						document.setPageSize(img);

@@ -2,6 +2,7 @@ package com.winfo.services;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetScriptParam;
 
 @Service
 @RefreshScope
@@ -53,6 +56,23 @@ public class DataBaseEntry {
 			String test_script_param_id) throws SQLException {
 			dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 	}
+	@Transactional
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
+		try {
+			Map<String, Map<String, TestSetScriptParam>>map =  dao.getTestRunMap(test_run_id);
+			return map;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Transactional
+	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id){
+			TestSetLines testSetLine  =	dao.getTestSetLine(test_set_line_id);
+			return dao.getTestScriptMap(testSetLine);
+	}
+	
+	
 }
 
 
