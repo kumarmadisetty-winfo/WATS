@@ -2022,7 +2022,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Timestamp startTimestamp = new Timestamp(TStarttime.getTime());
 				Timestamp endTimestamp = new Timestamp(Tendtime.getTime());
 
-				Map<String, Map<String, TestSetScriptParam>> descriptionList = databaseentry.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
+				//Map<String, Map<String, TestSetScriptParam>> descriptionList = databaseentry.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
 
 				
 				Map<Date, Long> timeslist = limitScriptExecutionService
