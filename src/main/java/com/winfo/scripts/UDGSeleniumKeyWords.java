@@ -2352,7 +2352,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.newPage();
 						document.add(img1);
 						Anchor target3 = new Anchor("Script Details", bf12);
-						target3.setName(ScriptNumber);
+						target3.setName(sno+"_"+ScriptNumber);
 						Paragraph pa = new Paragraph();
 						pa.add(target3);
 //						pa.setAlignment(Element.ALIGN_CENTER);
@@ -2453,17 +2453,17 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
 					//metadataCounter++;
 		
-					Chunk statusChunk = new Chunk("Status:", FontFactory.getFont("Arial", 12, Font.BOLD));
+					Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 					//Chunk statusChunk2 = new Chunk(status,fnt);
-					//Phrase statusPhrase = new Phrase();
-					//statusPhrase.add(statusChunk);
+					Phrase statusPhrase = new Phrase();
+					statusPhrase.add(statusChunk);
 					//statusPhrase.add(statusChunk2);
 					
 					
 					
 					
 					Paragraph pr1 = new Paragraph();
-					pr1.add("Status:");
+					pr1.add(statusPhrase);
 
 					if (image.startsWith(sndo + "_") && image.contains("Failed")) {
 						Anchor target1 = new Anchor(status);
@@ -2573,9 +2573,9 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 						Anchor target1 = new Anchor(status);
 						
-						target1.setName(String.valueOf(status + j));
+						target1.setName(String.valueOf(status));
 						//statusPhrase.add(target1);
-						j++;
+						//j++;
 						pr1.add(target1);
 						document.add(pr1);
 						img.setAlignment(Image.ALIGN_CENTER);
@@ -2687,8 +2687,31 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.newPage();
 
 						String S = "Status:" + " " + status;
+						Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk statusChunk2 = new Chunk(status,fnt);
+						Phrase statusPhrase = new Phrase();
+						statusPhrase.add(statusChunk);
+						statusPhrase.add(statusChunk2);
+						
 						String Scenarios = "Scenario Name :" + "" + Scenario;
+						Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
+						Phrase scenarioPhrase = new Phrase();
+						scenarioPhrase.add(scenarioChunk);
+						scenarioPhrase.add(scenarioChunk2);
+						
+						
 						String step = "Step No :" + "" + steps;
+						Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk stepChunk2 = new Chunk(steps,fnt);
+						Phrase stepPhrase = new Phrase();
+						stepPhrase.add(stepChunk);
+						stepPhrase.add(stepChunk2);
+						
+						
+						
+						
+						
 						
 						String stepDescription = map.get(steps).getTest_run_param_desc(); 
 						//String inputParam = fetchMetadataListVO.get(metaDataCounter).getInput_parameter();
@@ -2701,18 +2724,53 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						img1.scalePercent(65, 65);
 						img1.setAlignment(Image.ALIGN_RIGHT);
 						document.add(img1);
-						document.add(new Paragraph(S, fnt));
-						document.add(new Paragraph(Scenarios, fnt));
-						document.add(new Paragraph(step, fnt));
+						document.add(new Paragraph(statusPhrase));
+						document.add(new Paragraph(scenarioPhrase));
+						document.add(new Paragraph(stepPhrase));
+						
 						if(stepDescription!=null) {
-							document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+							
+							Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+							Phrase phraseDesc = new Phrase();
+							phraseDesc.add(stepDeschunk);
+							phraseDesc.add(stepDeschunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph stepDesc = new Paragraph();
+							stepDesc.add(phraseDesc);
+							document.add(stepDesc);
 						}
+
 						if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
-							if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
-							}
+							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+							Phrase phraseinputParam = new Phrase();
+							phraseinputParam.add(inputparamchunk);
+							phraseinputParam.add(inputparamchunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph paraInputParam = new Paragraph();
+							paraInputParam.add(phraseinputParam);
+							document.add(paraInputParam);
+							    if(inputValue!=null) {
+							    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+									Phrase phraseinputVal = new Phrase();
+									phraseinputVal.add(inputvalchunk);
+									phraseinputVal.add(inputvalchunk2);
+									
+									//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									//stepDesc.add(new Chunk(stepDescription, fnt));
+									Paragraph paraInputVal = new Paragraph();
+									paraInputVal.add(phraseinputVal);
+									document.add(paraInputVal);
+							    }
 						}
+						
+
 						document.add(Chunk.NEWLINE);
 
 						Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
