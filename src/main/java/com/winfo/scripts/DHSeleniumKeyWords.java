@@ -10038,23 +10038,39 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 			}
-		//DH 18
+		//DH 35
 		try {
-			if(param2.equalsIgnoreCase("Start Date and Time") || param2.equalsIgnoreCase("End Date and Time")) {
+
+			if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")) {
+
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" + param1+"']/following::label[text()='" + param2+"']/following::input[@placeholder='dd/mm/yy h:mm a'])[1]")));
+
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')]")));
+
 			Thread.sleep(1000);
-			WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1+"']/following::label[text()='" + param2+"']/following::input[@placeholder='dd/mm/yy h:mm a'])[1]"));
+
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')]"));
+
 			Actions actions = new Actions(driver);
+
 			actions.moveToElement(waittill).build().perform();
+
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+
 			Thread.sleep(500);
+
 			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked sendValue" + scripNumber);
+
+			log.info("Sucessfully Clicked sendValue"+ scripNumber);
+
 			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
+
 			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+
 			return keysToSend;
+
 			}
+
 
 
 			//return keysToSend;

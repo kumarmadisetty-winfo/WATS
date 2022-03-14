@@ -11092,7 +11092,7 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					//WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
 					
-					WebElement waittill = driver.findElement(By.xpath("(//table[@summary=\"Budget Lines\"]//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+					WebElement waittill = driver.findElement(By.xpath("(//table[@summary='Budget Lines']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
 					
 					Thread.sleep(1000);
 					// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
