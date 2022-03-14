@@ -111,6 +111,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -3144,11 +3145,48 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String Reason = image.split("_")[5];
 				// String TR = "Test Run Name:" + " " + TestRun;
 //						String SN = "Script Number:" + " " + ScriptNumber;
-				String S = "Status:" + " " + status;
+				String status2 = "Status: ";
+				
+				Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk statusChunk2 = new Chunk(status,fnt);
+				Phrase statusPhrase = new Phrase();
+				statusPhrase.add(statusChunk);
+				statusPhrase.add(statusChunk2);
+				
+				
 				String step = "Step No :" + "" + Reason;
+				Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk stepChunk2 = new Chunk(Reason,fnt);
+				Phrase stepPhrase = new Phrase();
+				stepPhrase.add(stepChunk);
+				stepPhrase.add(stepChunk2);
+				
+				
+				
 				String Scenarios = "Scenario Name :" + "" + Scenario;
+				Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
+				Phrase scenarioPhrase = new Phrase();
+				scenarioPhrase.add(scenarioChunk);
+				scenarioPhrase.add(scenarioChunk2);
+				
+				
 				String Message = "Failed at Line Number:" + "" + Reason;
+				Chunk messageChunk = new Chunk("Failed at Line Number: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk messageChunk2 = new Chunk(Reason,fnt);
+				Phrase messagePhrase = new Phrase();
+				messagePhrase.add(messageChunk);
+				messagePhrase.add(messageChunk2);
+				
+				
 				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
+				Chunk errorMessageChunk = new Chunk("Failed Message: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
+				Phrase errorMessagePhrase = new Phrase();
+				errorMessagePhrase.add(errorMessageChunk);
+				errorMessagePhrase.add(errorMessageChunk2);
+				
+				
 				
 				String stepDescription = map.get(Reason).getTest_run_param_desc();
 				String inputParam = map.get(Reason).getInput_parameter();
@@ -3160,24 +3198,89 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				// :"+fetchMetadataListVO.get(0).getInput_parameter();
 //						document.add(new Paragraph(TR, fnt));
 //						document.add(new Paragraph(SN, fnt));
-				document.add(new Paragraph(S, fnt));
-				document.add(new Paragraph(Scenarios, fnt));
-//new change-failed pdf to add pagesize
+				
+				
+				
+				
+				
+				
+				
+				document.add(new Paragraph(statusPhrase));
+				document.add(new Paragraph(scenarioPhrase));
+
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				//new change-failed pdf to add pagesize
 				if (status.equalsIgnoreCase("Failed")) {
-					document.add(new Paragraph(Message, fnt));
+					document.add(new Paragraph(messagePhrase));
 					if (fetchConfigVO.getErrormessage() != null) {
-						document.add(new Paragraph(errorMessage, fnt));
+						document.add(new Paragraph(errorMessagePhrase));
 					}
+					//if(stepDescription!=null) {
+						//document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+					//}
+
+//					if(inputParam!=null) {
+	//						document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+		//				    if(inputValue!=null) {
+			//					document.add(new Paragraph("Input Value: "+inputValue, fnt));
+				//			}
+					//}
+					
 					if(stepDescription!=null) {
-						document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+						
+						Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+						Phrase phraseDesc = new Phrase();
+						phraseDesc.add(stepDeschunk);
+						phraseDesc.add(stepDeschunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph stepDesc = new Paragraph();
+						stepDesc.add(phraseDesc);
+						document.add(stepDesc);
 					}
 
 					if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+						Phrase phraseinputParam = new Phrase();
+						phraseinputParam.add(inputparamchunk);
+						phraseinputParam.add(inputparamchunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph paraInputParam = new Paragraph();
+						paraInputParam.add(phraseinputParam);
+						document.add(paraInputParam);
 						    if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
-							}
+						    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+								Phrase phraseinputVal = new Phrase();
+								phraseinputVal.add(inputvalchunk);
+								phraseinputVal.add(inputvalchunk2);
+								
+								//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								//stepDesc.add(new Chunk(stepDescription, fnt));
+								Paragraph paraInputVal = new Paragraph();
+								paraInputVal.add(phraseinputVal);
+								document.add(paraInputVal);
+						    }
 					}
+					
+					
+					
+					
+					
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
@@ -3185,17 +3288,49 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.scalePercent(60, 58);
 					document.add(img);
 				} else {
-					document.add(new Paragraph(step, fnt));
+					document.add(new Paragraph(stepPhrase));
 					if(stepDescription!=null) {
-						document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+						
+						Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+						Phrase phraseDesc = new Phrase();
+						phraseDesc.add(stepDeschunk);
+						phraseDesc.add(stepDeschunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph stepDesc = new Paragraph();
+						stepDesc.add(phraseDesc);
+						document.add(stepDesc);
 					}
 
 					if(inputParam!=null) {
-							document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+						Phrase phraseinputParam = new Phrase();
+						phraseinputParam.add(inputparamchunk);
+						phraseinputParam.add(inputparamchunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph paraInputParam = new Paragraph();
+						paraInputParam.add(phraseinputParam);
+						document.add(paraInputParam);
 						    if(inputValue!=null) {
-								document.add(new Paragraph("Input Value: "+inputValue, fnt));
-							}
+						    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+								Phrase phraseinputVal = new Phrase();
+								phraseinputVal.add(inputvalchunk);
+								phraseinputVal.add(inputvalchunk2);
+								
+								//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								//stepDesc.add(new Chunk(stepDescription, fnt));
+								Paragraph paraInputVal = new Paragraph();
+								paraInputVal.add(phraseinputVal);
+								document.add(paraInputVal);
+						    }
 					}
+					
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
