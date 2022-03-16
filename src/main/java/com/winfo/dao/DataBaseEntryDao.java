@@ -41,32 +41,28 @@ public class DataBaseEntryDao {
 		}
 	}
 	public  void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status,String error_message) throws ClassNotFoundException, SQLException {
-		String folder = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-				+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
-		
-		File file=new File(folder);
-		byte[] screenshotArray=new byte[(int)file.length()];
-		 try {
-			FileInputStream fileInputStream = new FileInputStream(file);
-			fileInputStream.read(screenshotArray);
-			fileInputStream.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/*
+		 * String folder = (fetchConfigVO.getScreenshot_path() +
+		 * fetchMetadataVO.getCustomer_name() + "/" + fetchMetadataVO.getTest_run_name()
+		 * + "/" + fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number()
+		 * + "_" + fetchMetadataVO.getScenario_name() + "_" +
+		 * fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name()
+		 * + "_" + fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
+		 * 
+		 * File file=new File(folder); byte[] screenshotArray=new
+		 * byte[(int)file.length()]; try { FileInputStream fileInputStream = new
+		 * FileInputStream(file); fileInputStream.read(screenshotArray);
+		 * fileInputStream.close(); } catch (FileNotFoundException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } catch (IOException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); }
+		 */
 		//scriptParam.setLine_execution_statues(status);
 		//scriptParam.setLine_error_message(error_message);
-		String sql = "Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
+		String sql = "Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
 		Session session= em.unwrap(Session.class);
 		Query query=session.createSQLQuery(sql);
 		query.setParameter("error_message",error_message);
-		query.setParameter("screenshot",screenshotArray);
+		//query.setParameter("screenshot",screenshotArray);
 		query.executeUpdate();
 	
 }

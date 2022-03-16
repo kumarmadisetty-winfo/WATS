@@ -16165,4 +16165,102 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	
+
+	@Override
+	public String loginToExcel(WebDriver driver, String param1,String param2,String username,String password, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		String s ="    Login To Excel    "+username+"    "+password;
+		return s;
+	}
+
+	
+
+	@Override
+	public Integer addRow(Integer addrow) throws Exception {
+		// TODO Auto-generated method stub
+		int a = addrow.intValue();
+		a++;
+		return a;
+		
+	}
+
+	@Override
+	public String menuItemOfExcel(WebDriver driver, String param1,FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		String s ="    Select Menu Item Of Excel    "+param1;
+		return s;
+	}
+
+	@Override
+	public String closeExcel() throws Exception {
+		// TODO Auto-generated method stub
+		String s ="    Close Excel";
+		return s;
+	}
+
+	@Override
+	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
+			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		List<String> openExcelSteps = new ArrayList<String>();
+		String s ="*** Settings ***";
+	    openExcelSteps.add(s);
+	    s="Library    RPA.Desktop";
+	    openExcelSteps.add(s);
+	    s="Library    RPA.Desktop.Windows";
+	    openExcelSteps.add(s);
+	    
+	    
+	    s="Library    Screenshot";
+	    openExcelSteps.add(s);
+	    
+	    s="Library    OperatingSystem";
+	    openExcelSteps.add(s);
+	    
+	    
+	    s="Resource    C:\\\\EBS-Automation\\\\EBS Automation-POC\\\\robot files\\\\CustomKeywords.robot";
+	    openExcelSteps.add(s);
+	    
+	    
+	    
+	    
+	    s="Variables    C:\\\\EBS-Automation\\\\EBS Automation-POC\\\\robot files\\\\excelinfo.yaml";
+	    openExcelSteps.add(s);
+	    
+	    
+	    s="*** Tasks ***";
+	    openExcelSteps.add(s);
+	    s="Create Journal Entry";
+	    openExcelSteps.add(s);
+	    s="    [Setup]    Set Automation Speed    slow";
+	    openExcelSteps.add(s);
+		s = "    [TearDown]    Capture And Upload Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"+fetchMetadataVO.getTest_run_name()+"    "+fetchMetadataVO.getSeq_num();
+		openExcelSteps.add(s);
+		
+		s = "    OperatingSystem.Create Directory    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"+fetchMetadataVO.getTest_run_name();
+		openExcelSteps.add(s);
+		
+		
+		s="    Open Excel File With Sheet    "+fileName+"    "+sheetName;
+		openExcelSteps.add(s);
+		return openExcelSteps;
+		
+	}
+
+	@Override
+	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,Integer addrowCounter) throws Exception {
+		// TODO Auto-generated method stub
+		String s ="";
+		if(addrowCounter>1) {
+		s="    Type Into Cell    "+param1+"    "+value1+"    "+addrowCounter;
+		}
+		else {
+			s="    Type Into Cell    "+param1+"    "+value1;	
+		}
+		return s;
+	}
+
 }
