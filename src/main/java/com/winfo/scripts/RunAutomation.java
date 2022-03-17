@@ -420,11 +420,25 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+					case "Login into Application(OIC)":
+						userName = fetchMetadataVO.getInput_value();
+						log.info("Navigating to Login into Application Action");
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							seleniumFactory.getInstanceObj(instanceName).oicLoginPage(driver, param1, instanceName, fetchMetadataVO, fetchConfigVO);
+							userName = null;
+							break;
+						} else {
+							break;
+						}
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
 						seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO, fetchMetadataVO,
 								type1, type2, param1, param2, count);
+						break;
+					case "Navigate(OIC)":
+						log.info("Navigating to Navigate Action");
+						seleniumFactory.getInstanceObj(instanceName).oicNavigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
 						break;
 
 					case "openTask":
@@ -441,6 +455,13 @@ public class RunAutomation {
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2,
 									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							break;
+						} else {
+							break;
+						}
+					case "sendvalues(OIC)":
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							seleniumFactory.getInstanceObj(instanceName).oicSendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
 							break;
 						} else {
 							break;
@@ -546,6 +567,13 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
+					case "clickButton(OIC)":
+						seleniumFactory.getInstanceObj(instanceName).oicClickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						break;
+					case "Mouse Hover(OIC)":
+						seleniumFactory.getInstanceObj(instanceName).oicMouseHover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						break;
+					
 					case "clickButton":
 						seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
@@ -555,7 +583,7 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 
-						if (message != null && !message.startsWith("Example")&& !message.startsWith("Accounting Period")&& !message.startsWith("Source") && !message.startsWith("Add Collaborator Type")&& !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group") && !message.startsWith("item") && !message.startsWith("Select Subinventories") && !message.startsWith("Comments")) {
+						if (message != null && !message.startsWith("Example")&&!message.startsWith("Select Book")&& !message.startsWith("Context Value")&&!message.startsWith("Accounting Period")&& !message.startsWith("Source") && !message.startsWith("Add Collaborator Type")&& !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group") && !message.startsWith("item") && !message.startsWith("Select Subinventories") && !message.startsWith("Comments")) {
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);

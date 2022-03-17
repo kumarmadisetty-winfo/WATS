@@ -130,6 +130,36 @@ public interface SeleniumKeyWordsInterface {
 		public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
 
+		
+		public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+				String type2, String type3, String param1, String param2, String param3) throws Exception ;
+		
+
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) ;
+
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+				String type1, String type2, String param1, String param2, int count) throws Exception ;
+	
+	
+	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception ;
+		
+		public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception ;
+	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+				String type1, String type2, String param1, String param2, int count) throws Exception ;
+
+	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception ;
+
+
+	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception ;
+
+	public void oicMouseHover(WebDriver driver, String param1, String param2,
+
+	        FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
 

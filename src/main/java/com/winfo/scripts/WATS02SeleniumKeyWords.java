@@ -16128,4 +16128,68 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	@Override
+	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+			String type2, String type3, String param1, String param2, String param3) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String param1, String param2, int count) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicMouseHover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
