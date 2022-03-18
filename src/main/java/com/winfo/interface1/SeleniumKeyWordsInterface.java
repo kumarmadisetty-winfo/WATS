@@ -161,7 +161,25 @@ public interface SeleniumKeyWordsInterface {
 
 	        FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
-
+		
+		
+		
+		public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2,String fileName,String sheetName,FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception;
+		
+		
+		
+		
+		
+		public String closeExcel() throws Exception;
+		public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception;
+		public Integer addRow(Integer addrow) throws Exception;
+		
+		public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception;
+		public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
+				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
 

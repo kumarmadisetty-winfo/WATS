@@ -1,11 +1,28 @@
 package com.winfo.scripts;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +32,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -27,6 +51,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
+import com.winfo.services.FetchMetadataListVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
@@ -44,7 +69,13 @@ public class RunAutomation {
 	ErrorMessagesHandler errorMessagesHandler;
 	@Autowired
 	DriverConfiguration deriverConfiguration;
+	
+	@Value("${configvO.watsvediologo}")
+	private String watsvediologo;
 
+	@Value("${configvO.whiteimage}")
+	private String whiteimage;
+	
 	@Autowired
 	TestCaseDataService dataService;
 	@Autowired
@@ -109,9 +140,10 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-	//		fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
-	//		fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-	//		fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			//fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
+			//fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+			//fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			//fetchConfigVO.setInstance_name("DH");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -363,8 +395,11 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
+			Integer addRowCounter =1;
+			String journalScreenshot = "";
+			boolean journalScript = false;
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
-
+			List<String>excellSteps = new ArrayList<String>();
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -474,6 +509,7 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 					case "Dropdown Values":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
@@ -726,16 +762,308 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1, param2, value1,
 								value2, fetchMetadataVO, fetchConfigVO);
 						break;
+					
+					
+					
+					
+					case "LoginToExcel":
+						userName = fetchMetadataVO.getInput_value();
+						String login = seleniumFactory.getInstanceObj(instanceName).loginToExcel(driver, param1, param2,userName,dataBaseEntry.getPassword(param, userName, fetchConfigVO), fetchMetadataVO, fetchConfigVO);
+						excellSteps.add(login);
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						
+						excellSteps.add(journalScreenshot);
+						
+						break;
+					case "SelectMenuItemOfExcel":
+						String selectMenu = seleniumFactory.getInstanceObj(instanceName).menuItemOfExcel(driver, param1, fetchMetadataVO, fetchConfigVO);
+						excellSteps.add(selectMenu);
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						excellSteps.add(journalScreenshot);
+						
+						break;
+					case "CloseExcel":
+						String closeExcell = seleniumFactory.getInstanceObj(instanceName).closeExcel();
+						excellSteps.add(closeExcell);
+						this.createRobot(fetchConfigVO, fetchMetadataListVO, seq_num, excellSteps);
+						
+						
+						
+						
+						break;
+					case "TypeIntoCell":
+						String typeCell = seleniumFactory.getInstanceObj(instanceName).typeIntoCell(driver, screenParameter, value1, fetchMetadataVO, fetchConfigVO, addRowCounter);
+						excellSteps.add(typeCell);
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						
+						excellSteps.add(journalScreenshot);
+						
+						break;
+					case "AddRow":
+						addRowCounter = seleniumFactory.getInstanceObj(instanceName).addRow(addRowCounter);
+						break;
+					case "OpenExcelFileWithSheet":
+						List<String> openExcell = seleniumFactory.getInstanceObj(instanceName).openExcelFileWithSheet(driver, param1, param2,value1,value2, fetchMetadataVO, fetchConfigVO);
+						excellSteps.addAll(openExcell);
+						
+						journalScreenshot = "    Screenshot.Take Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						//journalScreenshot = "    Screenshot.Take Screenshot    D:\\\\Adfdi\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\"+fetchMetadataVO.getCustomer_name()+"\\\\"+fetchMetadataVO.getTest_run_name()+"\\\\"+fetchMetadataVO.getSeq_num()+"_"+fetchMetadataVO.getLine_number()+"_"+fetchMetadataVO.getScenario_name()+"_"+fetchMetadataVO.getScript_number()+"_"+fetchMetadataVO.getTest_run_name()+"_"+fetchMetadataVO.getLine_number()+"_"+"Passed.jpg";
+						
+						
+						excellSteps.add(journalScreenshot);
+						
+						journalScript = true;
+						break;
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",
 						// fetchMetadataListVO, fetchConfigVO);
 						break;
+						
 					}
 					i++;
 
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
+						
+						if(journalScript) {
+							String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+									+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
+							
+						//	String Folder = "C:\\EBS-Automation\\EBS Automation-POC\\robot files\\";
+							File theDir = new File(Folder);
+							if (!theDir.exists()) {
+								System.out.println("creating directory: " + theDir.getName());
+								boolean result = false;
+								try {
+									theDir.mkdirs();
+									result = true;
+								} catch (SecurityException se) {
+									// handle it
+									System.out.println(se.getMessage());
+								}
+							} else {
+								System.out.println("Folder exist");
+							}
+							FileWriter writer;
+							try {
+								String robotFileName=seq_num+"_"+fetchMetadataListVO.get(0).getScript_number()+".robot";
+								String completePath=Folder+robotFileName;
+							//	writer = new FileWriter("C:\\Users\\Winfo solutions\\Priya\\Documents\\createInvoice.robot");
+								writer = new FileWriter(completePath);
+								for(String codeline:excellSteps)
+						    	  {
+						    		//String code=codeline.getRobot_line();  
+						    		writer.write(codeline + System.lineSeparator());
+						    	  }
+							//	writer.write(robotCodeLine + System.lineSeparator());
+						      writer.close();
+						      //String screenshotPath="D:\\\\\\\\Adfdi\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
+						      String screenshotPath="C:\\\\\\\\EBS-Automation\\\\\\\\WATS_Files\\\\\\\\screenshot\\\\\\\\excel\\\\\\\\" + fetchMetadataVO.getCustomer_name() + "\\\\\\\\"+ fetchMetadataVO.getTest_run_name();
+						      robotFileTransfer( completePath, robotFileName);
+						      String response= callLocalRobot(seq_num+"_"+fetchMetadataListVO.get(0).getScript_number(),screenshotPath);
+								JSONObject jsonobj= new JSONObject(response);
+							String jsonResponse="";
+						for(Iterator iterator = jsonobj.keySet().iterator(); iterator.hasNext();) {
+						    String key = (String) iterator.next();
+						    System.out.println(jsonobj.get(key));
+						  //  System.out.println();
+						    if(!(key.equalsIgnoreCase("status")))
+						    {
+						    	String value=(String) jsonobj.get(key);
+						    	//seleniumFactory.getInstanceObj(instanceName).updateCopyValue(key,value,test_set_line_id,test_set_id);
+						    }
+						    if ((key.equalsIgnoreCase("status")))
+						     {
+						    	String value=(String) jsonobj.get(key);
+						    	jsonResponse=value;
+						    	 
+						 
+						     }
+						    List<String> fileNameList = new ArrayList<String>();
+						    File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+									+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+
+							File[] listOfFiles = folder.listFiles();
+							List<File> allFileList = Arrays.asList(listOfFiles);
+							List<File> fileList = new ArrayList<>();
+							String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+							// String seqNumber = "1";
+							for (File file : allFileList) {
+								if (file.getName().startsWith(seqNumber + "_")) {
+									fileList.add(file);
+								}
+							}
+
+							Collections.sort(fileList, new Comparator<File>() {
+
+								public int compare(File f1, File f2) {
+
+									return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
+
+								}
+
+							});
+							for(File f:fileList) {
+							fileNameList.add(f.getName());
+							}
+//						    fileNameList = seleniumFactory.getInstanceObj(instanceName).getFileNameListNew(fetchMetadataListVO, fetchConfigVO);
+				System.out.println("screenshot list first entry :");
+							String name=fileNameList.get(0);
+							System.out.println(name);
+				String arr[]=name.split("_", 0);
+			String lastScreenshotSeqNum=arr[1];
+			int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
+			System.out.println("line num:");
+				System.out.println(lastScreenshotSeqNum);
+			String lastSeqNum=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getSeq_num();
+			System.out.println("fetch metadatavo last element line number:");
+			System.out.println(lastSeqNum);
+			if(jsonResponse.equalsIgnoreCase("pass"))
+			{
+				for(FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO)
+				{
+					dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO1, fetchConfigVO, fetchMetadataVO1.getTest_script_param_id(),"Pass");
+
+				}
+				FetchScriptVO post = new FetchScriptVO();
+				post.setP_test_set_id(test_set_id);
+				post.setP_status("Pass");
+				post.setP_script_id(script_id);
+				post.setP_test_set_line_id(test_set_line_id);
+				post.setP_pass_path(passurl);
+				post.setP_fail_path(failurl);
+				post.setP_exception_path(detailurl);
+				post.setP_test_set_line_path(scripturl);
+				// passcount = passcount+1;
+				Date enddate = new Date();
+				fetchConfigVO.setEndtime(enddate);
+				try {
+					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+				} catch (Exception e) {
+					System.out.println("e");
+				}
+				seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
+						seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+				if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
+							fetchConfigVO);
+				}
+				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+						script_id1, script_Number, "pass", startdate, enddate);
+//				limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
+//						test_set_id);
+			}
+			if(jsonResponse.equalsIgnoreCase("fail"))
+			{
+				System.out.println("inside fail :");
+				for(FetchMetadataVO fetchMetadataVO11 : fetchMetadataListVO)
+				{
+					//int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
+					int currentSeqNum =Integer.parseInt(fetchMetadataVO11.getLine_number());
+					System.out.println("currentSeqNum: "+currentSeqNum);
+					System.out.println("lastPassedSeq: "+lastPassedSeq);
+					if(currentSeqNum<=lastPassedSeq)
+					{
+					dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(),"Pass");
+					}
+					else
+					{
+						message="Journal Execution Failed";
+						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(), "Fail",
+								message);
+						fetchConfigVO.setErrormessage(message);
+						FetchScriptVO post = new FetchScriptVO();
+						post.setP_test_set_id(test_set_id);
+						post.setP_status("Fail");
+						post.setP_script_id(script_id);
+						post.setP_test_set_line_id(test_set_line_id);
+						post.setP_pass_path(passurl);
+						post.setP_fail_path(failurl);
+						post.setP_exception_path(detailurl);
+						post.setP_test_set_line_path(scripturl);
+						failcount = failcount + 1;
+						Date enddate = new Date();
+						fetchConfigVO.setEndtime(enddate);
+						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+						
+//						File source = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images/last.jpg");
+				//	File dest = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			//					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg");
+//						try {
+//						    FileUtils.copyFile(source, dest);
+//						} catch (IOException e) {
+//						    e.printStackTrace();
+//						}
+						File file = new ClassPathResource(whiteimage).getFile();
+						// File file = new File("C:\\Users\\Winfo
+						// Solutions\\Desktop\\Add_On\\white.jpg");
+						File file1 = new ClassPathResource(watsvediologo).getFile();
+						// File file1=new File("C:\\Users\\Winfo
+						// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
+
+						BufferedImage image = null;
+						image = ImageIO.read(file);
+						BufferedImage logo = null;
+						logo = ImageIO.read(file1);
+						BufferedImage image1 = null;
+						image1 = ImageIO.read(file);
+						Graphics g1 = image1.getGraphics();
+						g1.setColor(Color.red);
+						java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+						g1.setFont(font1);
+						g1.drawString("FAILED IN THIS STEP!!", 400, 300);
+						g1.drawImage(logo, 1012, 15, null);
+						g1.dispose();
+
+						ImageIO.write(image1, "jpg",  new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+								+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg"));
+						seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+							seq_num + "_" + script_Number +".pdf", startdate, enddate);
+
+							
+								
+						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
+								script_Number, "Fail", startdate, enddate);
+						break;
+					}
+					
+				}
+			}
+//						    for(String name:fileNameList)
+//					{
+//						System.out.println(name);
+//						String arr[]=name.split("_", 1);
+//						String lineNum=arr[1];
+//						System.out.println(lineNum);
+//					String lastLineNumber=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getLine_number();
+//					
+//					}
+					
+						}
+				       System.out.println(response);
+				     
+					}catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					//	throw new Exception("Script failed");
+					}
+					}
+						
+						
+						
+						
+						
+						
+						else {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Pass");
@@ -765,7 +1093,10 @@ public class RunAutomation {
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
 								test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
+						}
+					
 					}
+					if(!journalScript) {
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
@@ -774,7 +1105,9 @@ public class RunAutomation {
 					} catch (Exception e) {
 						System.out.println("e");
 					}
-				} catch (Exception e) {
+					}
+					}
+				 catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
@@ -826,4 +1159,158 @@ public class RunAutomation {
 			throw e;
 		}
 	}
+	public void createRobot(FetchConfigVO fetchConfigVO,List<FetchMetadataVO> fetchMetadataListVO,String seq_num ,List<String>excelSteps) {
+		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
+		
+		File theDir = new File(Folder);
+		if (!theDir.exists()) {
+			System.out.println("creating directory: " + theDir.getName());
+			boolean result = false;
+			try {
+				theDir.mkdirs();
+				result = true;
+			} catch (SecurityException se) {
+				// handle it
+				System.out.println(se.getMessage());
+			}
+		} else {
+			System.out.println("Folder exist");
+		}
+		FileWriter writer;
+		try {
+			String robotFileName=seq_num+"_"+fetchMetadataListVO.get(0).getScript_number()+".robot";
+			String completePath=Folder+robotFileName;
+		//	writer = new FileWriter("C:\\Users\\Winfo solutions\\Priya\\Documents\\createInvoice.robot");
+			writer = new FileWriter(completePath);
+			for(String codeline:excelSteps)
+	    	  {
+	    		//String code=codeline.getRobot_line();  
+	    		writer.write(codeline + System.lineSeparator());
+	    	  }
+		//	writer.write(robotCodeLine + System.lineSeparator());
+	      writer.close();
+	      robotFileTransfer( completePath, robotFileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public String callLocalRobot(String fileName,String path)
+	{
+		HttpURLConnection conn = null;
+    DataOutputStream os = null;
+    String output="";
+    String response="";
+    try{
+        URL url = new URL("http://192.168.1.244:8080/EBSAutomation/api/v3/localRobotJob"); //important to add the trailing slash after add
+    //   URL url = new URL("http://localhost:8080/api/v3/localRobotJob"); //important to add the trailing slash after add
+
+   //  String input1="{\"Data\":  \"";
+    // String finalInput=input1+fileName+"\"}";
+     //   String[] inputData = {"{\"Data\": [{ \"SUBJECT\": \"invoiceDesktop\"}]}"};
+        String input1="{\"Data\": [{ \"SUBJECT\": \"";
+        String finalInput=input1+fileName+"\",\"PATH\":\"";
+        String finalInput2=finalInput+path+"\"}]}";
+        String[] inputData= {finalInput2};
+        for(String input: inputData){
+            byte[] postData = input.getBytes(StandardCharsets.UTF_8);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+           // conn.setRequestProperty( "charset", "utf-8");
+            conn.setRequestProperty("Content-Length", Integer.toString(input.length()));
+            os = new DataOutputStream(conn.getOutputStream());
+            os.write(postData);
+            os.flush();
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+           System.out.println("response message");
+           System.out.println(conn.getResponseMessage());
+           System.out.println(conn.getResponseMessage());           
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+                response=response+output;
+
+            }
+            conn.disconnect();
+        }
+} catch (MalformedURLException e) {
+    e.printStackTrace();
+}catch (IOException e){
+    e.printStackTrace();
+}finally
+    {
+        if(conn != null)
+        {
+            conn.disconnect();
+        }
+    }
+    System.out.println("returned Val");
+    System.out.println(response);
+
+    try {
+		JSONObject jsonobj= new JSONObject(response);
+		String val= (String) jsonobj.get("status");
+		System.out.println("json Object Val "+val);
+		
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+    return response; 
+}
+	
+	public void robotFileTransfer(String filePath,String robotFileName)
+	{
+		 String server = "192.168.1.244";
+	        int port = 21;
+	        String user = "wats_user";
+	        String pass = "2022@Winfo";
+
+	        FTPClient ftpClient = new FTPClient();
+	        try {
+
+	            ftpClient.connect(server, port);
+	            ftpClient.login(user, pass);
+	            ftpClient.enterLocalPassiveMode();
+
+	        
+	            File firstLocalFile = new File(filePath);
+
+	            String firstRemoteFile = robotFileName;
+	            InputStream inputStream = new FileInputStream(firstLocalFile);
+
+	            System.out.println("Start uploading first file");
+	            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
+	            inputStream.close();
+	            if (done) {
+	                System.out.println("The first file is uploaded successfully.");
+	            }
+	        }catch (IOException ex) {
+	            System.out.println("Error: " + ex.getMessage());
+	            ex.printStackTrace();
+	        } finally {
+	            try {
+	                if (ftpClient.isConnected()) {
+	                    ftpClient.logout();
+	                    ftpClient.disconnect();
+	                }
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	}
+	
 }
