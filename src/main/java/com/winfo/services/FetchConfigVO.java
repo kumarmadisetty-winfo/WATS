@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchConfigVO {
 	
+	private String OIC_APPLICATION_URL;
+	
 	
 	private String SHAREPOINT_SITE_ID; 
 	
@@ -542,6 +544,14 @@ public int getMax_num_scripts() {
 
 	public void setSHAREPOINT_SITE_ID(String sHAREPOINT_SITE_ID) {
 		SHAREPOINT_SITE_ID = sHAREPOINT_SITE_ID;
+	}
+
+	public String getOIC_APPLICATION_URL() {
+		return OIC_APPLICATION_URL;
+	}
+
+	public void setOIC_APPLICATION_URL(String oIC_APPLICATION_URL) {
+		OIC_APPLICATION_URL = oIC_APPLICATION_URL;
 	}
 	
 	

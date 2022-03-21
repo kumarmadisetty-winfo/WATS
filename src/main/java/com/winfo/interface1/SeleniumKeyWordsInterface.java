@@ -182,6 +182,10 @@ public interface SeleniumKeyWordsInterface {
 				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
+		public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) throws Exception;
+
+		
+
 
 
 

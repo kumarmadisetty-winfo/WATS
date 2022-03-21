@@ -16895,7 +16895,22 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 
 
 }
-
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+		try {
+			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.manage().window().maximize();
+			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
+			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed to logout " + scripNumber);
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("failed to do navigate URl " + scripNumber);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			System.out.println("Not able to navitage to the Url");
+		}
+	}
 
 	
 

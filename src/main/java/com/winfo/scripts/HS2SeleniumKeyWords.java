@@ -16245,6 +16245,13 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		return null;
 	}
 
+	@Override
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }
