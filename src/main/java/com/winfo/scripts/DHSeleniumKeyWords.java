@@ -16897,7 +16897,7 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 }
 	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getOIC_APPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
