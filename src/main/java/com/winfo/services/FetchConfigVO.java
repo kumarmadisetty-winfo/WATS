@@ -142,7 +142,24 @@ public class FetchConfigVO {
 	
     private String PDF_LOCATION;
 
-    
+    private String WINDOWS_PDF_LOCATION;
+    private String WINDOWS_SCREENSHOT_LOCATION;
+	public String getWINDOWS_PDF_LOCATION() {
+		return WINDOWS_PDF_LOCATION;
+	}
+
+	public void setWINDOWS_PDF_LOCATION(String wINDOWS_PDF_LOCATION) {
+		WINDOWS_PDF_LOCATION = wINDOWS_PDF_LOCATION;
+	}
+
+	public String getWINDOWS_SCREENSHOT_LOCATION() {
+		return WINDOWS_SCREENSHOT_LOCATION;
+	}
+
+	public void setWINDOWS_SCREENSHOT_LOCATION(String wINDOWS_SCREENSHOT_LOCATION) {
+		WINDOWS_SCREENSHOT_LOCATION = wINDOWS_SCREENSHOT_LOCATION;
+	}
+
 	public String getPDF_LOCATION() {
 		return PDF_LOCATION;
 	}

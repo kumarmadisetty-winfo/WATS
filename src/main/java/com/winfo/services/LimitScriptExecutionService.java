@@ -218,13 +218,13 @@ public class LimitScriptExecutionService {
 
 	public void renameFailedFile(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, int failedScriptRunCount) {
-		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		//String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //		String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 		File file = new File(Folder + pdffileName);
 		String pdfname = pdffileName.substring(0, pdffileName.indexOf(".pdf"));
-		String renameFolder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		String renameFolder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+pdfname+ "_RUN1.pdf");
 		 File renameFile = new File(renameFolder);
 		 boolean flag = file.renameTo(renameFile);

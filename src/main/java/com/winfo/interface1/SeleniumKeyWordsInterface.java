@@ -138,7 +138,7 @@ public interface SeleniumKeyWordsInterface {
 		public void ebsTabKey(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 		public void selectByIndex(WebDriver driver, String param1, String param2,
 				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) ;
-
+		public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath);
 
 
 

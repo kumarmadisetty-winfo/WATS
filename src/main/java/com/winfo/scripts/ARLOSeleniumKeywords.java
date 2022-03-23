@@ -445,7 +445,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
 		System.out.println("entered to getFailFileNameListNew");
-				File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 				//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 				File[] listOfFiles = folder.listFiles();
@@ -598,7 +598,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		//File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 
@@ -746,7 +746,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
@@ -920,7 +920,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException{
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
@@ -1112,7 +1112,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws Exception {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		//File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
@@ -1357,10 +1357,10 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	
 	public  void convertJPGtoMovie(String targetFile1,List<String> targetFileList, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,String name)
     {
-		 String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		 String vidPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION()  + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\"+name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		 String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		 String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION()  + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		 File theDir = new File(Folder);
 			if (!theDir.exists()) {
@@ -1416,7 +1416,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION()  + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 			//String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
@@ -1733,7 +1733,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			for (String image : fileNameList) {
 						i++;
 				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 //	Start to add script details 
 				String sno = image.split("_")[0];
 				String SNO = "Script Number";
@@ -1923,11 +1923,11 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		int i=0;
 			for (String image : fileNameList) {
 //				 Image img = Image.getInstance(
-//				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
+//				 fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "\\" + test_Run_Name +
 //				 "\\" + image);
 				i++;
 				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 
 				String Status = image.split("_")[6];
 				String status = Status.split("\\.")[0];
@@ -2049,7 +2049,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				String pdffileName,Date Starttime,Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 			try {
 				String Date = DateUtils.getSysdate();
-				String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION()  + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 				String FILE = (Folder + pdffileName);
 				System.out.println(FILE);
@@ -2157,7 +2157,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 						for (String image : fileNameList) {
 							i++;
 							Image img = Image.getInstance(
-									fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+									fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 
 //							String ScriptNumber = image.split("_")[3];
 //							String TestRun = image.split("_")[4];
@@ -2228,7 +2228,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	 public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 			List<String> fileNameList = new ArrayList<String>();
-			File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
+			File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 			File[] listOfFiles = folder.listFiles();
 			for (int i = 0; i < listOfFiles.length; i++) {
@@ -2251,7 +2251,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	 public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
 				throws IOException {
-			String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
+			String Folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 			List<String> fileNameList = null;
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
@@ -2261,7 +2261,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			for (String image : fileNameList) {
 
 				FileInputStream inputStream = new FileInputStream(
-						fetchConfigVO.getScreenshot_path() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
+						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
 				BufferedImage inputImage = ImageIO.read(inputStream);
 
 				JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
@@ -2305,7 +2305,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			  String accessToken = getAccessTokenPdf();
 			  List imageUrlList = new ArrayList();
-			  File imageDir = new File(fetchConfigVO.getPdf_path()+fetchMetadataListVO.get(0).getCustomer_name() +"\\" +fetchMetadataListVO.get(0).getTest_run_name()+"\\");
+			  File imageDir = new File(fetchConfigVO.getWINDOWS_PDF_LOCATION() +fetchMetadataListVO.get(0).getCustomer_name() +"\\" +fetchMetadataListVO.get(0).getTest_run_name()+"\\");
 			  System.out.println(imageDir);
 			  for(File imageFile : imageDir.listFiles()){
 				  String imageFileName = imageFile.getName();
@@ -6332,7 +6332,7 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 				Shutterbug.shootPage(driver,ScrollStrategy.BOTH_DIRECTIONS,500,true).withName(fetchMetadataVO.getSeq_num() + "_"
 						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-						+ fetchMetadataVO.getLine_number() + "_Passed").save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
+						+ fetchMetadataVO.getLine_number() + "_Passed").save(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "\\"
 						+ fetchMetadataVO.getTest_run_name() + "\\");
 				logger.info("Successfully Screenshot is taken");
 				return image_dest;
@@ -6350,7 +6350,7 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 				Shutterbug.shootPage(driver,ScrollStrategy.BOTH_DIRECTIONS,500,true).withName(fetchMetadataVO.getSeq_num() + "_"
 						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-						+ fetchMetadataVO.getLine_number() + "_Failed").save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
+						+ fetchMetadataVO.getLine_number() + "_Failed").save(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "\\"
 						+ fetchMetadataVO.getTest_run_name() + "\\");
 				logger.info("Successfully Screenshot is taken");
 				return image_dest;
@@ -6366,7 +6366,7 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 	 * FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) { String
 	 * image_dest = null; try { TakesScreenshot ts = (TakesScreenshot) driver; File
 	 * source = ts.getScreenshotAs(OutputType.FILE); image_dest =
-	 * (fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name()
+	 * (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()+"\\" + fetchMetadataVO.getCustomer_name()
 	 * + "\\" + fetchMetadataVO.getTest_run_name()+ "
 	 * \\" + fetchMetadataVO.getLine_number()+ "_" +
 	 * fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number()
@@ -6383,7 +6383,7 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 	 * (TakesScreenshot) driver; File source = ts.getScreenshotAs(OutputType.FILE);
 	 * String currenttime = new
 	 * SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime
-	 * ()); image_dest =(fetchConfigVO.getScreenshot_path()+"\\" +
+	 * ()); image_dest =(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()+"\\" +
 	 * fetchMetadataVO.getCustomer_name() +
 	 * "\\" + fetchMetadataVO.getTest_run_name()+ "
 	 * \\" + fetchMetadataVO.getLine_number()+ "
@@ -6400,7 +6400,7 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 	 * FetchConfigVO fetchConfigVO) { String image_dest = null; try {
 	 * TakesScreenshot ts = (TakesScreenshot) driver; File source =
 	 * ts.getScreenshotAs(OutputType.FILE); image_dest
-	 * =(fetchConfigVO.getScreenshot_path()+"\\" +
+	 * =(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()+"\\" +
 	 * fetchMetadataListVO.get(0).getCustomer_name() +
 	 * "\\" + fetchMetadataListVO.get(0).getTest_run_name()+ "
 	 * \\" + fetchMetadataListVO.get(0).getLine_number()+ "
@@ -6785,12 +6785,12 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 
 
 	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		if (folder.exists()) {
 		File[] listOfFiles = folder.listFiles();
 		
-//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+//		String image=fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "/"
 //				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
 //				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 //				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
@@ -6873,5 +6873,7 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 	@Override
 	public void selectByIndex(WebDriver driver, String param1, String param2,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {}
+	@Override
+	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {return null;}
 
 }

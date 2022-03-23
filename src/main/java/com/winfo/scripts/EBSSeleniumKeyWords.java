@@ -14,11 +14,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,6 +53,8 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
+
+import org.apache.commons.io.FileUtils;
 
 //import blank.FFmpegFrameRecorder;
 //import blank.IplImage;
@@ -124,6 +129,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
+import com.oracle.bmc.ConfigFileReader;
+import com.oracle.bmc.auth.AuthenticationDetailsProvider;
+import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+import com.oracle.bmc.objectstorage.ObjectStorageClient;
+import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
+import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.dao.ActionsRepository;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.EBSMappingRepository;
@@ -742,8 +753,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 		System.out.println("entered to getFailFileNameListNew");
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 		File[] listOfFiles = folder.listFiles();
 		String video_rec = "no";
@@ -822,7 +833,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.dispose();
 		System.out.println("before ImageIO.write");
 		File folder1 = new File(
-				fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\Images");
 		if (!folder1.exists()) {
 			System.out.println("creating directory: " + folder1.getName());
 			boolean result = false;
@@ -836,7 +847,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		} else {
 			System.out.println("Folder exist");
 		}
-		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
+		ImageIO.write(image, "jpg", new File(folder1 + "\\first.jpg"));
 		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
 		// Solutions\\Desktop\\Add_On\\first.jpg"));
 
@@ -850,7 +861,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g1.drawImage(logo, 1012, 15, null);
 		g1.dispose();
 
-		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
+		ImageIO.write(image1, "jpg", new File(folder1 + "\\last.jpg"));
 		String imgpath2 = folder1 + "/";
 		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
 		// Solutions\\Desktop\\Add_On\\last.jpg"));
@@ -913,7 +924,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 
@@ -993,7 +1004,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.drawImage(logo, 1012, 15, null);
 		g.dispose();
 		File folder1 = new File(
-				fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\Images");
 		if (!folder1.exists()) {
 			System.out.println("creating directory: " + folder1.getName());
 			boolean result = false;
@@ -1008,7 +1019,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println("Folder exist");
 		}
 
-		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
+		ImageIO.write(image, "jpg", new File(folder1 + "\\first.jpg"));
 		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
 		// Solutions\\Desktop\\Add_On\\first.jpg"));
 
@@ -1021,7 +1032,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
 		g1.drawImage(logo, 1150, 15, null);
 		g1.dispose();
-		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
+		ImageIO.write(image1, "jpg", new File(folder1 + "\\last.jpg"));
 		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
 		// Solutions\\Desktop\\Add_On\\last.jpg"));
 		String imgpath2 = folder1 + "/";
@@ -1077,7 +1088,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
@@ -1182,7 +1193,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
 			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
 				boolean result = false;
@@ -1197,12 +1208,12 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				System.out.println("Folder exist");
 			}
 
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
+			ImageIO.write(image2, "jpg", new File(folder1 + "\\first.jpg"));
 			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			String imgpath3 = folder1 + "/first.jpg";
-			String imgpath2 = folder1 + "/";
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
+			String imgpath3 = folder1 + "\\first.jpg";
+			String imgpath2 = folder1 + "\\";
+			ImageIO.write(image, "jpg", new File(folder1 + "\\" + imagename + ".jpg"));
 			// String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
@@ -1267,7 +1278,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
@@ -1359,7 +1370,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 ////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 			g.dispose();
 			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
 				boolean result = false;
@@ -1374,7 +1385,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				System.out.println("Folder exist");
 			}
 
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
+			ImageIO.write(image, "jpg", new File(folder1 + "\\" + imagename + ".jpg"));
 			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
@@ -1387,7 +1398,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g1.drawImage(logo, 1012, 14, null);
 			g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
 			g1.dispose();
-			ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
+			ImageIO.write(image1, "jpg", new File(folder1 + "\\last.jpg"));
 			// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\last.jpg"));
 
@@ -1404,9 +1415,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			String imgpath3 = folder1 + "/first.jpg";
-			String imgpath2 = folder1 + "/";
+			ImageIO.write(image2, "jpg", new File(folder1 + "\\first.jpg"));
+			String imgpath3 = folder1 + "\\first.jpg";
+			String imgpath2 = folder1 + "\\";
 
 			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\first.jpg"));
@@ -1478,7 +1489,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
@@ -1575,7 +1586,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 			g.dispose();
 			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
 				boolean result = false;
@@ -1590,7 +1601,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				System.out.println("Folder exist");
 			}
 
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
+			ImageIO.write(image, "jpg", new File(folder1 + "\\" + imagename + ".jpg"));
 			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
@@ -1617,12 +1628,12 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
+			ImageIO.write(image2, "jpg", new File(folder1 + "\\first.jpg"));
 			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			String imgpath2 = folder1 + "/";
+			String imgpath2 = folder1 + "\\";
 			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			String imgpath3 = folder1 + "/first.jpg";
+			String imgpath3 = folder1 + "\\first.jpg";
 			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 			File f11 = new File(imgpath2);
 			File[] f22 = f11.listFiles();
@@ -1736,10 +1747,10 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name) {
-		String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		String vidPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
@@ -1792,7 +1803,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
@@ -1826,7 +1837,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
@@ -1860,7 +1871,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
@@ -1894,7 +1905,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
@@ -1924,7 +1935,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
@@ -2342,7 +2353,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //				for (String image : fileNameList) {
 //					i++;
 //					Image img = Image.getInstance(
-//							fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+//							fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 ////	Start to add script details 
 //					String sno = image.split("_")[0];
 //					String SNO = "Script Number";
@@ -2536,11 +2547,11 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //					int i = 0;
 //					for (String image : fileNameList) {
 ////				 Image img = Image.getInstance(
-////				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
+////				 fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "\\" + test_Run_Name +
 ////				 "\\" + image);
 //						i++;
 //						Image img = Image.getInstance(
-//								fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+//								fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 //
 //						String Status = image.split("_")[6];
 //						String status = Status.split("\\.")[0];
@@ -2586,9 +2597,12 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");			
+//			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+//					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");	
 			
+			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+			+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");	
+		
 			// String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 			String FILE = (Folder + pdffileName);
@@ -2974,7 +2988,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				for (String image : fileNameList) {
 					i++;
 					Image img = Image.getInstance(
-							fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+							fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 //	Start to add script details 
 					String sno = image.split("_")[0];
 					String SNO = "Script Number";
@@ -3198,11 +3212,11 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					int i = 0;
 					for (String image : fileNameList) {
 //				 Image img = Image.getInstance(
-//				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
+//				 fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "\\" + test_Run_Name +
 //				 "\\" + image);
 						i++;
 						Image img = Image.getInstance(
-								fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+								fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 
 						String Status = image.split("_")[6];
 						String status = Status.split("\\.")[0];
@@ -3255,6 +3269,19 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		} catch (Exception e) {
 			System.out.println("Not able to Create pdf" + e);
+		}
+		try
+		{		String destinationFilePath = (fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			+ fetchMetadataListVO.get(0).getTest_run_name() + "/")+pdffileName;	
+			
+			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\")+pdffileName;	
+
+	
+			uploadObjectToObjectStore( sourceFilePath,  destinationFilePath);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
 		}
 	}
 
@@ -3340,7 +3367,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
 				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -3363,7 +3390,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
 			throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
+		String Folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
 				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		List<String> fileNameList = null;
 		String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
@@ -3373,7 +3400,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		for (String image : fileNameList) {
 
 			FileInputStream inputStream = new FileInputStream(
-					fetchConfigVO.getScreenshot_path() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
 			BufferedImage inputImage = ImageIO.read(inputStream);
 
 			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
@@ -3745,7 +3772,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //			for (String image : fileNameList) {
 //				i++;
 //				Image img = Image.getInstance(
-//						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+//						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 //
 ////						String ScriptNumber = image.split("_")[3];
 ////						String TestRun = image.split("_")[4];
@@ -3820,8 +3847,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -3935,7 +3962,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			for (String image : fileNameList) {
 				i++;
 				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
+						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/" + test_Run_Name + "/" + image);
 
 //						String ScriptNumber = image.split("_")[3];
 //						String TestRun = image.split("_")[4];
@@ -4037,13 +4064,26 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println("Not able to upload the pdf");
 			e.printStackTrace();
 		}
+		try
+		{		String destinationFilePath = ( fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			+ fetchMetadataListVO.get(0).getTest_run_name() + "/")+pdffileName;	
+			
+			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\")+pdffileName;	
+
+	
+			uploadObjectToObjectStore( sourceFilePath,  destinationFilePath);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
 	}
 
 	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		try {
 			String accessToken = getAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			File imageDir = new File(fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			System.out.println(imageDir);
 			for (File imageFile : imageDir.listFiles()) {
@@ -14035,7 +14075,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
+			image_dest = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "\\"
 					+ fetchMetadataVO.getTest_run_name() + "\\" + fetchMetadataVO.getSeq_num() + "_"
 
 					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
@@ -14112,7 +14152,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+			image_dest = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "/"
 
 					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
 
@@ -14188,7 +14228,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			String currenttime = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime());
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
+			image_dest = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "\\"
 					+ fetchMetadataVO.getTest_run_name() + "\\" + fetchMetadataVO.getSeq_num() + "_"
 					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
@@ -14254,7 +14294,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			image_dest = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + line_number + "_"
 
@@ -15337,12 +15377,12 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		if (folder.exists()) {
 			File[] listOfFiles = folder.listFiles();
 
-//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+//		String image=fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "/"
 //				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
 //				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 //				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
@@ -15461,6 +15501,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			boolean lineToBeAdded=true;
 			//CodeLines robotCodeLine=listOfCodeLines.get(0);
 			for(CodeLines robotCodeLine:listOfCodeLines) {
+//				System.out.println("robotCode line number"+robotCodeLine.getCodeLineId());
+				
 				codeLine=robotCodeLine.getRobot_line();
 			if(robotCodeLine.getParam_values()!=null)
 			{
@@ -15548,8 +15590,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						dbValue=	codeLineRepo.findByTestRunScriptIdInputParam(Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 						
 						if(actionName.equalsIgnoreCase("ebsClickCheckBox"))
-						{System.out.println("dbValue");
-							System.out.println(dbValue);
+						{//System.out.println("dbValue");
+						//	System.out.println(dbValue);
 							if(dbValue==null||dbValue.length()<3||dbValue.equals("")||dbValue.equals(" "))
 							{
 								codeLine="    RPA.JavaAccessBridge.Click Element    role|check box"	;	
@@ -15630,10 +15672,11 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 				
 			
-				System.out.println(codeLine);
+				//System.out.println(codeLine);
 			}
 			else
 			{
+			//	System.out.println(codeLine);
 				listOfRobotCodeLines.add(codeLine);	
 			}
 		}
@@ -15643,5 +15686,51 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	{
 		dynamicnumber.getTestSetParamIdWithCopyAction( key,value, test_set_line_id, test_set_id);
 		
+	}
+	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath)
+	{
+		PutObjectResponse response=null;
+		try
+		{
+		/**
+         * Create a default authentication provider that uses the DEFAULT
+         * profile in the configuration file.
+         * Refer to <see href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the public documentation</see> on how to prepare a configuration file.
+         */
+		 final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(),
+        		"WATS_WINFOERP");
+	        final AuthenticationDetailsProvider provider =
+	                new ConfigFileAuthenticationDetailsProvider(configFile);
+	     //    final String FILE_NAME = "C:\\Users\\Winfo solutions\\Priya\\softwares\\wats\\jars\\padf\\WATS\\TestJiraP1\\Detailed_Report.pdf";
+	        final String FILE_NAME=  sourceFilePath;
+	        File file = new File(FILE_NAME);
+	         long fileSize = FileUtils.sizeOf(file);
+	         InputStream is = new FileInputStream(file);
+	    
+        /* Create a service client */
+        ObjectStorageClient client = new ObjectStorageClient(provider);
+
+        /* Create a request and dependent object(s). */
+
+	PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+		.namespaceName("nrch2emfoqis")
+		.bucketName("obj-watsdev01-standard")
+		//.objectName("ebs/Detailed_Report.pdf")
+		.objectName(destinationFilePath)
+		.contentLength(fileSize)// Create a Stream, for example, by calling a helper function like below.
+
+		.putObjectBody(is)
+
+		.build();
+
+        /* Send request to the Client */
+         response = client.putObject(putObjectRequest);
+        
+        return response.toString();
+	}catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+		return response.toString();
 	}
 }

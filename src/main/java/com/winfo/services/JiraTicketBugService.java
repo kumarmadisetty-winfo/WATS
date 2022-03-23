@@ -103,7 +103,7 @@ public class JiraTicketBugService {
 
 			// File filenew=new
 			// File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-			File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			File filenew = new File(fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
 
 			System.out.println("jira pdf path= " + filenew);

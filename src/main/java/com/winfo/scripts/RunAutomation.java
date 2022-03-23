@@ -168,7 +168,7 @@ public class RunAutomation {
 			//fetchConfigVO.setScreenshot_path("C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\");
 
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
-			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
+			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()+fetchConfigVO.getUri_config()+fetchConfigVO.getWINDOWS_PDF_LOCATION() );
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
 //			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
@@ -207,7 +207,7 @@ public class RunAutomation {
 
 			fetchConfigVO.setStarttime1(date);
 			
-			System.out.println(metaDataMap.toString());
+			//System.out.println(metaDataMap.toString());
 	
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 		   try {
@@ -221,7 +221,7 @@ public class RunAutomation {
 							executor.shutdown();
 							System.out.println("treminattion is succeed");
 						} else {
-							System.out.println(metaData.getKey());
+							//System.out.println(metaData.getKey());
 							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
 						}
 						long i = System.currentTimeMillis() - starttimeIntermediate;
@@ -250,7 +250,7 @@ public class RunAutomation {
 					 * LinkedHashMap<String, List<FetchMetadataVO>> dependantmetaDataMap =
 					 * dataService .getDependentScriptMap();
 					 */
-					System.out.println(dependentScriptMap.toString());
+				//	System.out.println(dependentScriptMap.toString());
 					for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						executordependent.execute(() -> {
 							try {
@@ -300,6 +300,8 @@ public class RunAutomation {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 							fetchConfigVO);
 				}
+				
+				uploadScreenshotsToObjectStore(fetchConfigVO,fetchMetadataListVO);
 				executeTestrunVo.setStatusCode(200);
 				executeTestrunVo.setStatusMessage("SUCCESS");
 				executeTestrunVo.setStatusDescr("SUCCESS");
@@ -341,9 +343,9 @@ public class RunAutomation {
 		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
                 + fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
                 + "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="+fetchConfigVO.getImg_url();
-		System.out.println(passurl);
-		System.out.println(failurl);
-		System.out.println(detailurl);
+//		System.out.println(passurl);
+//		System.out.println(failurl);
+//		System.out.println(detailurl);
 		boolean isDriverError = true;
 		try {
 			if(fetchConfigVO.getInstance_name().equalsIgnoreCase("EBS"))
@@ -468,8 +470,8 @@ public class RunAutomation {
 						
 						for (Map.Entry<String,Object> entry : result.entrySet())
 						{
-				            System.out.println("Key = " + entry.getKey() +
-				                             ", Value = " + entry.getValue());
+//				            System.out.println("Key = " + entry.getKey() +
+//				                             ", Value = " + entry.getValue());
 				             key =entry.getKey();
 							 value=(String)entry.getValue();
 							if(value.equalsIgnoreCase("<Pick from Config Table>"))
@@ -494,7 +496,7 @@ public class RunAutomation {
 							}
 							
 							defaultCodeLine= defaultCodeLine.replace("${"+key+"}", dbValue);
-							System.out.println(defaultCodeLine);
+							//System.out.println(defaultCodeLine);
 						}
 						
 					} catch (JsonMappingException e) {
@@ -924,7 +926,7 @@ public class RunAutomation {
 					if (fetchMetadataListVO.size() == i) {
 						if(instanceName.equalsIgnoreCase("EBS")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))))
 						{
-							String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+							String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION()  + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 									+ fetchMetadataListVO.get(0).getTest_run_name()+"/"+"robot" + "/");
 							
 						//	String Folder = "C:\\EBS-Automation\\EBS Automation-POC\\robot files\\";
@@ -948,9 +950,11 @@ public class RunAutomation {
 							String completePath=Folder+robotFileName;
 						//	writer = new FileWriter("C:\\Users\\Winfo solutions\\Priya\\Documents\\createInvoice.robot");
 							writer = new FileWriter(completePath);
+							
 							for(String codeline:listOfRobotCodeLines)
 					    	  {
 					    		//String code=codeline.getRobot_line();  
+								
 					    		writer.write(codeline + System.lineSeparator());
 					    	  }
 						//	writer.write(robotCodeLine + System.lineSeparator());
@@ -976,45 +980,7 @@ public class RunAutomation {
 							    	 
 							 
 							     }
-							    List<String> fileNameList = new ArrayList<String>();
-							    File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-										+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-
-								File[] listOfFiles = folder.listFiles();
-								List<File> allFileList = Arrays.asList(listOfFiles);
-								List<File> fileList = new ArrayList<>();
-								String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-								// String seqNumber = "1";
-								for (File file : allFileList) {
-									if (file.getName().startsWith(seqNumber + "_")) {
-										fileList.add(file);
-									}
-								}
-
-								Collections.sort(fileList, new Comparator<File>() {
-
-									public int compare(File f1, File f2) {
-
-										return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-									}
-
-								});
-								for(File f:fileList) {
-								fileNameList.add(f.getName());
-								}
-//							    fileNameList = seleniumFactory.getInstanceObj(instanceName).getFileNameListNew(fetchMetadataListVO, fetchConfigVO);
-					System.out.println("screenshot list first entry :");
-								String name=fileNameList.get(0);
-								System.out.println(name);
-					String arr[]=name.split("_", 0);
-				String lastScreenshotSeqNum=arr[1];
-				int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
-				System.out.println("line num:");
-					System.out.println(lastScreenshotSeqNum);
-				String lastSeqNum=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getSeq_num();
-				System.out.println("fetch metadatavo last eleemnt line number:");
-				System.out.println(lastSeqNum);
+							
 				if(jsonResponse.equalsIgnoreCase("pass"))
 				{
 					for(FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO)
@@ -1042,10 +1008,10 @@ public class RunAutomation {
 					}
 					seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + ".pdf", startdate, enddate);
-					if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
-								fetchConfigVO);
-					}
+//					if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+//						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
+//								fetchConfigVO);
+//					}
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 							script_id1, script_Number, "pass", startdate, enddate);
 //					limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
@@ -1054,6 +1020,47 @@ public class RunAutomation {
 				if(jsonResponse.equalsIgnoreCase("fail"))
 				{
 					System.out.println("inside fail :");
+				    List<String> fileNameList = new ArrayList<String>();
+//				    File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//							+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			    File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+							+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+
+					File[] listOfFiles = folder.listFiles();
+					List<File> allFileList = Arrays.asList(listOfFiles);
+					List<File> fileList = new ArrayList<>();
+					String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
+					// String seqNumber = "1";
+					for (File file : allFileList) {
+						if (file.getName().startsWith(seqNumber + "_")) {
+							fileList.add(file);
+						}
+					}
+
+					Collections.sort(fileList, new Comparator<File>() {
+
+						public int compare(File f1, File f2) {
+
+							return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
+
+						}
+
+					});
+					for(File f:fileList) {
+					fileNameList.add(f.getName());
+					}
+//				    fileNameList = seleniumFactory.getInstanceObj(instanceName).getFileNameListNew(fetchMetadataListVO, fetchConfigVO);
+		System.out.println("screenshot list first entry :");
+					String name=fileNameList.get(0);
+					System.out.println(name);
+		String arr[]=name.split("_", 0);
+	String lastScreenshotSeqNum=arr[1];
+	int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
+	System.out.println("line num:");
+		System.out.println(lastScreenshotSeqNum);
+	String lastSeqNum=fetchMetadataListVO.get(fetchMetadataListVO.size()-1).getSeq_num();
+	System.out.println("fetch metadatavo last eleemnt line number:");
+	System.out.println(lastSeqNum);
 					for(FetchMetadataVO fetchMetadataVO11 : fetchMetadataListVO)
 					{
 						//int lastPassedSeq=Integer.parseInt (lastScreenshotSeqNum);
@@ -1085,8 +1092,8 @@ public class RunAutomation {
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 							
-//							File source = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images/last.jpg");
-					//	File dest = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//							File source = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images/last.jpg");
+					//	File dest = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				//					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg");
 //							try {
 //							    FileUtils.copyFile(source, dest);
@@ -1114,8 +1121,12 @@ public class RunAutomation {
 							g1.drawImage(logo, 1012, 15, null);
 							g1.dispose();
 
-							ImageIO.write(image1, "jpg",  new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-									+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg"));
+							//ImageIO.write(image1, "jpg",  new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+								//	+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg"));
+					
+							ImageIO.write(image1, "jpg",  new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+									+ fetchMetadataListVO.get(0).getTest_run_name() + "\\"+fetchMetadataVO.getSeq_num() + "_"+ currentSeqNum + "_" + fetchMetadataVO.getScenario_name() + "_"+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"+ currentSeqNum + "_Failed.jpg"));
+							
 							seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number +".pdf", startdate, enddate);
 
@@ -1183,8 +1194,14 @@ public class RunAutomation {
 					}
 				//	System.out.println("Successfully Executed the" + "" + actionName);
 					try {
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass");
+						if(instanceName.equalsIgnoreCase("EBS")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")&&(!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables"))))
+						{	}
+						else
+						{
+							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass");
 						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+						}
+						
 					} catch (Exception e) {
 						System.out.println("e");
 					}
@@ -1279,8 +1296,8 @@ public class RunAutomation {
                     (conn.getInputStream())));
 
            System.out.println("response message");
-           System.out.println(conn.getResponseMessage());
-           System.out.println(conn.getResponseMessage());           
+//           System.out.println(conn.getResponseMessage());
+//           System.out.println(conn.getResponseMessage());           
             System.out.println("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
                 System.out.println(output);
@@ -1355,5 +1372,31 @@ public class RunAutomation {
 	            }
 	        }
 	}
+	public void uploadScreenshotsToObjectStore(FetchConfigVO fetchConfigVO,List<FetchMetadataVO> fetchMetadataListVO)
+	{
+		String sourceFilePath;
+		String destinationFilePath;
+		
+		 File sourceFolderDirectory = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		 
+		 String sourceFolder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		 
+		 String destinationFolder = ("Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+
+			File[] listOfFiles = sourceFolderDirectory.listFiles();
+			List<File> allFileList = Arrays.asList(listOfFiles);
+			for(File f:allFileList)
+			{
+				String fileName=f.getName();
+				sourceFilePath=sourceFolder+fileName;
+				destinationFilePath=destinationFolder+fileName;
+				
+				
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadObjectToObjectStore(sourceFilePath,destinationFilePath);
+			}
 	
+	}
 }
