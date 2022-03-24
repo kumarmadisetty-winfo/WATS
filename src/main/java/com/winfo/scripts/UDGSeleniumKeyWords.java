@@ -9638,7 +9638,32 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		
-		
+		//DH 39 OTC.AR.236
+				try {
+					if (param1.equalsIgnoreCase("Create Contact Point") && param2.equalsIgnoreCase("Phone")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" + param1 + "']/following::label[text()='" + param2 + "']/following::input[1]")));
+					WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 + "']/following::label[text()='" + param2 + "']/following::input[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(1000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+					String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return keysToSend;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Close Date sendValue" + scripNumber);
+					System.out.println(e);
+					}
+
 		
 		//DH 32
 				try {
@@ -9691,32 +9716,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 		
-		//DH 39 OTC.AR.236
-		try {
-			if (param1.equalsIgnoreCase("Create Contact Point") && param2.equalsIgnoreCase("Phone")) {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" + param1 + "']/following::label[text()='" + param2 + "']/following::input[1]")));
-			WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 + "']/following::label[text()='" + param2 + "']/following::input[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittill).build().perform();
-			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
-			String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
-			return keysToSend;
-			}
-			} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
-			}
-
+		
 
 		
 		
