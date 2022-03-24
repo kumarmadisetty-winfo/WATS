@@ -5073,7 +5073,7 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			if (param1.equalsIgnoreCase("Generate Schedules")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver.findElement(By.xpath(("//span[text()='G']")));// screenshot(driver,
+			WebElement waittext = driver.findElement(By.xpath(("//span[text()='enerate Schedules']")));// screenshot(driver,
 			// "",
 			// fetchMetadataVO,
 			// fetchConfigVO);
@@ -5084,7 +5084,7 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(15000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			String xpath = "//span[text()='G']";
+			String xpath = "//span[text()='enerate Schedules']";
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 
 
@@ -11380,6 +11380,33 @@ public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		
+		//DH 40
+		
+				try {
+					if(param1.equalsIgnoreCase("Suppliers") && param2.equalsIgnoreCase("Supplier Contact")) {
+					WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 +"']/following::label[text()='" + param2 + "']/preceding::input[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+					String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during tableSendKeys" + scripNumber);
+					System.out.println(e);
+					}
+
+		
+		
 		
 		//DH 34
 		try {
