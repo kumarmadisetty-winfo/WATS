@@ -3243,6 +3243,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						//WebElement waittill = driver.findElement(
 							//	By.xpath("//h1[text()='" + inputParam + "']/following::input[@placeholder='Search']"));
 						// to get Dynamic copynumber
+						Thread.sleep(5000);
 						WebElement waittill = driver.findElement(
 								By.xpath("//*[@title='" + inputParam + "']/following::input[1]"));
 
@@ -5056,7 +5057,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				try {
 					if (param1.equalsIgnoreCase("Generate Schedules")) {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-					WebElement waittext = driver.findElement(By.xpath(("//span[text()='enerate Schedules']")));// screenshot(driver,
+					WebElement waittext = driver.findElement(By.xpath("//span[text()='enerate Schedules']"));// screenshot(driver,
 					// "",
 					// fetchMetadataVO,
 					// fetchConfigVO);
@@ -5064,19 +5065,14 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					actions.moveToElement(waittext).build().perform();
 					//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 					waittext.click();
-					Thread.sleep(15000);
+					Thread.sleep(2000);
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 					String xpath = "//span[text()='enerate Schedules']";
 					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
+					
 					return;
 					}
-
-
-
 					} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.error("Failed during clickButton" + scripNumber);
@@ -5387,119 +5383,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							System.out.println(e);
 							}
 
-						//Dh 39
-						try {
-							if (param1.equalsIgnoreCase("Generate Schedules")) {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-							WebElement waittext = driver.findElement(By.xpath(("//span[text()='G']")));// screenshot(driver,
-							// "",
-							// fetchMetadataVO,
-							// fetchConfigVO);
-							Actions actions = new Actions(driver);
-							actions.moveToElement(waittext).build().perform();
-							//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-							waittext.click();
-							Thread.sleep(15000);
-							String scripNumber = fetchMetadataVO.getScript_number();
-							log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-							String xpath = "//span[text()='G']";
-							String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
-							return;
-							}
-
-
-
-							} catch (Exception e) {
-							String scripNumber = fetchMetadataVO.getScript_number();
-							log.error("Failed during clickButton" + scripNumber);
-
-
-
-							System.out.println(e);
-							}
-
-						
-						//Dh 39
-						try {
-							if (param1.equalsIgnoreCase("Addresses")&& param2.equalsIgnoreCase("Edit")) {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-							WebElement waittext = driver.findElement(By.xpath(("//h2[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]")));// screenshot(driver,
-							// "",
-							// fetchMetadataVO,
-							// fetchConfigVO);
-							Actions actions = new Actions(driver);
-							actions.moveToElement(waittext).build().perform();
-							//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-							waittext.click();
-							Thread.sleep(15000);
-							String scripNumber = fetchMetadataVO.getScript_number();
-							log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-							String xpath = "//h2[text()='param1']/following::*[text()='param2'][1]";
-							String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
-							return;
-							}
-
-
-
-							} catch (Exception e) {
-							String scripNumber = fetchMetadataVO.getScript_number();
-							log.error("Failed during clickButton" + scripNumber);
-
-
-
-							System.out.println(e);
-							}
-
-						
-						
-						//Dh 39
-						try {
-							if (param1.equalsIgnoreCase("Warning") && param2.equalsIgnoreCase("Yes")) {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-							WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='"+ param1 + "']/following::*[normalize-space(text())='"+ param2 + "' and @type='button'][1]")));// screenshot(driver,
-							// "",
-							// fetchMetadataVO,
-							// fetchConfigVO);
-							Actions actions = new Actions(driver);
-							actions.moveToElement(waittext).build().perform();
-							//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-							waittext.click();
-							Thread.sleep(15000);
-							String scripNumber = fetchMetadataVO.getScript_number();
-							log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-							String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and @type='button'][1]";
-							String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
-							return;
-							}
-
-
-
-							} catch (Exception e) {
-							String scripNumber = fetchMetadataVO.getScript_number();
-							log.error("Failed during clickButton" + scripNumber);
-
-
-
-							System.out.println(e);
-							}
-
-						
-						
-						
-						
-						
-						
-
-
+					
 							//DH 29
 							try {
 							if (param1.equalsIgnoreCase("Initiate")|| param1.equalsIgnoreCase("Supplier") || param1.equalsIgnoreCase("Internal")) {
@@ -7238,7 +7122,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//span[normalize-space(text())='param1']";
-						                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				return;
 			}
 		} catch (Exception e) {
@@ -9715,9 +9599,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 			String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[1]";
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
 			return keysToSend;
 			}
 			} catch (Exception e) {
@@ -9725,7 +9606,29 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 			}
-
+		
+		//DH 39 OTC.AR.236
+				try {
+					if (param1.equalsIgnoreCase("Create Address") && (param2.equalsIgnoreCase("Phone Country Code") || param2.equalsIgnoreCase("Phone Area Code") || param2.equalsIgnoreCase("Phone") || param2.equalsIgnoreCase("Phone Extension"))) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" + param1 + "']/following::label[text()='Phone']/following::label[text()='" + param2 + "']/preceding::input[1]")));
+					WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 + "']/following::label[text()='Phone']/following::label[text()='" + param2 + "']/preceding::input[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(1000);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+					String xpath = "//div[text()='param1']/following::label[text()='Phone']/following::label[text()='param2']/preceding::input[1]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					return keysToSend;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Close Date sendValue" + scripNumber);
+					System.out.println(e);
+					}
 		
 		//DH 32
 		try {
@@ -16610,7 +16513,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	
 	private String copyValuesWithSpc(String value) {
 		try {
-		Pattern p = Pattern.compile("\\b[A-Z]+\\-[A-Z]+\\-\\d+"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
+		Pattern p = Pattern.compile("\\b[A-Z]+\\-*[A-Z]+\\-*\\d+"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
 		Matcher m = p.matcher(value);
 		// if we find a match, get the group
 		String theGroup = null;
