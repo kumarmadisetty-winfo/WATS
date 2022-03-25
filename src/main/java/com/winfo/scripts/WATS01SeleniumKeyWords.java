@@ -3261,6 +3261,8 @@ public class WATS01SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				System.out.println("copynumberValue:::" + copynumberValue);
 
 				String value = globalValueForSteps;
+				Thread.sleep(2000);
+				
 				waittill.click();
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
@@ -4440,6 +4442,29 @@ public class WATS01SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		
+		
+		//DH 43
+				try {
+					if(param1.equalsIgnoreCase("Plan Balances")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::div[@role='button'][1]")));
+					WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::div[@role='button'][1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					//highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(1000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					return;
+					}
+					}catch (Exception e) {
+					System.out.println(e);
+					}
+
+		
+		
+		
 		
 		//DH 15
 				try {
