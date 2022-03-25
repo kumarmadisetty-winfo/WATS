@@ -3267,6 +3267,8 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 						System.out.println("copynumberValue:::" + copynumberValue);
 
 						String value = globalValueForSteps;
+						
+						Thread.sleep(2000);
 						waittill.click();
 						JavascriptExecutor jse = (JavascriptExecutor) driver;
 						jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
@@ -3315,7 +3317,7 @@ public class WATS03SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String value = globalValueForSteps;
 				
-				Thread.sleep(2000);
+				//Thread.sleep(2000);
 				waittill.click();
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);

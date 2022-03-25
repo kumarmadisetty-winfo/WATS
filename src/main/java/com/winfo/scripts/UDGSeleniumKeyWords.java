@@ -3282,6 +3282,8 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						System.out.println("copynumberValue:::" + copynumberValue);
 
 						String value = globalValueForSteps;
+						Thread.sleep(2000);
+						
 						waittill.click();
 						JavascriptExecutor jse = (JavascriptExecutor) driver;
 						jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
@@ -3330,7 +3332,7 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				String value = globalValueForSteps;
 				
-				Thread.sleep(2000);
+				//Thread.sleep(2000);
 				
 				waittill.click();
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
