@@ -4957,9 +4957,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-					"//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "'][1]")));
-			WebElement waittext = driver.findElement(By
-					.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "'][1]"));
+					"//*[normalize-space(text())=\""+param1+"\"]/following::img[@title='" + param2 + "'][1]")));
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[normalize-space(text())=\""+param1+"\"]/following::img[@title='" + param2 + "'][1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			Thread.sleep(8000);
@@ -10112,7 +10112,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		
 		try {
-			if (param2.equalsIgnoreCase("Unapply Accounting Date")) {
+			if (param1.equalsIgnoreCase("Driver's Licenses") || param2.equalsIgnoreCase("Unapply Accounting Date")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='"
@@ -11408,7 +11408,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		
 		//DH 40
 				try {
-					if(param1.equalsIgnoreCase("Suppliers") && param2.equalsIgnoreCase("Supplier Contact")) {
+					if((param1.equalsIgnoreCase("Suppliers") && param2.equalsIgnoreCase("Supplier Contact")) || param1.equalsIgnoreCase("Security")) {
 					WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 +"']/following::label[text()='" + param2 + "']/preceding::input[1]"));
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
@@ -11418,12 +11418,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 					String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
 					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-
-
 					return;
 					}
-					} catch (Exception e) {
+				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.error("Failed during tableSendKeys" + scripNumber);
 					System.out.println(e);
@@ -15687,7 +15684,31 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					}
 
-		
+				try {
+					if (inputParam1.equalsIgnoreCase("Item")) {
+					Thread.sleep(5000);
+					WebElement webElement = driver.findElement(By.xpath("//label[text()='" + inputParam1 + "']/following::td[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(webElement).build().perform();
+					String stringToSearch = webElement.getText() ;
+					System.out.println(stringToSearch);
+					value = copyValuesWithSpc(stringToSearch);
+					// value = copyValuesWithSpc(webElement);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); String testParamId = fetchMetadataVO.getTest_script_param_id();
+					String testSetId = fetchMetadataVO.getTest_set_line_id();
+					dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+					log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+					return value;
+					}
+
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during copynumber" + scripNumber);
+					System.out.println(inputParam2);
+					}
 		
 		//DH 31
 				try {if (inputParam1.equalsIgnoreCase("Confirmation") && inputParam2.equalsIgnoreCase("Payment")) {
