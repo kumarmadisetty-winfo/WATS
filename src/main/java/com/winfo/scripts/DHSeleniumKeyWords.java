@@ -4564,7 +4564,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					//highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					Thread.sleep(1000);
-					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					waittext.click();
 					return;
 					}
 					}catch (Exception e) {
@@ -10686,7 +10687,34 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			throw e;
+			//throw e;
+		}
+		//PPM.PA.002 DH
+		try {
+		Thread.sleep(10000);
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),'" + param1 + "')]/following::label[text()='" + param2 + "']/following::input)[1]")));
+		Thread.sleep(1000);
+		wait.until(
+		ExpectedConditions
+		.textToBePresentInElementLocated(
+		By.xpath("(//h1[contains(text(),'" + param1 + "')]/following::label[text()='" + param2 + "']/following::input)[1]"),
+		param2));
+		WebElement waittill = driver.findElement(By.xpath("(//h1[contains(text(),'" + param1 + "')]/following::label[text()='" + param2 + "']/following::input)[1]"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittill).build().perform();
+		typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+		Thread.sleep(500);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked sendValue" + scripNumber);
+		String xpath = "(//h1[contains(text(),'param1')]/following::label[text()='param2']/following::input)[1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return keysToSend;
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during sendValue" + scripNumber);
+		System.out.println(e);
+		throw e;
 		}
 		
 	}
@@ -13151,7 +13179,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		// This is to select the dropdown and select 'All' and deselect All then
 		// Selecting Draft
 		try {
-			if (param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft")) {
+			if ((param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft"))||(param1.equalsIgnoreCase("Basic Options") && (param2.equalsIgnoreCase("Template") || param2.equalsIgnoreCase("Campaign Purpose")))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
 						+ "']/following::label[text()='" + param2 + "']/following::a[1]")));
