@@ -3518,6 +3518,62 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	/*
+	 * public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO,
+	 * FetchConfigVO fetchConfigVO) { try { String accessToken =
+	 * getAccessTokenPdf(fetchConfigVO); List imageUrlList = new ArrayList(); File
+	 * imageDir = new File(fetchConfigVO.getPdf_path() +
+	 * fetchMetadataListVO.get(0).getCustomer_name() + "/" +
+	 * fetchMetadataListVO.get(0).getTest_run_name() + "/");
+	 * System.out.println(imageDir); for (File imageFile : imageDir.listFiles()) {
+	 * String imageFileName = imageFile.getName();
+	 * System.out.println(imageFileName); imageUrlList.add(imageFileName); File
+	 * pdfFile = new File(imageDir + "/" + imageFileName);
+	 * System.out.println(pdfFile); FileInputStream input = new
+	 * FileInputStream(pdfFile); ByteArrayOutputStream bos = new
+	 * ByteArrayOutputStream(); byte[] buffer = new byte[99999999]; int l; while ((l
+	 * = input.read(buffer)) > 0) { bos.write(buffer, 0, l); } input.close(); byte[]
+	 * data = bos.toByteArray(); RestTemplate restTemplate = new RestTemplate();
+	 * MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
+	 * bodyMap.add("user-file", data); // Outer header HttpHeaders
+	 * uploadSessionHeader = new HttpHeaders(); //
+	 * uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
+	 * uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
+	 * System.out.println(fetchConfigVO.getSharepoint_drive_id());
+	 * System.out.println(fetchConfigVO.getSharepoint_item_id()); HttpEntity<byte[]>
+	 * uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+	 * ResponseEntity<Object> response =
+	 * restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/" +
+	 * fetchConfigVO.getSharepoint_drive_id() + "/items/" +
+	 * fetchConfigVO.getSharepoint_item_id() + ":/Screenshot/" +
+	 * fetchMetadataListVO.get(0).getCustomer_name() + "/" +
+	 * fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName +
+	 * ":/createUploadSession", HttpMethod.POST, uploadSessionRequest,
+	 * Object.class); System.out.println(response); Map<String, Object> linkedMap =
+	 * response.getBody() != null ? (LinkedHashMap<String, Object>)
+	 * response.getBody() : null; String uploadUrl = linkedMap != null ?
+	 * StringUtils.convertToString(linkedMap.get("uploadUrl")) : null;
+	 * 
+	 * HttpHeaders uploadingFileHeader = new HttpHeaders();
+	 * uploadingFileHeader.setContentLength(data.length);
+	 * uploadingFileHeader.add("Content-Range", "bytes " + 0 + "-" + (data.length -
+	 * 1) + "/" + data.length);
+	 * uploadingFileHeader.setContentType(MediaType.parseMediaType("application/pdf"
+	 * ));
+	 * 
+	 * HttpEntity<byte[]> uploadingFileRequest = new HttpEntity<>(data,
+	 * uploadingFileHeader); ResponseEntity<byte[]> putResponse =
+	 * restTemplate.exchange(uploadUrl, HttpMethod.PUT, uploadingFileRequest,
+	 * byte[].class);
+	 * 
+	 * System.out.println(putResponse); System.out.println("response status: " +
+	 * response.getStatusCode()); System.out.println("response body: " +
+	 * response.getBody()); System.out.println("response : " + response); } } catch
+	 * (Exception e) { System.out.println(e); } }
+	 */
+	
+	
+	
 	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		try {
 			String accessToken = getAccessTokenPdf(fetchConfigVO);
@@ -3547,14 +3603,25 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				HttpHeaders uploadSessionHeader = new HttpHeaders();
 				// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
 				uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
-				System.out.println(fetchConfigVO.getSharepoint_drive_id());
+				System.out.println(fetchConfigVO.getSHAREPOINT_SITE_ID());
 				System.out.println(fetchConfigVO.getSharepoint_item_id());
+				
+				
+				//HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+				//ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+					//	+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
+						//+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						//+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
+					//	HttpMethod.POST, uploadSessionRequest, Object.class);
+							
 				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
-				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
-						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
-						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
-						HttpMethod.POST, uploadSessionRequest, Object.class);
+				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+fetchConfigVO.getSHAREPOINT_SITE_ID()+"/drive/items/"+fetchConfigVO.getSharepoint_item_id()
+				+ ":/" + fetchMetadataListVO.get(0).getCustomer_name()+ "/" +fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
+				HttpMethod.POST, uploadSessionRequest, Object.class);
+				
+				
+				
+				
 				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
@@ -3580,6 +3647,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	
+	
+	
 	public String getAccessTokenPdf(FetchConfigVO fetchConfigVO) {
 		String acessToken = null;
 		try {
