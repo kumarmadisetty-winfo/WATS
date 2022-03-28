@@ -12706,7 +12706,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		log.error("Failed during Event Type dropdownValues" + scripNumber);
 		System.out.println(e);
 		}try {
-			if (param1.equalsIgnoreCase("Adjust Balance") || param1.equalsIgnoreCase("Reason")) {
+			if (param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]")));
@@ -12717,13 +12717,15 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				.findElement(By.xpath("//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(2000);
+				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
 
 				WebElement selectvalue = driver
 				.findElement(By.xpath("//li[text()='" + keysToSend + "']"));
-				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-
+				//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+				selectvalue.click();
+				
 				String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
 				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
@@ -12736,7 +12738,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 		
 		try {
-			if (param1.equalsIgnoreCase("Emirate") || param2.equalsIgnoreCase("Emirate")) {
+			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 			By.xpath("//*[text()='" + param1 + "']/following::a[@title='" + param2 + "']")));
