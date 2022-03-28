@@ -4245,6 +4245,34 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void selectAValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		
+		//DH 46
+				try {
+					if(param1.equalsIgnoreCase("shopByCategoryPopup")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@data-afr-popupid,'"+param1+"')]//*[contains(normalize-space(text()),'"+param2+"')][1]")));
+					WebElement waittext = driver.findElement(By.xpath("//*[contains(@data-afr-popupid,'"+param1+"')]//*[contains(normalize-space(text()),'"+param2+"')][1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(2000);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked selectAValue" + scripNumber);
+					String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'param2')][1]";
+
+					return;
+					}
+					} catch (Exception e) {
+					System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectAValue" + scripNumber);
+					screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+					}
+
+		
+		
+		
 		//DH 39
 				try {
 					if (param1.equalsIgnoreCase("Assignment Number")) {
