@@ -547,7 +547,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		String xpath = null;
 		try {
 			Thread.sleep(5000);
-			if (param2.equalsIgnoreCase("Assets")) {
+			if (param1.equalsIgnoreCase("Fixed Assets") && param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(By.xpath(
 						"//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='"
 								+ param2 + "']"));
@@ -4233,8 +4233,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			if(param1.equalsIgnoreCase("shopByCategoryPopup")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@data-afr-popupid,'"+param1+"')]//*[contains(normalize-space(text()),'"+param2+"')][1]")));
-			WebElement waittext = driver.findElement(By.xpath("//*[contains(@data-afr-popupid,'"+param1+"')]//*[contains(normalize-space(text()),'"+param2+"')][1]"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@data-afr-popupid,'"+param1+"')]//*[contains(normalize-space(text()),'"+keysToSend+"')][1]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[contains(@data-afr-popupid,'"+param1+"')]//*[contains(normalize-space(text()),'"+keysToSend+"')][1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -4242,7 +4242,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
-			String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'param2')][1]";
+			String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'keysToSend')][1]";
 
 			return;
 			}
