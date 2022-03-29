@@ -12740,29 +12740,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		
-		//DH 32
+		//DH 48
 		try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
-		WebElement waittext = driver.findElement(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		waittext.click();
-		Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
-		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
-		String scriptID = fetchMetadataVO.getScript_id();
-		String metadataID = fetchMetadataVO.getScript_meta_data_id();
-		service.saveXpathParams(scriptID, metadataID, xpath);
-		log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-		return;
-		} catch (Exception e) {
-		String scripNumber = fetchMetadataVO.getScript_number();
-		log.error("Failed during Event Type dropdownValues" + scripNumber);
-		System.out.println(e);
-		}try {
-			if (param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason")) {
+			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason")) || (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) ) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]")));
@@ -12792,7 +12772,35 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 				System.out.println(e);
 				}
+
 		
+		
+		
+		
+		
+		
+		//DH 32
+		try {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
+		WebElement waittext = driver.findElement(By.xpath(
+		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		waittext.click();
+		Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
+		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
+		String scriptID = fetchMetadataVO.getScript_id();
+		String metadataID = fetchMetadataVO.getScript_meta_data_id();
+		service.saveXpathParams(scriptID, metadataID, xpath);
+		log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+		return;
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during Event Type dropdownValues" + scripNumber);
+		System.out.println(e);
+		}		
 		try {
 			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
