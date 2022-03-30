@@ -146,7 +146,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
 
-	@Value("${configvO.watslogo}")
+	@Value("${configvO.watsdhlogo}")
 	private String watslogo;
 
 	@Value("${configvO.watsvediologo}")
@@ -2979,8 +2979,14 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println("before enter Images/wats_icon.png");
 			Image img1 = Image.getInstance(watslogo);
 			System.out.println("after enter Images/wats_icon.png");
+			
 			img1.scalePercent(65, 68);
 			img1.setAlignment(Image.ALIGN_RIGHT);
+			
+			
+			
+			
+			
 			Font bfBold12 = FontFactory.getFont("Arial", 23);
 			String Report = "Execution Report";
 			Font fnt = FontFactory.getFont("Arial", 12);
@@ -8967,6 +8973,73 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 					System.out.println(e);
 					}
+
+				
+				//DH 50
+				try {
+					if (param1.equalsIgnoreCase("Create Expense Item")&&keysToSend.equalsIgnoreCase("Receipt missing")) {
+					Thread.sleep(2000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+keysToSend+"']")));
+
+
+
+					WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+keysToSend+"']"));
+					Thread.sleep(1000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					tab(driver, fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(500);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+					String params = param1;
+					String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+					System.out.println(e);
+					}
+
+
+				
+				//DH 50
+				try {
+					if (param1.equalsIgnoreCase("Receipt Verification")&&keysToSend.equalsIgnoreCase("Receipt Verified")) {
+					Thread.sleep(2000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+keysToSend+"']")));
+
+
+
+					WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+keysToSend+"']"));
+					Thread.sleep(1000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					tab(driver, fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(500);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+					String params = param1;
+					String xpath = "//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+keysToSend+"']";
+					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+					return;
+					}
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+					System.out.println(e);
+					}
+
+				
 				
 				
 				//DH 31
@@ -11541,7 +11614,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					//WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
 					
-					WebElement waittill = driver.findElement(By.xpath("(//table[@summary=\"Budget Lines\"]//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+					WebElement waittill = driver.findElement(By.xpath("(//table[@summary='"+param1+"']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
 					
 					Thread.sleep(1000);
 					// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
@@ -13186,8 +13259,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		// This is to select the dropdown and select 'All' and deselect All then
 		// Selecting Draft
+		//DH_50
 		try {
-			if ((param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft"))||(param1.equalsIgnoreCase("Basic Options") && (param2.equalsIgnoreCase("Template") || param2.equalsIgnoreCase("Campaign Purpose")))) {
+			if (((param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft"))||(param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Template")) || param2.equalsIgnoreCase("Campaign Purpose"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
 						+ "']/following::label[text()='" + param2 + "']/following::a[1]")));
