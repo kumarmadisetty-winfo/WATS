@@ -13270,10 +13270,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.click(waittext).build().perform();
 				Thread.sleep(4000);
-				WebElement checkbox = driver.findElement(By.xpath("//label[text()='All']"));
-				checkbox.click();
-				Thread.sleep(3000);
-				checkbox.click();
+				//WebElement checkbox = driver.findElement(By.xpath("//label[text()='All']"));
+				//checkbox.click();
+				//Thread.sleep(3000);
+				//checkbox.click();
 				WebElement text = driver.findElement(By.xpath("//label[text()='" + param2
 						+ "']/following::label[normalize-space(text())='" + keysToSend + "']"));
 				text.click();
