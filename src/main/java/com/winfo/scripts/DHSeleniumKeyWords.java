@@ -11610,7 +11610,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		//DH 34
 				try {
-					if (param1.equalsIgnoreCase("Budget Lines")) {
+					if (param1.equalsIgnoreCase("Budget Lines")&& param2.equalsIgnoreCase("Total")) {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					//WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
 					
