@@ -11614,7 +11614,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					//WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
 					
-					WebElement waittill = driver.findElement(By.xpath("(//table[@summary='"+param1+"']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+					WebElement waittill = driver.findElement(By.xpath("//table[@summary='"+param1+"']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
 					
 					Thread.sleep(1000);
 					// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
@@ -11625,7 +11625,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
-					String xpath = "(//*[text()='param1'])[1]/following::label[text()='param2']/preceding::input[1]";
+					String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]";
 					String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 
 
