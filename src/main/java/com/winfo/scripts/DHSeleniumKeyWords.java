@@ -12845,6 +12845,152 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		
+		//DH 55
+		try {
+			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Ledger Name")) {
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver
+			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(3000);
+			WebElement selectvalue = driver.findElement(By.xpath("//div[@class='listbox']//div[text()='" + keysToSend + "']"));
+			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+			selectvalue.click();
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
+			
+		
+		try {
+			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("From Accounting Period")) {
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver
+			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(3000);
+			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'FROM_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
+			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+			selectvalue.click();
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
+			
+			
+			
+			try {
+			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("To Accounting Period")) {
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver
+			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(3000);
+			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'TO_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
+			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+			selectvalue.click();
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
+			
+			
+			try {
+			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Account")) {
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver
+			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(3000);
+			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'P_ACCOUNTS')]//div[text()='" + keysToSend + "']"));
+			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+			selectvalue.click();
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
+			
+			
+			try {
+			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Sub Ledger Application")) {
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver
+			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(3000);
+			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'SUB_LEDGER_APPL')]//div[text()='" + keysToSend + "']"));
+			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+			selectvalue.click();
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//DH 48
 		try {
 			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason")) || (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) ) {
