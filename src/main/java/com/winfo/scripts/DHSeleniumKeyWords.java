@@ -5113,6 +5113,36 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		
+		//DH 57
+
+		try {
+		if (param1.equalsIgnoreCase("Warning") && param2.equalsIgnoreCase("Yes")) {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+		By.xpath(("//table[contains(@id,'warningPopup')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']"))));
+		WebElement waittext = driver
+		.findElement(By.xpath(("//table[contains(@id,'warningPopup')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']")));
+		// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		Thread.sleep(15000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+		String xpath = "//table[contains(@id,'warningPopup')]//*[text()='param1']/following::*[text()='param2']";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); return;
+		}
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during Create Time Card clickButton" + scripNumber); System.out.println(e);
+		}
+
+		
+
+		
+		
+		
+		
 		//Dh 39
 				try {
 					if (param1.equalsIgnoreCase("Generate Schedules")) {
