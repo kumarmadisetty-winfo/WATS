@@ -10615,7 +10615,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + param1 + "')]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
-				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				waittill.sendKeys(keysToSend);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScript_number();
