@@ -16138,11 +16138,98 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			return theGroup;
 			}
 
-	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
+	
+		
+		private String copyunderscore(String value) {
+			try {
+			Pattern p = Pattern.compile("\\b[A-Z]+\\_[A-Z]+\\d+"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
+			Matcher m = p.matcher(value);
+			// if we find a match, get the group
+			String theGroup = null;
+			if (m.find())
+			{
+			// we're only looking for one group, so get it
+			theGroup = m.group(0);
+			System.out.println(theGroup);
+			//theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
+			//System.out.println(theGroup);
+			theGroup = theGroup.replaceAll(" ", "");
+			System.out.format(theGroup);
+			}
+			return theGroup;
+			} catch (Exception e) {
+			System.out.println(e);
+			throw e;
+			}
+
+
+			}
+		
+		
+		public String copynumber(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
 
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+		
+		//DH 58
+		try {
+
+
+
+			if (inputParam1.equalsIgnoreCase("Expense Report")) {
+
+
+
+			Thread.sleep(5000);
+
+
+
+			WebElement webElement = driver.findElement(By.xpath("(//*[contains(text(),'" + inputParam1 + "')])[1]"));
+
+
+
+			Actions actions = new Actions(driver);
+
+
+
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getText() ;
+			System.out.println(stringToSearch);
+			value = copyunderscore(stringToSearch);
+
+
+
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "(//*[contains(text(),'inputParam1')])[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+			log.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
+			return value;
+
+
+
+			}
+
+
+
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Totals or Total copynumber" + scripNumber);
+
+
+
+			System.out.println(inputParam2);
+
+
+
+			}
+		
+		
+		
+		
+		
 		//DH 38
 		
 				try {
