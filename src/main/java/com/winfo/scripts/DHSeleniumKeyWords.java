@@ -17105,8 +17105,16 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 		try {
 			driver.navigate().to(fetchConfigVO.getOIC_APPLICATION_URL());
 			driver.manage().window().maximize();
-			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
-	//		refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(4000);
+			WebElement iframe = driver.findElement(By.xpath("//iframe[@title='TrustArc Cookie Consent Manager']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(iframe).build().perform();
+			driver.switchTo().frame(iframe);
+			WebElement Acceptall = driver.findElement(By.xpath("//a[text()='Accept all']"));
+			Acceptall.click();
+			Thread.sleep(2000);
+			// deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
+			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
 			String scripNumber = fetchMetadataVO.getScript_number();
