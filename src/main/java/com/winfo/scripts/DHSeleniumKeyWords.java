@@ -16845,19 +16845,37 @@ public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMet
 public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+			/*
+			 * if(param1.equalsIgnoreCase("DH Projects to COA") &&
+			 * param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
+			 * Actions(driver); WebElement we = driver.findElement(By.
+			 * xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"
+			 * )); action.moveToElement(we).build(); Thread.sleep(5000); we.click();
+			 * //action.moveToElement(we).perform(); // WebElement waittext =
+			 * driver.findElement(By.
+			 * xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"
+			 * ));// screenshot(driver, // Actions actions = new Actions(driver); //
+			 * action.moveToElement(waittext).build().perform(); screenshot(driver, "",
+			 * fetchMetadataVO, fetchConfigVO); // clickValidateXpath(driver,
+			 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(5000); String
+			 * scripNumber = fetchMetadataVO.getScript_number();
+			 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			 * String xpath =
+			 * "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
+			 * String scriptID=fetchMetadataVO.getScript_id();String
+			 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
+			 * scriptID,metadataID,xpath); return; }
+			 */
 			if(param1.equalsIgnoreCase("DH Projects to COA") && param2.equalsIgnoreCase("Run")) {
 				Thread.sleep(3000);
 				Actions action = new Actions(driver);
-				WebElement we = driver.findElement(By.xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"));
-				action.moveToElement(we).build();
+				// WebElement we = driver.findElement(By.xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"));
+				WebElement we = driver.findElement(By.xpath("//*[text()='Scheduled Orchestration']"));
+				action.moveToElement(we).perform();
 				Thread.sleep(5000);
-				we.click();
-				//action.moveToElement(we).perform();	
-	//			WebElement waittext = driver.findElement(By.xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"));// screenshot(driver,
-	//			Actions actions = new Actions(driver);
-	//			action.moveToElement(waittext).build().perform();
+				WebElement run = driver.findElement(By.xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"));
+				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-	//			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
@@ -17087,7 +17105,7 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 		try {
 			driver.navigate().to(fetchConfigVO.getOIC_APPLICATION_URL());
 			driver.manage().window().maximize();
-	//		deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
+			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
 	//		refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
