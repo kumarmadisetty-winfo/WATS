@@ -16781,36 +16781,35 @@ public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO
 	}
 }
 	
-	public String oicClickMenu(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		try {
-			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("(//div[@class='navlist-container']//span[text()='"+ param1 +"'])[1]")));
-			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("(//div[@class='navlist-container']//span[text()='"+ param1 +"'])[1]")));
-			WebElement waittext = driver
-					.findElement(By.xpath("(//div[@class='navlist-container']//span[text()='"+ param1 +"'])[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Successfully menunavigation is clicked " + scripNumber);
-			String xpath = "(//div[@class='navlist-container']//span[text()='"+ param1 +"'])[1]";
-			log.info("Successfully menunavigation is clicked " + scripNumber);
-			return xpath;
-
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Menunavigation " + scripNumber);
-
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
-			System.out.println("Not able to navitage to the :" + "" + param1);
-			throw e;
-		}
-	}
+/*
+ * public String oicClickMenu(WebDriver driver, String param1, FetchMetadataVO
+ * fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception { try {
+ * Thread.sleep(5000); WebDriverWait wait = new WebDriverWait(driver,
+ * fetchConfigVO.getWait_time());
+ * wait.until(ExpectedConditions.presenceOfElementLocated(
+ * By.xpath("(//div[@class='navlist-container']//span[text()='"+ param1
+ * +"'])[1]"))); wait.until(ExpectedConditions.elementToBeClickable(
+ * By.xpath("(//div[@class='navlist-container']//span[text()='"+ param1
+ * +"'])[1]"))); WebElement waittext = driver
+ * .findElement(By.xpath("(//div[@class='navlist-container']//span[text()='"+
+ * param1 +"'])[1]")); Actions actions = new Actions(driver);
+ * actions.moveToElement(waittext).build().perform();
+ * actions.moveToElement(waittext).click().build().perform(); screenshot(driver,
+ * "", fetchMetadataVO, fetchConfigVO); String scripNumber =
+ * fetchMetadataVO.getScript_number();
+ * log.info("Successfully menunavigation is clicked " + scripNumber); String
+ * xpath = "(//div[@class='navlist-container']//span[text()='"+ param1
+ * +"'])[1]"; log.info("Successfully menunavigation is clicked " + scripNumber);
+ * return xpath;
+ * 
+ * } catch (Exception e) { String scripNumber =
+ * fetchMetadataVO.getScript_number(); log.error("Failed during Menunavigation "
+ * + scripNumber);
+ * 
+ * screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO,
+ * fetchConfigVO); System.out.println("Not able to navitage to the :" + "" +
+ * param1); throw e; } }
+ */
 public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		String xpath = null;
