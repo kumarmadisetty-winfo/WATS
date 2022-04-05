@@ -4769,7 +4769,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
@@ -4789,7 +4789,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
