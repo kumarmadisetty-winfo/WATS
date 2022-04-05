@@ -4782,7 +4782,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				log.error("Failed during clickButton" + scripNumber);
 				System.out.println(e);
 			}try {
-				Thread.sleep(3000);
+				//Thread.sleep(3000);
+				Thread.sleep(7000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='"+param1+"']")));
 				Actions actions = new Actions(driver);
@@ -16851,7 +16852,8 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 				WebElement we = driver.findElement(By.xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"));
 				action.moveToElement(we).build();
 				Thread.sleep(5000);
-				action.moveToElement(we).perform();	
+				we.click();
+				//action.moveToElement(we).perform();	
 	//			WebElement waittext = driver.findElement(By.xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"));// screenshot(driver,
 	//			Actions actions = new Actions(driver);
 	//			action.moveToElement(waittext).build().perform();
