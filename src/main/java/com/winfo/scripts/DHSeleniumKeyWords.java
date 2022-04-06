@@ -4759,52 +4759,95 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		
 	}
 	
-	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		
-		try {
-			if(param1.equalsIgnoreCase("Monitoring") && param2.equalsIgnoreCase("Integrations")) {
-				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				WebElement waittext = driver.findElement(By.xpath(("(//span[text()='"+ param2 +"'])[2]")));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-				String xpath = "(//span[text()='param2'])[2]";
-				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-				return;
-				}
-			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during clickButton" + scripNumber);
-				System.out.println(e);
-			}try {
-				//Thread.sleep(3000);
-				Thread.sleep(7000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				WebElement waittext = driver.findElement(By.xpath(("//span[text()='"+param1+"']")));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-				String xpath = "//span[text()='param1']";
-				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-				return;
-			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during clickButton" + scripNumber);
-				screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
-				throw e;
-			}
-	}
+	/*
+	 * public void oicClickMenu(WebDriver driver, String param1, String param2,
+	 * FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws
+	 * Exception {
+	 * 
+	 * try { if(param1.equalsIgnoreCase("Monitoring") &&
+	 * param2.equalsIgnoreCase("Integrations")) { Thread.sleep(3000); WebDriverWait
+	 * wait = new WebDriverWait(driver, fetchConfigVO.getWait_time()); WebElement
+	 * waittext = driver.findElement(By.xpath(("(//span[text()='"+ param2
+	 * +"'])[2]"))); Actions actions = new Actions(driver);
+	 * actions.moveToElement(waittext).build().perform(); screenshot(driver, "",
+	 * fetchMetadataVO, fetchConfigVO); //clickValidateXpath(driver,
+	 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(15000); String
+	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+	 * String xpath = "(//span[text()='param2'])[2]"; String
+	 * scriptID=fetchMetadataVO.getScript_id();String
+	 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
+	 * scriptID,metadataID,xpath); return; } } catch (Exception e) { String
+	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
+	 * }try { //Thread.sleep(3000); Thread.sleep(7000); WebDriverWait wait = new
+	 * WebDriverWait(driver, fetchConfigVO.getWait_time()); WebElement waittext =
+	 * driver.findElement(By.xpath(("//span[text()='"+param1+"']"))); Actions
+	 * actions = new Actions(driver);
+	 * actions.moveToElement(waittext).build().perform(); screenshot(driver, "",
+	 * fetchMetadataVO, fetchConfigVO); //clickValidateXpath(driver,
+	 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(15000); String
+	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+	 * String xpath = "//span[text()='param1']"; String
+	 * scriptID=fetchMetadataVO.getScript_id();String
+	 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
+	 * scriptID,metadataID,xpath); return; } catch (Exception e) { String
+	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * log.error("Failed during clickButton" + scripNumber); screenshotFail(driver,
+	 * "Failed during click Button Method", fetchMetadataVO, fetchConfigVO); throw
+	 * e; } }
+	 * 
+	 */
 	
+	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 
+		try {
+		if(param1.equalsIgnoreCase("Monitoring") && param2.equalsIgnoreCase("Integrations")) {
+		Thread.sleep(3000);
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		WebElement waittext = driver.findElement(By.xpath(("(//span[text()='"+ param2 +"'])[2]")));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).perform();
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", waittext);
+		Thread.sleep(15000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+		String xpath = "(//span[text()='param2'])[2]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return;
+		}
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during clickButton" + scripNumber);
+		System.out.println(e);
+		}try {
+		Thread.sleep(3000);
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		WebElement waittext = driver.findElement(By.xpath(("//span[text()='"+param1+"']")));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).perform();
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", waittext);
+		Thread.sleep(15000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+		String xpath = "//span[text()='param1']";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return;
+		} catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during clickButton" + scripNumber);
+		screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
+		throw e;
+		}
+		}
+	
+	
+	
 	public String clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
