@@ -6858,6 +6858,133 @@ private  void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadata
 		
 	}
 
+	@Override
+	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+			String type2, String type3, String param1, String param2, String param3) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String param1, String param2, int count) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicMouseHover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
+			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String closeExcel() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer addRow(Integer addrow) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 

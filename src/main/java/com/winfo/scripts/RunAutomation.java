@@ -1,11 +1,28 @@
 package com.winfo.scripts;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +32,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -27,6 +51,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
+import com.winfo.services.FetchMetadataListVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
@@ -44,7 +69,13 @@ public class RunAutomation {
 	ErrorMessagesHandler errorMessagesHandler;
 	@Autowired
 	DriverConfiguration deriverConfiguration;
+	
+	@Value("${configvO.watsvediologo}")
+	private String watsvediologo;
 
+	@Value("${configvO.whiteimage}")
+	private String whiteimage;
+	
 	@Autowired
 	TestCaseDataService dataService;
 	@Autowired
@@ -109,9 +140,11 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
-	//		fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriver\\chromedriver.exe");
-	//		fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-	//		fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+
+//			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriverNew\\chromedriver.exe");
+//			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
+//			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -215,7 +248,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
 										fetchConfigVO, "Detailed_Report.pdf", null, null);
 								increment = 0;
-								if ("ARLO".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+								if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 									seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 											fetchConfigVO);
 								}
@@ -236,7 +269,7 @@ public class RunAutomation {
 				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
 						fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
-				if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 							fetchConfigVO);
 				}
@@ -364,7 +397,7 @@ public class RunAutomation {
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
-
+			List<String>excellSteps = new ArrayList<String>();
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -420,11 +453,29 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+					case "Login into Application(OIC)":
+						userName = fetchMetadataVO.getInput_value();
+						log.info("Navigating to Login into Application Action");
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							seleniumFactory.getInstanceObj(instanceName).loginOicApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3, fetchMetadataVO.getInput_value(), dataBaseEntry.getPassword(param, userName, fetchConfigVO));
+							userName = null;
+							break;
+						} else {
+							break;
+						}
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
 						seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO, fetchMetadataVO,
 								type1, type2, param1, param2, count);
+						break;
+						
+					case "Click Menu(OIC)":
+							seleniumFactory.getInstanceObj(instanceName).oicClickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+							break;
+					case "Navigate(OIC)":
+						log.info("Navigating to Navigate Action");
+						seleniumFactory.getInstanceObj(instanceName).oicNavigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
 						break;
 
 					case "openTask":
@@ -445,6 +496,13 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+					case "sendvalues(OIC)":
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							seleniumFactory.getInstanceObj(instanceName).oicSendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							break;
+						} else {
+							break;
+						}
 					case "textarea":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2,
@@ -453,6 +511,7 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
 					case "Dropdown Values":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
@@ -546,6 +605,13 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
+					case "clickButton(OIC)":
+						seleniumFactory.getInstanceObj(instanceName).oicClickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						break;
+					case "Mouse Hover(OIC)":
+						seleniumFactory.getInstanceObj(instanceName).oicMouseHover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						break;
+					
 					case "clickButton":
 						seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
@@ -555,7 +621,9 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 
+
 						if (message != null && !message.startsWith("Example") && !message.startsWith("Context Value") && !message.startsWith("Select Book") && !message.startsWith("Enter a date between")&&!message.startsWith("Accounting Period")&& !message.startsWith("Source") && !message.startsWith("Add Collaborator Type")&& !message.startsWith("Batch")&&!message.startsWith("Added to Cart")&& !message.startsWith("Journal") && !message.startsWith("Project Number") && !message.startsWith("Regional Information") && !message.startsWith("Distribution") && !message.startsWith("Salary Basis") && !message.startsWith("Enter a date on or after") && !message.startsWith("Legislative Data Group") && !message.startsWith("item") && !message.startsWith("Select Subinventories") && !message.startsWith("Comments")) {
+
 							fetchConfigVO.setErrormessage(message);
 							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
 									fetchConfigVO);
@@ -703,6 +771,7 @@ public class RunAutomation {
 						// screenshotException(driver, "Test Action Name Not Exists_",
 						// fetchMetadataListVO, fetchConfigVO);
 						break;
+						
 					}
 					i++;
 
@@ -728,7 +797,7 @@ public class RunAutomation {
 						}
 						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
-						if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 									fetchConfigVO);
 						}
@@ -737,7 +806,10 @@ public class RunAutomation {
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id,
 								test_set_id);
 //						uploadPDF(fetchMetadataListVO, fetchConfigVO);
+						
+					
 					}
+					
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
@@ -746,7 +818,9 @@ public class RunAutomation {
 					} catch (Exception e) {
 						System.out.println("e");
 					}
-				} catch (Exception e) {
+					
+					}
+				 catch (Exception e) {
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
@@ -782,7 +856,7 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
 									seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
 							}
-							if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 										fetchConfigVO);
 							}
@@ -798,4 +872,6 @@ public class RunAutomation {
 			throw e;
 		}
 	}
+
+		
 }

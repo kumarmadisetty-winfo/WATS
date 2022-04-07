@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchConfigVO {
 	
+	private String OIC_APPLICATION_URL;
+	
+	
+	private String SHAREPOINT_SITE_ID; 
+	
+	
 	private String BROWSER;
 	
 	private Integer WAIT_TIME;
@@ -530,6 +536,22 @@ public int getMax_num_scripts() {
 	}
 	public void setUri_results(String uri_results) {
 		this.URI_RESULTS = uri_results;
+	}
+
+	public String getSHAREPOINT_SITE_ID() {
+		return SHAREPOINT_SITE_ID;
+	}
+
+	public void setSHAREPOINT_SITE_ID(String sHAREPOINT_SITE_ID) {
+		SHAREPOINT_SITE_ID = sHAREPOINT_SITE_ID;
+	}
+
+	public String getOIC_APPLICATION_URL() {
+		return OIC_APPLICATION_URL;
+	}
+
+	public void setOIC_APPLICATION_URL(String oIC_APPLICATION_URL) {
+		OIC_APPLICATION_URL = oIC_APPLICATION_URL;
 	}
 	
 	

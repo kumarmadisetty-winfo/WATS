@@ -57,6 +57,23 @@ public class DataBaseEntry {
 			dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 	}
 	
+
+	@Transactional
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
+		try {
+			Map<String, Map<String, TestSetScriptParam>>map =  dao.getTestRunMap(test_run_id);
+			return map;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Transactional
+	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id){
+			TestSetLines testSetLine  =	dao.getTestSetLine(test_set_line_id);
+			return dao.getTestScriptMap(testSetLine);
+	}
+
 	
 	
 }

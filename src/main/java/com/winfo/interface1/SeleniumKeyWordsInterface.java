@@ -130,10 +130,66 @@ public interface SeleniumKeyWordsInterface {
 		public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO) throws Exception;
 
+		
+		public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+				String type2, String type3, String param1, String param2, String param3) throws Exception ;
+		
+
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) ;
+
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+				String type1, String type2, String param1, String param2, int count) throws Exception ;
+	
+	
+	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception ;
+		
+		public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception ;
+	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+				String type1, String type2, String param1, String param2, int count) throws Exception ;
+
+	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception ;
 
 
+	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception ;
+
+	public void oicMouseHover(WebDriver driver, String param1, String param2,
+
+	        FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
+
+		
+		
+		
+		public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2,String fileName,String sheetName,FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception;
+		
+		
+		
+		
+		
+		public String closeExcel() throws Exception;
+		public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception;
+		public Integer addRow(Integer addrow) throws Exception;
+		
+		public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO) throws Exception;
+		public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
+				FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
+		public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) throws Exception;
+
+		
+		public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+				String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+				String value) throws Exception;
+				
+		public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
 
