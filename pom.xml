@@ -424,6 +424,15 @@
 			<artifactId>javacpp</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -516,7 +525,7 @@
 			</properties>
 		</profile>
 
-			<profile>
+		<profile>
 			<id>watsebs</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -551,6 +560,7 @@
 											<includes>
 												<include>*.properties</include>
 												<include>oci/</include>
+												<include>templates/</include>
 											</includes>
 										</resource>
 										<resource>
@@ -751,15 +761,15 @@
 				<app.name>application</app.name>
 				<profiles>prd</profiles>
 				<instance>prd</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
-	
-		
+
+
+
 		<profile>
 			<id>dh</id>
 			<activation>
@@ -841,14 +851,14 @@
 				<app.name>application</app.name>
 				<profiles>dh</profiles>
 				<instance>dh</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
-		
+
+
 		<profile>
 			<id>hs2</id>
 			<activation>
@@ -918,7 +928,7 @@
 				<instance>hs2</instance>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>wats</id>
 			<activation>
@@ -1000,14 +1010,14 @@
 				<app.name>application</app.name>
 				<profiles>wats</profiles>
 				<instance>wats</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
-		
+
+
 		<profile>
 			<id>uat</id>
 			<activation>

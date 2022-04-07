@@ -109,7 +109,6 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 	
 	public String findByTestRunScriptId(int TestRunScriptParamId,String inputParamName)
 	{
-		log.info("start findByTestRunScriptId method in "+this.getClass());
 		String resultList ="";
 		//String sql = "SELECT value_name from WIN_TA_CONFIG_LINES WHERE configuration_id="+configId+" AND key_name='"+column+"'";
 		String sql = "SELECT input_value from win_ta_test_set_script_param WHERE TEST_SCRIPT_PARAM_ID="+TestRunScriptParamId;
@@ -123,7 +122,6 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 		{
 			log.error("Some thing went wrong while getting script steps data for executing TestRun : "+TestRunScriptParamId);
 		}
-		log.info("exit method findByTestRunScriptId in "+this.getClass());
 		return resultList;
 	}
 	@SuppressWarnings("unchecked")
@@ -131,7 +129,6 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 	
 	public String findByTestRunScriptIdInputParam(int TestRunScriptParamId,String inputParamName)
 	{
-		log.info("start findByTestRunScriptId method in "+this.getClass());
 		String resultList ="";
 		//String sql = "SELECT value_name from WIN_TA_CONFIG_LINES WHERE configuration_id="+configId+" AND key_name='"+column+"'";
 		String sql = "SELECT input_parameter from win_ta_test_set_script_param WHERE TEST_SCRIPT_PARAM_ID="+TestRunScriptParamId;
@@ -145,7 +142,6 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 		{
 			log.error("Some thing went wrong while getting script steps data for executing TestRun : "+TestRunScriptParamId);
 		}
-		log.info("exit method findByTestRunScriptId in "+this.getClass());
 		return resultList;
 	}
 	
