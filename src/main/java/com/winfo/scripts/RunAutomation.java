@@ -470,8 +470,8 @@ public class RunAutomation {
 						
 						for (Map.Entry<String,Object> entry : result.entrySet())
 						{
-//				            System.out.println("Key = " + entry.getKey() +
-//				                             ", Value = " + entry.getValue());
+				            System.out.println("Key = " + entry.getKey() +
+				                             ", Value = " + entry.getValue());
 				             key =entry.getKey();
 							 value=(String)entry.getValue();
 							if(value.equalsIgnoreCase("<Pick from Config Table>"))

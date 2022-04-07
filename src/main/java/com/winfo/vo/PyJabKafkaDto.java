@@ -4,6 +4,7 @@ public class PyJabKafkaDto {
 	private String testSetId;
 	private String testSetLineId;
 	private String scriptPath;
+	private boolean pass;
 	
 	public PyJabKafkaDto(String testSetId, String testSetLineId, String scriptPath) {
 		super();
@@ -35,4 +36,13 @@ public class PyJabKafkaDto {
 	public void setScriptPath(String scriptPath) {
 		this.scriptPath = scriptPath;
 	}
+
+	public boolean isPass() {
+		return pass;
+	}
+
+	public void setPass(boolean pass) {
+		this.pass = pass;
+	}
+	
 }
