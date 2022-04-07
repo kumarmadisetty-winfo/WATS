@@ -189,6 +189,7 @@ public interface SeleniumKeyWordsInterface {
 				String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 				String value) throws Exception;
 				
+		public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception;
 
 
 
