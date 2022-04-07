@@ -478,6 +478,12 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).oicNavigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
 						break;
 
+					case "Logout(OIC)":
+						seleniumFactory.getInstanceObj(instanceName).oicLogout(driver, fetchConfigVO, fetchMetadataVO,
+						type1, type2, type3, param1, param2, param3);
+						break;
+					
+					
 					case "openTask":
 						log.info("Navigating to openTask Action");
 						seleniumFactory.getInstanceObj(instanceName).openTask(driver, fetchConfigVO, fetchMetadataVO,
