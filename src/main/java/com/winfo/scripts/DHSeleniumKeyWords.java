@@ -17911,27 +17911,7 @@ public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMet
 public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			/*
-			 * if(param1.equalsIgnoreCase("DH Projects to COA") &&
-			 * param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
-			 * Actions(driver); WebElement we = driver.findElement(By.
-			 * xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"
-			 * )); action.moveToElement(we).build(); Thread.sleep(5000); we.click();
-			 * //action.moveToElement(we).perform(); // WebElement waittext =
-			 * driver.findElement(By.
-			 * xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"
-			 * ));// screenshot(driver, // Actions actions = new Actions(driver); //
-			 * action.moveToElement(waittext).build().perform(); screenshot(driver, "",
-			 * fetchMetadataVO, fetchConfigVO); // clickValidateXpath(driver,
-			 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(5000); String
-			 * scripNumber = fetchMetadataVO.getScript_number();
-			 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			 * String xpath =
-			 * "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
-			 * String scriptID=fetchMetadataVO.getScript_id();String
-			 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
-			 * scriptID,metadataID,xpath); return; }
-			 */
+			
 			if(param1.equalsIgnoreCase("DH Projects to COA") && param2.equalsIgnoreCase("Run")) {
 				Thread.sleep(3000);
 				Actions action = new Actions(driver);
@@ -17954,53 +17934,7 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 				log.error("Failed during clickButton" + scripNumber);
 				System.out.println(e);
 			}
-			/*
-			 * try { if(param1.equalsIgnoreCase("DH Projects Cost for Contingent Workers")
-			 * && param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
-			 * Actions(driver); WebElement we = driver.findElement(By.
-			 * xpath("(//*[text()='App Driven Orchestration']/following::*[@title='Run'])[2]"
-			 * )); action.moveToElement(we).moveToElement(driver.findElement(By.
-			 * xpath("(//*[text()='App Driven Orchestration']/following::*[@title='Run'])[2]"
-			 * ))).click().build().perform(); // WebElement waittext =
-			 * driver.findElement(By.
-			 * xpath("(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]"
-			 * ));// screenshot(driver, // Actions actions = new Actions(driver); //
-			 * action.moveToElement(waittext).build().perform(); screenshot(driver, "",
-			 * fetchMetadataVO, fetchConfigVO); // clickValidateXpath(driver,
-			 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(5000); String
-			 * scripNumber = fetchMetadataVO.getScript_number();
-			 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			 * String xpath =
-			 * "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
-			 * String scriptID=fetchMetadataVO.getScript_id();String
-			 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
-			 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
-			 * scripNumber = fetchMetadataVO.getScript_number();
-			 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
-			 * }
-			 */
-		
-			/*
-			 * try { if(param1.equalsIgnoreCase("DH Projects Cost for Contingent Workers")
-			 * && param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
-			 * Actions(driver); WebElement we = driver.findElement(By.
-			 * xpath("//*[contains(text(),'Integration imports the Purchase requisitions')]"
-			 * )); action.moveToElement(we).perform(); Thread.sleep(5000); WebElement run =
-			 * driver.findElement(By.
-			 * xpath("//*[contains(text(),'Integration imports the Purchase requisitions')]/following::*[@title='Run']"
-			 * )); run.click(); screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScript_number();
-			 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			 * String xpath =
-			 * "//*[contains(text(),'Integration imports the Purchase requisitions')]/following::*[@title='Run']"
-			 * ; String scriptID=fetchMetadataVO.getScript_id();String
-			 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
-			 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
-			 * scripNumber = fetchMetadataVO.getScript_number();
-			 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
-			 * }
-			 */
-		
+		try {	
 		if(param1.equalsIgnoreCase("DH Projects Cost for Contingent Workers") && param2.equalsIgnoreCase("Run")) {
 			Thread.sleep(3000);
 			Actions action = new Actions(driver);
@@ -18017,6 +17951,11 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			return;
 			}
+		}catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+		}
 		
 		try {
 				if(param1.equalsIgnoreCase("Submit Now") && param2.equalsIgnoreCase("Submit Now")) {
@@ -18074,7 +18013,30 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
-		}try {
+		}
+		
+		try {
+			if(param1.equalsIgnoreCase("Close")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath(("//*[contains(@class,'cross-icon')][1]")));// screenshot(driver,
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(15000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "//*[contains(@class,'cross-icon')][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+			}
+		
+		try {
 			Thread.sleep(5000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::*[text()='"+param2+"'][1]")));// screenshot(driver,
@@ -18103,23 +18065,6 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath = "//*[@title='param1'][1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			return;
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
-		}try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver.findElement(By.xpath(("//*[contains(@class,'cross-icon')][1]")));// screenshot(driver,
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(15000);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			String xpath = "//*[contains(@class,'cross-icon')][1]";
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			return;
 		} catch (Exception e) {
