@@ -16661,7 +16661,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		String value = null;
 		
-		//Dh 61
+		//Dh 611
 		try {
 			if (inputParam1.equalsIgnoreCase("Number")) {
 
