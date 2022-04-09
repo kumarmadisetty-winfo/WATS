@@ -1,11 +1,24 @@
 package com.winfo.vo;
 
-public class PyJabKafkaDto {
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
+public class PyJabKafkaDto implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6396022101714194229L;
+	@NotNull
 	private String testSetId;
+	@NotNull
 	private String testSetLineId;
 	private String scriptPath;
 	private boolean pass;
-	
+	private Date startTime;
+	private String obJectStoreScreenshotPath;
+
 	public PyJabKafkaDto(String testSetId, String testSetLineId, String scriptPath) {
 		super();
 		this.testSetId = testSetId;
@@ -44,5 +57,14 @@ public class PyJabKafkaDto {
 	public void setPass(boolean pass) {
 		this.pass = pass;
 	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
 	
+
 }

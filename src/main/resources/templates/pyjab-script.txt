@@ -158,7 +158,7 @@ def take_screeshot_as_jpg(path):
 
 
 selenium_driver = webdriver.Chrome(executable_path=chrome_driver_path, options=options())
-def ebsLogin(url, username, password, path_to_screenhot, screenshot_file_name):
+def logInToEBS(url, username, password, path_to_screenhot, screenshot_file_name):
     trycounter = 0
     while trycounter < 3 :
         try : 
@@ -179,7 +179,7 @@ def ebsLogin(url, username, password, path_to_screenhot, screenshot_file_name):
                 take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
                 raise Exception(e)
 
-def ebsSwitchWindow():
+def ebsSwitchWindow(name):
     desktop.press_keys('ctrl','w')
     # to be done generic
     # since we are using two driver so it is not particularly required now
@@ -205,7 +205,7 @@ def ebsNavigate(navigation, path_to_screenhot, screenshot_file_name):
                 take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
                 raise Exception(e)
 
-def openEbs():
+def ebsOpenDownloadedFile():
     try :
         save_and_open_jnlp()
     except Exception as e :
@@ -229,7 +229,7 @@ def ebsClickLink(xpath_param, path_to_screenhot, screenshot_file_name):
                 take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
                 raise Exception(e)
 
-def ebsClickButton(xpath_param, path_to_screenhot, screenshot_file_name):
+def ebsButtonClick(xpath_param, path_to_screenhot, screenshot_file_name):
     trycounter = 0
     while trycounter <  3 :
         try :
@@ -251,7 +251,7 @@ def ebsClickButton(xpath_param, path_to_screenhot, screenshot_file_name):
                 take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
                 raise Exception(e)
 
-def ebsChooseRadioButton(xpath_param, path_to_screenhot, screenshot_file_name):
+def ebsClickBrowserRadioButton(xpath_param, path_to_screenhot, screenshot_file_name):
     trycounter = 0
     while trycounter <  3 :
         try :
@@ -290,7 +290,7 @@ def ebsSelectDropDown(xpath_param, value, path_to_screenhot, screenshot_file_nam
                 take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
                 raise Exception(e)
 
-def ebsInputTextField(xpath_param, value, path_to_screenhot, screenhot_file_name):
+def ebsBrowserEnterTextVal(xpath_param, value, path_to_screenhot, screenhot_file_name):
     trycounter = 0
     while trycounter <  3 :
         try :
@@ -342,7 +342,7 @@ def ebsEnterSearchTextField(xpath_param, value, path_to_screenhot, screenshot_fi
         time.sleep(10)
         selenium_driver.switch_to_frame(f'Search and Select: {xpath_param1}')           
         selenium_driver.find_element_by_xpath('(//*[text()="Advanced Network Devices"]/preceding::input[@type="radio"])[1]').click() 
-        ebsClickButton('Select', path_to_screenhot, screenshot_file_name)
+        ebsButtonClick('Select', path_to_screenhot, screenshot_file_name)
         selenium_driver.switch_to_default_content()
         take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
         trycounter = 3
@@ -426,7 +426,7 @@ def ebsCopyTextValue(xpath_param, path_to_screenhot, screenshot_file_name):
                 take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
                 raise Exception(e)
 def ebsPasteTextValue(xpath_param, path_to_screenhot, screenshot_file_name, value = copiedValue):
-    ebsInputTextField(xpath_param, value, path_to_screenhot, screenshot_file_name)
+    ebsBrowserEnterTextVal(xpath_param, value, path_to_screenhot, screenshot_file_name)
 
 def _clear(xpath_field):
     try :
@@ -478,6 +478,8 @@ def get_ebs_xpath( name, element, hasTable = False):
             XPATH = '//combo box' if name == '' else f'//combo box[@name=contains("{name}")]'
         elif element == 'tab':
             XPATH = '//page tab' if name == '' else f'//page tab[@name=contains("{name}")]'
+        elif element == 'menu' :
+            XPATH =  f'//menu[@name=contains("{name}")]'
         else:
             print(element,name)
             raise Exception("Please provide valid element or name")
@@ -487,7 +489,7 @@ def get_ebs_xpath( name, element, hasTable = False):
         raise Exception(E)
 
 # click push button
-def ebsClickButton(xpath_param, path_to_screenhot, screenshot_file_name):
+def ebsPushButtonClick(xpath_param, path_to_screenhot, screenshot_file_name):
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :
@@ -572,13 +574,34 @@ def ebsClickRadioButton(xpath_param, path_to_screenhot, screenshot_file_name):
                 raise Exception(exception)
 
 #ebs dropdown
-def ebsDropDown(xpath_param, input_value, path_to_screenhot, screenshot_file_name):
+def ebsClickDropDown(xpath_param, input_value, path_to_screenhot, screenshot_file_name):
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :
         try :
             trycounter += 1
             XPATH = get_ebs_xpath(xpath_param, 'combobox')
+            selectVal =  driver.find_element_by_xpath(XPATH)
+            selectVal.select(option=input_value, simulate=True)   
+            take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
+            trycounter = 3
+        except Exception as exception :
+            if trycounter < 3 :
+                _is_wait_cursor_complete()
+                setDriver()
+                continue
+            else :
+                take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
+                raise Exception(exception)
+
+#ebs dropdown
+def ebsSelectMenu(xpath_param, input_value, path_to_screenhot, screenshot_file_name):
+    trycounter = 0
+    _is_wait_cursor_complete()
+    while trycounter < 3 :
+        try :
+            trycounter += 1
+            XPATH = get_ebs_xpath(xpath_param, 'menu')
             selectVal =  driver.find_element_by_xpath(XPATH)
             selectVal.select(option=input_value, simulate=True)   
             take_screeshot_as_jpg(path_to_screenhot + screenshot_file_name)
@@ -600,11 +623,11 @@ def ebsTabKey():
     desktop.press_keys('tab')
 
 #ebs enter
-def ebsEnter():
+def ebsEnterKey():
     desktop.press_keys('enter')
 
 #ebs down
-def ebsDownKey():
+def downKey():
     desktop.press_keys('down')
 
 
@@ -634,7 +657,7 @@ def ebsSelectWindow(xpath_param, path_to_screenhot, screenshot_file_name):
         
 
 #ebsClosePopUP
-def ebsClosePopUp(path_to_screenhot, screenshot_file_name):
+def ebsCloseWindow(path_to_screenhot, screenshot_file_name):
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :
@@ -699,7 +722,7 @@ def ebsExitApp(path_to_screenhot, screenshot_file_name):
 
 
 #ebsSelectTab
-def ebsSelectTab(xpath_param,input_value, path_to_screenhot, screenshot_file_name):
+def ebsClickTab(xpath_param,input_value, path_to_screenhot, screenshot_file_name):
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :
@@ -745,20 +768,23 @@ def ebsCopyValue(xpath_param, path_to_screenhot, screenshot_file_name):
 def ebsPasteValue(xpath_param, input_value, path_to_screenhot, screenshot_file_name):
     ebsEnterTextVal(xpath_param, input_value, path_to_screenhot, screenshot_file_name)
 
-
-
-# if __name__ == '__main__':
 try :
+    """
+        To provide all the required actions from steps.
+    """
     [# th:each="action : ${dto.actions}"]
     [(${action})]
-    [/]    
-except Exception as e :
-    print("Execution Failed ", e)
+    [/]  
+    pass
+except Exception as exception :
+    print("script got failed")
 
 selenium_driver.close()
 end_time = time.time()
 
 print(f"it took {end_time - start_time} seconds")
     
+
+path_to_screenhot, screenshot_file_name = 'C:\\Github\\EBS-Automation-POC\\Java_customization\\Selenium\\', '1.jpg'
 
 

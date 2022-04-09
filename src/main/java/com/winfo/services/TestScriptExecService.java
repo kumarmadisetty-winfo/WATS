@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.SortedMap;
 import java.util.StringJoiner;
 import java.util.TimeZone;
@@ -91,9 +94,11 @@ import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.EBSSeleniumKeyWords;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.vo.ExecuteTestrunVo;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
+import com.winfo.vo.UpdateScriptParamStatus;
 
 @Service
 public class TestScriptExecService {
@@ -161,33 +166,33 @@ public class TestScriptExecService {
 
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
+				log.info(" In Independent - " + metaData.getKey());
 				executorMethodPyJab(args, fetchConfigVO, fetchMetadataListVO, metaData);
 			}
-			// Dependent
+
+			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
-//				executorMethodPyJab(args, fetchConfigVO, fetchMetadataListVO, metaData);
+				log.info(" In Dependent - " + metaData.getKey());
+				executordependent.execute(() -> {
+					try {
+						boolean run = dataBaseEntry
+								.checkRunStatusOfDependantScript(fetchMetadataListVO.get(0).getScript_id());
+
+						if (run) {
+							executorMethodPyJab(args, fetchConfigVO, fetchMetadataListVO, metaData);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
 			}
-//			seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-//					fetchConfigVO, "Passed_Report.pdf", null, null);
-//			seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-//					fetchConfigVO, "Failed_Report.pdf", null, null);
-//			seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-//					fetchConfigVO, "Detailed_Report.pdf", null, null);
-//			increment = 0;
-//			if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-//				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
-//						fetchConfigVO);
-//			}
-//
+			executordependent.shutdown();
 //			uploadScreenshotsToObjectStore(fetchConfigVO, fetchMetadataListVO);
 			executeTestrunVo.setStatusCode(200);
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
 			e.printStackTrace();
-			FetchScriptVO post = new FetchScriptVO();
-			post.setP_status("Fail");
-//			dataService.updateTestCaseStatus(post, args, null);
 		}
 		return executeTestrunVo;
 	}
@@ -236,7 +241,6 @@ public class TestScriptExecService {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
-//			deleteScreenshoots(fetchMetadataListVO, fetchConfigVO);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
@@ -248,8 +252,6 @@ public class TestScriptExecService {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 
-//				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
-//				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
 				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				testScriptParamId = fetchMetadataVO.getTest_script_param_id();
@@ -409,7 +411,10 @@ public class TestScriptExecService {
 						methodCall.add(addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Password>")) {
-						dbValue = fetchMetadataVO.getInput_value();
+						String userName = fetchMetadataVO.getInput_value();
+						
+						dbValue = dataBaseEntry.getPassword(fetchMetadataVO.getTest_set_id(), userName, null);
+
 						methodCall.add(addQuotes(dbValue));
 					}
 				}
@@ -500,126 +505,97 @@ public class TestScriptExecService {
 
 			if (args.isPass()) {
 				for (FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO) {
-					if (fetchMetadataVO1.getTest_set_line_id() == args.getTestSetLineId()) {
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO1, fetchConfigVO,
-								fetchMetadataVO1.getTest_script_param_id(), "Pass");
-
-					}
-					FetchScriptVO post = new FetchScriptVO();
-					post.setP_test_set_id(args.getTestSetId());
-					post.setP_status("Pass");
-					post.setP_script_id(script_id);
-					post.setP_test_set_line_id(args.getTestSetLineId());
-					post.setP_pass_path(passurl);
-					post.setP_fail_path(failurl);
-					post.setP_exception_path(detailurl);
-					post.setP_test_set_line_path(scripturl);
-					Date enddate = new Date();
-					fetchConfigVO.setEndtime(enddate);
-					try {
-						dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
-						dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(),
-								enddate);
-					} catch (Exception e) {
-						System.out.println("e");
-					}
-					createPdf(fetchMetadataListVO, fetchConfigVO,
-							fetchMetadataVO1.getSeq_num() + "_" + fetchMetadataVO1.getScript_number() + ".pdf",
-							new Date(), enddate);
-					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-							fetchMetadataVO1.getScript_id(), fetchMetadataVO1.getScript_number(), "pass", new Date(),
-							enddate);
-				}
-			} else {
-				List<String> fileNameList = new ArrayList<String>();
-				File folder = new File(
-						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
-								+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-
-				File[] listOfFiles = folder.listFiles();
-				List<File> allFileList = Arrays.asList(listOfFiles);
-				List<File> fileList = new ArrayList<>();
-				String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-				for (File file : allFileList) {
-					if (file.getName().startsWith(seqNumber + "_")) {
-						fileList.add(file);
-					}
-				}
-
-				Collections.sort(fileList, new Comparator<File>() {
-					public int compare(File f1, File f2) {
-						return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-					}
-				});
-
-				for (File f : fileList) {
-					fileNameList.add(f.getName());
-				}
-				String name = fileNameList.get(0);
-				String arr[] = name.split("_", 0);
-				String lastScreenshotSeqNum = arr[1];
-				int lastPassedSeq = Integer.parseInt(lastScreenshotSeqNum);
-				String lastSeqNum = fetchMetadataListVO.get(fetchMetadataListVO.size() - 1).getSeq_num();
-				for (FetchMetadataVO fetchMetadataVO11 : fetchMetadataListVO) {
-					if (fetchMetadataVO11.getTest_set_line_id() == args.getTestSetLineId()) {
-						int currentSeqNum = Integer.parseInt(fetchMetadataVO11.getLine_number());
-						if (currentSeqNum <= lastPassedSeq) {
-							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO11, fetchConfigVO,
-									fetchMetadataVO11.getTest_script_param_id(), "Pass");
-						} else {
-							String message = "EBS Execution Failed";
-							dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO11, fetchConfigVO,
-									fetchMetadataVO11.getTest_script_param_id(), "Fail", message);
-							fetchConfigVO.setErrormessage(message);
-							FetchScriptVO post = new FetchScriptVO();
-							post.setP_test_set_id(args.getTestSetId());
-							post.setP_status("Fail");
-							post.setP_script_id(script_id);
-							post.setP_test_set_line_id(args.getTestSetLineId());
-							post.setP_pass_path(passurl);
-							post.setP_fail_path(failurl);
-							post.setP_exception_path(detailurl);
-							post.setP_test_set_line_path(scripturl);
-							Date enddate = new Date();
-							fetchConfigVO.setEndtime(enddate);
+					if (fetchMetadataVO1.getTest_set_line_id().equalsIgnoreCase(args.getTestSetLineId())) {
+						FetchScriptVO post = new FetchScriptVO();
+						post.setP_test_set_id(args.getTestSetId());
+						post.setP_status("Pass");
+						post.setP_script_id(script_id);
+						post.setP_test_set_line_id(args.getTestSetLineId());
+						post.setP_pass_path(passurl);
+						post.setP_fail_path(failurl);
+						post.setP_exception_path(detailurl);
+						post.setP_test_set_line_path(scripturl);
+						Date enddate = new Date();
+						fetchConfigVO.setEndtime(enddate);
+						try {
 							dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(),
 									enddate);
+						} catch (Exception e) {
+							System.out.println("e");
+						}
+						createPdf(fetchMetadataListVO, fetchConfigVO,
+								fetchMetadataVO1.getSeq_num() + "_" + fetchMetadataVO1.getScript_number() + ".pdf",
+								args.getStartTime(), enddate);
+						if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+							eBSSeleniumKeyWords.uploadPDF(fetchMetadataListVO, fetchConfigVO);
+						}
 
-							File file = new ClassPathResource(whiteimage).getFile();
-							File file1 = new ClassPathResource(watsvediologo).getFile();
+						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+								fetchMetadataVO1.getScript_id(), fetchMetadataVO1.getScript_number(), "pass",
+								new Date(), enddate);
 
-							BufferedImage image = null;
-							image = ImageIO.read(file);
-							BufferedImage logo = null;
-							logo = ImageIO.read(file1);
-							BufferedImage image1 = null;
-							image1 = ImageIO.read(file);
-							Graphics g1 = image1.getGraphics();
-							g1.setColor(Color.red);
-							java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-							g1.setFont(font1);
-							g1.drawString("FAILED IN THIS STEP!!", 400, 300);
-							g1.drawImage(logo, 1012, 15, null);
-							g1.dispose();
+					}
+				}
+			} else {
 
-							ImageIO.write(image1, "jpg", new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-									+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-									+ fetchMetadataListVO.get(0).getTest_run_name() + "\\"
-									+ fetchMetadataVO11.getSeq_num() + "_" + currentSeqNum + "_"
-									+ fetchMetadataVO11.getScenario_name() + "_" + fetchMetadataVO11.getScript_number()
-									+ "_" + fetchMetadataVO11.getTest_run_name() + "_" + currentSeqNum
-									+ "_Failed.jpg"));
+				for (FetchMetadataVO fetchMetadataVO11 : fetchMetadataListVO) {
+					if (fetchMetadataVO11.getTest_set_line_id().equalsIgnoreCase(args.getTestSetLineId())) {
+						String message = "EBS Execution Failed";
+						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO11, fetchConfigVO,
+								fetchMetadataVO11.getTest_script_param_id(), "Fail", message);
+						fetchConfigVO.setErrormessage(message);
+						FetchScriptVO post = new FetchScriptVO();
+						post.setP_test_set_id(args.getTestSetId());
+						post.setP_status("Fail");
+						post.setP_script_id(script_id);
+						post.setP_test_set_line_id(args.getTestSetLineId());
+						post.setP_pass_path(passurl);
+						post.setP_fail_path(failurl);
+						post.setP_exception_path(detailurl);
+						post.setP_test_set_line_path(scripturl);
+						Date enddate = new Date();
+						fetchConfigVO.setEndtime(enddate);
+						dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
+						dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(),
+								enddate);
 
-							createFailedPdf(fetchMetadataListVO, fetchConfigVO, fetchMetadataVO11.getSeq_num() + "_"
-									+ fetchMetadataVO11.getScript_number() + ".pdf", new Date(), enddate);
+						int failedScriptRunCount = limitScriptExecutionService
+								.getFailedScriptRunCount(args.getTestSetLineId(), args.getTestSetId());
+						if (failedScriptRunCount == 1) {
+							eBSSeleniumKeyWords.createFailedPdf(
+									fetchMetadataListVO, fetchConfigVO, fetchMetadataVO11.getSeq_num() + "_"
+											+ fetchMetadataVO11.getScript_number() + ".pdf",
+									args.getStartTime(), enddate);
+
+						} else if (failedScriptRunCount == 2) {
+							limitScriptExecutionService
+									.renameFailedFile(
+											fetchMetadataListVO, fetchConfigVO, fetchMetadataVO11.getSeq_num() + "_"
+													+ fetchMetadataVO11.getScript_number() + ".pdf",
+											failedScriptRunCount);
+							eBSSeleniumKeyWords
+									.createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+											fetchMetadataVO11.getSeq_num() + "_" + fetchMetadataVO11.getScript_number()
+													+ "_RUN" + failedScriptRunCount + ".pdf",
+											args.getStartTime(), enddate);
+
+						} else {
+							eBSSeleniumKeyWords
+									.createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+											fetchMetadataVO11.getSeq_num() + "_" + fetchMetadataVO11.getScript_number()
+													+ "_RUN" + failedScriptRunCount + ".pdf",
+											args.getStartTime(), enddate);
+						}
+						if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 							limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 									fetchMetadataVO11.getScript_id(), fetchMetadataVO11.getScript_number(), "Fail",
 									new Date(), enddate);
 							break;
 						}
-
 					}
 				}
 			}
@@ -1481,6 +1457,16 @@ public class TestScriptExecService {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+
+	public void updateStartStatus(PyJabKafkaDto args) throws ClassNotFoundException, SQLException {
+		dataBaseEntry.updateInProgressScriptStatus(null, null, args.getTestSetLineId());
+		dataBaseEntry.updateStartTime(null, args.getTestSetLineId(), args.getTestSetId(), args.getStartTime());
+	}
+
+	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
+		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.toString() : SCRIPT_PARAM_STATUS.FAIL.toString();
+		dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status);
 	}
 
 }

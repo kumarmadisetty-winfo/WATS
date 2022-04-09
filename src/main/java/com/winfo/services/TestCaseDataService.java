@@ -28,9 +28,9 @@ public class TestCaseDataService {
 	Logger logger = LogManager.getLogger(TestCaseDataService.class);
 
 	@Value("${configvO.config_url1}")
-	private  String config_url;
+	private String config_url;
 
-	//public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
+	// public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
 //	public SortedMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
 //
@@ -65,30 +65,31 @@ public class TestCaseDataService {
 //		return testCaseMap;
 //
 //	}
-	public SortedMap<Integer, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap) {
+	public SortedMap<Integer, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,
+			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap) {
 
 		SortedMap<Integer, List<FetchMetadataVO>> testCaseMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 
 		if (list != null) {
 
-		for (FetchMetadataVO testcase : list) {
+			for (FetchMetadataVO testcase : list) {
 
-		String test_line_id = testcase.getTest_set_line_id();
+				String test_line_id = testcase.getTest_set_line_id();
 
-		Integer seq = Integer.parseInt(testcase.getSeq_num());
+				Integer seq = Integer.parseInt(testcase.getSeq_num());
 
-		String dependency = testcase.getDependency();
-		if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
+				String dependency = testcase.getDependency();
+				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
 
-		prepareTestData(testCaseMap, testcase,seq);
+					prepareTestData(testCaseMap, testcase, seq);
 
-		} else {
+				} else {
 
-		prepareTestData(dependentScriptMap, testcase, seq);
+					prepareTestData(dependentScriptMap, testcase, seq);
 
-		}
+				}
 
-		}
+			}
 
 		}
 
@@ -96,9 +97,7 @@ public class TestCaseDataService {
 
 		return testCaseMap;
 
-
-
-		}
+	}
 
 	/*
 	 * 
@@ -107,7 +106,7 @@ public class TestCaseDataService {
 	 * return dependentScriptMap;
 	 * 
 	 * }
-	 */ 
+	 */
 // private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
 //			String test_line_id) {
 //
@@ -134,7 +133,7 @@ public class TestCaseDataService {
 	private void prepareTestData(SortedMap<Integer, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
 			Integer seq) {
 
-			if (testCaseMap.containsKey(seq)) {
+		if (testCaseMap.containsKey(seq)) {
 
 			List<FetchMetadataVO> testcasedata = testCaseMap.get(seq);
 
@@ -142,7 +141,7 @@ public class TestCaseDataService {
 
 			testCaseMap.put(seq, testcasedata);
 
-			} else {
+		} else {
 
 			List<FetchMetadataVO> testcasedata = new ArrayList<FetchMetadataVO>();
 
@@ -150,9 +149,10 @@ public class TestCaseDataService {
 
 			testCaseMap.put(seq, testcasedata);
 
-			}
+		}
 
-			}
+	}
+
 	public List<FetchMetadataVO> getFetchMetaData(String parameter, String uri) {
 
 		System.out.println(uri);
@@ -171,7 +171,7 @@ public class TestCaseDataService {
 
 		FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
 
-		//prepareTestcasedata(MetaList.getItems());
+		// prepareTestcasedata(MetaList.getItems());
 
 		return MetaList.getItems();
 
@@ -179,35 +179,20 @@ public class TestCaseDataService {
 
 	public FetchConfigVO getFetchConfigVO(String parameter) {
 		JSONParser jsonParser = new JSONParser();
-//		 String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/CONFIG_GET/data";
 
 		final String uri = config_url + parameter;
 
-// 	                          final String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 		try {
-		//	System.out.println(uri);
 
 			RestTemplate restTemplate = new RestTemplate();
-
-			//System.out.println(restTemplate);
-
 			String result = restTemplate.getForObject(uri, String.class);
-
-		//	System.out.println(result);
-
 			JSONObject obj = (JSONObject) jsonParser.parse(result);
-
-			//System.out.println(restTemplate);
-
 			JSONArray employeeList = (JSONArray) obj.get("items");
-			//System.out.println(employeeList);
 			Map<String, String> map = new TreeMap<>();
-			// Iterate over employee array
 			employeeList.forEach(emp -> parseEmployeeObject((JSONObject) emp, map));
 			JSONObject jsno = new JSONObject(map);
 			Gson g = new Gson();
 			FetchConfigVO vo = g.fromJson(jsno.toString(), FetchConfigVO.class);
-		//	System.out.println(jsno.toString());
 			return vo;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -216,16 +201,9 @@ public class TestCaseDataService {
 	}
 
 	public void parseEmployeeObject(JSONObject employee, Map<String, String> map) {
-		// Get employee object within list
-//	        JSONObject employeeObject = (JSONObject) employee.get("items");
 
-		// Get employee first name
 		String firstName = (String) employee.get("key_name");
-	//	System.out.println(firstName);
-
-		// Get employee last name
 		String lastName = (String) employee.get("value_name");
-		//System.out.println(lastName);
 		map.put(firstName, lastName);
 	}
 
@@ -233,14 +211,11 @@ public class TestCaseDataService {
 
 		try {
 
-			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id="
-					+ request.getP_script_id() + "&p_status=" + request.getP_status() + "&p_test_set_id="
-					+ request.getP_test_set_id() + "&p_test_set_line_id=" + request.getP_test_set_line_id()
-					+ "&p_pass_path=" + request.getP_pass_path() + "&p_fail_path=" + request.getP_fail_path()
-					+ "&p_exception_path=" + request.getP_exception_path() + "&p_test_set_line_path="
-					+ request.getP_test_set_line_path();
-
-			//System.out.println(uri);
+			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id=" + request.getP_script_id()
+					+ "&p_status=" + request.getP_status() + "&p_test_set_id=" + request.getP_test_set_id()
+					+ "&p_test_set_line_id=" + request.getP_test_set_line_id() + "&p_pass_path="
+					+ request.getP_pass_path() + "&p_fail_path=" + request.getP_fail_path() + "&p_exception_path="
+					+ request.getP_exception_path() + "&p_test_set_line_path=" + request.getP_test_set_line_path();
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -254,19 +229,11 @@ public class TestCaseDataService {
 
 		} catch (Exception e) {
 
-			System.out.println("Not Updating the values");
-
 			logger.debug(parameter, "Updated the Failed Status");
 
 			throw e;
 
 		}
-
-		// postForLocation(uri, reqString);
-
-//                           System.out.println("If they return object" + result);
-
-//                           return null;
 
 	}
 

@@ -2,6 +2,7 @@ package com.winfo.controller;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.sql.SQLException;
 
 import javax.validation.Valid;
 
@@ -15,8 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.lowagie.text.DocumentException;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.TestScriptDto;
-
+import com.winfo.vo.UpdateScriptParamStatus;
 
 @Controller
 public class TestScriptExecController {
@@ -38,6 +40,26 @@ public class TestScriptExecController {
 		}
 
 		return status;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateStartScriptStatus")
+	public void updateStartScriptStatus(@Valid @RequestBody(required = false) PyJabKafkaDto args,
+			BindingResult bindingResult) throws ClassNotFoundException, SQLException {
+		testScriptExecService.updateStartStatus(args);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateEndScriptStatus")
+	public void updateEndScriptStatus(@Valid @RequestBody(required = false) PyJabKafkaDto args,
+			BindingResult bindingResult) {
+		testScriptExecService.generateTestScriptLineIdReports(args);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateScriptParamStatus")
+	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
+		testScriptExecService.updateScriptParamStatus(args);
 	}
 
 }
