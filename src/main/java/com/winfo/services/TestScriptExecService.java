@@ -2,10 +2,8 @@ package com.winfo.services;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,21 +20,17 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.SortedMap;
 import java.util.StringJoiner;
 import java.util.TimeZone;
 import java.util.TreeMap;
-
-import javax.imageio.ImageIO;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -93,8 +87,8 @@ import com.winfo.dao.PyJabActionRepo;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.EBSSeleniumKeyWords;
-import com.winfo.utils.DateUtils;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.DateUtils;
 import com.winfo.vo.ExecuteTestrunVo;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
@@ -119,6 +113,10 @@ public class TestScriptExecService {
 	private String watsvediologo;
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
+	
+	@Value("${url.update.script.param}")
+	private String scriptParamStatusUpdateUrl;
+	
 	@Autowired
 	TemplateEngine templateEngine;
 	@Autowired
@@ -163,7 +161,6 @@ public class TestScriptExecService {
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 			fetchConfigVO.setStarttime1(date);
-
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				log.info(" In Independent - " + metaData.getKey());
@@ -175,8 +172,8 @@ public class TestScriptExecService {
 				log.info(" In Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
 					try {
-						boolean run = dataBaseEntry
-								.checkRunStatusOfDependantScript(testSetId,fetchMetadataListVO.get(0).getScript_id());
+						boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
+								fetchMetadataListVO.get(0).getScript_id());
 
 						if (run) {
 							executorMethodPyJab(testSetId, fetchConfigVO, fetchMetadataListVO, metaData);
@@ -241,6 +238,14 @@ public class TestScriptExecService {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
+			String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\";
+
+			String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path()
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+					+ fetchMetadataListVO.get(0).getTest_set_line_id() + "/";
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
@@ -256,10 +261,14 @@ public class TestScriptExecService {
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				testScriptParamId = fetchMetadataVO.getTest_script_param_id();
 
-				String screenshotName = testScriptParamId + JPG;
-				String screenshotPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-						+ fetchMetadataVO.getCustomer_name() + File.separator + fetchMetadataVO.getTest_run_name()
-						+ File.separator;
+				String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
+
+						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+						+ fetchMetadataVO.getLine_number();
+
 
 				String param1 = null;
 				String param2 = null;
@@ -280,22 +289,23 @@ public class TestScriptExecService {
 						&& (!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")
 								&& (!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables")))) {
 					methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName,
-							screenshotPath, screenshotName);
+							screenshotPath, testScriptParamId);
 					methods.add(methodCall);
-					System.out.println("actionName --- " + actionName);
-					System.out.println("methodCall --- " + methodCall);
 				}
 			}
 			dto.setActions(methods);
+			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
 			final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
 
-			String destinationFilePath = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH + script_id + FORWARD_SLASH
-					+ script_id + PY_EXTN;
-			uploadObjectToObjectStore(scriptContent, destinationFilePath);
-			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, destinationFilePath));
+			String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
+					+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
+					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
+					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
+			uploadObjectToObjectStore(scriptContent, scriptPathForPyJabScript);
+			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
+					screenShotFolderPath, objectStoreScreenShotPath));
 		} catch (Exception e) {
 			throw e;
 		}
@@ -331,7 +341,7 @@ public class TestScriptExecService {
 	}
 
 	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName,
-			String screenshotPath, String screenshotname) throws Exception {
+			String screenshotPath, String testScriptParamId) throws Exception {
 		PyJabActions action = actionRepo.findByActionName(actionName);
 		String paramValue = action.getParamValues();
 		StringJoiner methodCall = new StringJoiner(",", action.getMethodName() + "(", ");");
@@ -412,7 +422,7 @@ public class TestScriptExecService {
 					}
 					if (value.equalsIgnoreCase("<Password>")) {
 						String userName = fetchMetadataVO.getInput_value();
-						
+
 						dbValue = dataBaseEntry.getPassword(fetchMetadataVO.getTest_set_id(), userName, null);
 
 						methodCall.add(addQuotes(dbValue));
@@ -425,7 +435,7 @@ public class TestScriptExecService {
 
 		}
 		methodCall.add(addQuotes(screenshotPath));
-		methodCall.add(addQuotes(screenshotname));
+		methodCall.add(testScriptParamId);
 		return methodCall.toString();
 	}
 
@@ -1466,7 +1476,7 @@ public class TestScriptExecService {
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.toString() : SCRIPT_PARAM_STATUS.FAIL.toString();
-		dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status);
+		dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult());
 	}
 
 }

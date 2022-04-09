@@ -49,6 +49,19 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
+	
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status,String value) throws ClassNotFoundException, SQLException {
+		try {
+			Query query = em.createQuery(
+					"Update TestSetScriptParam set line_execution_status='Pass',input_value='"+value+"' where test_script_param_id='"
+							+ test_script_param_id + "'");
+			query.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("cant update passed script line status");
+			System.out.println(e);
+		}
+	}
 
 	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String error_message)
