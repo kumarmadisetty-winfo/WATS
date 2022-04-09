@@ -146,14 +146,14 @@ public class TestScriptExecService {
 	@Autowired
 	EBSSeleniumKeyWords eBSSeleniumKeyWords;
 
-	public ExecuteTestrunVo run(String args) throws MalformedURLException {
+	public ExecuteTestrunVo run(String testSetId) throws MalformedURLException {
 		ExecuteTestrunVo executeTestrunVo = new ExecuteTestrunVo();
 
 		try {
-			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
+			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testSetId);
 
-			final String uri = fetchConfigVO.getMETADATA_URL() + args;
-			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
+			final String uri = fetchConfigVO.getMETADATA_URL() + testSetId;
+			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(testSetId, uri);
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
 					dependentScriptMap);
@@ -167,7 +167,7 @@ public class TestScriptExecService {
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				log.info(" In Independent - " + metaData.getKey());
-				executorMethodPyJab(args, fetchConfigVO, fetchMetadataListVO, metaData);
+				executorMethodPyJab(testSetId, fetchConfigVO, fetchMetadataListVO, metaData);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
@@ -176,10 +176,10 @@ public class TestScriptExecService {
 				executordependent.execute(() -> {
 					try {
 						boolean run = dataBaseEntry
-								.checkRunStatusOfDependantScript(fetchMetadataListVO.get(0).getScript_id());
+								.checkRunStatusOfDependantScript(testSetId,fetchMetadataListVO.get(0).getScript_id());
 
 						if (run) {
-							executorMethodPyJab(args, fetchConfigVO, fetchMetadataListVO, metaData);
+							executorMethodPyJab(testSetId, fetchConfigVO, fetchMetadataListVO, metaData);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

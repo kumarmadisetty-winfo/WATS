@@ -267,16 +267,20 @@ public class DataBaseEntryDao {
 		return (ScriptMaster) query.getSingleResult();
 	}
 
-	public TestSetLines checkTestSetLinesByScriptId(int scriptId) {
+	public TestSetLines checkTestSetLinesByScriptId(int testSetId, int scriptId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
 		Root<TestSetLines> from = cq.from(TestSetLines.class);
 
 		Predicate condition1 = cb.equal(from.get("script_id"), scriptId);
-
-		cq.where(condition1);
+		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition = cb.and(condition1, condition2);
+		cq.where(condition);
 		Query query = em.createQuery(cq);
-		return (TestSetLines) query.getSingleResult();
+		TestSetLines result = (TestSetLines) query.getSingleResult();
+		em.refresh(result);
+
+		return result;
 	}
 }

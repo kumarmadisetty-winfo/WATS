@@ -11,6 +11,10 @@ public class Constants {
 		private TEST_SET_LINE_ID_STATUS(String label) {
 			this.label = label;
 		}
+		
+		 public String getLabel() {
+		      return this.label;
+		   }
 	}
 
 	public enum SCRIPT_PARAM_STATUS {

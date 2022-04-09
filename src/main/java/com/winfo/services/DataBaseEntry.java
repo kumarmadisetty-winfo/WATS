@@ -4,9 +4,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -93,22 +90,24 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public boolean checkRunStatusOfDependantScript(String scriptId) {
+	public boolean checkRunStatusOfDependantScript(String testSetId, String scriptId) {
 		ScriptMaster scriptMaster = dao.findScriptMasterByScriptId(Integer.valueOf(scriptId));
-		TestSetLines testLines = dao.checkTestSetLinesByScriptId(scriptMaster.getDependency());
-
-		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.toString())
-				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.New.toString())
-				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.toString())) {
+		TestSetLines testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId),
+				scriptMaster.getDependency());
+	
+		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
+				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.New.getLabel())
+				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			testLines = dao.checkTestSetLinesByScriptId(scriptMaster.getDependency());
+			testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId), scriptMaster.getDependency());
+			
 		}
 
-		if(testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.toString())) {
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
 			return true;
 		} else {
 			return false;
