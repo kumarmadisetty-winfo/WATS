@@ -18068,6 +18068,7 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 			 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
 			 * }
 			 */
+		//testing
 		try {
 			if(param1.equalsIgnoreCase("DH SCM Supplier Site Inactivation") && param2.equalsIgnoreCase("Run")) {
 			Thread.sleep(3000);
