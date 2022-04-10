@@ -44,21 +44,21 @@ public class TestScriptExecController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStartScriptStatus")
-	public void updateStartScriptStatus(@Valid @RequestBody(required = false) PyJabKafkaDto args,
+	public void updateStartScriptStatus(@Valid @RequestBody PyJabKafkaDto args,
 			BindingResult bindingResult) throws ClassNotFoundException, SQLException {
 		testScriptExecService.updateStartStatus(args);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateEndScriptStatus")
-	public void updateEndScriptStatus(@Valid @RequestBody(required = false) PyJabKafkaDto args,
+	public void updateEndScriptStatus(@Valid @RequestBody PyJabKafkaDto args,
 			BindingResult bindingResult) {
 		testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateScriptParamStatus")
-	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
+	public void updateScriptParamStatus(@Valid @RequestBody UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		testScriptExecService.updateScriptParamStatus(args);
 	}
 

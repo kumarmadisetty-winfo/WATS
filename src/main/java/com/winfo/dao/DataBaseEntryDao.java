@@ -54,7 +54,7 @@ public class DataBaseEntryDao {
 			String test_script_param_id, String status,String value) throws ClassNotFoundException, SQLException {
 		try {
 			Query query = em.createQuery(
-					"Update TestSetScriptParam set line_execution_status='Pass',input_value='"+value+"' where test_script_param_id='"
+					"Update TestSetScriptParam set line_execution_status='"+status+"',input_value='"+value+"' where test_script_param_id='"
 							+ test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {

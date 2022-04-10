@@ -49,6 +49,7 @@ import org.jfree.ui.VerticalAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -113,10 +114,10 @@ public class TestScriptExecService {
 	private String watsvediologo;
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
-	
+
 	@Value("${url.update.script.param}")
 	private String scriptParamStatusUpdateUrl;
-	
+
 	@Autowired
 	TemplateEngine templateEngine;
 	@Autowired
@@ -143,6 +144,12 @@ public class TestScriptExecService {
 
 	@Autowired
 	EBSSeleniumKeyWords eBSSeleniumKeyWords;
+	
+	@KafkaListener(topics = "test-script-run", groupId = "wats-group")
+	public void consumeFromTopic(PyJabKafkaDto dto) {
+		System.out.println("Consummed message " + dto.getTestSetId());
+	}
+
 
 	public ExecuteTestrunVo run(String testSetId) throws MalformedURLException {
 		ExecuteTestrunVo executeTestrunVo = new ExecuteTestrunVo();
@@ -174,7 +181,7 @@ public class TestScriptExecService {
 					try {
 						boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
 								fetchMetadataListVO.get(0).getScript_id());
-
+						log.info(" Script Id run status" + fetchMetadataListVO.get(0).getScript_id() + " " + run);
 						if (run) {
 							executorMethodPyJab(testSetId, fetchConfigVO, fetchMetadataListVO, metaData);
 						}
@@ -232,6 +239,8 @@ public class TestScriptExecService {
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
 
+		System.out.println(" ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
+
 		try {
 
 			String userName = null;
@@ -268,7 +277,6 @@ public class TestScriptExecService {
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 
 						+ fetchMetadataVO.getLine_number();
-
 
 				String param1 = null;
 				String param2 = null;
@@ -466,6 +474,16 @@ public class TestScriptExecService {
 
 	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
 		PutObjectResponse response = null;
+
+		try {
+			String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+
+			Files.writeString(Paths.get(path), sourceFile);
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		}
+
 		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
@@ -513,7 +531,7 @@ public class TestScriptExecService {
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 
-			if (args.isPass()) {
+			if (args.isSuccess()) {
 				for (FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO) {
 					if (fetchMetadataVO1.getTest_set_line_id().equalsIgnoreCase(args.getTestSetLineId())) {
 						FetchScriptVO post = new FetchScriptVO();
@@ -536,7 +554,7 @@ public class TestScriptExecService {
 						}
 						createPdf(fetchMetadataListVO, fetchConfigVO,
 								fetchMetadataVO1.getSeq_num() + "_" + fetchMetadataVO1.getScript_number() + ".pdf",
-								args.getStartTime(), enddate);
+								args.getStartDate(), enddate);
 						if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							eBSSeleniumKeyWords.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 						}
@@ -576,7 +594,7 @@ public class TestScriptExecService {
 							eBSSeleniumKeyWords.createFailedPdf(
 									fetchMetadataListVO, fetchConfigVO, fetchMetadataVO11.getSeq_num() + "_"
 											+ fetchMetadataVO11.getScript_number() + ".pdf",
-									args.getStartTime(), enddate);
+									args.getStartDate(), enddate);
 
 						} else if (failedScriptRunCount == 2) {
 							limitScriptExecutionService
@@ -588,14 +606,14 @@ public class TestScriptExecService {
 									.createFailedPdf(fetchMetadataListVO, fetchConfigVO,
 											fetchMetadataVO11.getSeq_num() + "_" + fetchMetadataVO11.getScript_number()
 													+ "_RUN" + failedScriptRunCount + ".pdf",
-											args.getStartTime(), enddate);
+											args.getStartDate(), enddate);
 
 						} else {
 							eBSSeleniumKeyWords
 									.createFailedPdf(fetchMetadataListVO, fetchConfigVO,
 											fetchMetadataVO11.getSeq_num() + "_" + fetchMetadataVO11.getScript_number()
 													+ "_RUN" + failedScriptRunCount + ".pdf",
-											args.getStartTime(), enddate);
+											args.getStartDate(), enddate);
 						}
 						if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
@@ -1471,11 +1489,11 @@ public class TestScriptExecService {
 
 	public void updateStartStatus(PyJabKafkaDto args) throws ClassNotFoundException, SQLException {
 		dataBaseEntry.updateInProgressScriptStatus(null, null, args.getTestSetLineId());
-		dataBaseEntry.updateStartTime(null, args.getTestSetLineId(), args.getTestSetId(), args.getStartTime());
+		dataBaseEntry.updateStartTime(null, args.getTestSetLineId(), args.getTestSetId(), args.getStartDate());
 	}
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
-		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.toString() : SCRIPT_PARAM_STATUS.FAIL.toString();
+		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.getLabel() : SCRIPT_PARAM_STATUS.FAIL.getLabel();
 		dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult());
 	}
 
