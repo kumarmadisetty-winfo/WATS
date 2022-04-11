@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,13 +50,12 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
-	
+
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status,String value) throws ClassNotFoundException, SQLException {
+			String test_script_param_id, String status, String value) throws ClassNotFoundException, SQLException {
 		try {
-			Query query = em.createQuery(
-					"Update TestSetScriptParam set line_execution_status='"+status+"',input_value='"+value+"' where test_script_param_id='"
-							+ test_script_param_id + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
+					+ "',input_value='" + value + "' where test_script_param_id='" + test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -293,6 +293,20 @@ public class DataBaseEntryDao {
 		Query query = em.createQuery(cq);
 		TestSetLines result = (TestSetLines) query.getSingleResult();
 		em.refresh(result);
+
+		return result;
+	}
+
+	public ArrayList<String> getTestSetLinesStatusByTestSetId(int testSetId) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
+		Root<TestSetLines> from = cq.from(TestSetLines.class);
+
+		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		cq.where(condition);
+		Query query = em.createQuery(cq.select(from.get("status")));
+		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
 		return result;
 	}

@@ -144,11 +144,6 @@ public class TestScriptExecService {
 
 	@Autowired
 	EBSSeleniumKeyWords eBSSeleniumKeyWords;
-	
-	@KafkaListener(topics = "test-script-run", groupId = "wats-group")
-	public void consumeFromTopic(PyJabKafkaDto dto) {
-		System.out.println("Consummed message " + dto.getTestSetId());
-	}
 
 
 	public ExecuteTestrunVo run(String testSetId) throws MalformedURLException {
@@ -192,6 +187,7 @@ public class TestScriptExecService {
 			}
 			executordependent.shutdown();
 //			uploadScreenshotsToObjectStore(fetchConfigVO, fetchMetadataListVO);
+			generateFinalReports(testSetId);
 			executeTestrunVo.setStatusCode(200);
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
@@ -199,6 +195,11 @@ public class TestScriptExecService {
 			e.printStackTrace();
 		}
 		return executeTestrunVo;
+	}
+	
+	public void generateFinalReports(String testSetId) {
+		dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(testSetId));
+
 	}
 
 	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
@@ -352,7 +353,7 @@ public class TestScriptExecService {
 			String screenshotPath, String testScriptParamId) throws Exception {
 		PyJabActions action = actionRepo.findByActionName(actionName);
 		String paramValue = action.getParamValues();
-		StringJoiner methodCall = new StringJoiner(",", action.getMethodName() + "(", ");");
+		StringJoiner methodCall = new StringJoiner(",", action.getMethodName() + "(", ")");
 		String dbValue = "";
 		String key = "";
 		String value;
