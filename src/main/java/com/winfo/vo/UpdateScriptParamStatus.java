@@ -8,6 +8,7 @@ public class UpdateScriptParamStatus {
 	@NotNull
 	private String message;
 	private boolean success;
+	private String result;
 
 	public String getScriptParamId() {
 		return scriptParamId;
@@ -33,4 +34,12 @@ public class UpdateScriptParamStatus {
 		this.success = success;
 	}
 
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+	
 }

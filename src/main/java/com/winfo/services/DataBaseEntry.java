@@ -1,12 +1,10 @@
 package com.winfo.services;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -29,6 +27,11 @@ public class DataBaseEntry {
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
+	}
+
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status, String value) throws ClassNotFoundException, SQLException {
+		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value);
 	}
 
 	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -94,30 +97,53 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public boolean checkRunStatusOfDependantScript(String scriptId) {
+	public boolean checkRunStatusOfDependantScript(String testSetId, String scriptId) {
 		ScriptMaster scriptMaster = dao.findScriptMasterByScriptId(Integer.valueOf(scriptId));
-		TestSetLines testLines = dao.checkTestSetLinesByScriptId(scriptMaster.getDependency());
+		TestSetLines testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId),
+				scriptMaster.getDependency());
 
-		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.toString())
-				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.New.toString())
-				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.toString())) {
+		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
+				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.NEW.getLabel())
+				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			testLines = dao.checkTestSetLinesByScriptId(scriptMaster.getDependency());
+			testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId), scriptMaster.getDependency());
+
 		}
 
-		if(testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.toString())) {
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+
 	@Transactional
 	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId){
 		return  dao.getMetaDataVOList(testRunId, testSetLineId);
+	}
+
+
+
+	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
+		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId);
+
+		while (result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.NEW.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			result = dao.getTestSetLinesStatusByTestSetId(testSetId);
+			System.out.println("here");
+		}
+
+		return true;
 	}
 
 }

@@ -52,6 +52,18 @@ public class DataBaseEntryDao {
 		}
 	}
 
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status, String value) throws ClassNotFoundException, SQLException {
+		try {
+			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
+					+ "',input_value='" + value + "' where test_script_param_id='" + test_script_param_id + "'");
+			query.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("cant update passed script line status");
+			System.out.println(e);
+		}
+	}
+
 	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String error_message)
 			throws ClassNotFoundException, SQLException {
@@ -270,17 +282,35 @@ public class DataBaseEntryDao {
 		return (ScriptMaster) query.getSingleResult();
 	}
 
-	public TestSetLines checkTestSetLinesByScriptId(int scriptId) {
+	public TestSetLines checkTestSetLinesByScriptId(int testSetId, int scriptId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
 		Root<TestSetLines> from = cq.from(TestSetLines.class);
 
 		Predicate condition1 = cb.equal(from.get("script_id"), scriptId);
-
-		cq.where(condition1);
+		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition = cb.and(condition1, condition2);
+		cq.where(condition);
 		Query query = em.createQuery(cq);
-		return (TestSetLines) query.getSingleResult();
+		TestSetLines result = (TestSetLines) query.getSingleResult();
+		em.refresh(result);
+
+		return result;
+	}
+
+	public ArrayList<String> getTestSetLinesStatusByTestSetId(int testSetId) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
+		Root<TestSetLines> from = cq.from(TestSetLines.class);
+
+		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		cq.where(condition);
+		Query query = em.createQuery(cq.select(from.get("status")));
+		ArrayList<String> result = (ArrayList<String>) query.getResultList();
+
+		return result;
 	}
 	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId)  {
 		 

@@ -5,7 +5,9 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
-public class PyJabKafkaDto implements Serializable{
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public class PyJabKafkaDto implements Serializable {
 	/**
 	 * 
 	 */
@@ -15,15 +17,24 @@ public class PyJabKafkaDto implements Serializable{
 	@NotNull
 	private String testSetLineId;
 	private String scriptPath;
-	private boolean pass;
-	private Date startTime;
+	private boolean success;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	private Date startDate;
+	private String localScreenshotPath;
 	private String obJectStoreScreenshotPath;
+	
+	public PyJabKafkaDto() {
+	}
+	
 
-	public PyJabKafkaDto(String testSetId, String testSetLineId, String scriptPath) {
+	public PyJabKafkaDto(@NotNull String testSetId, @NotNull String testSetLineId, String scriptPath,
+			String localScreenshotPath, String obJectStoreScreenshotPath) {
 		super();
 		this.testSetId = testSetId;
 		this.testSetLineId = testSetLineId;
 		this.scriptPath = scriptPath;
+		this.localScreenshotPath = localScreenshotPath;
+		this.obJectStoreScreenshotPath = obJectStoreScreenshotPath;
 	}
 
 	public String getTestSetId() {
@@ -50,21 +61,37 @@ public class PyJabKafkaDto implements Serializable{
 		this.scriptPath = scriptPath;
 	}
 
-	public boolean isPass() {
-		return pass;
+
+	public boolean isSuccess() {
+		return success;
 	}
 
-	public void setPass(boolean pass) {
-		this.pass = pass;
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 
-	public Date getStartTime() {
-		return startTime;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-	
+
+	public String getLocalScreenshotPath() {
+		return localScreenshotPath;
+	}
+
+	public void setLocalScreenshotPath(String localScreenshotPath) {
+		this.localScreenshotPath = localScreenshotPath;
+	}
+
+	public String getObJectStoreScreenshotPath() {
+		return obJectStoreScreenshotPath;
+	}
+
+	public void setObJectStoreScreenshotPath(String obJectStoreScreenshotPath) {
+		this.obJectStoreScreenshotPath = obJectStoreScreenshotPath;
+	}
 
 }
