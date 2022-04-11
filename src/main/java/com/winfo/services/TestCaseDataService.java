@@ -236,5 +236,68 @@ public class TestCaseDataService {
 		}
 
 	}
+	public LinkedHashMap<String, List<FetchMetadataVO>> prepareMapOfTestSetLineIdAndStepsList(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
 
+		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+
+		//dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+
+		if (list != null) {
+
+			for (FetchMetadataVO testcase : list) {
+
+				String test_line_id = testcase.getTest_set_line_id();
+
+				String dependency = testcase.getDependency();
+
+				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
+
+					prepareTestSetLineIdData(testCaseMap, testcase, test_line_id);
+
+				} else {
+
+					prepareTestSetLineIdData(dependentScriptMap, testcase, test_line_id);
+
+				}
+
+			}
+
+		}
+
+		System.out.println(testCaseMap);
+
+		return testCaseMap;
+
+	}
+
+	/*
+	 * 
+	 * public LinkedHashMap<String, List<FetchMetadataVO>> getDependentScriptMap() {
+	 * 
+	 * return dependentScriptMap;
+	 * 
+	 * }
+	 */ 
+ private void prepareTestSetLineIdData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+			String test_line_id) {
+
+		if (testCaseMap.containsKey(test_line_id)) {
+
+			List<FetchMetadataVO> testcasedata = testCaseMap.get(test_line_id);
+
+			testcasedata.add(testcase);
+
+			testCaseMap.put(test_line_id, testcasedata);
+
+		} else {
+
+			List<FetchMetadataVO> testcasedata = new ArrayList<FetchMetadataVO>();
+
+			testcasedata.add(testcase);
+
+			testCaseMap.put(test_line_id, testcasedata);
+
+		}
+
+	}
 }

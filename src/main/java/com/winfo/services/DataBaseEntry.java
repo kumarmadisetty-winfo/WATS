@@ -2,6 +2,7 @@ package com.winfo.services;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -114,4 +115,9 @@ public class DataBaseEntry {
 			return false;
 		}
 	}
+	@Transactional
+	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId){
+		return  dao.getMetaDataVOList(testRunId, testSetLineId);
+	}
+
 }

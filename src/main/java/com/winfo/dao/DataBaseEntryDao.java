@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +90,7 @@ public class DataBaseEntryDao {
 
 		return errorMessage;
 	}
+	
 
 	public void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
@@ -279,4 +282,114 @@ public class DataBaseEntryDao {
 		Query query = em.createQuery(cq);
 		return (TestSetLines) query.getSingleResult();
 	}
+	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId)  {
+		 
+		List<FetchMetadataVO> listOfTestRunExecutionVo= new ArrayList<>();
+		 
+	    String sqlQuery = "SELECT wtp.customer_id,\r\n"
+				+ "           wtc.customer_number,\r\n"
+				+ "           wtc.customer_name,\r\n"
+				+ "           wtts.project_id,\r\n"
+				+ "           wtp.project_name,\r\n"
+				+ "           wttsl.test_set_id,\r\n"
+				+ "           wttsl.test_set_line_id,\r\n"
+				+ "           wtsmdata.script_id,\r\n"
+				+ "           wtsmdata.script_number,\r\n"
+				+ "           wtsmdata.line_number,\r\n"
+				+ "           CASE WHEN INSTR(wtsmdata.input_parameter,')',1,1) >4\r\n"
+				+ "               THEN wtsmdata.input_parameter\r\n"
+				+ "               ELSE regexp_replace( wtsmdata.input_parameter, '[*#()]', '') END input_parameter,\r\n"
+				+ "           wtsmdata.input_value,\r\n"
+				+ "           wtsmdata.action,\r\n"
+				+ "           wtsmdata.xpath_location,\r\n"
+				+ "           wtsmdata.xpath_location1,\r\n"
+				+ "           wtsmdata.field_type,\r\n"
+				+ "           wtsmdata.hint,\r\n"
+				+ "           ma.SCENARIO_NAME,\r\n"
+				+ "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
+				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
+				+ "          ,wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
+				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n"
+				+ "      from\r\n"
+				+ "      execute_status ex_st,\r\n"
+				+ "      win_ta_test_set        wtts,\r\n"
+				+ "    win_ta_script_master ma,\r\n"
+				+ "           win_ta_test_set_lines  wttsl,\r\n"
+				+ "           win_ta_test_set_script_param wtsmdata,\r\n"
+				+ "           win_ta_projects        wtp,\r\n"
+				+ "           win_ta_customers       wtc\r\n"
+				+ "     WHERE 1=1\r\n"
+				+ "     AND wtts.TEST_SET_ID = EX_ST.TEST_RUN_ID(+)\r\n"
+				+ "    and ma.script_id = wttsl.script_id\r\n"
+				+ "    and ma.script_number = wttsl.script_number\r\n"
+				+ "      -- AND wtts.test_set_id = :p_test_set_id\r\n"
+				+ "       AND wttsl.test_set_id = wtts.test_set_id\r\n"
+				+ "       AND wttsl.script_id = wtsmdata.script_id\r\n"
+				+ "       AND wtsmdata.test_set_line_id =wttsl.test_set_line_id\r\n"
+				+ "       AND wtts.project_id = wtp.project_id\r\n"
+				+ "       AND wtp.customer_id = wtc.customer_id\r\n"
+				+ "       AND wtts.test_set_id="+testRunId+"\r\n"
+				+ "       AND wttsl.test_set_line_id="+testSetLineId+"\r\n"
+				+ "      and  (upper(status) in ('PASS','FAIL'))\r\n"
+				+ "      and wttsl.enabled = 'Y'\r\n"
+				+ "       order by\r\n"
+				+ "       wttsl.SEQ_NUM,\r\n"
+				+ "         -- wtsmdata.script_number,\r\n"
+				+ "          wttsl.script_id,\r\n"
+				+ "          wtsmdata.line_number asc";
+	    
+	    
+	    try {String NULL_STRING="null";
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(sqlQuery);
+			List<Object[]> resultList =query.getResultList();
+			Iterator<Object[]> itr = resultList.iterator();
+			while (itr.hasNext()) 
+			{
+				Object[] obj = (Object[]) itr.next();
+				FetchMetadataVO testRunExecutionVO= new FetchMetadataVO();
+				
+				
+
+				
+				testRunExecutionVO.setCustomer_id(NULL_STRING.equals(String.valueOf(obj[0]))? null:String.valueOf(obj[0]));
+				testRunExecutionVO.setCustomer_number(NULL_STRING.equals(String.valueOf(obj[1]))? null:String.valueOf(obj[1]));
+				testRunExecutionVO.setCustomer_name( NULL_STRING.equals(String.valueOf(obj[2]))? null:String.valueOf(obj[2]));
+				testRunExecutionVO.setProject_id(NULL_STRING.equals(String.valueOf(obj[3]))? null:String.valueOf(obj[3]));
+				testRunExecutionVO.setProject_name(  NULL_STRING.equals(String.valueOf(obj[4]))? null:String.valueOf(obj[4]));
+			//	testRunExecutionVO.setTestRunId(NULL_STRING.equals(String.valueOf(obj[5]))? null:String.valueOf(obj[5]));
+				testRunExecutionVO.setTest_set_line_id(NULL_STRING.equals(String.valueOf(obj[6]))? null:String.valueOf(obj[6]));
+				testRunExecutionVO.setScript_id(NULL_STRING.equals(String.valueOf(obj[7]))? null:String.valueOf(obj[7]));
+				testRunExecutionVO.setScript_number( NULL_STRING.equals(String.valueOf(obj[8]))? null:String.valueOf(obj[8]));
+				testRunExecutionVO.setLine_number(NULL_STRING.equals(String.valueOf(obj[9]))? null:String.valueOf(obj[9]));
+				testRunExecutionVO.setInput_parameter( NULL_STRING.equals(String.valueOf(obj[10]))? null:String.valueOf(obj[10]));
+				testRunExecutionVO.setInput_value( NULL_STRING.equals(String.valueOf(obj[11]))? null:String.valueOf(obj[11]));
+				testRunExecutionVO.setAction( NULL_STRING.equals(String.valueOf(obj[12]))? null:String.valueOf(obj[12]));
+				testRunExecutionVO.setXpath_location( NULL_STRING.equals(String.valueOf(obj[13]))? null:String.valueOf(obj[13]));
+				testRunExecutionVO.setXpath_location1( NULL_STRING.equals(String.valueOf(obj[14]))? null:String.valueOf(obj[14]));
+				testRunExecutionVO.setField_type( NULL_STRING.equals(String.valueOf(obj[15]))? null:String.valueOf(obj[15]));
+				//testRunExecutionVO.setHint( NULL_STRING.equals(String.valueOf(obj[16]))? null:String.valueOf(obj[16]));
+				testRunExecutionVO.setScenario_name(  NULL_STRING.equals(String.valueOf(obj[17]))? null:String.valueOf(obj[17]));
+				testRunExecutionVO.setDependency( NULL_STRING.equals(String.valueOf(obj[18]))? null:String.valueOf(obj[18]));
+				testRunExecutionVO.setTest_run_name( NULL_STRING.equals(String.valueOf(obj[19]))? null:String.valueOf(obj[19]));
+				testRunExecutionVO.setSeq_num(NULL_STRING.equals(String.valueOf(obj[20]))? null:String.valueOf(obj[20]));
+				testRunExecutionVO.setTest_script_param_id(NULL_STRING.equals(String.valueOf(obj[21]))? null:String.valueOf(obj[21]));
+				testRunExecutionVO.setExecuted_by( NULL_STRING.equals(String.valueOf(obj[22]))? null:String.valueOf(obj[22]));
+				
+				
+			listOfTestRunExecutionVo.add(testRunExecutionVO);
+		}
+	}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return listOfTestRunExecutionVo;
+	}
+	    
+	    
+	    
+	   
+		
+	
 }
