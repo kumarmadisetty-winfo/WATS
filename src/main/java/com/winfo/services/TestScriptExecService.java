@@ -599,6 +599,32 @@ String objectStoreScreenshotPath="ebs/"+customerName+"/"+TestRunName;
 						System.out.println(se.getMessage());
 					}
 				} 
+				else
+				{
+					
+						File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+								+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+						if (folder.exists()) {
+							File[] listOfFiles = folder.listFiles();
+
+//						String image=fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "/"
+//								+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//								+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//								+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//								+ fetchMetadataVO.getLine_number();
+							for (File file : Arrays.asList(listOfFiles)) {
+
+								String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+								String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
+								if (seqNum.equalsIgnoreCase(seqnum1)) {
+									Path imagesPath = Paths.get(file.getPath());
+									Files.delete(imagesPath);
+								}
+							}
+						}
+					}
+				
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 			downloadScreenshotsFromObjectStore(screenShotFolderPath,fetchMetadataListVO.get(0).getCustomer_name(),fetchMetadataListVO.get(0).getTest_run_name());
@@ -621,8 +647,8 @@ String objectStoreScreenshotPath="ebs/"+customerName+"/"+TestRunName;
 			fetchConfigVO.setStarttime1(args.getStartTime());
 			
 //			Date startdate = new Date();
-		//	fetchConfigVO.setStarttime(startdate);
-		//	fetchConfigVO.setStarttime1(startdate);
+			//fetchConfigVO.setStarttime(startdate);
+			//fetchConfigVO.setStarttime1(startdate);
 			
 			if (args.isPass()) {
 
