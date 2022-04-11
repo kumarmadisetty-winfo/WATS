@@ -377,7 +377,7 @@ def ebsBrowserEnterTextVal(xpath_param, value, path_to_screenhot, scriptParamId)
                 sendResponse()
                 raise Exception(e)
 
-def ebsInputTextEreaField(xpath_param, value, path_to_screenhot, scriptParamId):
+def ebsInputTextAreaField(xpath_param, value, path_to_screenhot, scriptParamId):
     trycounter = 0
     while trycounter <  3 :
         try :
@@ -412,7 +412,7 @@ def ebsEnterSearchTextField(xpath_param, value, path_to_screenhot, scriptParamId
         selenium_driver.find_element_by_xpath(f'{xpath}/following::img[@title="Search: {xpath_param1}"]').click()
         time.sleep(10)
         selenium_driver.switch_to_frame(f'Search and Select: {xpath_param1}')           
-        selenium_driver.find_element_by_xpath('(//*[text()="Advanced Network Devices"]/preceding::input[@type="radio"])[1]').click() 
+        selenium_driver.find_element_by_xpath(f'(//*[text()="{value}"]/preceding::input[@type="radio"])[1]').click() 
         ebsButtonClick('Select', path_to_screenhot)
         selenium_driver.switch_to_default_content()
         trycounter = 3
@@ -512,7 +512,7 @@ def ebsCopyTextValue(xpath_param, path_to_screenhot, scriptParamId):
                 setResponse(scriptParamId, f'Failed To Copied The Value', False)
                 sendResponse()
                 raise Exception(e)
-def ebsPasteTextValue(xpath_param, path_to_screenhot, value = copiedValue,scriptParamId):
+def ebsPasteTextValue(xpath_param, path_to_screenhot, value,scriptParamId):
     ebsBrowserEnterTextVal(xpath_param, value, path_to_screenhot,scriptParamId)
 
 def _clear(xpath_field):
@@ -576,7 +576,7 @@ def get_ebs_xpath( name, element, hasTable = False):
         raise Exception(E)
 
 # click push button
-def ebsPushButtonClick(xpath_param, path_to_screenhot, scriptParamId):
+def ebsClickButton(xpath_param, path_to_screenhot, scriptParamId):
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :
@@ -676,7 +676,7 @@ def ebsClickRadioButton(xpath_param, path_to_screenhot, scriptParamId):
                 sendResponse()
                 raise Exception(exception)
 
-#ebs dropdown
+#ebs dropdown for java
 def ebsClickDropDown(xpath_param, input_value, path_to_screenhot, scriptParamId):
     trycounter = 0
     _is_wait_cursor_complete()
