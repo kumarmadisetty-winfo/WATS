@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -22,9 +23,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
 import java.util.SortedMap;
 import java.util.StringJoiner;
 import java.util.TimeZone;
@@ -76,10 +84,16 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.oracle.bmc.ConfigFileReader;
+import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
+import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
+import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
+import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
+import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
@@ -186,6 +200,12 @@ public class TestScriptExecService {
 				});
 			}
 			executordependent.shutdown();
+			createPdf(fetchMetadataListVO,
+					fetchConfigVO, "Passed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVO,
+					fetchConfigVO, "Failed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVO,
+					fetchConfigVO, "Detailed_Report.pdf", null, null);
 //			uploadScreenshotsToObjectStore(fetchConfigVO, fetchMetadataListVO);
 			generateFinalReports(testSetId);
 			executeTestrunVo.setStatusCode(200);
@@ -508,15 +528,139 @@ public class TestScriptExecService {
 		}
 		return response.toString();
 	}
+	public void downloadScreenshotsFromObjectStore(String screenshotPath,String customerName,String TestRunName) {
+		String configurationFilePath = "~/.oci/config";
+        String profile = "DEFAULT";
 
+        // Configuring the AuthenticationDetailsProvider. It's assuming there is a default OCI config file
+        // "~/.oci/config", and a profile in that config with the name "DEFAULT". Make changes to the following
+        // line if needed and use ConfigFileReader.parse(configurationFilePath, profile);
+
+        ConfigFileReader.ConfigFile configFile=null;;
+        List<String> objNames = null;
+		try {
+			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(),
+					"WATS_WINFOERP");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        final AuthenticationDetailsProvider provider =
+                new ConfigFileAuthenticationDetailsProvider(configFile);
+
+        ObjectStorage client = new ObjectStorageClient(provider);
+        client.setRegion(Region.UK_LONDON_1);
+
+
+        String namespaceName = "nrch2emfoqis";
+        System.out.println("Using namespace: " + namespaceName);
+        String bucketName = "obj-watsdev01-standard";
+        
+String objectStoreScreenshotPath="ebs/"+customerName+"/"+TestRunName;
+        
+        ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder()
+        		.namespaceName(namespaceName)
+        		.bucketName(bucketName)
+        		.prefix(objectStoreScreenshotPath)
+        		.build();
+
+                /* Send request to the Client */
+                ListObjectsResponse response = client.listObjects(listObjectsRequest);
+
+               objNames = response.getListObjects().getObjects().stream()
+            		   //.filter(objSummary->objSummary.getName().startsWith("/objstore/watsdev01/ebs/WATS"))
+                        .map((objSummary) -> objSummary.getName())
+                        .collect(Collectors.toList());
+               System.out.println(objNames.size());
+             ListIterator<String> listIt= objNames.listIterator();
+             String imagePath=screenshotPath;
+             while (listIt.hasNext())
+             {
+            	  String objectName = listIt.next();
+                  GetObjectResponse getResponse =
+                          client.getObject(
+                                  GetObjectRequest.builder()
+                                          .namespaceName(namespaceName)
+                                          .bucketName(bucketName)
+                                          .objectName(objectName)
+                                          .build());
+
+            String imageName=objectName.substring(objectName.lastIndexOf("/")+1,objectName.length());
+                  try (final InputStream stream = getResponse.getInputStream();
+                          final OutputStream outputStream = new FileOutputStream(imagePath+imageName)) {
+                      // use fileStream
+                      byte[] buf = new byte[8192];
+                      int bytesRead;
+                      while ((bytesRead = stream.read(buf)) > 0) {
+                          outputStream.write(buf, 0, bytesRead);
+                      }
+                  } catch (IOException e1) {
+     				// TODO Auto-generated catch block
+     				e1.printStackTrace();
+     			}
+             }
+           
+        try {
+			client.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+       
+	}
 	public void generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
-
+			
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
-
+			
 			final String uri = fetchConfigVO.getMETADATA_URL() + args.getTestSetId();
-			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args.getTestSetLineId(), uri);
+		
+				List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),args.getTestSetLineId());
 
+
+				File folder1 = new File(
+						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()+ "\\" + fetchMetadataListVO.get(0).getTest_run_name());
+				if (!folder1.exists()) {
+					System.out.println("creating directory: " + folder1.getName());
+					boolean result = false;
+					try {
+						folder1.mkdirs();
+						result = true;
+					} catch (SecurityException se) {
+						// handle it
+						System.out.println(se.getMessage());
+					}
+				} 
+				else
+				{
+					
+						File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
+								+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+						if (folder.exists()) {
+							File[] listOfFiles = folder.listFiles();
+
+//						String image=fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "/"
+//								+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//								+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//								+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//								+ fetchMetadataVO.getLine_number();
+							for (File file : Arrays.asList(listOfFiles)) {
+
+								String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+								String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
+								if (seqNum.equalsIgnoreCase(seqnum1)) {
+									Path imagesPath = Paths.get(file.getPath());
+									Files.delete(imagesPath);
+								}
+							}
+						}
+					}
+				
+			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			downloadScreenshotsFromObjectStore(screenShotFolderPath,fetchMetadataListVO.get(0).getCustomer_name(),fetchMetadataListVO.get(0).getTest_run_name());
 			String script_id = fetchMetadataListVO.get(0).getScript_id();
 			String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="
@@ -532,9 +676,18 @@ public class TestScriptExecService {
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 
+			Date startdate = new Date();
+			fetchConfigVO.setStarttime(args.getStartTime());
+			fetchConfigVO.setStarttime1(args.getStartTime());
+			
+//			Date startdate = new Date();
+			//fetchConfigVO.setStarttime(startdate);
+			//fetchConfigVO.setStarttime1(startdate);
+			
+
+
 			if (args.isSuccess()) {
-				for (FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO) {
-					if (fetchMetadataVO1.getTest_set_line_id().equalsIgnoreCase(args.getTestSetLineId())) {
+
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(args.getTestSetId());
 						post.setP_status("Pass");
@@ -546,6 +699,8 @@ public class TestScriptExecService {
 						post.setP_test_set_line_path(scripturl);
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
+					
+						
 						try {
 							dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(),
@@ -554,25 +709,25 @@ public class TestScriptExecService {
 							System.out.println("e");
 						}
 						createPdf(fetchMetadataListVO, fetchConfigVO,
-								fetchMetadataVO1.getSeq_num() + "_" + fetchMetadataVO1.getScript_number() + ".pdf",
-								args.getStartDate(), enddate);
+
+								fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf",
+								startdate, enddate);
+
 						if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							eBSSeleniumKeyWords.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 						}
 
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-								fetchMetadataVO1.getScript_id(), fetchMetadataVO1.getScript_number(), "pass",
+								fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(), "pass",
 								new Date(), enddate);
 
-					}
-				}
+					//}
+				//}
 			} else {
 
-				for (FetchMetadataVO fetchMetadataVO11 : fetchMetadataListVO) {
-					if (fetchMetadataVO11.getTest_set_line_id().equalsIgnoreCase(args.getTestSetLineId())) {
+
 						String message = "EBS Execution Failed";
-						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO11, fetchConfigVO,
-								fetchMetadataVO11.getTest_script_param_id(), "Fail", message);
+
 						fetchConfigVO.setErrormessage(message);
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(args.getTestSetId());
@@ -593,26 +748,28 @@ public class TestScriptExecService {
 								.getFailedScriptRunCount(args.getTestSetLineId(), args.getTestSetId());
 						if (failedScriptRunCount == 1) {
 							eBSSeleniumKeyWords.createFailedPdf(
-									fetchMetadataListVO, fetchConfigVO, fetchMetadataVO11.getSeq_num() + "_"
-											+ fetchMetadataVO11.getScript_number() + ".pdf",
+
+									fetchMetadataListVO, fetchConfigVO, fetchMetadataListVO.get(0).getSeq_num() + "_"
+											+ fetchMetadataListVO.get(0).getScript_number() + ".pdf",
 									args.getStartDate(), enddate);
+
 
 						} else if (failedScriptRunCount == 2) {
 							limitScriptExecutionService
 									.renameFailedFile(
-											fetchMetadataListVO, fetchConfigVO, fetchMetadataVO11.getSeq_num() + "_"
-													+ fetchMetadataVO11.getScript_number() + ".pdf",
+											fetchMetadataListVO, fetchConfigVO, fetchMetadataListVO.get(0).getSeq_num() + "_"
+													+ fetchMetadataListVO.get(0).getScript_number() + ".pdf",
 											failedScriptRunCount);
 							eBSSeleniumKeyWords
 									.createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-											fetchMetadataVO11.getSeq_num() + "_" + fetchMetadataVO11.getScript_number()
+											fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 													+ "_RUN" + failedScriptRunCount + ".pdf",
 											args.getStartDate(), enddate);
 
 						} else {
 							eBSSeleniumKeyWords
 									.createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-											fetchMetadataVO11.getSeq_num() + "_" + fetchMetadataVO11.getScript_number()
+											fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 													+ "_RUN" + failedScriptRunCount + ".pdf",
 											args.getStartDate(), enddate);
 						}
@@ -621,13 +778,13 @@ public class TestScriptExecService {
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 							limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-									fetchMetadataVO11.getScript_id(), fetchMetadataVO11.getScript_number(), "Fail",
+									fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(), "Fail",
 									new Date(), enddate);
-							break;
+							//break;
 						}
 					}
-				}
-			}
+				//}
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -644,6 +801,7 @@ public class TestScriptExecService {
 
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
+			
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = eBSSeleniumKeyWords.getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);

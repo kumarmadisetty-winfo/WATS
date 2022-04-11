@@ -121,6 +121,13 @@ public class DataBaseEntry {
 		}
 	}
 
+	@Transactional
+	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId){
+		return  dao.getMetaDataVOList(testRunId, testSetLineId);
+	}
+
+
+
 	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
 		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId);
 
@@ -138,4 +145,5 @@ public class DataBaseEntry {
 
 		return true;
 	}
+
 }
