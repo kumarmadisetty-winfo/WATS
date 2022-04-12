@@ -2,6 +2,7 @@ package com.winfo.services;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -130,10 +131,19 @@ public class DataBaseEntry {
 
 	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
 		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId);
-
+		Calendar cal = Calendar.getInstance(); // creates calendar
+		cal.setTime(new Date());               // sets calendar time/date
+		cal.add(Calendar.HOUR_OF_DAY, 2);      // adds one hour
+		Date endDate = cal.getTime();  
+		
+		Date startDate = new Date();
+		
+		
+		
 		while (result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
 				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.NEW.getLabel()::equalsIgnoreCase)
 				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+			startDate = new Date();
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -141,6 +151,9 @@ public class DataBaseEntry {
 			}
 			result = dao.getTestSetLinesStatusByTestSetId(testSetId);
 			System.out.println("here");
+			if(startDate.after(endDate)) {
+				break;
+			}
 		}
 
 		return true;
