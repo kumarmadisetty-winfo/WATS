@@ -530,9 +530,14 @@ public class TestScriptExecService {
 		return response.toString();
 	}
 
-	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String TestRunName) {
+	public void downloadScreenshotsFromObjectStore(String screenshotPath,String customerName,String TestRunName,String objectStoreScreenShotPath) {
 		String configurationFilePath = "~/.oci/config";
-		String profile = "DEFAULT";
+        String profile = "DEFAULT";
+
+        // Configuring the AuthenticationDetailsProvider. It's assuming there is a default OCI config file
+        // "~/.oci/config", and a profile in that config with the name "DEFAULT". Make changes to the following
+        // line if needed and use ConfigFileReader.parse(configurationFilePath, profile);
+
 
 		// Configuring the AuthenticationDetailsProvider. It's assuming there is a
 		// default OCI config file
@@ -550,50 +555,64 @@ public class TestScriptExecService {
 			e.printStackTrace();
 		}
 
-		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+        final AuthenticationDetailsProvider provider =
+                new ConfigFileAuthenticationDetailsProvider(configFile);
 
-		ObjectStorage client = new ObjectStorageClient(provider);
-		client.setRegion(Region.UK_LONDON_1);
+        ObjectStorage client = new ObjectStorageClient(provider);
+        client.setRegion(Region.UK_LONDON_1);
 
-		String namespaceName = "nrch2emfoqis";
-		System.out.println("Using namespace: " + namespaceName);
-		String bucketName = "obj-watsdev01-standard";
 
-		String objectStoreScreenshotPath = "ebs/" + customerName + "/" + TestRunName;
+        String namespaceName = "nrch2emfoqis";
+        System.out.println("Using namespace: " + namespaceName);
+        String bucketName = "obj-watsdev01-standard";
+        
+String objectStoreScreenshotPath=objectStoreScreenShotPath+customerName+"/"+TestRunName;
+        
+        ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder()
+        		.namespaceName(namespaceName)
+        		.bucketName(bucketName)
+        		//.startAfter(objectStoreScreenShotPath)
+        		.prefix(objectStoreScreenshotPath)
+        		.build();
 
-		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(namespaceName)
-				.bucketName(bucketName).prefix(objectStoreScreenshotPath).build();
+                /* Send request to the Client */
+                ListObjectsResponse response = client.listObjects(listObjectsRequest);
 
-		/* Send request to the Client */
-		ListObjectsResponse response = client.listObjects(listObjectsRequest);
+               objNames = response.getListObjects().getObjects().stream()
+            		   //.filter(objSummary->objSummary.getName().startsWith("/objstore/watsdev01/ebs/WATS"))
+                        .map((objSummary) -> objSummary.getName())
+                        .collect(Collectors.toList());
+               System.out.println(objNames.size());
+             ListIterator<String> listIt= objNames.listIterator();
+             String imagePath=screenshotPath;
+             while (listIt.hasNext())
+             {
+            	  String objectName = listIt.next();
+                  GetObjectResponse getResponse =
+                          client.getObject(
+                                  GetObjectRequest.builder()
+                                          .namespaceName(namespaceName)
+                                          .bucketName(bucketName)
+                                          .objectName(objectName)
+                                          .build());
 
-		objNames = response.getListObjects().getObjects().stream()
-				// .filter(objSummary->objSummary.getName().startsWith("/objstore/watsdev01/ebs/WATS"))
-				.map((objSummary) -> objSummary.getName()).collect(Collectors.toList());
-		System.out.println(objNames.size());
-		ListIterator<String> listIt = objNames.listIterator();
-		String imagePath = screenshotPath;
-		while (listIt.hasNext()) {
-			String objectName = listIt.next();
-			GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(namespaceName)
-					.bucketName(bucketName).objectName(objectName).build());
+            String imageName=objectName.substring(objectName.lastIndexOf("/")+1,objectName.length());
+                  try (final InputStream stream = getResponse.getInputStream();
+                          final OutputStream outputStream = new FileOutputStream(imagePath+imageName)) {
+                      // use fileStream
+                      byte[] buf = new byte[8192];
+                      int bytesRead;
+                      while ((bytesRead = stream.read(buf)) > 0) {
+                          outputStream.write(buf, 0, bytesRead);
+                      }
+                  } catch (IOException e1) {
+     				// TODO Auto-generated catch block
+     				e1.printStackTrace();
+     			}
+             }
+           
+        try {
 
-			String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
-			try (final InputStream stream = getResponse.getInputStream();
-					final OutputStream outputStream = new FileOutputStream(imagePath + imageName)) {
-				// use fileStream
-				byte[] buf = new byte[8192];
-				int bytesRead;
-				while ((bytesRead = stream.read(buf)) > 0) {
-					outputStream.write(buf, 0, bytesRead);
-				}
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-
-		try {
 			client.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -642,14 +661,21 @@ public class TestScriptExecService {
 							Files.delete(imagesPath);
 						}
 					}
-				}
-			}
 
-			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-			downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-					fetchMetadataListVO.get(0).getTest_run_name());
+				
+			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			String objectStore=fetchConfigVO.getScreenshot_path();
+			String[] arrOfStr = objectStore.split("/", 5);
+			String objectStoreScreenShotPath =fetchConfigVO.getScreenshot_path()+"/"+fetchMetadataListVO.get(0).getCustomer_name()+"/"+fetchMetadataListVO.get(0).getTest_run_name();
+			objectStoreScreenShotPath=arrOfStr[3];
+	 for (int i=4;i<arrOfStr.length;i++)
+	 {
+		 objectStoreScreenShotPath=objectStoreScreenShotPath+"/"+arrOfStr[i];
+	 }
+	        
+			downloadScreenshotsFromObjectStore(screenShotFolderPath,fetchMetadataListVO.get(0).getCustomer_name(),fetchMetadataListVO.get(0).getTest_run_name(),objectStoreScreenShotPath);
+
 			String script_id = fetchMetadataListVO.get(0).getScript_id();
 			String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="
@@ -668,6 +694,8 @@ public class TestScriptExecService {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
+
+
 
 			if (args.isSuccess()) {
 
