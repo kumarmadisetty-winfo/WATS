@@ -251,83 +251,84 @@ public class TestScriptExecService {
 
 		System.out.println(" ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
 
-		try {
+			try {
 
-			String userName = null;
-			Date startdate = new Date();
-			fetchConfigVO.setStarttime(startdate);
-			String instanceName = fetchConfigVO.getInstance_name();
-			String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
+				String userName = null;
+				Date startdate = new Date();
+				fetchConfigVO.setStarttime(startdate);
+				String instanceName = fetchConfigVO.getInstance_name();
+				String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+						+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
+						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
 
-			String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/";
+				String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path()
+						+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ fetchMetadataListVO.get(0).getTest_run_name() + "/";
 
-			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
-				String url = fetchConfigVO.getApplication_url();
-				actionName = fetchMetadataVO.getAction();
-				test_set_id = fetchMetadataVO.getTest_set_id();
-				test_set_line_id = fetchMetadataVO.getTest_set_line_id();
-				script_id = fetchMetadataVO.getScript_id();
-				script_Number = fetchMetadataVO.getScript_number();
-				line_number = fetchMetadataVO.getLine_number();
-				seq_num = fetchMetadataVO.getSeq_num();
+				for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
+					String url = fetchConfigVO.getApplication_url();
+					actionName = fetchMetadataVO.getAction();
+					test_set_id = fetchMetadataVO.getTest_set_id();
+					test_set_line_id = fetchMetadataVO.getTest_set_line_id();
+					script_id = fetchMetadataVO.getScript_id();
+					script_Number = fetchMetadataVO.getScript_number();
+					line_number = fetchMetadataVO.getLine_number();
+					seq_num = fetchMetadataVO.getSeq_num();
 
-				step_description = fetchMetadataVO.getStep_description();
-				String screenParameter = fetchMetadataVO.getInput_parameter();
-				testScriptParamId = fetchMetadataVO.getTest_script_param_id();
+					step_description = fetchMetadataVO.getStep_description();
+					String screenParameter = fetchMetadataVO.getInput_parameter();
+					testScriptParamId = fetchMetadataVO.getTest_script_param_id();
 
-				String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
+					String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
 
-						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+							+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 
-						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+							+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 
-						+ fetchMetadataVO.getLine_number();
+							+ fetchMetadataVO.getLine_number();
 
-				String param1 = null;
-				String param2 = null;
-				String param3 = null;
-				String type1 = null;
-				String type2 = null;
-				String type3 = null;
-				String message = null;
-				String value1 = null;
-				String value2 = null;
-				int count = 0;
-				if (screenParameter != null) {
-					param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
-					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
+					String param1 = null;
+					String param2 = null;
+					String param3 = null;
+					String type1 = null;
+					String type2 = null;
+					String type3 = null;
+					String message = null;
+					String value1 = null;
+					String value2 = null;
+					int count = 0;
+					if (screenParameter != null) {
+						param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
+						param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
+					}
+
+//					if (instanceName.equalsIgnoreCase("EBS") && (!fetchMetadataListVO.get(0).getScenario_name()
+//							.equalsIgnoreCase("Requisition Creation")
+//							&& (!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables")))) {
+						System.out.println("actionName" + actionName);
+						methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName,
+								screenshotPath, testScriptParamId);
+						methods.add(methodCall);
+//					}
 				}
+				dto.setActions(methods);
+				dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
+				final Context ctx = new Context();
+				ctx.setVariable("dto", dto);
+				final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
 
-				if (instanceName.equalsIgnoreCase("EBS")
-						&& (!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Requisition Creation")
-								&& (!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables")))) {
-					methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName,
-							screenshotPath, testScriptParamId);
-					methods.add(methodCall);
-				}
+				String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
+						+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
+						+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
+						+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
+				uploadObjectToObjectStore(scriptContent, scriptPathForPyJabScript);
+				System.out.println(test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
+						+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
+				this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
+						screenShotFolderPath, objectStoreScreenShotPath));
+			} catch (Exception e) {
+				throw e;
 			}
-			dto.setActions(methods);
-			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
-			final Context ctx = new Context();
-			ctx.setVariable("dto", dto);
-			final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
-
-			String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
-			uploadObjectToObjectStore(scriptContent, scriptPathForPyJabScript);
-			System.out.println(test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
-					+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
-			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
-					screenShotFolderPath, objectStoreScreenShotPath));
-		} catch (Exception e) {
-			throw e;
-		}
 
 	}
 
@@ -382,7 +383,7 @@ public class TestScriptExecService {
 
 					if (value.equalsIgnoreCase("<Pick from Config Table>")) {
 						dbValue = codeLineRepo.findByConfigurationId(Integer.parseInt(testrunId), key);
-						listArgs.add(index+SPLIT+addQuotes(dbValue));
+						listArgs.add(index + SPLIT + addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Value>")) {
 						if (actionName.equalsIgnoreCase("ebsSelectMenu")) {
@@ -397,13 +398,13 @@ public class TestScriptExecService {
 									String menu = arrOfStr[0];
 									String subMenu = arrOfStr[1];
 									String menu_link = menu + "    " + subMenu;
-									listArgs.add(index+SPLIT+addQuotes(menu_link));
+									listArgs.add(index + SPLIT + addQuotes(menu_link));
 								}
 							}
 						} else {
 							dbValue = codeLineRepo.findByTestRunScriptId(
 									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-							listArgs.add(index+SPLIT+addQuotes(dbValue));
+							listArgs.add(index + SPLIT + addQuotes(dbValue));
 						}
 
 					}
@@ -429,26 +430,26 @@ public class TestScriptExecService {
 											null);
 								}
 							}
-							listArgs.add(index+SPLIT+addQuotes(copynumberValue));
+							listArgs.add(index + SPLIT + addQuotes(copynumberValue));
 						} else {
 							String image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\"
 									+ fetchMetadataVO.getCustomer_name() + "\\\\" + fetchMetadataVO.getTest_run_name();
 
 							dbValue = image_dest;
-							listArgs.add(index+SPLIT+addQuotes(dbValue));
+							listArgs.add(index + SPLIT + addQuotes(dbValue));
 						}
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Parameter>")) {
 						dbValue = codeLineRepo.findByTestRunScriptIdInputParam(
 								Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-						listArgs.add(index+SPLIT+addQuotes(dbValue));
+						listArgs.add(index + SPLIT + addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Password>")) {
 						String userName = fetchMetadataVO.getInput_value();
 
 						dbValue = dataBaseEntry.getPassword(fetchMetadataVO.getTest_set_id(), userName, null);
 						dbValue = dbValue != null ? dbValue : "welcome123";
-						listArgs.add(index+SPLIT+addQuotes(dbValue));
+						listArgs.add(index + SPLIT + addQuotes(dbValue));
 					}
 				}
 
@@ -459,7 +460,7 @@ public class TestScriptExecService {
 		}
 		Collections.sort(listArgs);
 		listArgs.stream().map(val -> val.split(SPLIT)[1]).forEach(methodCall::add);
-		
+
 		methodCall.add(addQuotes(screenshotPath));
 		methodCall.add(testScriptParamId);
 		return methodCall.toString();
@@ -495,6 +496,9 @@ public class TestScriptExecService {
 
 		// try {
 		// 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+		// 	System.out.println("%%%%%%%%%%");
+
+		// 	System.out.println(path);
 
 		// 	Files.writeString(Paths.get(path), sourceFile);
 		// } catch (IOException e1) {
@@ -1625,7 +1629,11 @@ public class TestScriptExecService {
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.getLabel() : SCRIPT_PARAM_STATUS.FAIL.getLabel();
-		dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult());
+		if(args.getResult() == null) {
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status);
+		}else {
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult());
+		}
 	}
 
 }

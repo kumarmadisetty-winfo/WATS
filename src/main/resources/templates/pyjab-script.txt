@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
 url = 'http://winfo106.winfosolutions.com:8035/OA_HTML/AppsLocalLogin.jsp?'
 
-post_url = ' [(${dto.scriptStatusUpdateUrl})]'
+post_url = post_url = '[(${dto.scriptStatusUpdateUrl})]'
 
 response  = {
         "scriptParamId":"",
@@ -34,14 +34,21 @@ def setResponse(scriptParamId, message, success, copy = None):
     response['scriptParamId'] = scriptParamId
     response['message'] = message
     response['success'] = success
-    if copy is not None :
-        response['result'] = copy
+    response['result'] = copy
+
 
 def getResponse():
     return response
 
+
 def sendResponse():
-    req.post(post_url, json.dumps(getResponse()))
+    try :
+        req.post(post_url, data=json.dumps(getResponse()), headers= {
+            'Content-Type' : 'application/json'
+        })
+    except :
+        print(getResponse())
+        raise Exception("Post Failed")
 
 
 APPLICATION = "Oracle Applications - EBSVIS"
@@ -51,6 +58,7 @@ desktop = Desktop()
 LOV = "List of Values"
 driver = None
 chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
+toDelete = True
 
 #defining chrome options
 def options():
@@ -76,6 +84,8 @@ def get_xpath(name, tagname):
         
         if name == 'Submit':
             xpath += f'button[contains(@title,"Submit")]'
+        elif name == 'Go':
+            xpath += f'button[@id="GoButton"]'    
         else :
             xpath += f'button[text()="{name}"]'
     elif tagname == 'input':
@@ -93,6 +103,8 @@ def get_xpath(name, tagname):
         xpath += f'iframe[@id="{name}"]'
     elif tagname == 'b' :
         xpath += f'b[contains(text(),"{name}")]'
+    elif tagname == 'btnWParama':
+        xpath += '//*[text()="{name}"]/following::img[1]'
     else :
         xpath += f'*[text()="{name}"]'
     return xpath
@@ -127,10 +139,10 @@ def save_and_open_jnlp():
     desktop.press_keys('tab')
     time.sleep(0.1)
     desktop.press_keys('tab')
-    time.sleep(0.1)
+    time.sleep(3)
     desktop.press_keys('enter')
-    time.sleep(2)
-    desktop.press_keys('ctrl','w')
+    time.sleep(1)
+    desktop.press_keys('enter')
     time.sleep(10)
 
 #def upload screenshot in jpg format
@@ -153,7 +165,22 @@ def take_screeshot_as_jpg(path):
         path_name="/".join(path.split("\\")[-4:-1])
         logger.info(f"Uploading to {path_name} in oci") 
         object_name="/".join(path.split("\\")[-4:])
-
+        global toDelete
+        if toDelete == True:
+            toDelete = False
+            listfiles  = object_storage.list_objects(
+                namespace, bucket_name, prefix = path_name 
+            )
+            for filename in listfiles.data.objects:
+                try :
+                    delete_object_response = object_storage.delete_object(
+                    namespace,
+                    bucket_name,
+                    filename.name,
+                    )
+                    print(delete_object_response.headers)
+                except :
+                    print('delete failed for filename ', filename)
         ImageFile.MAXBLOCK = 2**20
         imagefile = BytesIO()
 
@@ -171,7 +198,6 @@ def take_screeshot_as_jpg(path):
             object_name,
 
             imagedata)
-
         logger.info(f"Uploaded to {path_name} in oci") 
     except Exception as e :
         raise  Exception(e," file upload failed")
@@ -343,7 +369,6 @@ def ebsSelectDropDown(xpath_param, value, path_to_screenhot, scriptParamId):
                 xpath_field.select_by_index(0)
             trycounter = 3
             time.sleep(2)
-            take_screeshot_as_jpg(path_to_screenhot + _passed)
             setResponse(scriptParamId, f'SuccessFully Selected The Dropdown {xpath_param.split(">")[-1]} with value {value}', True)
             sendResponse()
         except Exception as e :
@@ -367,7 +392,6 @@ def ebsBrowserEnterTextVal(xpath_param, value, path_to_screenhot, scriptParamId)
             xpath_field.send_keys(Keys.TAB)
             trycounter = 3
             time.sleep(2)
-            take_screeshot_as_jpg(path_to_screenhot + _passed)
             setResponse(scriptParamId, f'SuccessFully Typed Into {xpath_param.split(">")[-1]} with value {value}', True)
             sendResponse()
         except Exception as e :
@@ -688,7 +712,6 @@ def ebsClickDropDown(xpath_param, input_value, path_to_screenhot, scriptParamId)
             selectVal =  driver.find_element_by_xpath(XPATH)
             selectVal.select(option=input_value, simulate=True)   
             trycounter = 3
-            take_screeshot_as_jpg(path_to_screenhot + _passed)
             setResponse(scriptParamId, f'Successfully clicked dropdown {xpath_param}', True)
             sendResponse()
         except Exception as exception :
@@ -702,7 +725,7 @@ def ebsClickDropDown(xpath_param, input_value, path_to_screenhot, scriptParamId)
                 sendResponse()
                 raise Exception(exception)
 
-#ebs dropdown
+#ebs menu select
 def ebsSelectMenu(xpath_param, input_value, path_to_screenhot, scriptParamId):
     trycounter = 0
     _is_wait_cursor_complete()
@@ -727,20 +750,27 @@ def ebsSelectMenu(xpath_param, input_value, path_to_screenhot, scriptParamId):
                 sendResponse()
                 raise Exception(exception)
 #ebs save
-def ebsSave():
+def ebsSave(path_to_screenhot, scriptParamId):
     desktop.press_keys('ctrl','s')
-
+    setResponse(scriptParamId, f'Successfully Saved', True)
+    sendResponse()
 #ebs Tab
-def ebsTabKey():
+def ebsTabKey(path_to_screenhot, scriptParamId):
     desktop.press_keys('tab')
-
+    setResponse(scriptParamId, f'Tab Key Is pressed', True)
+    sendResponse()
+    
 #ebs enter
-def ebsEnterKey():
+def ebsEnterKey(path_to_screenhot, scriptParamId):
     desktop.press_keys('enter')
+    setResponse(scriptParamId, f'Enter Key Pressed', True)
+    sendResponse()
 
 #ebs down
-def downKey():
+def downKey(path_to_screenhot, scriptParamId):
     desktop.press_keys('down')
+    setResponse(scriptParamId, f'Down Key Pressed', True)
+    sendResponse()
 
 
 # select window and security changes
@@ -762,7 +792,6 @@ def ebsSelectWindow(xpath_param, path_to_screenhot, scriptParamId):
             pass
         setDriver(xpath_param)
         _is_wait_cursor_complete()
-        take_screeshot_as_jpg(path_to_screenhot + _passed)
         setResponse(scriptParamId, f'Success fully selected window {xpath_param}', True)
         sendResponse()
     except Exception as E :
@@ -833,7 +862,6 @@ def ebsExitApp(path_to_screenhot, scriptParamId):
             time.sleep(5)
             desktop.press_keys("enter")
             time.sleep(5)
-            take_screeshot_as_jpg(path_to_screenhot)
             trycounter = 3
             take_screeshot_as_jpg(path_to_screenhot + _passed)
             setResponse(scriptParamId, f'Successfully closed  Ebs Application', True)
@@ -841,7 +869,6 @@ def ebsExitApp(path_to_screenhot, scriptParamId):
         except Exception as exception :
             if trycounter < 3 :
                 _is_wait_cursor_complete()
-                setDriver()
                 continue
             else :
                 take_screeshot_as_jpg(path_to_screenhot + _failed)
@@ -887,7 +914,6 @@ def ebsCopyValue(xpath_param, path_to_screenhot, scriptParamId):
             text = txtelement.text 
             trycounter = 3
             # return text  
-            take_screeshot_as_jpg(path_to_screenhot + _passed)
             setResponse(scriptParamId, f'Successfully copied value from {xpath_param}', True, text)
             sendResponse()
         except Exception as exception :
@@ -945,6 +971,49 @@ def getText(xpath_param):
         return text
     except : pass
 
+
+def ebsLogout(path_to_screenhot, scriptParamId):
+    trycounter = 0
+    while trycounter < 3:
+        try :
+            trycounter += 1
+            logout_ele = selenium_driver.find_element_by_xpath("(//img[@title='Logout'])[2]")
+            logout_ele.click()
+            trycounter = 3
+            take_screeshot_as_jpg(path_to_screenhot + _passed)
+            setResponse(scriptParamId, f'SuccessFully Loged Out', True)
+            sendResponse()
+        except Exception as e:
+            take_screeshot_as_jpg(path_to_screenhot + _failed)
+            setResponse(scriptParamId, f'Failed To Logout', False)
+            sendResponse()
+            raise Exception("Logout Failed, ", e)
+
+def ebsCLickButtonWithParam(xpath_param, input_value, path_to_screenhot, scriptParamId):
+    trycounter = 0
+    while trycounter < 3 :
+        try :
+            trycounter += 1 
+            xpath_param += '>' + str(input_value)
+            xpath = get_xpath(xpath_param, 'btnWParama')
+            _wait_until_element_is_found(xpath)
+            xpath_field = selenium_driver.find_element_by_xpath(xpath)
+            xpath_field.send_keys(input_value)
+            trycounter = 3
+            time.sleep(2)
+            take_screeshot_as_jpg(path_to_screenhot + _passed)
+            setResponse(scriptParamId, f'Clicked on {xpath_param.split(">")[-1]} with value {input_value}', True)
+            sendResponse()
+        except Exception as e :
+            if trycounter < 3 : continue
+            else : 
+                take_screeshot_as_jpg(path_to_screenhot + _failed)
+                setResponse(scriptParamId, f'Failed To Click {xpath_param.split(">")[-1]} with value {input_value}', False)
+                sendResponse()
+                raise Exception(e)
+
+
+
 try :
     """
         To provide all the required actions from steps.
@@ -952,16 +1021,19 @@ try :
     [# th:each="action : ${dto.actions}"]
     [(${action})]
     [/]
-    pass
+    
 except Exception as exception :
-    print("script got failed")
+    print("script got failed", exception)
 
 selenium_driver.close()
+
+desktop.press_keys('ctrl','w')
+time.sleep(2)
+
 end_time = time.time()
 
 print(f"it took {end_time - start_time} seconds")
     
 
-path_to_screenhot = 'C:\\Github\\EBS-Automation-POC\\Java_customization\\Selenium\\', '1.jpg'
 
 
