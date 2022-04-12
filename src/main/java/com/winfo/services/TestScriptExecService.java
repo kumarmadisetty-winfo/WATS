@@ -496,15 +496,6 @@ public class TestScriptExecService {
 	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
 		PutObjectResponse response = null;
 
-		try {
-			String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-
-			Files.writeString(Paths.get(path), sourceFile);
-		} catch (IOException e1) {
-
-			e1.printStackTrace();
-		}
-
 		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
@@ -528,7 +519,7 @@ public class TestScriptExecService {
 		}
 		return response.toString();
 	}
-	public void downloadScreenshotsFromObjectStore(String screenshotPath,String customerName,String TestRunName) {
+	public void downloadScreenshotsFromObjectStore(String screenshotPath,String customerName,String TestRunName,String objectStoreScreenShotPath) {
 		String configurationFilePath = "~/.oci/config";
         String profile = "DEFAULT";
 
@@ -557,11 +548,12 @@ public class TestScriptExecService {
         System.out.println("Using namespace: " + namespaceName);
         String bucketName = "obj-watsdev01-standard";
         
-String objectStoreScreenshotPath="ebs/"+customerName+"/"+TestRunName;
+String objectStoreScreenshotPath=objectStoreScreenShotPath+customerName+"/"+TestRunName;
         
         ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder()
         		.namespaceName(namespaceName)
         		.bucketName(bucketName)
+        		//.startAfter(objectStoreScreenShotPath)
         		.prefix(objectStoreScreenshotPath)
         		.build();
 
@@ -660,7 +652,16 @@ String objectStoreScreenshotPath="ebs/"+customerName+"/"+TestRunName;
 				
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-			downloadScreenshotsFromObjectStore(screenShotFolderPath,fetchMetadataListVO.get(0).getCustomer_name(),fetchMetadataListVO.get(0).getTest_run_name());
+			String objectStore=fetchConfigVO.getScreenshot_path();
+			String[] arrOfStr = objectStore.split("/", 5);
+			String objectStoreScreenShotPath =fetchConfigVO.getScreenshot_path()+"/"+fetchMetadataListVO.get(0).getCustomer_name()+"/"+fetchMetadataListVO.get(0).getTest_run_name();
+			objectStoreScreenShotPath=arrOfStr[3];
+	 for (int i=4;i<arrOfStr.length;i++)
+	 {
+		 objectStoreScreenShotPath=objectStoreScreenShotPath+"/"+arrOfStr[i];
+	 }
+	        
+			downloadScreenshotsFromObjectStore(screenShotFolderPath,fetchMetadataListVO.get(0).getCustomer_name(),fetchMetadataListVO.get(0).getTest_run_name(),objectStoreScreenShotPath);
 			String script_id = fetchMetadataListVO.get(0).getScript_id();
 			String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf" + "AAAparent="
@@ -677,13 +678,10 @@ String objectStoreScreenshotPath="ebs/"+customerName+"/"+TestRunName;
 					+ fetchConfigVO.getImg_url();
 
 			Date startdate = new Date();
-			fetchConfigVO.setStarttime(args.getStartTime());
-			fetchConfigVO.setStarttime1(args.getStartTime());
+			fetchConfigVO.setStarttime(args.getStartDate());
+			fetchConfigVO.setStarttime1(args.getStartDate());
 			
-//			Date startdate = new Date();
-			//fetchConfigVO.setStarttime(startdate);
-			//fetchConfigVO.setStarttime1(startdate);
-			
+
 
 
 			if (args.isSuccess()) {
