@@ -14,17 +14,15 @@ import oci
 from selenium.webdriver.support.ui import Select
 import json
 import requests as req
+import os
+import pathlib
 
 start_time = time.time()
 
 logger = logging.getLogger(__name__)
 chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
 url = 'http://winfo106.winfosolutions.com:8035/OA_HTML/AppsLocalLogin.jsp?'
-username = 'gchockal'
-password = 'welcome123'
-# toNavigate = 'Purchasing, Vision Operations (USA)>Requisitions>Requisitions'
-toNavigate = 'iProcurement>iProcurement Home Page'
-isFrameSwithed = False
+
 post_url = ' [(${dto.scriptStatusUpdateUrl})]'
 
 response  = {
@@ -143,6 +141,9 @@ def take_screeshot_as_jpg(path):
     #to be written
     # pass
     try :
+        toMove = "\\".join(path.split("\\")[:-1]) + '\\'
+        if not os.path.isdir(toMove):
+            pathlib.Path(toMove).mkdir(parents=True, exist_ok=True)
         snapshot = ImageGrab.grab()
         snapshot.save(path)
         config = oci.config.from_file("C:\\oci\\config","WATS_WINFOERP")
@@ -182,7 +183,7 @@ _failed = '_Fail.jpg'
 selenium_driver = webdriver.Chrome(executable_path=chrome_driver_path, options=options())
 
 
-def logInToEBS(url, username, password, path_to_screenhot, scriptParamId):
+def logInToEBS( url,username, password, path_to_screenhot, scriptParamId):
     trycounter = 0
     while trycounter < 3 :
         try : 
@@ -247,7 +248,7 @@ def ebsNavigate(navigation, path_to_screenhot, scriptParamId):
                 sendResponse()
                 raise Exception(e)
 
-def ebsOpenDownloadedFile(path_to_screenhot , screenshot_file_name, scriptParamId):
+def ebsOpenDownloadedFile(path_to_screenhot ,scriptParamId):
     try :
         save_and_open_jnlp()
         take_screeshot_as_jpg(path_to_screenhot + _passed)

@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -112,6 +113,7 @@ public class TestScriptExecService {
 	private static final String PY_EXTN = ".py";
 	public static final String topic = "test-script-run";
 	public static final String FORWARD_SLASH = "/";
+	public static final String SPLIT = "@";
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
@@ -193,11 +195,13 @@ public class TestScriptExecService {
 				});
 			}
 			executordependent.shutdown();
+
+			// final reports generation
+			dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(testSetId));
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
-//			uploadScreenshotsToObjectStore(fetchConfigVO, fetchMetadataListVO);
-			generateFinalReports(testSetId);
+
 			executeTestrunVo.setStatusCode(200);
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
@@ -205,11 +209,6 @@ public class TestScriptExecService {
 			e.printStackTrace();
 		}
 		return executeTestrunVo;
-	}
-
-	public void generateFinalReports(String testSetId) {
-		dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(testSetId));
-
 	}
 
 	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
@@ -259,13 +258,12 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\";
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
 
 			String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_set_line_id() + "/";
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/";
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
@@ -323,6 +321,8 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
 			uploadObjectToObjectStore(scriptContent, scriptPathForPyJabScript);
+			System.out.println(test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
+					+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
 			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
 					screenShotFolderPath, objectStoreScreenShotPath));
 		} catch (Exception e) {
@@ -366,19 +366,23 @@ public class TestScriptExecService {
 		StringJoiner methodCall = new StringJoiner(",", action.getMethodName() + "(", ")");
 		String dbValue = "";
 		String key = "";
+		String keyWithIndex = "";
 		String value;
+		String index = "";
+		List<String> listArgs = new ArrayList<>();
 
 		if (paramValue != null) {
 			HashMap<String, Object> result = new ObjectMapper().readValue(paramValue, HashMap.class);
-
 			try {
 				for (Map.Entry<String, Object> entry : result.entrySet()) {
-					key = entry.getKey();
+					keyWithIndex = entry.getKey();
+					index = keyWithIndex.split(SPLIT)[0];
+					key = keyWithIndex.split(SPLIT)[1];
 					value = (String) entry.getValue();
 
 					if (value.equalsIgnoreCase("<Pick from Config Table>")) {
 						dbValue = codeLineRepo.findByConfigurationId(Integer.parseInt(testrunId), key);
-						methodCall.add(addQuotes(dbValue));
+						listArgs.add(index+SPLIT+addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Value>")) {
 						if (actionName.equalsIgnoreCase("ebsSelectMenu")) {
@@ -393,13 +397,13 @@ public class TestScriptExecService {
 									String menu = arrOfStr[0];
 									String subMenu = arrOfStr[1];
 									String menu_link = menu + "    " + subMenu;
-									methodCall.add(addQuotes(menu_link));
+									listArgs.add(index+SPLIT+addQuotes(menu_link));
 								}
 							}
 						} else {
 							dbValue = codeLineRepo.findByTestRunScriptId(
 									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-							methodCall.add(addQuotes(dbValue));
+							listArgs.add(index+SPLIT+addQuotes(dbValue));
 						}
 
 					}
@@ -425,26 +429,26 @@ public class TestScriptExecService {
 											null);
 								}
 							}
-							methodCall.add(addQuotes(copynumberValue));
+							listArgs.add(index+SPLIT+addQuotes(copynumberValue));
 						} else {
 							String image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\"
 									+ fetchMetadataVO.getCustomer_name() + "\\\\" + fetchMetadataVO.getTest_run_name();
 
 							dbValue = image_dest;
-							methodCall.add(addQuotes(dbValue));
+							listArgs.add(index+SPLIT+addQuotes(dbValue));
 						}
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Parameter>")) {
 						dbValue = codeLineRepo.findByTestRunScriptIdInputParam(
 								Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-						methodCall.add(addQuotes(dbValue));
+						listArgs.add(index+SPLIT+addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Password>")) {
 						String userName = fetchMetadataVO.getInput_value();
 
 						dbValue = dataBaseEntry.getPassword(fetchMetadataVO.getTest_set_id(), userName, null);
-
-						methodCall.add(addQuotes(dbValue));
+						dbValue = dbValue != null ? dbValue : "welcome123";
+						listArgs.add(index+SPLIT+addQuotes(dbValue));
 					}
 				}
 
@@ -453,6 +457,9 @@ public class TestScriptExecService {
 			}
 
 		}
+		Collections.sort(listArgs);
+		listArgs.stream().map(val -> val.split(SPLIT)[1]).forEach(methodCall::add);
+		
 		methodCall.add(addQuotes(screenshotPath));
 		methodCall.add(testScriptParamId);
 		return methodCall.toString();
@@ -486,14 +493,14 @@ public class TestScriptExecService {
 	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
 		PutObjectResponse response = null;
 
-//		try {
-//			String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-//
-//			Files.writeString(Paths.get(path), sourceFile);
-//		} catch (IOException e1) {
-//
-//			e1.printStackTrace();
-//		}
+		// try {
+		// 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+
+		// 	Files.writeString(Paths.get(path), sourceFile);
+		// } catch (IOException e1) {
+
+		// 	e1.printStackTrace();
+		// }
 
 		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
