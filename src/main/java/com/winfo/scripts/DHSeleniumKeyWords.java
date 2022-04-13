@@ -18048,41 +18048,41 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 				log.error("Failed during clickButton" + scripNumber);
 				System.out.println(e);
 			}
+			/*
+			 * try { if(param1.equalsIgnoreCase("DH SCM Supplier Site Inactivation") &&
+			 * param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
+			 * Actions(driver); WebElement we = driver.findElement(By.
+			 * xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]"));
+			 * action.moveToElement(we).perform(); Thread.sleep(5000); WebElement run =
+			 * driver.findElement(By.
+			 * xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[@title='Run'][1]"
+			 * )); run.click(); screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScript_number();
+			 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			 * String xpath =
+			 * "(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[@title='Run'][1]"
+			 * ; String scriptID=fetchMetadataVO.getScript_id();String
+			 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
+			 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
+			 * scripNumber = fetchMetadataVO.getScript_number();
+			 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
+			 * }
+			 */
+		//testing
 		try {
 			if(param1.equalsIgnoreCase("DH SCM Supplier Site Inactivation") && param2.equalsIgnoreCase("Run")) {
 			Thread.sleep(3000);
 			Actions action = new Actions(driver);
-			WebElement we = driver.findElement(By.xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]"));
+			WebElement we = driver.findElement(By.xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[text()='Scheduled Orchestration'][1]"));
 			action.moveToElement(we).perform();
 			Thread.sleep(5000);
-			WebElement run = driver.findElement(By.xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[@title='Run'][1]"));
+			WebElement run = driver.findElement(By.xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
 			run.click();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			String xpath = "(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[@title='Run'][1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			return;
-			}
-			}catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
-			}try {
-			if(param1.equalsIgnoreCase("DH Food Ingredients Stock Depletion Integration") && param2.equalsIgnoreCase("Run")) {
-			Thread.sleep(3000);
-			Actions action = new Actions(driver);
-			WebElement we = driver.findElement(By.xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]"));
-			action.moveToElement(we).perform();
-			Thread.sleep(5000);
-			WebElement run = driver.findElement(By.xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[@title='Run'][1]"));
-			run.click();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			String xpath = "(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[@title='Run'][1]";
+			String xpath = "(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			return;
 			}
@@ -18092,6 +18092,50 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 			System.out.println(e);
 			}
 		
+		
+			/*
+			 * try {
+			 * if(param1.equalsIgnoreCase("DH Food Ingredients Stock Depletion Integration")
+			 * && param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
+			 * Actions(driver); WebElement we = driver.findElement(By.
+			 * xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]"));
+			 * action.moveToElement(we).perform(); Thread.sleep(5000); WebElement run =
+			 * driver.findElement(By.
+			 * xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[@title='Run'][1]"
+			 * )); run.click(); screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScript_number();
+			 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			 * String xpath =
+			 * "(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[@title='Run'][1]"
+			 * ; String scriptID=fetchMetadataVO.getScript_id();String
+			 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
+			 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
+			 * scripNumber = fetchMetadataVO.getScript_number();
+			 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
+			 * }
+			 */
+		try {
+			if(param1.equalsIgnoreCase("DH Food Ingredients Stock Depletion Integration") && param2.equalsIgnoreCase("Run")) {
+			Thread.sleep(3000);
+			Actions action = new Actions(driver);
+			WebElement we = driver.findElement(By.xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[text()='Scheduled Orchestration']"));
+			action.moveToElement(we).perform();
+			Thread.sleep(5000);
+			WebElement run = driver.findElement(By.xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
+			run.click();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(5000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			}catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+			}
 		
 		
 		try {	
