@@ -7,6 +7,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
@@ -123,23 +129,19 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId){
-		return  dao.getMetaDataVOList(testRunId, testSetLineId);
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId) {
+		return dao.getMetaDataVOList(testRunId, testSetLineId);
 	}
-
-
 
 	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
 		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId);
 		Calendar cal = Calendar.getInstance(); // creates calendar
-		cal.setTime(new Date());               // sets calendar time/date
-		cal.add(Calendar.HOUR_OF_DAY, 2);      // adds one hour
-		Date endDate = cal.getTime();  
-		
+		cal.setTime(new Date()); // sets calendar time/date
+		cal.add(Calendar.HOUR_OF_DAY, 2); // adds one hour
+		Date endDate = cal.getTime();
+
 		Date startDate = new Date();
-		
-		
-		
+
 		while (result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
 				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.NEW.getLabel()::equalsIgnoreCase)
 				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
@@ -151,12 +153,17 @@ public class DataBaseEntry {
 			}
 			result = dao.getTestSetLinesStatusByTestSetId(testSetId);
 			System.out.println("here");
-			if(startDate.after(endDate)) {
+			if (startDate.after(endDate)) {
 				break;
 			}
 		}
 
 		return true;
+	}
+
+	public String getTestSetMode(Long testSetId) {
+		return dao.getTestSetMode(testSetId);
+
 	}
 
 }

@@ -38,6 +38,9 @@ import com.winfo.services.FetchMetadataVO;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
+	private static final String TEST_SET_ID = "test_set_id";
+	private static final String TR_MODE = "tr_mode";
+	
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
@@ -418,7 +421,15 @@ public class DataBaseEntryDao {
 	}
 	    
 	    
-	    
+	public String getTestSetMode(Long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> query = cb.createQuery(String.class);
+		Root<TestSet> root = query.from(TestSet.class);
+		Predicate condition = cb.equal(root.get(TEST_SET_ID), testSetId);
+		query.select(root.get(TR_MODE)).where(condition);
+		return em.createQuery(query).getSingleResult();
+		
+	} 
 	   
 		
 	

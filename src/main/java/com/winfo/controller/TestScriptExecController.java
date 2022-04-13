@@ -9,8 +9,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lowagie.text.DocumentException;
@@ -44,22 +46,28 @@ public class TestScriptExecController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStartScriptStatus")
-	public void updateStartScriptStatus(@Valid @RequestBody PyJabKafkaDto args,
-			BindingResult bindingResult) throws ClassNotFoundException, SQLException {
+	public void updateStartScriptStatus(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult)
+			throws ClassNotFoundException, SQLException {
 		testScriptExecService.updateStartStatus(args);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateEndScriptStatus")
-	public void updateEndScriptStatus(@Valid @RequestBody PyJabKafkaDto args,
-			BindingResult bindingResult) {
+	public void updateEndScriptStatus(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult) {
 		testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateScriptParamStatus")
-	public void updateScriptParamStatus(@Valid @RequestBody UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
+	public void updateScriptParamStatus(@Valid @RequestBody UpdateScriptParamStatus args)
+			throws ClassNotFoundException, SQLException {
 		testScriptExecService.updateScriptParamStatus(args);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/getTestSetMode/{testSetId}")
+	public String getTestSetMode(@PathVariable Long testSetId) {
+		return testScriptExecService.getTestSetMode(testSetId);
 	}
 
 }

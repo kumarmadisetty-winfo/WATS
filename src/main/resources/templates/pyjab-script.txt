@@ -169,34 +169,29 @@ def take_screeshot_as_jpg(path):
         if toDelete == True:
             toDelete = False
             listfiles  = object_storage.list_objects(
-                namespace, bucket_name, prefix = path_name 
+                namespace, bucket_name, prefix = path_name
             )
             for filename in listfiles.data.objects:
-                try :
-                    delete_object_response = object_storage.delete_object(
-                    namespace,
-                    bucket_name,
-                    filename.name,
-                    )
-                    print(delete_object_response.headers)
-                except :
-                    print('delete failed for filename ', filename)
+                name = filename.name.split('/')[-1]
+                if name.startswith(path.split('\\')[-1].split('_')[0]):
+                    try :
+                        delete_object_response = object_storage.delete_object(
+                        namespace,
+                        bucket_name,
+                        filename.name,
+                        )
+                        print(delete_object_response.headers)
+                    except :
+                        print('delete failed for filename ', filename)
         ImageFile.MAXBLOCK = 2**20
         imagefile = BytesIO()
-
         img = Image.open(path)
-
         img.save(imagefile, "JPEG", quality=80, optimize=True, progressive=True)
-
         imagedata = imagefile.getvalue()
         obj = object_storage.put_object(
-
             namespace,
-
             bucket_name,
-
             object_name,
-
             imagedata)
         logger.info(f"Uploaded to {path_name} in oci") 
     except Exception as e :
@@ -237,7 +232,7 @@ def logInToEBS( url,username, password, path_to_screenhot, scriptParamId):
 def ebsSwitchWindow(path_to_screenhot, scriptParamId):
     try :
         desktop.press_keys('ctrl','w')
-        time.sleep('2')
+        time.sleep(2)
         take_screeshot_as_jpg(path_to_screenhot + _passed)
         setResponse(scriptParamId, 'SwitchWindow is SuccessFull', True)
         sendResponse()
@@ -581,7 +576,10 @@ def get_ebs_xpath( name, element, hasTable = False):
         if element == 'button':
             XPATH = f'//push button[@name=contains("{name}")]'
         elif element == 'text' :
-            XPATH = f'//text[@name=contains("{name}")]'
+            if name == 'Invoice Amount':
+                XPATH = f"//text[@name=contains('Invoice Amount Required')]"
+            else:
+                XPATH = f'//text[@name=contains("{name}")]'
         elif element == 'checkbox':
             XPATH = '//check box' if name == '' else f'//check box[@name=contains("{name}")]'
         elif element == 'radio':
@@ -802,7 +800,7 @@ def ebsSelectWindow(xpath_param, path_to_screenhot, scriptParamId):
         
 
 #ebsClosePopUP
-def ebsCloseWindow(path_to_screenhot, scriptParamId):
+def ebsCloseWindow(xpath_param,path_to_screenhot, scriptParamId):
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :

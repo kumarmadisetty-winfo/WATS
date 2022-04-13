@@ -154,6 +154,11 @@ public class TestScriptExecService {
 
 	@Autowired
 	EBSSeleniumKeyWords eBSSeleniumKeyWords;
+	
+	public String getTestSetMode(Long testSetId) {
+		return dataBaseEntry.getTestSetMode(testSetId);
+
+	}
 
 	public ExecuteTestrunVo run(String testSetId) throws MalformedURLException {
 		ExecuteTestrunVo executeTestrunVo = new ExecuteTestrunVo();
@@ -172,6 +177,7 @@ public class TestScriptExecService {
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 			fetchConfigVO.setStarttime1(date);
+			
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				log.info(" In Independent - " + metaData.getKey());
@@ -380,6 +386,9 @@ public class TestScriptExecService {
 					index = keyWithIndex.split(SPLIT)[0];
 					key = keyWithIndex.split(SPLIT)[1];
 					value = (String) entry.getValue();
+					// if (actionName.equalsIgnoreCase("ebsSelectMenu")) {
+					// 	System.out.println(key);
+					// }
 
 					if (value.equalsIgnoreCase("<Pick from Config Table>")) {
 						dbValue = codeLineRepo.findByConfigurationId(Integer.parseInt(testrunId), key);
@@ -393,7 +402,7 @@ public class TestScriptExecService {
 							if (dbValue.contains(">")) {
 								String[] arrOfStr = dbValue.split(">", 5);
 								if (arrOfStr.length < 2) {
-									// copynumberValue = dbValue;
+									listArgs.add(index + SPLIT + addQuotes(dbValue));
 								} else {
 									String menu = arrOfStr[0];
 									String subMenu = arrOfStr[1];
@@ -495,17 +504,16 @@ public class TestScriptExecService {
 		PutObjectResponse response = null;
 
 		// try {
-		// String path = "D:\\wats\\New folder\\" +
-		// destinationFilePath.split(FORWARD_SLASH)[3];
-		// System.out.println("%%%%%%%%%%");
+		// 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+		// 	System.out.println("%%%%%%%%%%");
 
-		// System.out.println(path);
+		//  System.out.println(path);
 
-		// Files.writeString(Paths.get(path), sourceFile);
-		// } catch (IOException e1) {
+		//  Files.writeString(Paths.get(path), sourceFile);
+		//  } catch (IOException e1) {
 
-		// e1.printStackTrace();
-		// }
+		//  e1.printStackTrace();
+		//  }
 
 		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
