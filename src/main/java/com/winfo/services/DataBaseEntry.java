@@ -126,7 +126,11 @@ public class DataBaseEntry {
 	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId){
 		return  dao.getMetaDataVOList(testRunId, testSetLineId);
 	}
-
+	@Transactional
+	public   void setPassAndFailScriptCount( String testRunId,FetchConfigVO fetchConfigVO){
+		  dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
+	}
+	
 
 
 	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
