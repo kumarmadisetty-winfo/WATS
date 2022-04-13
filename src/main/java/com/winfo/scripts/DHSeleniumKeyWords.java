@@ -10255,6 +10255,94 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		
+		//DH 65
+		try {
+
+
+
+			if (param1.equalsIgnoreCase("Initial Due Date Option")) {
+
+
+
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+
+
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1 + "']/following::*[@placeholder='dd-mmm-yyyy'][1]")));
+
+
+
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 + "']/following::*[@placeholder='dd-mmm-yyyy'][1]"));
+
+
+
+			Actions actions = new Actions(driver);
+
+
+
+			actions.moveToElement(waittill).build().perform();
+
+
+
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+
+
+
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+
+
+
+			Thread.sleep(1000);
+
+
+
+			String scripNumber = fetchMetadataVO.getScript_number();
+
+
+
+			log.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
+
+
+
+			String xpath = "//*[text()='param1']/following::*[@placeholder='dd-mmm-yyyy'][1]";
+
+
+
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+
+
+			return keysToSend;
+
+
+
+			}
+
+
+
+			} catch (Exception e) {
+
+
+
+			String scripNumber = fetchMetadataVO.getScript_number();
+
+
+
+			log.error("Failed during Invoice Dates sendValue" + scripNumber);
+
+
+
+			System.out.println(e);
+
+
+
+			}
+		
+		
+		
+		
+		
 		//DH 55
 		try {
 			if (param1.equalsIgnoreCase("DH Transaction Detail Report") && (param2.equalsIgnoreCase("Business Unit") || param2.equalsIgnoreCase("Customer Name"))) {
