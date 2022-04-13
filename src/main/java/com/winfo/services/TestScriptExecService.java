@@ -308,9 +308,11 @@ public class TestScriptExecService {
 					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
 				}
 
+//				if(test_set_line_id.equalsIgnoreCase(""+17001)) {
 				methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName, screenshotPath,
 						testScriptParamId);
 				methods.add(methodCall);
+//				}
 			}
 			dto.setActions(methods);
 			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
@@ -381,7 +383,6 @@ public class TestScriptExecService {
 					index = keyWithIndex.split(SPLIT)[0];
 					key = keyWithIndex.split(SPLIT)[1];
 					value = (String) entry.getValue();
-					
 
 					if (value.equalsIgnoreCase("<Pick from Config Table>")) {
 						dbValue = codeLineRepo.findByConfigurationId(Integer.parseInt(testrunId), key);
@@ -401,7 +402,7 @@ public class TestScriptExecService {
 									String menu_link = menu + "    " + subMenu;
 									listArgs.add(index + SPLIT + addQuotes(menu_link));
 								}
-							}else {
+							} else {
 								dbValue = codeLineRepo.findByTestRunScriptId(
 										Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 								listArgs.add(index + SPLIT + addQuotes(dbValue));
@@ -415,34 +416,34 @@ public class TestScriptExecService {
 					}
 
 					if (value.equalsIgnoreCase("<Pick from Java>")) {
-						if (actionName.equalsIgnoreCase("ebsPasteValue")) {
-							String copynumberValue;
-							dbValue = codeLineRepo.findByTestRunScriptId(
-									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-							String[] arrOfStr = dbValue.split(">", 5);
-							if (arrOfStr.length < 2) {
-								copynumberValue = dbValue;
-							} else {
-								String Testrun_name = arrOfStr[0];
-								String seq = arrOfStr[1];
-								String line_number = arrOfStr[2];
-								if (Testrun_name.equalsIgnoreCase(fetchMetadataVO.getTest_run_name())
-										&& seq.equalsIgnoreCase(fetchMetadataVO.getSeq_num())) {
-									copynumberValue = dynamicnumber.getCopynumberInputParameter(Testrun_name, seq,
-											line_number, null, null);
-								} else {
-									copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, null,
-											null);
-								}
-							}
-							listArgs.add(index + SPLIT + addQuotes(copynumberValue));
-						} else {
-							String image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\"
-									+ fetchMetadataVO.getCustomer_name() + "\\\\" + fetchMetadataVO.getTest_run_name();
+//						if (actionName.equalsIgnoreCase("ebsPasteValue")) {
+//							String copynumberValue;
+//							dbValue = codeLineRepo.findByTestRunScriptId(
+//									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
+//							String[] arrOfStr = dbValue.split(">", 5);
+//							if (arrOfStr.length < 2) {
+//								copynumberValue = dbValue;
+//							} else {
+//								String Testrun_name = arrOfStr[0];
+//								String seq = arrOfStr[1];
+//								String line_number = arrOfStr[2];
+//								if (Testrun_name.equalsIgnoreCase(fetchMetadataVO.getTest_run_name())
+//										&& seq.equalsIgnoreCase(fetchMetadataVO.getSeq_num())) {
+//									copynumberValue = dynamicnumber.getCopynumberInputParameter(Testrun_name, seq,
+//											line_number, null, null);
+//								} else {
+//									copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, null,
+//											null);
+//								}
+//							}
+//							listArgs.add(index + SPLIT + addQuotes(copynumberValue));
+//						} else {
+						String image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\"
+								+ fetchMetadataVO.getCustomer_name() + "\\\\" + fetchMetadataVO.getTest_run_name();
 
-							dbValue = image_dest;
-							listArgs.add(index + SPLIT + addQuotes(dbValue));
-						}
+						dbValue = image_dest;
+						listArgs.add(index + SPLIT + addQuotes(dbValue));
+//						}
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Parameter>")) {
 						dbValue = codeLineRepo.findByTestRunScriptIdInputParam(
@@ -465,7 +466,6 @@ public class TestScriptExecService {
 		}
 		Collections.sort(listArgs);
 		listArgs.stream().map(val -> val.split(SPLIT)[1]).forEach(methodCall::add);
-		
 		methodCall.add(addQuotes(screenshotPath));
 		methodCall.add(testScriptParamId);
 		return methodCall.toString();
@@ -1661,6 +1661,20 @@ public class TestScriptExecService {
 		} else {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult());
 		}
+	}
+
+	public String getCopiedValue(String copyPath) {
+		String copynumberValue;
+		String[] arrOfStr = copyPath.split(">", 5);
+		if (arrOfStr.length < 2) {
+			copynumberValue = copyPath;
+		} else {
+			String Testrun_name = arrOfStr[0];
+			String seq = arrOfStr[1];
+			String line_number = arrOfStr[2];
+			copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, null, null);
+		}
+		return copynumberValue;
 	}
 
 }

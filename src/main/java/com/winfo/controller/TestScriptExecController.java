@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lowagie.text.DocumentException;
@@ -68,6 +67,12 @@ public class TestScriptExecController {
 	@RequestMapping(value = "/getTestSetMode/{testSetId}")
 	public String getTestSetMode(@PathVariable Long testSetId) {
 		return testScriptExecService.getTestSetMode(testSetId);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/getCopiedValue/{copyPath}")
+	public String getTestSetMode(@PathVariable String copyPath) {
+		return testScriptExecService.getCopiedValue(copyPath);
 	}
 
 }

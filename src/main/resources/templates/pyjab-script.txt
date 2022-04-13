@@ -590,6 +590,8 @@ def get_ebs_xpath( name, element, hasTable = False):
             XPATH = '//page tab' if name == '' else f'//page tab[@name=contains("{name}")]'
         elif element == 'menu' :
             XPATH =  f'//menu[@name=contains("{name}")]'
+        elif element == 'menuitem':
+            XPATH = f'//menu item[@name=contains("{name}")]'
         else:
             print(element,name)
             raise Exception("Please provide valid element or name")
@@ -731,8 +733,11 @@ def ebsSelectMenu(xpath_param, input_value, path_to_screenhot, scriptParamId):
         try :
             trycounter += 1
             XPATH = get_ebs_xpath(xpath_param, 'menu')
-            selectVal =  driver.find_element_by_xpath(XPATH)
-            selectVal.select(option=input_value, simulate=True)   
+            menu = driver.find_element_by_xpath(XPATH)
+            menu.click()
+            XPATH = get_ebs_xpath(input_value, 'menuitem')
+            menuItem = driver.find_element_by_xpath(XPATH)
+            menuItem.click()
             trycounter = 3
             take_screeshot_as_jpg(path_to_screenhot + _passed)
             setResponse(scriptParamId, f'Successfully select menu {xpath_param}', True)
