@@ -154,7 +154,7 @@ public class TestScriptExecService {
 
 	@Autowired
 	EBSSeleniumKeyWords eBSSeleniumKeyWords;
-	
+
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
 
@@ -177,7 +177,7 @@ public class TestScriptExecService {
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 			fetchConfigVO.setStarttime1(date);
-			
+
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				log.info(" In Independent - " + metaData.getKey());
@@ -308,14 +308,9 @@ public class TestScriptExecService {
 					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
 				}
 
-//					if (instanceName.equalsIgnoreCase("EBS") && (!fetchMetadataListVO.get(0).getScenario_name()
-//							.equalsIgnoreCase("Requisition Creation")
-//							&& (!fetchMetadataListVO.get(0).getScenario_name().equalsIgnoreCase("Receivables")))) {
-				System.out.println("actionName" + actionName);
 				methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName, screenshotPath,
 						testScriptParamId);
 				methods.add(methodCall);
-//					}
 			}
 			dto.setActions(methods);
 			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
@@ -386,9 +381,7 @@ public class TestScriptExecService {
 					index = keyWithIndex.split(SPLIT)[0];
 					key = keyWithIndex.split(SPLIT)[1];
 					value = (String) entry.getValue();
-					// if (actionName.equalsIgnoreCase("ebsSelectMenu")) {
-					// 	System.out.println(key);
-					// }
+					
 
 					if (value.equalsIgnoreCase("<Pick from Config Table>")) {
 						dbValue = codeLineRepo.findByConfigurationId(Integer.parseInt(testrunId), key);
@@ -398,7 +391,6 @@ public class TestScriptExecService {
 						if (actionName.equalsIgnoreCase("ebsSelectMenu")) {
 							dbValue = codeLineRepo.findByTestRunScriptId(
 									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-
 							if (dbValue.contains(">")) {
 								String[] arrOfStr = dbValue.split(">", 5);
 								if (arrOfStr.length < 2) {
@@ -409,6 +401,10 @@ public class TestScriptExecService {
 									String menu_link = menu + "    " + subMenu;
 									listArgs.add(index + SPLIT + addQuotes(menu_link));
 								}
+							}else {
+								dbValue = codeLineRepo.findByTestRunScriptId(
+										Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
+								listArgs.add(index + SPLIT + addQuotes(dbValue));
 							}
 						} else {
 							dbValue = codeLineRepo.findByTestRunScriptId(
@@ -469,7 +465,7 @@ public class TestScriptExecService {
 		}
 		Collections.sort(listArgs);
 		listArgs.stream().map(val -> val.split(SPLIT)[1]).forEach(methodCall::add);
-
+		
 		methodCall.add(addQuotes(screenshotPath));
 		methodCall.add(testScriptParamId);
 		return methodCall.toString();
@@ -507,13 +503,13 @@ public class TestScriptExecService {
 		// 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
 		// 	System.out.println("%%%%%%%%%%");
 
-		//  System.out.println(path);
+		// 	System.out.println(path);
 
-		//  Files.writeString(Paths.get(path), sourceFile);
-		//  } catch (IOException e1) {
+		// 	Files.writeString(Paths.get(path), sourceFile);
+		// } catch (IOException e1) {
 
-		//  e1.printStackTrace();
-		//  }
+		// 	e1.printStackTrace();
+		// }
 
 		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
@@ -576,7 +572,7 @@ public class TestScriptExecService {
 		System.out.println("Using namespace: " + namespaceName);
 		String bucketName = "obj-watsdev01-standard";
 
-		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + "/" + TestRunName +"/";
+		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + "/" + TestRunName + "/";
 
 		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(namespaceName)
 				.bucketName(bucketName)

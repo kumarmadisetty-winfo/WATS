@@ -1030,7 +1030,7 @@ time.sleep(2)
 
 end_time = time.time()
 
-print(f"it took {end_time - start_time} seconds")
+print(f"it took {int(end_time - start_time)} seconds")
     
 
 
