@@ -23,7 +23,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+// import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ScriptMaster;
@@ -34,7 +34,7 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 
 @Repository
-@RefreshScope
+// @RefreshScope
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;

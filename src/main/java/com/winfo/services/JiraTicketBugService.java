@@ -16,7 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+//import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -37,7 +37,7 @@ import com.winfo.vo.TestRunVO;
 import reactor.core.publisher.Mono;
 
 @Service
-@RefreshScope
+//@RefreshScope
 public class JiraTicketBugService {
 	@Autowired
 	private TestCaseDataService testRunService;

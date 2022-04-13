@@ -127,6 +127,9 @@ public class TestScriptExecService {
 
 	@Value("${url.update.script.param}")
 	private String scriptParamStatusUpdateUrl;
+	
+	@Value("${url.get.copied.value}")
+	private String copiedValueUrl;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -316,6 +319,7 @@ public class TestScriptExecService {
 			}
 			dto.setActions(methods);
 			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
+			dto.setCopiedValueUrl(copiedValueUrl);
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
 			final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
@@ -499,17 +503,17 @@ public class TestScriptExecService {
 	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
 		PutObjectResponse response = null;
 
-		// try {
-		// 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-		// 	System.out.println("%%%%%%%%%%");
-
-		// 	System.out.println(path);
-
-		// 	Files.writeString(Paths.get(path), sourceFile);
-		// } catch (IOException e1) {
-
-		// 	e1.printStackTrace();
-		// }
+//		 try {
+//		 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+//		 	System.out.println("%%%%%%%%%%");
+//
+//		 	System.out.println(path);
+//
+//		 	Files.writeString(Paths.get(path), sourceFile);
+//		 } catch (IOException e1) {
+//
+//		 	e1.printStackTrace();
+//		 }
 
 		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {

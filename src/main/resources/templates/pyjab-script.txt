@@ -24,6 +24,8 @@ chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
 url = 'http://winfo106.winfosolutions.com:8035/OA_HTML/AppsLocalLogin.jsp?'
 
 post_url = post_url = '[(${dto.scriptStatusUpdateUrl})]'
+copy_url = '[(${dto.copiedValueUrl})]'
+
 
 response  = {
         "scriptParamId":"",
@@ -46,9 +48,21 @@ def sendResponse():
         req.post(post_url, data=json.dumps(getResponse()), headers= {
             'Content-Type' : 'application/json'
         })
+        output = getResponse()
+        if output['copy'] is not None :
+            time.sleep(10)
     except :
         print(getResponse())
         raise Exception("Post Failed")
+
+def getCopiedValue(value):
+    try :
+        print(value, copy_url)
+        data = req.get(copy_url)
+        return str(data.text)
+    except :
+        print(getResponse())
+        raise Exception("Get Failed")
 
 
 APPLICATION = "Oracle Applications - EBSVIS"
@@ -532,7 +546,11 @@ def ebsCopyTextValue(xpath_param, path_to_screenhot, scriptParamId):
                 setResponse(scriptParamId, f'Failed To Copied The Value', False)
                 sendResponse()
                 raise Exception(e)
-def ebsPasteTextValue(xpath_param, path_to_screenhot, value,scriptParamId):
+def ebsPasteTextValue(xpath_param, value, path_to_screenhot,scriptParamId):
+    value = getCopiedValue(value)
+    if value == 'null':
+        global copiedValue
+        value = copiedValue
     ebsBrowserEnterTextVal(xpath_param, value, path_to_screenhot,scriptParamId)
 
 def _clear(xpath_field):
@@ -903,9 +921,10 @@ def ebsClickTab(xpath_param,input_value, path_to_screenhot, scriptParamId):
                 setResponse(scriptParamId, f'Failed to Switch to tab {xpath_param}', False)
                 sendResponse()
                 raise Exception(exception)
-
+ebsCopyValueParam = None
 #ebsCopyValue
 def ebsCopyValue(xpath_param, path_to_screenhot, scriptParamId):
+    global ebsCopyValueParam
     trycounter = 0
     _is_wait_cursor_complete()
     while trycounter < 3 :
@@ -916,7 +935,7 @@ def ebsCopyValue(xpath_param, path_to_screenhot, scriptParamId):
             txtelement = driver.find_element_by_xpath(XPATH)
             text = txtelement.text 
             trycounter = 3
-            # return text  
+            ebsCopyValueParam = text
             setResponse(scriptParamId, f'Successfully copied value from {xpath_param}', True, text)
             sendResponse()
         except Exception as exception :
@@ -931,6 +950,10 @@ def ebsCopyValue(xpath_param, path_to_screenhot, scriptParamId):
                 raise Exception(exception)
 
 def ebsPasteValue(xpath_param, input_value, path_to_screenhot,scriptParamId):
+    input_value = getCopiedValue(input_value)
+    if input_value == 'null':
+        global ebsCopyValueParam
+        input_value = ebsCopyValueParam
     ebsEnterTextVal(xpath_param, input_value, path_to_screenhot,scriptParamId)
 
 def ebsStatusChange(xpath_param,button_name, path_to_screenhot, scriptParamId):
@@ -943,7 +966,7 @@ def ebsStatusChange(xpath_param,button_name, path_to_screenhot, scriptParamId):
             txt_one = getText(xpath_param)
             while True :
                 txt_two = getText(xpath_param)
-                if txt_one != txt_two or txt_two == 'Completed' : 
+                if txt_one != txt_two and txt_two == 'Completed' : 
                     break
                 driver = JABDriver(APPLICATION, PATH)
                 logger.info("The JABDriver is initialized")

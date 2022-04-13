@@ -7,6 +7,7 @@ public class PyJabScriptDto {
 	private String applicationName;
 	private List<String> actions;
 	private String scriptStatusUpdateUrl;
+	private String copiedValueUrl;
 
 	public String getApplicationName() {
 		return applicationName;
@@ -30,6 +31,14 @@ public class PyJabScriptDto {
 
 	public void setScriptStatusUpdateUrl(String scriptStatusUpdateUrl) {
 		this.scriptStatusUpdateUrl = scriptStatusUpdateUrl;
+	}
+
+	public String getCopiedValueUrl() {
+		return copiedValueUrl;
+	}
+
+	public void setCopiedValueUrl(String copiedValueUrl) {
+		this.copiedValueUrl = copiedValueUrl;
 	}
 
 }
