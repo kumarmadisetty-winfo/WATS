@@ -18564,7 +18564,7 @@ screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO
 }
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param1+"']/following::input[1]")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"')]/following::*[text()='"+param2+"']/following::input[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
