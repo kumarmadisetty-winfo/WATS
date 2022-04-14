@@ -17917,6 +17917,27 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			service.saveXpathParams(scriptID,metadataID,xpath);
 			}
 	
+
+
+public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value) throws Exception {
+			String param4 = "User name or email";
+			String param5 = "password";
+			//String param6 = "Sign In";
+			navigateOICJobUrl(driver, fetchConfigVO, fetchMetadataVO);
+			String xpath1 = oicLoginPage(driver, param4, keysToSend, fetchMetadataVO, fetchConfigVO);
+			String xpath2 = oicLoginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
+			if(xpath2.equalsIgnoreCase(null)) {
+			throw new IOException("Failed during login page");
+			}
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = xpath1 + ";" + xpath2;
+			String scriptID=fetchMetadataVO.getScript_id();
+			String metadataID=fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID,metadataID,xpath);
+			}
+	
 	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		String xpath = null;
@@ -18189,24 +18210,24 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 	
 	
 	try {
-		if(param1.equalsIgnoreCase("Job Set Details") && (param2.equalsIgnoreCase("Adhoc"))) {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::*[@class='vb-icon vb-icon-plug']")));
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		Thread.sleep(15000);
-		String scripNumber = fetchMetadataVO.getScript_number();
-		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-		String xpath = "//*[text()='param1']/following::*[@class='vb-icon vb-icon-plug']";
-		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-		return;
-		}
+		if(param1.equalsIgnoreCase("Job Set Details")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath(("//*[text()='"+param1+"']/following::span[text()='"+param2+"']/following::*[@class='vb-icon vb-icon-plug']")));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(15000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "//*[text()='param1']/following::span[text()='param2']/following::*[@class='vb-icon vb-icon-plug']";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
 		} catch (Exception e) {
-		String scripNumber = fetchMetadataVO.getScript_number();
-		log.error("Failed during clickButton" + scripNumber);
-		System.out.println(e);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
 		}
 	
 	
@@ -18541,6 +18562,26 @@ String scripNumber = fetchMetadataVO.getScript_number();
 log.error("Failed during sendValue" + scripNumber);
 screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
 }
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param1+"']/following::input[1]")));
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"')]/following::*[text()='"+param2+"']/following::input[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			String xpath = "//input[@placeholder='param1']";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+		} catch (Exception e) {
+			System.out.println(e);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during sendValue" + scripNumber);
+			screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
+		}
 try {
 WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'"+param1+"')]/following::*[text()='"+param2+"']/following::input[1]")));
@@ -18663,7 +18704,31 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 		}
 	}
 
-	
+	public void navigateOICJobUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+		try {
+			driver.navigate().to(fetchConfigVO.getOIC_JOB_SCHEDULER());
+			driver.manage().window().maximize();
+			Thread.sleep(4000);
+			WebElement iframe = driver.findElement(By.xpath("//iframe[@title='TrustArc Cookie Consent Manager']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(iframe).build().perform();
+			driver.switchTo().frame(iframe);
+			WebElement Acceptall = driver.findElement(By.xpath("//a[text()='Accept all']"));
+			Acceptall.click();
+			Thread.sleep(2000);
+	//		deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
+	//		refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(10000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed to logout " + scripNumber);
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("failed to do navigate URl " + scripNumber);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			System.out.println("Not able to navitage to the Url");
+		}
+	}
 
 	@Override
 	public String loginToExcel(WebDriver driver, String param1,String param2,String username,String password, FetchMetadataVO fetchMetadataVO,

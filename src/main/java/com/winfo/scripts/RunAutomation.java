@@ -463,6 +463,17 @@ public class RunAutomation {
 						} else {
 							break;
 						}
+						
+					case "Login into Application(jobscheduler)":
+						userName = fetchMetadataVO.getInput_value();
+						log.info("Navigating to Login into Application Action");
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							seleniumFactory.getInstanceObj(instanceName).loginOicJob(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3, fetchMetadataVO.getInput_value(), dataBaseEntry.getPassword(param, userName, fetchConfigVO));
+							userName = null;
+							break;
+						} else {
+							break;
+						}
 
 					case "Navigate":
 						log.info("Navigating to Navigate Action");
