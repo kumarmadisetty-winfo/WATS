@@ -557,6 +557,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 												<include>templates/</include>
+												<include>log4j2.properties/</include>
 											</includes>
 										</resource>
 										<resource>
