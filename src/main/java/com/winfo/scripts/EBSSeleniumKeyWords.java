@@ -1088,6 +1088,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
+		System.out.println("In passed Pdf Method -- ");
 		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
@@ -1271,12 +1272,13 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		if (video_rec.equalsIgnoreCase("yes")) {
 			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Passed_Video.mp4");
 		}
-		System.out.println(targetFileList.size());
+		System.out.println("Passed pdf file list size"+targetFileList.size());
 		return targetFileList;
 	}
 
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
+		System.out.println("In Failed Pdf Method -- ");
 
 		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
@@ -1488,6 +1490,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
+		System.out.println("In Detailed Pdf Method -- ");
 
 		File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
