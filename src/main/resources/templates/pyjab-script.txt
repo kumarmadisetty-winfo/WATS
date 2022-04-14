@@ -49,8 +49,6 @@ def sendResponse():
             'Content-Type' : 'application/json'
         })
         output = getResponse()
-        if output['copy'] is not None :
-            time.sleep(10)
     except :
         print(getResponse())
         raise Exception("Post Failed")
@@ -58,7 +56,7 @@ def sendResponse():
 def getCopiedValue(value):
     try :
         print(value, copy_url)
-        data = req.get(copy_url)
+        data = req.get(copy_url + value)
         return str(data.text)
     except :
         print(getResponse())
@@ -154,8 +152,6 @@ def save_and_open_jnlp():
     time.sleep(0.1)
     desktop.press_keys('tab')
     time.sleep(3)
-    desktop.press_keys('enter')
-    time.sleep(1)
     desktop.press_keys('enter')
     time.sleep(10)
 
