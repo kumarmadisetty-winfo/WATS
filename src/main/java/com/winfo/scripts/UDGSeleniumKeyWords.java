@@ -17224,6 +17224,14 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		
 	}
 
+	@Override
+	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 

@@ -147,6 +147,16 @@ public class FetchConfigVO {
 	private String errormessage;
 	
     private String PDF_LOCATION;
+    
+    private String OIC_JOB_SCHEDULER;
+    
+   	public String getOIC_JOB_SCHEDULER() {
+   		return OIC_JOB_SCHEDULER;
+   	}
+
+   	public void setOIC_JOB_SCHEDULER(String oIC_JOB_SCHEDULER) {
+   		OIC_JOB_SCHEDULER = oIC_JOB_SCHEDULER;
+   	}
 
     
 	public String getPDF_LOCATION() {
