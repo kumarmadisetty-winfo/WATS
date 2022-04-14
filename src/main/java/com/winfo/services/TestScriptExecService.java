@@ -109,6 +109,7 @@ import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.UpdateScriptParamStatus;
 
 import org.apache.commons.io.FileUtils;
+
 @Service
 public class TestScriptExecService {
 
@@ -132,7 +133,7 @@ public class TestScriptExecService {
 
 	@Value("${url.update.script.param}")
 	private String scriptParamStatusUpdateUrl;
-	
+
 	@Value("${url.get.copied.value}")
 	private String copiedValueUrl;
 
@@ -212,9 +213,9 @@ public class TestScriptExecService {
 
 			// final reports generation
 			dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(testSetId));
-			  dataBaseEntry.setPassAndFailScriptCount(testSetId,fetchConfigVO);
-			  Date date1 = new Date();
-			  fetchConfigVO.setEndtime(date1);
+			dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
+			Date date1 = new Date();
+			fetchConfigVO.setEndtime(date1);
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
@@ -336,7 +337,7 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
-			uploadObjectToObjectStore(scriptContent, scriptPathForPyJabScript);
+			uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
 			System.out.println(test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 					+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
 			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
@@ -507,9 +508,10 @@ public class TestScriptExecService {
 	private String addQuotes(String string) {
 		return "'" + string + "'";
 	}
-
-	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
-		//		 try {
+	
+	
+	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
+		// try {
 //		 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
 //		 	System.out.println("%%%%%%%%%%");
 //
@@ -521,75 +523,77 @@ public class TestScriptExecService {
 //		 	e1.printStackTrace();
 //		 }
 
+		PutObjectResponse response = null;
+		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
+		try (InputStream in = new ByteArrayInputStream(bytes);) {
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new ClassPathResource("oci/config").getInputStream(), "WATS_WINFOERP");
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
-//		byte[] bytes = sourceFile.getBytes(StandardCharsets.UTF_8);
-//		try (InputStream in = new ByteArrayInputStream(bytes);) {
-//			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-//					.parse(new ClassPathResource("oci/config").getInputStream(), "WATS_WINFOERP");
-//			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-//
-//			/* Create a service client */
-//			ObjectStorageClient client = new ObjectStorageClient(provider);
-//
-//			/* Create a request and dependent object(s). */
-//			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName("nrch2emfoqis")
-//					.bucketName("obj-watsdev01-standard").objectName(destinationFilePath).putObjectBody(in).build();
-//
-//			/* Send request to the Client */
-//			response = client.putObject(putObjectRequest);
-//
-//			log.info("Uploaded to " + destinationFilePath);
-//			return response.toString();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return response.toString();
-		PutObjectResponse response=null;
-		try
-		{
-		/**
-         * Create a default authentication provider that uses the DEFAULT
-         * profile in the configuration file.
-         * Refer to <see href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the public documentation</see> on how to prepare a configuration file.
-         */
-		 final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(),
-        		"WATS_WINFOERP");
-	        final AuthenticationDetailsProvider provider =
-	                new ConfigFileAuthenticationDetailsProvider(configFile);
-	        final String FILE_NAME=  sourceFile;
-	        File file = new File(FILE_NAME);
-	         long fileSize = FileUtils.sizeOf(file);
-	         InputStream is = new FileInputStream(file);
-	    
-        /* Create a service client */
-        ObjectStorageClient client = new ObjectStorageClient(provider);
+			/* Create a service client */
+			ObjectStorageClient client = new ObjectStorageClient(provider);
 
-        /* Create a request and dependent object(s). */
+			/* Create a request and dependent object(s). */
+			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName("nrch2emfoqis")
+					.bucketName("obj-watsdev01-standard").objectName(destinationFilePath).putObjectBody(in).build();
 
-	PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-		.namespaceName("nrch2emfoqis")
-		.bucketName("obj-watsdev01-standard")
-		//.objectName("ebs/Detailed_Report.pdf")
-		.objectName(destinationFilePath)
-		.contentLength(fileSize)// Create a Stream, for example, by calling a helper function like below.
+			/* Send request to the Client */
+			response = client.putObject(putObjectRequest);
 
-		.putObjectBody(is)
-
-		.build();
-
-        /* Send request to the Client */
-         response = client.putObject(putObjectRequest);
-        
-        return response.toString();
-	}catch(Exception e)
-	{
-		e.printStackTrace();
+			log.info("Uploaded to " + destinationFilePath);
+			return response.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response.toString();
 	}
+	
+
+	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
+
+		PutObjectResponse response = null;
+		try {
+			/**
+			 * Create a default authentication provider that uses the DEFAULT profile in the
+			 * configuration file. Refer to <see
+			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
+			 * public documentation</see> on how to prepare a configuration file.
+			 */
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new ClassPathResource("oci/config").getInputStream(), "WATS_WINFOERP");
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			final String FILE_NAME = sourceFile;
+			File file = new File(FILE_NAME);
+			long fileSize = FileUtils.sizeOf(file);
+			InputStream is = new FileInputStream(file);
+
+			/* Create a service client */
+			ObjectStorageClient client = new ObjectStorageClient(provider);
+
+			/* Create a request and dependent object(s). */
+
+			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName("nrch2emfoqis")
+					.bucketName("obj-watsdev01-standard")
+					// .objectName("ebs/Detailed_Report.pdf")
+					.objectName(destinationFilePath).contentLength(fileSize)// Create a Stream, for example, by calling
+																			// a helper function like below.
+
+					.putObjectBody(is)
+
+					.build();
+
+			/* Send request to the Client */
+			response = client.putObject(putObjectRequest);
+
+			return response.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return response.toString();
 	}
 
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String TestRunName,
-			String objectStoreScreenShotPath,String seqNum) {
+			String objectStoreScreenShotPath, String seqNum) {
 		String configurationFilePath = "~/.oci/config";
 		String profile = "DEFAULT";
 
@@ -625,7 +629,7 @@ public class TestScriptExecService {
 		System.out.println("Using namespace: " + namespaceName);
 		String bucketName = "obj-watsdev01-standard";
 
-		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + "/" + TestRunName +"/"+seqNum;
+		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + "/" + TestRunName + "/" + seqNum;
 
 		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(namespaceName)
 				.bucketName(bucketName)
@@ -727,7 +731,8 @@ public class TestScriptExecService {
 			}
 
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-					fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,fetchMetadataListVO.get(0).getSeq_num()+"_");
+					fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
+					fetchMetadataListVO.get(0).getSeq_num() + "_");
 
 			String script_id = fetchMetadataListVO.get(0).getScript_id();
 			String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -781,8 +786,7 @@ public class TestScriptExecService {
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 						"pass", new Date(), enddate);
-						limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(),
-								args.getTestSetId());
+				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 
 			} else {
 
