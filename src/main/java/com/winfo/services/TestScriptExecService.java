@@ -511,17 +511,17 @@ public class TestScriptExecService {
 	
 	
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
-		// try {
-//		 	String path = "D:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-//		 	System.out.println("%%%%%%%%%%");
-//
-//		 	System.out.println(path);
-//
-//		 	Files.writeString(Paths.get(path), sourceFile);
-//		 } catch (IOException e1) {
-//
-//		 	e1.printStackTrace();
-//		 }
+		 try {
+		 	String path = "C:\\wats\\New folder\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+		 	System.out.println("%%%%%%%%%%");
+
+		 	System.out.println(path);
+
+		 	Files.writeString(Paths.get(path), sourceFileContent);
+		 } catch (IOException e1) {
+
+		 	e1.printStackTrace();
+		 }
 
 		PutObjectResponse response = null;
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
@@ -539,6 +539,7 @@ public class TestScriptExecService {
 
 			/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
+			System.out.println("Uploaded to " + destinationFilePath);
 
 			log.info("Uploaded to " + destinationFilePath);
 			return response.toString();

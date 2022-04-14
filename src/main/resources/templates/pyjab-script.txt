@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
 url = 'http://winfo106.winfosolutions.com:8035/OA_HTML/AppsLocalLogin.jsp?'
 
-post_url = post_url = '[(${dto.scriptStatusUpdateUrl})]'
+post_url = '[(${dto.scriptStatusUpdateUrl})]'
 copy_url = '[(${dto.copiedValueUrl})]'
 
 
