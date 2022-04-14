@@ -681,64 +681,62 @@ public class TestScriptExecService {
 
 	}
 
+	public void deleteScreenshotsFromWindows(FetchConfigVO fetchConfigVO,List<FetchMetadataVO> fetchMetadataListVO)
+	{
+		File folder1 = new File(
+				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+						+ "\\" + fetchMetadataListVO.get(0).getTest_run_name());
+		if (!folder1.exists()) {
+		//	boolean result = false;
+			try {
+				folder1.mkdirs();
+			//	result = true;
+			} catch (SecurityException se) {
+				// handle it
+				System.out.println(se.getMessage());
+			}
+		} else {
+
+			File folder = new File(
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+							+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			if (folder.exists()) {
+				File[] listOfFiles = folder.listFiles();
+
+				for (File file : Arrays.asList(listOfFiles)) {
+
+					String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+					String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
+					if (seqNum.equalsIgnoreCase(seqnum1)) {
+						Path imagesPath = Paths.get(file.getPath());
+						try {
+							Files.delete(imagesPath);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+	}
 	public void generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
 
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 
-			final String uri = fetchConfigVO.getMETADATA_URL() + args.getTestSetId();
-
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
 					args.getTestSetLineId());
-
-			File folder1 = new File(
-					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
-							+ "\\" + fetchMetadataListVO.get(0).getTest_run_name());
-			if (!folder1.exists()) {
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-
-				File folder = new File(
-						fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
-								+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-				if (folder.exists()) {
-					File[] listOfFiles = folder.listFiles();
-
-					for (File file : Arrays.asList(listOfFiles)) {
-
-						String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-						String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
-						if (seqNum.equalsIgnoreCase(seqnum1)) {
-							Path imagesPath = Paths.get(file.getPath());
-							Files.delete(imagesPath);
-						}
-					}
-				}
-			}
-			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		
+			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 			String objectStore = fetchConfigVO.getScreenshot_path();
 			String[] arrOfStr = objectStore.split("/", 5);
-			String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path() + "/"
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name();
+			String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path() + "/"+ fetchMetadataListVO.get(0).getCustomer_name() + "/"+ fetchMetadataListVO.get(0).getTest_run_name();
 			objectStoreScreenShotPath = arrOfStr[3];
 			for (int i = 4; i < arrOfStr.length; i++) {
 				objectStoreScreenShotPath = objectStoreScreenShotPath + "/" + arrOfStr[i];
 			}
-
-			downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-					fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
-					fetchMetadataListVO.get(0).getSeq_num() + "_");
 
 			String script_id = fetchMetadataListVO.get(0).getScript_id();
 			String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -755,7 +753,6 @@ public class TestScriptExecService {
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 
-			Date startdate = new Date();
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
 
@@ -779,6 +776,9 @@ public class TestScriptExecService {
 				} catch (Exception e) {
 					System.out.println("e");
 				}
+				deleteScreenshotsFromWindows(fetchConfigVO,fetchMetadataListVO);
+				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
+						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,fetchMetadataListVO.get(0).getSeq_num()+"_");
 				createPdf(fetchMetadataListVO, fetchConfigVO,
 
 						fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
@@ -812,7 +812,9 @@ public class TestScriptExecService {
 				fetchConfigVO.setEndtime(enddate);
 				dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 				dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
-
+				deleteScreenshotsFromWindows(fetchConfigVO,fetchMetadataListVO);
+				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
+						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,fetchMetadataListVO.get(0).getSeq_num()+"_");
 				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				if (failedScriptRunCount == 1) {
