@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 // import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ScriptMaster;
@@ -315,6 +317,45 @@ public class DataBaseEntryDao {
 
 		return result;
 	}
+	
+	public   void getPassAndFailScriptCount( String testRunId,FetchConfigVO fetchConfigVO)  {
+		String sqlQuery="select count(status) from win_ta_test_set_lines where test_set_id="+testRunId+"and status='Fail'";
+		String sqlPassQuery="select count(status) from win_ta_test_set_lines where test_set_id="+testRunId+"and status='Pass'";
+
+			Session session = em.unwrap(Session.class);
+		
+		  Integer failCount = 0;
+		  Integer passCount = 0;
+			try {
+				NativeQuery<BigDecimal> query = session.createSQLQuery(sqlQuery);
+
+				List<BigDecimal> results = query.list();
+				if (results != null && !results.isEmpty()) {
+					
+					BigDecimal bigDecimal = results.get(0);
+					failCount = Integer.parseInt(bigDecimal.toString());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
+
+				List<BigDecimal> results1 = query1.list();
+				if (results1 != null && !results1.isEmpty()) {
+					
+					BigDecimal bigDecimal1 = results1.get(0);
+					passCount = Integer.parseInt(bigDecimal1.toString());
+				}
+				fetchConfigVO.setFailcount(failCount);
+				fetchConfigVO.setPasscount(passCount);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		  
+		  
+	}
 	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId)  {
 		 
 		List<FetchMetadataVO> listOfTestRunExecutionVo= new ArrayList<>();
@@ -363,7 +404,7 @@ public class DataBaseEntryDao {
 				+ "       AND wtp.customer_id = wtc.customer_id\r\n"
 				+ "       AND wtts.test_set_id="+testRunId+"\r\n"
 				+ "       AND wttsl.test_set_line_id="+testSetLineId+"\r\n"
-				+ "      and  (upper(status) in ('PASS','FAIL'))\r\n"
+				//+ "      and  (upper(status) in ('PASS','FAIL'))\r\n"
 				+ "      and wttsl.enabled = 'Y'\r\n"
 				+ "       order by\r\n"
 				+ "       wttsl.SEQ_NUM,\r\n"
@@ -390,7 +431,7 @@ public class DataBaseEntryDao {
 				testRunExecutionVO.setCustomer_name( NULL_STRING.equals(String.valueOf(obj[2]))? null:String.valueOf(obj[2]));
 				testRunExecutionVO.setProject_id(NULL_STRING.equals(String.valueOf(obj[3]))? null:String.valueOf(obj[3]));
 				testRunExecutionVO.setProject_name(  NULL_STRING.equals(String.valueOf(obj[4]))? null:String.valueOf(obj[4]));
-			//	testRunExecutionVO.setTestRunId(NULL_STRING.equals(String.valueOf(obj[5]))? null:String.valueOf(obj[5]));
+				testRunExecutionVO.setTest_set_id(NULL_STRING.equals(String.valueOf(obj[5]))? null:String.valueOf(obj[5]));
 				testRunExecutionVO.setTest_set_line_id(NULL_STRING.equals(String.valueOf(obj[6]))? null:String.valueOf(obj[6]));
 				testRunExecutionVO.setScript_id(NULL_STRING.equals(String.valueOf(obj[7]))? null:String.valueOf(obj[7]));
 				testRunExecutionVO.setScript_number( NULL_STRING.equals(String.valueOf(obj[8]))? null:String.valueOf(obj[8]));
