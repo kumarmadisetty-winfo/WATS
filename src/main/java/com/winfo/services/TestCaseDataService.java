@@ -13,7 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 
 @Service
-//@RefreshScope
+@RefreshScope
 public class TestCaseDataService {
 
 	Logger logger = LogManager.getLogger(TestCaseDataService.class);

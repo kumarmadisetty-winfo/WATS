@@ -35,7 +35,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +71,7 @@ import com.winfo.dao.VmInstanceDAO;
 import com.winfo.vo.TestScriptDto;
 
 @Service
-//@RefreshScope
+@RefreshScope
 public class VMDetailesService {
 	Logger log = Logger.getLogger("Logger");
 

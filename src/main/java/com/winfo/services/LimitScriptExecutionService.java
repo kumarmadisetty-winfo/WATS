@@ -30,7 +30,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import com.winfo.dao.LimitScriptExecutionDao;
@@ -38,7 +38,7 @@ import com.winfo.dao.VmInstanceDAO;
 import com.winfo.model.ExecutionAudit;
 
 @Service
-//@RefreshScope
+@RefreshScope
 public class LimitScriptExecutionService {
 	Logger log = Logger.getLogger("Logger");
 

@@ -1,7 +1,6 @@
 package com.winfo.config;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -13,9 +12,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import com.winfo.constants.BrowserConstants;
@@ -23,7 +21,7 @@ import com.winfo.constants.DriverConstants;
 import com.winfo.services.FetchConfigVO;
 
 @Component
-//@RefreshScope
+@RefreshScope
 public class DriverConfiguration {
 
 	@Value("${configvO.config_url}")

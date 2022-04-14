@@ -13,7 +13,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +25,7 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 
 @Service
-//@RefreshScope
+@RefreshScope
 @Transactional
 public class DataBaseEntry {
 	@Autowired
