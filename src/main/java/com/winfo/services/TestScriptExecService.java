@@ -110,6 +110,7 @@ import com.winfo.vo.UpdateScriptParamStatus;
 
 import org.apache.commons.io.FileUtils;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 public class TestScriptExecService {
 
@@ -652,8 +653,12 @@ public class TestScriptExecService {
 					.bucketName(bucketName).objectName(objectName).build());
 
 			String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
+			File file = new File(imagePath + imageName);
 			try (final InputStream stream = getResponse.getInputStream();
-					final OutputStream outputStream = new FileOutputStream(imagePath + imageName)) {
+				//	final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
+					 
+					final OutputStream outputStream = Files.newOutputStream(file.toPath(),CREATE_NEW)		
+					) {
 				// use fileStream
 				byte[] buf = new byte[8192];
 				int bytesRead;
