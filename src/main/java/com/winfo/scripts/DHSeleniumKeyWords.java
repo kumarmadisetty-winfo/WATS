@@ -18631,6 +18631,7 @@ screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO
 	//waittill.click();
 	Thread.sleep(3000);
 	WebElement selectValue = driver.findElement(By.xpath("//span[text()='"+keysToSend+"']"));
+	actions.moveToElement(selectValue).build().perform();	
 	actions.click(selectValue).perform();
 	//clickValidateXpath(driver, fetchMetadataVO, selectValue, fetchConfigVO);
 	//selectValue.click();
