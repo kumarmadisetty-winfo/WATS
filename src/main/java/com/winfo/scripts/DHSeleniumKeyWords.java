@@ -18584,15 +18584,50 @@ System.out.println(e);
 String scripNumber = fetchMetadataVO.getScript_number();
 log.error("Failed during sendValue" + scripNumber);
 screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
-}		
+}try {
+	if(param1.equalsIgnoreCase("Request Submission")) {
+	WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+	wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::a[1]")));
+	WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::a[1]"));
+	Actions actions = new Actions(driver);
+	actions.moveToElement(waittill).build().perform();
+	actions.click(waittill).perform();
+	//clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
+	//waittill.click();
+	Thread.sleep(3000);
+	WebElement selectValue = driver.findElement(By.xpath("//span[text()='"+keysToSend+"']"));
+	actions.click(selectValue).perform();
+	//clickValidateXpath(driver, fetchMetadataVO, selectValue, fetchConfigVO);
+	//selectValue.click();
+	/*
+	 * JavascriptExecutor jse = (JavascriptExecutor) driver;
+	 * jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+	 * tab(driver, fetchMetadataVO, fetchConfigVO);
+	 */
+	screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+	Thread.sleep(1000);
+	String scripNumber = fetchMetadataVO.getScript_number();
+	log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+	String xpath = "//input[@placeholder='param1']";
+	String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+	return keysToSend;
+	}
+} catch (Exception e) {
+	System.out.println(e);
+	String scripNumber = fetchMetadataVO.getScript_number();
+	log.error("Failed during sendValue" + scripNumber);
+	screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
+	}		
 try {
 WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
-WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
+wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::a[1]")));
+WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::a[1]"));
 Actions actions = new Actions(driver);
 actions.moveToElement(waittill).build().perform();
-waittill.sendKeys(keysToSend);
-//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+Thread.sleep(3000);
+WebElement selectValue = driver.findElement(By.xpath("//span[text()='"+keysToSend+"']"));
+actions.click(selectValue).perform();
+typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 Thread.sleep(1000);
 String scripNumber = fetchMetadataVO.getScript_number();
