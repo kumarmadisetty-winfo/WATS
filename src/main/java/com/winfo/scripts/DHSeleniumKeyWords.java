@@ -206,7 +206,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String param4 = "User name or email";
 			String param5 = "password";
 			//String param6 = "Sign In";
-			navigateOICUrl(driver, fetchConfigVO, fetchMetadataVO);
 			String xpath1 = oicLoginPage(driver, param4, keysToSend, fetchMetadataVO, fetchConfigVO);
 			String xpath2 = oicLoginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
