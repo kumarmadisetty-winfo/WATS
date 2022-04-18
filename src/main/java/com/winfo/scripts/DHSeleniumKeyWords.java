@@ -190,6 +190,35 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
+	
+	public void loginSSO(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value) throws Exception {
+		
+			navigateUrl(driver, fetchConfigVO, fetchMetadataVO);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("//button[text()='Company Single Sign-On']")));
+			WebElement waittill = driver.findElement(By.xpath("//button[text()='Company Single Sign-On']"));
+			waittill.click();
+			Thread.sleep(7000);
+			
+			String param4 = "User name or email";
+			String param5 = "password";
+			//String param6 = "Sign In";
+			navigateOICUrl(driver, fetchConfigVO, fetchMetadataVO);
+			String xpath1 = oicLoginPage(driver, param4, keysToSend, fetchMetadataVO, fetchConfigVO);
+			String xpath2 = oicLoginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(10000);
+			if(xpath2.equalsIgnoreCase(null)) {
+			throw new IOException("Failed during login page");
+			}
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = xpath1 + ";" + xpath2;
+			String scriptID=fetchMetadataVO.getScript_id();
+			String metadataID=fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID,metadataID,xpath);
+			}
 
 	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
