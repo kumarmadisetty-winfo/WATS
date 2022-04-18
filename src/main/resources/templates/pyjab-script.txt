@@ -116,7 +116,7 @@ def get_xpath(name, tagname):
     elif tagname == 'b' :
         xpath += f'b[contains(text(),"{name}")]'
     elif tagname == 'btnWParama':
-        xpath += '//*[text()="{name}"]/following::img[1]'
+        xpath += f'//*[text()="{name}"]/following::img[1]'
     else :
         xpath += f'*[text()="{name}"]'
     return xpath
