@@ -169,7 +169,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public WebElement fromElement;
 	public WebElement toElement;
 
-	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginApplication1(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		String param5 = "password";
@@ -191,7 +191,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 	
-	public void loginSSO(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		
