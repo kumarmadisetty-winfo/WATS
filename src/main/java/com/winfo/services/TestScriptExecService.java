@@ -512,7 +512,7 @@ public class TestScriptExecService {
 
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
 		 try {
-		 	String path = "C:\\wats\\java-generated-scripts" + destinationFilePath.split(FORWARD_SLASH)[3];
+		 	String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
 		 	System.out.println("%%%%%%%%%%");
 
 		 	System.out.println(path);
