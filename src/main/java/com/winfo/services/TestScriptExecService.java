@@ -210,15 +210,6 @@ public class TestScriptExecService {
 			}
 			executordependent.shutdown();
 
-			// final reports generation
-			dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(testSetId));
-			dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
-			Date date1 = new Date();
-			fetchConfigVO.setEndtime(date1);
-			createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
-			createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
-			createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
-
 			executeTestrunVo.setStatusCode(200);
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
@@ -342,7 +333,8 @@ public class TestScriptExecService {
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
-			dataBaseEntry.updateStatusOfScript(test_set_id, test_set_line_id, TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel());
+			dataBaseEntry.updateStatusOfScript(test_set_id, test_set_line_id,
+					TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel());
 			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
 					screenShotFolderPath, objectStoreScreenShotPath));
 		} catch (Exception e) {
@@ -390,6 +382,7 @@ public class TestScriptExecService {
 		String value;
 		String index = "";
 		List<String> listArgs = new ArrayList<>();
+
 
 		if (paramValue != null) {
 			HashMap<String, Object> result = new ObjectMapper().readValue(paramValue, HashMap.class);
@@ -513,17 +506,17 @@ public class TestScriptExecService {
 	}
 
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
-		 try {
-		 	String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-		 	System.out.println("%%%%%%%%%%");
+		try {
+			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+			System.out.println("%%%%%%%%%%");
 
-		 	System.out.println(path);
+			System.out.println(path);
 
-		 	Files.write(Paths.get(path), sourceFileContent.getBytes());
-		 } catch (IOException e1) {
+			Files.write(Paths.get(path), sourceFileContent.getBytes());
+		} catch (IOException e1) {
 
-		 	e1.printStackTrace();
-		 }
+			e1.printStackTrace();
+		}
 
 		PutObjectResponse response = null;
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
@@ -720,11 +713,18 @@ public class TestScriptExecService {
 
 	public void generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
+			if(args.isManualTrigger()) {
+				Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());	
+				if(scriptStatus==null) {
+					return;
+				}
+				args.setSuccess(scriptStatus);
+			}
 
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
-					args.getTestSetLineId());
+					args.getTestSetLineId(),false);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
@@ -856,6 +856,19 @@ public class TestScriptExecService {
 							"Fail", new Date(), enddate);
 					// break;
 				}
+			}
+
+			// final reports generation
+			boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(args.getTestSetId()));
+			if (runFinalPdf) {
+				List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
+						args.getTestSetLineId(),runFinalPdf);
+				dataBaseEntry.setPassAndFailScriptCount(args.getTestSetId(), fetchConfigVO);
+				Date date1 = new Date();
+				fetchConfigVO.setEndtime(date1);
+				createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
+				createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
+				createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
 			}
 
 		} catch (Exception e) {

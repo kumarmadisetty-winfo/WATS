@@ -443,7 +443,7 @@ def ebsEnterSearchTextField(xpath_param, value, path_to_screenhot, scriptParamId
         time.sleep(10)
         selenium_driver.switch_to_frame(f'Search and Select: {xpath_param1}')           
         selenium_driver.find_element_by_xpath(f'(//*[text()="{value}"]/preceding::input[@type="radio"])[1]').click() 
-        ebsButtonClick('Select', path_to_screenhot)
+        ebsButtonClick('Select', path_to_screenhot,scriptParamId)
         selenium_driver.switch_to_default_content()
         trycounter = 3
         time.sleep(2)

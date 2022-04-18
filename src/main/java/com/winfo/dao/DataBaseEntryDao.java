@@ -373,10 +373,15 @@ public class DataBaseEntryDao {
 		  
 		  
 	}
-	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId)  {
+	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId,boolean finalPdf)  {
 		 
 		List<FetchMetadataVO> listOfTestRunExecutionVo= new ArrayList<>();
-		 
+		String whereClause =  "       AND wttsl.test_set_line_id="+testSetLineId+"\r\n";
+		
+		if(finalPdf) {
+			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
+		}
+		
 	    String sqlQuery = "SELECT wtp.customer_id,\r\n"
 				+ "           wtc.customer_number,\r\n"
 				+ "           wtc.customer_name,\r\n"
@@ -420,8 +425,7 @@ public class DataBaseEntryDao {
 				+ "       AND wtts.project_id = wtp.project_id\r\n"
 				+ "       AND wtp.customer_id = wtc.customer_id\r\n"
 				+ "       AND wtts.test_set_id="+testRunId+"\r\n"
-				+ "       AND wttsl.test_set_line_id="+testSetLineId+"\r\n"
-				//+ "      and  (upper(status) in ('PASS','FAIL'))\r\n"
+				+ whereClause
 				+ "      and wttsl.enabled = 'Y'\r\n"
 				+ "       order by\r\n"
 				+ "       wttsl.SEQ_NUM,\r\n"
@@ -489,6 +493,19 @@ public class DataBaseEntryDao {
 		
 	} 
 	   
+	public ArrayList<String> getStepsStatusByScriptId(int testSetLineId) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
+
+		Predicate condition = cb.equal(from.get("testSetLines").get("test_set_line_id"), testSetLineId);
+		cq.where(condition);
+		Query query = em.createQuery(cq.select(from.get("line_execution_status")));
+		ArrayList<String> result = (ArrayList<String>) query.getResultList();
+
+		return result;
+	}
 		
 	
 }

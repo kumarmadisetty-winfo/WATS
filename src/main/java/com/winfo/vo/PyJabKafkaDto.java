@@ -6,7 +6,10 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class PyJabKafkaDto implements Serializable {
 	/**
 	 * 
@@ -22,6 +25,7 @@ public class PyJabKafkaDto implements Serializable {
 	private Date startDate;
 	private String localScreenshotPath;
 	private String obJectStoreScreenshotPath;
+	private boolean manualTrigger;
 	
 	public PyJabKafkaDto() {
 	}
@@ -92,6 +96,16 @@ public class PyJabKafkaDto implements Serializable {
 
 	public void setObJectStoreScreenshotPath(String obJectStoreScreenshotPath) {
 		this.obJectStoreScreenshotPath = obJectStoreScreenshotPath;
+	}
+
+
+	public boolean isManualTrigger() {
+		return manualTrigger;
+	}
+
+
+	public void setManualTrigger(boolean manualTrigger) {
+		this.manualTrigger = manualTrigger;
 	}
 
 }

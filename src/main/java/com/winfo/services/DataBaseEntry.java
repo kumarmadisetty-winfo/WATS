@@ -2,15 +2,9 @@ package com.winfo.services;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -19,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.ScriptMaster;
-import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 
 @Service
@@ -61,10 +55,10 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 	}
-	
-	public void updateStatusOfScript( String test_set_id, String test_set_line_id,String status)
+
+	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
 			throws ClassNotFoundException, SQLException {
-		dao.updateStatusOfScript( test_set_id, test_set_line_id,status);
+		dao.updateStatusOfScript(test_set_id, test_set_line_id, status);
 	}
 
 	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
@@ -134,46 +128,38 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId) {
-		return dao.getMetaDataVOList(testRunId, testSetLineId);
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf) {
+		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf);
 	}
+
 	@Transactional
-	public   void setPassAndFailScriptCount( String testRunId,FetchConfigVO fetchConfigVO){
-		  dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
+	public void setPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
+		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
 	}
-	
 
 	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
 		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId);
-		Calendar cal = Calendar.getInstance(); // creates calendar
-		cal.setTime(new Date()); // sets calendar time/date
-		cal.add(Calendar.HOUR_OF_DAY, 2); // adds one hour
-		Date endDate = cal.getTime();
 
-		Date startDate = new Date();
+		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
 
-		while (result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.NEW.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
-			startDate = new Date();
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			result = dao.getTestSetLinesStatusByTestSetId(testSetId);
-			System.out.println("here");
-			if (startDate.after(endDate)) {
-				break;
-			}
-		}
-
-		return true;
 	}
 
 	public String getTestSetMode(Long testSetId) {
 		return dao.getTestSetMode(testSetId);
 
+	}
+
+	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
+		ArrayList<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+			return false;
+		} else if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+			return null;
+		} else {
+			return true;
+		}
 	}
 
 }
