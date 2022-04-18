@@ -162,4 +162,7 @@ public class DataBaseEntry {
 		}
 	}
 
+	public Date getExecStartDateOfScript(String testSetId,String testSetLineId) {
+		return dao.getScript(Integer.valueOf(testSetId),Integer.valueOf(testSetLineId)).getExecution_start_time();
+	}
 }

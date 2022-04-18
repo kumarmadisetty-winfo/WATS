@@ -721,6 +721,7 @@ public class TestScriptExecService {
 				args.setSuccess(scriptStatus);
 			}
 
+			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(),args.getTestSetLineId()));
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
