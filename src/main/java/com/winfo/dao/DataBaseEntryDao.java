@@ -141,6 +141,23 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
+	
+	public void updateStatusOfScript( String test_set_id, String test_set_line_id,String status)
+			throws ClassNotFoundException, SQLException {
+		try {
+			TestSetLines testLines = em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+
+			/* if(testLines==null) { throw new RuntimeException(); } */
+			if (testLines != null) {
+				testLines.setStatus(status);
+				em.merge(testLines);
+			}
+		} catch (Exception e) {
+			System.out.println("cant update script status to - "+status);
+			System.out.println(e);
+		}
+	}
+
 
 	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
 			throws ClassNotFoundException, SQLException {

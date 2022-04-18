@@ -61,6 +61,11 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 	}
+	
+	public void updateStatusOfScript( String test_set_id, String test_set_line_id,String status)
+			throws ClassNotFoundException, SQLException {
+		dao.updateStatusOfScript( test_set_id, test_set_line_id,status);
+	}
 
 	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
 			throws ClassNotFoundException, SQLException {

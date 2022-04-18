@@ -102,6 +102,7 @@ import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.EBSSeleniumKeyWords;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.ExecuteTestrunVo;
 import com.winfo.vo.PyJabKafkaDto;
@@ -341,6 +342,7 @@ public class TestScriptExecService {
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
+			dataBaseEntry.updateStatusOfScript(test_set_id, test_set_line_id, TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel());
 			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
 					screenShotFolderPath, objectStoreScreenShotPath));
 		} catch (Exception e) {
