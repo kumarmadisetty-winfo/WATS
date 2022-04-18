@@ -86,6 +86,8 @@ def options():
 def get_xpath(name, tagname):
     if len(name.split('>')) > 1 :
         name1 = name.split('>')[0]
+        if len(name.split('>')) > 2 :
+            name2 = name.split('>')[1]
         name = name.split('>')[-1]
         xpath = f'//*[text()="{name1}"]//following::'
     else :
@@ -116,7 +118,9 @@ def get_xpath(name, tagname):
     elif tagname == 'b' :
         xpath += f'b[contains(text(),"{name}")]'
     elif tagname == 'btnWParama':
-        xpath += f'//*[text()="{name}"]/following::img[1]'
+        xpath += f'*[text()="{name}"]/following::a[1]'
+        #xpath += f'*[text()="{name}"]/following::img[@title="{name2}"][1]'
+        print(xpath)
     else :
         xpath += f'*[text()="{name}"]'
     return xpath
@@ -1015,12 +1019,14 @@ def ebsCLickButtonWithParam(xpath_param, input_value, path_to_screenhot, scriptP
     trycounter = 0
     while trycounter < 3 :
         try :
-            trycounter += 1 
-            xpath_param += '>' + str(input_value)
-            xpath = get_xpath(xpath_param, 'btnWParama')
+            trycounter += 1
+            input_value = getCopiedValue(input_value)
+            #xpath_param += '>' + str(input_value)
+            print(xpath_param + str(input_value))
+            xpath = get_xpath(xpath_param + '>' +str(input_value), 'btnWParama')
             _wait_until_element_is_found(xpath)
             xpath_field = selenium_driver.find_element_by_xpath(xpath)
-            xpath_field.send_keys(input_value)
+            xpath_field.click()
             trycounter = 3
             time.sleep(2)
             take_screeshot_as_jpg(path_to_screenhot + _passed)
