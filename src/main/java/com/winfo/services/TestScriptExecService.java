@@ -188,7 +188,7 @@ public class TestScriptExecService {
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				System.out.println(" Running Independent - " + metaData.getKey());
-				executorMethodPyJab(testSetId, fetchConfigVO, fetchMetadataListVO, metaData);
+				executorMethodPyJab(testSetId, fetchConfigVO, metaData);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
@@ -197,11 +197,11 @@ public class TestScriptExecService {
 				executordependent.execute(() -> {
 					try {
 						boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
-								fetchMetadataListVO.get(0).getScript_id());
+								metaData.getValue().get(0).getScript_id());
 						log.info(
-								" Dependant Script run status" + fetchMetadataListVO.get(0).getScript_id() + " " + run);
+								" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
 						if (run) {
-							executorMethodPyJab(testSetId, fetchConfigVO, fetchMetadataListVO, metaData);
+							executorMethodPyJab(testSetId, fetchConfigVO,  metaData);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -219,7 +219,7 @@ public class TestScriptExecService {
 		return executeTestrunVo;
 	}
 
-	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
+	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO, 
 			Entry<Integer, List<FetchMetadataVO>> metaData) throws Exception {
 
 		try {
