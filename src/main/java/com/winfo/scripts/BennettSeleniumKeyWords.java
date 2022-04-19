@@ -132,10 +132,10 @@ import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
-@Service("BENNET")
+@Service("BENNETT")
 //@Service("WATS")
 @RefreshScope
-public class BennetSeleniumKeyWords implements SeleniumKeyWordsInterface {
+public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
 	private DataBaseEntry databaseentry;
