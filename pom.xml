@@ -1120,7 +1120,93 @@
 
 		</profile>
 		
-		
+		<profile>
+			<id>lumentum</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>wats</finalName>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>Images/</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+
+
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>lumentum</profiles>
+				<instance>lumentum</instance>
+				
+				
+				
+			</properties>
+
+		</profile>		
 		
 		<profile>
 			<id>wats01</id>
