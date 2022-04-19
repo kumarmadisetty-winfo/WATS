@@ -13547,6 +13547,34 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// OTL.004 DH
+		try {
+
+			if (param1.equalsIgnoreCase("Create Shift") && (param2.equalsIgnoreCase("Resource"))) {
+	            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+	            wait.until(ExpectedConditions.presenceOfElementLocated(
+	            By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]")));
+	            WebElement waittext = driver
+	            .findElement(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]"));
+	            Actions actions = new Actions(driver);
+	            actions.moveToElement(waittext).build().perform();
+	            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+	            waittext.click();
+	            Thread.sleep(3000);
+
+	          	                  WebElement select = driver
+	          	                  .findElement(By.xpath("//li[contains(text(), '" +keysToSend+ "')]"));
+	          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+	          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+	          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+	          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+	          	                  return;
+	          	                  }}
+	          	           catch (Exception e) {
+	          	                  String scripNumber = fetchMetadataVO.getScript_number();
+	          	                  log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+	          	                  System.out.println(e);
+	          	                  }
 		
 		//DH 55
 		try {
