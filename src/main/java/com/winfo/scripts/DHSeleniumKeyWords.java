@@ -13356,6 +13356,34 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//OB.9 DH
+				try {
+
+				if (param1.equalsIgnoreCase("Schedules") && (param2.equalsIgnoreCase("Primary"))) {
+		            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		            wait.until(ExpectedConditions.presenceOfElementLocated(
+		            By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "']/ancestor::span//input)[1]")));
+		            WebElement waittext = driver
+		            .findElement(By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "']/ancestor::span//input)[1]"));
+		            Actions actions = new Actions(driver);
+		            actions.moveToElement(waittext).build().perform();
+		            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		            waittext.click();
+		            Thread.sleep(3000);
+
+		          	                  WebElement select = driver
+		          	                  .findElement(By.xpath("//*[text()='" +keysToSend+ "']"));
+		          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+		          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+		          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+		          	                  return;
+		          	                  }}
+		          	           catch (Exception e) {
+		          	                  String scripNumber = fetchMetadataVO.getScript_number();
+		          	                  log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+		          	                  System.out.println(e);
+		          	                  }
 		//dh 8
 		try {if (param2.equalsIgnoreCase("Type")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
