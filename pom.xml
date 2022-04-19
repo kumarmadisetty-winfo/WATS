@@ -1521,7 +1521,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>wats</finalName>
+				<finalName>wats_lumentum</finalName>
 
 				<plugins>
 
