@@ -113,6 +113,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -123,6 +124,7 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -2023,6 +2025,10 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Timestamp startTimestamp = new Timestamp(TStarttime.getTime());
 				Timestamp endTimestamp = new Timestamp(Tendtime.getTime());
 
+				Map<String, Map<String, TestSetScriptParam>> descriptionList = databaseentry.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
+
+				
+
 				Map<Date, Long> timeslist = limitScriptExecutionService
 						.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
 				if (timeslist.size() == 0) {
@@ -2331,13 +2337,25 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String SNM = "Scenario Name";
 					String ScriptName = image.split("_")[2];
 					String testRunName = image.split("_")[4];
+					
+					
+					
+					//String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
+					//String inputParam = descriptionList.get(sno).get(Reason).getInput_parameter();
+					//String inputValue = fetchMetadataListVO.get(metadataCounter).getInput_value();
+					//String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+					//metadataCounter++;
+					
+					
+					
 //				String scrtipt=;
 					if (!sno.equalsIgnoreCase(sno1)) {
 						document.setPageSize(img);
 						document.newPage();
 						document.add(img1);
 						Anchor target3 = new Anchor("Script Details", bf12);
-						target3.setName(ScriptNumber);
+						target3.setName(sno+"_"+ScriptNumber);
 						Paragraph pa = new Paragraph();
 						pa.add(target3);
 //						pa.setAlignment(Element.ALIGN_CENTER);
@@ -2380,6 +2398,11 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //				String SN = "Script Number:" + " " + ScriptNumber;
 
 					String Scenarios = "Scenario Name :" + "" + Scenario;
+					Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
+					Phrase scenarioPhrase = new Phrase();
+					scenarioPhrase.add(scenarioChunk);
+					scenarioPhrase.add(scenarioChunk2);
 
 					String sndo = image.split("_")[0];
 					img1.scalePercent(65, 68);
@@ -2396,26 +2419,110 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.newPage();
 					}
 					document.add(img1);
-					document.add(new Paragraph(Scenarios, fnt));
+					document.add(new Paragraph(scenarioPhrase));
 					String Reason = image.split("_")[5];
 					String step = "Step No :" + "" + Reason;
+					Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					Chunk stepChunk2 = new Chunk(Reason,fnt);
+					Phrase stepPhrase = new Phrase();
+					stepPhrase.add(stepChunk);
+					stepPhrase.add(stepChunk2);
+					
+					
+					
 					String Message = "Failed at Line Number:" + "" + Reason;
 					// new change-database to get error message
+					Chunk messageChunk = new Chunk("Failed at Line Number: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					Chunk messageChunk2 = new Chunk(Reason,fnt);
+					Phrase messagePhrase = new Phrase();
+					messagePhrase.add(messageChunk);
+					messagePhrase.add(messageChunk2);
+					
+					
+					
+					
 					String error = databaseentry.getErrorMessage(sndo, ScriptNumber, testRunName, fetchConfigVO);
 					String errorMessage = "Failed Message:" + "" + error;
+					Chunk errorMessageChunk = new Chunk("Failed Message: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
+					Phrase errorMessagePhrase = new Phrase();
+					errorMessagePhrase.add(errorMessageChunk);
+					errorMessagePhrase.add(errorMessageChunk2);
+					
+					String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
+					String inputParam = descriptionList.get(sno).get(Reason).getInput_parameter();
+					//String inputValue = fetchMetadataListVO.get(metadataCounter).getInput_value();
+					String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+					//metadataCounter++;
+		
+					Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					//Chunk statusChunk2 = new Chunk(status,fnt);
+					Phrase statusPhrase = new Phrase();
+					statusPhrase.add(statusChunk);
+					//statusPhrase.add(statusChunk2);
+					
+					
+					
+					
 					Paragraph pr1 = new Paragraph();
-					pr1.add("Status:");
+					pr1.add(statusPhrase);
 
 					if (image.startsWith(sndo + "_") && image.contains("Failed")) {
 						Anchor target1 = new Anchor(status);
+						
 						target1.setName(String.valueOf(status + j));
+						//Chunk chunk = new Chunk(target1);
+						//statusPhrase.add(target1);
 						j++;
 						pr1.add(target1);
 						document.add(pr1);
-						document.add(new Paragraph(Message, fnt));
+						document.add(new Paragraph(messagePhrase));
 						if (error != null) {
-							document.add(new Paragraph(errorMessage, fnt));
+							document.add(new Paragraph(errorMessagePhrase));
 						}
+						if(stepDescription!=null) {
+							
+							Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+							Phrase phraseDesc = new Phrase();
+							phraseDesc.add(stepDeschunk);
+							phraseDesc.add(stepDeschunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph stepDesc = new Paragraph();
+							stepDesc.add(phraseDesc);
+							document.add(stepDesc);
+						}
+
+						if(inputParam!=null) {
+							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+							Phrase phraseinputParam = new Phrase();
+							phraseinputParam.add(inputparamchunk);
+							phraseinputParam.add(inputparamchunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph paraInputParam = new Paragraph();
+							paraInputParam.add(phraseinputParam);
+							document.add(paraInputParam);
+							    if(inputValue!=null) {
+							    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+									Phrase phraseinputVal = new Phrase();
+									phraseinputVal.add(inputvalchunk);
+									phraseinputVal.add(inputvalchunk2);
+									
+									//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									//stepDesc.add(new Chunk(stepDescription, fnt));
+									Paragraph paraInputVal = new Paragraph();
+									paraInputVal.add(phraseinputVal);
+									document.add(paraInputVal);
+							    }
+						}
+
 						document.add(Chunk.NEWLINE);
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
@@ -2424,15 +2531,60 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						document.add(img);
 
 					} else {
-						document.add(new Paragraph(step, fnt));
+						document.add(new Paragraph(stepPhrase));
+						if(stepDescription!=null) {
+							
+							Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+							Phrase phraseDesc = new Phrase();
+							phraseDesc.add(stepDeschunk);
+							phraseDesc.add(stepDeschunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph stepDesc = new Paragraph();
+							stepDesc.add(phraseDesc);
+							document.add(stepDesc);
+						}
+
+						if(inputParam!=null) {
+							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+							Phrase phraseinputParam = new Phrase();
+							phraseinputParam.add(inputparamchunk);
+							phraseinputParam.add(inputparamchunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph paraInputParam = new Paragraph();
+							paraInputParam.add(phraseinputParam);
+							document.add(paraInputParam);
+							    if(inputValue!=null) {
+							    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+									Phrase phraseinputVal = new Phrase();
+									phraseinputVal.add(inputvalchunk);
+									phraseinputVal.add(inputvalchunk2);
+									
+									//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									//stepDesc.add(new Chunk(stepDescription, fnt));
+									Paragraph paraInputVal = new Paragraph();
+									paraInputVal.add(phraseinputVal);
+									document.add(paraInputVal);
+							    }
+						}
+
 						Anchor target1 = new Anchor(status);
+						
 						target1.setName(String.valueOf(status));
+						//statusPhrase.add(target1);
+						//j++;
 						pr1.add(target1);
 						document.add(pr1);
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
 						// new change-change page size
-						img.scalePercent(60, 68);
+						img.scalePercent(51, 51);
 						document.add(img);
 					}
 
@@ -2477,6 +2629,10 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String EndTime = endtime1;
 					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
 
+					Map<String, TestSetScriptParam> map = databaseentry.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
+					
+					
+					
 					String TR = "Test Run Name";
 					String SN = "Script Number";
 					String SN1 = "Scenario name";
@@ -2527,18 +2683,97 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						String status = Status.split("\\.")[0];
 						String Scenario = image.split("_")[2];
 						String steps = image.split("_")[5];
+						
+					
+						
 						document.setPageSize(img);
 						document.newPage();
 
 						String S = "Status:" + " " + status;
+						Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk statusChunk2 = new Chunk(status,fnt);
+						Phrase statusPhrase = new Phrase();
+						statusPhrase.add(statusChunk);
+						statusPhrase.add(statusChunk2);
+						
 						String Scenarios = "Scenario Name :" + "" + Scenario;
+						Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
+						Phrase scenarioPhrase = new Phrase();
+						scenarioPhrase.add(scenarioChunk);
+						scenarioPhrase.add(scenarioChunk2);
+						
+						
 						String step = "Step No :" + "" + steps;
+						Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk stepChunk2 = new Chunk(steps,fnt);
+						Phrase stepPhrase = new Phrase();
+						stepPhrase.add(stepChunk);
+						stepPhrase.add(stepChunk2);
+						
+						
+						
+						
+						
+						
+						String stepDescription = map.get(steps).getTest_run_param_desc(); 
+						//String inputParam = fetchMetadataListVO.get(metaDataCounter).getInput_parameter();
+						String inputParam = map.get(steps).getInput_parameter();
+						//String inputValue = fetchMetadataListVO.get(metaDataCounter).getInput_value();
+						String inputValue = map.get(steps).getInput_value();
+						
+						
+						
 						img1.scalePercent(65, 65);
 						img1.setAlignment(Image.ALIGN_RIGHT);
 						document.add(img1);
-						document.add(new Paragraph(S, fnt));
-						document.add(new Paragraph(Scenarios, fnt));
-						document.add(new Paragraph(step, fnt));
+						document.add(new Paragraph(statusPhrase));
+						document.add(new Paragraph(scenarioPhrase));
+						document.add(new Paragraph(stepPhrase));
+						
+						if(stepDescription!=null) {
+							
+							Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+							Phrase phraseDesc = new Phrase();
+							phraseDesc.add(stepDeschunk);
+							phraseDesc.add(stepDeschunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph stepDesc = new Paragraph();
+							stepDesc.add(phraseDesc);
+							document.add(stepDesc);
+						}
+
+						if(inputParam!=null) {
+							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+							Phrase phraseinputParam = new Phrase();
+							phraseinputParam.add(inputparamchunk);
+							phraseinputParam.add(inputparamchunk2);
+							
+							//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							//stepDesc.add(new Chunk(stepDescription, fnt));
+							Paragraph paraInputParam = new Paragraph();
+							paraInputParam.add(phraseinputParam);
+							document.add(paraInputParam);
+							    if(inputValue!=null) {
+							    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+									Phrase phraseinputVal = new Phrase();
+									phraseinputVal.add(inputvalchunk);
+									phraseinputVal.add(inputvalchunk2);
+									
+									//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+									//stepDesc.add(new Chunk(stepDescription, fnt));
+									Paragraph paraInputVal = new Paragraph();
+									paraInputVal.add(phraseinputVal);
+									document.add(paraInputVal);
+							    }
+						}
+						
+
 						document.add(Chunk.NEWLINE);
 
 						Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
@@ -2546,7 +2781,7 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						img.setAlignment(Image.ALIGN_CENTER);
 						img.isScaleToFitHeight();
 						// new change-change page size
-						img.scalePercent(60, 62);
+						img.scalePercent(51, 51);
 						document.add(img);
 						document.add(p);
 						System.out.println("This Image " + "" + image + "" + "was added to the report");
@@ -2934,6 +3169,127 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	/*
+	 * public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO,
+	 * FetchConfigVO fetchConfigVO, String pdffileName, Date Starttime, Date
+	 * endtime) throws IOException, DocumentException,
+	 * com.itextpdf.text.DocumentException { try { String Date =
+	 * DateUtils.getSysdate(); String Folder = (fetchConfigVO.getPdf_path() +
+	 * fetchMetadataListVO.get(0).getCustomer_name() + "/" +
+	 * fetchMetadataListVO.get(0).getTest_run_name() + "/"); String FILE = (Folder +
+	 * pdffileName); System.out.println(FILE); List<String> fileNameList = null; if
+	 * ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) { // fileNameList =
+	 * getPassedPdfNew(fetchMetadataListVO, fetchConfigVO); } else if
+	 * ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) { // fileNameList =
+	 * getFailedPdfNew(fetchMetadataListVO, fetchConfigVO); } if
+	 * ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) { fileNameList =
+	 * getDetailPdfNew(fetchMetadataListVO, fetchConfigVO); } else { fileNameList =
+	 * getFailFileNameListNew(fetchMetadataListVO, fetchConfigVO); }
+	 * 
+	 * String Script_Number = fetchMetadataListVO.get(0).getScript_number(); String
+	 * customer_Name = fetchMetadataListVO.get(0).getCustomer_name(); String
+	 * test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name(); String
+	 * Scenario_Name = fetchMetadataListVO.get(0).getScenario_name(); // new change
+	 * add ExecutedBy field String ExecutedBy =
+	 * fetchMetadataListVO.get(0).getExecuted_by(); String ScriptDescription1 =
+	 * fetchMetadataListVO.get(0).getScenario_name(); File theDir = new
+	 * File(Folder); if (!theDir.exists()) {
+	 * System.out.println("creating directory: " + theDir.getName()); boolean result
+	 * = false; try { theDir.mkdirs(); result = true; } catch (SecurityException se)
+	 * { // handle it System.out.println(se.getMessage()); } } else {
+	 * System.out.println("Folder exist"); } Font bf12 =
+	 * FontFactory.getFont("Arial", 23);
+	 * System.out.println("before enter Images/wats_icon.png"); Image img1 =
+	 * Image.getInstance(watslogo);
+	 * System.out.println("after enter Images/wats_icon.png"); img1.scalePercent(65,
+	 * 68); img1.setAlignment(Image.ALIGN_RIGHT); Font bfBold12 =
+	 * FontFactory.getFont("Arial", 23); String Report = "Execution Report"; Font
+	 * fnt = FontFactory.getFont("Arial", 12); SimpleDateFormat dateFormat = new
+	 * SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa"); String Starttime1 =
+	 * dateFormat.format(Starttime); String endtime1 = dateFormat.format(endtime);
+	 * long diff = endtime.getTime() - Starttime.getTime(); long diffSeconds = diff
+	 * / 1000 % 60; long diffMinutes = diff / (60 * 1000) % 60; long diffHours =
+	 * diff / (60 * 60 * 1000); Document document = new Document();
+	 * PdfWriter.getInstance(document, new FileOutputStream(FILE)); Rectangle one =
+	 * new Rectangle(1360, 800); document.setPageSize(one); document.open(); String
+	 * TestRun = test_Run_Name; String ScriptNumber = Script_Number; String error =
+	 * fetchConfigVO.getErrormessage(); String ScriptNumber1 = Scenario_Name; String
+	 * Scenario1 = fetchConfigVO.getStatus1(); // String
+	 * ExecutedBy=fetchConfigVO.getApplication_user_name(); String StartTime =
+	 * Starttime1; String EndTime = endtime1; String ExecutionTime = diffHours + ":"
+	 * + diffMinutes + ":" + diffSeconds;
+	 * 
+	 * String TR = "Test Run Name"; String SN = "Script Number"; String SN1 =
+	 * "Scenario Name"; String Scenarios1 = "Status "; String showErrorMessage =
+	 * "	ErrorMessage "; String EB = "Executed By"; String ST = "Start Time";
+	 * String ET = "End Time"; String EX = "Execution Time";
+	 * 
+	 * document.add(img1);
+	 * 
+	 * document.add(new Paragraph(Report, bfBold12)); document.add(Chunk.NEWLINE);
+	 * PdfPTable table1 = new PdfPTable(2); table1.setWidths(new int[] { 1, 1 });
+	 * table1.setWidthPercentage(100f);
+	 * 
+	 * insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12); insertCell(table1,
+	 * TestRun, Element.ALIGN_LEFT, 1, bf12); insertCell(table1, SN,
+	 * Element.ALIGN_LEFT, 1, bf12); insertCell(table1, ScriptNumber,
+	 * Element.ALIGN_LEFT, 1, bf12); insertCell(table1, SN1, Element.ALIGN_LEFT, 1,
+	 * bf12); insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
+	 * insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
+	 * insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
+	 * insertCell(table1, showErrorMessage, Element.ALIGN_LEFT, 1, bf12);
+	 * insertCell(table1, error, Element.ALIGN_LEFT, 1, bf12); insertCell(table1,
+	 * EB, Element.ALIGN_LEFT, 1, bf12); insertCell(table1, ExecutedBy,
+	 * Element.ALIGN_LEFT, 1, bf12); insertCell(table1, ST, Element.ALIGN_LEFT, 1,
+	 * bf12); insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
+	 * insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12); insertCell(table1,
+	 * EndTime, Element.ALIGN_LEFT, 1, bf12); insertCell(table1, EX,
+	 * Element.ALIGN_LEFT, 1, bf12); insertCell(table1, ExecutionTime,
+	 * Element.ALIGN_LEFT, 1, bf12); document.add(table1); document.newPage(); //End
+	 * to add Script level details // Start to add screenshoots and pagenumbers and
+	 * wats icon int i = 0; for (String image : fileNameList) { i++; Image img =
+	 * Image.getInstance( fetchConfigVO.getScreenshot_path() + customer_Name + "/" +
+	 * test_Run_Name + "/" + image);
+	 * 
+	 * // String ScriptNumber = image.split("_")[3]; // String TestRun =
+	 * image.split("_")[4]; String Status = image.split("_")[6]; String status =
+	 * Status.split("\\.")[0]; String Scenario = image.split("_")[2];
+	 * 
+	 * if (status.equalsIgnoreCase("Failed")) {// Rectangle one2 = new
+	 * Rectangle(1360,1000); document.setPageSize(one); document.newPage(); } else {
+	 * 
+	 * document.setPageSize(img); document.newPage(); }
+	 * 
+	 * document.add(img1); String Reason = image.split("_")[5]; // String TR =
+	 * "Test Run Name:" + " " + TestRun; // String SN = "Script Number:" + " " +
+	 * ScriptNumber; String S = "Status:" + " " + status; String step = "Step No :"
+	 * + "" + Reason; String Scenarios = "Scenario Name :" + "" + Scenario; String
+	 * Message = "Failed at Line Number:" + "" + Reason; String errorMessage =
+	 * "Failed Message:" + "" + fetchConfigVO.getErrormessage(); // String message =
+	 * "Failed at // :"+fetchMetadataListVO.get(0).getInput_parameter(); //
+	 * document.add(new Paragraph(TR, fnt)); // document.add(new Paragraph(SN,
+	 * fnt)); document.add(new Paragraph(S, fnt)); document.add(new
+	 * Paragraph(Scenarios, fnt)); //new change-failed pdf to add pagesize if
+	 * (status.equalsIgnoreCase("Failed")) { document.add(new Paragraph(Message,
+	 * fnt)); if (fetchConfigVO.getErrormessage() != null) { document.add(new
+	 * Paragraph(errorMessage, fnt)); } document.add(Chunk.NEWLINE);
+	 * img.setAlignment(Image.ALIGN_CENTER); img.isScaleToFitHeight(); // new
+	 * change-change page size img.scalePercent(60, 58); document.add(img); } else {
+	 * document.add(new Paragraph(step, fnt)); document.add(Chunk.NEWLINE);
+	 * img.setAlignment(Image.ALIGN_CENTER); img.isScaleToFitHeight(); // new
+	 * change-change page size img.scalePercent(60, 62); document.add(img); }
+	 * 
+	 * Paragraph p = new Paragraph(String.format("page %s of %s", i,
+	 * fileNameList.size())); p.setAlignment(Element.ALIGN_RIGHT);
+	 * 
+	 * document.add(p); System.out.println("This Image " + "" + image + "" +
+	 * "was added to the report"); // End to add screenshoots and pagenumbers and
+	 * wats icon // End to create Script level passed reports
+	 * 
+	 * } document.close(); compress(fetchMetadataListVO, fetchConfigVO,
+	 * pdffileName); } catch (Exception e) {
+	 * System.out.println("Not able to upload the pdf"); e.printStackTrace(); } }
+	 */
 	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, Date Starttime, Date endtime)
 			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
@@ -2954,6 +3310,7 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			} else {
 				fileNameList = getFailFileNameListNew(fetchMetadataListVO, fetchConfigVO);
 			}
+			Map<String, TestSetScriptParam> map = databaseentry.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
 
 			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
 			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
@@ -2980,8 +3337,14 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println("before enter Images/wats_icon.png");
 			Image img1 = Image.getInstance(watslogo);
 			System.out.println("after enter Images/wats_icon.png");
+			
 			img1.scalePercent(65, 68);
 			img1.setAlignment(Image.ALIGN_RIGHT);
+			
+			
+			
+			
+			
 			Font bfBold12 = FontFactory.getFont("Arial", 23);
 			String Report = "Execution Report";
 			Font fnt = FontFactory.getFont("Arial", 12);
@@ -3072,23 +3435,142 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String Reason = image.split("_")[5];
 				// String TR = "Test Run Name:" + " " + TestRun;
 //						String SN = "Script Number:" + " " + ScriptNumber;
-				String S = "Status:" + " " + status;
+				String status2 = "Status: ";
+				
+				Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk statusChunk2 = new Chunk(status,fnt);
+				Phrase statusPhrase = new Phrase();
+				statusPhrase.add(statusChunk);
+				statusPhrase.add(statusChunk2);
+				
+				
 				String step = "Step No :" + "" + Reason;
+				Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk stepChunk2 = new Chunk(Reason,fnt);
+				Phrase stepPhrase = new Phrase();
+				stepPhrase.add(stepChunk);
+				stepPhrase.add(stepChunk2);
+				
+				
+				
 				String Scenarios = "Scenario Name :" + "" + Scenario;
+				Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
+				Phrase scenarioPhrase = new Phrase();
+				scenarioPhrase.add(scenarioChunk);
+				scenarioPhrase.add(scenarioChunk2);
+				
+				
 				String Message = "Failed at Line Number:" + "" + Reason;
+				Chunk messageChunk = new Chunk("Failed at Line Number: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk messageChunk2 = new Chunk(Reason,fnt);
+				Phrase messagePhrase = new Phrase();
+				messagePhrase.add(messageChunk);
+				messagePhrase.add(messageChunk2);
+				
+				
 				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
+				Chunk errorMessageChunk = new Chunk("Failed Message: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
+				Phrase errorMessagePhrase = new Phrase();
+				errorMessagePhrase.add(errorMessageChunk);
+				errorMessagePhrase.add(errorMessageChunk2);
+				
+				
+				
+				String stepDescription = map.get(Reason).getTest_run_param_desc();
+				String inputParam = map.get(Reason).getInput_parameter();
+				String inputValue = map.get(Reason).getInput_value();
+			
+				
+				
 				// String message = "Failed at
 				// :"+fetchMetadataListVO.get(0).getInput_parameter();
 //						document.add(new Paragraph(TR, fnt));
 //						document.add(new Paragraph(SN, fnt));
-				document.add(new Paragraph(S, fnt));
-				document.add(new Paragraph(Scenarios, fnt));
-//new change-failed pdf to add pagesize
+				
+				
+				
+				
+				
+				
+				
+				document.add(new Paragraph(statusPhrase));
+				document.add(new Paragraph(scenarioPhrase));
+
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				//new change-failed pdf to add pagesize
 				if (status.equalsIgnoreCase("Failed")) {
-					document.add(new Paragraph(Message, fnt));
+					document.add(new Paragraph(messagePhrase));
 					if (fetchConfigVO.getErrormessage() != null) {
-						document.add(new Paragraph(errorMessage, fnt));
+						document.add(new Paragraph(errorMessagePhrase));
 					}
+					//if(stepDescription!=null) {
+						//document.add(new Paragraph("Step Description: "+stepDescription, fnt));
+					//}
+
+//					if(inputParam!=null) {
+	//						document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
+		//				    if(inputValue!=null) {
+			//					document.add(new Paragraph("Input Value: "+inputValue, fnt));
+				//			}
+					//}
+					
+					if(stepDescription!=null) {
+						
+						Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+						Phrase phraseDesc = new Phrase();
+						phraseDesc.add(stepDeschunk);
+						phraseDesc.add(stepDeschunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph stepDesc = new Paragraph();
+						stepDesc.add(phraseDesc);
+						document.add(stepDesc);
+					}
+
+					if(inputParam!=null) {
+						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+						Phrase phraseinputParam = new Phrase();
+						phraseinputParam.add(inputparamchunk);
+						phraseinputParam.add(inputparamchunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph paraInputParam = new Paragraph();
+						paraInputParam.add(phraseinputParam);
+						document.add(paraInputParam);
+						    if(inputValue!=null) {
+						    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+								Phrase phraseinputVal = new Phrase();
+								phraseinputVal.add(inputvalchunk);
+								phraseinputVal.add(inputvalchunk2);
+								
+								//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								//stepDesc.add(new Chunk(stepDescription, fnt));
+								Paragraph paraInputVal = new Paragraph();
+								paraInputVal.add(phraseinputVal);
+								document.add(paraInputVal);
+						    }
+					}
+					
+					
+					
+					
+					
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
@@ -3096,12 +3578,54 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					img.scalePercent(60, 58);
 					document.add(img);
 				} else {
-					document.add(new Paragraph(step, fnt));
+					document.add(new Paragraph(stepPhrase));
+					if(stepDescription!=null) {
+						
+						Chunk stepDeschunk = new Chunk("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
+						Phrase phraseDesc = new Phrase();
+						phraseDesc.add(stepDeschunk);
+						phraseDesc.add(stepDeschunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph stepDesc = new Paragraph();
+						stepDesc.add(phraseDesc);
+						document.add(stepDesc);
+					}
+
+					if(inputParam!=null) {
+						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
+						Phrase phraseinputParam = new Phrase();
+						phraseinputParam.add(inputparamchunk);
+						phraseinputParam.add(inputparamchunk2);
+						
+						//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						//stepDesc.add(new Chunk(stepDescription, fnt));
+						Paragraph paraInputParam = new Paragraph();
+						paraInputParam.add(phraseinputParam);
+						document.add(paraInputParam);
+						    if(inputValue!=null) {
+						    	Chunk inputvalchunk = new Chunk("Input Value: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
+								Phrase phraseinputVal = new Phrase();
+								phraseinputVal.add(inputvalchunk);
+								phraseinputVal.add(inputvalchunk2);
+								
+								//Paragraph stepDesc =new Paragraph("Step Description: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+								//stepDesc.add(new Chunk(stepDescription, fnt));
+								Paragraph paraInputVal = new Paragraph();
+								paraInputVal.add(phraseinputVal);
+								document.add(paraInputVal);
+						    }
+					}
+					
 					document.add(Chunk.NEWLINE);
 					img.setAlignment(Image.ALIGN_CENTER);
 					img.isScaleToFitHeight();
 					// new change-change page size
-					img.scalePercent(60, 62);
+					img.scalePercent(51, 51);
 					document.add(img);
 				}
 
@@ -3122,6 +3646,9 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
+	
+	
+	
 	/*
 	 * public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO,
 	 * FetchConfigVO fetchConfigVO) { try { String accessToken =
