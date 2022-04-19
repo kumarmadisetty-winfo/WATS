@@ -28,7 +28,7 @@ public class TestScriptExecController {
 	TestScriptExecService testScriptExecService;
 
 	@ResponseBody
-	@RequestMapping(value = "/executePyJabScript")
+	@RequestMapping(value = "/executeTestScript")
 	public ExecuteTestrunVo executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
 			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		ExecuteTestrunVo status = null;

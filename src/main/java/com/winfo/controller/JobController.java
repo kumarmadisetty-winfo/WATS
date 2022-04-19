@@ -31,7 +31,7 @@ public class JobController {
 	RunAutomation runAutomation;
 	
 	@ResponseBody
-	@RequestMapping(value = "/executeTestScript")
+	@RequestMapping(value = "/executeTestScript2")
 	public ExecuteTestrunVo executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
 			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		ExecuteTestrunVo status = null;
