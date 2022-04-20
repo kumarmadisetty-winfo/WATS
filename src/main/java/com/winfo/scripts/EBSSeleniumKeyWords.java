@@ -14,12 +14,10 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
@@ -77,13 +75,11 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 //import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -96,6 +92,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -182,6 +179,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	@Autowired
 	EBSMappingRepository ebsMappingRepo;
+	
+	@Autowired
+	Environment env;
 //	public static log log = LogManager.getlog(SeleniumKeyWords.class);
 	/*
 	 * private Integer ElementWait = Integer
@@ -4074,7 +4074,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\")+pdffileName;	
 
 	
-			uploadObjectToObjectStore( sourceFilePath,  destinationFilePath);
+//			uploadObjectToObjectStore( sourceFilePath,  destinationFilePath);
 		}
 		catch(Exception e)
 		{
@@ -15701,7 +15701,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
          * Refer to <see href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the public documentation</see> on how to prepare a configuration file.
          */
 		 final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(),
-        		"WATS_WINFOERP");
+				 env.getProperty("oci.config.name"));
 	        final AuthenticationDetailsProvider provider =
 	                new ConfigFileAuthenticationDetailsProvider(configFile);
 	     //    final String FILE_NAME = "C:\\Users\\Winfo solutions\\Priya\\softwares\\wats\\jars\\padf\\WATS\\TestJiraP1\\Detailed_Report.pdf";
@@ -15716,8 +15716,8 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
         /* Create a request and dependent object(s). */
 
 	PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-		.namespaceName("nrch2emfoqis")
-		.bucketName("obj-watsdev01-standard")
+		.namespaceName(env.getProperty("oci.namespace"))
+		.bucketName(env.getProperty("oci.bucket.name"))
 		//.objectName("ebs/Detailed_Report.pdf")
 		.objectName(destinationFilePath)
 		.contentLength(fileSize)// Create a Stream, for example, by calling a helper function like below.

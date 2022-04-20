@@ -20,8 +20,13 @@ import pathlib
 start_time = time.time()
 
 logger = logging.getLogger(__name__)
-chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
-url = 'http://winfo106.winfosolutions.com:8035/OA_HTML/AppsLocalLogin.jsp?'
+chrome_driver_path = '[(${dto.chromeDriverPath})]'
+url = '[(${dto.ebsApplicationUrl})]'
+APPLICATION = "[(${dto.applicationName})]"
+PATH = "[(${dto.dllPath})]"
+oci_config_path = "[(${dto.ociConfigPath})]"
+oci_config_name = "[(${dto.ociConfigName})]"
+bucket_name = "[(${dto.buckerName})]"
 
 post_url = '[(${dto.scriptStatusUpdateUrl})]'
 copy_url = '[(${dto.copiedValueUrl})]'
@@ -63,13 +68,10 @@ def getCopiedValue(value):
         raise Exception("Get Failed")
 
 
-APPLICATION = "Oracle Applications - EBSVIS"
-PATH = "C:\\GitHub\\EBS-Automation-POC\\Driver\\WindowsAccessBridge-64.dll"
 logger = logging.getLogger(__name__)
 desktop = Desktop()
 LOV = "List of Values"
 driver = None
-chrome_driver_path = 'C:/Github/EBS-Automation-POC/Driver/chromedriver.exe'
 toDelete = True
 
 #defining chrome options
@@ -172,10 +174,9 @@ def take_screeshot_as_jpg(path):
             pathlib.Path(toMove).mkdir(parents=True, exist_ok=True)
         snapshot = ImageGrab.grab()
         snapshot.save(path)
-        config = oci.config.from_file("C:\\oci\\config","WATS_WINFOERP")
+        config = oci.config.from_file(oci_config_path,oci_config_name)
         object_storage = oci.object_storage.ObjectStorageClient(config)
         namespace = object_storage.get_namespace().data
-        bucket_name = "obj-watsdev01-standard"
         path_name="/".join(path.split("\\")[-4:-1])
         logger.info(f"Uploading to {path_name} in oci") 
         object_name="/".join(path.split("\\")[-4:])

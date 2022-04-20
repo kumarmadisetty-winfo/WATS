@@ -144,6 +144,18 @@ public class FetchConfigVO {
 
     private String WINDOWS_PDF_LOCATION;
     private String WINDOWS_SCREENSHOT_LOCATION;
+    
+    private String EBS_APPLICATION_NAME;
+    
+    public String getEBS_APPLICATION_NAME() {
+		return EBS_APPLICATION_NAME;
+	}
+
+	public void setEBS_APPLICATION_NAME(String eBS_APPLICATION_NAME) {
+		EBS_APPLICATION_NAME = eBS_APPLICATION_NAME;
+	}
+
+    
 	public String getWINDOWS_PDF_LOCATION() {
 		return WINDOWS_PDF_LOCATION;
 	}

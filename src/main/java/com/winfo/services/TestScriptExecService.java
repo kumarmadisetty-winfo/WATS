@@ -121,6 +121,19 @@ public class TestScriptExecService {
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
+	
+	@Value("${chrome.driver.path}")
+	private String chromeDriverPath;
+	@Value("${dll.path}")
+	private String dllPath;
+	@Value("${oci.config.path}")
+	private String ociConfigPath;
+	@Value("${oci.config.name}")
+	private String ociConfigName;
+	@Value("${oci.bucket.name}")
+	private String ociBucketName;
+	@Value("${oci.namespace}")
+	private String ociNamespace;
 
 	@Autowired
 	ErrorMessagesHandler errorMessagesHandler;
@@ -320,6 +333,15 @@ public class TestScriptExecService {
 			dto.setActions(methods);
 			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
 			dto.setCopiedValueUrl(copiedValueUrl);
+			dto.setChromeDriverPath(chromeDriverPath);
+			dto.setApplicationName(fetchConfigVO.getEBS_APPLICATION_NAME());
+			dto.setDllPath(dllPath);
+			dto.setOciConfigPath(ociConfigPath);
+			dto.setOciConfigName(ociConfigName);
+			dto.setBuckerName(ociBucketName);
+			dto.setOciNameSpace(ociNamespace);
+			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
+			
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
 			final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
@@ -522,15 +544,15 @@ public class TestScriptExecService {
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource("oci/config").getInputStream(), "WATS_WINFOERP");
+					.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
 			/* Create a service client */
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
 			/* Create a request and dependent object(s). */
-			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName("nrch2emfoqis")
-					.bucketName("obj-watsdev01-standard").objectName(destinationFilePath).putObjectBody(in).build();
+			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+					.bucketName(ociBucketName).objectName(destinationFilePath).putObjectBody(in).build();
 
 			/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
@@ -554,7 +576,7 @@ public class TestScriptExecService {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource("oci/config").getInputStream(), "WATS_WINFOERP");
+					.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			final String FILE_NAME = sourceFile;
 			File file = new File(FILE_NAME);
@@ -566,8 +588,8 @@ public class TestScriptExecService {
 
 			/* Create a request and dependent object(s). */
 
-			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName("nrch2emfoqis")
-					.bucketName("obj-watsdev01-standard")
+			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+					.bucketName(ociBucketName)
 					// .objectName("ebs/Detailed_Report.pdf")
 					.objectName(destinationFilePath).contentLength(fileSize)// Create a Stream, for example, by calling
 																			// a helper function like below.
@@ -609,7 +631,7 @@ public class TestScriptExecService {
 		;
 		List<String> objNames = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), "WATS_WINFOERP");
+			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -619,14 +641,11 @@ public class TestScriptExecService {
 		ObjectStorage client = new ObjectStorageClient(provider);
 		client.setRegion(Region.UK_LONDON_1);
 
-		String namespaceName = "nrch2emfoqis";
-		System.out.println("Using namespace: " + namespaceName);
-		String bucketName = "obj-watsdev01-standard";
 
 		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + "/" + TestRunName + "/" + seqNum;
 
-		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(namespaceName)
-				.bucketName(bucketName)
+		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+				.bucketName(ociBucketName)
 				// .startAfter(objectStoreScreenShotPath)
 				.prefix(objectStoreScreenshotPath).delimiter("/").build();
 
@@ -641,8 +660,8 @@ public class TestScriptExecService {
 		String imagePath = screenshotPath;
 		while (listIt.hasNext()) {
 			String objectName = listIt.next();
-			GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(namespaceName)
-					.bucketName(bucketName).objectName(objectName).build());
+			GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(ociNamespace)
+					.bucketName(ociBucketName).objectName(objectName).build());
 
 			String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 			File file = new File(imagePath + imageName);
@@ -778,10 +797,10 @@ public class TestScriptExecService {
 				} catch (Exception e) {
 					System.out.println("e");
 				}
-				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
-				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
-						fetchMetadataListVO.get(0).getSeq_num() + "_");
+//				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
+//				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
+//						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
+//						fetchMetadataListVO.get(0).getSeq_num() + "_");
 				createPdf(fetchMetadataListVO, fetchConfigVO,
 
 						fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
@@ -815,10 +834,10 @@ public class TestScriptExecService {
 				fetchConfigVO.setEndtime(enddate);
 				dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 				dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
-				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
-				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
-						fetchMetadataListVO.get(0).getSeq_num() + "_");
+//				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
+//				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
+//						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
+//						fetchMetadataListVO.get(0).getSeq_num() + "_");
 				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				if (failedScriptRunCount == 1) {
@@ -1501,7 +1520,7 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\") + pdffileName;
 
-			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
