@@ -4074,7 +4074,7 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"+ fetchMetadataListVO.get(0).getTest_run_name() + "\\")+pdffileName;	
 
 	
-//			uploadObjectToObjectStore( sourceFilePath,  destinationFilePath);
+			uploadObjectToObjectStore( sourceFilePath,  destinationFilePath);
 		}
 		catch(Exception e)
 		{

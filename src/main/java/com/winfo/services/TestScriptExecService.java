@@ -797,10 +797,10 @@ public class TestScriptExecService {
 				} catch (Exception e) {
 					System.out.println("e");
 				}
-//				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
-//				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-//						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
-//						fetchMetadataListVO.get(0).getSeq_num() + "_");
+				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
+				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
+						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
+						fetchMetadataListVO.get(0).getSeq_num() + "_");
 				createPdf(fetchMetadataListVO, fetchConfigVO,
 
 						fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
@@ -834,10 +834,10 @@ public class TestScriptExecService {
 				fetchConfigVO.setEndtime(enddate);
 				dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 				dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
-//				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
-//				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
-//						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
-//						fetchMetadataListVO.get(0).getSeq_num() + "_");
+				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
+				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
+						fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath,
+						fetchMetadataListVO.get(0).getSeq_num() + "_");
 				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				if (failedScriptRunCount == 1) {
@@ -1520,7 +1520,7 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\") + pdffileName;
 
-//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
