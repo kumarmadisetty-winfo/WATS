@@ -395,6 +395,8 @@ public class TestScriptExecService {
 
 	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName,
 			String screenshotPath, String testScriptParamId) throws Exception {
+		System.out.println(actionName);
+
 		PyJabActions action = actionRepo.findByActionName(actionName);
 		String paramValue = action.getParamValues();
 		StringJoiner methodCall = new StringJoiner(",", action.getMethodName() + "(", ")");
@@ -404,7 +406,6 @@ public class TestScriptExecService {
 		String value;
 		String index = "";
 		List<String> listArgs = new ArrayList<>();
-
 
 		if (paramValue != null) {
 			HashMap<String, Object> result = new ObjectMapper().readValue(paramValue, HashMap.class);
