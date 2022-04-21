@@ -16,6 +16,7 @@ import json
 import requests as req
 import os
 import pathlib
+from subprocess import call
 
 start_time = time.time()
 
@@ -78,18 +79,16 @@ toDelete = True
 def options():
     options = webdriver.ChromeOptions()
     options.add_argument('--start-maximized')
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-web-security")
+    #options.add_argument("--disable-gpu")
+    #options.add_argument("--disable-web-security")
     options.add_argument("--allow-running-insecure-content")
-    options.add_experimental_option("prefs",{'download.prompt_for_download':True})
+    #options.add_experimental_option("prefs",{'download.prompt_for_download':True})
     return options
 
 #get xpath for selenium
 def get_xpath(name, tagname):
     if len(name.split('>')) > 1 :
         name1 = name.split('>')[0]
-        if len(name.split('>')) > 2 :
-            name2 = name.split('>')[1]
         name = name.split('>')[-1]
         xpath = f'//*[text()="{name1}"]//following::'
     else :
@@ -120,9 +119,7 @@ def get_xpath(name, tagname):
     elif tagname == 'b' :
         xpath += f'b[contains(text(),"{name}")]'
     elif tagname == 'btnWParama':
-        xpath += f'*[text()="{name}"]/following::a[1]'
-        #xpath += f'*[text()="{name}"]/following::img[@title="{name2}"][1]'
-        print(xpath)
+        xpath += '//*[text()="{name}"]/following::img[1]'
     else :
         xpath += f'*[text()="{name}"]'
     return xpath
@@ -148,18 +145,30 @@ def create_xpath(navigation):
         XPATH.append(constantPathValueStart+to_navigate[-1]+'"])[1]') 
     return XPATH
 
+def _is_file_exists():
+    counter  = 0
+    while counter <= 120 :
+        if os.path.isfile('c:\\selenium\\downloads\\frmservlet.jnlp'):
+            return True
+        time.sleep(0.5)
+        counter += 1
+    return False
+
 def save_and_open_jnlp():
-    time.sleep(5)
-    desktop.press_keys('enter')
-    time.sleep(5)
-    desktop.press_keys('ctrl', 'j')
-    time.sleep(5)
-    desktop.press_keys('tab')
-    time.sleep(0.1)
-    desktop.press_keys('tab')
-    time.sleep(3)
-    desktop.press_keys('enter')
-    time.sleep(10)
+    #time.sleep(5)
+    #desktop.press_keys('enter')
+    #time.sleep(5)
+    #desktop.press_keys('ctrl', 'j')
+    #time.sleep(5)
+    #desktop.press_keys('tab')
+    #time.sleep(0.1)
+    #time.sleep(3)
+    #desktop.press_keys('enter')
+    #time.sleep(10)
+    if _is_file_exists():
+        call(['javaws', 'C:\\selenium\\downloads\\frmservlet.jnlp'])
+    else :
+        raise Exception("File is not downloaded")
 
 #def upload screenshot in jpg format
 def take_screeshot_as_jpg(path):
@@ -217,7 +226,8 @@ _passed = '_Passed.jpg'
 _failed = '_Fail.jpg'
 
 selenium_driver = webdriver.Chrome(executable_path=chrome_driver_path, options=options())
-
+params = {'behavior' : 'allow', 'downloadPath':"C:\\selenium\\downloads"}
+selenium_driver.execute_cdp_cmd('Page.setDownloadBehavior', params)
 
 def logInToEBS( url,username, password, path_to_screenhot, scriptParamId):
     trycounter = 0
@@ -1020,14 +1030,12 @@ def ebsCLickButtonWithParam(xpath_param, input_value, path_to_screenhot, scriptP
     trycounter = 0
     while trycounter < 3 :
         try :
-            trycounter += 1
-            input_value = getCopiedValue(input_value)
-            #xpath_param += '>' + str(input_value)
-            print(xpath_param + str(input_value))
-            xpath = get_xpath(xpath_param + '>' +str(input_value), 'btnWParama')
+            trycounter += 1 
+            xpath_param += '>' + str(input_value)
+            xpath = get_xpath(xpath_param, 'btnWParama')
             _wait_until_element_is_found(xpath)
             xpath_field = selenium_driver.find_element_by_xpath(xpath)
-            xpath_field.click()
+            xpath_field.send_keys(input_value)
             trycounter = 3
             time.sleep(2)
             take_screeshot_as_jpg(path_to_screenhot + _passed)
@@ -1054,7 +1062,7 @@ try :
 except Exception as exception :
     print("script got failed", exception)
 
-selenium_driver.close()
+selenium_driver.quit()
 
 desktop.press_keys('ctrl','w')
 time.sleep(2)
