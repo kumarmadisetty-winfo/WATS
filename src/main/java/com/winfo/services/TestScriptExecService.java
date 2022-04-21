@@ -121,7 +121,7 @@ public class TestScriptExecService {
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
-	
+
 	@Value("${chrome.driver.path}")
 	private String chromeDriverPath;
 	@Value("${dll.path}")
@@ -214,7 +214,7 @@ public class TestScriptExecService {
 						log.info(
 								" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
 						if (run) {
-							executorMethodPyJab(testSetId, fetchConfigVO,  metaData);
+							executorMethodPyJab(testSetId, fetchConfigVO, metaData);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -232,7 +232,7 @@ public class TestScriptExecService {
 		return executeTestrunVo;
 	}
 
-	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO, 
+	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO,
 			Entry<Integer, List<FetchMetadataVO>> metaData) throws Exception {
 
 		try {
@@ -341,7 +341,7 @@ public class TestScriptExecService {
 			dto.setBuckerName(ociBucketName);
 			dto.setOciNameSpace(ociNamespace);
 			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
-			
+
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
 			final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
@@ -731,19 +731,21 @@ public class TestScriptExecService {
 
 	public void generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
-			if(args.isManualTrigger()) {
-				Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());	
-				if(scriptStatus==null) {
+			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
+			if (scriptStatus == null) {
+				if (args.isManualTrigger()) {
 					return;
+				}else {
+					scriptStatus=false;
 				}
-				args.setSuccess(scriptStatus);
 			}
+			args.setSuccess(scriptStatus);
 
-			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(),args.getTestSetLineId()));
+			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
-					args.getTestSetLineId(),false);
+					args.getTestSetLineId(), false);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
@@ -881,7 +883,7 @@ public class TestScriptExecService {
 			boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(args.getTestSetId()));
 			if (runFinalPdf) {
 				List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
-						args.getTestSetLineId(),runFinalPdf);
+						args.getTestSetLineId(), runFinalPdf);
 				dataBaseEntry.setPassAndFailScriptCount(args.getTestSetId(), fetchConfigVO);
 				Date date1 = new Date();
 				fetchConfigVO.setEndtime(date1);
