@@ -640,8 +640,6 @@ public class TestScriptExecService {
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
 		ObjectStorage client = new ObjectStorageClient(provider);
-		client.setRegion(Region.UK_LONDON_1);
-
 
 		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + "/" + TestRunName + "/" + seqNum;
 
