@@ -1050,6 +1050,120 @@ def ebsCLickButtonWithParam(xpath_param, input_value, path_to_screenhot, scriptP
                 raise Exception(e)
 
 
+def ebsUploadFile(xpath_param,file_path,path_to_screenhot,scriptParamId):
+    trycounter = 0
+    _is_wait_cursor_complete()
+    while trycounter < 3 :
+        try :
+            trycounter += 1
+            xpath = get_ebs_xpath(xpath_param, 'button')
+            _wait_until_element_is_found(xpath)
+            file_element= driver.find_element_by_xpath(xpath)
+            file_element.send_keys(file_path)
+            trycounter = 3
+            take_screeshot_as_jpg(path_to_screenhot + _passed)
+            setResponse(scriptParamId, f'Successffully Uploaded File', True)
+            sendResponse()
+        except Exception as exception :
+            if trycounter < 3 :
+                continue
+            else :
+                take_screeshot_as_jpg(path_to_screenhot + _failed)
+                setResponse(scriptParamId, f'Failed To Upload File', False)
+                sendResponse()
+                raise Exception(exception)
+
+def ebsSwitchResponsibiliy(xpath_param, path_to_screenhot, scriptParamId):
+    trycounter = 0
+    _is_wait_cursor_complete()
+    while trycounter < 3 :
+        try :
+            trycounter += 1
+            desktop.press_keys('f4')
+            _is_wait_cursor_complete()
+            setDriver()
+            switch_item = driver.find_element_by_xpath('//menu item[@name=contains("Switch")]') 
+            switch_item.click()
+            _is_wait_cursor_complete()
+            setDriver()
+            menu1 = xpath_param.split('>')[0]
+            menu2 = xpath_param.split('>')[-1]
+            xpath1 = get_ebs_xpath('Find','text') 
+            xpath2 = get_ebs_xpath('Find', 'button')
+            xpathelm1 = driver.find_element_by_xpath(xpath1)
+            xpathelm2 = driver.find_element_by_xpath(xpath2)
+            xpathelm1.clear(True)
+            xpathelm1.send_text('%' + menu1 +'%', True)
+            _is_wait_cursor_complete()
+            xpathelm2.click()
+            desktop.press_keys('ctrl','l')
+            _is_wait_cursor_complete()
+            setDriver()
+            xpath1 = get_ebs_xpath('Find','text') 
+            xpath2 = get_ebs_xpath('Find', 'button')
+            xpathelm1 = driver.find_element_by_xpath(xpath1)
+            xpathelm2 = driver.find_element_by_xpath(xpath2)
+            xpathelm1.clear(True)
+            xpathelm1.send_text(menu2, True)
+            _is_wait_cursor_complete()
+            xpathelm2.click()
+            trycounter = 3
+            take_screeshot_as_jpg(path_to_screenhot + _passed)
+            setResponse(scriptParamId, f'Successfully Switched Responsibility', True)
+            sendResponse()
+        except Exception as exception :
+            if trycounter < 3 :
+                _is_wait_cursor_complete()
+                setDriver()
+                continue
+            else :
+                take_screeshot_as_jpg(path_to_screenhot + _failed)
+                setResponse(scriptParamId, f'Failed To Switch Responsibility', False)
+                sendResponse()
+                raise Exception(exception)
+
+def selectTableRowByCellValue(xpath_param,input_value, path_to_screenhot, scriptParamId) :
+    """
+        xpath_param will be from_coloumn>to_column
+        input_value will be from_id,to_id
+    """
+    trycounter = 0
+    while trycounter < 3 :
+        try :
+            fromName, toName  = xpath_param.split('>')
+            fromId, toId = input_value.split(',')
+            fromId = getCopiedValue(fromId)
+            fromName = get_ebs_xpath(fromName, 'text')
+            allElements = driver.find_elements_by_xpath(fromName)
+            for idx in allElements:
+                element = allElements[idx]
+                clickFlag = False
+                if element.text == fromId :
+                    print("Key is {} and value is {} sent value is {}".format(idx , type(element.text), type(fromId))) 
+                    clickFlag = True
+                if(clickFlag):
+                    allElements[idx].click(simulate=True)
+                    break
+            toName = get_ebs_xpath(toName, 'text')
+            toNameElement = driver.find_elements_by_xpath(toName)
+            toNameElement[idx].clear(True)
+            toNameElement[idx].send_text(toId, True)
+            trycounter = 3 
+            take_screeshot_as_jpg(path_to_screenhot + _passed)
+            setResponse(scriptParamId, f'Successfully Entered The Value In Required Row', True)
+            sendResponse()
+        except Exception as e :
+            if trycounter < 3 :
+                _is_wait_cursor_complete()
+                setDriver()
+                continue
+            else :
+                take_screeshot_as_jpg(path_to_screenhot + _failed)
+                setResponse(scriptParamId, f'Failed To Entered The Value In Required Row', False)
+                sendResponse()
+                raise Exception(exception)
+
+
 
 try :
     """
@@ -1064,8 +1178,8 @@ except Exception as exception :
 
 selenium_driver.quit()
 
-desktop.press_keys('ctrl','w')
-time.sleep(2)
+#desktop.press_keys('ctrl','w')
+#time.sleep(2)
 
 end_time = time.time()
 
