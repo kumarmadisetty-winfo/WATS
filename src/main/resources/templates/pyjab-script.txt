@@ -1185,6 +1185,4 @@ end_time = time.time()
 
 print(f"it took {int(end_time - start_time)} seconds")
     
-
-
-
+print("%$#000#$%")
