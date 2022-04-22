@@ -147,6 +147,9 @@ public class TestScriptExecService {
 
 	@Value("${url.get.copied.value}")
 	private String copiedValueUrl;
+	
+	@Value("${pyjab.template.name}")
+	private String templateName;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -344,7 +347,7 @@ public class TestScriptExecService {
 
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
-			final String scriptContent = this.templateEngine.process("pyjab-script.txt", ctx);
+			final String scriptContent = this.templateEngine.process(templateName, ctx);
 
 			String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
