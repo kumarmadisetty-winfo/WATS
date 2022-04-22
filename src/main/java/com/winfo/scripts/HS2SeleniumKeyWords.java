@@ -7976,7 +7976,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			 {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver.findElement(By.xpath(("//*[text()='" +param1+ " ']")));
+			WebElement waittext = driver.findElement(By.xpath(("//*[text()='" +param1+ "']")));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -13243,9 +13243,9 @@ try {
 			 {
 	            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 	            wait.until(ExpectedConditions.presenceOfElementLocated(
-	            By.xpath("//h1[text()=' " +param1+ " ']/following::span[text()=' " +param2+ " ']/following::a[1]")));
+	            By.xpath("//h1[text()='" +param1+ "']/following::span[text()='" +param2+ "']/following::a[1]")));
 	            WebElement waittext = driver
-	            .findElement(By.xpath("//h1[text()=' " +param1+ " ']/following::span[text()=' " +param2+ " ']/following::a[1]"));
+	            .findElement(By.xpath("//h1[text()='" +param1+ "']/following::span[text()='" +param2+ "']/following::a[1]"));
 	            Actions actions = new Actions(driver);
 	            actions.moveToElement(waittext).build().perform();
 	            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -13253,7 +13253,7 @@ try {
 	            Thread.sleep(3000);
 	            
 	          	                  WebElement select = driver
-	          	                  .findElement(By.xpath("//li[text()=' " +keysToSend+ " ']"));
+	          	                  .findElement(By.xpath("//li[text()='" +keysToSend+ "']"));
 	          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 	          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
 	          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
@@ -15281,9 +15281,9 @@ try {
 		 {
             WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
             wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//*[text()=' " +param1+ " ']//following::label[text()=' " +param2+ " ']//following::a[1]")));
+            By.xpath("//*[text()='" +param1+ "']//following::label[text()='" +param2+ "']//following::a[1]")));
             WebElement waittext = driver
-            .findElement(By.xpath("//*[text()=' " +param1+ " ']//following::label[text()=' " +param2+ " ']//following::a[1]"));
+            .findElement(By.xpath("//*[text()='" +param1+ "']//following::label[text()='" +param2+ "']//following::a[1]"));
             Actions actions = new Actions(driver);
             actions.moveToElement(waittext).build().perform();
             //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -15291,7 +15291,7 @@ try {
             Thread.sleep(3000);
             
           	                  WebElement select = driver
-          	                  .findElement(By.xpath("//li[text()=' " +keysToSend+ " ']"));
+          	                  .findElement(By.xpath("//li[text()='" +keysToSend+ "']"));
           	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
           	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
           	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
@@ -15309,9 +15309,9 @@ try {
 				 {
 		            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		            wait.until(ExpectedConditions.presenceOfElementLocated(
-		            By.xpath("//*[text()=' " +param1+ " ']//following::*[text()=' " +param2+ " ']//following::a[1]")));
+		            By.xpath("//*[text()='" +param1+ "']//following::*[text()='" +param2+ "']//following::a[1]")));
 		            WebElement waittext = driver
-		            .findElement(By.xpath("//*[text()=' " +param1+ " ']//following::*[text()=' " +param2+ " ']//following::a[1]"));
+		            .findElement(By.xpath("//*[text()='" +param1+ "']//following::*[text()='" +param2+ "']//following::a[1]"));
 		            Actions actions = new Actions(driver);
 		            actions.moveToElement(waittext).build().perform();
 		            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -15319,7 +15319,7 @@ try {
 		            Thread.sleep(3000);
 		            
 		          	                  WebElement select = driver
-		          	                  .findElement(By.xpath("//li[text()=' " +keysToSend+ " ']"));
+		          	                  .findElement(By.xpath("//li[text()='" +keysToSend+ "']"));
 		          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 		          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
 		          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
@@ -15337,9 +15337,9 @@ try {
 				 {
 		            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		            wait.until(ExpectedConditions.presenceOfElementLocated(
-		            By.xpath("//*[text()=' " +param1+ " ']//following::label[text()=' " +param2+ " '][1]//following::a[1]")));
+		            By.xpath("//*[text()='" +param1+ "']//following::label[text()='" +param2+ "'][1]//following::a[1]")));
 		            WebElement waittext = driver
-		            .findElement(By.xpath("//*[text()=' " +param1+ " ']//following::label[text()=' " +param2+ " '][1]//following::a[1]"));
+		            .findElement(By.xpath("//*[text()='" +param1+ "']//following::label[text()='" +param2+ "'][1]//following::a[1]"));
 		            Actions actions = new Actions(driver);
 		            actions.moveToElement(waittext).build().perform();
 		            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -15347,7 +15347,7 @@ try {
 		            Thread.sleep(3000);
 		            
 		          	                  WebElement select = driver
-		          	                  .findElement(By.xpath("//li[text()=' " +keysToSend+ " ']"));
+		          	                  .findElement(By.xpath("//li[text()='" +keysToSend+ "']"));
 		          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 		          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
 		          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
@@ -15365,9 +15365,9 @@ try {
 		 {
             WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
             wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//*[text()=' " +param1+ " ']/following::label[contains(text(),' " +param2+ " ')][1]/preceding::a[1]")));
+            By.xpath("//*[text()='" +param1+ "']/following::label[contains(text(),'" +param2+ "')][1]/preceding::a[1]")));
             WebElement waittext = driver
-            .findElement(By.xpath("//*[text()=' " +param1+ " ']/following::label[contains(text(),' " +param2+ " ')][1]/preceding::a[1]"));
+            .findElement(By.xpath("//*[text()='" +param1+ "']/following::label[contains(text(),'" +param2+ "')][1]/preceding::a[1]"));
             Actions actions = new Actions(driver);
             actions.moveToElement(waittext).build().perform();
             //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -15375,7 +15375,7 @@ try {
             Thread.sleep(3000);
             
           	                  WebElement select = driver
-          	                  .findElement(By.xpath("(//*[text()=' " +keysToSend+ " '])[2]"));
+          	                  .findElement(By.xpath("(//*[text()='" +keysToSend+ "'])[2]"));
           	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
           	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
           	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
