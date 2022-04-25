@@ -18219,6 +18219,28 @@ public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMet
 
 public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+	try {
+		if(param1.equalsIgnoreCase("Oracle ERP OPERA Trigger Synchronization") && param2.equalsIgnoreCase("Run")) {
+		Thread.sleep(3000);
+		Actions action = new Actions(driver);
+		WebElement we = driver.findElement(By.xpath("(//*[text()='Oracle ERP OPERA Trigger Synchronization'])[1]/following::*[text()='Scheduled Orchestration'][1]"));
+		action.moveToElement(we).perform();
+		Thread.sleep(5000);
+		WebElement run = driver.findElement(By.xpath("(//*[text()='Oracle ERP OPERA Trigger Synchronization'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
+		run.click();
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Thread.sleep(5000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+		String xpath = "(//*[text()='Oracle ERP OPERA Trigger Synchronization'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return;
+		}
+		}catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during clickButton" + scripNumber);
+		System.out.println(e);
+		}
 		
 
 	try {
