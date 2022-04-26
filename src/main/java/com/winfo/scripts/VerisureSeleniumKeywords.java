@@ -13098,7 +13098,69 @@ System.out.println(e);
 		
 	}
 
+	@Override
+	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
+			FetchMetadataVO fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
+			String param3, String keysToSend, String value) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void InformaticaClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void InformaticaclickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
+			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void InformaticaClickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

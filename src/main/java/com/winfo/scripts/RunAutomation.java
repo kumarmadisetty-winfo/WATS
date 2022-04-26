@@ -783,6 +783,44 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1, param2, value1,
 								value2, fetchMetadataVO, fetchConfigVO);
 						break;
+						//[1:04 PM] Vijayakumar Raju Kosuru
+					case "Login into Application(Informatica)":
+					userName = fetchMetadataVO.getInput_value();log.info("Navigating to Login into Application Action");
+					if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {​​
+					seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3, fetchMetadataVO.getInput_value(), dataBaseEntry.getPassword(param, userName, fetchConfigVO));
+					userName = null;
+					break;
+					}​​ else {​​
+					break;
+					}​​
+					case "Logout(Informatica)":
+					seleniumFactory.getInstanceObj(instanceName).InformaticaLogout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
+					break;
+					case "sendvalues(Informatica)":
+					if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {​​
+					seleniumFactory.getInstanceObj(instanceName).InformaticaSendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+					break;
+					}​​ else {​​
+					break;
+					}​​
+					case "selectAValue(Informatica)":
+					if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {​​
+					seleniumFactory.getInstanceObj(instanceName).InformaticaSelectAValue(driver, param1, param2,
+					fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+					break;
+					}​​ else {​​
+					break;
+					}​​
+					case "clickLink(Informatica)":
+					seleniumFactory.getInstanceObj(instanceName).InformaticaclickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+					break;
+					case "clickImage(Informatica)":
+					seleniumFactory.getInstanceObj(instanceName).InformaticaClickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+					break;
+					case "clickButton(Informatica)":
+					seleniumFactory.getInstanceObj(instanceName).InformaticaClickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+					break;
+				
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						// screenshotException(driver, "Test Action Name Not Exists_",
