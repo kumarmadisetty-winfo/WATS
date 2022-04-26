@@ -1,28 +1,11 @@
 package com.winfo.scripts;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.awt.Color;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,17 +15,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
-
-import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -51,7 +28,6 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
-import com.winfo.services.FetchMetadataListVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
@@ -783,34 +759,34 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1, param2, value1,
 								value2, fetchMetadataVO, fetchConfigVO);
 						break;
-						//[1:04 PM] Vijayakumar Raju Kosuru
+						
 					case "Login into Application(Informatica)":
-					userName = fetchMetadataVO.getInput_value();log.info("Navigating to Login into Application Action");
-					if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {​​
-					seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3, fetchMetadataVO.getInput_value(), dataBaseEntry.getPassword(param, userName, fetchConfigVO));
-					userName = null;
-					break;
-					}​​ else {​​
-					break;
-					}​​
+						userName = fetchMetadataVO.getInput_value();log.info("Navigating to Login into Application Action");
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == ""){
+							seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3, fetchMetadataVO.getInput_value(), dataBaseEntry.getPassword(param, userName, fetchConfigVO));
+							userName = null;
+							}
+						break;
 					case "Logout(Informatica)":
 					seleniumFactory.getInstanceObj(instanceName).InformaticaLogout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3);
 					break;
+					
 					case "sendvalues(Informatica)":
-					if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {​​
-					seleniumFactory.getInstanceObj(instanceName).InformaticaSendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-					break;
-					}​​ else {​​
-					break;
-					}​​
+						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							seleniumFactory.getInstanceObj(instanceName).InformaticaSendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+						break;
+						}else{
+							break;
+						}
+					
 					case "selectAValue(Informatica)":
-					if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {​​
-					seleniumFactory.getInstanceObj(instanceName).InformaticaSelectAValue(driver, param1, param2,
-					fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-					break;
-					}​​ else {​​
-					break;
-					}​​
+						if (fetchMetadataVO.getInput_value() != null || "".equals(fetchMetadataVO.getInput_value())) {
+							seleniumFactory.getInstanceObj(instanceName).InformaticaSelectAValue(driver, param1, param2,
+							fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+						}
+						break;
+						
+					
 					case "clickLink(Informatica)":
 					seleniumFactory.getInstanceObj(instanceName).InformaticaclickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 					break;
