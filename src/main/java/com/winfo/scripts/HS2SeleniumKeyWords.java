@@ -5709,6 +5709,30 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		//HCM.ADM.1133 HS2 (click button)
+		try {
+			{
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath(("//div[text()='" +param1+ "']")));// screenshot(driver,
+			// "",
+			// fetchMetadataVO,
+			// fetchConfigVO);
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(15000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "//div[text()='param1']";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+			}
 		//HCM.ADM.1124 HS2 (clickbutton)
 		try {
 			if (param1.equalsIgnoreCase("Apply")) {
@@ -10293,14 +10317,7 @@ try {
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]")));
 			Thread.sleep(1000);
-			wait.until(
-					ExpectedConditions
-							.textToBePresentInElementLocated(
-									By.xpath("//*[contains(text(),'" + param1
-											+ "')]/following::label[normalize-space(text())='" + param2 + "']"),
-									param2));
-			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" + param1
-					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]"));
+			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" + param1 + "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -10341,6 +10358,28 @@ try {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//HCM.ADM.1121 HS2
+		try {
+			if (param1.equalsIgnoreCase("Initial Due Date Option")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" +param1+ "']/following::*[@placeholder='dd/mm/yyyy'][1]")));
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='" +param1+ "']/following::*[@placeholder='dd/mm/yyyy'][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
+			String xpath = "//*[text()='param1']/following::*[@placeholder='dd/mm/yyyy'][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Invoice Dates sendValue" + scripNumber);
+			System.out.println(e);
+			}
 		//DH 32
 		try {
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15777,6 +15816,20 @@ try {
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
+		//HCM.ADM.1133 HS2(vertical scrol)
+		try {
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='" + inputParam + "']"));
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[text()='inputParam']";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  scrollUsingElement" + scripNumber);
+			System.out.println(inputParam);
+		}
+
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
