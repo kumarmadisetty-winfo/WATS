@@ -15400,7 +15400,7 @@ try {
 		            WebElement waittext = driver
 		            .findElement(By.xpath("//*[text()='" +param1+ "']//following::*[text()='" +param2+ "']//following::a[1]"));
 		            Actions actions = new Actions(driver);
-		            actions.moveToElement(waittext).build().perform();
+		            actions.moveToElement(waittext).perform();
 		            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 		            waittext.click();
 		            Thread.sleep(5000);
