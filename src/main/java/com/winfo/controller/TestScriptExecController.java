@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -75,4 +77,12 @@ public class TestScriptExecController {
 		return testScriptExecService.getCopiedValue(copyPath);
 	}
 
+	
+	Logger log = Logger.getLogger(TestScriptExecController.class);
+	public final org.apache.logging.log4j.Logger logger = LogManager.getLogger(TestScriptExecController.class);
+	@RequestMapping(value ="/test")
+	public void test() {
+		log.info("skjdfksjdf");
+		logger.info("LogManager");
+	}
 }
