@@ -15407,8 +15407,8 @@ try {
 		            
 		          	                  WebElement select = driver
 		          	                  .findElement(By.xpath("//li[text()='" +keysToSend+ "']"));
-					 	  select.click();
-		          	                 // clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+					 	  //select.click();
+		          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 		          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
 		          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 		          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
