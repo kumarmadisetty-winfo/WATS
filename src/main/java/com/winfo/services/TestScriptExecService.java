@@ -40,8 +40,9 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
@@ -111,8 +112,7 @@ import com.winfo.vo.UpdateScriptParamStatus;
 @Service
 public class TestScriptExecService {
 
-	Logger log = Logger.getLogger("Logger");
-
+	public final Logger logger = LogManager.getLogger(TestScriptExecService.class);
 	private static final String PY_EXTN = ".py";
 	public static final String topic = "test-script-run";
 	public static final String FORWARD_SLASH = "/";
@@ -146,7 +146,7 @@ public class TestScriptExecService {
 
 	@Value("${url.get.copied.value}")
 	private String copiedValueUrl;
-	
+
 	@Value("${pyjab.template.name}")
 	private String templateName;
 
@@ -202,18 +202,18 @@ public class TestScriptExecService {
 
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
-				System.out.println(" Running Independent - " + metaData.getKey());
+				logger.info(" Running Independent - " + metaData.getKey());
 				executorMethodPyJab(testSetId, fetchConfigVO, metaData);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
-				System.out.println(" Running Dependent - " + metaData.getKey());
+				logger.info(" Running Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
 					try {
 						boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
 								metaData.getValue().get(0).getScript_id());
-						log.info(
+						logger.info(
 								" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
 						if (run) {
 							executorMethodPyJab(testSetId, fetchConfigVO, metaData);
@@ -353,7 +353,7 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
 			uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
-			System.out.println(
+			logger.info(
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
@@ -397,7 +397,7 @@ public class TestScriptExecService {
 
 	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName,
 			String screenshotPath, String testScriptParamId) throws Exception {
-		System.out.println(actionName);
+		logger.info(actionName);
 
 		PyJabActions action = actionRepo.findByActionName(actionName);
 		String paramValue = action.getParamValues();
@@ -533,9 +533,9 @@ public class TestScriptExecService {
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
 		try {
 			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-			System.out.println("%%%%%%%%%%");
+			logger.info("%%%%%%%%%%");
 
-			System.out.println(path);
+			logger.info(path);
 
 			Files.write(Paths.get(path), sourceFileContent.getBytes());
 		} catch (IOException e1) {
@@ -559,7 +559,7 @@ public class TestScriptExecService {
 
 			/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
-			System.out.println("Uploaded to -------- " + destinationFilePath);
+			logger.info("Uploaded to -------- " + destinationFilePath);
 
 			return response.toString();
 		} catch (Exception e) {
@@ -656,7 +656,7 @@ public class TestScriptExecService {
 		objNames = response.getListObjects().getObjects().stream()
 				// .filter(objSummary->objSummary.getName().startsWith("/objstore/watsdev01/ebs/WATS"))
 				.map((objSummary) -> objSummary.getName()).collect(Collectors.toList());
-		System.out.println(objNames.size());
+		logger.info(objNames.size());
 		ListIterator<String> listIt = objNames.listIterator();
 		String imagePath = screenshotPath;
 		while (listIt.hasNext()) {
@@ -702,7 +702,7 @@ public class TestScriptExecService {
 				// result = true;
 			} catch (SecurityException se) {
 				// handle it
-				System.out.println(se.getMessage());
+				logger.info(se.getMessage());
 			}
 		} else {
 
@@ -737,8 +737,8 @@ public class TestScriptExecService {
 			if (scriptStatus == null) {
 				if (args.isManualTrigger()) {
 					return;
-				}else {
-					scriptStatus=false;
+				} else {
+					scriptStatus = false;
 				}
 			}
 			args.setSuccess(scriptStatus);
@@ -798,7 +798,7 @@ public class TestScriptExecService {
 					dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 					dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
 				} catch (Exception e) {
-					System.out.println("e");
+					logger.info("e");
 				}
 				deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
 				downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
@@ -883,7 +883,7 @@ public class TestScriptExecService {
 
 			// final reports generation
 			boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(args.getTestSetId()));
-			if (runFinalPdf) {
+			if (runFinalPdf && !args.isManualTrigger()) {
 				List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
 						args.getTestSetLineId(), runFinalPdf);
 				dataBaseEntry.setPassAndFailScriptCount(args.getTestSetId(), fetchConfigVO);
@@ -899,18 +899,28 @@ public class TestScriptExecService {
 		}
 
 	}
+//	private void testRunPdfGeneration(String testSetId) {
+//		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId,
+//				null, true);
+//		dataBaseEntry.setPassAndFailScriptCount(args.getTestSetId(), fetchConfigVO);
+//		Date date1 = new Date();
+//		fetchConfigVO.setEndtime(date1);
+//		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
+//		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
+//		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
+//	}
 
 	private void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
-			System.out.println("Start of create Pdf for -- " + pdffileName);
+			logger.info("Start of create Pdf for -- " + pdffileName);
 			String Date = DateUtils.getSysdate();
 
 			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
 
 			String FILE = (Folder + pdffileName);
-			System.out.println("Path of Pdf -- " + FILE);
+			logger.info("Path of Pdf -- " + FILE);
 
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
@@ -931,17 +941,17 @@ public class TestScriptExecService {
 			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
 			File theDir = new File(Folder);
 			if (!theDir.exists()) {
-				System.out.println("Creating directory: " + theDir.getName());
+				logger.info("Creating directory: " + theDir.getName());
 				boolean result = false;
 				try {
 					theDir.mkdirs();
 					result = true;
 				} catch (SecurityException se) {
 					// handle it
-					System.out.println(se.getMessage());
+					logger.info(se.getMessage());
 				}
 			} else {
-				System.out.println("Folder exist");
+				logger.info("Folder exist");
 			}
 			int passcount = fetchConfigVO.getPasscount();
 			int failcount = fetchConfigVO.getFailcount();
@@ -971,9 +981,9 @@ public class TestScriptExecService {
 			Rectangle one = new Rectangle(1360, 800);
 			document.setPageSize(one);
 			document.open();
-			System.out.println("before enter Images/wats_icon.png1");
+			logger.info("before enter Images/wats_icon.png1");
 			Image img1 = Image.getInstance(watslogo);
-			System.out.println("after enter Images/wats_icon.png1");
+			logger.info("after enter Images/wats_icon.png1");
 
 			img1.scalePercent(65, 68);
 			img1.setAlignment(Image.ALIGN_RIGHT);
@@ -1513,7 +1523,7 @@ public class TestScriptExecService {
 			document.close();
 
 		} catch (Exception e) {
-			System.out.println("Not able to Create pdf" + e);
+			logger.info("Not able to Create pdf {}", e);
 		}
 		try {
 			String destinationFilePath = (fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -1525,7 +1535,7 @@ public class TestScriptExecService {
 
 			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.info(e);
 		}
 	}
 
@@ -1537,9 +1547,10 @@ public class TestScriptExecService {
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.getLabel() : SCRIPT_PARAM_STATUS.FAIL.getLabel();
 		if (args.getResult() == null) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status);
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
 		} else {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult());
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
+					args.getMessage());
 		}
 	}
 
@@ -1555,6 +1566,11 @@ public class TestScriptExecService {
 			copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, null, null);
 		}
 		return copynumberValue;
+	}
+	
+	public void runGeneratePdf() {
+		
+		
 	}
 
 }

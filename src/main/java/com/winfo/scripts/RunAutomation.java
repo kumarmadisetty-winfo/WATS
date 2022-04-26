@@ -985,7 +985,7 @@ public class RunAutomation {
 				{
 					for(FetchMetadataVO fetchMetadataVO1 : fetchMetadataListVO)
 					{
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO1, fetchConfigVO, fetchMetadataVO1.getTest_script_param_id(),"Pass");
+						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO1, fetchConfigVO, fetchMetadataVO1.getTest_script_param_id(),"Pass",null);
 
 					}
 					FetchScriptVO post = new FetchScriptVO();
@@ -1069,7 +1069,7 @@ public class RunAutomation {
 						System.out.println("lastPassedSeq: "+lastPassedSeq);
 						if(currentSeqNum<=lastPassedSeq)
 						{
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(),"Pass");
+						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO11, fetchConfigVO, fetchMetadataVO11.getTest_script_param_id(),"Pass",null);
 						}
 						else
 						{
@@ -1198,7 +1198,7 @@ public class RunAutomation {
 						{	}
 						else
 						{
-							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass");
+							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,"Pass",null);
 						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 						}
 						

@@ -207,8 +207,8 @@ public class TestCaseDataService {
 		map.put(firstName, lastName);
 	}
 
-	public void updateTestCaseStatus(FetchScriptVO request, String parameter, FetchConfigVO fetchConfigVO) {
 
+	public void updateTestCaseStatus(FetchScriptVO request, String parameter, FetchConfigVO fetchConfigVO) {
 		try {
 
 			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id=" + request.getP_script_id()

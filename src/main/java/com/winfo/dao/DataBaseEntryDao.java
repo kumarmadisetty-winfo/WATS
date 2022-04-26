@@ -24,7 +24,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
- import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.hibernate.query.NativeQuery;
 import org.springframework.stereotype.Repository;
 
@@ -36,20 +36,20 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 
 @Repository
- @RefreshScope
+@RefreshScope
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
 	private static final String TEST_SET_ID = "test_set_id";
 	private static final String TR_MODE = "tr_mode";
-	
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
+			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		try {
-			Query query = em.createQuery(
-					"Update TestSetScriptParam set line_execution_status='Pass' where test_script_param_id=" + "'"
-							+ test_script_param_id + "'");
+			Query query = em
+					.createQuery("Update TestSetScriptParam set line_execution_status='" + status
+							+ "',line_error_message='"
+							+ message + "' where test_script_param_id=" + "'" + test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -58,10 +58,12 @@ public class DataBaseEntryDao {
 	}
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String value) throws ClassNotFoundException, SQLException {
+			String test_script_param_id, String status, String value, String message)
+			throws ClassNotFoundException, SQLException {
 		try {
 			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-					+ "',input_value='" + value + "' where test_script_param_id='" + test_script_param_id + "'");
+					+ "',input_value='" + value + "',line_error_message='" + message + "' where test_script_param_id='"
+					+ test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -107,7 +109,6 @@ public class DataBaseEntryDao {
 
 		return errorMessage;
 	}
-	
 
 	public void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
@@ -141,8 +142,8 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
-	
-	public void updateStatusOfScript( String test_set_id, String test_set_line_id,String status)
+
+	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
 			throws ClassNotFoundException, SQLException {
 		try {
 			TestSetLines testLines = em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
@@ -153,11 +154,10 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			System.out.println("cant update script status to - "+status);
+			System.out.println("cant update script status to - " + status);
 			System.out.println(e);
 		}
 	}
-
 
 	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
 			throws ClassNotFoundException, SQLException {
@@ -334,155 +334,150 @@ public class DataBaseEntryDao {
 
 		return result;
 	}
-	
-	public   void getPassAndFailScriptCount( String testRunId,FetchConfigVO fetchConfigVO)  {
-		String sqlQuery="select count(status) from win_ta_test_set_lines where test_set_id="+testRunId+"and status='Fail'";
-		String sqlPassQuery="select count(status) from win_ta_test_set_lines where test_set_id="+testRunId+"and status='Pass'";
 
-			Session session = em.unwrap(Session.class);
-		
-		  Integer failCount = 0;
-		  Integer passCount = 0;
-			try {
-				NativeQuery<BigDecimal> query = session.createSQLQuery(sqlQuery);
+	public void getPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
+		String sqlQuery = "select count(status) from win_ta_test_set_lines where test_set_id=" + testRunId
+				+ "and status='Fail'";
+		String sqlPassQuery = "select count(status) from win_ta_test_set_lines where test_set_id=" + testRunId
+				+ "and status='Pass'";
 
-				List<BigDecimal> results = query.list();
-				if (results != null && !results.isEmpty()) {
-					
-					BigDecimal bigDecimal = results.get(0);
-					failCount = Integer.parseInt(bigDecimal.toString());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+		Session session = em.unwrap(Session.class);
+
+		Integer failCount = 0;
+		Integer passCount = 0;
+		try {
+			NativeQuery<BigDecimal> query = session.createSQLQuery(sqlQuery);
+
+			List<BigDecimal> results = query.list();
+			if (results != null && !results.isEmpty()) {
+
+				BigDecimal bigDecimal = results.get(0);
+				failCount = Integer.parseInt(bigDecimal.toString());
 			}
-			try {
-				NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
 
-				List<BigDecimal> results1 = query1.list();
-				if (results1 != null && !results1.isEmpty()) {
-					
-					BigDecimal bigDecimal1 = results1.get(0);
-					passCount = Integer.parseInt(bigDecimal1.toString());
-				}
-				fetchConfigVO.setFailcount(failCount);
-				fetchConfigVO.setPasscount(passCount);
-			} catch (Exception e) {
-				e.printStackTrace();
+			List<BigDecimal> results1 = query1.list();
+			if (results1 != null && !results1.isEmpty()) {
+
+				BigDecimal bigDecimal1 = results1.get(0);
+				passCount = Integer.parseInt(bigDecimal1.toString());
 			}
+			fetchConfigVO.setFailcount(failCount);
+			fetchConfigVO.setPasscount(passCount);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		  
-		  
 	}
-	public   List<FetchMetadataVO> getMetaDataVOList( String testRunId,String testSetLineId,boolean finalPdf)  {
-		 
-		List<FetchMetadataVO> listOfTestRunExecutionVo= new ArrayList<>();
-		String whereClause =  "       AND wttsl.test_set_line_id="+testSetLineId+"\r\n";
-		
-		if(finalPdf) {
+
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf) {
+
+		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
+		String whereClause = "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
+
+		if (finalPdf) {
 			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
 		}
-		
-	    String sqlQuery = "SELECT wtp.customer_id,\r\n"
-				+ "           wtc.customer_number,\r\n"
-				+ "           wtc.customer_name,\r\n"
-				+ "           wtts.project_id,\r\n"
-				+ "           wtp.project_name,\r\n"
-				+ "           wttsl.test_set_id,\r\n"
-				+ "           wttsl.test_set_line_id,\r\n"
-				+ "           wtsmdata.script_id,\r\n"
-				+ "           wtsmdata.script_number,\r\n"
-				+ "           wtsmdata.line_number,\r\n"
+
+		String sqlQuery = "SELECT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
+				+ "           wtc.customer_name,\r\n" + "           wtts.project_id,\r\n"
+				+ "           wtp.project_name,\r\n" + "           wttsl.test_set_id,\r\n"
+				+ "           wttsl.test_set_line_id,\r\n" + "           wtsmdata.script_id,\r\n"
+				+ "           wtsmdata.script_number,\r\n" + "           wtsmdata.line_number,\r\n"
 				+ "           CASE WHEN INSTR(wtsmdata.input_parameter,')',1,1) >4\r\n"
 				+ "               THEN wtsmdata.input_parameter\r\n"
 				+ "               ELSE regexp_replace( wtsmdata.input_parameter, '[*#()]', '') END input_parameter,\r\n"
-				+ "           wtsmdata.input_value,\r\n"
-				+ "           wtsmdata.action,\r\n"
-				+ "           wtsmdata.xpath_location,\r\n"
-				+ "           wtsmdata.xpath_location1,\r\n"
-				+ "           wtsmdata.field_type,\r\n"
-				+ "           wtsmdata.hint,\r\n"
-				+ "           ma.SCENARIO_NAME,\r\n"
-				+ "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
+				+ "           wtsmdata.input_value,\r\n" + "           wtsmdata.action,\r\n"
+				+ "           wtsmdata.xpath_location,\r\n" + "           wtsmdata.xpath_location1,\r\n"
+				+ "           wtsmdata.field_type,\r\n" + "           wtsmdata.hint,\r\n"
+				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
 				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
-				+ "          ,wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
-				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n"
-				+ "      from\r\n"
-				+ "      execute_status ex_st,\r\n"
-				+ "      win_ta_test_set        wtts,\r\n"
-				+ "    win_ta_script_master ma,\r\n"
-				+ "           win_ta_test_set_lines  wttsl,\r\n"
-				+ "           win_ta_test_set_script_param wtsmdata,\r\n"
-				+ "           win_ta_projects        wtp,\r\n"
-				+ "           win_ta_customers       wtc\r\n"
-				+ "     WHERE 1=1\r\n"
-				+ "     AND wtts.TEST_SET_ID = EX_ST.TEST_RUN_ID(+)\r\n"
-				+ "    and ma.script_id = wttsl.script_id\r\n"
+				+ "          ,wtsmdata.TEST_SCRIPT_PARAM_ID\r\n" + "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n"
+				+ "      from\r\n" + "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
+				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
+				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
+				+ "           win_ta_customers       wtc\r\n" + "     WHERE 1=1\r\n"
+				+ "     AND wtts.TEST_SET_ID = EX_ST.TEST_RUN_ID(+)\r\n" + "    and ma.script_id = wttsl.script_id\r\n"
 				+ "    and ma.script_number = wttsl.script_number\r\n"
 				+ "      -- AND wtts.test_set_id = :p_test_set_id\r\n"
 				+ "       AND wttsl.test_set_id = wtts.test_set_id\r\n"
 				+ "       AND wttsl.script_id = wtsmdata.script_id\r\n"
 				+ "       AND wtsmdata.test_set_line_id =wttsl.test_set_line_id\r\n"
-				+ "       AND wtts.project_id = wtp.project_id\r\n"
-				+ "       AND wtp.customer_id = wtc.customer_id\r\n"
-				+ "       AND wtts.test_set_id="+testRunId+"\r\n"
-				+ whereClause
-				+ "      and wttsl.enabled = 'Y'\r\n"
-				+ "       order by\r\n"
-				+ "       wttsl.SEQ_NUM,\r\n"
-				+ "         -- wtsmdata.script_number,\r\n"
-				+ "          wttsl.script_id,\r\n"
+				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
+				+ "       AND wtts.test_set_id=" + testRunId + "\r\n" + whereClause
+				+ "      and wttsl.enabled = 'Y'\r\n" + "       order by\r\n" + "       wttsl.SEQ_NUM,\r\n"
+				+ "         -- wtsmdata.script_number,\r\n" + "          wttsl.script_id,\r\n"
 				+ "          wtsmdata.line_number asc";
-	    
-	    
-	    try {String NULL_STRING="null";
+
+		try {
+			String NULL_STRING = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(sqlQuery);
-			List<Object[]> resultList =query.getResultList();
+			List<Object[]> resultList = query.getResultList();
 			Iterator<Object[]> itr = resultList.iterator();
-			while (itr.hasNext()) 
-			{
+			while (itr.hasNext()) {
 				Object[] obj = (Object[]) itr.next();
-				FetchMetadataVO testRunExecutionVO= new FetchMetadataVO();
-				
-				
+				FetchMetadataVO testRunExecutionVO = new FetchMetadataVO();
 
-				
-				testRunExecutionVO.setCustomer_id(NULL_STRING.equals(String.valueOf(obj[0]))? null:String.valueOf(obj[0]));
-				testRunExecutionVO.setCustomer_number(NULL_STRING.equals(String.valueOf(obj[1]))? null:String.valueOf(obj[1]));
-				testRunExecutionVO.setCustomer_name( NULL_STRING.equals(String.valueOf(obj[2]))? null:String.valueOf(obj[2]));
-				testRunExecutionVO.setProject_id(NULL_STRING.equals(String.valueOf(obj[3]))? null:String.valueOf(obj[3]));
-				testRunExecutionVO.setProject_name(  NULL_STRING.equals(String.valueOf(obj[4]))? null:String.valueOf(obj[4]));
-				testRunExecutionVO.setTest_set_id(NULL_STRING.equals(String.valueOf(obj[5]))? null:String.valueOf(obj[5]));
-				testRunExecutionVO.setTest_set_line_id(NULL_STRING.equals(String.valueOf(obj[6]))? null:String.valueOf(obj[6]));
-				testRunExecutionVO.setScript_id(NULL_STRING.equals(String.valueOf(obj[7]))? null:String.valueOf(obj[7]));
-				testRunExecutionVO.setScript_number( NULL_STRING.equals(String.valueOf(obj[8]))? null:String.valueOf(obj[8]));
-				testRunExecutionVO.setLine_number(NULL_STRING.equals(String.valueOf(obj[9]))? null:String.valueOf(obj[9]));
-				testRunExecutionVO.setInput_parameter( NULL_STRING.equals(String.valueOf(obj[10]))? null:String.valueOf(obj[10]));
-				testRunExecutionVO.setInput_value( NULL_STRING.equals(String.valueOf(obj[11]))? null:String.valueOf(obj[11]));
-				testRunExecutionVO.setAction( NULL_STRING.equals(String.valueOf(obj[12]))? null:String.valueOf(obj[12]));
-				testRunExecutionVO.setXpath_location( NULL_STRING.equals(String.valueOf(obj[13]))? null:String.valueOf(obj[13]));
-				testRunExecutionVO.setXpath_location1( NULL_STRING.equals(String.valueOf(obj[14]))? null:String.valueOf(obj[14]));
-				testRunExecutionVO.setField_type( NULL_STRING.equals(String.valueOf(obj[15]))? null:String.valueOf(obj[15]));
-				//testRunExecutionVO.setHint( NULL_STRING.equals(String.valueOf(obj[16]))? null:String.valueOf(obj[16]));
-				testRunExecutionVO.setScenario_name(  NULL_STRING.equals(String.valueOf(obj[17]))? null:String.valueOf(obj[17]));
-				testRunExecutionVO.setDependency( NULL_STRING.equals(String.valueOf(obj[18]))? null:String.valueOf(obj[18]));
-				testRunExecutionVO.setTest_run_name( NULL_STRING.equals(String.valueOf(obj[19]))? null:String.valueOf(obj[19]));
-				testRunExecutionVO.setSeq_num(NULL_STRING.equals(String.valueOf(obj[20]))? null:String.valueOf(obj[20]));
-				testRunExecutionVO.setTest_script_param_id(NULL_STRING.equals(String.valueOf(obj[21]))? null:String.valueOf(obj[21]));
-				testRunExecutionVO.setExecuted_by( NULL_STRING.equals(String.valueOf(obj[22]))? null:String.valueOf(obj[22]));
-				
-				
-			listOfTestRunExecutionVo.add(testRunExecutionVO);
-		}
-	}
-		catch(Exception e)
-		{
+				testRunExecutionVO
+						.setCustomer_id(NULL_STRING.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
+				testRunExecutionVO
+						.setCustomer_number(NULL_STRING.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
+				testRunExecutionVO
+						.setCustomer_name(NULL_STRING.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
+				testRunExecutionVO
+						.setProject_id(NULL_STRING.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
+				testRunExecutionVO
+						.setProject_name(NULL_STRING.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
+				testRunExecutionVO
+						.setTest_set_id(NULL_STRING.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
+				testRunExecutionVO.setTest_set_line_id(
+						NULL_STRING.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
+				testRunExecutionVO
+						.setScript_id(NULL_STRING.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
+				testRunExecutionVO
+						.setScript_number(NULL_STRING.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
+				testRunExecutionVO
+						.setLine_number(NULL_STRING.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
+				testRunExecutionVO.setInput_parameter(
+						NULL_STRING.equals(String.valueOf(obj[10])) ? null : String.valueOf(obj[10]));
+				testRunExecutionVO
+						.setInput_value(NULL_STRING.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
+				testRunExecutionVO
+						.setAction(NULL_STRING.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+				testRunExecutionVO.setXpath_location(
+						NULL_STRING.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+				testRunExecutionVO.setXpath_location1(
+						NULL_STRING.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
+				testRunExecutionVO
+						.setField_type(NULL_STRING.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
+				// testRunExecutionVO.setHint( NULL_STRING.equals(String.valueOf(obj[16]))?
+				// null:String.valueOf(obj[16]));
+				testRunExecutionVO
+						.setScenario_name(NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
+				testRunExecutionVO
+						.setDependency(NULL_STRING.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
+				testRunExecutionVO
+						.setTest_run_name(NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+				testRunExecutionVO
+						.setSeq_num(NULL_STRING.equals(String.valueOf(obj[20])) ? null : String.valueOf(obj[20]));
+				testRunExecutionVO.setTest_script_param_id(
+						NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
+				testRunExecutionVO
+						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
+
+				listOfTestRunExecutionVo.add(testRunExecutionVO);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return listOfTestRunExecutionVo;
 	}
-	    
-	    
+
 	public String getTestSetMode(Long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> query = cb.createQuery(String.class);
@@ -490,9 +485,9 @@ public class DataBaseEntryDao {
 		Predicate condition = cb.equal(root.get(TEST_SET_ID), testSetId);
 		query.select(root.get(TR_MODE)).where(condition);
 		return em.createQuery(query).getSingleResult();
-		
-	} 
-	   
+
+	}
+
 	public ArrayList<String> getStepsStatusByScriptId(int testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -506,8 +501,8 @@ public class DataBaseEntryDao {
 
 		return result;
 	}
-		
-	public TestSetLines getScript(int testSetId,int testSetLineId) {
+
+	public TestSetLines getScript(int testSetId, int testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
@@ -515,11 +510,11 @@ public class DataBaseEntryDao {
 
 		Predicate condition1 = cb.equal(from.get("test_set_line_id"), testSetLineId);
 		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
-		Predicate condition = cb.and(condition1,condition2);
+		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from));
 		return (TestSetLines) query.getSingleResult();
 
 	}
-	
+
 }
