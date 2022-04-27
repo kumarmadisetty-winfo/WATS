@@ -19001,11 +19001,11 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
-			String param4 = "User name or email";
+			String param4 = "username";
 			String param5 = "password";
 			//String param6 = "Sign In";
 			navigateInformaticaUrl(driver, fetchConfigVO, fetchMetadataVO);
-			String xpath1 = InformaticaLoginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+			String xpath1 = InformaticaLoginPage(driver, param4, keysToSend, fetchMetadataVO, fetchConfigVO);
 			String xpath2 = this.InformaticaLoginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
 			if(xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
