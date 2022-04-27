@@ -62,8 +62,8 @@ public class ScriptMetaData {
 	private String validation_name;
 	@Column(name = "METADATA_INPUT_VALUE")
 	private String metadata_inputvalue;
-	@Column(name = "CONDITIONAL_POPUP")
-	private String conditional_popup;
+//	@Column(name = "CONDITIONAL_POPUP")
+//	private String conditional_popup;
 	
 	
 
@@ -95,13 +95,13 @@ public class ScriptMetaData {
 	
 	
 
-	public String getConditional_popup() {
-		return conditional_popup;
-	}
-
-	public void setConditional_popup(String conditional_popup) {
-		this.conditional_popup = conditional_popup;
-	}
+//	public String getConditional_popup() {
+//		return conditional_popup;
+//	}
+//
+//	public void setConditional_popup(String conditional_popup) {
+//		this.conditional_popup = conditional_popup;
+//	}
 
 	public Integer getScript_meta_data_id() {
 		return script_meta_data_id;
