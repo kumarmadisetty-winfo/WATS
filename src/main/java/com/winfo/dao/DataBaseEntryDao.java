@@ -562,7 +562,7 @@ public class DataBaseEntryDao {
 		Root<TestSetLines> from = cq.from(TestSetLines.class);
 		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
 
-		cq.select(cb.greatest(from.get("execution_end_time"))).where(condition);
+		cq.select(cb.greatest(from.<Date>get("execution_end_time"))).where(condition);
 		Date query = em.createQuery(cq).getSingleResult();
 		return query;
 
