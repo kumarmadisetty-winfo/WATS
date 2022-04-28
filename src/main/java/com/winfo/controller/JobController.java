@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.scripts.RunAutomation;
-import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
 
 @CrossOrigin("*")
@@ -32,9 +32,9 @@ public class JobController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript2")
-	public ExecuteTestrunVo executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
+	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
 			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-		ExecuteTestrunVo status = null;
+		ResponseDto status = null;
 		if(testScriptDto !=null && testScriptDto.getTestScriptNo() != null) {
 			System.out.println("Parameter test script # : "+testScriptDto.getTestScriptNo());
 			try {

@@ -67,7 +67,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
-import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.vo.ResponseDto;
 
 @Service
 
@@ -144,9 +144,9 @@ public class RunAutomation {
 
 	long increment = 0;
 
-	public ExecuteTestrunVo run(String args) throws MalformedURLException {
+	public ResponseDto run(String args) throws MalformedURLException {
 		System.out.println(args);
-		ExecuteTestrunVo executeTestrunVo = new ExecuteTestrunVo();
+		ResponseDto executeTestrunVo = new ResponseDto();
 
 		try {
 			// Config Webservice

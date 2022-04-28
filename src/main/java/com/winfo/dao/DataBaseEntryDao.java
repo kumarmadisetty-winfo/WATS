@@ -24,8 +24,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.hibernate.query.NativeQuery;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ScriptMaster;
@@ -34,6 +34,7 @@ import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
+import com.winfo.utils.Constants.BOOLEAN_STATUS;
 
 @Repository
 @RefreshScope
@@ -46,9 +47,8 @@ public class DataBaseEntryDao {
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		try {
-			Query query = em
-					.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-							+ "',line_error_message='"
+			Query query = em.createQuery(
+					"Update TestSetScriptParam set line_execution_status='" + status + "',line_error_message='"
 							+ message + "' where test_script_param_id=" + "'" + test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
@@ -321,13 +321,22 @@ public class DataBaseEntryDao {
 		return result;
 	}
 
-	public ArrayList<String> getTestSetLinesStatusByTestSetId(int testSetId) {
+	public ArrayList<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
 		Root<TestSetLines> from = cq.from(TestSetLines.class);
 
-		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition1 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition2 = null;
+		Predicate condition = cb.and(condition1, condition2);
+		if (enable != null) {
+			condition2 = cb.equal(from.get("enabled"),
+					enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
+			condition = cb.and(condition1, condition2);
+		} else {
+			condition = condition1;
+		}
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from.get("status")));
 		ArrayList<String> result = (ArrayList<String>) query.getResultList();
@@ -488,6 +497,16 @@ public class DataBaseEntryDao {
 
 	}
 
+	public String getTestSetPdfGenerationEnableStatus(Long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> query = cb.createQuery(String.class);
+		Root<TestSet> root = query.from(TestSet.class);
+		Predicate condition = cb.equal(root.get(TEST_SET_ID), testSetId);
+		query.select(root.get("pdfGenerationEnabled")).where(condition);
+		return em.createQuery(query).getSingleResult();
+
+	}
+
 	public ArrayList<String> getStepsStatusByScriptId(int testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -515,6 +534,26 @@ public class DataBaseEntryDao {
 		Query query = em.createQuery(cq.select(from));
 		return (TestSetLines) query.getSingleResult();
 
+	}
+
+	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
+		Query query = em
+				.createNativeQuery("select cm.KEY_NAME,cl.VALUE_NAME,cm.DEFAULT_VALUE from WIN_TA_CONFIG_LINES cl "
+						+ "join WIN_TA_CONFIG_MASTER cm on cl.KEY_ID=cm.KEY_ID "
+						+ "join win_ta_test_set ts on ts.CONFIGURATION_ID=cl.CONFIGURATION_ID where ts.TEST_SET_ID=:testSetId");
+		query.setParameter("testSetId", testSetId);
+		return (ArrayList<Object[]>) query.getResultList();
+	}
+
+	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
+		try {
+			Query query = em.createQuery(
+					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where test_set_id='" + testSetId + "'");
+			query.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("Error Updation PDF Generation Status");
+			System.out.println(e);
+		}
 	}
 
 }

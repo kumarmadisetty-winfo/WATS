@@ -40,6 +40,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +56,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -64,6 +66,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -101,10 +104,11 @@ import com.winfo.dao.PyJabActionRepo;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.EBSSeleniumKeyWords;
+import com.winfo.utils.Constants;
+import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
-import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
-import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.vo.ResponseDto;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.UpdateScriptParamStatus;
@@ -182,10 +186,11 @@ public class TestScriptExecService {
 
 	}
 
-	public ExecuteTestrunVo run(String testSetId) throws MalformedURLException {
-		ExecuteTestrunVo executeTestrunVo = new ExecuteTestrunVo();
+	public ResponseDto run(String testSetId) throws MalformedURLException {
+		ResponseDto executeTestrunVo = new ResponseDto();
 
 		try {
+			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testSetId);
 
 			final String uri = fetchConfigVO.getMETADATA_URL() + testSetId;
@@ -217,6 +222,10 @@ public class TestScriptExecService {
 								" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
 						if (run) {
 							executorMethodPyJab(testSetId, fetchConfigVO, metaData);
+						} else {
+							dataBaseEntry.updateStatusOfScript(testSetId,
+									metaData.getValue().get(0).getTest_set_line_id(),
+									Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -357,8 +366,6 @@ public class TestScriptExecService {
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
-			dataBaseEntry.updateStatusOfScript(test_set_id, test_set_line_id,
-					TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel());
 			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
 					screenShotFolderPath, objectStoreScreenShotPath));
 		} catch (Exception e) {
@@ -731,12 +738,12 @@ public class TestScriptExecService {
 		}
 	}
 
-	public void generateTestScriptLineIdReports(PyJabKafkaDto args) {
+	public ResponseDto generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
 			if (scriptStatus == null) {
 				if (args.isManualTrigger()) {
-					return;
+					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
 				} else {
 					scriptStatus = false;
 				}
@@ -882,33 +889,39 @@ public class TestScriptExecService {
 			}
 
 			// final reports generation
-			boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Integer.valueOf(args.getTestSetId()));
-			if (runFinalPdf && !args.isManualTrigger()) {
-				List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
-						args.getTestSetLineId(), runFinalPdf);
-				dataBaseEntry.setPassAndFailScriptCount(args.getTestSetId(), fetchConfigVO);
-				Date date1 = new Date();
-				fetchConfigVO.setEndtime(date1);
-				createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
-				createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
-				createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
+			if (!args.isManualTrigger()) {
+				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
+				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
+					boolean runFinalPdf = dataBaseEntry
+							.checkIfAllTestSetLinesCompleted(Long.valueOf(args.getTestSetId()), true);
+					if (runFinalPdf) {
+						Date date1 = new Date();
+						fetchConfigVO.setEndtime(date1);
+						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
+								BOOLEAN_STATUS.FALSE.getLabel());
+						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO, date1);
+					}
+				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
-//	private void testRunPdfGeneration(String testSetId) {
-//		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId,
-//				null, true);
-//		dataBaseEntry.setPassAndFailScriptCount(args.getTestSetId(), fetchConfigVO);
-//		Date date1 = new Date();
-//		fetchConfigVO.setEndtime(date1);
-//		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
-//		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
-//		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
-//	}
+
+	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
+		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true);
+		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
+		fetchConfigVO.setEndtime(endDate);
+		try {
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
+		} catch (IOException | DocumentException | com.itextpdf.text.DocumentException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
@@ -1567,10 +1580,44 @@ public class TestScriptExecService {
 		}
 		return copynumberValue;
 	}
-	
-	public void runGeneratePdf() {
-		
-		
+
+	public FetchConfigVO fetchConfigVO(String testSetId) {
+		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
+		Map<String, String> mapConfig = new HashMap<>();
+		String value = null;
+		for (Object[] e : configurations) {
+			if (e[1] != null && StringUtils.isNotBlank(e[1].toString())) {
+				value = e[1].toString();
+			} else if (e[2] != null && StringUtils.isNotBlank(e[2].toString())) {
+				value = e[2].toString();
+			} else {
+				value = null;
+			}
+			mapConfig.put(e[0].toString(), value);
+		}
+
+		JSONObject jsno = new JSONObject(mapConfig);
+		Gson g = new Gson();
+		return g.fromJson(jsno.toString(), FetchConfigVO.class);
+	}
+
+	public ResponseDto generateTestRunPdf(String testSetId) {
+		boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Long.valueOf(testSetId), null);
+		if (runFinalPdf) {
+			try {
+				FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
+				Date date1 = new Date();
+				fetchConfigVO.setEndtime(date1);
+				testRunPdfGeneration(testSetId, fetchConfigVO, date1);
+				return new ResponseDto(200, Constants.SUCCESS, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			}
+		} else {
+			return new ResponseDto(200, Constants.WARNING,
+					"Cannot generate PDF. Scripts are In-Progress or In-Queue");
+		}
 	}
 
 }

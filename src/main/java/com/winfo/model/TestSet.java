@@ -12,81 +12,79 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-
-
 @Entity
-@Table(name="WIN_TA_TEST_SET")
+@Table(name = "WIN_TA_TEST_SET")
 
 public class TestSet {
 	@Id
 	@GeneratedValue
 	@Column(name = "TEST_SET_ID")
 	private Integer test_set_id;
-	
 
 	@Column(name = "TEST_SET_DESC")
-	private String  test_set_desc;
-	
+	private String test_set_desc;
+
 	@Column(name = "TEST_SET_COMMENTS")
-	private String  test_set_comments;
-	
+	private String test_set_comments;
+
 	@Column(name = "ENABLED")
-	private String  enabled;
-	
+	private String enabled;
+
 	@Column(name = "DESCRIPTION")
-	private String  description;
-	
+	private String description;
+
 	@Column(name = "EFFECTIVE_FROM")
-	private Date  effective_from;
-	
+	private Date effective_from;
+
 	@Column(name = "EFFECTIVE_TO")
-	private Date  effective_to;
-	
+	private Date effective_to;
+
 	@Column(name = "PROJECT_ID")
-	private Integer  project_id;
-	
+	private Integer project_id;
+
 	@Column(name = "TEST_SET_NAME")
-	private String  test_set_name;
-	
+	private String test_set_name;
+
 	@Column(name = "CONFIGURATION_ID")
-	private Integer  configuration_id;
-	
+	private Integer configuration_id;
+
 	@Column(name = "CREATED_BY")
-	private String  created_by;
+	private String created_by;
 
 	@Column(name = "LAST_UPDATED_BY")
-	private String  last_updated_by;
-	
+	private String last_updated_by;
+
 	@Column(name = "CREATION_DATE")
-	private Date  creation_date;
-	
+	private Date creation_date;
+
 	@Column(name = "UPDATE_DATE")
-	private Date  update_date;
-	
+	private Date update_date;
+
 	@Column(name = "LAST_EXECUTED_BY")
-	private Date  last_execute_by;
-	
+	private Date last_execute_by;
+
 	@Column(name = "TS_COMPLETE_FLAG")
-	private String  ts_complete_flag;
-	
+	private String ts_complete_flag;
+
 	@Column(name = "PASS_PATH")
-	private String  pass_path;
-	
+	private String pass_path;
+
 	@Column(name = "FAIL_PATH")
-	private String  fail_path;
-	
+	private String fail_path;
+
 	@Column(name = "EXCEPTION_PATH")
-	private String  exception_path;
-	
+	private String exception_path;
+
 	@Column(name = "TR_MODE")
-	private String  tr_mode;
-	
-	
+	private String tr_mode;
+
+	@Column(name = "PDF_GENERATION")
+	private String pdfGenerationEnabled;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSet")
 
 	private List<TestSetLines> testSetLinesDatalist = new ArrayList<TestSetLines>();
-	
+
 	public void addTestSetLinesdata(TestSetLines setlines) {
 		testSetLinesDatalist.add(setlines);
 		setlines.setTestSet(this);
@@ -259,8 +257,13 @@ public class TestSet {
 	public void setTestSetLinesDatalist(List<TestSetLines> testSetLinesDatalist) {
 		this.testSetLinesDatalist = testSetLinesDatalist;
 	}
-		
-		
-	
 
+	public String getPdfGenerationEnabled() {
+		return pdfGenerationEnabled;
 	}
+
+	public void setPdfGenerationEnabled(String pdfGenerationEnabled) {
+		this.pdfGenerationEnabled = pdfGenerationEnabled;
+	}
+
+}

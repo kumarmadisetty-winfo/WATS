@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -27,12 +29,13 @@ public class DataBaseEntry {
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status,message);
+		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
 	}
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String value, String message) throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value,message);
+			String test_script_param_id, String status, String value, String message)
+			throws ClassNotFoundException, SQLException {
+		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);
 	}
 
 	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -109,7 +112,6 @@ public class DataBaseEntry {
 				scriptMaster.getDependency());
 
 		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
-				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.NEW.getLabel())
 				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
 			try {
 				Thread.sleep(3000);
@@ -137,12 +139,16 @@ public class DataBaseEntry {
 		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
 	}
 
-	public boolean checkIfAllTestSetLinesCompleted(int testSetId) {
-		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId);
-
+	public boolean checkIfAllTestSetLinesCompleted(long testSetId,Boolean enable) {
+		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId,enable);
 		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)
+				);
 
+	}
+	
+	public String pdfGenerationEnabled(long testSetId) {
+			return dao.getTestSetPdfGenerationEnableStatus(testSetId);
 	}
 
 	public String getTestSetMode(Long testSetId) {
@@ -162,7 +168,15 @@ public class DataBaseEntry {
 		}
 	}
 
-	public Date getExecStartDateOfScript(String testSetId,String testSetLineId) {
-		return dao.getScript(Integer.valueOf(testSetId),Integer.valueOf(testSetLineId)).getExecution_start_time();
+	public Date getExecStartDateOfScript(String testSetId, String testSetLineId) {
+		return dao.getScript(Integer.valueOf(testSetId), Integer.valueOf(testSetLineId)).getExecution_start_time();
+	}
+
+	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
+		return dao.getConfigurationDetails(testSetId);
+	}
+	
+	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
+		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
 	}
 }
