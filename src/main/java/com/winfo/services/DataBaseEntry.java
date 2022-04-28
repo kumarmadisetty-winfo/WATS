@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Query;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -169,7 +167,7 @@ public class DataBaseEntry {
 	}
 
 	public Date getExecStartDateOfScript(String testSetId, String testSetLineId) {
-		return dao.getScript(Integer.valueOf(testSetId), Integer.valueOf(testSetLineId)).getExecution_start_time();
+		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId)).getExecution_start_time();
 	}
 
 	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
@@ -178,5 +176,10 @@ public class DataBaseEntry {
 	
 	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
 		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
+	}
+	
+	public Date findMaxExecutionEndDate(long testSetId) {
+		return dao.findMaxExecutionEndDate(testSetId);
+
 	}
 }

@@ -521,7 +521,7 @@ public class DataBaseEntryDao {
 		return result;
 	}
 
-	public TestSetLines getScript(int testSetId, int testSetLineId) {
+	public TestSetLines getScript(long testSetId, long testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
@@ -554,6 +554,18 @@ public class DataBaseEntryDao {
 			System.out.println("Error Updation PDF Generation Status");
 			System.out.println(e);
 		}
+	}
+
+	public Date findMaxExecutionEndDate(long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
+		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+
+		cq.select(cb.greatest(from.get("execution_end_time"))).where(condition);
+		Date query = em.createQuery(cq).getSingleResult();
+		return query;
+
 	}
 
 }

@@ -1606,7 +1606,7 @@ public class TestScriptExecService {
 		if (runFinalPdf) {
 			try {
 				FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
-				Date date1 = new Date();
+				Date date1 = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
 				fetchConfigVO.setEndtime(date1);
 				testRunPdfGeneration(testSetId, fetchConfigVO, date1);
 				return new ResponseDto(200, Constants.SUCCESS, null);
@@ -1615,8 +1615,7 @@ public class TestScriptExecService {
 				return new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		} else {
-			return new ResponseDto(200, Constants.WARNING,
-					"Cannot generate PDF. Scripts are In-Progress or In-Queue");
+			return new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
 	}
 
