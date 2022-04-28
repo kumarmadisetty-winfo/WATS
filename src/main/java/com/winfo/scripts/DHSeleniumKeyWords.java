@@ -11793,6 +11793,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='"
 								+ param2 + "']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+				String xpath = "//div[contains(@id,'dropdownPopup::popup-container')]//a[contains(text(),'Search')][1]" +";"+"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				if (keysToSend != null) {
 
 					enter(driver, fetchMetadataVO, fetchConfigVO);
@@ -11814,7 +11818,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					button.click();
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Postal Code Legal Entity dropdownTexts" + scripNumber);
-
+					String xpath1 = "(//div[@class='AFDetectExpansion']/following::span[normalize-space(text())='param2']/following::table//span[text()])[1]"+";"+"//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
+					String scriptID1 = fetchMetadataVO.getScript_id();
+					String metadataID1 = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID1, metadataID1, xpath1);
 				}
 
 				return;
@@ -11836,14 +11843,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(
 					"(//div[contains(@id,'popup-container')]//*[normalize-space(text())='" + keysToSend + "'])[1]"),
 					keysToSend));
-			WebElement waittext = driver.findElement(By.xpath(
-					"(//div[contains(@id,'popup-container')]//*[normalize-space(text())='" + keysToSend + "'])[1]"));
+			WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,'popup-container')]//*[normalize-space(text())='" + keysToSend + "'])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			String xpath = "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='keysToSend'])[1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -11861,14 +11871,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							+ keysToSend + "'])[1]"),
 					keysToSend));
 			WebElement waittext = driver.findElement(
-					By.xpath("(//div[contains(@id,'dropdownPopup::dropDownContent')]//*[normalize-space(text())='"
-							+ keysToSend + "'])[1]"));
+					By.xpath("(//div[contains(@id,'dropdownPopup::dropDownContent')]//*[normalize-space(text())='"+ keysToSend + "'])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			String xpath = "(//div[contains(@id,'dropdownPopup::dropDownContent')]//*[normalize-space(text())='keysToSend'])[1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -11891,6 +11904,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='"
 							+ param2 + "']/following::input[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+			String xpath1 = "//div[contains(@id,'dropdownPopup::dropDownContent')]/following::a[contains(text(),'Search')][1]";
+			String xpath2 = "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			String xpath = xpath1+";"+xpath2;
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			if (keysToSend != null) {
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -11901,6 +11920,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 					text.click();
+					
 				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.error("Failed during dropdownTexts" + scripNumber);
@@ -11948,6 +11968,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			button.click();
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			String xpath1 = "//div[contains(@id,'PopupId::content')]/following::*[normalize-space(text())='Search']/following::*[text()='Name']/following::input[@type='text'][1]";
+			String xpath2 = "(//span[contains(text(),'keysToSend')])[1]";
+			String xpath3 = "//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]";
+			String xpath = xpath1+";"+xpath2+";"+xpath3;
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -11972,6 +11999,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			String xpath = "//h1[contains(text(),'param1')]/following::label[normalize-space(text())='keysToSend']/following::input[1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during dropdownTexts" + scripNumber);
@@ -12067,10 +12098,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[text()=\"" + param1
-
-						+ "\"]/following::label[text()='" + param2 + "']/preceding-sibling::input)[2]";
-  		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[2]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 
 				log.info("Sucessfully Clicked Time Entry multiplelinestableSendKeys" + scripNumber);
 
@@ -12100,10 +12131,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[8]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//td[contains(text(),'Saturday')])[1]" + ";" + "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[8]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -12122,12 +12153,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
+				String xpath = "(//td[contains(text(),'Saturday')])[1]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[9]";
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12146,9 +12177,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
+				String xpath = "(//td[contains(text(),'Saturday')])[1]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[10]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -12167,10 +12196,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//td[contains(text(),'Saturday')])[1]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[11]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12188,10 +12217,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[12]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//td[contains(text(),'Saturday')])[1]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[12]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12208,10 +12237,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[13]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12228,10 +12257,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[14]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12261,9 +12290,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[8]";
+				String xpath = "(//td[contains(text(),'Sat')])[3]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[8]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
 
@@ -12285,9 +12312,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
+				String xpath ="(//td[contains(text(),'Sat')])[3]"+";"+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[9]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
 
@@ -12307,10 +12332,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//td[contains(text(),'Sat')])[3]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[10]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12328,9 +12353,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]";
+				String xpath = "(//td[contains(text(),'Sat')])[3]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[11]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -12350,10 +12373,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[12]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//td[contains(text(),'Sat')])[3]"+";"+"(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[12]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12371,9 +12394,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[13]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -12391,9 +12412,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[14]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -12421,9 +12440,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[6]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[6]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
@@ -12443,10 +12460,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[7]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[7]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
 				return;
@@ -12467,6 +12484,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Wed multiplelinestableSendKeys" + scripNumber);
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[8]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				return;
 			}
 			if (param1.equalsIgnoreCase("Thu")) {
@@ -12484,9 +12505,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[9]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Thu multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -12506,9 +12525,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[10]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Fri multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -12527,9 +12544,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[13]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Sat multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -12548,9 +12563,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "(//*[contains(text(),\"" + param1
-
-						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[14]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Sunday multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -12712,7 +12725,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-				String xpath = "//span[text()='" + param2 + "']/following::input[1]";
+				String xpath = "//span[text()='param2']/following::input[1]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				return;
 			}
@@ -12734,7 +12747,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						String scripNumber = fetchMetadataVO.getScript_number();
 						log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-						String xpath = "//span[text()='" + param2 + "']/following::input[1]";
+						String xpath = "//*[text()='param1']/following::input[contains(@id,'param2')][1]";
 		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 						return;
 					}
@@ -12755,9 +12768,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-				String xpath = "//*[text()='" + param1 + "']/following::label[text()='" + param2
-						+ "']/preceding-sibling::input[not(@type='hidden')]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				return;
 			}
 		} catch (Exception e) {
@@ -12778,9 +12792,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-					String xpath = "//*[text()='" + param1 + "']/following::label[text()='" + param2
-					+ "']/preceding-sibling::input[not(@type='hidden')]";
+					String xpath = "(//*[contains(text(),'param1')]/following::*[text()='param2']//preceding::input[contains(@id,'Filter')])[3]";
 					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
+
 					return;
 					}
 					} catch (Exception e) {
@@ -12813,9 +12830,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
-					String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[1]";
+					String xpath = "//h1[text()='param1']/following::input[contains(@id,'trxNumberList')]/following::a[@title='Search']/preceding-sibling::input[1]";
 					//service.saveXpathParams(param1, param2, scripNumber, xpath);
-
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 
 
 					return;
@@ -12964,7 +12983,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Mon tableSendKeys" + scripNumber);
-				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[2]";
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[1]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 
 				return;
@@ -13113,7 +13132,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.info("Sucessfully Clicked Quantity tableSendKeys" + scripNumber);
 					String xpath = "(//text()='param1']/preceding-sibling::input[ not (@value)])[1]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 
 				} catch (Exception e) {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13125,7 +13146,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 					log.error("Failed during Quantity tableSendKeys" + scripNumber);
-
+					
 				}
 				return;
 			}
@@ -13191,7 +13212,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				return;
 			}
 		} catch (Exception e) {
@@ -13214,6 +13237,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 					String xpath = "//*[contains(text(),'param1')]/following::th[@_d_index='param2'][1]//input[1]";
 					//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
+
 					return;
 					}
 					} catch (Exception e) {
@@ -13355,7 +13382,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-			String xpath = "//h1[text()='Assets']/following::span[text()='Description']/preceding::input[contains(@id,'descColumn::content')]";
+			String xpath = "//h1[text()='param1']/following::span[text()='param2']/preceding::input[contains(@id,'descColumn::content')]";
     		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 
 			return;
@@ -13495,6 +13522,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='keysToSend']";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -13512,6 +13543,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			String xpath = "//table[@summary='param1']/following::li[text()='keysToSend']";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -13529,6 +13564,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			String xpath = "//*[text()='param1']/following::li[text()='keysToSend']";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -13548,6 +13587,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			String xpath = "//*[text()='param1']/following::td[text()='keysToSend']";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -13571,12 +13614,16 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			WebElement searchResult = driver.findElement(By.xpath(
 					"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='"
 							+ param2 + "']/following::input[1]"));
+			String xpath1 = "//div[contains(@id,'dropdownPopup::content')]/following::a[contains(text(),'Search')][1]";
+			String xpath2 = "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]";
+			String xpath = xpath1+";"+xpath2;
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			if (keysToSend != null) {
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 				text.click();
+				xpath = xpath+";"+"(//span[contains(text(),'keysToSend')])[1]";
 			}
 			try {
 				WebElement button = driver.findElement(By.xpath(
@@ -13584,13 +13631,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				button.click();
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+				xpath = xpath + ";" + "//*[text()='Search']/following::*[text()='param2']/following::*[text()='K'][1]";
 			} catch (Exception e) {
 				WebElement button = driver.findElement(By.xpath(
 						"//*[text()='Search']/following::*[text()='" + param2 + "']/following::*[text()='OK'][1]"));
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				button.click();
+				xpath = xpath + ";" + "//*[text()='Search']/following::*[text()='param2']/following::*[text()='OK'][1]";
 			}
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -13599,6 +13651,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			String xpath;
 			try {
 				WebElement searchResult = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
@@ -13607,6 +13660,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+				xpath = "//*[text()='Search']/following::*[text()='Name']/following::input[1]";
 			} catch (Exception e) {
 				WebElement searchResult = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[text()='Value']/following::input[1]"));
@@ -13615,10 +13669,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
+				xpath = "//*[text()='Search']/following::*[text()='Value']/following::input[1]";
 			}
 
 			WebElement text = driver.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 			text.click();
+			xpath = xpath+";"+"(//span[contains(text(),'keysToSend')])[1]";
 			Thread.sleep(1000);
 			try {
 				WebElement button = driver.findElement(
@@ -13626,14 +13682,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				button.click();
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+				xpath = xpath+";"+"//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]";
 			} catch (Exception e) {
 				WebElement button = driver.findElement(
 						By.xpath("//*[text()='Search']/following::*[text()='Value']/following::*[text()='OK'][1]"));
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				button.click();
+				xpath = xpath+";"+"//*[text()='Search']/following::*[text()='Value']/following::*[text()='OK'][1]";
 			}
-
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -13647,6 +13707,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			button.click();
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			String xpath = "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -13660,33 +13724,37 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		//OB.9 DH
-				try {
+		try {
 
-				if (param1.equalsIgnoreCase("Schedules") && (param2.equalsIgnoreCase("Primary"))) {
-		            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		            wait.until(ExpectedConditions.presenceOfElementLocated(
-		            By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "']/ancestor::span//input)[1]")));
-		            WebElement waittext = driver
-		            .findElement(By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "']/ancestor::span//input)[1]"));
-		            Actions actions = new Actions(driver);
-		            actions.moveToElement(waittext).build().perform();
-		            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		            waittext.click();
-		            Thread.sleep(3000);
+			if (param1.equalsIgnoreCase("Schedules") && (param2.equalsIgnoreCase("Primary"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()='" + param1
+						+ "']/following::label[text()='" + param2 + "']/ancestor::span//input)[1]")));
+				WebElement waittext = driver.findElement(By.xpath("(//h1[text()='" + param1
+						+ "']/following::label[text()='" + param2 + "']/ancestor::span//input)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
 
-		          	                  WebElement select = driver
-		          	                  .findElement(By.xpath("//*[text()='" +keysToSend+ "']"));
-		          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-		          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-		          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-		          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-		          	                  return;
-		          	                  }}
-		          	           catch (Exception e) {
-		          	                  String scripNumber = fetchMetadataVO.getScript_number();
-		          	                  log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-		          	                  System.out.println(e);
-		          	                  }
+				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath1 = "(//h1[text()='param1']/following::label[text()='param2']/ancestor::span//input)[1]";
+				String xpath2 = "//*[text()='keysToSend']";
+				String xpath = xpath1+";"+xpath2;
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
 		//dh 8
 		try {if (param2.equalsIgnoreCase("Type")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13699,6 +13767,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(3000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[2]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			return;
 			}
 			} catch (Exception e) {
@@ -13854,30 +13926,34 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 
 			if (param1.equalsIgnoreCase("Create Shift") && (param2.equalsIgnoreCase("Resource"))) {
-	            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-	            wait.until(ExpectedConditions.presenceOfElementLocated(
-	            By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]")));
-	            WebElement waittext = driver
-	            .findElement(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]"));
-	            Actions actions = new Actions(driver);
-	            actions.moveToElement(waittext).build().perform();
-	            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-	            waittext.click();
-	            Thread.sleep(3000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"(//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a)[1]")));
+				WebElement waittext = driver.findElement(By
+						.xpath("(//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
 
-	          	                  WebElement select = driver
-	          	                  .findElement(By.xpath("//li[contains(text(), '" +keysToSend+ "')]"));
-	          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-	          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-	          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-	          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-	          	                  return;
-	          	                  }}
-	          	           catch (Exception e) {
-	          	                  String scripNumber = fetchMetadataVO.getScript_number();
-	          	                  log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-	          	                  System.out.println(e);
-	          	                  }
+				WebElement select = driver.findElement(By.xpath("//li[contains(text(), '" + keysToSend + "')]"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath1 = "(//*[text()='param1']/following::*[text()='param2']/following::a)[1]";
+				String xpath2 = "//li[contains(text(), 'keysToSend')]";
+				String xpath = xpath1+";"+xpath2;
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
 		
 		//DH 55
 		try {
@@ -13894,8 +13970,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			WebElement selectvalue = driver.findElement(By.xpath("//div[@class='listbox']//div[text()='" + keysToSend + "']"));
 			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 			selectvalue.click();
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath1 = "//*[text()='param2']//following::a[1]";
+			String xpath2 = "//div[@class='listbox']//div[text()='keysToSend']";
+			String xpath = xpath1+";"+xpath2;
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
 			}
@@ -13906,108 +13987,131 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			}
 			
 		
-		try {
-			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("From Accounting Period")) {
-			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver
-			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			waittext.click();
-			Thread.sleep(3000);
-			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'FROM_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
-			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-			selectvalue.click();
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-			return;
-			}
+			try {
+				if (param1.equalsIgnoreCase("DH Account Analysis Report")
+						&& param2.equalsIgnoreCase("From Accounting Period")) {
+					Thread.sleep(5000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath("//*[text()='" + param2 + "']//following::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					waittext.click();
+					Thread.sleep(3000);
+					WebElement selectvalue = driver.findElement(
+							By.xpath("//div[contains(@id,'FROM_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
+					// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+					selectvalue.click();
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath1 = "//*[text()='param2']//following::a[1]";
+					String xpath2 = "//div[contains(@id,'FROM_PERIOD_DT')]//div[text()='keysToSend']";
+					String xpath = xpath1+";"+xpath2;
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
+					log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+					return;
+				}
 			} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+				System.out.println(e);
 			}
 			
 			
 			
 			try {
-			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("To Accounting Period")) {
-			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver
-			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			waittext.click();
-			Thread.sleep(3000);
-			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'TO_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
-			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-			selectvalue.click();
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-			return;
-			}
+				if (param1.equalsIgnoreCase("DH Account Analysis Report")
+						&& param2.equalsIgnoreCase("To Accounting Period")) {
+					Thread.sleep(5000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath("//*[text()='" + param2 + "']//following::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					waittext.click();
+					Thread.sleep(3000);
+					WebElement selectvalue = driver.findElement(
+							By.xpath("//div[contains(@id,'TO_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
+					// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+					selectvalue.click();
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath1 = "//*[text()='param2']//following::a[1]";
+					String xpath2 = "//div[contains(@id,'TO_PERIOD_DT')]//div[text()='keysToSend']";
+					String xpath = xpath1+";"+xpath2;
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
+					log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+					return;
+				}
 			} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+				System.out.println(e);
 			}
 			
 			
 			try {
-			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Account")) {
-			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver
-			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			waittext.click();
-			Thread.sleep(3000);
-			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'P_ACCOUNTS')]//div[text()='" + keysToSend + "']"));
-			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-			selectvalue.click();
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-			return;
-			}
+				if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Account")) {
+					Thread.sleep(5000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath("//*[text()='" + param2 + "']//following::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					waittext.click();
+					Thread.sleep(3000);
+					WebElement selectvalue = driver.findElement(
+							By.xpath("//div[contains(@id,'P_ACCOUNTS')]//div[text()='" + keysToSend + "']"));
+					// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+					selectvalue.click();
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath1 = "//*[text()='param2']//following::a[1]";
+					String xpath2 = "//div[contains(@id,'P_ACCOUNTS')]//div[text()='keysToSend']";
+					String xpath = xpath1+";"+xpath2;
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
+					log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+					return;
+				}
 			} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+				System.out.println(e);
 			}
 			
 			
 			try {
-			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Sub Ledger Application")) {
-			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver
-			.findElement(By.xpath("//*[text()='"+param2+"']//following::a[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			waittext.click();
-			Thread.sleep(3000);
-			WebElement selectvalue = driver.findElement(By.xpath("//div[contains(@id,'SUB_LEDGER_APPL')]//div[text()='" + keysToSend + "']"));
-			//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-			selectvalue.click();
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-			return;
-			}
+				if (param1.equalsIgnoreCase("DH Account Analysis Report")
+						&& param2.equalsIgnoreCase("Sub Ledger Application")) {
+					Thread.sleep(5000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebElement waittext = driver.findElement(By.xpath("//*[text()='" + param2 + "']//following::a[1]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					waittext.click();
+					Thread.sleep(3000);
+					WebElement selectvalue = driver.findElement(
+							By.xpath("//div[contains(@id,'SUB_LEDGER_APPL')]//div[text()='" + keysToSend + "']"));
+					// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+					selectvalue.click();
+					String scripNumber = fetchMetadataVO.getScript_number();
+					String xpath1 = "//*[text()='" + param2 + "']//following::a[1]";
+					String xpath2 = "//div[contains(@id,'SUB_LEDGER_APPL')]//div[text()='keysToSend']";
+					String xpath = xpath1+";"+xpath2;
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
+					log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+					return;
+				}
 			} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+				System.out.println(e);
 			}
 		
 		
@@ -14027,36 +14131,39 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		
 		//DH 48
 		try {
-			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason")) || (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) ) {
+			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
+					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]")));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]")));
 
-
-
-				WebElement waittext = driver
-				.findElement(By.xpath("//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]"));
+				WebElement waittext = driver.findElement(By
+						.xpath("//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(3000);
 
-				WebElement selectvalue = driver
-				.findElement(By.xpath("//li[text()='" + keysToSend + "']"));
-				//clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+				WebElement selectvalue = driver.findElement(By.xpath("//li[text()='" + keysToSend + "']"));
+				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
-				
-				String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath1 = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+				String xpath2 = "//li[text()='keysToSend']";
+				String xpath = xpath1+";"+xpath2;
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
-				}
-				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-				System.out.println(e);
-				}
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
 
 		
 		
@@ -14066,26 +14173,28 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		
 		//DH 32
 		try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
-		WebElement waittext = driver.findElement(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		waittext.click();
-		Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
-		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
-		String scriptID = fetchMetadataVO.getScript_id();
-		String metadataID = fetchMetadataVO.getScript_meta_data_id();
-		service.saveXpathParams(scriptID, metadataID, xpath);
-		log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-		return;
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1
+							+ "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='"
+					+ param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			waittext.click();
+			Thread.sleep(4000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
 		} catch (Exception e) {
-		String scripNumber = fetchMetadataVO.getScript_number();
-		log.error("Failed during Event Type dropdownValues" + scripNumber);
-		System.out.println(e);
-		}		
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Event Type dropdownValues" + scripNumber);
+			System.out.println(e);
+		}	
 		try {
 			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14125,14 +14234,20 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			WebElement searchok = driver
 			.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
 			+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
+			
 			clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']/following::*[@title='param2']"
-			+ ";" + "//a[contains(text(),'Search')]" + ";"
-			+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
-			+ ";"
-			+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]";
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[text()='param1']/following::*[@title='param2']" 
+					+ ";" 
+					+ "//table[contains(@id,'dropdownPopup')]//*[text()='Search...']"
+					+ ";"
+					+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
+					+ ";"
+					+ "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
+					+ ";"
+					+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
@@ -14165,7 +14280,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//h1[normalize-space(text())='param1']/following::label[text()='param2']/following::a[contains(@id,'eventType')]"
 			+ ";"
-			+ "//div[contains(@id,'popup-container')]//td[text()='" + keysToSend + "'][1]";
+			+ "//div[contains(@id,'popup-container')]//td[text()='keysToSend'][1]";
 			String scriptID = fetchMetadataVO.getScript_id();
 			String metadataID = fetchMetadataVO.getScript_meta_data_id();
 			service.saveXpathParams(scriptID, metadataID, xpath);
@@ -14179,120 +14294,105 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			}
 		
 		//DH 14  SCP.512
-				try {
-				if (param1.equalsIgnoreCase("Search") && param2.equalsIgnoreCase("Order Type")) {
+		try {
+			if (param1.equalsIgnoreCase("Search") && param2.equalsIgnoreCase("Order Type")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='"
+						+ param1 + "']/following::label[text()='" + param2 + "']/following::input)[1]")));
 
-
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-				"(//*[normalize-space(text())='" + param1 + "']/following::label[text()='" + param2 + "']/following::input)[1]")));
-
-
-
-				WebElement waittext = driver.findElement(By.xpath(
-				"(//*[normalize-space(text())='" + param1 + "']/following::label[text()='" + param2 + "']/following::input)[1]"));
-
-
+				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='" + param1
+						+ "']/following::label[text()='" + param2 + "']/following::input)[1]"));
 
 				Actions actions = new Actions(driver);
 
-
-
 				waittext.click();
-
-
 
 				Thread.sleep(10000);
 
 				WebElement search = driver
-				.findElement(By.xpath("//div[contains(@id,'popup-container')]//label[text()='All']/input[1]"));
-
-
+						.findElement(By.xpath("//div[contains(@id,'popup-container')]//label[text()='All']/input[1]"));
 
 				search.click();
-
-
 
 				Thread.sleep(4000);
 
-
-
 				search.click();
 
-
-
 				WebElement Value = driver.findElement(By
-				.xpath("//div[contains(@id,'popup-container')]//label[text()='" + keysToSend + "']/input[1]"));
-
-
+						.xpath("//div[contains(@id,'popup-container')]//label[text()='" + keysToSend + "']/input[1]"));
 
 				Value.click();
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
-				+ ";" + "//a[contains(text(),'Search')]" + ";"
-				+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
-				+ ";"
-				+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
-				+ ";"
-				+ "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
+				String xpath = "(//*[normalize-space(text())='param1']/following::label[text()='param2']/following::input)[1]"
+						+ ";" 
+						+ "//div[contains(@id,'popup-container')]//label[text()='All']/input[1]" 
+						+ ";"
+						+ "//div[contains(@id,'popup-container')]//label[text()='keysToSend']/input[1]";
 				String scriptID = fetchMetadataVO.getScript_id();
 				String metadataID = fetchMetadataVO.getScript_meta_data_id();
 				service.saveXpathParams(scriptID, metadataID, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
-				}
-				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-				System.out.println(e);
-				}
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
 				
 				
 				//DH 24
 				try {
-				if (param1.equalsIgnoreCase("Pay Groups") || param1.equalsIgnoreCase("Sources")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2+ "']")));
-				WebElement waittext = driver
-				.findElement(By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2+ "']"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(2000);
-				WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')]"));
-				clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
-				Thread.sleep(5000);
-				WebElement values = driver.findElement(By.xpath(
-				"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
-				+ param2 + "']/following::input[1]"));
-				typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				WebElement select = driver
-				.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
-				+ keysToSend + "')][1]"));
-				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				WebElement searchok = driver
-				.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
-				+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
-				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']/following::*[@title='param2']"
-				+ ";" + "//a[contains(text(),'Search')]" + ";"
-				+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
-				+ ";"
-				+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]";
-				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-				return;
-				}
+					if (param1.equalsIgnoreCase("Pay Groups") || param1.equalsIgnoreCase("Sources")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(
+								By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2 + "']")));
+						WebElement waittext = driver.findElement(
+								By.xpath("//*[text()='" + param1 + "']/following::*[@title='" + param2 + "']"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						Thread.sleep(2000);
+						WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')]"));
+						clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
+						Thread.sleep(5000);
+						WebElement values = driver.findElement(By.xpath(
+								"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
+										+ param2 + "']/following::input[1]"));
+						typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+						enter(driver, fetchMetadataVO, fetchConfigVO);
+						WebElement select = driver.findElement(
+								By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
+										+ keysToSend + "')][1]"));
+						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+						WebElement searchok = driver.findElement(
+								By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
+										+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
+						clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						Thread.sleep(5000);
+						String scripNumber = fetchMetadataVO.getScript_number();
+						String xpath = "//*[text()='param1']/following::*[@title='param2']" 
+								+ ";"
+								+ "//a[contains(text(),'Search')]" 
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
+						log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+						return;
+					}
 				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-				System.out.println(e);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+					System.out.println(e);
 				}
 				
 				
@@ -14361,119 +14461,140 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		
 		
 		
-		try {
-			if (param1.equalsIgnoreCase("Schedule New Process") && param2.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + param1
-								+ "']/following::*[normalize-space(text())='" + param2 + "']/following::a[1]")));
-				WebElement waittext = driver
-						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + param1
-								+ "']/following::*[normalize-space(text())='" + param2 + "']/following::a[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(2000);
-				WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')]"));
-				clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
-				Thread.sleep(5000);
-				WebElement values = driver.findElement(By.xpath(
-						"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
-								+ param2 + "']/following::input[1]"));
-				typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				WebElement select = driver
-						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
-								+ keysToSend + "')][1]"));
-				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				WebElement searchok = driver
-						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
-								+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
-				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(5000);
-				WebElement ok = driver.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='"
-						+ param1 + "']/following::*[normalize-space(text())='" + param2
-						+ "']/following::a[1]/following::button[text()='OK']"));
-				ok.click();
-				Thread.sleep(6000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-
-				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
-						+ ";" + "//a[contains(text(),'Search')]" + ";"
-						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
-						+ ";"
-						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
-						+ ";"
-						+ "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-				return;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
-		}
-		try {
-			if (param1.equalsIgnoreCase("Invoice Header") && param2.equalsIgnoreCase("Business Unit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
-						+ "']/following::label[text()='" + param2 + "']/following::a[1]")));
-				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
-						+ "']/following::label[text()='" + param2 + "']/following::a[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
-
-				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
-						+ ";" + "//a[contains(text(),'Search')][1]" + ";"
-						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
-						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
-						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				try {
-					actions.click(waittext).build().perform();
-					Thread.sleep(10000);
-					// WebElement popup1 =
-					// driver.findElement(By.xpath("//div[contains(@id,'suggestions-popup')]"));
-					WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')][1]"));
-					search.click();
-					Thread.sleep(3000);
-					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-							"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]")));
-					WebElement searchResult = driver.findElement(By.xpath(
-							"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"));
-					typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
-					Thread.sleep(5000);
-					WebElement text = driver.findElement(By.xpath(
-							"//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
-					text.click();
-					Thread.sleep(1000);
-					WebElement button = driver.findElement(By.xpath(
-							"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
-					button.click();
+					if (param1.equalsIgnoreCase("Schedule New Process") && param2.equalsIgnoreCase("Name")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(
+								By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + param1
+										+ "']/following::*[normalize-space(text())='" + param2
+										+ "']/following::a[1]")));
+						WebElement waittext = driver
+								.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + param1
+										+ "']/following::*[normalize-space(text())='" + param2 + "']/following::a[1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+						Thread.sleep(2000);
+						WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')]"));
+						clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
+						Thread.sleep(5000);
+						WebElement values = driver.findElement(By.xpath(
+								"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
+										+ param2 + "']/following::input[1]"));
+						typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+						enter(driver, fetchMetadataVO, fetchConfigVO);
+						WebElement select = driver.findElement(
+								By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
+										+ keysToSend + "')][1]"));
+						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+						WebElement searchok = driver.findElement(
+								By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
+										+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
+						clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						Thread.sleep(5000);
+						WebElement ok = driver
+								.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + param1
+										+ "']/following::*[normalize-space(text())='" + param2
+										+ "']/following::a[1]/following::button[text()='OK']"));
+						ok.click();
+						Thread.sleep(6000);
+						String scripNumber = fetchMetadataVO.getScript_number();
 
-					log.info("Sucessfully Clicked Invoice Header or Business Unit dropdownValues" + scripNumber);
-
+						String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
+								+ ";" 
+								+ "//a[contains(text(),'Search')]" 
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]"
+								+ ";"
+								+ "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
+						log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+						return;
+					}
 				} catch (Exception e) {
-					// String scripNumber = fetchMetadataVO.getScript_number();
-					log.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 					System.out.println(e);
 				}
-				return;
-			}
-		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(ex);
-		}
+				
+				try {
+					if (param1.equalsIgnoreCase("Invoice Header") && param2.equalsIgnoreCase("Business Unit")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='"
+								+ param1 + "']/following::label[text()='" + param2 + "']/following::a[1]")));
+						WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
+								+ "']/following::label[text()='" + param2 + "']/following::a[1]"));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						String scripNumber = fetchMetadataVO.getScript_number();
+
+						String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]";
+			
+						try {
+							actions.click(waittext).build().perform();
+							Thread.sleep(10000);
+							// WebElement popup1 =
+							// driver.findElement(By.xpath("//div[contains(@id,'suggestions-popup')]"));
+							WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')][1]"));
+							search.click();
+							Thread.sleep(3000);
+							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+									"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]")));
+							WebElement searchResult = driver.findElement(By.xpath(
+									"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"));
+							typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+							enter(driver, fetchMetadataVO, fetchConfigVO);
+							Thread.sleep(5000);
+							WebElement text = driver.findElement(
+									By.xpath("//span[text()='Name']/following::span[normalize-space(text())='"
+											+ keysToSend + "']"));
+							text.click();
+							Thread.sleep(1000);
+							WebElement button = driver.findElement(By.xpath(
+									"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
+							button.click();
+
+							log.info("Sucessfully Clicked Invoice Header or Business Unit dropdownValues" + scripNumber);
+							
+							xpath = xpath
+										+";"
+										+"//a[contains(text(),'Search')][1]"
+										+";"
+										+"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
+										+";"
+										+"//span[text()='Name']/following::span[normalize-space(text())='keysToSend']"
+										+";"
+										+"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
+
+						} catch (Exception e) {
+							// String scripNumber = fetchMetadataVO.getScript_number();
+							log.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
+							System.out.println(e);
+						}
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
+						return;
+					}
+				} catch (Exception ex) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during  dropdownValues" + scripNumber);
+					System.out.println(ex);
+				}
 		// This is to select the dropdown and select 'All' and deselect All then
 		// Selecting Draft
 		//DH_50
 		try {
-			if (((param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft"))||(param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Template")) || param2.equalsIgnoreCase("Campaign Purpose"))) {
+			if (((param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft"))
+					|| (param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Template"))
+					|| param2.equalsIgnoreCase("Campaign Purpose"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
 						+ "']/following::label[text()='" + param2 + "']/following::a[1]")));
@@ -14482,10 +14603,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.click(waittext).build().perform();
 				Thread.sleep(4000);
-				//WebElement checkbox = driver.findElement(By.xpath("//label[text()='All']"));
-				//checkbox.click();
-				//Thread.sleep(3000);
-				//checkbox.click();
+				// WebElement checkbox = driver.findElement(By.xpath("//label[text()='All']"));
+				// checkbox.click();
+				// Thread.sleep(3000);
+				// checkbox.click();
 				WebElement text = driver.findElement(By.xpath("//label[text()='" + param2
 						+ "']/following::label[normalize-space(text())='" + keysToSend + "']"));
 				text.click();
@@ -14493,9 +14614,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
-						+ ";" + "//label[text()='All']" + ";"
+						+ ";"
 						+ "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
 				return;
 			}
@@ -14523,11 +14646,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
-						+ ";" + "//label[text()='All']" + ";"
-						+ "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
+				String xpath = "//*[contains(text(),'param1')]/following::a[@title='param2'][1]"
+						+ ";" 
+						+ "//a[text()='Search...']" 
+						+ ";"
+						+ "//div[text()='Search and Select: Bill-to Account']/following::label[text()='Account Number']/following::input[1]"
+						+ ";"
+						+ "//h1[text()='Search']/following::button[text()='OK'][1]";
 				//service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				
 				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
 				return;
@@ -14565,11 +14694,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String scripNumber = fetchMetadataVO.getScript_number();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
-						+ ";" + "(//a[text()='Search...'])[3]" + ";"
+						+ ";" 
+						+ "(//a[text()='Search...'])[3]" 
+						+ ";"
 						+ "//h2[normalize-space(text())='Search']/following::label[text()='Name']/following::input[1]"
-						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
+						+ ";" 
+						+ "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" 
+						+ ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				return;
 			}
 		} catch (Exception ex) {
@@ -14611,9 +14746,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						+ "//*[contains(@id,'territoryShortNameId')]/following-sibling::a[contains(text(),'Search')]"
 						+ ";"
 						+ "(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"
-						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
+						+ ";" 
+						+ "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" 
+						+ ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				log.info("Sucessfully Clicked Create Bank Account or Country dropdownValues" + scripNumber);
 				return;
 			}
@@ -14647,6 +14786,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				WebElement button = driver.findElement(By.xpath(
 						"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 				button.click();
+				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[@title='Search: Tax Country']"
+						+ ";"
+						+ "(//a[text()='Search...'])"
+						+ ";"
+						+ "//div[normalize-space(text())='Search and Select: Tax Country']/following::label[text()='Name']/following::input[1]"
+						+ ";" 
+						+ "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" 
+						+ ";"
+						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				return;
 			}
 		} catch (Exception ex) {
@@ -14807,7 +14958,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-
+				String xpath = "//*[normalize-space(text())='param2']/following::input[1]";
 				Thread.sleep(2000);
 				if (param2.equalsIgnoreCase("Procurement BU") || param2.equalsIgnoreCase("Business Unit")) {
 					WebElement search = driver
@@ -14827,11 +14978,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input)[1]" + ";"
+					xpath = xpath
+							+";"
+							+"//div[@class='listbox']//span[contains(text(),'Search')]"
+							+ ";"
+							+ "(//span[text()='Name']/following::input)[1]" 
+							+ ";"
+							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Procurement BU or Business Unit dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Requisition BU")) {
@@ -14854,12 +15012,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "(//div[@class='listbox']//span[contains(text(),'Search')])[1]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
-							+ "//*[text()='Name']/following::div[text()='" + keysToSend + "']" + ";"
+					xpath = xpath
+							+";"
+							+"(//div[@class='listbox']//span[contains(text(),'Search')])[1]"
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[2]"
+							+ ";"
+							+ "//*[text()='Name']/following::div[text()='keysToSend']" 
+							+ ";"
 							+ "//span[text()='Name']/following::button[text()='OK'][2]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Requisition BU dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Supplier Name")) {
@@ -14867,6 +15031,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						WebElement select = driver.findElement(By.xpath("//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='" + keysToSend + "'][1]"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+						xpath = xpath+ ";"+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
 						return;
 					} else {
 						WebElement search = driver
@@ -14886,12 +15054,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						String scripNumber = fetchMetadataVO.getScript_number();
 
-						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-								+ "(//div[@class='listbox']//span[contains(text(),'Search')])[3]" + ";"
-								+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
-								+ "//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"
-								+ ";" + "//span[text()='Name']/following::button[text()='OK'][3]";
-		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						xpath = xpath
+								+";"
+								+"(//div[@class='listbox']//span[contains(text(),'Search')])[3]"
+								+ ";"
+								+ "(//span[text()='Name']/following::input[@type='text'])[3]"
+								+ ";"
+								+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" 
+								+ ";"
+								+ "//span[text()='Name']/following::button[text()='OK'][3]";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
 						log.info("Sucessfully  Supplier Name Clicked dropdownValues" + scripNumber);
 
 						return;
@@ -14914,6 +15088,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				String xpath = "//*[normalize-space(text())='param2']/following::input[1]";
 				Thread.sleep(2000);
 				if (param2.equalsIgnoreCase("Period Name")) {
 					WebElement search = driver
@@ -14932,12 +15107,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input)[1]" + ";"
-							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
+					xpath = xpath
+							+";"
+							+ "//div[@class='listbox']//span[contains(text(),'Search')]"
+							+ ";"
+							+ "(//span[text()='Name']/following::input)[1]"
+							+ ";"
+							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Period Name dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Legal Entity")) {
@@ -14959,9 +15140,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//div[@class='listbox']//span[contains(text(),'Search')]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					xpath = xpath
+							+";"
+							+ "//div[@class='listbox']//span[contains(text(),'Search')]"
+							+ ";"
+							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[1]"
+							+ ";"
+							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
+							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::button[text()='OK']";
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
 				}
@@ -14985,6 +15175,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				String xpath = "//*[normalize-space(text())='param2']/following::input[1]";
 				Thread.sleep(2000);
 				if (param2.equalsIgnoreCase("Legal Entity")) {
 					WebElement search = driver.findElement(
@@ -15005,12 +15196,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'LEGAL_ENTITY')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
+					xpath = xpath
+							+";"
+							+ "//a[contains(@id,'LEGAL_ENTITY')][1]//span/span[contains(text(),'Search')]"
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[1]"
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Customer Name")) {
@@ -15033,12 +15230,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'CUSTOMER_NAME')][1]//span/span[contains(text(),'Search')]" + ";"
+					xpath = xpath
+							+";"
+							+ "//a[contains(@id,'CUSTOMER_NAME')][1]//span/span[contains(text(),'Search')]"
+							+ ";"
 							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[@type='text'][1]"
-							+ ";" + "//*[text()='Value']/following::div[contains(text(),'" + keysToSend + "')]" + ";"
+							+ ";"
+							+ "//*[text()='Value']/following::div[contains(text(),'keysToSend')]" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
 					return;
 				}
@@ -15058,6 +15261,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					|| (param1.equalsIgnoreCase("Receivables to Ledger Reconciliation")
 
 							&& param2.equalsIgnoreCase("Ledger"))) {
+				String xpath;
 
 				if (param1.equalsIgnoreCase("General Journals Report") && (param2.equalsIgnoreCase("Ledger"))) {
 
@@ -15080,7 +15284,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
 					waittext.click();
-
+					xpath = "(//span[text()='param2']/following::img)[1]";
 					Thread.sleep(2000);
 
 				}
@@ -15106,7 +15310,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
 					waittext.click();
-
+					xpath = "(//span[contains(text(),'param2')]/following::img)[1]";
 					Thread.sleep(2000);
 
 				}
@@ -15159,17 +15363,21 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
-
-							+ "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" + ";"
-
-							+ "(//span[text()='Name']/following::input)[1]" + ";"
-
-							+ "//*[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
-
+					xpath = xpath
+							+";"
+							+"//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" 
+							+ ";"
+							+ "//span[text()='Name']/following::select[1]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input)[1]" 
+							+ ";"
+							+ "//*[text()='Name']/following:*[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 
@@ -15214,17 +15422,19 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
-
-							+ "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" + ""
-
-							+ "(//span[text()='Name']/following::input)[1]" + ";"
-
-							+ "//*[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
-
+					xpath = xpath
+							+";"
+							+ "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input)[1]" 
+							+ ";"
+							+ "//*[text()='Name']/following::*[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 
 					log.info("Sucessfully Clicked Request Name dropdownValues" + scripNumber);
 
@@ -15278,17 +15488,21 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
-
-							+ "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" + ";"
-
-							+ "(//span[text()='Name']/following::input)[1]" + ";"
-
-							+ "//*[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
-
+					xpath = xpath
+							+";"
+							+ "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input)[1]" 
+							+ ";"
+							+ "//*[text()='Name']/following::span[normalize-space(text())='keysToSend']" 
+							+ ";"
+							+ "//td[@title='Move']" 
+							+ ";"
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 
@@ -15339,12 +15553,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 
-				String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-						+ "(//a[contains(@id,'legal')or 'LE'][1]//span/span[contains(text(),'Search')])[2]" + ";"
-						+ "(//span[text()='Name']/following::input[@type='text'])" + ";"
-						+ "//b[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
+				String xpath = "//*[normalize-space(text())='param2']/following::input[1]" 
+						+ ";"
+						+ "(//a[contains(@id,'legal')or 'LE'][1]//span/span[contains(text(),'Search')])[2]" 
+						+ ";"
+						+ "(//span[text()='Name']/following::input[@type='text'])" 
+						+ ";"
+						+ "//b[text()='Value']/following::div[normalize-space(text())='keysToSend']" 
+						+ ";"
 						+ "//div[text()='Search']/following::button[text()='OK']";
-    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+				String scriptID = fetchMetadataVO.getScript_id();
+				String metadataID = fetchMetadataVO.getScript_meta_data_id();
+				service.saveXpathParams(scriptID, metadataID, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 				return;
 			}
