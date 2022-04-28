@@ -15585,6 +15585,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				String xpath = "//*[normalize-space(text())='param2']/following::input[1]";
 				Thread.sleep(2000);
 				if (param2.equalsIgnoreCase("Procurement Business Unit")) {
 					WebElement search = driver.findElement(
@@ -15603,12 +15604,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'PROCUREMENT')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
+					xpath = xpath
+							+";"
+							+"//a[contains(@id,'PROCUREMENT')][1]//span/span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[1]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Report dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Ledger")) {
@@ -15629,12 +15636,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
+					xpath = xpath
+							+";"
+							+"//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[2]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Request Name")) {
@@ -15655,12 +15668,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
+					xpath = xpath
+							+";"
+							+"//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[2]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Requistion Business Unit")) {
@@ -15681,12 +15700,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
+					xpath = xpath
+							+";"
+							+"//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[2]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Status")) {
@@ -15706,12 +15731,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'STATUS')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][1]" + ";"
+					xpath = xpath
+							+";"
+							+"//a[contains(@id,'STATUS')][1]//span/span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[3]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][1]" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][3]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Status dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Req. Business Unit") || param2.equalsIgnoreCase("Client BU")) {
@@ -15731,12 +15762,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
+					xpath = xpath
+							+";"
+							+"//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[1]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Req. Business Unit dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Legal Entity")) {
@@ -15757,12 +15794,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "(//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')])[1]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
+					xpath = xpath
+							+";"
+							+"(//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')])[1]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[1]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Customer Name")) {
@@ -15783,12 +15826,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScript_number();
 
-					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-							+ "(//a[contains(@id,'CUSTOMER')][1]//span/span[contains(text(),'Search')])[1]" + ";"
-							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
-							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
+					xpath = xpath
+							+";"
+							+"(//a[contains(@id,'CUSTOMER')][1]//span/span[contains(text(),'Search')])[1]" 
+							+ ";"
+							+ "(//span[text()='Name']/following::input[@type='text'])[2]" 
+							+ ";"
+							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" 
+							+ ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-	    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					String scriptID = fetchMetadataVO.getScript_id();
+					String metadataID = fetchMetadataVO.getScript_meta_data_id();
+					service.saveXpathParams(scriptID, metadataID, xpath);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Business Unit")) {
@@ -15798,10 +15847,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 						String scripNumber = fetchMetadataVO.getScript_number();
 
-						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-								+ "//span[text()='" + param2
-								+ "']/following::div[normalize-space(text())='keysToSend'][1]";
-		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						xpath = xpath
+								+";"
+								+"//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
 						log.info("Sucessfully Clicked Business Unit dropdownValues" + scripNumber);
 						return;
 					} else {
@@ -15823,12 +15874,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						Thread.sleep(3000);
 						String scripNumber = fetchMetadataVO.getScript_number();
 
-						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-								+ "//a[contains(@id,'BU')][1]//span/span[contains(text(),'Search')]" + ";"
-								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
-								+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
+						xpath = xpath
+								+";"
+								+"//a[contains(@id,'BU')][1]//span/span[contains(text(),'Search')]" 
+								+ ";"
+								+ "(//span[text()='Name']/following::input[@type='text'])[1]" 
+								+ ";"
+								+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" 
+								+ ";"
 								+ "//div[text()='Search']/following::button[text()='OK']";
-		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 						return;
 					}
@@ -15839,9 +15896,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 						String scripNumber = fetchMetadataVO.getScript_number();
 
-						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-								+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
-		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						xpath = xpath
+								+";"
+								+"//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
 						log.info("Sucessfully Clicked Supplier Name dropdownValues" + scripNumber);
 						return;
 					} else {
@@ -15864,12 +15924,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						Thread.sleep(3000);
 						String scripNumber = fetchMetadataVO.getScript_number();
 
-						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
-								+ "//a[contains(@id,'SUPPLIER')][1]//span/span[contains(text(),'Search')]" + ";"
-								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
-								+ "//*[normalize-space(text())='Value']/following::div[normalize-space(text())='keysToSend']"
-								+ ";" + "//div[text()='Search']/following::button[text()='OK']";
-		    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+						xpath = xpath
+								+";"
+								+"//a[contains(@id,'SUPPLIER')][1]//span/span[contains(text(),'Search')]" 
+								+ ";"
+								+ "(//span[text()='Name']/following::input[@type='text'])[1]" 
+								+ ";"
+								+ "//*[normalize-space(text())='Value']/following::div[normalize-space(text())='keysToSend']" 
+								+ ";"
+								+ "//div[text()='Search']/following::button[text()='OK']";
+						String scriptID = fetchMetadataVO.getScript_id();
+						String metadataID = fetchMetadataVO.getScript_meta_data_id();
+						service.saveXpathParams(scriptID, metadataID, xpath);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 						return;
 					}
