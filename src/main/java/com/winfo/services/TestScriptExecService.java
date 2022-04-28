@@ -1608,6 +1608,7 @@ public class TestScriptExecService {
 				FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
 				Date startDate = dataBaseEntry.findMinExecutionStartDate(Long.valueOf(testSetId));
 				Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
+				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setStarttime1(startDate);
 				fetchConfigVO.setEndtime(endDate);
 				testRunPdfGeneration(testSetId, fetchConfigVO, endDate);
