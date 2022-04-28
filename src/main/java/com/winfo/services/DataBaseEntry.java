@@ -137,16 +137,15 @@ public class DataBaseEntry {
 		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
 	}
 
-	public boolean checkIfAllTestSetLinesCompleted(long testSetId,Boolean enable) {
-		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId,enable);
+	public boolean checkIfAllTestSetLinesCompleted(long testSetId, Boolean enable) {
+		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId, enable);
 		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)
-				);
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
 
 	}
-	
+
 	public String pdfGenerationEnabled(long testSetId) {
-			return dao.getTestSetPdfGenerationEnableStatus(testSetId);
+		return dao.getTestSetPdfGenerationEnableStatus(testSetId);
 	}
 
 	public String getTestSetMode(Long testSetId) {
@@ -173,13 +172,16 @@ public class DataBaseEntry {
 	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
 		return dao.getConfigurationDetails(testSetId);
 	}
-	
+
 	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
 		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
 	}
-	
+
 	public Date findMaxExecutionEndDate(long testSetId) {
 		return dao.findMaxExecutionEndDate(testSetId);
+	}
 
+	public Date findMinExecutionStartDate(long testSetId) {
+		return dao.findMinExecutionStartDate(testSetId);
 	}
 }

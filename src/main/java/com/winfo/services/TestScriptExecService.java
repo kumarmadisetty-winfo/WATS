@@ -1606,9 +1606,11 @@ public class TestScriptExecService {
 		if (runFinalPdf) {
 			try {
 				FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
-				Date date1 = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
-				fetchConfigVO.setEndtime(date1);
-				testRunPdfGeneration(testSetId, fetchConfigVO, date1);
+				Date startDate = dataBaseEntry.findMinExecutionStartDate(Long.valueOf(testSetId));
+				Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
+				fetchConfigVO.setStarttime1(startDate);
+				fetchConfigVO.setEndtime(endDate);
+				testRunPdfGeneration(testSetId, fetchConfigVO, endDate);
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
 				e.printStackTrace();

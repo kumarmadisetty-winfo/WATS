@@ -567,5 +567,17 @@ public class DataBaseEntryDao {
 		return query;
 
 	}
+	
+	public Date findMinExecutionStartDate(long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
+		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+
+		cq.select(cb.least(from.<Date>get("execution_start_time"))).where(condition);
+		Date query = em.createQuery(cq).getSingleResult();
+		return query;
+
+	}
 
 }
