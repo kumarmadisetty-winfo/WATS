@@ -186,7 +186,7 @@ public class RunAutomation {
 							executor.shutdown();
 							System.out.println("treminattion is succeed");
 						} else {
-							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData);
+							executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,scriptStatus);
 						}
 						long i = System.currentTimeMillis() - starttimeIntermediate;
 						increment = increment + i;
@@ -379,7 +379,7 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData) throws Exception {
+			Entry<String, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
 		List<String> failList = new ArrayList<String>();
 		WebDriver driver = null;
 //		//String start_time=null;
