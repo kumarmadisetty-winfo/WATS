@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.vo.Status;
 
 @Service
 
@@ -127,6 +129,7 @@ public class RunAutomation {
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
 			System.out.println(fetchMetadataListVO.size());
+			Map<Integer,Status> scriptStatus = new HashMap<Integer,Status>();
 			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
 			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
 					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
