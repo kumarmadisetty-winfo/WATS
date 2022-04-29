@@ -1,8 +1,12 @@
 package com.winfo.services;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.vo.Status;
 
 @Service
 @RefreshScope
@@ -74,6 +79,34 @@ public class DataBaseEntry {
 			return dao.getTestScriptMap(testSetLine);
 	}
 
+	@Transactional
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+		List<Integer> dependentList = new ArrayList();
+		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
+			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
+
+		}
+
+		dao.getDependentScriptNumbers(dependentScriptMap, dependentList);
+		/*
+		 * for(Entry<String,List<FetchMetadataVO>>
+		 * element:dependentScriptMap.entrySet()) {
+		 * //dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()
+		 * ));
+		 * status.put(Integer.parseInt(element.getValue().get(0).getScript_id()),"New");
+		 * 
+		 * if(element.getValue().get(0).getDependencyScriptNumber()!=null) {
+		 * status.put(element.getValue().get(0).getDependencyScriptNumber(),"New"); }
+		 * 
+		 * }
+		 */
+
+	}
+	
+public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Integer, Status> scriptStatus) {
+		// TODO Auto-generated method stub
+		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus);
+	}
 	
 	
 }

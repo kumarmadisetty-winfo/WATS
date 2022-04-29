@@ -38,6 +38,7 @@ public class FetchMetadataVO implements Serializable {
 //added executed_by
     private String executed_by;
 	private String smtp_from_mail;
+	private Integer dependencyScriptNumber;
 	
  public String getSmtp_from_mail() {
 		return smtp_from_mail;
@@ -259,6 +260,14 @@ public void setConditional_popup(String conditional_popup) {
 	}
 	public void setInput_value(String input_value) {
 		this.input_value = input_value;
+	}
+
+	public Integer getDependencyScriptNumber() {
+		return dependencyScriptNumber;
+	}
+
+	public void setDependencyScriptNumber(Integer dependencyScriptNumber) {
+		this.dependencyScriptNumber = dependencyScriptNumber;
 	}
 	
 	
