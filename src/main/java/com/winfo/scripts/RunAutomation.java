@@ -278,7 +278,7 @@ public class RunAutomation {
 								Status s =scriptStatus.get(Integer.parseInt(metadata.getValue().get(0).getScript_id()));
 								s.setStatus("Fail");
 							}
-						   errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,fd.getTest_script_param_id(),null,null,null);
+						   errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,fd.getTest_script_param_id(),null,null,null,null);
 						   
 					   }
 				   }else {
@@ -336,7 +336,7 @@ public class RunAutomation {
 								Status s =scriptStatus.get(Integer.parseInt(metadata.getValue().get(0).getScript_id()));
 								s.setStatus("Fail");
 							}
-						   errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,fd.getTest_script_param_id(),null,null,null);
+						   errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,fd.getTest_script_param_id(),null,null,null,null);
 						   
 					   }
 					   
