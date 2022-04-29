@@ -410,7 +410,7 @@ public class RunAutomation {
 			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,scriptStatus);
 
 		} catch (Exception e) {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO, "0", inputParam);
@@ -441,7 +441,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<FetchMetadataVO> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus)throws Exception {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -932,6 +932,22 @@ public class RunAutomation {
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
 						try {
+							//dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+							if(fetchMetadataVO.getDependency().equalsIgnoreCase("Y")) {
+								if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
+									Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+									if(!s.getStatus().equalsIgnoreCase("Fail")) {
+										int awaitCounter=s.getInExecutionCount();
+										s.setInExecutionCount(--awaitCounter);
+										if(awaitCounter<=0) {
+											s.setStatus("Pass");
+										}
+										
+											
+									}
+								}
+							}
+
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 						} catch (Exception e) {
@@ -963,7 +979,11 @@ public class RunAutomation {
 					
 					}
 				 catch (Exception e) {
-					System.out.println("Failed to Execute the " + "" + actionName);
+					 if(scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
+							Status s =scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+							s.setStatus("Fail");
+						}
+					 System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
 					errorMessagesHandler.getError(actionName,fetchMetadataVO, fetchConfigVO, test_script_param_id,message,param1,param2,dataBaseEntry.getPassword(param, userName, fetchConfigVO));
