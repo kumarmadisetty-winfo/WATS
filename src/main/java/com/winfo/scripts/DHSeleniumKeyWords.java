@@ -271,8 +271,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@id,'UISpb2')]")));
-			WebElement waittext = driver.findElement(By.xpath("//div[contains(@id,'UISpb2')]"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,'UIScmil')])[1]")));
+			WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,'UIScmil')])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
