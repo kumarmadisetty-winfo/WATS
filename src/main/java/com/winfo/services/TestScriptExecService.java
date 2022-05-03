@@ -192,7 +192,6 @@ public class TestScriptExecService {
 
 	public ResponseDto run(String testSetId) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
-
 		try {
 			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testSetId);
@@ -356,6 +355,7 @@ public class TestScriptExecService {
 			dto.setBuckerName(ociBucketName);
 			dto.setOciNameSpace(ociNamespace);
 			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
+			dto.setScriptFileName(environment.getProperty("pyjab.customer.specific.name").split("\\.")[0]);
 
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);

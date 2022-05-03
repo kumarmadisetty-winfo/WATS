@@ -15,6 +15,7 @@ public class PyJabScriptDto {
 	private String ociConfigName;
 	private String buckerName;
 	private String ociNameSpace;
+	private String scriptFileName;
 
 	public String getApplicationName() {
 		return applicationName;
@@ -102,6 +103,14 @@ public class PyJabScriptDto {
 
 	public void setOciNameSpace(String ociNameSpace) {
 		this.ociNameSpace = ociNameSpace;
+	}
+
+	public String getScriptFileName() {
+		return scriptFileName;
+	}
+
+	public void setScriptFileName(String scriptFileName) {
+		this.scriptFileName = scriptFileName;
 	}
 
 }
