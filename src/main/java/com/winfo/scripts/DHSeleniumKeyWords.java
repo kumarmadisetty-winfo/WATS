@@ -5636,6 +5636,30 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		//HCM.ADM.1132 HS2 (click button)
+try {
+			if (param1.equalsIgnoreCase("Send")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath(("//button[text()='Sen']")));// screenshot(driver,
+			// "",
+			// fetchMetadataVO,
+			// fetchConfigVO);
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(15000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "//button[text()='Sen']";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+			}
 		
 		//DH 57
 
@@ -10188,6 +10212,24 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
+				try {
+					if(param1.equalsIgnoreCase("Compose")) {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//body[contains(@id,'MessageContent')]")));
+					Thread.sleep(1000);
+					WebElement waittill = driver.findElement(By.xpath("//body[contains(@id,'MessageContent')]"));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittill).build().perform();
+					waittill.sendKeys(keysToSend);
+				//	typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					Thread.sleep(500);
+					return keysToSend;
+					}
+					} catch (Exception e) {
+					System.out.println(e);
+					}
 		
 		//DH 20
 		try {
@@ -13547,6 +13589,31 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Relationship Information") && (param2.equalsIgnoreCase("Contact Type"))) 
+			{
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+			By.xpath("//h1[normalize-space(text())='" +param1 + "']/following::*[normalize-space(text())='" +param2+ "']/following::a[1]")));
+			WebElement waittext = driver
+			.findElement(By.xpath("//h1[normalize-space(text())='" +param1 + "']/following::*[normalize-space(text())='" +param2+ "']/following::a[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).perform();
+
+			WebElement select = driver
+			.findElement(By.xpath("(//div[contains(@id,'popup-container')]//*[normalize-space(text())='" + keysToSend + "'])[1]"));
+			//select.click();
+			clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}}
+			catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
 		// OTL.004 DH
 		try {
 
