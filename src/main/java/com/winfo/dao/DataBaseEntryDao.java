@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -303,6 +304,21 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 			scriptStatus.put(dependentScriptNo, status);
 		}
 		
+	}
+
+	public String getNodeOs(Integer script_id) {
+		// TODO Auto-generated method stub
+		String os = null;
+		try {
+			String sql = "select operating_system from win_ta_script_master_os WHERE script_id = :scriptId";
+			Query query = em.unwrap(Session.class).createSQLQuery(sql);
+			query.setParameter("scriptId", script_id);
+			os = query.getSingleResult().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			return os;
+		}
 	}
 	
 	
