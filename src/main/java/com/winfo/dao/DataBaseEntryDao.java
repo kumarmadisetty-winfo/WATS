@@ -405,8 +405,9 @@ public class DataBaseEntryDao {
 				+ "           wtsmdata.field_type,\r\n" + "           wtsmdata.hint,\r\n"
 				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
 				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
-				+ "          ,wtsmdata.TEST_SCRIPT_PARAM_ID\r\n" + "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n"
-				+ "      from\r\n" + "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
+				+ "				,wtsmdata.LINE_EXECUTION_STATUS\r\n" + "          ,wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
+				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "      from\r\n"
+				+ "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
 				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
 				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
 				+ "           win_ta_customers       wtc\r\n" + "     WHERE 1=1\r\n"
@@ -474,10 +475,12 @@ public class DataBaseEntryDao {
 						.setTest_run_name(NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
 				testRunExecutionVO
 						.setSeq_num(NULL_STRING.equals(String.valueOf(obj[20])) ? null : String.valueOf(obj[20]));
-				testRunExecutionVO.setTest_script_param_id(
-						NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
 				testRunExecutionVO
-						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
+						.setStatus(NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
+				testRunExecutionVO.setTest_script_param_id(
+						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
+				testRunExecutionVO
+						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
 
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
@@ -567,7 +570,7 @@ public class DataBaseEntryDao {
 		return query;
 
 	}
-	
+
 	public Date findMinExecutionStartDate(long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
