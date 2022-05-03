@@ -59,6 +59,7 @@ import org.jfree.ui.VerticalAlignment;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -108,9 +109,9 @@ import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.DateUtils;
-import com.winfo.vo.ResponseDto;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
+import com.winfo.vo.ResponseDto;
 import com.winfo.vo.UpdateScriptParamStatus;
 
 @Service
@@ -180,6 +181,9 @@ public class TestScriptExecService {
 
 	@Autowired
 	EBSSeleniumKeyWords eBSSeleniumKeyWords;
+
+	@Autowired
+	Environment environment;
 
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
@@ -1620,6 +1624,17 @@ public class TestScriptExecService {
 		} else {
 			return new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
+	}
+
+	public void movePyjabScriptFilesToObjectStore() {
+		String actionsFilePath = environment.getProperty("pyjab.template.path")
+				+ environment.getProperty("pyjab.actions.script.name");
+		String customerSpecificScriptPath = environment.getProperty("pyjab.template.path")
+				+ environment.getProperty("pyjab.customer.specific.name");
+		uploadObjectToObjectStore(actionsFilePath, environment.getProperty("pyjab.script.path.in.oci")
+				+ environment.getProperty("pyjab.actions.script.name"));
+		uploadObjectToObjectStore(customerSpecificScriptPath, environment.getProperty("pyjab.script.path.in.oci")
+				+ environment.getProperty("pyjab.customer.specific.name"));
 	}
 
 }
