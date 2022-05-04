@@ -542,17 +542,17 @@ public class TestScriptExecService {
 	}
 
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
-		try {
-			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-			logger.info("%%%%%%%%%%");
-
-			logger.info(path);
-
-			Files.write(Paths.get(path), sourceFileContent.getBytes());
-		} catch (IOException e1) {
-
-			e1.printStackTrace();
-		}
+//		try {
+//			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+//			logger.info("%%%%%%%%%%");
+//
+//			logger.info(path);
+//
+//			Files.write(Paths.get(path), sourceFileContent.getBytes());
+//		} catch (IOException e1) {
+//
+//			e1.printStackTrace();
+//		}
 
 		PutObjectResponse response = null;
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
