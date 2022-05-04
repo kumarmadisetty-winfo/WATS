@@ -18051,7 +18051,7 @@ try {
 	
 	private String copyValuesWithSpc(String value) {
 		try {
-		Pattern p = Pattern.compile("\\b[A-Z]+\\-*[A-Z]+\\-*\\d+"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
+		Pattern p = Pattern.compile("\b[A-Z]*\-*[A-Z]*\-*[a-z]*[A-Z]*[a-z]*\d+[a-z]*[A-Z]*[a-z]*"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
 		Matcher m = p.matcher(value);
 		// if we find a match, get the group
 		String theGroup = null;
