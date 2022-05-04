@@ -949,9 +949,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		});
 
-		List<String> fileNameList = new ArrayList<String>();
-		ArrayList<String> linksall = new ArrayList<String>();
-		ArrayList<String> links1 = new ArrayList<String>();
+		List<String> fileNameList = new ArrayList<>();
+		ArrayList<String> linksall = new ArrayList<>();
+		ArrayList<String> links1 = new ArrayList<>();
 		File file = new ClassPathResource(whiteimage).getFile();
 		// File file = new File("C:\\Users\\Winfo
 		// Solutions\\Desktop\\Add_On\\white.jpg");
@@ -969,48 +969,46 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.setFont(font);
 		String details = fileList.get(0).getName();
 		// String details= seqList.get(0).getName();
-		String ScriptNumber = details.split("_")[3];
-		String TestRun = details.split("_")[4];
-		String Status = details.split("_")[6];
-		String status = Status.split("\\.")[0];
-		String Scenario = details.split("_")[2];
-		String imagename = TestRun + ScriptNumber;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
+		String scriptNumber = details.split("_")[3];
+//		String testRun = details.split("_")[4];
+		String status = details.split("_")[6].split("\\.")[0];
+		String scenario = details.split("_")[2];
+//		String imagename = testRun + scriptNumber;
+		String tName = fetchMetadataListVO.get(0).getTest_run_name();
 		String no = details.split("_")[0];
-		Date Starttime = fetchConfigVO.getStarttime();
+		Date starttime = fetchConfigVO.getStarttime();
 		Date endtime = fetchConfigVO.getEndtime();
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String Starttime1 = dateFormat.format(Starttime);
+		String starttime1 = dateFormat.format(starttime);
 //Changed the executed by variable
-		String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
+		String exeBy = fetchMetadataListVO.get(0).getExecuted_by();
 		String endtime1 = dateFormat.format(endtime);
-		long diff = endtime.getTime() - Starttime.getTime();
+		long diff = endtime.getTime() - starttime.getTime();
 		long diffSeconds = diff / 1000 % 60;
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String executionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
-		g.drawString("Test Run Name : " + TName, 50, 100);
-		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Scenario Name :" + Scenario, 50, 200);
+		g.drawString("Test Run Name : " + tName, 50, 100);
+		g.drawString("Script Number : " + scriptNumber, 50, 150);
+		g.drawString("Scenario Name :" + scenario, 50, 200);
 		g.drawString("Status : " + status, 50, 250);
-		g.drawString("Executed By :" + ExeBy, 50, 300);
-		g.drawString("Start Time :" + Starttime1, 50, 350);
+		g.drawString("Executed By :" + exeBy, 50, 300);
+		g.drawString("Start Time :" + starttime1, 50, 350);
 		g.drawString("End Time :" + endtime1, 50, 400);
-		g.drawString("Execution Time : " + ExecutionTime, 50, 450);
+		g.drawString("Execution Time : " + executionTime, 50, 450);
 		g.drawImage(logo, 1012, 15, null);
 		g.dispose();
 		File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 				+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
 		if (!folder1.exists()) {
 			System.out.println("creating directory: " + folder1.getName());
-			boolean result = false;
+//			boolean result = false;
 			try {
 				folder1.mkdirs();
-				result = true;
+//				result = true;
 			} catch (SecurityException se) {
-				// handle it
-				System.out.println(se.getMessage());
+				se.printStackTrace();
 			}
 		} else {
 			System.out.println("Folder exist");
@@ -1053,8 +1051,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					fileNameList.add(fileList.get(i).getName());
 
-				} else {
-
 				}
 
 			}
@@ -1075,7 +1071,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		 * }
 		 */
 		if (video_rec.equalsIgnoreCase("Y")) {
-			String name = no + "_" + ScriptNumber + ".mp4";
+			String name = no + "_" + scriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
 		}
 		return fileNameList;
@@ -1112,7 +1108,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
+		ArrayList<String> links = new ArrayList<>();
 		String firstimagelink = null;
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
@@ -1127,9 +1123,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 
 			});
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-			ArrayList<String> linksall = new ArrayList<String>();
+			List<String> seqFileNameList = new ArrayList<>();
+			ArrayList<String> links1 = new ArrayList<>();
+			ArrayList<String> linksall = new ArrayList<>();
 
 			File file = new ClassPathResource(whiteimage).getFile();
 			// File file = new File("C:\\Users\\Winfo
@@ -1148,31 +1144,30 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.setFont(font);
 
 			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			String TName = fetchMetadataListVO.get(0).getTest_run_name();
+			String scriptNumber = details.split("_")[3];
+			String testRun = details.split("_")[4];
+			String status = details.split("_")[6].split("\\.")[0];
+			String scenario = details.split("_")[2];
+			String imagename = testRun + scriptNumber;
+			String tName = fetchMetadataListVO.get(0).getTest_run_name();
 			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
+			Date tStarttime = fetchConfigVO.getStarttime1();
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
+			String tStarttime1 = dateFormat.format(tStarttime);
 //Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
+			String exeBy = fetchMetadataListVO.get(0).getExecuted_by();
 			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			long tdiff = endtime.getTime() - tStarttime.getTime();
+			long tdiffSeconds = tdiff / 1000 % 60;
+			long tdiffMinutes = tdiff / (60 * 1000) % 60;
+			long tdiffHours = tdiff / (60 * 60 * 1000);
+			String executionTime = tdiffHours + ":" + tdiffMinutes + ":" + tdiffSeconds;
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Scenario Name :" + Scenario, 50, 275);
+			g.drawString("Test Run Name : " + tName, 50, 125);
+			g.drawString("Script Number : " + scriptNumber, 50, 200);
+			g.drawString("Scenario Name :" + scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
+			g.drawString("Executed By :" + exeBy, 50, 425);
 			g.drawImage(logo, 1012, 15, null);
 ////		 g.drawString("Start Time :"+TStarttime1, 50, 425);
 ////		 g.drawString("End Time :"+endtime1, 50, 500);
@@ -1185,24 +1180,23 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.setColor(Color.black);
 			g2.setFont(font);
 			g2.drawString("TEST RUN SUMMARY", 450, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
+			g2.drawString("Test Run Name : " + tName, 50, 125);
+			g2.drawString("Executed By :" + exeBy, 50, 200);
+			g2.drawString("Start Time :" + tStarttime1, 50, 275);
 			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
+			g2.drawString("Execution Time : " + executionTime, 50, 425);
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
 			File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
+//				boolean result = false;
 				try {
 					folder1.mkdirs();
-					result = true;
+//					result = true;
 				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
+					se.printStackTrace();
 				}
 			} else {
 				System.out.println("Folder exist");
@@ -1271,7 +1265,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		if (video_rec.equalsIgnoreCase("yes")) {
 			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Passed_Video.mp4");
 		}
-		System.out.println(targetFileList.size());
 		return targetFileList;
 	}
 
@@ -1305,7 +1298,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
+		ArrayList<String> links = new ArrayList<>();
 		String firstimagelink = null;
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
@@ -1321,9 +1314,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			});
 
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-			ArrayList<String> linksall = new ArrayList<String>();
+			List<String> seqFileNameList = new ArrayList<>();
+			ArrayList<String> links1 = new ArrayList<>();
+			ArrayList<String> linksall = new ArrayList<>();
 
 			File file = new ClassPathResource(whiteimage).getFile();
 			// File file = new File("C:\\Users\\Winfo
@@ -1332,8 +1325,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// File file1=new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
-			BufferedImage image = null;
-			image = ImageIO.read(file);
+			BufferedImage image = ImageIO.read(file);
 			BufferedImage logo = null;
 			logo = ImageIO.read(file1);
 			Graphics g = image.getGraphics();
@@ -1341,32 +1333,31 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
 			g.setFont(font);
 			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			String TName = fetchMetadataListVO.get(0).getTest_run_name();
+			String scriptNumber = details.split("_")[3];
+			String testRun = details.split("_")[4];
+			String status = details.split("_")[6].split("\\.")[0];
+			String scenario = details.split("_")[2];
+			String imagename = testRun + scriptNumber;
+			String tName = fetchMetadataListVO.get(0).getTest_run_name();
 			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
+			Date tStarttime = fetchConfigVO.getStarttime1();
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
+			String tStarttime1 = dateFormat.format(tStarttime);
 //Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
+			String exeBy = fetchMetadataListVO.get(0).getExecuted_by();
 			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			long tdiff = endtime.getTime() - tStarttime.getTime();
+			long tdiffSeconds = tdiff / 1000 % 60;
+			long tdiffMinutes = tdiff / (60 * 1000) % 60;
+			long tdiffHours = tdiff / (60 * 60 * 1000);
+			String executionTime = tdiffHours + ":" + tdiffMinutes + ":" + tdiffSeconds;
 
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Scenario Name :" + Scenario, 50, 275);
+			g.drawString("Test Run Name : " + tName, 50, 125);
+			g.drawString("Script Number : " + scriptNumber, 50, 200);
+			g.drawString("Scenario Name :" + scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
+			g.drawString("Executed By :" + exeBy, 50, 425);
 			g.drawImage(logo, 1150, 15, null);
 ////	    g.drawString("Start Time :"+TStarttime1, 50, 425);
 ////	    g.drawString("End Time :"+endtime1, 50, 500);
@@ -1376,13 +1367,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
+//				boolean result = false;
 				try {
 					folder1.mkdirs();
-					result = true;
+//					result = true;
 				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
+					se.printStackTrace();
 				}
 			} else {
 				System.out.println("Folder exist");
@@ -1392,8 +1382,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
+			BufferedImage image1 = ImageIO.read(file);
 			Graphics g1 = image1.getGraphics();
 			g1.setColor(Color.red);
 			java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
@@ -1405,17 +1394,16 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\last.jpg"));
 
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
+			BufferedImage image2 = ImageIO.read(file);
 			Graphics g2 = image2.getGraphics();
 			g2.setColor(Color.black);
 			g2.setFont(font);
 			g2.drawString("TEST RUN SUMMARY", 50, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
+			g2.drawString("Test Run Name : " + tName, 50, 125);
+			g2.drawString("Executed By :" + exeBy, 50, 200);
+			g2.drawString("Start Time :" + tStarttime1, 50, 275);
 			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
+			g2.drawString("Execution Time : " + executionTime, 50, 425);
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
 			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
@@ -1498,7 +1486,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
 //		String video_rec=fetchConfigVO.getEnable_video();
-		String video_rec = "no";
+		String videoRec = "no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		int failcount = 0;
@@ -1519,13 +1507,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 
 		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> finalLinks = new ArrayList<String>();
+		ArrayList<String> finalLinks = new ArrayList<>();
 		List<String> targetSuccessFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		ArrayList<String> links2 = new ArrayList<String>();
+		ArrayList<String> links = new ArrayList<>();
+		ArrayList<String> links2 = new ArrayList<>();
 		List<String> targetFailedFileList = new ArrayList<>();
 		String firstimagelink = null;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
+		String tName = fetchMetadataListVO.get(0).getTest_run_name();
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
@@ -1540,10 +1528,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			});
 
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
+			List<String> seqFileNameList = new ArrayList<>();
+			ArrayList<String> links1 = new ArrayList<>();
 
-			ArrayList<String> linksall = new ArrayList<String>();
+			ArrayList<String> linksall = new ArrayList<>();
 
 			File file = new ClassPathResource(whiteimage).getFile();
 			File file1 = new ClassPathResource(watsvediologo).getFile();
@@ -1561,31 +1549,30 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.setFont(font);
 
 			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
+			String scriptNumber = details.split("_")[3];
+			String testRun = details.split("_")[4];
+			String status = details.split("_")[6].split("\\.")[0];
+			String scenario = details.split("_")[2];
+			String imagename = testRun + scriptNumber;
 			// String TName = fetchMetadataListVO.get(0).getTest_run_name();
 			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
+			Date tStarttime = fetchConfigVO.getStarttime1();
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
+			String tStarttime1 = dateFormat.format(tStarttime);
 //Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
+			String exeBy = fetchMetadataListVO.get(0).getExecuted_by();
 			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			long tdiff = endtime.getTime() - tStarttime.getTime();
+			long tdiffSeconds = tdiff / 1000 % 60;
+			long tdiffMinutes = tdiff / (60 * 1000) % 60;
+			long tdiffHours = tdiff / (60 * 60 * 1000);
+			String executionTime = tdiffHours + ":" + tdiffMinutes + ":" + tdiffSeconds;
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Scenario Name :" + Scenario, 50, 275);
+			g.drawString("Test Run Name : " + tName, 50, 125);
+			g.drawString("Script Number : " + scriptNumber, 50, 200);
+			g.drawString("Scenario Name :" + scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
+			g.drawString("Executed By :" + exeBy, 50, 425);
 			g.drawImage(logo, 1012, 15, null);
 			// g.drawString("Start Time :"+TStarttime1, 50, 425);
 			// g.drawString("End Time :"+endtime1, 50, 500);
@@ -1595,10 +1582,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
+//				boolean result = false;
 				try {
 					folder1.mkdirs();
-					result = true;
+//					result = true;
 				} catch (SecurityException se) {
 					// handle it
 					System.out.println(se.getMessage());
@@ -1627,11 +1614,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.setColor(Color.black);
 			g2.setFont(font);
 			g2.drawString("TEST RUN SUMMARY", 450, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
+			g2.drawString("Test Run Name : " + tName, 50, 125);
+			g2.drawString("Executed By :" + exeBy, 50, 200);
+			g2.drawString("Start Time :" + tStarttime1, 50, 275);
 			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
+			g2.drawString("Execution Time : " + executionTime, 50, 425);
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
 			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
@@ -1667,8 +1654,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						seqFileNameList.add(seqList.get(i).getName());
 
 //			                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
-
-					} else {
 
 					}
 
@@ -1711,8 +1696,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 //			                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
 
-					} else {
-
 					}
 
 				}
@@ -1744,9 +1727,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		 */
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("Y")) {
+		if (videoRec.equalsIgnoreCase("Y")) {
 
-			convertJPGtoMovie(firstimagelink, finalLinks, fetchMetadataListVO, fetchConfigVO, TName + ".mp4");
+			convertJPGtoMovie(firstimagelink, finalLinks, fetchMetadataListVO, fetchConfigVO, tName + ".mp4");
 		}
 		return targetFileList;
 	}
@@ -6006,7 +5989,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				return;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during Submit clickButton" + scripNumber);
 		}
