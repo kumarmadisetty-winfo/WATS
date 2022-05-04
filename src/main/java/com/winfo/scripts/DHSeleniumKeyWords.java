@@ -13398,6 +13398,34 @@ try {
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//HS2
+		try {
+
+			if (param1.equalsIgnoreCase("Edit Citizenships") && ((param2.equalsIgnoreCase("Citizenship Status") || (param2.equalsIgnoreCase("Citizenship"))))) {
+	            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+	            wait.until(ExpectedConditions.presenceOfElementLocated(
+	            By.xpath("(//div[text()='" +param1+ "']/following::label[text()='" +param2+ "']/parent::span//a)[1]")));
+	            WebElement waittext = driver
+	            .findElement(By.xpath("(//div[text()='" +param1+ "']/following::label[text()='" +param2+ "']/parent::span//a)[1]"));
+	            Actions actions = new Actions(driver);
+	            actions.moveToElement(waittext).build().perform();
+	            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+	            waittext.click();
+	            Thread.sleep(3000);
+
+	          	                  WebElement select = driver
+	          	                  .findElement(By.xpath("//*[text()='" +keysToSend+ "']"));
+	          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+	          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+	          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+	          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+	          	                  return;
+	          	                  }}
+	          	           catch (Exception e) {
+	          	                  String scripNumber = fetchMetadataVO.getScript_number();
+	          	                  log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+	          	                  System.out.println(e);
+	          	                  }
 		//OB.9 DH
 				try {
 
@@ -17860,6 +17888,22 @@ try {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//iframe[@title='inputParam']";
 			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			return;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		//HS2
+		try {
+			Thread.sleep(3000);
+			WebElement waittext = driver
+					.findElement(By.xpath("//*[@class='AFMaskingFrame']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			driver.switchTo().frame(waittext);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[@class='AFMaskingFrame']";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+			return;
 		} catch (Exception e) {
 			System.out.println(e);
 		}
