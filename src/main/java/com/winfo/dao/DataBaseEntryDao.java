@@ -386,8 +386,10 @@ public class DataBaseEntryDao {
 	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf) {
 
 		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
-		String whereClause = "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
-
+		String whereClause = "";
+		if (testSetLineId != null) {
+			whereClause = "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
+		}
 		if (finalPdf) {
 			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
 		}
@@ -405,7 +407,7 @@ public class DataBaseEntryDao {
 				+ "           wtsmdata.field_type,\r\n" + "           wtsmdata.hint,\r\n"
 				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
 				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
-				+ "				,wtsmdata.LINE_EXECUTION_STATUS\r\n" + "          ,wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
+				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
 				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "      from\r\n"
 				+ "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
 				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
@@ -430,7 +432,7 @@ public class DataBaseEntryDao {
 			List<Object[]> resultList = query.getResultList();
 			Iterator<Object[]> itr = resultList.iterator();
 			while (itr.hasNext()) {
-				Object[] obj = (Object[]) itr.next();
+				Object[] obj = itr.next();
 				FetchMetadataVO testRunExecutionVO = new FetchMetadataVO();
 
 				testRunExecutionVO

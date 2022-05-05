@@ -199,9 +199,7 @@ public class TestScriptExecService {
 		try {
 			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testSetId);
-
-			final String uri = fetchConfigVO.getMETADATA_URL() + testSetId;
-			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(testSetId, uri);
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false);
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
 					dependentScriptMap);
