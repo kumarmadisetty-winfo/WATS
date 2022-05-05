@@ -18394,19 +18394,19 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 		
 
 	try {
-		if(param1.equalsIgnoreCase("OPERA ERP Trigger Invoice Upload") && param2.equalsIgnoreCase("Run")) {
+		if(param1.equalsIgnoreCase("Oracle OPERA ERP Trigger Invoice Upload") && param2.equalsIgnoreCase("Run")) {
 		Thread.sleep(3000);
 		Actions action = new Actions(driver);
-		WebElement we = driver.findElement(By.xpath("(//*[text()='OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']"));
+		WebElement we = driver.findElement(By.xpath("(//*[text()='Oracle OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']"));
 		action.moveToElement(we).perform();
 		Thread.sleep(5000);
-		WebElement run = driver.findElement(By.xpath("(//*[text()='OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
+		WebElement run = driver.findElement(By.xpath("(//*[text()='Oracle OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
 		run.click();
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		Thread.sleep(5000);
 		String scripNumber = fetchMetadataVO.getScript_number();
 		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-		String xpath = "(//*[text()='OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
+		String xpath = "(//*[text()='Oracle OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 		return;
 		}
