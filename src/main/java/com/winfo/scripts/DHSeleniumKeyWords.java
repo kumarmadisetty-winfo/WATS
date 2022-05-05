@@ -736,9 +736,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<File> fileList = new ArrayList<>();
 		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
 		// String seqNumber = "1";
+		List<String> fileNameList = new ArrayList<String>();
+
 		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_")) {
+			if (file.getName().startsWith(seqNumber + "_") && file.getName().endsWith("Failed.jpg")) {
 				fileList.add(file);
+//				fileNameList.add(file.getName());
 			}
 		}
 		System.out.println("before Collections.sort completed");
@@ -752,7 +755,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		});
 		System.out.println("after Collections.sort completed");
-		List<String> fileNameList = new ArrayList<String>();
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
 		File file = new ClassPathResource(whiteimage).getFile();
@@ -890,6 +892,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String name = no + "_" + ScriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
 		}
+		System.out.println("fileNameList -- "+fileNameList);
 		return fileNameList;
 	}
 
