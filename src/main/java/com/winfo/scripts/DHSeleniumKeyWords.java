@@ -10279,19 +10279,14 @@ try {
 			log.error("Failed during textarea" + scripNumber);
 			System.out.println(e);
 		}
+		//PROD
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),'" + param1
-					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),'" + param1+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]")));
 			Thread.sleep(1000);
-			wait.until(
-					ExpectedConditions
-							.textToBePresentInElementLocated(
-									By.xpath("//*[contains(text(),'" + param1
-											+ "')]/following::label[normalize-space(text())='" + param2 + "']"),
-									param2));
-			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" + param1
-					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]"));
+//			wait.until(
+//			ExspectedConditions.textToBePresentInElementLocated(By.xpath("(//*[contains(text(),'" + param1+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]"), param2));
+			WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" + param1+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -10332,6 +10327,50 @@ try {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//prod
+		try {
+			if (param1.equalsIgnoreCase("Add Activities")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" +param1+ "')]/following::input[1]")));
+			WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::input[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			String xpath = "//*[contains(text(),'param1')]/following::input[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+			}
+		//prod
+		try {
+			if (param1.equalsIgnoreCase("Create Line") && (param2.equalsIgnoreCase("Name"))) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" +param1+ "']/following::label[text()='" +param2+ "']/following::input[@aria-live='off'][1]")));
+			WebElement waittill = driver.findElement(By.xpath("//div[text()='" +param1+ "']/following::label[text()='" +param2+ "']/following::input[@aria-live='off'][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[@aria-live='off'][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+			}
 		
 		//DH 65
 		try {
