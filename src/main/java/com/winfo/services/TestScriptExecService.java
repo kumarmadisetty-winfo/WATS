@@ -125,7 +125,7 @@ public class TestScriptExecService {
 	private static final String STATUS = "Status";
 	private static final String PERCENTAGE = "Percentage";
 	private static final String TOTAL = "Total";
-	private static final String[] NEW_STATUS = {"Passed", "Failed"};
+	private static final String[] NEW_STATUS = { "Passed", "Failed" };
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
@@ -657,7 +657,8 @@ public class TestScriptExecService {
 
 		ObjectStorage client = new ObjectStorageClient(provider);
 
-		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH + TestRunName + FORWARD_SLASH + seqNum;
+		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH + TestRunName
+				+ FORWARD_SLASH + seqNum;
 
 		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
 				.bucketName(ociBucketName)
@@ -705,8 +706,9 @@ public class TestScriptExecService {
 	}
 
 	public void deleteScreenshotsFromWindows(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO) {
-		File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-				+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name());
+		File folder1 = new File(
+				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+						+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name());
 		if (!folder1.exists()) {
 			try {
 				folder1.mkdirs();
@@ -818,10 +820,6 @@ public class TestScriptExecService {
 								+ ".pdf",
 						args.getStartDate(), enddate);
 
-				if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-					eBSSeleniumKeyWords.uploadPDF(fetchMetadataListVO, fetchConfigVO);
-				}
-
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 						"pass", new Date(), enddate);
@@ -878,15 +876,12 @@ public class TestScriptExecService {
 									+ ".pdf",
 							args.getStartDate(), enddate);
 				}
-				if ("OBJECT_STORE".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
-							fetchConfigVO);
 
-					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-							fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-							"Fail", new Date(), enddate);
-					// break;
-				}
+				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
+						"Fail", new Date(), enddate);
+				// break;
+
 			}
 
 			// final reports generation
@@ -1287,7 +1282,7 @@ public class TestScriptExecService {
 					}
 				}
 
-				int i = 0; 
+				int i = 0;
 				int j = 0;
 				for (String image : fileNameList) {
 					i++;
