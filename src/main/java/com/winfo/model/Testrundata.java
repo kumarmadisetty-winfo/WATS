@@ -11,12 +11,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="WIN_TA_TEST_SET")
 public class Testrundata {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRun_generator")
+	@SequenceGenerator(name = "testRun_generator", sequenceName = "WIN_TA_TEST_SET_ID_SEQ", allocationSize = 1)
 	@Column(name = "TEST_SET_ID")
 	private int testsetid;
 	

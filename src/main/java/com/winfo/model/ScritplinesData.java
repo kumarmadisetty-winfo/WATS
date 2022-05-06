@@ -7,15 +7,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM")
 public class ScritplinesData {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRunScriptParam_generator")
+	@SequenceGenerator(name = "testRunScriptParam_generator", sequenceName = "WIN_TA_PARAM_ID_SEQ", allocationSize = 1)
 	@Column(name = "TEST_SCRIPT_PARAM_ID")
 	private int testscriptperamid;
 	
