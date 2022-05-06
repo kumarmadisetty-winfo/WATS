@@ -739,9 +739,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<String> fileNameList = new ArrayList<String>();
 
 		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_") && file.getName().endsWith("Failed.jpg")) {
+			if (file.getName().startsWith(seqNumber + "_")) {
 				fileList.add(file);
-//				fileNameList.add(file.getName());
 			}
 		}
 		System.out.println("before Collections.sort completed");
@@ -843,41 +842,39 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		File f11 = new File(imgpath2);
 		File[] f22 = f11.listFiles();
 		System.out.println("before Failed.jpg");
-		if (fileList.get(0).getName().endsWith("Failed.jpg")) {
-			for (File f33 : f22) {
-				if (f33.getAbsolutePath().contains("first")) {
-					linksall.add(f33.getAbsolutePath());
-					linksall.set(0, f33.getAbsolutePath());
-				}
-				if (f33.getAbsolutePath().contains("last")) {
-					linksall.add(f33.getAbsolutePath());
-					linksall.add(f33.getAbsolutePath());
-					linksall.set(1, f33.getAbsolutePath());
-
-				}
+		for (File f33 : f22) {
+			if (f33.getAbsolutePath().contains("first")) {
+				linksall.add(f33.getAbsolutePath());
+				linksall.set(0, f33.getAbsolutePath());
 			}
-			fetchConfigVO.setStatus1("Fail");
-			fileNameList.add(fileList.get(0).getName());
-			links1.add(fileList.get(0).getAbsolutePath());
-			links1.add(linksall.get(1));
-			System.out.println("added links1 list");
-			for (int i = 1; i < fileList.size(); i++) {
-
-				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-					links1.add(fileList.get(i).getAbsolutePath());
-					fileNameList.add(fileList.get(i).getName());
-
-				} else {
-
-				}
+			if (f33.getAbsolutePath().contains("last")) {
+				linksall.add(f33.getAbsolutePath());
+				linksall.add(f33.getAbsolutePath());
+				linksall.set(1, f33.getAbsolutePath());
 
 			}
-
-			links1.add(linksall.get(0));
-			Collections.reverse(links1);
-			Collections.reverse(fileNameList);
-			System.out.println("Collections.reverse");
 		}
+		fetchConfigVO.setStatus1("Fail");
+		fileNameList.add(fileList.get(0).getName());
+		links1.add(fileList.get(0).getAbsolutePath());
+		links1.add(linksall.get(1));
+		System.out.println("added links1 list");
+		for (int i = 1; i < fileList.size(); i++) {
+
+			if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+				links1.add(fileList.get(i).getAbsolutePath());
+				fileNameList.add(fileList.get(i).getName());
+
+			} else {
+
+			}
+
+		}
+
+		links1.add(linksall.get(0));
+		Collections.reverse(links1);
+		Collections.reverse(fileNameList);
+		System.out.println("Collections.reverse");
 
 		// targetFileList.addAll(seqList);
 
@@ -892,7 +889,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String name = no + "_" + ScriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
 		}
-		System.out.println("fileNameList -- "+fileNameList);
+		System.out.println("fileNameList -- " + fileNameList);
 		return fileNameList;
 	}
 
