@@ -383,13 +383,17 @@ public class DataBaseEntryDao {
 
 	}
 
-	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf) {
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,boolean isManualTrigger) {
 
 		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
 		String whereClause = "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
 
 		if (finalPdf) {
 			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
+		}
+		
+		if (!isManualTrigger) {
+			whereClause = whereClause +  "      and wttsl.enabled = 'Y'\r\n";
 		}
 
 		String sqlQuery = "SELECT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
@@ -419,7 +423,7 @@ public class DataBaseEntryDao {
 				+ "       AND wtsmdata.test_set_line_id =wttsl.test_set_line_id\r\n"
 				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
 				+ "       AND wtts.test_set_id=" + testRunId + "\r\n" + whereClause
-				+ "      and wttsl.enabled = 'Y'\r\n" + "       order by\r\n" + "       wttsl.SEQ_NUM,\r\n"
+				+ "       order by\r\n" + "       wttsl.SEQ_NUM,\r\n"
 				+ "         -- wtsmdata.script_number,\r\n" + "          wttsl.script_id,\r\n"
 				+ "          wtsmdata.line_number asc";
 

@@ -128,8 +128,8 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf) {
-		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf);
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,boolean isManualTrigger) {
+		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf,isManualTrigger);
 	}
 
 	@Transactional
