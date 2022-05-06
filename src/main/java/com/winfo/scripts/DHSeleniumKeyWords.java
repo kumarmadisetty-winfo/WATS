@@ -10329,6 +10329,29 @@ try {
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		//prod
 		try {
+			if (param1.equalsIgnoreCase("Maintain Managers")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input)[1]")));
+			WebElement waittill = driver.findElement(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input)[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			waittill.sendKeys(keysToSend);
+			//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(2000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			String xpath = "//*[contains(text(),'param1')]/following::input[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+			}
+		//prod
+		try {
 			if (param1.equalsIgnoreCase("Add Activities")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" +param1+ "')]/following::input[1]")));
@@ -12982,7 +13005,7 @@ try {
 					
 					if(param1.equalsIgnoreCase("Query By Example")) {
 					Thread.sleep(4000);
-					WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'"+param1+"')]/following::th[@_d_index='"+param2+"'][1]//input[1]"));
+					WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'"+param1+"')]/following::th[@_d_index='"+param2+"'][1]//input)[1]"));
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -17927,22 +17950,6 @@ try {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			String xpath = "//iframe[@title='inputParam']";
 			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);			return;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		//HS2
-		try {
-			Thread.sleep(3000);
-			WebElement waittext = driver
-					.findElement(By.xpath("//*[@class='AFMaskingFrame']"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			String xpath = "//*[@class='AFMaskingFrame']";
-			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-
-			return;
 		} catch (Exception e) {
 			System.out.println(e);
 		}
