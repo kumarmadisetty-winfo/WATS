@@ -155,10 +155,10 @@ public class DataBaseEntry {
 
 	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
 		ArrayList<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
-		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
 			return false;
-		} else if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+		} else if ( result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
 			return null;
 		} else {
 			return true;
