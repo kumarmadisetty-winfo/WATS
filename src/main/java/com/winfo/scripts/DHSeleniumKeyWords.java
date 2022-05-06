@@ -5082,7 +5082,40 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		
+		//prod
+		try {
+			if(param2.equalsIgnoreCase("General Journals Report")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),'" +param1+ "')]/following::img[@class='promptComboBoxButtonMoz'])[1]")));
+			WebElement waittext = driver.findElement(By.xpath("(//*[contains(text(),'" +param1+ "')]/following::img[@class='promptComboBoxButtonMoz'])[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			return;
+			}
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+		//prod
+		try {
+			if(param2.equalsIgnoreCase("General Journals Report")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" +param1+ "']/following::img[@class='promptComboBoxButtonMoz'])[1]")));
+			WebElement waittext = driver.findElement(By.xpath("(//*[text()='" +param1+ "']/following::img[@class='promptComboBoxButtonMoz'])[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			return;
+			}
+			}catch (Exception e) {
+			System.out.println(e);
+			}
 		//DH 43
 				try {
 					if(param1.equalsIgnoreCase("Plan Balances") ||param1.equalsIgnoreCase("Existing Absences")) {
@@ -5636,6 +5669,30 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	}
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Search...")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath(("//div[@class='masterMenu DropDownSearch' and @style='display: block;']/span[text()='" +param1+ "']")));// screenshot(driver,
+			// "",
+			// fetchMetadataVO,
+			// fetchConfigVO);
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(15000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "//div[@class='masterMenu DropDownSearch' and @style='display: block;']/span[text()='param1']";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+			}
+
 		//HCM.ADM.1132 HS2 (click button)
 try {
 			if (param1.equalsIgnoreCase("Send")) {
@@ -11533,6 +11590,31 @@ try {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::img[@title='param2']/following::input)[1]";
+                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+		} catch (Exception e) {
+			System.out.println(e);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during sendValue" + scripNumber);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			//throw e;
+		}
+		try {
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input[1]")));
+			wait.until(ExpectedConditions.textToBePresentInElementLocated(
+					By.xpath("//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input[1]"),
+					param2));
+			WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
+					+ "']/following::img[@title='" + param2 + "']/following::input[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			Thread.sleep(2000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked sendValue" + scripNumber);
+			String xpath = "//*[text()='param1']/following::*[text()='param2']/following::input[1]";
                        String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			return keysToSend;
 		} catch (Exception e) {
