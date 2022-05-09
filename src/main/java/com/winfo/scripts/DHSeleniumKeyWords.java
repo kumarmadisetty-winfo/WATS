@@ -3677,6 +3677,76 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			throws Exception {
 
+		try { if(inputParam.equalsIgnoreCase("Transaction"))
+
+		{
+
+		WebElement waittill = driver
+
+
+
+		.findElement(By.xpath("//span[text()='" + inputParam + "']/following::input[1]"));
+
+		String testParamId = fetchMetadataVO.getTest_script_param_id();
+		String testSetId = fetchMetadataVO.getTest_set_line_id();
+		String copynumberValue;
+		String inputValue = fetchMetadataVO.getInput_value();
+
+
+
+		String[] arrOfStr = inputValue.split(">", 5);
+		if (arrOfStr.length < 2) {
+		copynumberValue = inputValue;
+		} else {
+		String Testrun_name = arrOfStr[0];
+		String seq = arrOfStr[1];
+		// String Script_num=arrOfStr[2];
+		String line_number = arrOfStr[2];
+		copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
+		}
+
+
+
+		System.out.println("copynumberValue:::" + copynumberValue);
+
+
+
+		String value = globalValueForSteps;
+
+
+
+		// String value = copynumber(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO)
+
+
+
+		waittill.click();
+
+
+
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+
+
+
+		jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+
+		Thread.sleep(3000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		String xpath = "//label[text()='inputParam']/following::input[1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+		return;
+
+		}
+
+		} catch (Exception e) {
+
+
+
+		System.out.println(e);
+
+
+
+		}
 		
 		//DH 39
 				try {
