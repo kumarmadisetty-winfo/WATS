@@ -13206,6 +13206,46 @@ try {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Create Element Entry") && param2.equalsIgnoreCase("Element Name")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
+			+ "']/following::label[text()='" + param2 + "']/following::a[@title='" + param2 + "']")));
+			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1+ "']/following::label[text()='" + param2 + "']/following::a[@title='" + param2 +"']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			actions.click(waittext).build().perform();
+		try {
+			Thread.sleep(1000);
+			WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')][1]"));
+			search.click();
+			Thread.sleep(3000);
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+			"(//*[contains(text(),'Search and Select')]/following::*[normalize-space(text())='" + param2 + "']/following::input)[1]")));
+			WebElement searchResult = driver.findElement(By.xpath(
+			"(//*[contains(text(),'Search and Select')]/following::*[normalize-space(text())='" + param2 + "']/following::input[1])"));
+			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+			enter(driver, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(5000);
+			WebElement text = driver.findElement(By.xpath("(//span[normalize-space(text())='" + keysToSend + "'])[2]"));
+			text.click();
+			Thread.sleep(1000);
+			WebElement button = driver.findElement(By.xpath(
+			"//*[contains(text(),'Search and Select')]/following::*[text()='OK'][1]"));
+			button.click();
+
+
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+			return;
+			}
+			} catch (Exception ex) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during dropdownValues" + scripNumber);
+			System.out.println(ex);
+			}
 		//DH 32
 				try {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
