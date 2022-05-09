@@ -923,19 +923,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		File folder = new File(
 				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
-
 		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
 		String video_rec = "no";
-//		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
-		// String seqNumber = "1";
-		for (File file : allFileList) {
-			if (fileSeqList.contains(file.getName())) {
-				fileList.add(file);
+		for (String fileNames : fileSeqList) {
+			for (File file : allFileList) {
+				if (fileNames.equals(file.getName())) {
+					fileList.add(file);
+					break;
+				}
 			}
 		}
 
@@ -1003,10 +1001,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
 		if (!folder1.exists()) {
 			System.out.println("creating directory: " + folder1.getName());
-//			boolean result = false;
 			try {
 				folder1.mkdirs();
-//				result = true;
 			} catch (SecurityException se) {
 				se.printStackTrace();
 			}
@@ -1034,32 +1030,33 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 		File f11 = new File(imgpath2);
 		File[] f22 = f11.listFiles();
-
-		if (!fileList.get(0).getName().endsWith("Failed.jpg")) {
-			for (File f33 : f22) {
-				if (f33.getAbsolutePath().contains("first")) {
-					linksall.add(f33.getAbsolutePath());
-				}
+		for (File f33 : f22) {
+			if (f33.getAbsolutePath().contains("first")) {
+				linksall.add(f33.getAbsolutePath());
 			}
+		}
+		if (fetchConfigVO.getStatus1() == null) {
 			fetchConfigVO.setStatus1("Pass");
-			fileNameList.add(fileList.get(0).getName());
-			links1.add(fileList.get(0).getAbsolutePath());
-			for (int i = 1; i < fileList.size(); i++) {
+		}
+		fileNameList.add(fileList.get(0).getName());
+		links1.add(fileList.get(0).getAbsolutePath());
+		for (int i = 1; i < fileList.size(); i++) {
 
-				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-					links1.add(fileList.get(i).getAbsolutePath());
+			links1.add(fileList.get(i).getAbsolutePath());
+			fileNameList.add(fileList.get(i).getName());
 
-					fileNameList.add(fileList.get(i).getName());
-
-				}
-
-			}
-
-			links1.add(linksall.get(0));
-			Collections.reverse(links1);
-			Collections.reverse(fileNameList);
+//				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+//					links1.add(fileList.get(i).getAbsolutePath());
+//
+//					fileNameList.add(fileList.get(i).getName());
+//
+//				}
 
 		}
+
+		links1.add(linksall.get(0));
+		Collections.reverse(links1);
+		Collections.reverse(fileNameList);
 
 		// targetFileList.addAll(seqList);
 
@@ -1084,26 +1081,26 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		File folder = new File(
 				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
 		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
 		String video_rec = "no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		int passcount = 0;
 		int failcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-			if (fileSeqList.contains(file.getName())) {
-				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+		for (String fileNames : fileSeqList) {
+			for (File file : Arrays.asList(listOfFiles)) {
+				if (fileNames.equals(file.getName())) {
+					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
-				if (!filesMap.containsKey(seqNum)) {
+					if (!filesMap.containsKey(seqNum)) {
 
-					filesMap.put(seqNum, new ArrayList<File>());
+						filesMap.put(seqNum, new ArrayList<File>());
 
+					}
+
+					filesMap.get(seqNum).add(file);
+					break;
 				}
-
-				filesMap.get(seqNum).add(file);
-
 			}
 		}
 
@@ -1282,18 +1279,20 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		int failcount = 0;
 		int passcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-			if (fileSeqList.contains(file.getName())) {
-				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+		for (String fileNames : fileSeqList) {
+			for (File file : Arrays.asList(listOfFiles)) {
+				if (fileNames.equals(file.getName())) {
+					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
-				if (!filesMap.containsKey(seqNum)) {
+					if (!filesMap.containsKey(seqNum)) {
 
-					filesMap.put(seqNum, new ArrayList<File>());
+						filesMap.put(seqNum, new ArrayList<File>());
 
+					}
+
+					filesMap.get(seqNum).add(file);
+					break;
 				}
-
-				filesMap.get(seqNum).add(file);
-
 			}
 		}
 
@@ -1491,18 +1490,21 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		int failcount = 0;
 		int passcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-			if (fileSeqList.contains(file.getName())) {
-				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+		for (String fileNames : fileSeqList) {
+			for (File file : Arrays.asList(listOfFiles)) {
+				if (fileNames.equals(file.getName())) {
+					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
-				if (!filesMap.containsKey(seqNum)) {
+					if (!filesMap.containsKey(seqNum)) {
 
-					filesMap.put(seqNum, new ArrayList<File>());
+						filesMap.put(seqNum, new ArrayList<File>());
+
+					}
+
+					filesMap.get(seqNum).add(file);
+					break;
 
 				}
-
-				filesMap.get(seqNum).add(file);
-
 			}
 		}
 
@@ -2714,7 +2716,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
 			// specifies where the jpg image has to be written
-			writer.setOutput(new FileImageOutputStream(new File("C:\\Kaushik" + "\\" + image)));
+			writer.setOutput(new FileImageOutputStream(new File("C:\\home" + "\\" + image)));
 
 			BufferedImage convertedImg = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(),
 					BufferedImage.TYPE_INT_RGB);
@@ -2774,7 +2776,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getLowFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
+		File folder = new File("C:\\home\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -2805,7 +2807,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getLowPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
+		File folder = new File("C:\\home\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -2836,7 +2838,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getLowFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
 
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
+		File folder = new File("C:\\home\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -2865,7 +2867,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public List<String> getLowDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
+		File folder = new File("C:\\home\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -2896,7 +2898,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		try {
 			String Date = DateUtils.getSysdate();
-			String Folder = ("C:\\Kaushik\\PDF\\");
+			String Folder = ("C:\\home\\PDF\\");
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -2931,7 +2933,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			PdfWriter.getInstance(document, new FileOutputStream(FILE));
 			document.open();
 			for (String image : fileNameList) {
-				Image img = Image.getInstance("C:\\Kaushik\\" + image);
+				Image img = Image.getInstance("C:\\home\\" + image);
 				String ScriptNumber = image.split("_")[2];
 				String TestRun = image.split("_")[3];
 				String Status = image.split("_")[6];
