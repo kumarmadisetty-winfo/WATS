@@ -13840,17 +13840,17 @@ try {
 			actions.click(waittext).build().perform();
 		try {
 			Thread.sleep(1000);
-			WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search')][1]"));
+			WebElement search = driver.findElement(By.xpath("//a[contains(text(),'Search...')][1]"));
 			search.click();
 			Thread.sleep(3000);
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 			"(//*[contains(text(),'Search and Select')]/following::*[normalize-space(text())='" + param2 + "']/following::input)[1]")));
 			WebElement searchResult = driver.findElement(By.xpath(
-			"(//*[contains(text(),'Search and Select')]/following::*[normalize-space(text())='" + param2 + "']/following::input[1])"));
+			"(//*[contains(text(),'Search and Select')]/following::*[normalize-space(text())='" + param2 + "']/following::input)[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			enter(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
-			WebElement text = driver.findElement(By.xpath("(//span[normalize-space(text())='" + keysToSend + "'])[2]"));
+			WebElement text = driver.findElement(By.xpath("(//span[normalize-space(text())='" + keysToSend + "'])[1]"));
 			text.click();
 			Thread.sleep(1000);
 			WebElement button = driver.findElement(By.xpath(
