@@ -1073,16 +1073,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
 			List<String> seqFileNameList = new ArrayList<>();
 			ArrayList<String> links1 = new ArrayList<>();
 			ArrayList<String> linksall = new ArrayList<>();
@@ -1151,10 +1141,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
 			if (!folder1.exists()) {
 				System.out.println("creating directory: " + folder1.getName());
-//				boolean result = false;
 				try {
 					folder1.mkdirs();
-//					result = true;
 				} catch (SecurityException se) {
 					se.printStackTrace();
 				}
@@ -1194,31 +1182,14 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
-					} else {
-
-					}
-
+					} 
 				}
 
 				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
 				links.addAll(links1);
 				targetFileList.addAll(seqFileNameList);
-
 			}
-
-////                    targetFileList.addAll(seqList);
-
 		}
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
@@ -1265,16 +1236,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
 
 			List<String> seqFileNameList = new ArrayList<>();
 			ArrayList<String> links1 = new ArrayList<>();
@@ -1406,14 +1367,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
-					} else {
-
 					}
-
 				}
 				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
 				links.addAll(links1);
 				targetFileList.addAll(seqFileNameList);
 
@@ -1482,16 +1438,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
 
 			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
 
 			List<String> seqFileNameList = new ArrayList<>();
 			ArrayList<String> links1 = new ArrayList<>();
@@ -1624,8 +1570,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				}
 				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
 				links.addAll(links1);
 				targetSuccessFileList.addAll(seqFileNameList);
 
@@ -1666,8 +1610,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 
 				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
 				links2.addAll(links1);
 				targetFailedFileList.addAll(seqFileNameList);
 
