@@ -18615,7 +18615,28 @@ public void oicClickButton(WebDriver driver, String param1, String param2, Fetch
 		System.out.println(e);
 		}
 	
-	
+	try {
+		if(param1.equalsIgnoreCase("Oracle OPERA ERP Initiate Refresh Receivables") && param2.equalsIgnoreCase("Run")) {
+		Thread.sleep(3000);
+		Actions action = new Actions(driver);
+		WebElement we = driver.findElement(By.xpath("(//*[text()='Oracle OPERA ERP Initiate Refresh Receivables'])[1]/following::*[text()='App Driven Orchestration']"));
+		action.moveToElement(we).perform();
+		Thread.sleep(5000);
+		WebElement run = driver.findElement(By.xpath("(//*[text()='Oracle OPERA ERP Initiate Refresh Receivables'])[1]/following::*[text()='App Driven Orchestration']/following::*[@title='Run'][1]"));
+		run.click();
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Thread.sleep(5000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+		String xpath = "(//*[text()='Oracle OPERA ERP Initiate Refresh Receivables'])[1]/following::*[text()='App Driven Orchestration']/following::*[@title='Run'][1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return;
+		}
+		}catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during clickButton" + scripNumber);
+		System.out.println(e);
+		}
 	
 	
 	
