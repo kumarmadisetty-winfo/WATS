@@ -97,8 +97,6 @@ public class TestSetScriptParam {
 	
 	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_LINE_ID")
-	
-	
 	private TestSetLines testSetLines;
 
 	

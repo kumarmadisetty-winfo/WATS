@@ -128,8 +128,9 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,boolean isManualTrigger) {
-		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf,isManualTrigger);
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
+			boolean isManualTrigger) {
+		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf, isManualTrigger);
 	}
 
 	@Transactional
@@ -153,12 +154,19 @@ public class DataBaseEntry {
 
 	}
 
-	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
+	public Boolean checkAllStepsStatusForAScript(String testSetLineId) throws ClassNotFoundException, SQLException {
 		ArrayList<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
-		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
+			int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
+			dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "",
+					SCRIPT_PARAM_STATUS.FAIL.getLabel(),
+					"System could not launch the script. Try to re-execute. If it continues to fail, please contact WATS Support Team");
 			return false;
-		} else if ( result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+		}
+
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+			return false;
+		} else if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
 			return null;
 		} else {
 			return true;

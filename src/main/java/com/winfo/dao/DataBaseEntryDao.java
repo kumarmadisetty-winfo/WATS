@@ -383,7 +383,8 @@ public class DataBaseEntryDao {
 
 	}
 
-	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,boolean isManualTrigger) {
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
+			boolean isManualTrigger) {
 
 		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
 		String whereClause = "";
@@ -393,9 +394,9 @@ public class DataBaseEntryDao {
 		if (finalPdf) {
 			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
 		}
-		
+
 		if (!isManualTrigger) {
-			whereClause = whereClause +  "      and wttsl.enabled = 'Y'\r\n";
+			whereClause = whereClause + "      and wttsl.enabled = 'Y'\r\n";
 		}
 
 		String sqlQuery = "SELECT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
@@ -424,10 +425,9 @@ public class DataBaseEntryDao {
 				+ "       AND wttsl.script_id = wtsmdata.script_id\r\n"
 				+ "       AND wtsmdata.test_set_line_id =wttsl.test_set_line_id\r\n"
 				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
-				+ "       AND wtts.test_set_id=" + testRunId + "\r\n" + whereClause
-				+ "       order by\r\n" + "       wttsl.SEQ_NUM,\r\n"
-				+ "         -- wtsmdata.script_number,\r\n" + "          wttsl.script_id,\r\n"
-				+ "          wtsmdata.line_number asc";
+				+ "       AND wtts.test_set_id=" + testRunId + "\r\n" + whereClause + "       order by\r\n"
+				+ "       wttsl.SEQ_NUM,\r\n" + "         -- wtsmdata.script_number,\r\n"
+				+ "          wttsl.script_id,\r\n" + "          wtsmdata.line_number asc";
 
 		try {
 			String NULL_STRING = "null";
@@ -586,6 +586,18 @@ public class DataBaseEntryDao {
 		cq.select(cb.least(from.<Date>get("execution_start_time"))).where(condition);
 		Date query = em.createQuery(cq).getSingleResult();
 		return query;
+
+	}
+
+	public Integer findFirstStepIdInScript(String testSetLineId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
+		Predicate condition = cb.equal(from.get("testSetLines").get("test_set_line_id"), testSetLineId);
+		cq.select(from.get("test_script_param_id")).where(condition);
+		cq.orderBy(cb.asc(from.get("line_number")));
+		Integer result = em.createQuery(cq).setMaxResults(1).getSingleResult();
+		return result;
 
 	}
 
