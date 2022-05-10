@@ -734,26 +734,15 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //		List<File> fileList = Arrays.asList(listOfFiles);
 		List<File> allFileList = Arrays.asList(listOfFiles);
 		List<File> fileList = new ArrayList<>();
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		// String seqNumber = "1";
+		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		List<String> fileNameList = new ArrayList<String>();
-
-		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_")) {
-				fileList.add(file);
+		for (String fileNames : fileSeqList) {
+			for (File file : allFileList) {
+				if (fileNames.equals(file.getName())) {
+					fileList.add(file);
+				}
 			}
 		}
-		System.out.println("before Collections.sort completed");
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-		System.out.println("after Collections.sort completed");
 		ArrayList<String> linksall = new ArrayList<String>();
 		ArrayList<String> links1 = new ArrayList<String>();
 		File file = new ClassPathResource(whiteimage).getFile();
@@ -865,16 +854,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				links1.add(fileList.get(i).getAbsolutePath());
 				fileNameList.add(fileList.get(i).getName());
 
-			} else {
-
 			}
 
 		}
 
 		links1.add(linksall.get(0));
-		Collections.reverse(links1);
-		Collections.reverse(fileNameList);
-		System.out.println("Collections.reverse");
 
 		// targetFileList.addAll(seqList);
 
@@ -936,17 +920,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 			}
 		}
-
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-
 		List<String> fileNameList = new ArrayList<>();
 		ArrayList<String> linksall = new ArrayList<>();
 		ArrayList<String> links1 = new ArrayList<>();
@@ -1044,19 +1017,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			links1.add(fileList.get(i).getAbsolutePath());
 			fileNameList.add(fileList.get(i).getName());
-
-//				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-//					links1.add(fileList.get(i).getAbsolutePath());
-//
-//					fileNameList.add(fileList.get(i).getName());
-//
-//				}
-
 		}
 
 		links1.add(linksall.get(0));
-		Collections.reverse(links1);
-		Collections.reverse(fileNameList);
 
 		// targetFileList.addAll(seqList);
 
