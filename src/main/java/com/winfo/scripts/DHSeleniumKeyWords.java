@@ -11390,45 +11390,45 @@ try {
 		//DH 35
 		try {
 
-			if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")) {
+					if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date") || param2.equalsIgnoreCase("End Date and Time")) {
 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')]")));
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')][1]")));
 
-			Thread.sleep(1000);
+					Thread.sleep(1000);
 
-			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')]"));
+					WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')][1]"));
 
-			Actions actions = new Actions(driver);
+					Actions actions = new Actions(driver);
 
-			actions.moveToElement(waittill).build().perform();
+					actions.moveToElement(waittill).build().perform();
 
-			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-			Thread.sleep(500);
+					Thread.sleep(500);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScript_number();
 
-			log.info("Sucessfully Clicked sendValue"+ scripNumber);
+					log.info("Sucessfully Clicked sendValue"+ scripNumber);
 
-			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
+					String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
 
-			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+					//service.saveXpathParams(param1, param2, scripNumber, xpath);
 
-			return keysToSend;
+					return keysToSend;
 
-			}
+					}
 
 
 
-			//return keysToSend;
-			} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
-			//throw e;
-			}
+					//return keysToSend;
+					} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during sendValue" + scripNumber);
+					System.out.println(e);
+					//throw e;
+					}
 		try {
 			if (param1.equalsIgnoreCase("Create Expense Item") && param2.equalsIgnoreCase("Amount")) {
 				Thread.sleep(10000);
