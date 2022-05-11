@@ -81,11 +81,11 @@ public class DataBaseEntry {
 		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
 	}
 
-	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO) {
+	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO, Date endDate) {
 
 		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
 				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(),
-				fetchScriptVO.getP_script_id());
+				fetchScriptVO.getP_script_id(), endDate);
 		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
 
