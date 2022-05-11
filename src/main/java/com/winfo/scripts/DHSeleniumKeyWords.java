@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -71,13 +70,11 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 //import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -128,6 +125,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.PropertyReader;
 import com.winfo.utils.StringUtils;
 
 @Service("DH")
@@ -901,6 +899,20 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		return fetchConfigVODtl;
 	}
 
+	private void createDir(String path) {
+		File folder1 = new File(path);
+		if (!folder1.exists()) {
+			System.out.println("creating directory: " + folder1.getName());
+			try {
+				folder1.mkdirs();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+			}
+		} else {
+			System.out.println("Folder exist");
+		}
+	}
+
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
@@ -908,7 +920,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 		File[] listOfFiles = folder.listFiles();
-		String video_rec = "no";
+		String videoRec = "no";
 		List<File> allFileList = Arrays.asList(listOfFiles);
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
@@ -924,27 +936,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		ArrayList<String> linksall = new ArrayList<>();
 		ArrayList<String> links1 = new ArrayList<>();
 		File file = new ClassPathResource(whiteimage).getFile();
-		// File file = new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\white.jpg");
 		File file1 = new ClassPathResource(watsvediologo).getFile();
-		// File file1=new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-		BufferedImage image = null;
-		image = ImageIO.read(file);
-		BufferedImage logo = null;
-		logo = ImageIO.read(file1);
+		BufferedImage image = ImageIO.read(file);
+		BufferedImage logo = ImageIO.read(file1);
 		Graphics g = image.getGraphics();
 		g.setColor(Color.black);
 		java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
 		g.setFont(font);
 		String details = fileList.get(0).getName();
-		// String details= seqList.get(0).getName();
 		String scriptNumber = details.split("_")[3];
-//		String testRun = details.split("_")[4];
 		String status = details.split("_")[6].split("\\.")[0];
 		String scenario = details.split("_")[2];
-//		String imagename = testRun + scriptNumber;
 		String tName = fetchMetadataListVO.get(0).getTest_run_name();
 		String no = details.split("_")[0];
 		Date starttime = fetchConfigVO.getStarttime();
@@ -970,22 +972,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.drawString("Execution Time : " + executionTime, 50, 450);
 		g.drawImage(logo, 1012, 15, null);
 		g.dispose();
-		File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-				+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
-			try {
-				folder1.mkdirs();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-			}
-		} else {
-			System.out.println("Folder exist");
-		}
+
+		String folder1 = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/Images";
+		createDir(folder1);
 
 		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
-		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\first.jpg"));
 
 		BufferedImage image1 = null;
 		image1 = ImageIO.read(file);
@@ -997,10 +989,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g1.drawImage(logo, 1150, 15, null);
 		g1.dispose();
 		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\last.jpg"));
 		String imgpath2 = folder1 + "/";
-		// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 		File f11 = new File(imgpath2);
 		File[] f22 = f11.listFiles();
 		for (File f33 : f22) {
@@ -1011,26 +1000,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		if (fetchConfigVO.getStatus1() == null) {
 			fetchConfigVO.setStatus1("Pass");
 		}
-		fileNameList.add(fileList.get(0).getName());
-		links1.add(fileList.get(0).getAbsolutePath());
-		for (int i = 1; i < fileList.size(); i++) {
-
+		for (int i = 0; i < fileList.size(); i++) {
 			links1.add(fileList.get(i).getAbsolutePath());
 			fileNameList.add(fileList.get(i).getName());
 		}
-
 		links1.add(linksall.get(0));
-
-		// targetFileList.addAll(seqList);
-
-		/*
-		 * for (String fileName : fileNameList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		if (video_rec.equalsIgnoreCase("Y")) {
+		if (videoRec.equalsIgnoreCase("Y")) {
 			String name = no + "_" + scriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
 		}
@@ -1182,7 +1157,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
-					} 
+					}
 				}
 
 				links1.add(linksall.get(0));
@@ -1446,14 +1421,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			File file = new ClassPathResource(whiteimage).getFile();
 			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
+			BufferedImage image = ImageIO.read(file);
+			BufferedImage logo = ImageIO.read(file1);
 			Graphics g = image.getGraphics();
 			g.setColor(Color.black);
 			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
@@ -1465,7 +1434,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String status = details.split("_")[6].split("\\.")[0];
 			String scenario = details.split("_")[2];
 			String imagename = testRun + scriptNumber;
-			// String TName = fetchMetadataListVO.get(0).getTest_run_name();
 			Date endtime = fetchConfigVO.getEndtime();
 			Date tStarttime = fetchConfigVO.getStarttime1();
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -1509,8 +1477,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
 			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
+			BufferedImage image1 = ImageIO.read(file);
 			Graphics g1 = image1.getGraphics();
 			g1.setColor(Color.red);
 			java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
@@ -1519,8 +1486,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g1.drawImage(logo, 1012, 14, null);
 			g1.dispose();
 
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
+			BufferedImage image2 = ImageIO.read(file);
 			Graphics g2 = image2.getGraphics();
 			g2.setColor(Color.black);
 			g2.setFont(font);

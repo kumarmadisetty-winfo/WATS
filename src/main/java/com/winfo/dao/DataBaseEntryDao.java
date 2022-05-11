@@ -220,6 +220,37 @@ public class DataBaseEntryDao {
 		}
 	}
 
+	public void updateTestSetLineStatus(String status, String testSetLineScriptPath, String testSetId,
+			String testSetLineId, String scriptId, Date endDate) { 
+		String endTime = new SimpleDateFormat("M/dd/yyyy HH:mm:ss").format(endDate);
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status + "', TEST_SET_LINE_SCRIPT_PATH='"
+					+ testSetLineScriptPath + "', EXECUTION_END_TIME=TO_TIMESTAMP('" + endTime+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID="
+					+ testSetLineId + " AND SCRIPT_ID=" + scriptId;
+			Query query = session.createSQLQuery(sqlQuery);
+			query.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("cannot update Status");
+			System.out.println(e);
+		}
+	}
+
+	public void updateTestSetPaths(String passPath, String failPath, String executionPath, String testSetId) {
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String sqlQuery = "Update WIN_TA_TEST_SET SET PASS_PATH ='" + passPath + "', FAIL_PATH ='" + failPath
+					+ "', EXCEPTION_PATH ='" + executionPath + "'WHERE TEST_SET_ID=" + testSetId;
+			Query query = session.createSQLQuery(sqlQuery);
+			query.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("cannot update TestSetPath");
+			System.out.println(e);
+		}
+	}
+
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id) throws SQLException {
 		try {

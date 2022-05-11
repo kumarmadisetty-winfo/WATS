@@ -81,6 +81,16 @@ public class DataBaseEntry {
 		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
 	}
 
+	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO) {
+
+		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
+				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(),
+				fetchScriptVO.getP_script_id());
+		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
+				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
+
+	}
+
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id) throws SQLException {
 		dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
