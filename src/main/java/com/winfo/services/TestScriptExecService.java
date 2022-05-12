@@ -1612,9 +1612,9 @@ public class TestScriptExecService {
 	}
 
 	public void movePyjabScriptFilesToObjectStore() {
-		String actionsFilePath = environment.getProperty("pyjab.template.path")
+		String actionsFilePath = environment.getProperty("pyjab.scripts.git.path")
 				+ environment.getProperty("pyjab.actions.script.name");
-		String customerSpecificScriptPath = environment.getProperty("pyjab.template.path")
+		String customerSpecificScriptPath = environment.getProperty("pyjab.scripts.git.path")
 				+ environment.getProperty("pyjab.customer.specific.name");
 		uploadObjectToObjectStore(actionsFilePath, environment.getProperty("pyjab.script.path.in.oci")
 				+ environment.getProperty("pyjab.actions.script.name"));
