@@ -11390,15 +11390,15 @@ try {
 		//DH 35
 		try {
 
-			if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")) {
+			if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")) || param2.equalsIgnoreCase("End Date and Time") {
 
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')]")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')][1]")));
 
 			Thread.sleep(1000);
 
-			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')]"));
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')][1]"));
 
 			Actions actions = new Actions(driver);
 
