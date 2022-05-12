@@ -10454,10 +10454,10 @@ try {
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		//prod
 		try {
-			if (param1.equalsIgnoreCase("Maintain Managers")) {
+			if (param1.equalsIgnoreCase("Maintain Managers")|| (param1.equalsIgnoreCase("SR Details"))) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input)[1]")));
-			WebElement waittill = driver.findElement(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input)[1]"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input[not(@type='hidden')])[1]")));
+			WebElement waittill = driver.findElement(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::input[not(@type='hidden')])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			waittill.sendKeys(keysToSend);
@@ -10466,7 +10466,7 @@ try {
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
-			String xpath = "//*[contains(text(),'param1')]/following::input[1]";
+			String xpath = "(//*[text()='param1']/following::*[text()='param2']/following::input[not(@type='hidden')])[1]";
 			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 			return keysToSend;
 			}
@@ -18287,7 +18287,7 @@ try {
 	
 	private String copyValuesWithSpc(String value) {
 		try {
-		Pattern p = Pattern.compile("\\b[A-Z]*\\-*[A-Z]*\\-*[a-z]*[A-Z]*[a-z]*\\d+[a-z]*[A-Z]*[a-z]*"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
+		Pattern p = Pattern.compile("\\b[A-Z]*\\-*[A-Z]*\\-*[a-z]*[A-Z]*[a-z]*\\d+[a-z]*[A-Z]*[a-z]*[0-9]*"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
 		Matcher m = p.matcher(value);
 		// if we find a match, get the group
 		String theGroup = null;
