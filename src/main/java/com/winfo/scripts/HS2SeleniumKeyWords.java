@@ -13897,7 +13897,7 @@ try {
 		// OTL.004 DH
 		try {
 
-			if (param1.equalsIgnoreCase("Create Shift") && (param2.equalsIgnoreCase("Resource")) ||(param1.equalsIgnoreCase("Termination Details") ) {
+			if (param1.equalsIgnoreCase("Create Shift") && (param2.equalsIgnoreCase("Resource")) ||(param1.equalsIgnoreCase("Termination Details") )) {
 	            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 	            wait.until(ExpectedConditions.presenceOfElementLocated(
 	            By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]")));
