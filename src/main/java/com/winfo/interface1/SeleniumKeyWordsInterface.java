@@ -226,5 +226,7 @@ public interface SeleniumKeyWordsInterface {
 		public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
 				String type2, String type3, String param1, String param2, String param3) throws Exception ;
 
-
+		public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+				String type1, String type2, String type3, String param1, String param2, String param3,
+				String input_value, String password) throws Exception;
 }
