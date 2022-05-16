@@ -47,5 +47,8 @@ public class Constants {
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
+	public static final String SYS_USER_HOME_PATH =  "user.home";
+	public static final String SCREENSHOT =  "//wats//Screenshot//";
+	public static final String PDF =  "//wats//PDF//";
 
 }

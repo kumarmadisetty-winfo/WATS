@@ -599,7 +599,8 @@ public class TestScriptExecService {
 			File file = new File(FILE_NAME);
 			long fileSize = FileUtils.sizeOf(file);
 			InputStream is = new FileInputStream(file);
-
+			System.out.println("fileSize === *** "+fileSize);
+			System.out.println("file location === *** "+file.getAbsolutePath());
 			/* Create a service client */
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
@@ -617,7 +618,7 @@ public class TestScriptExecService {
 
 			/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
-
+			System.out.println("upload response string === *** "+response.toString());
 			return response.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -680,6 +681,7 @@ public class TestScriptExecService {
 
 			String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 			File file = new File(imagePath + imageName);
+			System.out.println("downloading from object store " +imagePath + imageName);
 			try (final InputStream stream = getResponse.getInputStream();
 					// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
 
@@ -723,7 +725,7 @@ public class TestScriptExecService {
 				File[] listOfFiles = folder.listFiles();
 
 				for (File file : Arrays.asList(listOfFiles)) {
-
+					System.out.println("deleting ********* "+file.getName());
 					String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
 					String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
@@ -754,6 +756,8 @@ public class TestScriptExecService {
 
 			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
+			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH)+Constants.SCREENSHOT);
+			fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH)+Constants.PDF);
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
 					args.getTestSetLineId(), false, args.isManualTrigger());
@@ -1535,6 +1539,8 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH) + pdffileName;
 
+			System.out.println("pdf created in windows location -- "+sourceFilePath);
+			System.out.println("pdf uploaded to linux location -- "+destinationFilePath);
 			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
@@ -1600,6 +1606,8 @@ public class TestScriptExecService {
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setStarttime1(startDate);
 				fetchConfigVO.setEndtime(endDate);
+				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH)+Constants.SCREENSHOT);
+				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH)+Constants.PDF);
 				testRunPdfGeneration(testSetId, fetchConfigVO, endDate);
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
