@@ -599,8 +599,6 @@ public class TestScriptExecService {
 			File file = new File(FILE_NAME);
 			long fileSize = FileUtils.sizeOf(file);
 			InputStream is = new FileInputStream(file);
-			System.out.println("fileSize === *** "+fileSize);
-			System.out.println("file location === *** "+file.getAbsolutePath());
 			/* Create a service client */
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
@@ -618,7 +616,6 @@ public class TestScriptExecService {
 
 			/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
-			System.out.println("upload response string === *** "+response.toString());
 			return response.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1539,8 +1536,6 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH) + pdffileName;
 
-			System.out.println("pdf created in windows location -- "+sourceFilePath);
-			System.out.println("pdf uploaded to linux location -- "+destinationFilePath);
 			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
@@ -1638,7 +1633,6 @@ public class TestScriptExecService {
 			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			String FILE = (Folder + pdffileName);
-			System.out.println(FILE);
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 //				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
