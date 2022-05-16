@@ -4712,16 +4712,16 @@ try {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-					"(//*[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]")));
+					"(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]")));
 			WebElement waittext = driver.findElement(By
-					.xpath("(//*[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]"));
+					.xpath("(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(4000);
 			try {
 				WebElement Expand = driver.findElement(By.xpath(
-						"(//*[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]"));
+						"(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
@@ -10623,11 +10623,11 @@ try {
 
 
 
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1 + "']/following::*[@placeholder='dd-mmm-yyyy'][1]")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1 + "']/following::*[@placeholder='dd/mm/yyyy'][1]")));
 
 
 
-			WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 + "']/following::*[@placeholder='dd-mmm-yyyy'][1]"));
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 + "']/following::*[@placeholder='dd/mm/yyyy'][1]"));
 
 
 
@@ -10659,7 +10659,7 @@ try {
 
 
 
-			String xpath = "//*[text()='param1']/following::*[@placeholder='dd-mmm-yyyy'][1]";
+			String xpath = "//*[text()='param1']/following::*[@placeholder='dd/mm/yyyy'][1]";
 
 
 
@@ -13741,11 +13741,12 @@ try {
 	            actions.moveToElement(waittext).build().perform();
 	            //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 	            waittext.click();
-	            Thread.sleep(3000);
+	            Thread.sleep(4000);
 
 	          	                  WebElement select = driver
 	          	                  .findElement(By.xpath("//*[text()='" +keysToSend+ "']"));
-	          	                  clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+						select.click();
+	          	                 // clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 	          	                  String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
 	          	                  String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 	          	                  log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
