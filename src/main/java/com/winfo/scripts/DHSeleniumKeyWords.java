@@ -4916,6 +4916,26 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 					//throw e;
 					}
+		//DH
+		try {
+					Thread.sleep(5000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" +param1+ "')]/following::span[normalize-space(text())='" + keysToSend + "'][1]")));
+					WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::span[normalize-space(text())='" + keysToSend + "'][1]"));
+					Thread.sleep(2000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+					Thread.sleep(5000);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.info("Sucessfully Clicked selectAValue" + scripNumber);
+					String xpath = "//*[contains(text(),'param1')]/following::span[normalize-space(text())='keysToSend'][1]";
+					                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+					return;
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScript_number();
+					log.error("Failed during selectAValue" + scripNumber);
+					System.out.println(e);
+				}
 		try {
 			Thread.sleep(5000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13434,6 +13454,30 @@ try {
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
+		//DH
+		try {
+			Thread.sleep(6000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::label[text()='" +param2+ "']/preceding::input[1]"));
+			Thread.sleep(1000);
+			// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+			// param2));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			Thread.sleep(6000);
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			String xpath = "//*[contains(text(),'param1')]/following::label[text()='param2']/preceding::input[1]";
+    		                             String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+
+			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			// tab(driver, fetchMetadataVO, fetchConfigVO);
 			// Thread.sleep(1000);
@@ -13853,6 +13897,62 @@ try {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//DH
+		try {
+			if (param1.equalsIgnoreCase("Create Contract") && param2.equalsIgnoreCase("Primary Party")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+			By.xpath("//div[text()='" +param1+ "']/following::label[text()='" +param2+ "'][1]/following::a[@title='Name']")));
+
+
+
+			WebElement waittext = driver
+			.findElement(By.xpath("//div[text()='" +param1+ "']/following::label[text()='" +param2+ "'][1]/following::a[@title='Name']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(2000);
+
+
+
+			WebElement search = driver.findElement(By.xpath("//table[contains(@id,'dropdownPopup')]//*[text()='Search...']"));
+			clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
+			Thread.sleep(5000);
+
+			WebElement values = driver.findElement(By.xpath(
+			"//div[contains(text(),'" +param2+ "')]/following::input[1]"));
+			typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+			enter(driver, fetchMetadataVO, fetchConfigVO);
+
+
+
+			WebElement select = driver
+			.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
+			+ keysToSend + "')][1]"));
+			clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+
+
+
+			WebElement searchok = driver
+			.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
+			+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
+			clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(5000);
+			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']/following::*[@title='param2']"
+			+ ";" + "//a[contains(text(),'Search')]" + ";"
+			+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
+			+ ";"
+			+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+			}
 		//HS2
 		try {
 			if (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time"))||(param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("End Time"))) )
