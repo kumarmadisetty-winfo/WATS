@@ -134,6 +134,8 @@ public class FetchConfigVO {
 //	@JsonProperty("BROWSER")
 	private int failcount;
 	
+	private int otherCount;
+	
 //	@JsonProperty("BROWSER")
 	private String status1;
 	
@@ -374,6 +376,14 @@ public int getMax_num_scripts() {
 	public void setFailcount(int failcount) {
 		this.failcount = failcount;
 	}
+	
+	public int getOtherCount() {
+		return otherCount;
+	}
+	public void setOtherCount(int otherCount) {
+		this.otherCount = otherCount;
+	}
+	
 	public String getStatus1() {
 		return status1;
 	}

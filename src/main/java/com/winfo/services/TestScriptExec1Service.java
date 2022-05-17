@@ -12,9 +12,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -52,6 +54,7 @@ import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
@@ -79,7 +82,8 @@ import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
-import com.winfo.utils.PropertyReader;
+import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.ResponseDto;
 
@@ -142,15 +146,13 @@ public class TestScriptExec1Service {
 				}
 			}
 			args.setSuccess(scriptStatus);
-
+ 
 			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
 					args.getTestSetLineId(), false, args.isManualTrigger());
 
-			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION("C:\\WATS\\Screenshot\\");
-			fetchConfigVO.setWINDOWS_PDF_LOCATION("C:\\WATS\\PDF\\");
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
@@ -205,15 +207,44 @@ public class TestScriptExec1Service {
 
 			}
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), fetchConfigVO.getEndtime());
-			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO.getEndtime());
+			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 					fetchConfigVO.getStatus1(), new Date(), fetchConfigVO.getEndtime());
+
+			// final reports generation
+			if (!args.isManualTrigger()) {
+				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
+				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
+					boolean runFinalPdf = dataBaseEntry
+							.checkIfAllTestSetLinesCompleted(Long.valueOf(args.getTestSetId()), true);
+					if (runFinalPdf) {
+						Date date1 = new Date();
+						fetchConfigVO.setEndtime(date1);
+						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
+								BOOLEAN_STATUS.FALSE.getLabel());
+						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO, date1);
+					}
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseDto(200, Constants.ERROR, "Fail");
+	}
+
+	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
+		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true, true);
+		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
+		fetchConfigVO.setEndtime(endDate);
+		try {
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
+		} catch (IOException | com.itextpdf.text.DocumentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteScreenshotsFromWindows(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO) {
@@ -311,9 +342,120 @@ public class TestScriptExec1Service {
 
 	}
 
+	public void generateDetailsPDF(Document document, Image watsLogo, int passCount, int failCount, int others,
+			PdfWriter writer) throws DocumentException {
+		String start = "Execution Summary";
+		String pichart = "Pie-Chart";
+		Font font23 = FontFactory.getFont(ARIAL, 23);
+		Font fontWhite23 = FontFactory.getFont(ARIAL, 23, BaseColor.WHITE);
+		document.add(Chunk.NEWLINE);
+		Paragraph executionSummery = new Paragraph(start, font23);
+		document.add(executionSummery);
+		document.add(Chunk.NEWLINE);
+		DecimalFormat df1 = new DecimalFormat("0");
+		DecimalFormat df2 = new DecimalFormat("0");
+		double pass = Math.round((passCount * 100.0) / (passCount + failCount + others));
+		double fail = Math.round((failCount * 100.0) / (passCount + failCount + others));
+		double other = Math.round(others * 100.0) / (passCount + failCount + others);
+		DefaultPieDataset dataSet = new DefaultPieDataset();
+		if (passCount == 0 && others == 0) {
+			dataSet.setValue("Fail", fail);
+		} else if (failCount == 0 && others == 0) {
+			dataSet.setValue("Pass", pass);
+		} else if (passCount == 0 && failCount == 0) {
+			dataSet.setValue("Others", other);
+		} else if (passCount != 0 && others != 0 && failCount == 0) {
+			dataSet.setValue("Pass", pass);
+			dataSet.setValue("Others", other);
+		} else if (passCount == 0 && others != 0 && failCount != 0) {
+			dataSet.setValue("Fail", fail);
+			dataSet.setValue("Others", other);
+		} else if (passCount != 0 && others == 0 && failCount != 0) {
+			dataSet.setValue("Pass", pass);
+			dataSet.setValue("Fail", fail);
+		} else if (passCount != 0 && others != 0 && failCount != 0) {
+			dataSet.setValue("Pass", pass);
+			dataSet.setValue("Fail", fail);
+			dataSet.setValue("Others", other);
+		}
+		PdfPTable table = new PdfPTable(3);
+		table.setWidths(new int[] { 1, 1, 1 });
+		table.setWidthPercentage(100f);
+		for (String consts : CONST) {
+			eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
+		}
+		PdfPCell[] cells1 = table.getRow(0).getCells();
+		for (int k = 0; k < cells1.length; k++) {
+			cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
+		}
+		String[] strArr = { PASSED, df1.format(passCount), df2.format(pass) + "%", FAILED, df1.format(failCount),
+				df2.format(fail) + "%" };
+
+		for (String str : strArr) {
+			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+		}
+		document.setMargins(20, 20, 20, 20);
+		document.add(table);
+
+		Chunk ch = new Chunk(pichart, fontWhite23);
+		ch.setTextRise(-18);
+		ch.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
+		document.newPage();
+		document.add(watsLogo);
+		Paragraph p1 = new Paragraph(ch);
+		p1.setSpacingBefore(50);
+		document.add(p1);
+
+		JFreeChart chart = ChartFactory.createPieChart("", dataSet, true, true, false);
+		Color c1 = Color.GREEN;
+		Color c = Color.RED;
+		Color yellow = Color.YELLOW;
+
+		LegendTitle legend = chart.getLegend();
+		PiePlot piePlot = (PiePlot) chart.getPlot();
+		piePlot.setSectionPaint("Pass", c1);
+		piePlot.setSectionPaint("Fail", c);
+		piePlot.setSectionPaint("Others", yellow);
+
+		piePlot.setBackgroundPaint(Color.WHITE);
+		piePlot.setOutlinePaint(null);
+		piePlot.setLabelBackgroundPaint(null);
+		piePlot.setLabelOutlinePaint(null);
+		piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
+		piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
+		piePlot.setLabelShadowPaint(null);
+		piePlot.setShadowXOffset(0.0D);
+		piePlot.setShadowYOffset(0.0D);
+		piePlot.setLabelGenerator(null);
+		piePlot.setBackgroundAlpha(0.4f);
+		piePlot.setExplodePercent("Pass", 0.05);
+		piePlot.setSimpleLabels(true);
+		piePlot.setSectionOutlinesVisible(false);
+		java.awt.Font f2 = new java.awt.Font("", java.awt.Font.PLAIN, 22);
+		piePlot.setLabelFont(f2);
+		PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}", new DecimalFormat("0"),
+				new DecimalFormat("0%"));
+		piePlot.setLabelGenerator(gen);
+		legend.setPosition(RectangleEdge.RIGHT);
+		legend.setVerticalAlignment(VerticalAlignment.CENTER);
+		piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
+		legend.setFrame(BlockBorder.NONE);
+		legend.setFrame(new LineBorder(Color.white, new BasicStroke(20f), new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
+
+		java.awt.Font pass1 = new java.awt.Font("", Font.NORMAL, 22);
+		legend.setItemFont(pass1);
+		PdfContentByte contentByte = writer.getDirectContent();
+		PdfTemplate template = contentByte.createTemplate(1000, 900);
+		Graphics2D graphics2d = template.createGraphics(700, 400, new DefaultFontMapper());
+		Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600, 400);
+		chart.draw(graphics2d, rectangle2d);
+		graphics2d.dispose();
+		contentByte.addTemplate(template, 400, 100);
+	}
+
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
 			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, List<String> fileNameList)
-			throws Exception {
+			throws DocumentException, IOException {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
@@ -459,14 +601,324 @@ public class TestScriptExec1Service {
 		}
 	}
 
+	public void generatePassPDF(Document document, int passCount, int failCount) throws DocumentException {
+		Font font23 = FontFactory.getFont(ARIAL, 23);
+		String start = "Execution Summary";
+		document.add(Chunk.NEWLINE);
+		Paragraph executionSummery = new Paragraph(start, font23);
+		document.add(executionSummery);
+		document.add(Chunk.NEWLINE);
+		DecimalFormat df1 = new DecimalFormat("0");
+		DecimalFormat df2 = new DecimalFormat("0");
+		double pass = Math.round((passCount * 100.0) / (passCount + failCount));
+		PdfPTable table = new PdfPTable(3);
+		table.setWidths(new int[] { 1, 1, 1 });
+		table.setWidthPercentage(100f);
+		for (String consts : CONST) {
+			eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
+		}
+		PdfPCell[] cells1 = table.getRow(0).getCells();
+		for (int k = 0; k < cells1.length; k++) {
+			cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
+		}
+		String[] strArr = { "Status", df1.format(passCount), df2.format(pass) + "%" };
+		for (String str : strArr) {
+			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+		}
+		document.setMargins(20, 20, 20, 20);
+		document.add(table);
+
+	}
+
+	public void generateFailedPDF(Document document, int passcount, int failcount) throws DocumentException {
+		Font font23 = FontFactory.getFont(ARIAL, 23);
+		String start = "Execution Summary";
+		document.add(Chunk.NEWLINE);
+		Paragraph executionSummery = new Paragraph(start, font23);
+		document.add(executionSummery);
+		document.add(Chunk.NEWLINE);
+		DecimalFormat df1 = new DecimalFormat("0");
+		DecimalFormat df2 = new DecimalFormat("0");
+		double fail = Math.round((failcount * 100.0) / (passcount + failcount));
+		PdfPTable table = new PdfPTable(3);
+		table.setWidths(new int[] { 1, 1, 1 });
+		table.setWidthPercentage(100f);
+		for (String str : CONST) {
+			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+		}
+		PdfPCell[] cells1 = table.getRow(0).getCells();
+		for (int k = 0; k < cells1.length; k++) {
+			cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
+		}
+		String[] strArr = { FAILED, df1.format(failcount), df2.format(fail) + "%" };
+		for (String str : strArr) {
+			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+		}
+		document.setMargins(20, 20, 20, 20);
+		document.add(table);
+	}
+
+	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
+			FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO)
+			throws DocumentException, IOException, ClassNotFoundException, SQLException {
+		int k = 0;
+		int l = 0;
+		String sno1 = "";
+		Map<Integer, Map<String, String>> toc = new TreeMap<>();
+		Map<String, String> toc2 = new TreeMap<>();
+		String customerName = fetchMetadataListVO.get(0).getCustomer_name();
+		String testRunName1 = fetchMetadataListVO.get(0).getTest_run_name();
+		Font font23 = FontFactory.getFont(ARIAL, 23);
+		Font fnt12 = FontFactory.getFont(ARIAL, 12);
+		Font bf15 = FontFactory.getFont(ARIAL, 23, Font.UNDERLINE);
+		Font bf16 = FontFactory.getFont(ARIAL, 12, Font.UNDERLINE, new BaseColor(66, 245, 236));
+		Font bf13 = FontFactory.getFont(ARIAL, 23, Font.UNDERLINE, BaseColor.GREEN);
+		Font bf14 = FontFactory.getFont(ARIAL, 23, Font.UNDERLINE, BaseColor.RED);
+		Font bfBold = FontFactory.getFont(ARIAL, 23, BaseColor.WHITE);
+
+		for (String image : fileNameList) {
+			k++;
+			String sndo = image.split("_")[0]; // SEQ NUM
+			String name = image.split("_")[3];// SCRIPT NUM
+
+			if (!sndo.equalsIgnoreCase(sno1)) {
+				Map<String, String> toc1 = new TreeMap<>();
+				for (String image1 : fileNameList) {
+					if (image1.startsWith(sndo + "_") && image1.contains(FAILED)) {
+
+						toc2.put(sndo, FAILED + l);
+						l++;
+					}
+				}
+				String str = String.valueOf(toc2.get(sndo));
+				toc1.put(sndo + "_" + name, str);
+				toc.put(k, toc1);
+
+			}
+			if (sndo != null) {
+				sno1 = sndo;
+			}
+		}
+		sno1 = "";
+		document.newPage();
+		document.add(watsLogo);
+		Anchor target2 = new Anchor(String.valueOf("Page Numbers"), bfBold);
+		target2.setName(String.valueOf("details"));
+		Chunk ch1 = new Chunk("Script Numbers", bfBold);
+		ch1.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
+		Paragraph p2 = new Paragraph();
+		p2.add(ch1);
+		p2.add(new Chunk(new VerticalPositionMark()));
+		p2.add(target2);
+		document.add(p2);
+		document.add(Chunk.NEWLINE);
+
+		Chunk dottedLine = new Chunk(new DottedLineSeparator());
+		for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
+			Map<String, String> str1 = entry.getValue();
+			for (Entry<String, String> entry1 : str1.entrySet()) {
+				Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
+				click.setReference("#" + entry1.getKey());
+				Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
+				click1.setReference("#" + entry1.getValue());
+				Paragraph pr = new Paragraph();
+				Anchor ca1 = new Anchor(entry1.getKey(), bf15);
+				ca1.setReference("#" + entry1.getKey());
+				String compare = entry1.getValue();
+				if (!compare.equals("null")) {
+					pr.add(ca1);
+
+					pr.add(click1);
+					pr.add(dottedLine);
+					pr.add(click);
+					document.add(Chunk.NEWLINE);
+					document.add(pr);
+				} else {
+					Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
+					click2.setReference("#" + entry1.getKey());
+					pr.add(ca1);
+					pr.add(click2);
+					pr.add(dottedLine);
+					pr.add(click);
+					document.add(Chunk.NEWLINE);
+					document.add(pr);
+				}
+			}
+		}
+
+		int i = 0;
+		int j = 0;
+		for (String image : fileNameList) {
+			i++;
+			Image img = Image.getInstance(
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/" + testRunName1 + "/" + image);
+			String sno = image.split("_")[0];
+			String sNo = "Script Number";
+			String scriptNumber1 = image.split("_")[3];
+			String snm = "Scenario Name";
+			String scriptName = image.split("_")[2];
+			String testRunName = image.split("_")[4];
+			if (!sno.equalsIgnoreCase(sno1)) {
+				document.setPageSize(img);
+				document.newPage();
+				document.add(watsLogo);
+				Anchor target3 = new Anchor("Script Details", font23);
+				target3.setName(sno + "_" + scriptNumber1);
+				Paragraph pa = new Paragraph();
+				pa.add(target3);
+				document.add(pa);
+				document.add(Chunk.NEWLINE);
+				PdfPTable table2 = new PdfPTable(2);
+				table2.setWidths(new int[] { 1, 1 });
+				table2.setWidthPercentage(100f);
+				String[] strArr = { sNo, scriptNumber1, snm, scriptName };
+				for (String str : strArr) {
+					eBSSeleniumKeyWords.insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
+				}
+
+				for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
+					String str = entry1.getValue();
+					if (!str.equals("null")) {
+						eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+						eBSSeleniumKeyWords.insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
+					} else {
+						eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+						eBSSeleniumKeyWords.insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
+					}
+				}
+
+				document.add(table2);
+
+			}
+			if (sno != null) {
+				sno1 = sno;
+			}
+			String status = image.split("_")[6].split("\\.")[0];
+			String scenario = image.split("_")[2];
+
+			String scenarios = "Scenario Name :" + "" + scenario;
+
+			String sndo = image.split("_")[0];
+			watsLogo.scalePercent(65, 68);
+			Rectangle one1 = new Rectangle(1360, 1000);
+			watsLogo.setAlignment(Image.ALIGN_RIGHT);
+			if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+				document.setPageSize(one1);
+				document.newPage();
+			} else {
+
+				document.setPageSize(img);
+				document.newPage();
+			}
+			document.add(watsLogo);
+			document.add(new Paragraph(scenarios, fnt12));
+			String reason = image.split("_")[5];
+			String step = "Step No :" + "" + reason;
+			String message = "Failed at Line Number:" + "" + reason;
+			// new change-database to get error message
+			String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName, fetchConfigVO);
+			String errorMessage = "Failed Message:" + "" + error;
+
+			Map<String, Map<String, TestSetScriptParam>> descriptionList = dataBaseEntry
+					.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
+			String stepDescription = descriptionList.get(sno).get(reason).getTest_run_param_desc();
+
+			String inputParam = descriptionList.get(sno).get(reason).getInput_parameter();
+
+			String inputValue = descriptionList.get(sno).get(reason).getInput_value();
+
+			Paragraph pr1 = new Paragraph();
+			pr1.add("Status:");
+
+			if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+				Anchor target1 = new Anchor(status);
+				target1.setName(String.valueOf(status + j));
+				j++;
+				pr1.add(target1);
+				document.add(pr1);
+				document.add(new Paragraph(message, fnt12));
+				if (error != null) {
+					document.add(new Paragraph(errorMessage, fnt12));
+				}
+				if (stepDescription != null) {
+					document.add(new Paragraph("Step Description :" + stepDescription, fnt12));
+				}
+				if (inputParam != null) {
+					document.add(new Paragraph("Test Parameter :" + inputParam, fnt12));
+					if (inputValue != null) {
+						document.add(new Paragraph("Test Value :" + inputValue, fnt12));
+					}
+				}
+				document.add(Chunk.NEWLINE);
+				img.setAlignment(Image.ALIGN_CENTER);
+				img.isScaleToFitHeight();
+				// new change-change page size
+				img.scalePercent(60, 60);
+				document.add(img);
+
+			} else {
+				document.add(new Paragraph(step, fnt12));
+				Anchor target1 = new Anchor(status);
+				target1.setName(String.valueOf(status));
+				pr1.add(target1);
+				document.add(pr1);
+
+				if (stepDescription != null) {
+					document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+				}
+				if (inputParam != null) {
+					document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
+					if (inputValue != null) {
+						document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+					}
+				}
+				img.setAlignment(Image.ALIGN_CENTER);
+				img.isScaleToFitHeight();
+				img.scalePercent(60, 68);
+				document.add(img);
+			}
+
+			Anchor target = new Anchor(String.valueOf(i));
+			target.setName(String.valueOf(i));
+			Anchor target1 = new Anchor(String.valueOf("Back to Index"), bf16);
+			target1.setReference("#" + "details");
+			Paragraph p = new Paragraph();
+			p.add(target1);
+			p.add(new Chunk(new VerticalPositionMark()));
+			p.add(" page ");
+			p.add(target);
+			p.add(" of " + fileNameList.size());
+			document.add(p);
+		}
+
+	}
+
+	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
+
+		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
+		int passCount = 0;
+		int failCount = 0;
+		int other = 0;
+		for (String testLinesStatus : testLineStatusList) {
+			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+				passCount++;
+			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Fail.getLabel())) {
+				failCount++;
+			} else {
+				other++;
+			}
+		}
+		fetchConfigVO.setPasscount(passCount);
+		fetchConfigVO.setFailcount(failCount);
+		fetchConfigVO.setOtherCount(other);
+	}
+
 	private void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			Date starttime, Date endtime) throws IOException, com.itextpdf.text.DocumentException {
 		try {
-			logger.info("Start of create Pdf for -- " + pdffileName);
 			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
 			String file = (folder + pdffileName);
-			logger.info("Path of Pdf -- " + file);
 
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
@@ -479,21 +931,10 @@ public class TestScriptExec1Service {
 				fileNameList = eBSSeleniumKeyWords.getFileNameListNew(fetchMetadataListVO, fetchConfigVO);
 			}
 			String executedBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String customerName = fetchMetadataListVO.get(0).getCustomer_name();
 			createDir(folder);
 			Document document = new Document();
-			String start = "Execution Summary";
-			String pichart = "Pie-Chart";
 			String report = "Execution Report";
 			Font font23 = FontFactory.getFont(ARIAL, 23);
-			Font fnt12 = FontFactory.getFont(ARIAL, 12);
-			Font bf12 = FontFactory.getFont(ARIAL, 23);
-			Font bf15 = FontFactory.getFont(ARIAL, 23, Font.UNDERLINE);
-			Font bf16 = FontFactory.getFont(ARIAL, 12, Font.UNDERLINE, new BaseColor(66, 245, 236));
-			Font bf13 = FontFactory.getFont(ARIAL, 23, Font.UNDERLINE, BaseColor.GREEN);
-			Font bf14 = FontFactory.getFont(ARIAL, 23, Font.UNDERLINE, BaseColor.RED);
-			Font bfBold = FontFactory.getFont(ARIAL, 23, BaseColor.WHITE);
-			DefaultPieDataset dataSet = new DefaultPieDataset();
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			Rectangle one = new Rectangle(1360, 800);
 			document.setPageSize(one);
@@ -503,19 +944,22 @@ public class TestScriptExec1Service {
 			logger.info("after enter Images/wats_icon.png1");
 			watsLogo.scalePercent(65, 68);
 			watsLogo.setAlignment(Image.ALIGN_RIGHT);
-
-			int passcount = fetchConfigVO.getPasscount();
-			int failcount = fetchConfigVO.getFailcount();
 			Date tendTime = fetchConfigVO.getEndtime();
+			fetchConfigVO.setStarttime1(new Date());
 			Date tStarttime = fetchConfigVO.getStarttime1();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
 			String tendtime1 = dateFormat.format(tendTime);
 			long tdiff = tendTime.getTime() - tStarttime.getTime();
 			String testRunName1 = fetchMetadataListVO.get(0).getTest_run_name();
 
-			if ((passcount != 0 || failcount != 0) && ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
+			if ((!fileNameList.isEmpty()) && ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
 					|| "Failed_Report.pdf".equalsIgnoreCase(pdffileName)
 					|| "Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {
+
+				findPassAndFailCount(fetchConfigVO, fetchMetadataListVO.get(0).getTest_set_id());
+				int passcount = fetchConfigVO.getPasscount();
+				int failcount = fetchConfigVO.getFailcount();
+				int others = fetchConfigVO.getOtherCount();
 
 				String[] startAndExecTime = findExecutionTimeForScript(fetchMetadataListVO.get(0).getTest_set_id(),
 						pdffileName, tStarttime, tendTime, tdiff).split("_");
@@ -536,376 +980,21 @@ public class TestScriptExec1Service {
 				table1.setWidths(new int[] { 1, 1 });
 				table1.setWidthPercentage(100f);
 				for (String text : testArr) {
-					eBSSeleniumKeyWords.insertCell(table1, text, Element.ALIGN_LEFT, 1, bf12);
+					eBSSeleniumKeyWords.insertCell(table1, text, Element.ALIGN_LEFT, 1, font23);
 				}
 				document.add(table1);
-				if (passcount == 0) {
-					dataSet.setValue("Fail", failcount);
-				} else if (failcount == 0) {
-					dataSet.setValue("Pass", passcount);
-				} else {
-					dataSet.setValue("Pass", passcount);
-					dataSet.setValue("Fail", failcount);
-				}
-				double pass = Math.round((passcount * 100.0) / (passcount + failcount));
-				double fail = Math.round((failcount * 100.0) / (passcount + failcount));
-				Rectangle one1 = new Rectangle(1360, 1000);
-				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-					document.setPageSize(one1);
-					document.newPage();
-					document.add(watsLogo);
-					Paragraph executionSummery = new Paragraph(start, font23);
-					document.add(executionSummery);
-					document.add(Chunk.NEWLINE);
-					DecimalFormat df1 = new DecimalFormat("0");
-					DecimalFormat df2 = new DecimalFormat("0");
-					PdfPTable table = new PdfPTable(3);
-					table.setWidths(new int[] { 1, 1, 1 });
-					table.setWidthPercentage(100f);
-					for (String consts : CONST) {
-						eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
-					}
-					PdfPCell[] cells1 = table.getRow(0).getCells();
-					for (int k = 0; k < cells1.length; k++) {
-						cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
-					}
-					String[] strArr = { PASSED, df1.format(passcount), df2.format(pass) + "%", FAILED,
-							df1.format(failcount), df2.format(fail) };
 
-					for (String str : strArr) {
-						eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, bf12);
-					}
-					document.setMargins(20, 20, 20, 20);
-					document.add(table);
+				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
+					generateDetailsPDF(document, watsLogo, passcount, failcount, others, writer);
 				} else if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-					document.add(Chunk.NEWLINE);
-					Paragraph executionSummery = new Paragraph(start, font23);
-					document.add(executionSummery);
-					document.add(Chunk.NEWLINE);
-					DecimalFormat df1 = new DecimalFormat("0");
-					DecimalFormat df2 = new DecimalFormat("0");
-					PdfPTable table = new PdfPTable(3);
-					table.setWidths(new int[] { 1, 1, 1 });
-					table.setWidthPercentage(100f);
-					for (String consts : CONST) {
-						eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
-					}
-					PdfPCell[] cells1 = table.getRow(0).getCells();
-					for (int k = 0; k < cells1.length; k++) {
-						cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
-					}
-					String[] strArr = { "Status", df1.format(passcount), df2.format(pass) + "%" };
-					for (String str : strArr) {
-						eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, bf12);
-					}
-					document.setMargins(20, 20, 20, 20);
-					document.add(table);
-
+					generatePassPDF(document, passcount, failcount);
 				} else {
-					document.add(Chunk.NEWLINE);
-					Paragraph executionSummery = new Paragraph(start, font23);
-					document.add(executionSummery);
-					document.add(Chunk.NEWLINE);
-					DecimalFormat df1 = new DecimalFormat("0");
-					DecimalFormat df2 = new DecimalFormat("0");
-					PdfPTable table = new PdfPTable(3);
-					table.setWidths(new int[] { 1, 1, 1 });
-					table.setWidthPercentage(100f);
-					for (String str : CONST) {
-						eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
-					}
-					PdfPCell[] cells1 = table.getRow(0).getCells();
-					for (int k = 0; k < cells1.length; k++) {
-						cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
-					}
-					String[] strArr = { FAILED, df1.format(failcount), df2.format(fail) + "%" };
-					for (String str : strArr) {
-						eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, bf12);
-					}
-					document.setMargins(20, 20, 20, 20);
-					document.add(table);
+					generateFailedPDF(document, passcount, failcount);
 				}
-				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-					Chunk ch = new Chunk(pichart, bfBold);
-					ch.setTextRise(-18);
-					ch.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
-
-					Paragraph p1 = new Paragraph(ch);
-					p1.setSpacingBefore(50);
-					document.add(p1);
-
-					JFreeChart chart = ChartFactory.createPieChart(" ", dataSet, true, true, false);
-					Color c1 = new Color(102, 255, 102);
-					Color c = new Color(253, 32, 32);
-
-					LegendTitle legend = chart.getLegend();
-					PiePlot piePlot = (PiePlot) chart.getPlot();
-					piePlot.setSectionPaint("Pass", c1);
-					piePlot.setSectionPaint("Fail", c);
-					piePlot.setBackgroundPaint(Color.WHITE);
-					piePlot.setOutlinePaint(null);
-					piePlot.setLabelBackgroundPaint(null);
-					piePlot.setLabelOutlinePaint(null);
-					piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
-					piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
-					piePlot.setLabelShadowPaint(null);
-					piePlot.setShadowXOffset(0.0D);
-					piePlot.setShadowYOffset(0.0D);
-					piePlot.setLabelGenerator(null);
-					piePlot.setBackgroundAlpha(0.4f);
-					piePlot.setExplodePercent("Pass", 0.05);
-					piePlot.setSimpleLabels(true);
-					piePlot.setSectionOutlinesVisible(false);
-					java.awt.Font f2 = new java.awt.Font("", java.awt.Font.PLAIN, 22);
-					piePlot.setLabelFont(f2);
-
-					PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}", new DecimalFormat("0"),
-							new DecimalFormat("0%"));
-					piePlot.setLabelGenerator(gen);
-					legend.setPosition(RectangleEdge.RIGHT);
-					legend.setVerticalAlignment(VerticalAlignment.CENTER);
-					piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-					legend.setFrame(BlockBorder.NONE);
-					legend.setFrame(
-							new LineBorder(Color.white, new BasicStroke(20f), new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
-
-					java.awt.Font pass1 = new java.awt.Font("", Font.NORMAL, 22);
-					legend.setItemFont(pass1);
-					PdfContentByte contentByte = writer.getDirectContent();
-					PdfTemplate template = contentByte.createTemplate(1000, 900);
-					Graphics2D graphics2d = template.createGraphics(700, 400, new DefaultFontMapper());
-					Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600, 400);
-					chart.draw(graphics2d, rectangle2d);
-					graphics2d.dispose();
-					contentByte.addTemplate(template, 400, 100);
-				}
-				int k = 0;
-				int l = 0;
-				String sno1 = "";
-				Map<Integer, Map<String, String>> toc = new TreeMap<>();
-
-				Map<String, String> toc2 = new TreeMap<>();
-				for (String image : fileNameList) {
-					k++;
-					String sndo = image.split("_")[0];
-					String name = image.split("_")[3];
-
-					if (!sndo.equalsIgnoreCase(sno1)) {
-						Map<String, String> toc1 = new TreeMap<>();
-						for (String image1 : fileNameList) {
-							if (image1.startsWith(sndo + "_") && image1.contains(FAILED)) {
-
-								toc2.put(sndo, FAILED + l);
-								l++;
-							}
-						}
-
-						String str = String.valueOf(toc2.get(sndo));
-						toc1.put(sndo + "_" + name, str);
-						toc.put(k, toc1);
-
-					}
-					if (sndo != null) {
-						sno1 = sndo;
-					}
-				}
-				sno1 = "";
-				document.newPage();
-				document.add(watsLogo);
-				Anchor target2 = new Anchor(String.valueOf("Page Numbers"), bfBold);
-				target2.setName(String.valueOf("details"));
-				Chunk ch1 = new Chunk("Script Numbers", bfBold);
-				ch1.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
-				Paragraph p2 = new Paragraph();
-				p2.add(ch1);
-				p2.add(new Chunk(new VerticalPositionMark()));
-				p2.add(target2);
-				document.add(p2);
-				document.add(Chunk.NEWLINE);
-
-				Chunk dottedLine = new Chunk(new DottedLineSeparator());
-				for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
-					Map<String, String> str1 = entry.getValue();
-					for (Entry<String, String> entry1 : str1.entrySet()) {
-						Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
-						click.setReference("#" + entry1.getKey());
-						Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
-						click1.setReference("#" + entry1.getValue());
-						Paragraph pr = new Paragraph();
-//						int value = entry.getKey();
-						Anchor ca1 = new Anchor(entry1.getKey(), bf15);
-						ca1.setReference("#" + entry1.getKey());
-						String compare = entry1.getValue();
-						if (!compare.equals("null")) {
-							pr.add(ca1);
-
-							pr.add(click1);
-							pr.add(dottedLine);
-							pr.add(click);
-							document.add(Chunk.NEWLINE);
-							document.add(pr);
-						} else {
-							Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
-							click2.setReference("#" + entry1.getKey());
-							pr.add(ca1);
-							pr.add(click2);
-							pr.add(dottedLine);
-							pr.add(click);
-							document.add(Chunk.NEWLINE);
-							document.add(pr);
-						}
-					}
-				}
-
-				int i = 0;
-				int j = 0;
-				for (String image : fileNameList) {
-					i++;
-					Image img = Image.getInstance(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/"
-							+ testRunName1 + "/" + image);
-					String sno = image.split("_")[0];
-					String sNo = "Script Number";
-					String scriptNumber1 = image.split("_")[3];
-					String snm = "Scenario Name";
-					String scriptName = image.split("_")[2];
-					String testRunName = image.split("_")[4];
-					if (!sno.equalsIgnoreCase(sno1)) {
-						document.setPageSize(img);
-						document.newPage();
-						document.add(watsLogo);
-						Anchor target3 = new Anchor("Script Details", bf12);
-						target3.setName(sno + "_" + scriptNumber1);
-						Paragraph pa = new Paragraph();
-						pa.add(target3);
-						document.add(pa);
-						document.add(Chunk.NEWLINE);
-						PdfPTable table2 = new PdfPTable(2);
-						table2.setWidths(new int[] { 1, 1 });
-						table2.setWidthPercentage(100f);
-						String[] strArr = { sNo, scriptNumber1, snm, scriptName };
-						for (String str : strArr) {
-							eBSSeleniumKeyWords.insertCell(table2, str, Element.ALIGN_LEFT, 1, bf12);
-						}
-
-						for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
-							String str = entry1.getValue();
-							if (!str.equals("null")) {
-								eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, bf12);
-								eBSSeleniumKeyWords.insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, bf12);
-							} else {
-								eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, bf12);
-								eBSSeleniumKeyWords.insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, bf12);
-							}
-						}
-
-						document.add(table2);
-
-					}
-					if (sno != null) {
-						sno1 = sno;
-					}
-					String status = image.split("_")[6].split("\\.")[0];
-					String scenario = image.split("_")[2];
-
-					String scenarios = "Scenario Name :" + "" + scenario;
-
-					String sndo = image.split("_")[0];
-					watsLogo.scalePercent(65, 68);
-
-					watsLogo.setAlignment(Image.ALIGN_RIGHT);
-					if (image.startsWith(sndo + "_") && image.contains("Failed")) {
-						document.setPageSize(one1);
-						document.newPage();
-					} else {
-
-						document.setPageSize(img);
-						document.newPage();
-					}
-					document.add(watsLogo);
-					document.add(new Paragraph(scenarios, fnt12));
-					String reason = image.split("_")[5];
-					String step = "Step No :" + "" + reason;
-					String message = "Failed at Line Number:" + "" + reason;
-					// new change-database to get error message
-					String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName, fetchConfigVO);
-					String errorMessage = "Failed Message:" + "" + error;
-
-					Map<String, Map<String, TestSetScriptParam>> descriptionList = dataBaseEntry
-							.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
-					String stepDescription = descriptionList.get(sno).get(reason).getTest_run_param_desc();
-
-					String inputParam = descriptionList.get(sno).get(reason).getInput_parameter();
-
-					String inputValue = descriptionList.get(sno).get(reason).getInput_value();
-
-					Paragraph pr1 = new Paragraph();
-					pr1.add("Status:");
-
-					if (image.startsWith(sndo + "_") && image.contains("Failed")) {
-						Anchor target1 = new Anchor(status);
-						target1.setName(String.valueOf(status + j));
-						j++;
-						pr1.add(target1);
-						document.add(pr1);
-						document.add(new Paragraph(message, fnt12));
-						if (error != null) {
-							document.add(new Paragraph(errorMessage, fnt12));
-						}
-						if (stepDescription != null) {
-							document.add(new Paragraph("Step Description :" + stepDescription, fnt12));
-						}
-						if (inputParam != null) {
-							document.add(new Paragraph("Test Parameter :" + inputParam, fnt12));
-							if (inputValue != null) {
-								document.add(new Paragraph("Test Value :" + inputValue, fnt12));
-							}
-						}
-						document.add(Chunk.NEWLINE);
-						img.setAlignment(Image.ALIGN_CENTER);
-						img.isScaleToFitHeight();
-						// new change-change page size
-						img.scalePercent(60, 60);
-						document.add(img);
-
-					} else {
-						document.add(new Paragraph(step, fnt12));
-						Anchor target1 = new Anchor(status);
-						target1.setName(String.valueOf(status));
-						pr1.add(target1);
-						document.add(pr1);
-
-						if (stepDescription != null) {
-							document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
-						}
-						if (inputParam != null) {
-							document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
-							if (inputValue != null) {
-								document.add(new Paragraph("Test Value: " + inputValue, fnt12));
-							}
-						}
-						img.setAlignment(Image.ALIGN_CENTER);
-						img.isScaleToFitHeight();
-						img.scalePercent(60, 68);
-						document.add(img);
-					}
-
-					Anchor target = new Anchor(String.valueOf(i));
-					target.setName(String.valueOf(i));
-					Anchor target1 = new Anchor(String.valueOf("Back to Index"), bf16);
-					target1.setReference("#" + "details");
-					Paragraph p = new Paragraph();
-					p.add(target1);
-					p.add(new Chunk(new VerticalPositionMark()));
-					p.add(" page ");
-					p.add(target);
-					p.add(" of " + fileNameList.size());
-					document.add(p);
-				}
+				addRestOfPagesToPDF(document, fileNameList, watsLogo, fetchConfigVO, fetchMetadataListVO);
 			} else if (!("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
 					|| "Failed_Report.pdf".equalsIgnoreCase(pdffileName)
 					|| "Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {
-
-				System.out.println(fetchConfigVO.getStatus1() + " " + "Status of the SCRIPT");
 				generateScriptLvlPDF(document, starttime, endtime, watsLogo, fetchMetadataListVO, fetchConfigVO,
 						fileNameList);
 			}
@@ -921,8 +1010,7 @@ public class TestScriptExec1Service {
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH) + pdffileName;
-
-//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
 		}

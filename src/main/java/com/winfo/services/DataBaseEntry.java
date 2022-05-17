@@ -11,6 +11,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetLines;
@@ -24,6 +25,9 @@ import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 public class DataBaseEntry {
 	@Autowired
 	DataBaseEntryDao dao;
+
+	@Autowired
+	CopyTestRunDao copyTestrunDao;
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
@@ -81,14 +85,17 @@ public class DataBaseEntry {
 		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
 	}
 
-	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO, Date endDate) {
-
+	@Transactional
+	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO) {
 		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
-				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(),
-				fetchScriptVO.getP_script_id(), endDate);
+				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(),
+				fetchConfigVO.getEndtime());
 		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
-
+		dao.updateExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
+				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
+		
+		dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 	}
 
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -105,6 +112,11 @@ public class DataBaseEntry {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Transactional
+	public List<String> getStatusByTestSetId(String testSetId) {
+		return dao.getStatusByTestSetId(testSetId);
 	}
 
 	@Transactional

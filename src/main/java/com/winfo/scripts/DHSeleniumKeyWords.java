@@ -916,20 +916,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
+//		File[] listOfFiles = folder.listFiles();
 		String videoRec = "no";
-		List<File> allFileList = Arrays.asList(listOfFiles);
+//		List<File> allFileList = Arrays.asList(listOfFiles);
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
-		for (String fileNames : fileSeqList) {
-			for (File file : allFileList) {
-				if (fileNames.equals(file.getName())) {
-					fileList.add(file);
-					break;
-				}
+		for (String newFile : fileSeqList) {
+			File file = new File(folder + newFile);
+			if (file.exists()) {
+				fileList.add(file);
 			}
 		}
 		List<String> fileNameList = new ArrayList<>();
@@ -1016,29 +1013,19 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
-		String video_rec = "no";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
+		String videoRec = "no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
-		int passcount = 0;
-		int failcount = 0;
 		for (String fileNames : fileSeqList) {
-			for (File file : Arrays.asList(listOfFiles)) {
-				if (fileNames.equals(file.getName())) {
-					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-					if (!filesMap.containsKey(seqNum)) {
-
-						filesMap.put(seqNum, new ArrayList<File>());
-
-					}
-
-					filesMap.get(seqNum).add(file);
-					break;
+			File newFile = new File(folder + fileNames);
+			if (newFile.exists()) {
+				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
+				if (!filesMap.containsKey(seqNum)) {
+					filesMap.put(seqNum, new ArrayList<File>());
 				}
+				filesMap.get(seqNum).add(newFile);
 			}
 		}
 
@@ -1053,11 +1040,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			ArrayList<String> linksall = new ArrayList<>();
 
 			File file = new ClassPathResource(whiteimage).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
 			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
 
 			BufferedImage image = null;
 			image = ImageIO.read(file);
@@ -1098,7 +1081,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 ////		 g.drawString("End Time :"+endtime1, 50, 500);
 ////		 g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 			g.dispose();
-
+ 
 			BufferedImage image2 = null;
 			image2 = ImageIO.read(file);
 			Graphics g2 = image2.getGraphics();
@@ -1112,63 +1095,39 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.drawString("Execution Time : " + executionTime, 50, 425);
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
-			File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				try {
-					folder1.mkdirs();
-				} catch (SecurityException se) {
-					se.printStackTrace();
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
+			String folder1 = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images";
+			createDir(folder1);
 
 			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
 			String imgpath3 = folder1 + "/first.jpg";
 			String imgpath2 = folder1 + "/";
 			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
 			File f11 = new File(imgpath2);
 			File[] f22 = f11.listFiles();
 			File f44 = new File(imgpath3);
 			firstimagelink = f44.getAbsolutePath();
-
 			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
 					}
 				}
-				links1.add(seqList.get(0).getAbsolutePath());
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
+				for (int i = 0; i < seqList.size(); i++) {
 					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
 						links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
 					}
 				}
-
 				links1.add(linksall.get(0));
 				links.addAll(links1);
 				targetFileList.addAll(seqFileNameList);
 			}
 		}
 
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("yes")) {
+		if (videoRec.equalsIgnoreCase("yes")) {
 			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Passed_Video.mp4");
 		}
 		return targetFileList;
@@ -1177,31 +1136,19 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec = "no";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
+		String videoRec = "no";
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int failcount = 0;
-		int passcount = 0;
 		for (String fileNames : fileSeqList) {
-			for (File file : Arrays.asList(listOfFiles)) {
-				if (fileNames.equals(file.getName())) {
-					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-					if (!filesMap.containsKey(seqNum)) {
-
-						filesMap.put(seqNum, new ArrayList<File>());
-
-					}
-
-					filesMap.get(seqNum).add(file);
-					break;
+			File file = new File(folder + fileNames);
+			if (file.exists()) {
+				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+				if (!filesMap.containsKey(seqNum)) {
+					filesMap.put(seqNum, new ArrayList<File>());
 				}
+				filesMap.get(seqNum).add(file);
 			}
 		}
 
@@ -1261,24 +1208,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 ////	    g.drawString("End Time :"+endtime1, 50, 500);
 ////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 			g.dispose();
-			File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-//				boolean result = false;
-				try {
-					folder1.mkdirs();
-//					result = true;
-				} catch (SecurityException se) {
-					se.printStackTrace();
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
+			String folder1 = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images";
+			createDir(folder1);
 			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
 			BufferedImage image1 = ImageIO.read(file);
 			Graphics g1 = image1.getGraphics();
@@ -1289,8 +1222,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
 			g1.dispose();
 			ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-			// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\last.jpg"));
 
 			BufferedImage image2 = ImageIO.read(file);
 			Graphics g2 = image2.getGraphics();
@@ -1307,18 +1238,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
 			String imgpath3 = folder1 + "/first.jpg";
 			String imgpath2 = folder1 + "/";
-
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 			File f11 = new File(imgpath2);
 			File[] f22 = f11.listFiles();
 			File f44 = new File(imgpath3);
 			firstimagelink = f44.getAbsolutePath();
 
 			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-				failcount++;
+//				failcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
@@ -1331,7 +1257,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					}
 				}
-//                                   System.out.println("SEQ : "+seqEntry.getKey());
 				links1.add(seqList.get(0).getAbsolutePath());
 				links1.add(linksall.get(1));
 				seqFileNameList.add(seqList.get(0).getName());
@@ -1350,8 +1275,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			}
 
-//                    targetFileList.addAll(seqList);
-
 		}
 //
 //		/*
@@ -1361,9 +1284,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //		 * 
 //		 * }
 //		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("yes")) {
+//		fetchConfigVO.setPasscount(passcount);
+//		fetchConfigVO.setFailcount(failcount);
+		if (videoRec.equalsIgnoreCase("yes")) {
 			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Failed_Video.mp4");
 		}
 		return targetFileList;
@@ -1373,32 +1296,21 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
 		String videoRec = "no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
-		int failcount = 0;
-		int passcount = 0;
+		List<String> detailsFileName = new ArrayList<>();
 		for (String fileNames : fileSeqList) {
-			for (File file : Arrays.asList(listOfFiles)) {
-				if (fileNames.equals(file.getName())) {
-					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-					if (!filesMap.containsKey(seqNum)) {
-
-						filesMap.put(seqNum, new ArrayList<File>());
-
-					}
-
-					filesMap.get(seqNum).add(file);
-					break;
-
+			File file = new File(folder + fileNames);
+			if (file.exists()) {
+				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+				if (!filesMap.containsKey(seqNum)) {
+					filesMap.put(seqNum, new ArrayList<File>());
 				}
+				filesMap.get(seqNum).add(file);
+				detailsFileName.add(fileNames);
 			}
 		}
 
@@ -1457,25 +1369,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// g.drawString("End Time :"+endtime1, 50, 500);
 			// g.drawString("Execution Time : "+ExecutionTime, 50, 575);
 			g.dispose();
-			File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-//				boolean result = false;
-				try {
-					folder1.mkdirs();
-//					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
+			String folder1 = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+					+ fetchMetadataListVO.get(0).getCustomer_name() + "/Images";
+			createDir(folder1);
 
 			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
 
 			BufferedImage image1 = ImageIO.read(file);
 			Graphics g1 = image1.getGraphics();
@@ -1499,48 +1397,32 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g2.drawImage(logo, 1012, 15, null);
 			g2.dispose();
 			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
 			String imgpath2 = folder1 + "/";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
 			String imgpath3 = folder1 + "/first.jpg";
-			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
 			File f11 = new File(imgpath2);
 			File[] f22 = f11.listFiles();
 			File f44 = new File(imgpath3);
 			firstimagelink = f44.getAbsolutePath();
 
 			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
 					}
 				}
 				links1.add(seqList.get(0).getAbsolutePath());
-
 				seqFileNameList.add(seqList.get(0).getName());
-
-//			             	                      System.out.println("FIRST S STEP: "+seqList.get(0).getName());
-
 				for (int i = 1; i < seqList.size(); i++) {
-
 					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
 						links1.add(seqList.get(i).getAbsolutePath());
-
 						seqFileNameList.add(seqList.get(i).getName());
-
-//			                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
-
 					}
-
 				}
 				links1.add(linksall.get(0));
 				links.addAll(links1);
 				targetSuccessFileList.addAll(seqFileNameList);
 
 			} else {
-				failcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
@@ -1553,24 +1435,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					}
 				}
-//			                                   System.out.println("SEQ : "+seqEntry.getKey());
 				links1.add(seqList.get(0).getAbsolutePath());
 				links1.add(linksall.get(1));
-//			                                   System.out.println("SEQ : "+seqEntry.getKey());
-
 				seqFileNameList.add(seqList.get(0).getName());
-
-//			                                   System.out.println("FIRST F STEP: "+seqList.get(0).getName());
-
 				for (int i = 1; i < seqList.size(); i++) {
-
 					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
 						links1.add(seqList.get(i).getAbsolutePath());
-
 						seqFileNameList.add(seqList.get(i).getName());
-
-//			                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
-
 					}
 
 				}
@@ -1581,8 +1452,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			}
 
-//			                    targetFileList.addAll(seqList);
-
 		}
 
 		finalLinks.addAll(links);
@@ -1591,20 +1460,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		targetFileList.addAll(targetFailedFileList);
 
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
 		if (videoRec.equalsIgnoreCase("Y")) {
 
 			convertJPGtoMovie(firstimagelink, finalLinks, fetchMetadataListVO, fetchConfigVO, tName + ".mp4");
 		}
-		return targetFileList;
+		return detailsFileName;
 	}
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,

@@ -23,6 +23,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -221,13 +222,14 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateTestSetLineStatus(String status, String testSetLineScriptPath, String testSetId,
-			String testSetLineId, String scriptId, Date endDate) { 
+			String testSetLineId, String scriptId, Date endDate) {
 		String endTime = new SimpleDateFormat("M/dd/yyyy HH:mm:ss").format(endDate);
 
 		try {
 			Session session = em.unwrap(Session.class);
 			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status + "', TEST_SET_LINE_SCRIPT_PATH='"
-					+ testSetLineScriptPath + "', EXECUTION_END_TIME=TO_TIMESTAMP('" + endTime+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID="
+					+ testSetLineScriptPath + "', EXECUTION_END_TIME=TO_TIMESTAMP('" + endTime
+					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID="
 					+ testSetLineId + " AND SCRIPT_ID=" + scriptId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
@@ -248,6 +250,60 @@ public class DataBaseEntryDao {
 		} catch (Exception e) {
 			System.out.println("cannot update TestSetPath");
 			System.out.println(e);
+		}
+	}
+
+	public void updateExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
+		Format dateFormat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
+		String startTime = dateFormat.format(startDate);
+		String endTime = dateFormat.format(endDate);
+		try {
+			Session session = em.unwrap(Session.class);
+			int nextExecNo = getNextExecutionNum();
+			String instQry = "INSERT INTO WIN_TA_EXECUTION_HISTORY (EXECUTION_ID, TEST_SET_LINE_ID, EXECUTION_START_TIME, EXECUTION_END_TIME, STATUS) VALUES ('"
+					+ (nextExecNo) + "','" + testSetLineId + "'," + "TO_TIMESTAMP('"+startTime+"','MM/DD/YYYY HH24:MI:SS')"+ "," +"TO_TIMESTAMP('"+endTime+"','MM/DD/YYYY HH24:MI:SS')" + ",'" + status + "')";
+			System.out.println(instQry);
+			Query instQuery = session.createSQLQuery(instQry);
+			instQuery.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateExecStatusTable(String testSetId) {
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String execQry = "SELECT RESPONSE_COUNT FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID =" + testSetId
+					+ " AND EXECUTION_ID = (SELECT MAX(EXECUTION_ID) FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID ="
+					+ testSetId+" )";
+			BigDecimal bigDecimal = (BigDecimal) session.createSQLQuery(execQry).getSingleResult();
+			Integer id = Integer.parseInt(bigDecimal.toString());
+			String updateQry = "UPDATE TEST_RUN_EXECUTE_STATUS SET RESPONSE_COUNT =" + (id + 1)
+					+ " WHERE TEST_RUN_ID = " + testSetId
+					+ " AND EXECUTION_ID = (SELECT MAX(EXECUTION_ID) FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID = "+testSetId+" )";
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public int getNextExecutionNum() {
+		Session session = em.unwrap(Session.class);
+		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
+		SQLQuery query = session.createSQLQuery(sql);
+
+		List results = query.list();
+		if (results.size() > 0) {
+			System.out.println(results.get(0));
+
+			BigDecimal bigDecimal = (BigDecimal) results.get(0);
+			Integer id = Integer.parseInt(bigDecimal.toString());
+			return id;
+		} else {
+			return 0;
 		}
 	}
 
@@ -372,6 +428,21 @@ public class DataBaseEntryDao {
 		Query query = em.createQuery(cq.select(from.get("status")));
 		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getStatusByTestSetId(String testSetId) {
+
+		String sqlQry = "select STATUS FROM win_ta_test_set_lines where test_set_id=" + testSetId;
+		List<String> result = null;
+		Session session = em.unwrap(Session.class);
+		try {
+			Query query = session.createSQLQuery(sqlQry);
+			result = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 
