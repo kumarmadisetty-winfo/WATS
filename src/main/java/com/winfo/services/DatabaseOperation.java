@@ -2,6 +2,7 @@ package com.winfo.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -14,6 +15,8 @@ import com.winfo.dao.ScriptParamRepository;
 import com.winfo.dao.TestRunExecuteStatusRepository;
 import com.winfo.dao.TestSetLinesRepository;
 import com.winfo.dao.TestSetRepository;
+import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 
 @Service
@@ -97,6 +100,13 @@ public class DatabaseOperation {
 		
 		testRunExecStatusRepo.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 	}
+	
+	@Transactional
+	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id) {
+		TestSetLines testSetLine = testSetLinesRepo.getTestSetLine(test_set_line_id);
+		return scriptDao.getTestScriptMap(testSetLine);
+	}
+
 
 
 }

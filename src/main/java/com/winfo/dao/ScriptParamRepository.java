@@ -1,6 +1,8 @@
 package com.winfo.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +15,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 
 @Repository
@@ -55,6 +58,19 @@ public class ScriptParamRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLines test_set_line) {
+		String sql = "from TestSetScriptParam where testSetLines=:testSetLines";
+		Query query = em.createQuery(sql);
+		query.setParameter("testSetLines", test_set_line);
+		List<TestSetScriptParam> testScriptParamList = query.getResultList();
+		Map<String, TestSetScriptParam> map2 = new HashMap<String, TestSetScriptParam>();
+		for (TestSetScriptParam scriptParam : testScriptParamList) {
+			map2.put(String.valueOf(scriptParam.getLineNumber()), scriptParam);
+		}
+		// map.put(String.valueOf(test_set_line.getSeq_num()),map2);
+		return map2;
 	}
 
 }

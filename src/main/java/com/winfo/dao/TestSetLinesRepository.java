@@ -132,6 +132,12 @@ public class TestSetLinesRepository {
 			System.out.println(e);
 		}
 	}
+	
+	public TestSetLines getTestSetLine(String test_set_line_id) {
+		return em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+	}
+	
+	
 
 
 }
