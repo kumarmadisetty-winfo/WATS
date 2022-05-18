@@ -3,10 +3,16 @@ package com.winfo.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
+
+import com.winfo.model.TestSet;
 
 @Repository
 @RefreshScope
@@ -25,6 +31,27 @@ public class TestSetRepository {
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cannot update TestSetPath");
+			System.out.println(e);
+		}
+	}
+	
+	public String getTestSetPdfGenerationEnableStatus(Long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> query = cb.createQuery(String.class);
+		Root<TestSet> root = query.from(TestSet.class);
+		Predicate condition = cb.equal(root.get("testRunId"), testSetId);
+		query.select(root.get("pdfGenerationEnabled")).where(condition);
+		return em.createQuery(query).getSingleResult();
+
+	}
+	
+	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
+		try {
+			Query query = em.createQuery(
+					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where test_set_id='" + testSetId + "'");
+			query.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("Error Updation PDF Generation Status");
 			System.out.println(e);
 		}
 	}

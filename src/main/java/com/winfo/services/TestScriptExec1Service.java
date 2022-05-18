@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -214,21 +212,21 @@ public class TestScriptExec1Service {
 
 			}
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), fetchConfigVO.getEndtime());
-			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
-			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+			dataBaseOpt.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+			dataBaseOpt.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 					fetchConfigVO.getStatus1(), new Date(), fetchConfigVO.getEndtime());
 
 			// final reports generation
 			if (!args.isManualTrigger()) {
-				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
+				String pdfGenerationEnabled = dataBaseOpt.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
-					boolean runFinalPdf = dataBaseEntry
+					boolean runFinalPdf = dataBaseOpt
 							.checkIfAllTestSetLinesCompleted(Long.valueOf(args.getTestSetId()), true);
 					if (runFinalPdf) {
 						Date date1 = new Date();
 						fetchConfigVO.setEndtime(date1);
-						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
+						dataBaseOpt.updatePdfGenerationEnableStatus(args.getTestSetId(),
 								BOOLEAN_STATUS.FALSE.getLabel());
 						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO, date1);
 					}

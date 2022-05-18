@@ -2,6 +2,7 @@ package com.winfo.dao;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.TestSetLines;
+import com.winfo.services.FetchConfigVO;
+import com.winfo.utils.Constants.BOOLEAN_STATUS;
 
 @Repository
 @RefreshScope
@@ -131,6 +134,67 @@ public class TestSetLinesRepository {
 			System.out.println("cannot update Status");
 			System.out.println(e);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
+		Root<TestSetLines> from = cq.from(TestSetLines.class);
+
+		Predicate condition1 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition2 = null;
+		Predicate condition = cb.and(condition1, condition2);
+		if (enable != null) {
+			condition2 = cb.equal(from.get("enabled"),
+					enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
+			condition = cb.and(condition1, condition2);
+		} else {
+			condition = condition1;
+		}
+		cq.where(condition);
+		Query query = em.createQuery(cq.select(from.get("status")));
+		return query.getResultList();
+	}
+	
+	public void getPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
+		String sqlQuery = "select count(status) from win_ta_test_set_lines where test_set_id=" + testRunId
+				+ "and status='Fail'";
+		String sqlPassQuery = "select count(status) from win_ta_test_set_lines where test_set_id=" + testRunId
+				+ "and status='Pass'";
+
+		Session session = em.unwrap(Session.class);
+
+		Integer failCount = 0;
+		Integer passCount = 0;
+		try {
+			NativeQuery<BigDecimal> query = session.createSQLQuery(sqlQuery);
+
+			List<BigDecimal> results = query.list();
+			if (results != null && !results.isEmpty()) {
+
+				BigDecimal bigDecimal = results.get(0);
+				failCount = Integer.parseInt(bigDecimal.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
+
+			List<BigDecimal> results1 = query1.list();
+			if (results1 != null && !results1.isEmpty()) {
+
+				BigDecimal bigDecimal1 = results1.get(0);
+				passCount = Integer.parseInt(bigDecimal1.toString());
+			}
+			fetchConfigVO.setFailcount(failCount);
+			fetchConfigVO.setPasscount(passCount);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 

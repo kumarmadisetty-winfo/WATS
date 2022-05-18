@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,12 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.dao.ExecutionAuditRepository;
 import com.winfo.dao.ExecutionHistoryRepository;
 import com.winfo.dao.ScriptParamRepository;
 import com.winfo.dao.TestRunExecuteStatusRepository;
 import com.winfo.dao.TestSetLinesRepository;
 import com.winfo.dao.TestSetRepository;
+import com.winfo.model.ExecutionAudit;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 
 @Service
 @RefreshScope
@@ -38,6 +42,9 @@ public class DatabaseOperation {
 	
 	@Autowired
 	TestRunExecuteStatusRepository testRunExecStatusRepo;
+	
+	@Autowired
+	ExecutionAuditRepository exeAuditRepo;
 	
 
 	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
@@ -98,5 +105,43 @@ public class DatabaseOperation {
 		testRunExecStatusRepo.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 	}
 
+	public void insertTestRunScriptData(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
+			String scriptId, String scriptNumber, String status, Date startDate, Date endDate) {
+		try {
+			ExecutionAudit executionAudit = new ExecutionAudit();
+			String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
+			executionAudit.setTestsetid(testSetId);
+			executionAudit.setScriptid(scriptId);
+			executionAudit.setScriptnumber(scriptNumber);
+			executionAudit.setExecutionstarttime(startDate);
+			executionAudit.setExecutionendtime(endDate);
+			executionAudit.setStatus(status);
+			exeAuditRepo.insertTestrundata(executionAudit);
+			System.out.println("data added successfully");
+			System.out.println("data added successfully");
+		} catch (Exception e) {
+			System.out.println("testrun data not added " + e);
+			e.printStackTrace();
+		}
+	}
+	
+	public String pdfGenerationEnabled(long testSetId) {
+		return testSetRepo.getTestSetPdfGenerationEnableStatus(testSetId);
+	}
+	
+	public boolean checkIfAllTestSetLinesCompleted(long testSetId, Boolean enable) {
+		List<String> result = testSetLinesRepo.getTestSetLinesStatusByTestSetId(testSetId, enable);
+		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
+
+	}
+	
+	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
+		testSetRepo.updatePdfGenerationEnableStatus(testSetId, enabled);
+	}
+	
+	public void setPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
+		testSetLinesRepo.getPassAndFailScriptCount(testRunId, fetchConfigVO);
+	}
 
 }
