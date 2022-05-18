@@ -60,6 +60,10 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 	}
+	
+	public List<Object[]> getStatusAndSeqNum(String testSetId) {
+		return dao.getStatusAndSeqNum(testSetId);	
+	}
 
 	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
 			throws ClassNotFoundException, SQLException {
@@ -197,7 +201,7 @@ public class DataBaseEntry {
 	}
 
 	public Date getExecStartDateOfScript(String testSetId, String testSetLineId) {
-		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId)).getExecution_start_time();
+		 return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId)).getExecutionStartTime();
 	}
 
 	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {

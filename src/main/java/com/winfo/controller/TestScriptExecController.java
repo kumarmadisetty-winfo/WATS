@@ -60,7 +60,7 @@ public class TestScriptExecController {
 //		testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
-	@ResponseBody
+	@ResponseBody 
 	@RequestMapping(value = "/generateScriptPdf")
 	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult) {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
@@ -88,7 +88,8 @@ public class TestScriptExecController {
 	@ResponseBody
 	@RequestMapping(value = "/generateTestRunPdfs/{testSetId}")
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
-		return testScriptExecService.generateTestRunPdf(testSetId);
+		return testScriptExec1Service.generateTestRunPdf(testSetId);
+//		return testScriptExecService.generateTestRunPdf(testSetId);
 	}
 
 	@ResponseBody

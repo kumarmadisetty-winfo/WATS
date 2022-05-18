@@ -1350,11 +1350,11 @@ public class TestScriptExecService {
 					String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName, fetchConfigVO);
 					String errorMessage = "Failed Message:" + "" + error;
 
-					String stepDescription = descriptionList.get(sno).get(reason).getTest_run_param_desc();
+					String stepDescription = descriptionList.get(sno).get(reason).getTestRunParamDesc();
 
-					String inputParam = descriptionList.get(sno).get(reason).getInput_parameter();
+					String inputParam = descriptionList.get(sno).get(reason).getInputParameter();
 
-					String inputValue = descriptionList.get(sno).get(reason).getInput_value();
+					String inputValue = descriptionList.get(sno).get(reason).getInputValue();
 
 					Paragraph pr1 = new Paragraph();
 					pr1.add("Status:");
@@ -1485,9 +1485,9 @@ public class TestScriptExecService {
 						String scenario = image.split("_")[2];
 						String steps = image.split("_")[5];
 
-						String stepDescription = map.get(steps).getTest_run_param_desc();
-						String inputParam = map.get(steps).getInput_parameter();
-						String inputValue = map.get(steps).getInput_value();
+						String stepDescription = map.get(steps).getTestRunParamDesc();
+						String inputParam = map.get(steps).getInputParameter();
+						String inputValue = map.get(steps).getInputValue();
 						document.setPageSize(img);
 						document.newPage();
 

@@ -1,9 +1,7 @@
 			package com.winfo.services;
 
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 public class FetchConfigVO {
 	
@@ -148,6 +146,17 @@ public class FetchConfigVO {
     private String WINDOWS_SCREENSHOT_LOCATION;
     
     private String EBS_APPLICATION_NAME;
+    
+    private List<Object[]> seqNumAndStatus;
+    
+    public List<Object[]> getSeqNumAndStatus() {
+		return seqNumAndStatus;
+	}
+
+	public void setSeqNumAndStatus(List<Object[]> seqNumAndStatus) {
+		this.seqNumAndStatus = seqNumAndStatus;
+	}
+    
     
     public String getEBS_APPLICATION_NAME() {
 		return EBS_APPLICATION_NAME;

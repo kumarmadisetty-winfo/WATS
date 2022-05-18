@@ -119,7 +119,7 @@ public class DataBaseEntryDao {
 			 * if(scriptParam==null) { throw new RuntimeException(); }
 			 */
 			if (scriptParam != null) {
-				scriptParam.setLine_execution_statues(status);
+				scriptParam.setLineExecutionStatus(status);
 				em.merge(scriptParam);
 			}
 		} catch (Exception e) {
@@ -181,7 +181,7 @@ public class DataBaseEntryDao {
 		if (testSet == null) {
 			throw new RuntimeException();
 		}
-		return testSet.getTr_mode();
+		return testSet.getTestRunMode();
 	}
 
 	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
@@ -270,6 +270,19 @@ public class DataBaseEntryDao {
 			e.printStackTrace();
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getStatusAndSeqNum(String testSetId) {
+		List<Object[]> listObj = null;
+		try {
+			Session session = em.unwrap(Session.class);
+			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID="+testSetId;
+			listObj = session.createSQLQuery(execQry).getResultList();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return listObj;
+	}
 
 	public void updateExecStatusTable(String testSetId) {
 
@@ -354,7 +367,7 @@ public class DataBaseEntryDao {
 		List<TestSetLines> test_set_lines_list = query.getResultList();
 		for (TestSetLines test_set_line : test_set_lines_list) {
 			Map<String, TestSetScriptParam> map2 = getTestScriptMap(test_set_line);
-			map.put(String.valueOf(test_set_line.getSeq_num()), map2);
+			map.put(String.valueOf(test_set_line.getSeqNum()), map2);
 
 		}
 		return map;
@@ -368,7 +381,7 @@ public class DataBaseEntryDao {
 		List<TestSetScriptParam> testScriptParamList = query.getResultList();
 		Map<String, TestSetScriptParam> map2 = new HashMap<String, TestSetScriptParam>();
 		for (TestSetScriptParam scriptParam : testScriptParamList) {
-			map2.put(String.valueOf(scriptParam.getLine_number()), scriptParam);
+			map2.put(String.valueOf(scriptParam.getLineNumber()), scriptParam);
 		}
 		// map.put(String.valueOf(test_set_line.getSeq_num()),map2);
 		return map2;
