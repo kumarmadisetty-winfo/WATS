@@ -4594,6 +4594,38 @@ try {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+					"(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]")));
+			WebElement waittext = driver.findElement(By
+					.xpath("(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(4000);
+			try {
+				WebElement Expand = driver.findElement(By.xpath(
+						"(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]"));
+				Expand.click();
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.error("Failed During ClickExpand or Collapse" + scripNumber);
+
+			}
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			String xpath = "(//*[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
+			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During ClickExpand or Collapse" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//h2[normalize-space(text())='" + param1 + "']/following::*[@title='" + param2 + "'])[1]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
 					By.xpath("//h2[normalize-space(text())='" + param1 + "']"), param1));
@@ -4709,38 +4741,7 @@ try {
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
-		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-					"(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]")));
-			WebElement waittext = driver.findElement(By
-					.xpath("(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(4000);
-			try {
-				WebElement Expand = driver.findElement(By.xpath(
-						"(//*[normalize-space(text())=\""+param1+"\"]/preceding::*[@title='" + param2 + "'])[1]"));
-				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
-			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed During ClickExpand or Collapse" + scripNumber);
-
-			}
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
-			String xpath = "(//*[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			                       String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			return;
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
-		}
+		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
