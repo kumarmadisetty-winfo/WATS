@@ -17691,7 +17691,47 @@ try {
 			System.out.println(inputParam1);
 
 		}
+			
+			try {
+			Thread.sleep(5000);
+			WebElement webElement = driver.findElement(By.xpath("(//h1[contains(text(),'" + inputParam1 + "')])[1]"));
 
+
+
+
+
+			Actions actions = new Actions(driver);
+
+
+
+
+
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getText() ;
+			System.out.println(stringToSearch);
+			value = copyValuesWithSpc(stringToSearch);
+
+
+
+
+
+			// value = copyValuesWithSpc(webElement);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+			log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+
+
+			return value;
+
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+			}
 		try {
 			WebElement webElement = driver.findElement(By.xpath("//img[@title='In Balance ']/following::td[1]"));
 
@@ -18287,7 +18327,7 @@ try {
 	
 	private String copyValuesWithSpc(String value) {
 		try {
-		Pattern p = Pattern.compile("\\b[A-Z]*\\-*[A-Z]*\\-*[a-z]*[A-Z]*[a-z]*\\d+[a-z]*[A-Z]*[a-z]*"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
+		Pattern p = Pattern.compile("\\b[A-Z]*\\-*[A-Z]*\\-*[a-z]*[A-Z]*[a-z]*\\d+[a-z]*[A-Z]*[a-z]*[0-9]*"); // the pattern to search for \b[IBAA]+\-[A-Z]+\-\d+ (\\b[Payment]+\\s[\\d]+)
 		Matcher m = p.matcher(value);
 		// if we find a match, get the group
 		String theGroup = null;
