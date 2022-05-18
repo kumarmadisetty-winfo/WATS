@@ -49,7 +49,7 @@ public class DataBaseEntryDao {
 		try {
 			Query query = em.createQuery(
 					"Update TestSetScriptParam set line_execution_status='" + status + "',line_error_message='"
-							+ message + "' where test_script_param_id=" + "'" + test_script_param_id + "'");
+							+ message.replace("'", "''") + "' where test_script_param_id=" + "'" + test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -62,7 +62,7 @@ public class DataBaseEntryDao {
 			throws ClassNotFoundException, SQLException {
 		try {
 			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-					+ "',input_value='" + value + "',line_error_message='" + message + "' where test_script_param_id='"
+					+ "',input_value='" + value + "',line_error_message='" + message.replace("'", "''") + "' where test_script_param_id='"
 					+ test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
