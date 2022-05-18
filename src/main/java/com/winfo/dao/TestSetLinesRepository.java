@@ -135,7 +135,7 @@ public class TestSetLinesRepository {
 			System.out.println(e);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
 
@@ -197,5 +197,8 @@ public class TestSetLinesRepository {
 
 	}
 
+	public TestSetLines getTestSetLine(String test_set_line_id) {
+		return em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+	}
 
 }
