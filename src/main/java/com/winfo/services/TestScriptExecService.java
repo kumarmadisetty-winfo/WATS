@@ -926,7 +926,7 @@ public class TestScriptExecService {
 
 			String file = (folder + pdffileName);
 			logger.info("Path of Pdf -- " + file);
-
+			fetchConfigVO.setSeqNumAndStatus(dataBaseEntry.getSeqNumAndStatus(fetchMetadataListVO.get(0).getTest_set_id()));
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = eBSSeleniumKeyWords.getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
