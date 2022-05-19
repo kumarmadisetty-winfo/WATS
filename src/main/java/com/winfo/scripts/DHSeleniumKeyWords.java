@@ -850,11 +850,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		System.out.println("added links1 list");
 		for (int i = 1; i < fileList.size(); i++) {
 
-			if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+//			if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
 				links1.add(fileList.get(i).getAbsolutePath());
 				fileNameList.add(fileList.get(i).getName());
 
-			}
+//			}
 
 		}
 
@@ -1166,7 +1166,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			File f44 = new File(imgpath3);
 			firstimagelink = f44.getAbsolutePath();
 
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
+			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
 				passcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
