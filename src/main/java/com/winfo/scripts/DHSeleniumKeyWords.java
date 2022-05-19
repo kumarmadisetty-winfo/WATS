@@ -2480,10 +2480,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String error = databaseentry.getErrorMessage(sndo, ScriptNumber, testRunName, fetchConfigVO);
 					String errorMessage = "Failed Message:" + "" + error;
 					Chunk errorMessageChunk = new Chunk("Failed Message: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-					Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
+					
 					Phrase errorMessagePhrase = new Phrase();
 					errorMessagePhrase.add(errorMessageChunk);
+					
+					try {
+					Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
 					errorMessagePhrase.add(errorMessageChunk2);
+					}
+					catch(Exception e) {
+						System.out.println("error message is not there");
+					}
 					
 					String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
 					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
@@ -3385,13 +3392,20 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				messagePhrase.add(messageChunk2);
 				
 				
+				
 				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
 				Chunk errorMessageChunk = new Chunk("Failed Message: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-				Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
+//				Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
 				Phrase errorMessagePhrase = new Phrase();
 				errorMessagePhrase.add(errorMessageChunk);
-				errorMessagePhrase.add(errorMessageChunk2);
-				
+//				errorMessagePhrase.add(errorMessageChunk2);
+				try {
+					Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
+					errorMessagePhrase.add(errorMessageChunk2);
+					}
+					catch(Exception e) {
+						System.out.println("error message is not there");
+					}
 				
 				
 				String stepDescription = map.get(Reason).getTest_run_param_desc();
