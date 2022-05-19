@@ -31,9 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,13 +71,11 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 //import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -851,8 +849,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		for (int i = 1; i < fileList.size(); i++) {
 
 //			if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-				links1.add(fileList.get(i).getAbsolutePath());
-				fileNameList.add(fileList.get(i).getName());
+			links1.add(fileList.get(i).getAbsolutePath());
+			fileNameList.add(fileList.get(i).getName());
 
 //			}
 
@@ -1041,32 +1039,32 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
 		String video_rec = "no";
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
+		Map<String, String> seqNumMap = new HashMap<>();
+		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
+			seqNumMap.put(obj[0].toString(), obj[1].toString());
+		}
+		List<String> passedPdf = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		int passcount = 0;
 		int failcount = 0;
 		for (String fileNames : fileSeqList) {
-			for (File file : Arrays.asList(listOfFiles)) {
-				if (fileNames.equals(file.getName())) {
-					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
+			File newFile = new File(folder + fileNames);
+			if (newFile.exists()) {
+				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
+				if (seqNumMap.get(seqNum.toString()).equals("Pass")) {
 					if (!filesMap.containsKey(seqNum)) {
-
 						filesMap.put(seqNum, new ArrayList<File>());
-
 					}
-
-					filesMap.get(seqNum).add(file);
-					break;
+					filesMap.get(seqNum).add(newFile);
+					passedPdf.add(newFile.getName());
 				}
 			}
 		}
-
+		passcount = filesMap.size();
 		List<String> targetFileList = new ArrayList<>();
 		ArrayList<String> links = new ArrayList<>();
 		String firstimagelink = null;
@@ -1167,7 +1165,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			firstimagelink = f44.getAbsolutePath();
 
 			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
+//				passcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
@@ -1182,7 +1180,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						links1.add(seqList.get(i).getAbsolutePath());
 						seqFileNameList.add(seqList.get(i).getName());
 
-					} 
+					}
 				}
 
 				links1.add(linksall.get(0));
@@ -1196,40 +1194,39 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		if (video_rec.equalsIgnoreCase("yes")) {
 			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Passed_Video.mp4");
 		}
-		return targetFileList;
+		return passedPdf;
 	}
 
 	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec = "no";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
+		String videoRec = "no";
+		Map<String, String> seqNumMap = new HashMap<>();
+		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
+			seqNumMap.put(obj[0].toString(), obj[1].toString());
+		}
+		List<String> targetFailedPdf = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
+		String video_rec = "no";
+		int passCount = 0;
+		int failCount = 0;
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int failcount = 0;
-		int passcount = 0;
 		for (String fileNames : fileSeqList) {
-			for (File file : Arrays.asList(listOfFiles)) {
-				if (fileNames.equals(file.getName())) {
-					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
+			File newFile = new File(folder + fileNames);
+			if (newFile.exists()) {
+				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
+				if (seqNumMap.get(seqNum.toString()).equals("Fail")) {
 					if (!filesMap.containsKey(seqNum)) {
-
 						filesMap.put(seqNum, new ArrayList<File>());
-
 					}
-
-					filesMap.get(seqNum).add(file);
-					break;
+					filesMap.get(seqNum).add(newFile);
+					targetFailedPdf.add(newFile.getName());
 				}
 			}
 		}
-
+		failCount = filesMap.size();
 		List<String> targetFileList = new ArrayList<>();
 		ArrayList<String> links = new ArrayList<>();
 		String firstimagelink = null;
@@ -1343,7 +1340,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			firstimagelink = f44.getAbsolutePath();
 
 			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-				failcount++;
+//				failcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
@@ -1386,44 +1383,51 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //		 * 
 //		 * }
 //		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
+		fetchConfigVO.setPasscount(passCount);
+		fetchConfigVO.setFailcount(failCount);
 		if (video_rec.equalsIgnoreCase("yes")) {
 			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Failed_Video.mp4");
 		}
-		return targetFileList;
+		return targetFailedPdf;
 
 	}
 
 	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 
-		File folder = new File(
-				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/";
 		String videoRec = "no";
+		int passcount = 0;
+		int failcount = 0;
+		Map<String, String> seqNumMap = new HashMap<>();
+		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
+			seqNumMap.put(obj[0].toString(), obj[1].toString());
+		}
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
-		int failcount = 0;
-		int passcount = 0;
+		List<String> detailsFileName = new ArrayList<>();
+//		Set<Integer> passedSeqNum = new LinkedHashSet<>();
+//		Set<Integer> failedSeqNum = new LinkedHashSet<>();
 		for (String fileNames : fileSeqList) {
-			for (File file : Arrays.asList(listOfFiles)) {
-				if (fileNames.equals(file.getName())) {
-					Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-					if (!filesMap.containsKey(seqNum)) {
-
-						filesMap.put(seqNum, new ArrayList<File>());
-
-					}
-
-					filesMap.get(seqNum).add(file);
-					break;
-
+			File file = new File(folder + fileNames);
+			if (file.exists()) {
+				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+				if (!filesMap.containsKey(seqNum)) {
+					filesMap.put(seqNum, new ArrayList<File>());
 				}
+				filesMap.get(seqNum).add(file);
+				detailsFileName.add(fileNames);
+			}
+
+		}
+
+		for (Map.Entry<String, String> entrySet : seqNumMap.entrySet()) {
+			String value = entrySet.getValue();
+			if ("Pass".equals(value)) {
+				passcount++;
+			} else if ("Fail".equals(value)) {
+				failcount++;
 			}
 		}
 
@@ -1545,7 +1549,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			firstimagelink = f44.getAbsolutePath();
 
 			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
+//				passcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
@@ -1574,7 +1578,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				targetSuccessFileList.addAll(seqFileNameList);
 
 			} else {
-				failcount++;
+//				failcount++;
 				for (File f33 : f22) {
 					if (f33.getAbsolutePath().contains(imagename)) {
 						linksall.add(f33.getAbsolutePath());
@@ -1638,7 +1642,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			convertJPGtoMovie(firstimagelink, finalLinks, fetchMetadataListVO, fetchConfigVO, tName + ".mp4");
 		}
-		return targetFileList;
+		return detailsFileName;
 	}
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,

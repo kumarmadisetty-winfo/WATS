@@ -544,6 +544,19 @@ public class DataBaseEntryDao {
 		return (TestSetLines) query.getSingleResult();
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getStatusAndSeqNum(String testSetId) {
+		List<Object[]> listObj = null;
+		try {
+			Session session = em.unwrap(Session.class);
+			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID="+testSetId;
+			listObj = session.createSQLQuery(execQry).getResultList();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return listObj;
+	} 
 
 	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
 		Query query = em
