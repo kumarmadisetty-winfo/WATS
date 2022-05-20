@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -83,6 +82,7 @@ import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
@@ -141,7 +141,7 @@ public class TestScriptExec1Service {
 
 	public ResponseDto generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
- 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
+			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
 			if (scriptStatus == null) {
 				if (args.isManualTrigger()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
@@ -232,9 +232,9 @@ public class TestScriptExec1Service {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(900, "Unable to generate the reports");
 		}
-		return new ResponseDto(200, Constants.ERROR, "Fail");
+		return new ResponseDto(200, Constants.ERROR, "Fail"); 
 	}
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
@@ -245,8 +245,8 @@ public class TestScriptExec1Service {
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
-		} catch (IOException | com.itextpdf.text.DocumentException e) {
-			e.printStackTrace();
+		} catch (com.itextpdf.text.DocumentException e) {
+			logger.error("Unable to create TestLvlPDF"+e);
 		}
 	}
 
@@ -272,7 +272,7 @@ public class TestScriptExec1Service {
 	}
 
 	public FetchConfigVO fetchConfigVODetails(String testSetId) {
-		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
+		List<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
 		Map<String, String> mapConfig = new HashMap<>();
 		String value = null;
 		for (Object[] e : configurations) {
@@ -299,7 +299,7 @@ public class TestScriptExec1Service {
 			try {
 				folder1.mkdirs();
 			} catch (SecurityException se) {
-				logger.info(se.getMessage());
+				throw new WatsEBSCustomException(700, "Unable to create Directory");
 			}
 		} else {
 
@@ -333,7 +333,7 @@ public class TestScriptExec1Service {
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(800, "Unable to access oci/config path");
 		}
 
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -376,16 +376,15 @@ public class TestScriptExec1Service {
 						outputStream.write(buf, 0, bytesRead);
 					}
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					throw new WatsEBSCustomException(801, "Unable to read or write screenshot from Object Storage");
 				}
 			}
 		}
 
 		try {
-
 			client.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(802, "Unable to close Object stroage path");
 		}
 
 	}
@@ -411,20 +410,20 @@ public class TestScriptExec1Service {
 		} else if (failCount == 0 && others == 0) {
 			dataSet.setValue("Pass", pass);
 		} else if (passCount == 0 && failCount == 0) {
-			dataSet.setValue("Others", other);
+			dataSet.setValue("In Complete", other);
 		} else if (passCount != 0 && others != 0 && failCount == 0) {
 			dataSet.setValue("Pass", pass);
-			dataSet.setValue("Others", other);
+			dataSet.setValue("In Complete", other);
 		} else if (passCount == 0 && others != 0 && failCount != 0) {
 			dataSet.setValue("Fail", fail);
-			dataSet.setValue("Others", other);
+			dataSet.setValue("In Complete", other);
 		} else if (passCount != 0 && others == 0 && failCount != 0) {
 			dataSet.setValue("Pass", pass);
 			dataSet.setValue("Fail", fail);
 		} else if (passCount != 0 && others != 0 && failCount != 0) {
 			dataSet.setValue("Pass", pass);
 			dataSet.setValue("Fail", fail);
-			dataSet.setValue("Others", other);
+			dataSet.setValue("In Complete", other);
 		}
 		PdfPTable table = new PdfPTable(3);
 		table.setWidths(new int[] { 1, 1, 1 });
@@ -966,7 +965,7 @@ public class TestScriptExec1Service {
 	}
 
 	private void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			Date starttime, Date endtime) throws IOException, com.itextpdf.text.DocumentException {
+			Date starttime, Date endtime) throws com.itextpdf.text.DocumentException {
 		try {
 			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
@@ -1086,26 +1085,26 @@ public class TestScriptExec1Service {
 			InputStream is = new FileInputStream(file);
 
 			/* Create a service client */
-			ObjectStorageClient client = new ObjectStorageClient(provider);
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 
-			/* Create a request and dependent object(s). */
+				/* Create a request and dependent object(s). */
 
-			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-					.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize).putObjectBody(is)
-					.build();
+				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
+						.putObjectBody(is).build();
 
-			/* Send request to the Client */
-			response = client.putObject(putObjectRequest);
+				/* Send request to the Client */
+				response = client.putObject(putObjectRequest);
+			}
 
 			return response.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(701,"Unable to upload the pfd to Object store");
 		}
-		return response.toString();
 	}
-	
+
 	public FetchConfigVO fetchConfigVO(String testSetId) {
-		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
+		List<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
 		Map<String, String> mapConfig = new HashMap<>();
 		String value = null;
 		for (Object[] e : configurations) {

@@ -1571,7 +1571,7 @@ public class TestScriptExecService {
 	}
 
 	public FetchConfigVO fetchConfigVO(String testSetId) {
-		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
+		List<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
 		Map<String, String> mapConfig = new HashMap<>();
 		String value = null;
 		for (Object[] e : configurations) {

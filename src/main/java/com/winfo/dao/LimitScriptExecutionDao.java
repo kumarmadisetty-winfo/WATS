@@ -5,11 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +13,8 @@ import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
-import com.winfo.model.ScriptsData;
 import com.winfo.services.TestCaseDataService;
 
 @Repository
@@ -110,13 +105,12 @@ public class LimitScriptExecutionDao {
 
 			List<BigDecimal> results = query.list();
 			if (results != null && !results.isEmpty()) {
-				System.out.println(results.get(0));
 				logger.info("result" + results.get(0));
 				BigDecimal bigDecimal = results.get(0);
 				id = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(602,"Unable to select the RUN_COUNT FROM WIN_TA_TEST_SET_LINES");
 		}
 		int failedScriptRunCount=id + 1;
 		try {
@@ -126,7 +120,7 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
 		}
 
 		return failedScriptRunCount;
@@ -142,7 +136,7 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
 		}
 
 		

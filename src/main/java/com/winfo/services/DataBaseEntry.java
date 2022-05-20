@@ -165,7 +165,7 @@ public class DataBaseEntry {
 	}
 
 	public boolean checkIfAllTestSetLinesCompleted(long testSetId, Boolean enable) {
-		ArrayList<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId, enable);
+		List<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId, enable);
 		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
 				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
 
@@ -204,7 +204,7 @@ public class DataBaseEntry {
 		 return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId)).getExecutionStartTime();
 	}
 
-	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
+	public List<Object[]> getConfigurationDetails(String testSetId) {
 		return dao.getConfigurationDetails(testSetId);
 	}
 
