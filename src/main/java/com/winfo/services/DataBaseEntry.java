@@ -108,9 +108,9 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String testRunId) {
 		try {
-			Map<String, Map<String, TestSetScriptParam>> map = dao.getTestRunMap(test_run_id);
+			Map<String, Map<String, TestSetScriptParam>> map = dao.getTestRunMap(testRunId);
 			return map;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,8 +124,8 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id) {
-		TestSetLines testSetLine = dao.getTestSetLine(test_set_line_id);
+	public Map<String, TestSetScriptParam> getTestScriptMap(String testSetLineId) {
+		TestSetLines testSetLine = dao.getTestSetLine(testSetLineId);
 		return dao.getTestScriptMap(testSetLine);
 	}
 
@@ -181,7 +181,7 @@ public class DataBaseEntry {
 	}
 
 	public Boolean checkAllStepsStatusForAScript(String testSetLineId) throws ClassNotFoundException, SQLException {
-		ArrayList<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
 			int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
 			dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "",

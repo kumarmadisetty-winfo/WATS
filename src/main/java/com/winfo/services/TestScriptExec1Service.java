@@ -133,8 +133,6 @@ public class TestScriptExec1Service {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 	@Autowired
-	DatabaseOperation dataBaseOpt;
-	@Autowired
 	TestCaseDataService dataService;
 	@Autowired
 	DHSeleniumKeyWords eBSSeleniumKeyWords;
@@ -143,7 +141,7 @@ public class TestScriptExec1Service {
 
 	public ResponseDto generateTestScriptLineIdReports(PyJabKafkaDto args) {
 		try {
-			Boolean scriptStatus = dataBaseOpt.checkAllStepsStatusForAScript(args.getTestSetLineId());
+ 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
 			if (scriptStatus == null) {
 				if (args.isManualTrigger()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
@@ -152,10 +150,10 @@ public class TestScriptExec1Service {
 				}
 			}
 			args.setSuccess(scriptStatus);
-			args.setStartDate(dataBaseOpt.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
-			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
+			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
+			FetchConfigVO fetchConfigVO = fetchConfigVODetails(args.getTestSetId());
 
-			List<FetchMetadataVO> fetchMetadataListVO = dataBaseOpt.getMetaDataVOList(args.getTestSetId(),
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
 					args.getTestSetLineId(), false, args.isManualTrigger());
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
@@ -198,13 +196,13 @@ public class TestScriptExec1Service {
 				post.setP_status("Pass");
 				Date enddate = new Date();
 				fetchConfigVO.setEndtime(enddate);
-				dataBaseOpt.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
+				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
 				post.setP_status("Fail");
 				Date enddate = new Date();
 				fetchConfigVO.setEndtime(enddate);
-				int failedScriptRunCount = dataBaseOpt.getFailedScriptRunCount(args.getTestSetLineId(),
+				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
@@ -212,21 +210,21 @@ public class TestScriptExec1Service {
 
 			}
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), fetchConfigVO.getEndtime());
-			dataBaseOpt.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
-			dataBaseOpt.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 					fetchConfigVO.getStatus1(), new Date(), fetchConfigVO.getEndtime());
 
 			// final reports generation
 			if (!args.isManualTrigger()) {
-				String pdfGenerationEnabled = dataBaseOpt.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
+				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
-					boolean runFinalPdf = dataBaseOpt
+					boolean runFinalPdf = dataBaseEntry
 							.checkIfAllTestSetLinesCompleted(Long.valueOf(args.getTestSetId()), true);
 					if (runFinalPdf) {
 						Date date1 = new Date();
 						fetchConfigVO.setEndtime(date1);
-						dataBaseOpt.updatePdfGenerationEnableStatus(args.getTestSetId(),
+						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
 								BOOLEAN_STATUS.FALSE.getLabel());
 						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO, date1);
 					}
@@ -273,7 +271,7 @@ public class TestScriptExec1Service {
 		}
 	}
 
-	public FetchConfigVO fetchConfigVO(String testSetId) {
+	public FetchConfigVO fetchConfigVODetails(String testSetId) {
 		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
 		Map<String, String> mapConfig = new HashMap<>();
 		String value = null;
@@ -948,8 +946,8 @@ public class TestScriptExec1Service {
 
 	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
 
-		List<String> testLineStatusList = dataBaseOpt.getStatusByTestSetId(testSetId);
-		fetchConfigVO.setSeqNumAndStatus(dataBaseOpt.getStatusAndSeqNum(testSetId));
+		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
+		fetchConfigVO.setSeqNumAndStatus(dataBaseEntry.getStatusAndSeqNum(testSetId));
 		int passCount = 0;
 		int failCount = 0;
 		int other = 0;
@@ -1104,5 +1102,25 @@ public class TestScriptExec1Service {
 			e.printStackTrace();
 		}
 		return response.toString();
+	}
+	
+	public FetchConfigVO fetchConfigVO(String testSetId) {
+		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
+		Map<String, String> mapConfig = new HashMap<>();
+		String value = null;
+		for (Object[] e : configurations) {
+			if (e[1] != null && StringUtils.isNotBlank(e[1].toString())) {
+				value = e[1].toString();
+			} else if (e[2] != null && StringUtils.isNotBlank(e[2].toString())) {
+				value = e[2].toString();
+			} else {
+				value = null;
+			}
+			mapConfig.put(e[0].toString(), value);
+		}
+
+		JSONObject jsno = new JSONObject(mapConfig);
+		Gson g = new Gson();
+		return g.fromJson(jsno.toString(), FetchConfigVO.class);
 	}
 }

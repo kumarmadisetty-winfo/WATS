@@ -91,10 +91,22 @@ public class TestSet {
 	@Column(name = "TR_MODE")
 	private String  testRunMode;
 	
+	@Column(name = "PDF_GENERATION")
+	private String pdfGenerationEnabled;
+	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 
 	private List<TestSetLines> testRunScriptDatalist = new ArrayList<TestSetLines>();
+	
+
+	public String getPdfGenerationEnabled() {
+		return pdfGenerationEnabled;
+	}
+
+	public void setPdfGenerationEnabled(String pdfGenerationEnabled) {
+		this.pdfGenerationEnabled = pdfGenerationEnabled;
+	}
 	
 	public List<TestSetLines> getTestRunScriptDatalist() {
 		return testRunScriptDatalist;

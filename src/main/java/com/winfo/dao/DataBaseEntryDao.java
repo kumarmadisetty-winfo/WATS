@@ -42,7 +42,7 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
-	private static final String TEST_SET_ID = "test_set_id";
+	private static final String TEST_SET_ID = "testRun";
 	private static final String TR_MODE = "tr_mode";
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -356,12 +356,10 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
-		// TODO Auto-generated method stub
-		// FetchMetadataVO metadataVO=new FetchMetadataVO();
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String testRunId) {
 		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<String, Map<String, TestSetScriptParam>>();
 		String sql = "from TestSetLines where testSet=:testSet";
-		Integer test_run_id2 = Integer.parseInt(test_run_id);
+		Integer test_run_id2 = Integer.parseInt(testRunId);
 		Query query = em.createQuery(sql);
 		query.setParameter("testSet", em.find(TestSet.class, test_run_id2));
 		List<TestSetLines> test_set_lines_list = query.getResultList();
@@ -374,10 +372,10 @@ public class DataBaseEntryDao {
 
 	}
 
-	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLines test_set_line) {
+	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLines testSetLine) {
 		String sql = "from TestSetScriptParam where testSetLines=:testSetLines";
 		Query query = em.createQuery(sql);
-		query.setParameter("testSetLines", test_set_line);
+		query.setParameter("testSetLines", testSetLine);
 		List<TestSetScriptParam> testScriptParamList = query.getResultList();
 		Map<String, TestSetScriptParam> map2 = new HashMap<String, TestSetScriptParam>();
 		for (TestSetScriptParam scriptParam : testScriptParamList) {
@@ -427,7 +425,7 @@ public class DataBaseEntryDao {
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
 		Root<TestSetLines> from = cq.from(TestSetLines.class);
 
-		Predicate condition1 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 		Predicate condition2 = null;
 		Predicate condition = cb.and(condition1, condition2);
 		if (enable != null) {
@@ -625,7 +623,7 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> query = cb.createQuery(String.class);
 		Root<TestSet> root = query.from(TestSet.class);
-		Predicate condition = cb.equal(root.get(TEST_SET_ID), testSetId);
+		Predicate condition = cb.equal(root.get("testRunId"), testSetId);
 		query.select(root.get("pdfGenerationEnabled")).where(condition);
 		return em.createQuery(query).getSingleResult();
 
@@ -637,9 +635,9 @@ public class DataBaseEntryDao {
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
 
-		Predicate condition = cb.equal(from.get("testSetLines").get("test_set_line_id"), testSetLineId);
+		Predicate condition = cb.equal(from.get("testSetLines").get("testRunScriptId"), testSetLineId);
 		cq.where(condition);
-		Query query = em.createQuery(cq.select(from.get("line_execution_status")));
+		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
 		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
 		return result;
@@ -651,8 +649,8 @@ public class DataBaseEntryDao {
 		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
 		Root<TestSetLines> from = cq.from(TestSetLines.class);
 
-		Predicate condition1 = cb.equal(from.get("test_set_line_id"), testSetLineId);
-		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition1 = cb.equal(from.get("testRunScriptId"), testSetLineId);
+		Predicate condition2 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from));
@@ -708,9 +706,9 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
-		Predicate condition = cb.equal(from.get("testSetLines").get("test_set_line_id"), testSetLineId);
-		cq.select(from.get("test_script_param_id")).where(condition);
-		cq.orderBy(cb.asc(from.get("line_number")));
+		Predicate condition = cb.equal(from.get("testSetLines").get("testRunScriptId"), testSetLineId);
+		cq.select(from.get("testRunScriptParamId")).where(condition);
+		cq.orderBy(cb.asc(from.get("lineNumber")));
 		Integer result = em.createQuery(cq).setMaxResults(1).getSingleResult();
 		return result;
 
