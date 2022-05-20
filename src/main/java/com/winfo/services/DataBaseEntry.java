@@ -174,8 +174,8 @@ public class DataBaseEntry {
 		}
 	}
 
-	public Date getExecStartDateOfScript(String testSetId, String testSetLineId) {
-		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId)).getExecution_start_time();
+	public TestSetLines getTestSetLinesRecord(String testSetId, String testSetLineId) {
+		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
 	}
 	
 	public List<Object[]> getSeqNumAndStatus(String testSetId) {

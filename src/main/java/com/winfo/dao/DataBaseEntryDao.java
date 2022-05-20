@@ -385,7 +385,7 @@ public class DataBaseEntryDao {
 	}
 
 	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
-			boolean isManualTrigger) {
+			boolean executeApi) {
 
 		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
 		String whereClause = "";
@@ -396,7 +396,7 @@ public class DataBaseEntryDao {
 			whereClause = whereClause + "      and  (upper(status) in ('PASS','FAIL'))\r\n";
 		} 
 
-		if (!isManualTrigger) {
+		if (executeApi) {
 			whereClause = whereClause + "      and wttsl.enabled = 'Y'\r\n";
 			 whereClause = whereClause + "      and  (upper(status) in ('NEW','FAIL','IN-QUEUE'))\r\n";
 		}
