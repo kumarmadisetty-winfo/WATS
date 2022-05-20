@@ -28,6 +28,7 @@ import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Console;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
@@ -47,9 +48,9 @@ public class DataBaseEntryDao {
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		try {
-			Query query = em.createQuery(
-					"Update TestSetScriptParam set line_execution_status='" + status + "',line_error_message='"
-							+ message.replace("'", "''") + "' where test_script_param_id=" + "'" + test_script_param_id + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
+					+ "',line_error_message='" + message.replace("'", "''") + "' where test_script_param_id=" + "'"
+					+ test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -62,8 +63,8 @@ public class DataBaseEntryDao {
 			throws ClassNotFoundException, SQLException {
 		try {
 			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-					+ "',input_value='" + value + "',line_error_message='" + message.replace("'", "''") + "' where test_script_param_id='"
-					+ test_script_param_id + "'");
+					+ "',input_value='" + value + "',line_error_message='" + message.replace("'", "''")
+					+ "' where test_script_param_id='" + test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -389,14 +390,15 @@ public class DataBaseEntryDao {
 		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
 		String whereClause = "";
 		if (testSetLineId != null) {
-			whereClause = "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
+			whereClause = whereClause + "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
 		}
 		if (finalPdf) {
-			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
-		}
+			whereClause = whereClause + "      and  (upper(status) in ('PASS','FAIL'))\r\n";
+		} 
 
 		if (!isManualTrigger) {
 			whereClause = whereClause + "      and wttsl.enabled = 'Y'\r\n";
+			 whereClause = whereClause + "      and  (upper(status) in ('NEW','FAIL','IN-QUEUE'))\r\n";
 		}
 
 		String sqlQuery = "SELECT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
@@ -544,19 +546,19 @@ public class DataBaseEntryDao {
 		return (TestSetLines) query.getSingleResult();
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
 		List<Object[]> listObj = null;
 		try {
 			Session session = em.unwrap(Session.class);
-			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID="+testSetId;
+			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID=" + testSetId;
 			listObj = session.createSQLQuery(execQry).getResultList();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return listObj;
-	} 
+	}
 
 	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
 		Query query = em
