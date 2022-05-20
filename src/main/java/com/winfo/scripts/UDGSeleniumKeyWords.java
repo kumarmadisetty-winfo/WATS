@@ -12742,7 +12742,44 @@ public class UDGSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		
+		//UDG
+		try {
+			if(param1.equalsIgnoreCase("Edit Budget") && param2.equalsIgnoreCase("Raw Cost (USD)")) {
+			WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::span[text()=\""+param2+"\"]/following::input[contains(@id,'tRCIN')][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			String xpath = "//*[contains(text(),'param1')]/following::span[text()='param2']/following::input[contains(@id,'tRCIN')][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+			}
+		//UDG
+		try {
+			if(param1.equalsIgnoreCase("Edit Budget") && param2.equalsIgnoreCase("Revenue (USD)")) {
+			WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::span[text()=\""+param2+"\"]/following::input[contains(@id,'tRCIN')][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			String xpath = "//*[contains(text(),'param1')]/following::span[text()='param2']/following::input[contains(@id,'tRevIN')][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+			}
 		//DH 40
 		try {
 			if(param1.equalsIgnoreCase("Suppliers") && param2.equalsIgnoreCase("Supplier Contact")) {
