@@ -83,6 +83,7 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
@@ -150,7 +151,9 @@ public class TestScriptExec1Service {
 				}
 			}
 			args.setSuccess(scriptStatus);
-			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
+			TestSetLines testSetLines = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
+					args.getTestSetLineId());
+			args.setStartDate(testSetLines.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = fetchConfigVODetails(args.getTestSetId());
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),

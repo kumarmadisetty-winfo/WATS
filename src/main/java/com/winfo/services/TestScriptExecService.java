@@ -753,7 +753,7 @@ public class TestScriptExecService {
 			args.setSuccess(scriptStatus);
 			TestSetLines testSetLines = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
 					args.getTestSetLineId());
-			args.setStartDate(testSetLines.getExecution_start_time());
+			args.setStartDate(testSetLines.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
 					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
@@ -793,7 +793,7 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
 
-			Date enddate = testSetLines.getExecution_end_time() != null ? testSetLines.getExecution_end_time()
+			Date enddate = testSetLines.getExecutionEndTime() != null ? testSetLines.getExecutionEndTime()
 					: new Date();
 
 			if (args.isSuccess()) {
@@ -827,7 +827,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"pass", testSetLines.getExecution_start_time(), enddate);
+						"pass", testSetLines.getExecutionStartTime(), enddate);
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 
 			} else {
@@ -880,7 +880,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"Fail", testSetLines.getExecution_start_time(), enddate);
+						"Fail", testSetLines.getExecutionStartTime(), enddate);
 				// break;
 
 			}
