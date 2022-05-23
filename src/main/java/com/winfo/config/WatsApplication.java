@@ -20,7 +20,7 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 @EnableScheduling
 @EnableJpaRepositories(basePackages ="com.winfo.dao")
 @EntityScan("com.winfo.model")
-@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;")
+@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;com.winfo.exception;")
 
 public class WatsApplication extends SpringBootServletInitializer{
 	

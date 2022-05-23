@@ -12,7 +12,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(WatsEBSCustomException.class)
 	public ResponseEntity<Object> handleDefaultException(WatsEBSCustomException exception) {
 		ErrorDetail errorDetails = new ErrorDetail(exception.getErrorCode(), exception.getErrorMessage());
-		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
 }

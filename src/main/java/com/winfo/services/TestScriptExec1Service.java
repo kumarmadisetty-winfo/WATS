@@ -142,6 +142,7 @@ public class TestScriptExec1Service {
 
 	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto msgQueueDto) {
 		try {
+//			int x = 1/0;
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(msgQueueDto.getTestSetLineId());
 			if (scriptStatus == null) {
 				if (msgQueueDto.isExecuteApi()) {
@@ -244,6 +245,7 @@ public class TestScriptExec1Service {
 			}
 
 		} catch (Exception e) {
+		//	e.printStackTrace();
 			throw new WatsEBSCustomException(900, "Unable to generate the reports", e);
 		}
 		return new ResponseDto(200, Constants.ERROR, "Fail");
@@ -1075,6 +1077,7 @@ public class TestScriptExec1Service {
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH) + pdffileName;
+			System.out.println(sourceFilePath+"*********"+destinationFilePath);
 			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);

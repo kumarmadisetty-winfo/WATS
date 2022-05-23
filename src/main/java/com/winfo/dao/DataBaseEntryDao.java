@@ -612,7 +612,7 @@ public class DataBaseEntryDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(600, "Unable to read the records from Tables", e);
+			throw new WatsEBSCustomException(600, "Unable to read the records from Tables");
 		}
 		return listOfTestRunExecutionVo;
 	}

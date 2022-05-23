@@ -109,6 +109,7 @@ import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
@@ -907,6 +908,27 @@ public class TestScriptExecService {
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
+	
+	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
+
+		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
+		fetchConfigVO.setSeqNumAndStatus(dataBaseEntry.getStatusAndSeqNum(testSetId));
+		int passCount = 0;
+		int failCount = 0;
+		int other = 0;
+		for (String testLinesStatus : testLineStatusList) {
+			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+				passCount++;
+			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Fail.getLabel())) {
+				failCount++;
+			} else {
+				other++;
+			}
+		}
+		fetchConfigVO.setPasscount(passCount);
+		fetchConfigVO.setFailcount(failCount);
+		fetchConfigVO.setOtherCount(other);
+	}
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
 		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true, false);
@@ -932,8 +954,9 @@ public class TestScriptExecService {
 
 			String file = (folder + pdffileName);
 			logger.info("Path of Pdf -- " + file);
-			fetchConfigVO
-					.setSeqNumAndStatus(dataBaseEntry.getSeqNumAndStatus(fetchMetadataListVO.get(0).getTest_set_id()));
+//			fetchConfigVO
+//					.setSeqNumAndStatus(dataBaseEntry.getSeqNumAndStatus(fetchMetadataListVO.get(0).getTest_set_id()));
+			findPassAndFailCount(fetchConfigVO, fetchMetadataListVO.get(0).getTest_set_id());
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = eBSSeleniumKeyWords.getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
