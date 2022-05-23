@@ -103,12 +103,13 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.model.PyJabActions;
+import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
-import com.winfo.utils.DateUtils;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.DateUtils;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
@@ -200,7 +201,7 @@ public class TestScriptExecService {
 		try {
 			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testSetId);
-			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false,false);
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, false);
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
 					dependentScriptMap);
@@ -599,7 +600,6 @@ public class TestScriptExecService {
 			File file = new File(FILE_NAME);
 			long fileSize = FileUtils.sizeOf(file);
 			InputStream is = new FileInputStream(file);
-
 			/* Create a service client */
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
@@ -617,7 +617,6 @@ public class TestScriptExecService {
 
 			/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
-
 			return response.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -680,6 +679,7 @@ public class TestScriptExecService {
 
 			String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 			File file = new File(imagePath + imageName);
+			System.out.println("downloading from object store " + imagePath + imageName);
 			try (final InputStream stream = getResponse.getInputStream();
 					// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
 
@@ -723,7 +723,7 @@ public class TestScriptExecService {
 				File[] listOfFiles = folder.listFiles();
 
 				for (File file : Arrays.asList(listOfFiles)) {
-
+					System.out.println("deleting ********* " + file.getName());
 					String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
 					String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
@@ -751,12 +751,16 @@ public class TestScriptExecService {
 				}
 			}
 			args.setSuccess(scriptStatus);
-
-			args.setStartDate(dataBaseEntry.getExecStartDateOfScript(args.getTestSetId(), args.getTestSetLineId()));
+			TestSetLines testSetLines = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
+					args.getTestSetLineId());
+			args.setStartDate(testSetLines.getExecution_start_time());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
+			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
+					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
+			fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
-					args.getTestSetLineId(), false, args.isManualTrigger());
+					args.getTestSetLineId(), false, false);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
@@ -789,6 +793,9 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
 
+			Date enddate = testSetLines.getExecution_end_time() != null ? testSetLines.getExecution_end_time()
+					: new Date();
+
 			if (args.isSuccess()) {
 
 				FetchScriptVO post = new FetchScriptVO();
@@ -800,7 +807,6 @@ public class TestScriptExecService {
 				post.setP_fail_path(failurl);
 				post.setP_exception_path(detailurl);
 				post.setP_test_set_line_path(scripturl);
-				Date enddate = new Date();
 				fetchConfigVO.setEndtime(enddate);
 
 				try {
@@ -821,7 +827,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"pass", new Date(), enddate);
+						"pass", testSetLines.getExecution_start_time(), enddate);
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 
 			} else {
@@ -838,7 +844,6 @@ public class TestScriptExecService {
 				post.setP_fail_path(failurl);
 				post.setP_exception_path(detailurl);
 				post.setP_test_set_line_path(scripturl);
-				Date enddate = new Date();
 				fetchConfigVO.setEndtime(enddate);
 				dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 				dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
@@ -848,6 +853,7 @@ public class TestScriptExecService {
 						fetchMetadataListVO.get(0).getSeq_num() + "_");
 				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
+				failedScriptRunCount = args.isManualTrigger() ? failedScriptRunCount - 1 : failedScriptRunCount;
 				if (failedScriptRunCount == 1) {
 					createFailedPdf(
 
@@ -874,7 +880,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"Fail", new Date(), enddate);
+						"Fail", testSetLines.getExecution_start_time(), enddate);
 				// break;
 
 			}
@@ -902,7 +908,7 @@ public class TestScriptExecService {
 	}
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
-		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true, true);
+		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true, false);
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
 		fetchConfigVO.setEndtime(endDate);
 		try {
@@ -925,7 +931,8 @@ public class TestScriptExecService {
 
 			String file = (folder + pdffileName);
 			logger.info("Path of Pdf -- " + file);
-
+			fetchConfigVO
+					.setSeqNumAndStatus(dataBaseEntry.getSeqNumAndStatus(fetchMetadataListVO.get(0).getTest_set_id()));
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = eBSSeleniumKeyWords.getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
@@ -1600,6 +1607,9 @@ public class TestScriptExecService {
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setStarttime1(startDate);
 				fetchConfigVO.setEndtime(endDate);
+				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
+						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
+				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 				testRunPdfGeneration(testSetId, fetchConfigVO, endDate);
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
@@ -1612,9 +1622,9 @@ public class TestScriptExecService {
 	}
 
 	public void movePyjabScriptFilesToObjectStore() {
-		String actionsFilePath = environment.getProperty("pyjab.template.path")
+		String actionsFilePath = environment.getProperty("pyjab.scripts.git.path")
 				+ environment.getProperty("pyjab.actions.script.name");
-		String customerSpecificScriptPath = environment.getProperty("pyjab.template.path")
+		String customerSpecificScriptPath = environment.getProperty("pyjab.scripts.git.path")
 				+ environment.getProperty("pyjab.customer.specific.name");
 		uploadObjectToObjectStore(actionsFilePath, environment.getProperty("pyjab.script.path.in.oci")
 				+ environment.getProperty("pyjab.actions.script.name"));
@@ -1630,7 +1640,6 @@ public class TestScriptExecService {
 			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			String FILE = (Folder + pdffileName);
-			System.out.println(FILE);
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 //				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);

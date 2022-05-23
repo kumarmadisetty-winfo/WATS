@@ -30,6 +30,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
+import com.gargoylesoftware.htmlunit.javascript.host.Console;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
@@ -49,9 +50,9 @@ public class DataBaseEntryDao {
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		try {
-			Query query = em.createQuery(
-					"Update TestSetScriptParam set line_execution_status='" + status + "',line_error_message='"
-							+ message + "' where test_script_param_id=" + "'" + test_script_param_id + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
+					+ "',line_error_message='" + message.replace("'", "''") + "' where test_script_param_id=" + "'"
+					+ test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -64,8 +65,8 @@ public class DataBaseEntryDao {
 			throws ClassNotFoundException, SQLException {
 		try {
 			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-					+ "',input_value='" + value + "',line_error_message='" + message + "' where test_script_param_id='"
-					+ test_script_param_id + "'");
+					+ "',input_value='" + value + "',line_error_message='" + message.replace("'", "''")
+					+ "' where test_script_param_id='" + test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -503,19 +504,20 @@ public class DataBaseEntryDao {
 	}
 
 	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
-			boolean isManualTrigger) {
+			boolean executeApi) {
 
 		List<FetchMetadataVO> listOfTestRunExecutionVo = new ArrayList<>();
 		String whereClause = "";
 		if (testSetLineId != null) {
-			whereClause = "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
+			whereClause = whereClause + "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
 		}
 		if (finalPdf) {
-			whereClause = "      and  (upper(status) in ('PASS','FAIL'))\r\n";
-		}
+			whereClause = whereClause + "      and  (upper(status) in ('PASS','FAIL'))\r\n";
+		} 
 
-		if (!isManualTrigger) {
+		if (executeApi) {
 			whereClause = whereClause + "      and wttsl.enabled = 'Y'\r\n";
+			 whereClause = whereClause + "      and  (upper(status) in ('NEW','FAIL','IN-QUEUE'))\r\n";
 		}
 
 		String sqlQuery = "SELECT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"

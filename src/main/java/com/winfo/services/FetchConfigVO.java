@@ -147,7 +147,7 @@ public class FetchConfigVO {
     
     private String EBS_APPLICATION_NAME;
     
-    private List<Object[]> seqNumAndStatus;
+    private List<Object[]> seqNumAndStatus; 
     
     public List<Object[]> getSeqNumAndStatus() {
 		return seqNumAndStatus;
@@ -156,7 +156,6 @@ public class FetchConfigVO {
 	public void setSeqNumAndStatus(List<Object[]> seqNumAndStatus) {
 		this.seqNumAndStatus = seqNumAndStatus;
 	}
-    
     
     public String getEBS_APPLICATION_NAME() {
 		return EBS_APPLICATION_NAME;

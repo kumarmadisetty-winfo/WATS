@@ -850,11 +850,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		System.out.println("added links1 list");
 		for (int i = 1; i < fileList.size(); i++) {
 
-			if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-				links1.add(fileList.get(i).getAbsolutePath());
-				fileNameList.add(fileList.get(i).getName());
+//			if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
+			links1.add(fileList.get(i).getAbsolutePath());
+			fileNameList.add(fileList.get(i).getName());
 
-			}
+//			}
 
 		}
 
@@ -1054,6 +1054,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		List<String> targetFailedPdf = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
+		String video_rec = "no";
+		int passCount = 0;
+		int failCount = 0;
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		for (String fileNames : fileSeqList) {
 			File newFile = new File(folder + fileNames);
@@ -1068,7 +1071,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 			}
 		}
-
 		return targetFailedPdf;
 
 	}
