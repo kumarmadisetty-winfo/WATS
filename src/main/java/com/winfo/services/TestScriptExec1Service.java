@@ -144,7 +144,7 @@ public class TestScriptExec1Service {
 		try {
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(msgQueueDto.getTestSetLineId());
 			if (scriptStatus == null) {
-				if (msgQueueDto.isManualTrigger()) {
+				if (msgQueueDto.isExecuteApi()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
 				} else {
 					scriptStatus = false;
@@ -155,13 +155,17 @@ public class TestScriptExec1Service {
 					msgQueueDto.getTestSetLineId());
 			msgQueueDto.setStartDate(testSetLines.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = fetchConfigVODetails(msgQueueDto.getTestSetId());
+			
+			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
+					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
+			fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(msgQueueDto.getTestSetId(),
-					msgQueueDto.getTestSetLineId(), false, msgQueueDto.isManualTrigger());
+					msgQueueDto.getTestSetLineId(), false, msgQueueDto.isExecuteApi());
 			msgQueueDto.setSuccess(scriptStatus);
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
 					msgQueueDto.getTestSetLineId());
-			msgQueueDto.setStartDate(testSetLine.getExecutionStartTime());
+			
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
@@ -193,25 +197,25 @@ public class TestScriptExec1Service {
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
 					fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath.toString(),
 					fetchMetadataListVO.get(0).getSeq_num() + "_");
-			FetchScriptVO post = new FetchScriptVO(msgQueueDto.getTestSetId(), scriptId, msgQueueDto.getTestSetLineId(), passurl,
-					failurl, detailurl, scripturl);
-			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
-					: new Date();
+			FetchScriptVO post = new FetchScriptVO(msgQueueDto.getTestSetId(), scriptId, msgQueueDto.getTestSetLineId(),
+					passurl, failurl, detailurl, scripturl);
+			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime() : new Date();
 			String pdfName = null;
 			if (msgQueueDto.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ ".pdf";
 				post.setP_status("Pass");
 				fetchConfigVO.setEndtime(enddate);
-				limitScriptExecutionService.updateFaileScriptscount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
+				limitScriptExecutionService.updateFaileScriptscount(msgQueueDto.getTestSetLineId(),
+						msgQueueDto.getTestSetId());
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
 				post.setP_status("Fail");
 				fetchConfigVO.setEndtime(enddate);
-				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(),
-						msgQueueDto.getTestSetId());
+				int failedScriptRunCount = limitScriptExecutionService
+						.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
-				failedScriptRunCount = msgQueueDto.isManualTrigger() ? failedScriptRunCount - 1 : failedScriptRunCount;
+				failedScriptRunCount = msgQueueDto.isExecuteApi() ? failedScriptRunCount - 1 : failedScriptRunCount;
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ "_RUN" + failedScriptRunCount + ".pdf";
 
@@ -223,8 +227,9 @@ public class TestScriptExec1Service {
 					fetchConfigVO.getStatus1(), new Date(), enddate);
 
 			// final reports generation
-			if (!msgQueueDto.isManualTrigger()) {
-				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(msgQueueDto.getTestSetId()));
+			if (!msgQueueDto.isExecuteApi()) {
+				String pdfGenerationEnabled = dataBaseEntry
+						.pdfGenerationEnabled(Long.valueOf(msgQueueDto.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
 					boolean runFinalPdf = dataBaseEntry
 							.checkIfAllTestSetLinesCompleted(Long.valueOf(msgQueueDto.getTestSetId()), true);
@@ -239,13 +244,13 @@ public class TestScriptExec1Service {
 			}
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(900, "Unable to generate the reports");
+			throw new WatsEBSCustomException(900, "Unable to generate the reports", e);
 		}
-		return new ResponseDto(200, Constants.ERROR, "Fail"); 
+		return new ResponseDto(200, Constants.ERROR, "Fail");
 	}
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
-		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true, true);
+		List<FetchMetadataVO> fetchMetadataListVOFinal = dataBaseEntry.getMetaDataVOList(testSetId, null, true, false);
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
 		fetchConfigVO.setEndtime(endDate);
 		try {
@@ -253,7 +258,7 @@ public class TestScriptExec1Service {
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
 		} catch (com.itextpdf.text.DocumentException e) {
-			logger.error("Unable to create TestLvlPDF"+e);
+			logger.error("Unable to create TestLvlPDF" + e);
 		}
 	}
 
@@ -264,6 +269,9 @@ public class TestScriptExec1Service {
 				FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
 				Date startDate = dataBaseEntry.findMinExecutionStartDate(Long.valueOf(testSetId));
 				Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
+//				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
+//						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
+//				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setStarttime1(startDate);
 				fetchConfigVO.setEndtime(endDate);
@@ -1106,7 +1114,7 @@ public class TestScriptExec1Service {
 
 			return response.toString();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(701,"Unable to upload the pfd to Object store");
+			throw new WatsEBSCustomException(701, "Unable to upload the pfd to Object store");
 		}
 	}
 

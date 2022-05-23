@@ -90,7 +90,7 @@ public class TestSetLine {
 	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
 	private TestSet testRun;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLines")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine")
 	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
 
 	public void addTestScriptParam(TestSetScriptParam scriptParam) {

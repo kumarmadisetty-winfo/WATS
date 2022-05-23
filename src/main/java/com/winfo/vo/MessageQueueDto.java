@@ -25,7 +25,7 @@ public class MessageQueueDto implements Serializable {
 	private Date startDate;
 	private String localScreenshotPath;
 	private String obJectStoreScreenshotPath;
-	private boolean manualTrigger;
+	private boolean executeApi;
 	
 	public MessageQueueDto() {
 	}
@@ -99,13 +99,13 @@ public class MessageQueueDto implements Serializable {
 	}
 
 
-	public boolean isManualTrigger() {
-		return manualTrigger;
+	public boolean isExecuteApi() {
+		return executeApi;
 	}
 
 
-	public void setManualTrigger(boolean manualTrigger) {
-		this.manualTrigger = manualTrigger;
+	public void setExecuteApi(boolean executeApi) {
+		this.executeApi = executeApi;
 	}
 
 }

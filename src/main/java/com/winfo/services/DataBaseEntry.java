@@ -154,8 +154,8 @@ public class DataBaseEntry {
 
 	@Transactional
 	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
-			boolean isManualTrigger) {
-		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf, isManualTrigger);
+			boolean executeApi) {
+		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf, executeApi);
 	}
 
 	@Transactional

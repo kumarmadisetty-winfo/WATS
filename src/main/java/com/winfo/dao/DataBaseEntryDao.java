@@ -358,13 +358,13 @@ public class DataBaseEntryDao {
 	}
 
 	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String testRunId) {
-		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<String, Map<String, TestSetScriptParam>>();
-		String sql = "from TestSetLines where TEST_SET_ID=:testRunId";
-		Integer test_run_id2 = Integer.parseInt(testRunId);
+		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<>();
+		String sql = "from TestSetLine where TEST_SET_ID=:testRunId";
+		Integer testRunId2 = Integer.parseInt(testRunId);
 		Query query = em.createQuery(sql);
-		query.setParameter("testRunId", em.find(TestSet.class, test_run_id2));
-		List<TestSetLine> test_set_lines_list = query.getResultList();
-		for (TestSetLine test_set_line : test_set_lines_list) {
+		query.setParameter("testRunId", em.find(TestSet.class, testRunId2));
+		List<TestSetLine> testSetLinesList = query.getResultList();
+		for (TestSetLine test_set_line : testSetLinesList) {
 			Map<String, TestSetScriptParam> map2 = getTestScriptMap(test_set_line);
 			map.put(String.valueOf(test_set_line.getSeqNum()), map2);
 
@@ -374,11 +374,11 @@ public class DataBaseEntryDao {
 	}
 
 	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLine testSetLine) {
-		String sql = "from TestSetScriptParam where testSetLines=:testSetLines";
+		String sql = "from TestSetScriptParam where testSetLine=:testSetLines";
 		Query query = em.createQuery(sql);
 		query.setParameter("testSetLines", testSetLine);
 		List<TestSetScriptParam> testScriptParamList = query.getResultList();
-		Map<String, TestSetScriptParam> map2 = new HashMap<String, TestSetScriptParam>();
+		Map<String, TestSetScriptParam> map2 = new HashMap<>();
 		for (TestSetScriptParam scriptParam : testScriptParamList) {
 			map2.put(String.valueOf(scriptParam.getLineNumber()), scriptParam);
 		}
@@ -647,7 +647,7 @@ public class DataBaseEntryDao {
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
 
-		Predicate condition = cb.equal(from.get("testSetLines").get("testRunScriptId"), testSetLineId);
+		Predicate condition = cb.equal(from.get("testSetLine").get("testRunScriptId"), testSetLineId);
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
 		ArrayList<String> result = (ArrayList<String>) query.getResultList();
