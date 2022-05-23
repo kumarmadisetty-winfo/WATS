@@ -110,7 +110,7 @@ public class TestSetScriptParam {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 
 	@JoinColumn(name = "TEST_SET_LINE_ID" ,nullable = false)
-	private TestSetLines testSetLines;
+	private TestSetLine testSetLine;
 
 	public Integer getTestRunScriptParamId() {
 		return testRunScriptParamId;
@@ -304,12 +304,12 @@ public class TestSetScriptParam {
 		this.validationName = validationName;
 	}
 
-	public TestSetLines getTestRunScripts() {
-		return testSetLines;
+	public TestSetLine getTestRunScripts() {
+		return testSetLine;
 	}
 
-	public void setTestRunScripts(TestSetLines testSetLines) {
-		this.testSetLines = testSetLines;
+	public void setTestRunScripts(TestSetLine testSetLine) {
+		this.testSetLine = testSetLine;
 	}
 
 	public byte[] getScreenshot() {

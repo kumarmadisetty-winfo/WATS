@@ -33,7 +33,7 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.gargoylesoftware.htmlunit.javascript.host.Console;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
-import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -88,8 +88,7 @@ public class DataBaseEntryDao {
 
 	}
 
-	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
-			throws ClassNotFoundException, SQLException {
+	public String getErrorMessage(String sndo, String ScriptName, String testRunName) {
 		String errorMessage = "";
 		String sqlQuery = "SELECT PARAM.LINE_ERROR_MESSAGE "
 				+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
@@ -133,7 +132,7 @@ public class DataBaseEntryDao {
 	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
 			throws ClassNotFoundException, SQLException {
 		try {
-			TestSetLines testLines = em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 
 			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
@@ -149,7 +148,7 @@ public class DataBaseEntryDao {
 	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
 			throws ClassNotFoundException, SQLException {
 		try {
-			TestSetLines testLines = em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 
 			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
@@ -236,7 +235,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(606,"Unable to update records on  WIN_TA_TEST_SET_LINES");
+			throw new WatsEBSCustomException(606, "Unable to update records on  WIN_TA_TEST_SET_LINES");
 		}
 	}
 
@@ -249,7 +248,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(607,"Unable to update the records for WIN_TA_TEST_SET table");
+			throw new WatsEBSCustomException(607, "Unable to update the records for WIN_TA_TEST_SET table");
 		}
 	}
 
@@ -364,8 +363,8 @@ public class DataBaseEntryDao {
 		Integer test_run_id2 = Integer.parseInt(testRunId);
 		Query query = em.createQuery(sql);
 		query.setParameter("testRunId", em.find(TestSet.class, test_run_id2));
-		List<TestSetLines> test_set_lines_list = query.getResultList();
-		for (TestSetLines test_set_line : test_set_lines_list) {
+		List<TestSetLine> test_set_lines_list = query.getResultList();
+		for (TestSetLine test_set_line : test_set_lines_list) {
 			Map<String, TestSetScriptParam> map2 = getTestScriptMap(test_set_line);
 			map.put(String.valueOf(test_set_line.getSeqNum()), map2);
 
@@ -374,7 +373,7 @@ public class DataBaseEntryDao {
 
 	}
 
-	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLines testSetLine) {
+	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLine testSetLine) {
 		String sql = "from TestSetScriptParam where testSetLines=:testSetLines";
 		Query query = em.createQuery(sql);
 		query.setParameter("testSetLines", testSetLine);
@@ -387,8 +386,8 @@ public class DataBaseEntryDao {
 		return map2;
 	}
 
-	public TestSetLines getTestSetLine(String test_set_line_id) {
-		return em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+	public TestSetLine getTestSetLine(String test_set_line_id) {
+		return em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 	}
 
 	public ScriptMaster findScriptMasterByScriptId(int scriptId) {
@@ -404,18 +403,18 @@ public class DataBaseEntryDao {
 		return (ScriptMaster) query.getSingleResult();
 	}
 
-	public TestSetLines checkTestSetLinesByScriptId(int testSetId, int scriptId) {
+	public TestSetLine checkTestSetLinesByScriptId(int testSetId, int scriptId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
 		Predicate condition1 = cb.equal(from.get("script_id"), scriptId);
 		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
-		TestSetLines result = (TestSetLines) query.getSingleResult();
+		TestSetLine result = (TestSetLine) query.getSingleResult();
 		em.refresh(result);
 
 		return result;
@@ -425,24 +424,24 @@ public class DataBaseEntryDao {
 	public List<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
 		List<String> result = null;
 		try {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+			Root<TestSetLine> from = cq.from(TestSetLine.class);
 
-		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
-		Predicate condition2 = null;
-		Predicate condition = cb.and(condition1, condition2);
-		if (enable != null) {
-			condition2 = cb.equal(from.get("enabled"),
-					enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
-			condition = cb.and(condition1, condition2);
-		} else {
-			condition = condition1;
-		}
-		cq.where(condition);
-		Query query = em.createQuery(cq.select(from.get("status")));
-		result = query.getResultList();
-		} catch(Exception e) {
+			Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
+			Predicate condition2 = null;
+			Predicate condition = cb.and(condition1, condition2);
+			if (enable != null) {
+				condition2 = cb.equal(from.get("enabled"),
+						enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
+				condition = cb.and(condition1, condition2);
+			} else {
+				condition = condition1;
+			}
+			cq.where(condition);
+			Query query = em.createQuery(cq.select(from.get("status")));
+			result = query.getResultList();
+		} catch (Exception e) {
 			throw new WatsEBSCustomException(600, "Unable to read the records");
 		}
 
@@ -459,7 +458,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQry);
 			result = query.getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(604,"Unable to read status from win_ta_test_set_lines");
+			throw new WatsEBSCustomException(604, "Unable to read status from win_ta_test_set_lines");
 		}
 		return result;
 	}
@@ -613,7 +612,7 @@ public class DataBaseEntryDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(600, "Unable to read the records from Tables",e);
+			throw new WatsEBSCustomException(600, "Unable to read the records from Tables", e);
 		}
 		return listOfTestRunExecutionVo;
 	}
@@ -630,13 +629,13 @@ public class DataBaseEntryDao {
 
 	public String getTestSetPdfGenerationEnableStatus(Long testSetId) {
 		try {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<String> query = cb.createQuery(String.class);
-		Root<TestSet> root = query.from(TestSet.class);
-		Predicate condition = cb.equal(root.get("testRunId"), testSetId);
-		query.select(root.get("pdfGenerationEnabled")).where(condition);
-		return em.createQuery(query).getSingleResult();
-		} catch(Exception e) {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<String> query = cb.createQuery(String.class);
+			Root<TestSet> root = query.from(TestSet.class);
+			Predicate condition = cb.equal(root.get("testRunId"), testSetId);
+			query.select(root.get("pdfGenerationEnabled")).where(condition);
+			return em.createQuery(query).getSingleResult();
+		} catch (Exception e) {
 			throw new WatsEBSCustomException(600, "Unable to read the records");
 		}
 
@@ -656,18 +655,18 @@ public class DataBaseEntryDao {
 		return result;
 	}
 
-	public TestSetLines getScript(long testSetId, long testSetLineId) {
+	public TestSetLine getScript(long testSetId, long testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
 		Predicate condition1 = cb.equal(from.get("testRunScriptId"), testSetLineId);
 		Predicate condition2 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from));
-		return (TestSetLines) query.getSingleResult();
+		return (TestSetLine) query.getSingleResult();
 
 	}
 
@@ -698,7 +697,7 @@ public class DataBaseEntryDao {
 	public Date findMaxExecutionEndDate(long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 
 		cq.select(cb.greatest(from.<Date>get("executionEndTime"))).where(condition);
@@ -710,7 +709,7 @@ public class DataBaseEntryDao {
 	public Date findMinExecutionStartDate(long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 
 		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition);

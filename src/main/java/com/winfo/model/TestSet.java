@@ -97,7 +97,7 @@ public class TestSet {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 
-	private List<TestSetLines> testRunScriptDatalist = new ArrayList<TestSetLines>();
+	private List<TestSetLine> testRunScriptDatalist = new ArrayList<TestSetLine>();
 	
 
 	public String getPdfGenerationEnabled() {
@@ -108,15 +108,15 @@ public class TestSet {
 		this.pdfGenerationEnabled = pdfGenerationEnabled;
 	}
 	
-	public List<TestSetLines> getTestRunScriptDatalist() {
+	public List<TestSetLine> getTestRunScriptDatalist() {
 		return testRunScriptDatalist;
 	}
 
-	public void setTestRunScriptDatalist(List<TestSetLines> testRunScriptDatalist) {
+	public void setTestRunScriptDatalist(List<TestSetLine> testRunScriptDatalist) {
 		this.testRunScriptDatalist = testRunScriptDatalist;
 	}
 
-	public void addTestRunScriptData(TestSetLines testRunScript) {
+	public void addTestRunScriptData(TestSetLine testRunScript) {
 		testRunScriptDatalist.add(testRunScript);
 		testRunScript.setTestRun(this);
 	}

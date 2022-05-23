@@ -103,7 +103,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.model.PyJabActions;
-import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
@@ -751,9 +751,10 @@ public class TestScriptExecService {
 				}
 			}
 			args.setSuccess(scriptStatus);
-			TestSetLines testSetLines = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
+			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
 					args.getTestSetLineId());
-			args.setStartDate(testSetLines.getExecutionStartTime());
+			args.setStartDate(testSetLine.getExecutionStartTime());
+			args.setStartDate(testSetLine.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
 					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
@@ -793,7 +794,7 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
 
-			Date enddate = testSetLines.getExecutionEndTime() != null ? testSetLines.getExecutionEndTime()
+			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
 					: new Date();
 
 			if (args.isSuccess()) {
@@ -827,7 +828,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"pass", testSetLines.getExecutionStartTime(), enddate);
+						"pass", testSetLine.getExecutionStartTime(), enddate);
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 
 			} else {
@@ -880,7 +881,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"Fail", testSetLines.getExecutionStartTime(), enddate);
+						"Fail", testSetLine.getExecutionStartTime(), enddate);
 				// break;
 
 			}
@@ -1354,7 +1355,7 @@ public class TestScriptExecService {
 					String step = "Step No :" + "" + reason;
 					String message = "Failed at Line Number:" + "" + reason;
 					// new change-database to get error message
-					String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName, fetchConfigVO);
+					String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName);
 					String errorMessage = "Failed Message:" + "" + error;
 
 					String stepDescription = descriptionList.get(sno).get(reason).getTestRunParamDesc();

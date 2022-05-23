@@ -83,13 +83,13 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
-import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
-import com.winfo.vo.PyJabKafkaDto;
+import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.ResponseDto;
 
 @Service
@@ -140,25 +140,28 @@ public class TestScriptExec1Service {
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
 
-	public ResponseDto generateTestScriptLineIdReports(PyJabKafkaDto args) {
+	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto msgQueueDto) {
 		try {
-			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
+			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(msgQueueDto.getTestSetLineId());
 			if (scriptStatus == null) {
-				if (args.isManualTrigger()) {
+				if (msgQueueDto.isManualTrigger()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
 				} else {
 					scriptStatus = false;
 				}
 			}
-			args.setSuccess(scriptStatus);
-			TestSetLines testSetLines = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
-					args.getTestSetLineId());
-			args.setStartDate(testSetLines.getExecutionStartTime());
-			FetchConfigVO fetchConfigVO = fetchConfigVODetails(args.getTestSetId());
+			msgQueueDto.setSuccess(scriptStatus);
+			TestSetLine testSetLines = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
+					msgQueueDto.getTestSetLineId());
+			msgQueueDto.setStartDate(testSetLines.getExecutionStartTime());
+			FetchConfigVO fetchConfigVO = fetchConfigVODetails(msgQueueDto.getTestSetId());
 
-			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args.getTestSetId(),
-					args.getTestSetLineId(), false, args.isManualTrigger());
-
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(msgQueueDto.getTestSetId(),
+					msgQueueDto.getTestSetLineId(), false, msgQueueDto.isManualTrigger());
+			msgQueueDto.setSuccess(scriptStatus);
+			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
+					msgQueueDto.getTestSetLineId());
+			msgQueueDto.setStartDate(testSetLine.getExecutionStartTime());
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
@@ -184,52 +187,53 @@ public class TestScriptExec1Service {
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 
-			fetchConfigVO.setStarttime(args.getStartDate());
-			fetchConfigVO.setStarttime1(args.getStartDate());
+			fetchConfigVO.setStarttime(msgQueueDto.getStartDate());
+			fetchConfigVO.setStarttime1(msgQueueDto.getStartDate());
 			deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
 					fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath.toString(),
 					fetchMetadataListVO.get(0).getSeq_num() + "_");
-			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
+			FetchScriptVO post = new FetchScriptVO(msgQueueDto.getTestSetId(), scriptId, msgQueueDto.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
+			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
+					: new Date();
 			String pdfName = null;
-			if (args.isSuccess()) {
+			if (msgQueueDto.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ ".pdf";
 				post.setP_status("Pass");
-				Date enddate = new Date();
 				fetchConfigVO.setEndtime(enddate);
-				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
+				limitScriptExecutionService.updateFaileScriptscount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
 				post.setP_status("Fail");
-				Date enddate = new Date();
 				fetchConfigVO.setEndtime(enddate);
-				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(args.getTestSetLineId(),
-						args.getTestSetId());
+				int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(),
+						msgQueueDto.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
+				failedScriptRunCount = msgQueueDto.isManualTrigger() ? failedScriptRunCount - 1 : failedScriptRunCount;
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ "_RUN" + failedScriptRunCount + ".pdf";
 
 			}
-			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), fetchConfigVO.getEndtime());
+			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, msgQueueDto.getStartDate(), enddate);
 			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-					fetchConfigVO.getStatus1(), new Date(), fetchConfigVO.getEndtime());
+					fetchConfigVO.getStatus1(), new Date(), enddate);
 
 			// final reports generation
-			if (!args.isManualTrigger()) {
-				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
+			if (!msgQueueDto.isManualTrigger()) {
+				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(msgQueueDto.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
 					boolean runFinalPdf = dataBaseEntry
-							.checkIfAllTestSetLinesCompleted(Long.valueOf(args.getTestSetId()), true);
+							.checkIfAllTestSetLinesCompleted(Long.valueOf(msgQueueDto.getTestSetId()), true);
 					if (runFinalPdf) {
 						Date date1 = new Date();
 						fetchConfigVO.setEndtime(date1);
-						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
+						dataBaseEntry.updatePdfGenerationEnableStatus(msgQueueDto.getTestSetId(),
 								BOOLEAN_STATUS.FALSE.getLabel());
-						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO, date1);
+						testRunPdfGeneration(msgQueueDto.getTestSetId(), fetchConfigVO, date1);
 					}
 				}
 			}
@@ -459,7 +463,7 @@ public class TestScriptExec1Service {
 		JFreeChart chart = ChartFactory.createPieChart("", dataSet, true, true, false);
 		Color c1 = Color.GREEN;
 		Color c = Color.RED;
-		Color yellow = Color.YELLOW;
+		Color yellow = Color.GRAY;
 
 		LegendTitle legend = chart.getLegend();
 		PiePlot piePlot = (PiePlot) chart.getPlot();
@@ -869,7 +873,7 @@ public class TestScriptExec1Service {
 			String step = "Step No :" + "" + reason;
 			String message = "Failed at Line Number:" + "" + reason;
 			// new change-database to get error message
-			String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName, fetchConfigVO);
+			String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName);
 			String errorMessage = "Failed Message:" + "" + error;
 
 			Map<String, Map<String, TestSetScriptParam>> descriptionList = dataBaseEntry

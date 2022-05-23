@@ -1,7 +1,6 @@
 package com.winfo.services;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.ScriptMaster;
-import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
@@ -51,9 +50,9 @@ public class DataBaseEntry {
 		dao.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
 	}
 
-	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
+	public String getErrorMessage(String sndo, String ScriptName, String testRunName)
 			throws ClassNotFoundException, SQLException {
-		return dao.getErrorMessage(sndo, ScriptName, testRunName, fetchConfigVO);
+		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
 
 	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
@@ -125,14 +124,14 @@ public class DataBaseEntry {
 
 	@Transactional
 	public Map<String, TestSetScriptParam> getTestScriptMap(String testSetLineId) {
-		TestSetLines testSetLine = dao.getTestSetLine(testSetLineId);
+		TestSetLine testSetLine = dao.getTestSetLine(testSetLineId);
 		return dao.getTestScriptMap(testSetLine);
 	}
 
 	@Transactional
 	public boolean checkRunStatusOfDependantScript(String testSetId, String scriptId) {
 		ScriptMaster scriptMaster = dao.findScriptMasterByScriptId(Integer.valueOf(scriptId));
-		TestSetLines testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId),
+		TestSetLine testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId),
 				scriptMaster.getDependency());
 
 		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
@@ -174,6 +173,10 @@ public class DataBaseEntry {
 	public String pdfGenerationEnabled(long testSetId) {
 		return dao.getTestSetPdfGenerationEnableStatus(testSetId);
 	}
+	
+	public TestSetLine getTestSetLinesRecord(String testSetId, String testSetLineId) {
+		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
+	}
 
 	public String getTestSetMode(Long testSetId) {
 		return dao.getTestSetMode(testSetId);
@@ -198,10 +201,6 @@ public class DataBaseEntry {
 		} else {
 			return true;
 		}
-	}
-
-	public TestSetLines getTestSetLinesRecord(String testSetId, String testSetLineId) {
-		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
 	}
 	
 	public List<Object[]> getSeqNumAndStatus(String testSetId) {

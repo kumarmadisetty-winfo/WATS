@@ -24,7 +24,7 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Table(name = "WIN_TA_TEST_SET_LINES")
 
-public class TestSetLines {
+public class TestSetLine {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRunScript_generator")
 	@SequenceGenerator(name = "testRunScript_generator", sequenceName = "WIN_TA_TEST_SET_LINE_SEQ", allocationSize = 1)
