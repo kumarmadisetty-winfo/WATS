@@ -44,8 +44,8 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
-	private static final String TEST_SET_ID = "testRun";
-	private static final String TR_MODE = "tr_mode";
+	private static final String TEST_SET_ID = "testRunId";
+	private static final String TR_MODE = "testRunMode";
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
