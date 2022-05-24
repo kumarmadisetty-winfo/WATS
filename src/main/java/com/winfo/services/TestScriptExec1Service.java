@@ -142,10 +142,10 @@ public class TestScriptExec1Service {
 
 	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto msgQueueDto) {
 		try {
-//			int x = 1/0;
+			msgQueueDto.setManualTriger(true);
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(msgQueueDto.getTestSetLineId());
 			if (scriptStatus == null) {
-				if (msgQueueDto.isExecuteApi()) {
+				if (msgQueueDto.isManualTriger()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
 				} else {
 					scriptStatus = false;
@@ -156,17 +156,17 @@ public class TestScriptExec1Service {
 					msgQueueDto.getTestSetLineId());
 			msgQueueDto.setStartDate(testSetLines.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = fetchConfigVODetails(msgQueueDto.getTestSetId());
-			
+
 			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
 					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
 			fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(msgQueueDto.getTestSetId(),
-					msgQueueDto.getTestSetLineId(), false, msgQueueDto.isExecuteApi());
+					msgQueueDto.getTestSetLineId(), false, false);
 			msgQueueDto.setSuccess(scriptStatus);
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
 					msgQueueDto.getTestSetLineId());
-			
+
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
@@ -213,10 +213,16 @@ public class TestScriptExec1Service {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
 				post.setP_status("Fail");
 				fetchConfigVO.setEndtime(enddate);
+//				int failedScriptRunCount = limitScriptExecutionService
+//						.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 				int failedScriptRunCount = limitScriptExecutionService
-						.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
+						.getFailScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
-				failedScriptRunCount = msgQueueDto.isExecuteApi() ? failedScriptRunCount - 1 : failedScriptRunCount;
+				if (!msgQueueDto.isManualTriger()) {
+					failedScriptRunCount = failedScriptRunCount + 1;
+					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount,
+							msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
+				}
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ "_RUN" + failedScriptRunCount + ".pdf";
 
@@ -228,7 +234,7 @@ public class TestScriptExec1Service {
 					fetchConfigVO.getStatus1(), new Date(), enddate);
 
 			// final reports generation
-			if (!msgQueueDto.isExecuteApi()) {
+			if (!msgQueueDto.isManualTriger()) {
 				String pdfGenerationEnabled = dataBaseEntry
 						.pdfGenerationEnabled(Long.valueOf(msgQueueDto.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
@@ -245,7 +251,7 @@ public class TestScriptExec1Service {
 			}
 
 		} catch (Exception e) {
-		//	e.printStackTrace();
+			// e.printStackTrace();
 			throw new WatsEBSCustomException(900, "Unable to generate the reports", e);
 		}
 		return new ResponseDto(200, Constants.ERROR, "Fail");
@@ -355,51 +361,48 @@ public class TestScriptExec1Service {
 
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
-		ObjectStorage client = new ObjectStorageClient(provider);
+		try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 //		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH + TestRunName
 //				+ FORWARD_SLASH + seqNum;
 
-		String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH + TestRunName
-				+ FORWARD_SLASH;
+			String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH + TestRunName
+					+ FORWARD_SLASH;
 
-		ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
-				.bucketName(ociBucketName).prefix(objectStoreScreenshotPath).delimiter("/").build();
+			ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+					.bucketName(ociBucketName).prefix(objectStoreScreenshotPath).delimiter("/").build();
 
-		/* Send request to the Client */
-		ListObjectsResponse response = client.listObjects(listObjectsRequest);
+			/* Send request to the Client */
+			ListObjectsResponse response = client.listObjects(listObjectsRequest);
 
-		objNames = response.getListObjects().getObjects().stream().map((objSummary) -> objSummary.getName())
-				.collect(Collectors.toList());
-		logger.info(objNames.size());
-		ListIterator<String> listIt = objNames.listIterator();
-		String imagePath = screenshotPath;
-		while (listIt.hasNext()) {
-			String objectName = listIt.next();
-			GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(ociNamespace)
-					.bucketName(ociBucketName).objectName(objectName).build());
+			objNames = response.getListObjects().getObjects().stream().map((objSummary) -> objSummary.getName())
+					.collect(Collectors.toList());
+			logger.info(objNames.size());
+			ListIterator<String> listIt = objNames.listIterator();
+			String imagePath = screenshotPath;
+			while (listIt.hasNext()) {
+				String objectName = listIt.next();
+				GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(objectName).build());
 
-			String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
-			File file = new File(imagePath + imageName);
-			if (!file.exists()) {
-				try (final InputStream stream = getResponse.getInputStream();
-						// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
+				String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
+				File file = new File(imagePath + imageName);
+				if (!file.exists()) {
+					try (final InputStream stream = getResponse.getInputStream();
+							// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
 
-						final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
-					// use fileStream
-					byte[] buf = new byte[8192];
-					int bytesRead;
-					while ((bytesRead = stream.read(buf)) > 0) {
-						outputStream.write(buf, 0, bytesRead);
+							final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
+						// use fileStream
+						byte[] buf = new byte[8192];
+						int bytesRead;
+						while ((bytesRead = stream.read(buf)) > 0) {
+							outputStream.write(buf, 0, bytesRead);
+						}
+					} catch (IOException e1) {
+						throw new WatsEBSCustomException(801, "Unable to read or write screenshot from Object Storage");
 					}
-				} catch (IOException e1) {
-					throw new WatsEBSCustomException(801, "Unable to read or write screenshot from Object Storage");
 				}
 			}
-		}
-
-		try {
-			client.close();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(802, "Unable to close Object stroage path");
 		}
@@ -473,13 +476,13 @@ public class TestScriptExec1Service {
 		JFreeChart chart = ChartFactory.createPieChart("", dataSet, true, true, false);
 		Color c1 = Color.GREEN;
 		Color c = Color.RED;
-		Color yellow = Color.GRAY;
+		Color gray = Color.GRAY;
 
 		LegendTitle legend = chart.getLegend();
 		PiePlot piePlot = (PiePlot) chart.getPlot();
 		piePlot.setSectionPaint("Pass", c1);
 		piePlot.setSectionPaint("Fail", c);
-		piePlot.setSectionPaint("Others", yellow);
+		piePlot.setSectionPaint("In Complete", gray);
 
 		piePlot.setBackgroundPaint(Color.WHITE);
 		piePlot.setOutlinePaint(null);
@@ -510,6 +513,7 @@ public class TestScriptExec1Service {
 		legend.setItemFont(pass1);
 		PdfContentByte contentByte = writer.getDirectContent();
 		PdfTemplate template = contentByte.createTemplate(1000, 900);
+		@SuppressWarnings("deprecation")
 		Graphics2D graphics2d = template.createGraphics(700, 400, new DefaultFontMapper());
 		Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600, 400);
 		chart.draw(graphics2d, rectangle2d);
@@ -591,13 +595,17 @@ public class TestScriptExec1Service {
 
 			String s = "Status:" + " " + status;
 			String scenarios = "Scenario Name :" + "" + scenario;
-			String step = "Step No :" + "" + steps;
 			watsLogo.scalePercent(65, 65);
 			watsLogo.setAlignment(Image.ALIGN_RIGHT);
 			document.add(watsLogo);
 			document.add(new Paragraph(s, fnt12));
 			document.add(new Paragraph(scenarios, fnt12));
+			String step = status.equals("Failed") ? "Failed at Line Number:" + "" + steps : "Step No :" + "" + steps;
+			String failMsg = status.equals("Failed") ? "Failed Message:" + "" + fetchConfigVO.getErrormessage() : null;
 			document.add(new Paragraph(step, fnt12));
+			if (failMsg != null) {
+				document.add(new Paragraph(failMsg, fnt12));
+			}
 			if (stepDescription != null) {
 				document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
 			}
@@ -1077,7 +1085,6 @@ public class TestScriptExec1Service {
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH) + pdffileName;
-			System.out.println(sourceFilePath+"*********"+destinationFilePath);
 			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);

@@ -200,6 +200,17 @@ public class LimitScriptExecutionService {
 		 vmInstanceDao.updateTestrunTimes1(tendtime,tdiffMinutes,testSetid);		
 		
 	}
+	
+	@Transactional
+	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
+		return limitScriptExecutionDao.getFailScriptRunCount(testSetLineId,testSetId);
+	}
+
+	@Transactional
+	public void updateFailScriptRunCount(int failedRunCount, String testSetLineId, String testSetId) {
+		limitScriptExecutionDao.updateFailScriptRunCount(failedRunCount,testSetId,testSetLineId);
+	}
+
 
 	@Transactional
 	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {

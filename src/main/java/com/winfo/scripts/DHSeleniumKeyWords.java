@@ -887,7 +887,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 						+ fetchMetaData.getScript_number() + "_" + fetchMetaData.getTest_run_name() + "_"
 
-						+ fetchMetaData.getLine_number() + "_Passed.jpg");
+						+ fetchMetaData.getLine_number() + "_Passed");
 			} else if (fetchMetaData.getStatus().equals("Fail")) {
 				fetchConfigVODtl.add(fetchMetaData.getSeq_num() + "_"
 
@@ -895,7 +895,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 						+ fetchMetaData.getScript_number() + "_" + fetchMetaData.getTest_run_name() + "_"
 
-						+ fetchMetaData.getLine_number() + "_Failed.jpg");
+						+ fetchMetaData.getLine_number() + "_Failed");
 			}
 		}
 		return fetchConfigVODtl;
@@ -924,6 +924,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		for (String newFile : fileSeqList) {
+			newFile = new File(folder + newFile+".png").exists() ? newFile+".png" : newFile;
+			newFile = (!(newFile.endsWith(".png")) && (new File(folder + newFile+".jpg").exists()))  ? newFile+".jpg" : newFile;
 			File file = new File(folder + newFile);
 			if (file.exists()) {
 				fileList.add(file);
@@ -1027,7 +1029,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		for (String fileNames : fileSeqList) {
-			if (fileNames.endsWith("Passed.jpg")) {
+			if (fileNames.endsWith("Passed")) {
+				fileNames = new File(folder + fileNames+".png").exists() ? fileNames+".png" : fileNames;
+				fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".png" : fileNames;
 				File newFile = new File(folder + fileNames);
 				if (newFile.exists()) {
 					Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
@@ -1057,6 +1061,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		for (String fileNames : fileSeqList) {
+			fileNames = new File(folder + fileNames+".png").exists() ? fileNames+".png" : fileNames;
+			fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".png" : fileNames;
 			File newFile = new File(folder + fileNames);
 			if (newFile.exists()) {
 				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
@@ -1082,6 +1088,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		List<String> detailsFileName = new ArrayList<>();
 		for (String fileNames : fileSeqList) {
+			fileNames = new File(folder + fileNames+".png").exists() ? fileNames+".png" : fileNames;
+			fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".png" : fileNames;
 			File file = new File(folder + fileNames);
 			if (file.exists()) {
 				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
