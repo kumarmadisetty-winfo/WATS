@@ -10506,6 +10506,29 @@ try {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")|| param2.equalsIgnoreCase("End Date and Time")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')][1]")));
+			Thread.sleep(1000);
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[contains(@id,'Ed')][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			Thread.sleep(500);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked sendValue"+ scripNumber);
+			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
+			//service.saveXpathParams(param1, param2, scripNumber, xpath);
+			return keysToSend;
+		}
+		//return keysToSend;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during sendValue" + scripNumber);
+			System.out.println(e);
+			//throw e;
+		}
 		//HS2
 		try {
 			if (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time"))||(param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time")))) {
