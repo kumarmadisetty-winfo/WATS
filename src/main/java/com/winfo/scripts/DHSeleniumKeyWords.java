@@ -935,7 +935,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
 
 		File[] listOfFiles = folder.listFiles();
 //		String video_rec=fetchConfigVO.getEnable_video();
@@ -1977,7 +1976,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-			// String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
@@ -2106,9 +2104,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				table1.setWidthPercentage(100f);
 				insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
 				insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
+			
+				
 				try {
+					if (ExecutedBy != null) {
+					insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+					}
 				} catch (Exception e) {
 					System.out.println("Executed By is not present");
 				}
@@ -2704,9 +2706,12 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
+					
 					try {
-						insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+						if (ExecutedBy != null) {
+							insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
+							insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+						}
 					} catch (Exception e) {
 						System.out.println("Executed By is not present");
 					}
@@ -3329,8 +3334,14 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
 			insertCell(table1, showErrorMessage, Element.ALIGN_LEFT, 1, bf12);
 			insertCell(table1, error, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+			try {
+				if (ExecutedBy != null) {
+				insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+				}
+			} catch (Exception e) {
+				System.out.println("Executed By is not present");
+			}
 			insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
 			insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
 			insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
