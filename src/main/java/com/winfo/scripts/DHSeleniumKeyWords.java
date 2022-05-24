@@ -2107,7 +2107,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
 				insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
 				insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+				try {
+					insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+				} catch (Exception e) {
+					System.out.println("Executed By is not present");
+				}
 				insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
 				insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
 				insertCell(table1, S1, Element.ALIGN_LEFT, 1, bf12);
@@ -2701,7 +2705,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+					try {
+						insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+					} catch (Exception e) {
+						System.out.println("Executed By is not present");
+					}
 					insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
 					insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
