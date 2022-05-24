@@ -5,11 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +13,8 @@ import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
-import com.winfo.model.ScriptsData;
 import com.winfo.services.TestCaseDataService;
 
 @Repository
@@ -99,6 +94,38 @@ public class LimitScriptExecutionDao {
 		}
 		return mailId;
 	}
+	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "SELECT RUN_COUNT from WIN_TA_TEST_SET_LINES where TEST_SET_LINE_ID=" + testSetLineId
+				+ " AND TEST_SET_ID=" + testSetId + "";
+		Integer id = 0;
+		try {
+			NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
+
+			List<BigDecimal> results = query.list();
+			if (results != null && !results.isEmpty()) {
+				logger.info("result" + results.get(0));
+				BigDecimal bigDecimal = results.get(0);
+				id = Integer.parseInt(bigDecimal.toString());
+			}
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(602,"Unable to select the RUN_COUNT FROM WIN_TA_TEST_SET_LINES");
+		}
+		return id;
+	}
+	
+	public void updateFailScriptRunCount(int failedScriptRunCount,String testSetId, String testSetLineId) {
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
+					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
+			Query query = session.createSQLQuery(sql1);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
+		}
+	}
 
 	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {
 		Session session = entityManager.unwrap(Session.class);
@@ -110,13 +137,12 @@ public class LimitScriptExecutionDao {
 
 			List<BigDecimal> results = query.list();
 			if (results != null && !results.isEmpty()) {
-				System.out.println(results.get(0));
 				logger.info("result" + results.get(0));
 				BigDecimal bigDecimal = results.get(0);
 				id = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(602,"Unable to select the RUN_COUNT FROM WIN_TA_TEST_SET_LINES");
 		}
 		int failedScriptRunCount=id + 1;
 		try {
@@ -126,7 +152,7 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
 		}
 
 		return failedScriptRunCount;
@@ -142,7 +168,7 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
 		}
 
 		

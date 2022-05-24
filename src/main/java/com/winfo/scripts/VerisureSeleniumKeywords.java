@@ -2141,7 +2141,7 @@ public class VerisureSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 					String Message = "Failed at Line Number:" + "" + Reason;
 					// new change-database to get error message
-					String error = databaseentry.getErrorMessage(sndo, ScriptNumber, testRunName, fetchConfigVO);
+					String error = databaseentry.getErrorMessage(sndo, ScriptNumber, testRunName);
 					String errorMessage = "Failed Message:" + "" + error;
 					Paragraph pr1 = new Paragraph();
 					pr1.add("Status:");

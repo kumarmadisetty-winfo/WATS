@@ -8,110 +8,149 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+
 
 @Entity
 @Table(name = "WIN_TA_TEST_SET")
 
 public class TestSet {
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRun_generator")
+	@SequenceGenerator(name = "testRun_generator", sequenceName = "WIN_TA_TEST_SET_ID_SEQ", allocationSize = 1)
 	@Id
-	@GeneratedValue
-	@Column(name = "TEST_SET_ID")
-	private Integer test_set_id;
+	@Column(name = "TEST_SET_ID", nullable = false)
+	private Integer testRunId;
+	
+	@NotEmpty(message="Test_SET_Name can not be null")
+	@Column(name = "TEST_SET_NAME")
+	private String  testRunName;
 
 	@Column(name = "TEST_SET_DESC")
-	private String test_set_desc;
-
+	private String  testRunDesc;
+	
 	@Column(name = "TEST_SET_COMMENTS")
-	private String test_set_comments;
-
+	private String  testRunComments;
+	
 	@Column(name = "ENABLED")
-	private String enabled;
-
+	private String  enabled;
+	
 	@Column(name = "DESCRIPTION")
-	private String description;
-
+	private String  description;
+	
 	@Column(name = "EFFECTIVE_FROM")
-	private Date effective_from;
-
+	@Temporal(TemporalType.DATE)
+	private Date  effectiveFrom;
+	
 	@Column(name = "EFFECTIVE_TO")
-	private Date effective_to;
-
+	@Temporal(TemporalType.DATE)
+	private Date  effectiveTo;
+	
 	@Column(name = "PROJECT_ID")
-	private Integer project_id;
-
-	@Column(name = "TEST_SET_NAME")
-	private String test_set_name;
-
+	private Integer  projectId;
+	
 	@Column(name = "CONFIGURATION_ID")
-	private Integer configuration_id;
-
+	private Integer  configurationId;
+	
 	@Column(name = "CREATED_BY")
-	private String created_by;
+	private String  createdBy;
 
 	@Column(name = "LAST_UPDATED_BY")
-	private String last_updated_by;
-
+	private String  lastUpdatedBy;
+	
 	@Column(name = "CREATION_DATE")
-	private Date creation_date;
-
+	@Temporal(TemporalType.DATE)
+	private Date  creationDate;
+	
 	@Column(name = "UPDATE_DATE")
-	private Date update_date;
-
+	@Temporal(TemporalType.DATE)
+	private Date  updateDate;
+	
 	@Column(name = "LAST_EXECUTED_BY")
-	private Date last_execute_by;
-
+	@Temporal(TemporalType.DATE)
+	private Date  lastExecutBy;
+	
 	@Column(name = "TS_COMPLETE_FLAG")
-	private String ts_complete_flag;
-
+	private String  tsCompleteFlag;
+	
 	@Column(name = "PASS_PATH")
-	private String pass_path;
-
+	private String  passPath;
+	
 	@Column(name = "FAIL_PATH")
-	private String fail_path;
-
+	private String  failPath;
+	
 	@Column(name = "EXCEPTION_PATH")
-	private String exception_path;
-
+	private String  exceptionPath;
+	
 	@Column(name = "TR_MODE")
-	private String tr_mode;
-
+	private String  testRunMode;
+	
 	@Column(name = "PDF_GENERATION")
 	private String pdfGenerationEnabled;
+	
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSet")
+	private List<TestSetLine> testRunScriptDatalist = new ArrayList<TestSetLine>();
+	
 
-	private List<TestSetLines> testSetLinesDatalist = new ArrayList<TestSetLines>();
-
-	public void addTestSetLinesdata(TestSetLines setlines) {
-		testSetLinesDatalist.add(setlines);
-		setlines.setTestSet(this);
+	public String getPdfGenerationEnabled() {
+		return pdfGenerationEnabled;
 	}
 
-	public Integer getTest_set_id() {
-		return test_set_id;
+	public void setPdfGenerationEnabled(String pdfGenerationEnabled) {
+		this.pdfGenerationEnabled = pdfGenerationEnabled;
+	}
+	
+	public List<TestSetLine> getTestRunScriptDatalist() {
+		return testRunScriptDatalist;
 	}
 
-	public void setTest_set_id(Integer test_set_id) {
-		this.test_set_id = test_set_id;
+	public void setTestRunScriptDatalist(List<TestSetLine> testRunScriptDatalist) {
+		this.testRunScriptDatalist = testRunScriptDatalist;
 	}
 
-	public String getTest_set_desc() {
-		return test_set_desc;
+	public void addTestRunScriptData(TestSetLine testRunScript) {
+		testRunScriptDatalist.add(testRunScript);
+		testRunScript.setTestRun(this);
 	}
 
-	public void setTest_set_desc(String test_set_desc) {
-		this.test_set_desc = test_set_desc;
+	public Integer getTestRunId() {
+		return testRunId;
 	}
 
-	public String getTest_set_comments() {
-		return test_set_comments;
+	public void setTestRunId(Integer testRunId) {
+		this.testRunId = testRunId;
 	}
 
-	public void setTest_set_comments(String test_set_comments) {
-		this.test_set_comments = test_set_comments;
+	public String getTestRunName() {
+		return testRunName;
+	}
+
+	public void setTestRunName(String testRunName) {
+		this.testRunName = testRunName;
+	}
+
+	public String getTestRunDesc() {
+		return testRunDesc;
+	}
+
+	public void setTestRunDesc(String testRunDesc) {
+		this.testRunDesc = testRunDesc;
+	}
+
+	public String getTestRunComments() {
+		return testRunComments;
+	}
+
+	public void setTestRunComments(String testRunComments) {
+		this.testRunComments = testRunComments;
 	}
 
 	public String getEnabled() {
@@ -130,140 +169,116 @@ public class TestSet {
 		this.description = description;
 	}
 
-	public Date getEffective_from() {
-		return effective_from;
+	public Date getEffectiveFrom() {
+		return effectiveFrom;
 	}
 
-	public void setEffective_from(Date effective_from) {
-		this.effective_from = effective_from;
+	public void setEffectiveFrom(Date effectiveFrom) {
+		this.effectiveFrom = effectiveFrom;
 	}
 
-	public Date getEffective_to() {
-		return effective_to;
+	public Date getEffectiveTo() {
+		return effectiveTo;
 	}
 
-	public void setEffective_to(Date effective_to) {
-		this.effective_to = effective_to;
+	public void setEffectiveTo(Date effectiveTo) {
+		this.effectiveTo = effectiveTo;
 	}
 
-	public Integer getProject_id() {
-		return project_id;
+	public Integer getProjectId() {
+		return projectId;
 	}
 
-	public void setProject_id(Integer project_id) {
-		this.project_id = project_id;
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
 	}
 
-	public String getTest_set_name() {
-		return test_set_name;
+	public Integer getConfigurationId() {
+		return configurationId;
 	}
 
-	public void setTest_set_name(String test_set_name) {
-		this.test_set_name = test_set_name;
+	public void setConfigurationId(Integer configurationId) {
+		this.configurationId = configurationId;
 	}
 
-	public Integer getConfiguration_id() {
-		return configuration_id;
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setConfiguration_id(Integer configuration_id) {
-		this.configuration_id = configuration_id;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public String getCreated_by() {
-		return created_by;
+	public String getLastUpdatedBy() {
+		return lastUpdatedBy;
 	}
 
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
+	public void setLastUpdatedBy(String lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	public String getLast_updated_by() {
-		return last_updated_by;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setLast_updated_by(String last_updated_by) {
-		this.last_updated_by = last_updated_by;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
-	public Date getCreation_date() {
-		return creation_date;
+	public Date getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setCreation_date(Date creation_date) {
-		this.creation_date = creation_date;
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
-	public Date getUpdate_date() {
-		return update_date;
+	public Date getLastExecutBy() {
+		return lastExecutBy;
 	}
 
-	public void setUpdate_date(Date update_date) {
-		this.update_date = update_date;
+	public void setLastExecutBy(Date lastExecutBy) {
+		this.lastExecutBy = lastExecutBy;
 	}
 
-	public Date getLast_execute_by() {
-		return last_execute_by;
+	public String getTsCompleteFlag() {
+		return tsCompleteFlag;
 	}
 
-	public void setLast_execute_by(Date last_execute_by) {
-		this.last_execute_by = last_execute_by;
+	public void setTsCompleteFlag(String tsCompleteFlag) {
+		this.tsCompleteFlag = tsCompleteFlag;
 	}
 
-	public String getTs_complete_flag() {
-		return ts_complete_flag;
+	public String getPassPath() {
+		return passPath;
 	}
 
-	public void setTs_complete_flag(String ts_complete_flag) {
-		this.ts_complete_flag = ts_complete_flag;
+	public void setPassPath(String passPath) {
+		this.passPath = passPath;
 	}
 
-	public String getPass_path() {
-		return pass_path;
+	public String getFailPath() {
+		return failPath;
 	}
 
-	public void setPass_path(String pass_path) {
-		this.pass_path = pass_path;
+	public void setFailPath(String failPath) {
+		this.failPath = failPath;
 	}
 
-	public String getFail_path() {
-		return fail_path;
+	public String getExceptionPath() {
+		return exceptionPath;
 	}
 
-	public void setFail_path(String fail_path) {
-		this.fail_path = fail_path;
+	public void setExceptionPath(String exceptionPath) {
+		this.exceptionPath = exceptionPath;
 	}
 
-	public String getException_path() {
-		return exception_path;
+	public String getTestRunMode() {
+		return testRunMode;
 	}
 
-	public void setException_path(String exception_path) {
-		this.exception_path = exception_path;
-	}
-
-	public String getTr_mode() {
-		return tr_mode;
-	}
-
-	public void setTr_mode(String tr_mode) {
-		this.tr_mode = tr_mode;
-	}
-
-	public List<TestSetLines> getTestSetLinesDatalist() {
-		return testSetLinesDatalist;
-	}
-
-	public void setTestSetLinesDatalist(List<TestSetLines> testSetLinesDatalist) {
-		this.testSetLinesDatalist = testSetLinesDatalist;
-	}
-
-	public String getPdfGenerationEnabled() {
-		return pdfGenerationEnabled;
-	}
-
-	public void setPdfGenerationEnabled(String pdfGenerationEnabled) {
-		this.pdfGenerationEnabled = pdfGenerationEnabled;
+	public void setTestRunMode(String testRunMode) {
+		this.testRunMode = testRunMode;
 	}
 
 }

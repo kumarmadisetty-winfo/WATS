@@ -23,15 +23,17 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.gargoylesoftware.htmlunit.javascript.host.Console;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
-import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -42,7 +44,7 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
-	private static final String TEST_SET_ID = "test_set_id";
+	private static final String TEST_SET_ID = "testRun";
 	private static final String TR_MODE = "tr_mode";
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -86,8 +88,7 @@ public class DataBaseEntryDao {
 
 	}
 
-	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
-			throws ClassNotFoundException, SQLException {
+	public String getErrorMessage(String sndo, String ScriptName, String testRunName) {
 		String errorMessage = "";
 		String sqlQuery = "SELECT PARAM.LINE_ERROR_MESSAGE "
 				+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
@@ -119,7 +120,7 @@ public class DataBaseEntryDao {
 			 * if(scriptParam==null) { throw new RuntimeException(); }
 			 */
 			if (scriptParam != null) {
-				scriptParam.setLine_execution_statues(status);
+				scriptParam.setLineExecutionStatus(status);
 				em.merge(scriptParam);
 			}
 		} catch (Exception e) {
@@ -131,7 +132,7 @@ public class DataBaseEntryDao {
 	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
 			throws ClassNotFoundException, SQLException {
 		try {
-			TestSetLines testLines = em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 
 			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
@@ -147,7 +148,7 @@ public class DataBaseEntryDao {
 	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
 			throws ClassNotFoundException, SQLException {
 		try {
-			TestSetLines testLines = em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 
 			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
@@ -181,7 +182,7 @@ public class DataBaseEntryDao {
 		if (testSet == null) {
 			throw new RuntimeException();
 		}
-		return testSet.getTr_mode();
+		return testSet.getTestRunMode();
 	}
 
 	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
@@ -221,6 +222,105 @@ public class DataBaseEntryDao {
 		}
 	}
 
+	public void updateTestSetLineStatus(String status, String testSetLineScriptPath, String testSetId,
+			String testSetLineId, String scriptId, Date endDate) {
+		String endTime = new SimpleDateFormat("M/dd/yyyy HH:mm:ss").format(endDate);
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status + "', TEST_SET_LINE_SCRIPT_PATH='"
+					+ testSetLineScriptPath + "', EXECUTION_END_TIME=TO_TIMESTAMP('" + endTime
+					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID="
+					+ testSetLineId + " AND SCRIPT_ID=" + scriptId;
+			Query query = session.createSQLQuery(sqlQuery);
+			query.executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(606, "Unable to update records on  WIN_TA_TEST_SET_LINES");
+		}
+	}
+
+	public void updateTestSetPaths(String passPath, String failPath, String executionPath, String testSetId) {
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String sqlQuery = "Update WIN_TA_TEST_SET SET PASS_PATH ='" + passPath + "', FAIL_PATH ='" + failPath
+					+ "', EXCEPTION_PATH ='" + executionPath + "'WHERE TEST_SET_ID=" + testSetId;
+			Query query = session.createSQLQuery(sqlQuery);
+			query.executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(607, "Unable to update the records for WIN_TA_TEST_SET table");
+		}
+	}
+
+	public void updateExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
+		Format dateFormat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
+		String startTime = dateFormat.format(startDate);
+		String endTime = dateFormat.format(endDate);
+		try {
+			Session session = em.unwrap(Session.class);
+			int nextExecNo = getNextExecutionNum();
+			String instQry = "INSERT INTO WIN_TA_EXECUTION_HISTORY (EXECUTION_ID, TEST_SET_LINE_ID, EXECUTION_START_TIME, EXECUTION_END_TIME, STATUS) VALUES ('"
+					+ (nextExecNo) + "','" + testSetLineId + "'," + "TO_TIMESTAMP('" + startTime
+					+ "','MM/DD/YYYY HH24:MI:SS')" + "," + "TO_TIMESTAMP('" + endTime + "','MM/DD/YYYY HH24:MI:SS')"
+					+ ",'" + status + "')";
+			Query instQuery = session.createSQLQuery(instQry);
+			instQuery.executeUpdate();
+
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(608, "Unable to insert the records in WIN_TA_EXECUTION_HISTORY table");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getStatusAndSeqNum(String testSetId) {
+		List<Object[]> listObj = null;
+		try {
+			Session session = em.unwrap(Session.class);
+			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID=" + testSetId;
+			listObj = session.createSQLQuery(execQry).getResultList();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(605, "Unable to read records from WIN_TA_TEST_SET_LINES");
+		}
+		return listObj;
+	}
+
+	public void updateExecStatusTable(String testSetId) {
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String execQry = "SELECT RESPONSE_COUNT FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID =" + testSetId
+					+ " AND EXECUTION_ID = (SELECT MAX(EXECUTION_ID) FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID ="
+					+ testSetId + " )";
+			BigDecimal bigDecimal = (BigDecimal) session.createSQLQuery(execQry).getSingleResult();
+			Integer id = Integer.parseInt(bigDecimal.toString());
+			String updateQry = "UPDATE TEST_RUN_EXECUTE_STATUS SET RESPONSE_COUNT =" + (id + 1)
+					+ " WHERE TEST_RUN_ID = " + testSetId
+					+ " AND EXECUTION_ID = (SELECT MAX(EXECUTION_ID) FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID = "
+					+ testSetId + " )";
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(608, "Unable to update the records");
+		}
+
+	}
+
+	public int getNextExecutionNum() {
+		Session session = em.unwrap(Session.class);
+		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
+		SQLQuery query = session.createSQLQuery(sql);
+
+		List results = query.list();
+		if (results.size() > 0) {
+			System.out.println(results.get(0));
+
+			BigDecimal bigDecimal = (BigDecimal) results.get(0);
+			Integer id = Integer.parseInt(bigDecimal.toString());
+			return id;
+		} else {
+			return 0;
+		}
+	}
+
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id) throws SQLException {
 		try {
@@ -257,39 +357,37 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
-		// TODO Auto-generated method stub
-		// FetchMetadataVO metadataVO=new FetchMetadataVO();
-		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<String, Map<String, TestSetScriptParam>>();
-		String sql = "from TestSetLines where testSet=:testSet";
-		Integer test_run_id2 = Integer.parseInt(test_run_id);
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String testRunId) {
+		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<>();
+		String sql = "from TestSetLine where TEST_SET_ID=:testRunId";
+		Integer testRunId2 = Integer.parseInt(testRunId);
 		Query query = em.createQuery(sql);
-		query.setParameter("testSet", em.find(TestSet.class, test_run_id2));
-		List<TestSetLines> test_set_lines_list = query.getResultList();
-		for (TestSetLines test_set_line : test_set_lines_list) {
+		query.setParameter("testRunId", em.find(TestSet.class, testRunId2));
+		List<TestSetLine> testSetLinesList = query.getResultList();
+		for (TestSetLine test_set_line : testSetLinesList) {
 			Map<String, TestSetScriptParam> map2 = getTestScriptMap(test_set_line);
-			map.put(String.valueOf(test_set_line.getSeq_num()), map2);
+			map.put(String.valueOf(test_set_line.getSeqNum()), map2);
 
 		}
 		return map;
 
 	}
 
-	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLines test_set_line) {
-		String sql = "from TestSetScriptParam where testSetLines=:testSetLines";
+	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLine testSetLine) {
+		String sql = "from TestSetScriptParam where testSetLine=:testSetLines";
 		Query query = em.createQuery(sql);
-		query.setParameter("testSetLines", test_set_line);
+		query.setParameter("testSetLines", testSetLine);
 		List<TestSetScriptParam> testScriptParamList = query.getResultList();
-		Map<String, TestSetScriptParam> map2 = new HashMap<String, TestSetScriptParam>();
+		Map<String, TestSetScriptParam> map2 = new HashMap<>();
 		for (TestSetScriptParam scriptParam : testScriptParamList) {
-			map2.put(String.valueOf(scriptParam.getLine_number()), scriptParam);
+			map2.put(String.valueOf(scriptParam.getLineNumber()), scriptParam);
 		}
 		// map.put(String.valueOf(test_set_line.getSeq_num()),map2);
 		return map2;
 	}
 
-	public TestSetLines getTestSetLine(String test_set_line_id) {
-		return em.find(TestSetLines.class, Integer.parseInt(test_set_line_id));
+	public TestSetLine getTestSetLine(String test_set_line_id) {
+		return em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 	}
 
 	public ScriptMaster findScriptMasterByScriptId(int scriptId) {
@@ -305,43 +403,63 @@ public class DataBaseEntryDao {
 		return (ScriptMaster) query.getSingleResult();
 	}
 
-	public TestSetLines checkTestSetLinesByScriptId(int testSetId, int scriptId) {
+	public TestSetLine checkTestSetLinesByScriptId(int testSetId, int scriptId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
 		Predicate condition1 = cb.equal(from.get("script_id"), scriptId);
 		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
-		TestSetLines result = (TestSetLines) query.getSingleResult();
+		TestSetLine result = (TestSetLine) query.getSingleResult();
 		em.refresh(result);
 
 		return result;
 	}
 
-	public ArrayList<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
+	@SuppressWarnings("unchecked")
+	public List<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
+		List<String> result = null;
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+			Root<TestSetLine> from = cq.from(TestSetLine.class);
 
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
-
-		Predicate condition1 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
-		Predicate condition2 = null;
-		Predicate condition = cb.and(condition1, condition2);
-		if (enable != null) {
-			condition2 = cb.equal(from.get("enabled"),
-					enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
-			condition = cb.and(condition1, condition2);
-		} else {
-			condition = condition1;
+			Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
+			Predicate condition2 = null;
+			Predicate condition = cb.and(condition1, condition2);
+			if (enable != null) {
+				condition2 = cb.equal(from.get("enabled"),
+						enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
+				condition = cb.and(condition1, condition2);
+			} else {
+				condition = condition1;
+			}
+			cq.where(condition);
+			Query query = em.createQuery(cq.select(from.get("status")));
+			result = query.getResultList();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(600, "Unable to read the records");
 		}
-		cq.where(condition);
-		Query query = em.createQuery(cq.select(from.get("status")));
-		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getStatusByTestSetId(String testSetId) {
+
+		String sqlQry = "select STATUS FROM win_ta_test_set_lines where test_set_id=" + testSetId;
+		List<String> result = null;
+		Session session = em.unwrap(Session.class);
+		try {
+			Query query = session.createSQLQuery(sqlQry);
+			result = query.getResultList();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(604, "Unable to read status from win_ta_test_set_lines");
+		}
 		return result;
 	}
 
@@ -365,7 +483,7 @@ public class DataBaseEntryDao {
 				failCount = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(600, "Unable to read the fail count");
 		}
 		try {
 			NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
@@ -379,7 +497,7 @@ public class DataBaseEntryDao {
 			fetchConfigVO.setFailcount(failCount);
 			fetchConfigVO.setPasscount(passCount);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(600, "Unable to read the pass count");
 		}
 
 	}
@@ -494,6 +612,7 @@ public class DataBaseEntryDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new WatsEBSCustomException(600, "Unable to read the records from Tables");
 		}
 		return listOfTestRunExecutionVo;
 	}
@@ -509,12 +628,16 @@ public class DataBaseEntryDao {
 	}
 
 	public String getTestSetPdfGenerationEnableStatus(Long testSetId) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<String> query = cb.createQuery(String.class);
-		Root<TestSet> root = query.from(TestSet.class);
-		Predicate condition = cb.equal(root.get(TEST_SET_ID), testSetId);
-		query.select(root.get("pdfGenerationEnabled")).where(condition);
-		return em.createQuery(query).getSingleResult();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<String> query = cb.createQuery(String.class);
+			Root<TestSet> root = query.from(TestSet.class);
+			Predicate condition = cb.equal(root.get("testRunId"), testSetId);
+			query.select(root.get("pdfGenerationEnabled")).where(condition);
+			return em.createQuery(query).getSingleResult();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(600, "Unable to read the records");
+		}
 
 	}
 
@@ -524,49 +647,40 @@ public class DataBaseEntryDao {
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
 
-		Predicate condition = cb.equal(from.get("testSetLines").get("test_set_line_id"), testSetLineId);
+		Predicate condition = cb.equal(from.get("testSetLine").get("testRunScriptId"), testSetLineId);
 		cq.where(condition);
-		Query query = em.createQuery(cq.select(from.get("line_execution_status")));
+		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
 		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
 		return result;
 	}
 
-	public TestSetLines getScript(long testSetId, long testSetLineId) {
+	public TestSetLine getScript(long testSetId, long testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TestSetLines> cq = cb.createQuery(TestSetLines.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
+		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
-		Predicate condition1 = cb.equal(from.get("test_set_line_id"), testSetLineId);
-		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition1 = cb.equal(from.get("testRunScriptId"), testSetLineId);
+		Predicate condition2 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from));
-		return (TestSetLines) query.getSingleResult();
+		return (TestSetLine) query.getSingleResult();
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Object[]> getStatusAndSeqNum(String testSetId) {
-		List<Object[]> listObj = null;
+	public List<Object[]> getConfigurationDetails(String testSetId) {
 		try {
-			Session session = em.unwrap(Session.class);
-			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID=" + testSetId;
-			listObj = session.createSQLQuery(execQry).getResultList();
+			Query query = em
+					.createNativeQuery("select cm.KEY_NAME,cl.VALUE_NAME,cm.DEFAULT_VALUE from WIN_TA_CONFIG_LINES cl "
+							+ "join WIN_TA_CONFIG_MASTER cm on cl.KEY_ID=cm.KEY_ID "
+							+ "join win_ta_test_set ts on ts.CONFIGURATION_ID=cl.CONFIGURATION_ID where ts.TEST_SET_ID=:testSetId");
+			query.setParameter("testSetId", testSetId);
+			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(601, "Records are not available");
 		}
-		return listObj;
-	}
-
-	public ArrayList<Object[]> getConfigurationDetails(String testSetId) {
-		Query query = em
-				.createNativeQuery("select cm.KEY_NAME,cl.VALUE_NAME,cm.DEFAULT_VALUE from WIN_TA_CONFIG_LINES cl "
-						+ "join WIN_TA_CONFIG_MASTER cm on cl.KEY_ID=cm.KEY_ID "
-						+ "join win_ta_test_set ts on ts.CONFIGURATION_ID=cl.CONFIGURATION_ID where ts.TEST_SET_ID=:testSetId");
-		query.setParameter("testSetId", testSetId);
-		return (ArrayList<Object[]>) query.getResultList();
 	}
 
 	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
@@ -583,10 +697,10 @@ public class DataBaseEntryDao {
 	public Date findMaxExecutionEndDate(long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
-		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 
-		cq.select(cb.greatest(from.<Date>get("execution_end_time"))).where(condition);
+		cq.select(cb.greatest(from.<Date>get("executionEndTime"))).where(condition);
 		Date query = em.createQuery(cq).getSingleResult();
 		return query;
 
@@ -595,10 +709,10 @@ public class DataBaseEntryDao {
 	public Date findMinExecutionStartDate(long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
-		Root<TestSetLines> from = cq.from(TestSetLines.class);
-		Predicate condition = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 
-		cq.select(cb.least(from.<Date>get("execution_start_time"))).where(condition);
+		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition);
 		Date query = em.createQuery(cq).getSingleResult();
 		return query;
 
@@ -608,9 +722,9 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
-		Predicate condition = cb.equal(from.get("testSetLines").get("test_set_line_id"), testSetLineId);
-		cq.select(from.get("test_script_param_id")).where(condition);
-		cq.orderBy(cb.asc(from.get("line_number")));
+		Predicate condition = cb.equal(from.get("testSetLines").get("testRunScriptId"), testSetLineId);
+		cq.select(from.get("testRunScriptParamId")).where(condition);
+		cq.orderBy(cb.asc(from.get("lineNumber")));
 		Integer result = em.createQuery(cq).setMaxResults(1).getSingleResult();
 		return result;
 

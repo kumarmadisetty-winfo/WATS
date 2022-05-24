@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lowagie.text.DocumentException;
+import com.winfo.services.TestScriptExec1Service;
 import com.winfo.services.TestScriptExecService;
-import com.winfo.vo.ResponseDto;
+import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.PyJabKafkaDto;
+import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
 import com.winfo.vo.UpdateScriptParamStatus;
 
@@ -26,6 +28,8 @@ public class TestScriptExecController {
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
+	@Autowired
+	TestScriptExec1Service testScriptExec1Service;
 
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript")
@@ -52,11 +56,12 @@ public class TestScriptExecController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateEndScriptStatus")
-	public void updateEndScriptStatus(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult) {
-		testScriptExecService.generateTestScriptLineIdReports(args);
+	public void updateEndScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult) {
+		testScriptExec1Service.generateTestScriptLineIdReports(msgQueueDto);
+//		testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
-	@ResponseBody
+	@ResponseBody 
 	@RequestMapping(value = "/generateScriptPdf")
 	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult) {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
@@ -84,7 +89,8 @@ public class TestScriptExecController {
 	@ResponseBody
 	@RequestMapping(value = "/generateTestRunPdfs/{testSetId}")
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
-		return testScriptExecService.generateTestRunPdf(testSetId);
+		return testScriptExec1Service.generateTestRunPdf(testSetId);
+//		return testScriptExecService.generateTestRunPdf(testSetId);
 	}
 
 	@ResponseBody

@@ -103,12 +103,13 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.model.PyJabActions;
-import com.winfo.model.TestSetLines;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.PyJabScriptDto;
@@ -751,9 +752,10 @@ public class TestScriptExecService {
 				}
 			}
 			args.setSuccess(scriptStatus);
-			TestSetLines testSetLines = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
+			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
 					args.getTestSetLineId());
-			args.setStartDate(testSetLines.getExecution_start_time());
+			args.setStartDate(testSetLine.getExecutionStartTime());
+			args.setStartDate(testSetLine.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
 			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
 					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
@@ -793,7 +795,7 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
 
-			Date enddate = testSetLines.getExecution_end_time() != null ? testSetLines.getExecution_end_time()
+			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
 					: new Date();
 
 			if (args.isSuccess()) {
@@ -827,7 +829,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"pass", testSetLines.getExecution_start_time(), enddate);
+						"pass", testSetLine.getExecutionStartTime(), enddate);
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 
 			} else {
@@ -880,7 +882,7 @@ public class TestScriptExecService {
 
 				limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 						fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-						"Fail", testSetLines.getExecution_start_time(), enddate);
+						"Fail", testSetLine.getExecutionStartTime(), enddate);
 				// break;
 
 			}
@@ -905,6 +907,27 @@ public class TestScriptExecService {
 			e.printStackTrace();
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
+	}
+	
+	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
+
+		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
+		fetchConfigVO.setSeqNumAndStatus(dataBaseEntry.getStatusAndSeqNum(testSetId));
+		int passCount = 0;
+		int failCount = 0;
+		int other = 0;
+		for (String testLinesStatus : testLineStatusList) {
+			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+				passCount++;
+			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Fail.getLabel())) {
+				failCount++;
+			} else {
+				other++;
+			}
+		}
+		fetchConfigVO.setPasscount(passCount);
+		fetchConfigVO.setFailcount(failCount);
+		fetchConfigVO.setOtherCount(other);
 	}
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
@@ -931,8 +954,9 @@ public class TestScriptExecService {
 
 			String file = (folder + pdffileName);
 			logger.info("Path of Pdf -- " + file);
-			fetchConfigVO
-					.setSeqNumAndStatus(dataBaseEntry.getSeqNumAndStatus(fetchMetadataListVO.get(0).getTest_set_id()));
+//			fetchConfigVO
+//					.setSeqNumAndStatus(dataBaseEntry.getSeqNumAndStatus(fetchMetadataListVO.get(0).getTest_set_id()));
+			findPassAndFailCount(fetchConfigVO, fetchMetadataListVO.get(0).getTest_set_id());
 			List<String> fileNameList = null;
 			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				fileNameList = eBSSeleniumKeyWords.getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
@@ -1354,14 +1378,14 @@ public class TestScriptExecService {
 					String step = "Step No :" + "" + reason;
 					String message = "Failed at Line Number:" + "" + reason;
 					// new change-database to get error message
-					String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName, fetchConfigVO);
+					String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName);
 					String errorMessage = "Failed Message:" + "" + error;
 
-					String stepDescription = descriptionList.get(sno).get(reason).getTest_run_param_desc();
+					String stepDescription = descriptionList.get(sno).get(reason).getTestRunParamDesc();
 
-					String inputParam = descriptionList.get(sno).get(reason).getInput_parameter();
+					String inputParam = descriptionList.get(sno).get(reason).getInputParameter();
 
-					String inputValue = descriptionList.get(sno).get(reason).getInput_value();
+					String inputValue = descriptionList.get(sno).get(reason).getInputValue();
 
 					Paragraph pr1 = new Paragraph();
 					pr1.add("Status:");
@@ -1492,9 +1516,9 @@ public class TestScriptExecService {
 						String scenario = image.split("_")[2];
 						String steps = image.split("_")[5];
 
-						String stepDescription = map.get(steps).getTest_run_param_desc();
-						String inputParam = map.get(steps).getInput_parameter();
-						String inputValue = map.get(steps).getInput_value();
+						String stepDescription = map.get(steps).getTestRunParamDesc();
+						String inputParam = map.get(steps).getInputParameter();
+						String inputValue = map.get(steps).getInputValue();
 						document.setPageSize(img);
 						document.newPage();
 
@@ -1578,7 +1602,7 @@ public class TestScriptExecService {
 	}
 
 	public FetchConfigVO fetchConfigVO(String testSetId) {
-		ArrayList<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
+		List<Object[]> configurations = dataBaseEntry.getConfigurationDetails(testSetId);
 		Map<String, String> mapConfig = new HashMap<>();
 		String value = null;
 		for (Object[] e : configurations) {
