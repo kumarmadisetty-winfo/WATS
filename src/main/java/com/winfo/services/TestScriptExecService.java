@@ -223,6 +223,7 @@ public class TestScriptExecService {
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 				logger.info(" Running Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
+					logger.info(" Running Dependent in executor - " + metaData.getKey());
 					try {
 						boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
 								metaData.getValue().get(0).getScript_id());
