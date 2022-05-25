@@ -142,10 +142,9 @@ public class TestScriptExec1Service {
 
 	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto msgQueueDto) {
 		try {
-			msgQueueDto.setManualTriger(true);
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(msgQueueDto.getTestSetLineId());
 			if (scriptStatus == null) {
-				if (msgQueueDto.isManualTriger()) {
+				if (msgQueueDto.isManualTrigger()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
 				} else {
 					scriptStatus = false;
@@ -218,7 +217,7 @@ public class TestScriptExec1Service {
 				int failedScriptRunCount = limitScriptExecutionService
 						.getFailScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
-				if (!msgQueueDto.isManualTriger()) {
+				if (!msgQueueDto.isManualTrigger()) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount,
 							msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
@@ -234,7 +233,7 @@ public class TestScriptExec1Service {
 					fetchConfigVO.getStatus1(), new Date(), enddate);
 
 			// final reports generation
-			if (!msgQueueDto.isManualTriger()) {
+			if (!msgQueueDto.isManualTrigger()) {
 				String pdfGenerationEnabled = dataBaseEntry
 						.pdfGenerationEnabled(Long.valueOf(msgQueueDto.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
