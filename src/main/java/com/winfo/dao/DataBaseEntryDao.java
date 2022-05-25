@@ -304,6 +304,13 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		}
 		
 	}
+
+	public int getTestRunDependentCount(String testSetId) {
+		String sq1 = "select count(*) from win_ta_test_set_lines where dependency_tr is not null and test_set_id = :test_set_id";
+		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
+		query.setParameter("test_set_id", testSetId);
+		return Integer.parseInt(query.getSingleResult().toString());
+	}
 	
 	
 }

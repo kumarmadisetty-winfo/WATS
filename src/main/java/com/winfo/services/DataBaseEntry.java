@@ -86,6 +86,8 @@ public class DataBaseEntry {
 			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
 
 		}
+		
+		
 
 		dao.getDependentScriptNumbers(dependentScriptMap, dependentList);
 		/*
@@ -108,6 +110,10 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus);
 	}
 	
+	@Transactional
+	public int getTestRunDependentCount(String testSetId) {
+		return dao.getTestRunDependentCount(testSetId);
+	}
 	
 }
 

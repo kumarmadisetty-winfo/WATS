@@ -42,7 +42,8 @@ import com.winfo.vo.Status;
 
 public class RunAutomation {
 	Logger log = Logger.getLogger("Logger");
-
+	private static final String TEST_RUN_LEVEL_DEPENDENCY = "TestRunDependency";
+	private static final String SCRIPT_LEVEL_DEPENDENCY = "ScriptDependency";
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
 	@Autowired
@@ -131,12 +132,17 @@ public class RunAutomation {
 			System.out.println(fetchMetadataListVO.size());
 			Map<Integer,Status> scriptStatus = new HashMap<Integer,Status>();
 			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap=new LinkedHashMap<String, List<FetchMetadataVO>>();
-			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = dataService
-					.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap);
-			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,
-					fetchMetadataListVO, metaDataMap, args);
+			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+			 int testRunDependencyCount = dataBaseEntry.getTestRunDependentCount(args);
+			 if(testRunDependencyCount > 0) {
+				 metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap,TEST_RUN_LEVEL_DEPENDENCY);
+			 }
+			 else {
+				 metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,dependentScriptMap,SCRIPT_LEVEL_DEPENDENCY);
+			 }
+			 
 			
-			
+			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedCoundiationExaption(fetchConfigVO,fetchMetadataListVO, metaDataMap, args);
 			Queue<Entry<String,List<FetchMetadataVO>>> dependentQueue = new LinkedList<Entry<String,List<FetchMetadataVO>> >();
 			
 			for(Entry<String,List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
