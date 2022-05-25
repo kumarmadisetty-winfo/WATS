@@ -10507,6 +10507,29 @@ try {
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		//DH
+		try {
+			if (param1.equalsIgnoreCase("Search for proposed manager")||(param1.equalsIgnoreCase("Select a value"))) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@placeholder='" +param1+ "'][1]")));
+			WebElement waittill = driver.findElement(By.xpath("//*[@placeholder='" +param1+ "'][1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			waittill.sendKeys(keysToSend);
+			//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(2000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			String xpath = "(//*[text()='param1']/following::*[text()='param2']/following::input[not(@type='hidden')])[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return keysToSend;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+			}
 		try {
 			if(param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")|| param2.equalsIgnoreCase("End Date and Time")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
