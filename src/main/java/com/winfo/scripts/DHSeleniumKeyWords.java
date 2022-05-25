@@ -1031,7 +1031,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		for (String fileNames : fileSeqList) {
 			if (fileNames.endsWith("Passed")) {
 				fileNames = new File(folder + fileNames+".png").exists() ? fileNames+".png" : fileNames;
-				fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".png" : fileNames;
+				fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".jpg" : fileNames;
 				File newFile = new File(folder + fileNames);
 				if (newFile.exists()) {
 					Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
@@ -1062,7 +1062,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		for (String fileNames : fileSeqList) {
 			fileNames = new File(folder + fileNames+".png").exists() ? fileNames+".png" : fileNames;
-			fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".png" : fileNames;
+			fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".jpg" : fileNames;
 			File newFile = new File(folder + fileNames);
 			if (newFile.exists()) {
 				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
@@ -1089,7 +1089,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		List<String> detailsFileName = new ArrayList<>();
 		for (String fileNames : fileSeqList) {
 			fileNames = new File(folder + fileNames+".png").exists() ? fileNames+".png" : fileNames;
-			fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".png" : fileNames;
+			fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames+".jpg").exists()))  ? fileNames+".jpg" : fileNames;
 			File file = new File(folder + fileNames);
 			if (file.exists()) {
 				Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
