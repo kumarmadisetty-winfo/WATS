@@ -94,6 +94,7 @@ public class LimitScriptExecutionDao {
 		}
 		return mailId;
 	}
+
 	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT RUN_COUNT from WIN_TA_TEST_SET_LINES where TEST_SET_LINE_ID=" + testSetLineId
@@ -109,12 +110,13 @@ public class LimitScriptExecutionDao {
 				id = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(602,"Unable to select the RUN_COUNT FROM WIN_TA_TEST_SET_LINES");
+			throw new WatsEBSCustomException(500,
+					"Exception occured while selecting the run count for Script level pdf", e);
 		}
 		return id;
 	}
-	
-	public void updateFailScriptRunCount(int failedScriptRunCount,String testSetId, String testSetLineId) {
+
+	public void updateFailScriptRunCount(int failedScriptRunCount, String testSetId, String testSetLineId) {
 		try {
 			Session session = entityManager.unwrap(Session.class);
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
@@ -123,7 +125,8 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
+			throw new WatsEBSCustomException(500,
+					"Exception occured while updating the fail run count for script level pdf", e);
 		}
 	}
 
@@ -142,9 +145,10 @@ public class LimitScriptExecutionDao {
 				id = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(602,"Unable to select the RUN_COUNT FROM WIN_TA_TEST_SET_LINES");
+			throw new WatsEBSCustomException(500, "Exception occured while fetching the run count for script level pdf",
+					e);
 		}
-		int failedScriptRunCount=id + 1;
+		int failedScriptRunCount = id + 1;
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
 					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
@@ -152,14 +156,14 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
+			throw new WatsEBSCustomException(500, "Exception occured while updating run count for Script level pdf", e);
 		}
 
 		return failedScriptRunCount;
 	}
 
 	public void updateFaileScriptscount(String testSetLineId, String testSetId) {
-		int failedScriptRunCount=0;
+		int failedScriptRunCount = 0;
 		Session session = entityManager.unwrap(Session.class);
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
@@ -168,11 +172,10 @@ public class LimitScriptExecutionDao {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(601,"Unable to update RUN_COUNT in WIN_TA_TEST_SET_LINES table");
+			throw new WatsEBSCustomException(500, "Exception occured while updating the run count for script level pdf",
+					e);
 		}
 
-		
 	}
 
-	
 }
