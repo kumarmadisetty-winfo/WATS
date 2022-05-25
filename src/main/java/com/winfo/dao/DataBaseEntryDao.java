@@ -55,8 +55,8 @@ public class DataBaseEntryDao {
 					+ test_script_param_id + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("cant update passed script line status");
-			System.out.println(e);
+			throw new WatsEBSCustomException(500,
+					"Exception occured while updating the status for testScriptId " + test_script_param_id, e);
 		}
 	}
 
@@ -235,7 +235,8 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(606, "Unable to update records on  WIN_TA_TEST_SET_LINES");
+			throw new WatsEBSCustomException(500,
+					"Exception occured while updating status, end date and path for script level pdf", e);
 		}
 	}
 
@@ -248,7 +249,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(607, "Unable to update the records for WIN_TA_TEST_SET table");
+			throw new WatsEBSCustomException(500, "Exception occured while updating the Paths for test run pdfs", e);
 		}
 	}
 
@@ -267,7 +268,8 @@ public class DataBaseEntryDao {
 			instQuery.executeUpdate();
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(608, "Unable to insert the records in WIN_TA_EXECUTION_HISTORY table");
+			throw new WatsEBSCustomException(500,
+					"Exception occured while inserting records for start date, end date and status", e);
 		}
 	}
 
@@ -285,7 +287,6 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateExecStatusTable(String testSetId) {
-
 		try {
 			Session session = em.unwrap(Session.class);
 			String execQry = "SELECT RESPONSE_COUNT FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID =" + testSetId
@@ -299,7 +300,7 @@ public class DataBaseEntryDao {
 					+ testSetId + " )";
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(608, "Unable to update the records");
+			throw new WatsEBSCustomException(500, "Exception occured while updating the response count", e);
 		}
 
 	}
@@ -442,7 +443,7 @@ public class DataBaseEntryDao {
 			Query query = em.createQuery(cq.select(from.get("status")));
 			result = query.getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(600, "Unable to read the records");
+			throw new WatsEBSCustomException(500, "Exception occured while fetching the status for test run pdfs", e);
 		}
 
 		return result;
@@ -512,11 +513,11 @@ public class DataBaseEntryDao {
 		}
 		if (finalPdf) {
 			whereClause = whereClause + "      and  (upper(status) in ('PASS','FAIL'))\r\n";
-		} 
+		}
 
 		if (executeApi) {
 			whereClause = whereClause + "      and wttsl.enabled = 'Y'\r\n";
-			 whereClause = whereClause + "      and  (upper(status) in ('NEW','FAIL','IN-QUEUE'))\r\n";
+			whereClause = whereClause + "      and  (upper(status) in ('NEW','FAIL','IN-QUEUE'))\r\n";
 		}
 
 		String sqlQuery = "SELECT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
@@ -611,8 +612,7 @@ public class DataBaseEntryDao {
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WatsEBSCustomException(600, "Unable to read the records from Tables");
+			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
 		}
 		return listOfTestRunExecutionVo;
 	}
@@ -636,7 +636,7 @@ public class DataBaseEntryDao {
 			query.select(root.get("pdfGenerationEnabled")).where(condition);
 			return em.createQuery(query).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(600, "Unable to read the records");
+			throw new WatsEBSCustomException(500, "Exception occured while running test run pdfs", e);
 		}
 
 	}
@@ -679,7 +679,7 @@ public class DataBaseEntryDao {
 			query.setParameter("testSetId", testSetId);
 			return (List<Object[]>) query.getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(601, "Records are not available");
+			throw new WatsEBSCustomException(500, "Exception occured while fetching configuration details", e);
 		}
 	}
 
