@@ -25,7 +25,7 @@ public class MessageQueueDto implements Serializable {
 	private Date startDate;
 	private String localScreenshotPath;
 	private String obJectStoreScreenshotPath;
-	private boolean isManual;
+	private boolean manualTrigger;
 	
 	public MessageQueueDto() {
 	}
@@ -99,13 +99,15 @@ public class MessageQueueDto implements Serializable {
 	}
 
 
-	public boolean isManualTriger() {
-		return isManual;
+	public boolean isManualTrigger() {
+		return manualTrigger;
 	}
 
 
-	public void setManualTriger(boolean isManual) {
-		this.isManual = isManual;
+	public void setManualTrigger(boolean manualTrigger) {
+		this.manualTrigger = manualTrigger;
 	}
+
+
 
 }
