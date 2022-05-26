@@ -168,6 +168,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public String Main_Window = "";
 	public WebElement fromElement;
 	public WebElement toElement;
+	
+	private static final DecimalFormat df = new DecimalFormat("00");
+
 
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
@@ -828,7 +831,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		long diffSeconds = diff / 1000 % 60;
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
@@ -999,7 +1002,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		long diffSeconds = diff / 1000 % 60;
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
@@ -1174,7 +1177,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
@@ -1364,7 +1367,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);;
 
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
@@ -1581,7 +1584,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
+			
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
@@ -1976,7 +1980,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
+//			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -2065,12 +2069,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				Map<Date, Long> timeslist = limitScriptExecutionService
 						.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
+				
 				if (timeslist.size() == 0) {
 					StartTime = TStarttime1;
 					long TdiffSeconds = Tdiff / 1000 % 60;
 					long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 					long TdiffHours = Tdiff / (60 * 60 * 1000);
-					ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+					ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
 					if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 						limitScriptExecutionService.updateTestrunTimes(startTimestamp, endTimestamp, Tdiff,
 								fetchMetadataListVO.get(0).getTest_set_id());
@@ -2082,7 +2087,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						long TdiffSeconds = totalTime / 1000 % 60;
 						long TdiffMinutes = totalTime / (60 * 1000) % 60;
 						long TdiffHours = totalTime / (60 * 60 * 1000);
-						ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+						ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
+						System.out.println("jxvbj");
 						if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 
 							limitScriptExecutionService.updateTestrunTimes1(endTimestamp, totalTime,
@@ -2676,7 +2682,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //					String ExecutedBy=fetchConfigVO.getApplication_user_name();
 					String StartTime = Starttime1;
 					String EndTime = endtime1;
-					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+					String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 
 					Map<String, TestSetScriptParam> map = databaseentry.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
 					
@@ -3233,6 +3239,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+//			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -3304,7 +3311,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //			String ExecutedBy=fetchConfigVO.getApplication_user_name();
 			String StartTime = Starttime1;
 			String EndTime = endtime1;
-			String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+			String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 
 			String TR = "Test Run Name";
 			String SN = "Script Number";
