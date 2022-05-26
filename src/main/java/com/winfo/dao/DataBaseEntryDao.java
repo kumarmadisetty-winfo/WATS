@@ -30,7 +30,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
-import com.gargoylesoftware.htmlunit.javascript.host.Console;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
@@ -48,25 +47,24 @@ public class DataBaseEntryDao {
 	private static final String TR_MODE = "testRunMode";
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
+			String testScriptParamId, String status, String message) {
 		try {
-			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-					+ "',line_error_message='" + message.replace("'", "''") + "' where test_script_param_id=" + "'"
-					+ test_script_param_id + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set lineExecutionStatus='" + status
+					+ "',line_error_message='" + message.replace("'", "''") + "' where testRunScriptParamId=" + "'"
+					+ testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500,
-					"Exception occured while updating the status for testScriptId " + test_script_param_id, e);
+					"Exception occured while updating the status for testScriptId " + testScriptParamId, e);
 		}
 	}
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String value, String message)
-			throws ClassNotFoundException, SQLException {
+			String testScriptParamId, String status, String value, String message) {
 		try {
 			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
 					+ "',input_value='" + value + "',line_error_message='" + message.replace("'", "''")
-					+ "' where test_script_param_id='" + test_script_param_id + "'");
+					+ "' where test_script_param_id='" + testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -75,26 +73,25 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String error_message)
-			throws ClassNotFoundException, SQLException {
+			String testScriptParamId, String status, String errorMessage) {
 
 		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message where TEST_SCRIPT_PARAM_ID='"
-				+ test_script_param_id + "'";
+				+ testScriptParamId + "'";
 		Session session = em.unwrap(Session.class);
 		Query query = session.createSQLQuery(sql);
-		query.setParameter("error_message", error_message);
+		query.setParameter("error_message", errorMessage);
 
 		query.executeUpdate();
 
 	}
 
-	public String getErrorMessage(String sndo, String ScriptName, String testRunName) {
+	public String getErrorMessage(String sndo, String scriptName, String testRunName) {
 		String errorMessage = "";
 		String sqlQuery = "SELECT PARAM.LINE_ERROR_MESSAGE "
 				+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
 				+ "WHERE TS.TEST_SET_ID = LINES.TEST_SET_ID " + "AND LINES.TEST_SET_LINE_ID = PARAM.TEST_SET_LINE_ID "
 				+ "AND TS.TEST_SET_ID = (SELECT TEST_SET_ID FROM WIN_TA_TEST_SET WHERE UPPER(TEST_SET_NAME)=UPPER('"
-				+ testRunName + "'))" + "AND UPPER(LINES.SCRIPT_NUMBER) = UPPER('" + ScriptName + "') "
+				+ testRunName + "'))" + "AND UPPER(LINES.SCRIPT_NUMBER) = UPPER('" + scriptName + "') "
 				+ "AND LINES.SEQ_NUM = " + sndo + " " + "AND PARAM.LINE_ERROR_MESSAGE IS NOT NULL";
 
 		try {
@@ -113,9 +110,9 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
+			String testScriptParamId, String status) {
 		try {
-			TestSetScriptParam scriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(test_script_param_id));
+			TestSetScriptParam scriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));
 			/*
 			 * if(scriptParam==null) { throw new RuntimeException(); }
 			 */
@@ -129,10 +126,9 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
-			throws ClassNotFoundException, SQLException {
+	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String testSetId, String testSetLineId) {
 		try {
-			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
 			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
@@ -145,10 +141,9 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
-			throws ClassNotFoundException, SQLException {
+	public void updateStatusOfScript(String testSetId, String testSetLineId, String status) {
 		try {
-			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
 			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
@@ -161,15 +156,14 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
-			throws ClassNotFoundException, SQLException {
+	public void updateStartTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date startTime1) {
 		Format startformat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
-		String start_time = startformat.format(start_time1);
+		String startTime = startformat.format(startTime1);
 		try {
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery("Update WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"
-					+ start_time + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID=" + test_set_id
-					+ " AND TEST_SET_LINE_ID = " + line_id);
+					+ startTime + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID=" + testSetId
+					+ " AND TEST_SET_LINE_ID = " + lineId);
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update starttime");
@@ -177,20 +171,19 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
-		TestSet testSet = em.find(TestSet.class, Integer.parseInt(args));
+	public String getTrMode(String testSetId, FetchConfigVO fetchConfigVO) throws SQLException {
+		TestSet testSet = em.find(TestSet.class, Integer.parseInt(testSetId));
 		if (testSet == null) {
-			throw new RuntimeException();
+			throw new SQLException();
 		}
 		return testSet.getTestRunMode();
 	}
 
-	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
-			throws SQLException, ClassNotFoundException {
+	public String getPassword(String testSetId, String userId, FetchConfigVO fetchConfigVO) {
 		Session session = em.unwrap(Session.class);
 		String password = null;
 		String sqlStr = "select WIN_DBMS_CRYPTO.DECRYPT(users.password , users.encrypt_key) PASSWORD from win_ta_test_set test_set,win_ta_config config,win_ta_config_users users where test_set.configuration_id = config.configuration_id and config.configuration_id = users.config_id and test_set.test_set_id = "
-				+ args + " and (upper(users.user_name) = upper('" + userId + "') or ('" + userId
+				+ testSetId + " and (upper(users.user_name) = upper('" + userId + "') or ('" + userId
 				+ "' is null and users.default_user = 'Y')) and rownum = 1";
 
 		System.out.println(sqlStr);
@@ -204,16 +197,15 @@ public class DataBaseEntryDao {
 
 	}
 
-	public void updateEndTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date end_time1)
-			throws ClassNotFoundException, SQLException {
+	public void updateEndTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date endTime1) {
 		Format startformat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
-		String end_time = startformat.format(end_time1);
+		String end_time = startformat.format(endTime1);
 
 		try {
 			Session session = em.unwrap(Session.class);
 			String sqlQuery = "Update WIN_TA_TEST_SET_LINES  SET EXECUTION_END_TIME=TO_TIMESTAMP('" + end_time
-					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + test_set_id + " AND TEST_SET_LINE_ID ="
-					+ line_id;
+					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID ="
+					+ lineId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
@@ -323,7 +315,7 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id) throws SQLException {
+			String testScriptParamId) throws SQLException {
 		try {
 			String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "\\"
 
@@ -337,19 +329,13 @@ public class DataBaseEntryDao {
 
 			File file = new File(folder);
 			byte[] screenshotArray = new byte[(int) file.length()];
-			try {
-				FileInputStream fileInputStream = new FileInputStream(file);
+			try (FileInputStream fileInputStream = new FileInputStream(file);) {
 				fileInputStream.read(screenshotArray);
-				fileInputStream.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"
-					+ test_script_param_id + "'";
+					+ testScriptParamId + "'";
 			Query query = em.unwrap(Session.class).createSQLQuery(sql);
 			query.setParameter("screenshot", screenshotArray);
 			query.executeUpdate();
@@ -387,8 +373,8 @@ public class DataBaseEntryDao {
 		return map2;
 	}
 
-	public TestSetLine getTestSetLine(String test_set_line_id) {
-		return em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
+	public TestSetLine getTestSetLine(String testSetLineId) {
+		return em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 	}
 
 	public ScriptMaster findScriptMasterByScriptId(int scriptId) {
@@ -410,13 +396,13 @@ public class DataBaseEntryDao {
 		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
-		Predicate condition1 = cb.equal(from.get("script_id"), scriptId);
-		Predicate condition2 = cb.equal(from.get("testSet").get("test_set_id"), testSetId);
+		Predicate condition1 = cb.equal(from.get("scriptId"), scriptId);
+		Predicate condition2 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		TestSetLine result = (TestSetLine) query.getSingleResult();
-		em.refresh(result);
+//		em.refresh(result);
 
 		return result;
 	}
@@ -686,7 +672,7 @@ public class DataBaseEntryDao {
 	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
 		try {
 			Query query = em.createQuery(
-					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where test_set_id='" + testSetId + "'");
+					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where testRunId='" + testSetId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("Error Updation PDF Generation Status");
@@ -722,7 +708,7 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
-		Predicate condition = cb.equal(from.get("testSetLines").get("testRunScriptId"), testSetLineId);
+		Predicate condition = cb.equal(from.get("testSetLine").get("testRunScriptId"), testSetLineId);
 		cq.select(from.get("testRunScriptParamId")).where(condition);
 		cq.orderBy(cb.asc(from.get("lineNumber")));
 		Integer result = em.createQuery(cq).setMaxResults(1).getSingleResult();
