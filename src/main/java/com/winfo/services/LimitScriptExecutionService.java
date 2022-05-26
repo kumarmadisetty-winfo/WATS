@@ -42,42 +42,44 @@ public class LimitScriptExecutionService {
 
 	@Value("${smpt.host}")
 	private String host;
-	
+
 	@Value("${smpt.port}")
 	private String port;
-	
+
 	@Value("${smpt.from.mail}")
 	private String fromMail;
-	
-	public Map<Integer, Boolean> getLimitedCoundiationExaption(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO, LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap, String args) {
-		boolean flag=false;
-		int remaingScriptsCount=0;
-		 Map<Integer, Boolean> mutableMap=new TreeMap<Integer, Boolean>();
+
+	public Map<Integer, Boolean> getLimitedCoundiationExaption(FetchConfigVO fetchConfigVO,
+			List<FetchMetadataVO> fetchMetadataListVO, LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap,
+			String args) {
+		boolean flag = false;
+		int remaingScriptsCount = 0;
+		Map<Integer, Boolean> mutableMap = new TreeMap<Integer, Boolean>();
 		try {
-		int threshold = fetchConfigVO.getMax_num_scripts();
+			int threshold = fetchConfigVO.getMax_num_scripts();
 //		int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
-		int scriptsPassCount=getPassedScriptsCount(fetchConfigVO.getStart_date(),fetchConfigVO.getEnd_date());
-		int inprogressandInqueueCount=getInprogressAndInqueueCount();
-		int percentageCount=Math.round((threshold*(80.0f/100.0f)));
-		scriptsPassCount=scriptsPassCount+metaDataMap.size()+inprogressandInqueueCount;
-		if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
-			sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
-					fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-		} else if (threshold < scriptsPassCount) {
-			remaingScriptsCount=threshold-(scriptsPassCount+inprogressandInqueueCount);
-			sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
-					fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
-			flag=true;
-		
-		}
-		}catch (Exception e) {
+			int scriptsPassCount = getPassedScriptsCount(fetchConfigVO.getStart_date(), fetchConfigVO.getEnd_date());
+			int inprogressandInqueueCount = getInprogressAndInqueueCount();
+			int percentageCount = Math.round((threshold * (80.0f / 100.0f)));
+			scriptsPassCount = scriptsPassCount + metaDataMap.size() + inprogressandInqueueCount;
+			if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
+				sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
+						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
+			} else if (threshold < scriptsPassCount) {
+				remaingScriptsCount = threshold - (scriptsPassCount + inprogressandInqueueCount);
+				sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
+						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
+				flag = true;
+
+			}
+		} catch (Exception e) {
 			System.out.println("limited sctipt condiation filed " + e);
 			log.error("limited sctipt condiation filed " + e);
 		}
-		mutableMap.put(remaingScriptsCount,flag);
+		mutableMap.put(remaingScriptsCount, flag);
 		return mutableMap;
 	}
-	
+
 	@Transactional
 	public int getLimitedCountForConfiguration(String testRunNo) {
 		log.info("goto limitScriptExecutionDao class");
@@ -101,60 +103,61 @@ public class LimitScriptExecutionService {
 			log.info("data added successfully");
 		} catch (Exception e) {
 			log.error("testrun data not added " + e);
-			throw new WatsEBSCustomException(600, "Unable to insert the records");
+			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
 		}
 	}
 
 	@Transactional
-	public void sendAlertmail(String name, String fromMail1, String testRunId){
+	public void sendAlertmail(String name, String fromMail1, String testRunId) {
 		try {
-		String toMail = limitScriptExecutionDao.getToMailId(name);
-		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
-		Properties props = System.getProperties();
-		props.put("mail.smtp.host", host);
-		props.put("mail.smtp.port", port);
-		props.put("mail.debug", "true");
-		Session session = Session.getDefaultInstance(props);
-		String subject = "Warning - 80% Limit Completed";
-		String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
-				+ "        <br><br>You have reached 80% of your threshold limit for the number of script execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
-				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
-		Message message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(fromMail));
-		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
-		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
-		message.setSubject(subject);
-		message.setContent(htmlBody,"text/html");
-		message.setSentDate(new Date());
-		Transport.send(message);
-		}catch (Exception e) {
+			String toMail = limitScriptExecutionDao.getToMailId(name);
+			String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
+			Properties props = System.getProperties();
+			props.put("mail.smtp.host", host);
+			props.put("mail.smtp.port", port);
+			props.put("mail.debug", "true");
+			Session session = Session.getDefaultInstance(props);
+			String subject = "Warning - 80% Limit Completed";
+			String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
+					+ "        <br><br>You have reached 80% of your threshold limit for the number of script execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
+					+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(fromMail));
+			message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
+			message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
+			message.setSubject(subject);
+			message.setContent(htmlBody, "text/html");
+			message.setSentDate(new Date());
+			Transport.send(message);
+		} catch (Exception e) {
 			System.out.println("respect alert mail not sent  " + e);
 			log.error("respect alert mail not sent" + e);
 		}
 	}
+
 	@Transactional
 	public void sendExceptionmail(String name, String fromMail1, String testRunId) {
 		try {
-		String toMail = limitScriptExecutionDao.getToMailId(name);
-		String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
-		Properties props = System.getProperties();
-		props.put("mail.smtp.host", host);
-		props.put("mail.smtp.port", port);
-		props.put("mail.debug", "true");
-		Session session = Session.getDefaultInstance(props);
-		String subnect = "Error - 100% Limit Completed";
-		String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
-				+ "        <br><br>You have exceeded your threshold limit for the number of scripts execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
-				+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
-		Message message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(fromMail));
-		message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
-		message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
-		message.setSubject(subnect);
-		message.setContent(htmlBody,"text/html");
-		message.setSentDate(new Date());
-		Transport.send(message);
-		}catch (Exception e) {
+			String toMail = limitScriptExecutionDao.getToMailId(name);
+			String ccMail = limitScriptExecutionDao.getCCmailId(testRunId);
+			Properties props = System.getProperties();
+			props.put("mail.smtp.host", host);
+			props.put("mail.smtp.port", port);
+			props.put("mail.debug", "true");
+			Session session = Session.getDefaultInstance(props);
+			String subnect = "Error - 100% Limit Completed";
+			String htmlBody = "<html><body>" + "        <p>Hi,<br><br>Dear User<b>"
+					+ "        <br><br>You have exceeded your threshold limit for the number of scripts execution. Please reach out to WATS support team to enhance your usage limit.<br><br>"
+					+ "        Regards,<br><b>WATS</b>." + "        </p>" + "    </body>" + "</html>";
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(fromMail));
+			message.setRecipient(RecipientType.TO, new InternetAddress(toMail));
+			message.setRecipient(RecipientType.CC, new InternetAddress(ccMail));
+			message.setSubject(subnect);
+			message.setContent(htmlBody, "text/html");
+			message.setSentDate(new Date());
+			Transport.send(message);
+		} catch (Exception e) {
 			System.out.println("respect execuption mail not sent " + e);
 			log.error("respect execuption mail not sent  " + e);
 		}
@@ -166,18 +169,18 @@ public class LimitScriptExecutionService {
 		String startDate1 = null;
 		String endDate1 = null;
 		try {
-		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy");
-		Date date1 = inputFormat.parse(startDate);
-		Date date2 = inputFormat.parse(endDate);
-		startDate1= outputFormat.format(date1);
-		endDate1= outputFormat.format(date2);
-		System.out.println(startDate1+"enddate"+endDate1);
+			SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+			SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy");
+			Date date1 = inputFormat.parse(startDate);
+			Date date2 = inputFormat.parse(endDate);
+			startDate1 = outputFormat.format(date1);
+			endDate1 = outputFormat.format(date2);
+			System.out.println(startDate1 + "enddate" + endDate1);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return limitScriptExecutionDao.getPassedScriptsCount(startDate1,endDate1);
+		return limitScriptExecutionDao.getPassedScriptsCount(startDate1, endDate1);
 	}
 
 	@Transactional
@@ -185,67 +188,69 @@ public class LimitScriptExecutionService {
 		return vmInstanceDao.getInprogressAndInqueueCount();
 
 	}
+
 	@Transactional
-	public Map<Date,Long> getStarttimeandExecutiontime(String testSetid) {
-		return vmInstanceDao.getStarttimeandExecutiontime(testSetid);	
+	public Map<Date, Long> getStarttimeandExecutiontime(String testSetid) {
+		return vmInstanceDao.getStarttimeandExecutiontime(testSetid);
 	}
+
 	@Transactional
 
 	public void updateTestrunTimes(Date tStarttime, Date tendtime, long tdiffMinutes, String testSetid) {
-		 vmInstanceDao.updateTestrunTimes(tStarttime,tendtime,tdiffMinutes,testSetid);		
+		vmInstanceDao.updateTestrunTimes(tStarttime, tendtime, tdiffMinutes, testSetid);
 	}
+
 	@Transactional
 
 	public void updateTestrunTimes1(Date tendtime, long tdiffMinutes, String testSetid) {
-		 vmInstanceDao.updateTestrunTimes1(tendtime,tdiffMinutes,testSetid);		
-		
+		vmInstanceDao.updateTestrunTimes1(tendtime, tdiffMinutes, testSetid);
+
 	}
-	
+
 	@Transactional
 	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
-		return limitScriptExecutionDao.getFailScriptRunCount(testSetLineId,testSetId);
+		return limitScriptExecutionDao.getFailScriptRunCount(testSetLineId, testSetId);
 	}
 
 	@Transactional
 	public void updateFailScriptRunCount(int failedRunCount, String testSetLineId, String testSetId) {
-		limitScriptExecutionDao.updateFailScriptRunCount(failedRunCount,testSetId,testSetLineId);
+		limitScriptExecutionDao.updateFailScriptRunCount(failedRunCount, testSetId, testSetLineId);
 	}
-
 
 	@Transactional
 	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {
-		return limitScriptExecutionDao.getFailedScriptRunCount(testSetLineId,testSetId);
+		return limitScriptExecutionDao.getFailedScriptRunCount(testSetLineId, testSetId);
 	}
 
 	public void renameFailedFile(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, int failedScriptRunCount) {
 		String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		//String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
+		// String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
 //		String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
 		File file = new File(Folder + pdffileName);
 		String pdfname = pdffileName.substring(0, pdffileName.indexOf(".pdf"));
-		String renameFolder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/"+pdfname+ "_RUN1.pdf");
-		 File renameFile = new File(renameFolder);
-		 boolean flag = file.renameTo(renameFile);
-		  
-	        // if renameTo() return true then if block is
-	        // executed
-	        if (flag == true) {
-	            System.out.println("File Successfully Rename");
-	        }
-	        // if renameTo() return false then else block is
-	        // executed
-	        else {
-	            System.out.println("Operation Failed");
-	        }
+		String renameFolder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
+				+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/" + pdfname + "_RUN1.pdf");
+		File renameFile = new File(renameFolder);
+		boolean flag = file.renameTo(renameFile);
+
+		// if renameTo() return true then if block is
+		// executed
+		if (flag == true) {
+			System.out.println("File Successfully Rename");
+		}
+		// if renameTo() return false then else block is
+		// executed
+		else {
+			System.out.println("Operation Failed");
+		}
 	}
+
 	@Transactional
 	public void updateFaileScriptscount(String testSetLineId, String testSetId) {
-		limitScriptExecutionDao.updateFaileScriptscount(testSetLineId,testSetId);
-		
+		limitScriptExecutionDao.updateFaileScriptscount(testSetLineId, testSetId);
+
 	}
-	
 
 }

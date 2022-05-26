@@ -151,9 +151,9 @@ public class TestScriptExec1Service {
 				}
 			}
 			msgQueueDto.setSuccess(scriptStatus);
-			TestSetLine testSetLines = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
+			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
 					msgQueueDto.getTestSetLineId());
-			msgQueueDto.setStartDate(testSetLines.getExecutionStartTime());
+			msgQueueDto.setStartDate(testSetLine.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = fetchConfigVODetails(msgQueueDto.getTestSetId());
 
 			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
@@ -163,8 +163,6 @@ public class TestScriptExec1Service {
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(msgQueueDto.getTestSetId(),
 					msgQueueDto.getTestSetLineId(), false, false);
 			msgQueueDto.setSuccess(scriptStatus);
-			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(msgQueueDto.getTestSetId(),
-					msgQueueDto.getTestSetLineId());
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
@@ -227,7 +225,8 @@ public class TestScriptExec1Service {
 
 			}
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, msgQueueDto.getStartDate(), enddate);
-			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+//			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+			dataService.updateTestCaseStatus(post, msgQueueDto.getTestSetId(), fetchConfigVO);
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 					fetchConfigVO.getStatus1(), new Date(), enddate);
@@ -250,8 +249,7 @@ public class TestScriptExec1Service {
 			}
 
 		} catch (Exception e) {
-			// e.printStackTrace();
-			throw new WatsEBSCustomException(900, "Unable to generate the reports", e);
+			throw new WatsEBSCustomException(500, "Exception occured while generating the pdf", e);
 		}
 		return new ResponseDto(200, Constants.ERROR, "Fail");
 	}
@@ -321,7 +319,7 @@ public class TestScriptExec1Service {
 			try {
 				folder1.mkdirs();
 			} catch (SecurityException se) {
-				throw new WatsEBSCustomException(700, "Unable to create Directory");
+				throw new WatsEBSCustomException(500, "Exception occured while creating directory", se);
 			}
 		} else {
 
@@ -352,10 +350,12 @@ public class TestScriptExec1Service {
 			String objectStoreScreenShotPath, String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
 		List<String> objNames = null;
+
+		System.out.println(objectStoreScreenShotPath);
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(800, "Unable to access oci/config path");
+			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
 		}
 
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -398,12 +398,13 @@ public class TestScriptExec1Service {
 							outputStream.write(buf, 0, bytesRead);
 						}
 					} catch (IOException e1) {
-						throw new WatsEBSCustomException(801, "Unable to read or write screenshot from Object Storage");
+						throw new WatsEBSCustomException(500,
+								"Exception occured while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(802, "Unable to close Object stroage path");
+			throw new WatsEBSCustomException(500, "Exception occured while closing Object stroage path", e);
 		}
 
 	}
@@ -581,6 +582,8 @@ public class TestScriptExec1Service {
 			i++;
 			Image img = Image.getInstance(
 					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/" + testRunName1 + "/" + image);
+			
+			Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 
 			String status = image.split("_")[6].split("\\.")[0];
 			String scenario = image.split("_")[2];
@@ -589,7 +592,7 @@ public class TestScriptExec1Service {
 			String stepDescription = map.get(steps).getTestRunParamDesc();
 			String inputParam = map.get(steps).getInputParameter();
 			String inputValue = map.get(steps).getInputValue();
-			document.setPageSize(img);
+			document.setPageSize(pageSize);
 			document.newPage();
 
 			String s = "Status:" + " " + status;
@@ -826,6 +829,7 @@ public class TestScriptExec1Service {
 			i++;
 			Image img = Image.getInstance(
 					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/" + testRunName1 + "/" + image);
+			Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 			String sno = image.split("_")[0];
 			String sNo = "Script Number";
 			String scriptNumber1 = image.split("_")[3];
@@ -833,7 +837,7 @@ public class TestScriptExec1Service {
 			String scriptName = image.split("_")[2];
 			String testRunName = image.split("_")[4];
 			if (!sno.equalsIgnoreCase(sno1)) {
-				document.setPageSize(img);
+				document.setPageSize(pageSize);
 				document.newPage();
 				document.add(watsLogo);
 				Anchor target3 = new Anchor("Script Details", font23);
@@ -881,7 +885,7 @@ public class TestScriptExec1Service {
 				document.newPage();
 			} else {
 
-				document.setPageSize(img);
+				document.setPageSize(pageSize);
 				document.newPage();
 			}
 			document.add(watsLogo);
@@ -1012,8 +1016,8 @@ public class TestScriptExec1Service {
 			String report = "Execution Report";
 			Font font23 = FontFactory.getFont(ARIAL, 23);
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-			Rectangle one = new Rectangle(1360, 800);
-			document.setPageSize(one);
+			Rectangle pageSize = new Rectangle(1360, 800);
+			document.setPageSize(pageSize);
 			document.open();
 			logger.info("before enter Images/wats_icon.png1");
 			Image watsLogo = Image.getInstance(watslogo);
@@ -1120,10 +1124,9 @@ public class TestScriptExec1Service {
 				/* Send request to the Client */
 				response = client.putObject(putObjectRequest);
 			}
-
 			return response.toString();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(701, "Unable to upload the pfd to Object store");
+			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 	}
 
