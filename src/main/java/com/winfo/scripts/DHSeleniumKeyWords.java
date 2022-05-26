@@ -10509,7 +10509,7 @@ try {
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		//DH
 		try {
-			if (param1.equalsIgnoreCase("Search for proposed manager")||(param1.equalsIgnoreCase("Select a value"))) {
+			if (param1.equalsIgnoreCase("Search for proposed manager")||(param1.equalsIgnoreCase("Select a value")||(param1.equalsIgnoreCase("Search for a Person")))) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@placeholder='" +param1+ "'][1]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[@placeholder='" +param1+ "'][1]"));
