@@ -11169,17 +11169,17 @@ try {
 					&& (param2.equalsIgnoreCase("Bank") || param2.equalsIgnoreCase("Bank Branch"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("//*[text()='Create Bank Account']/following::label[text()='" + param2 + "'][2]")));
+						By.xpath("(//*[text()='" +param1+ "']/following::label[text()='" + param2 + "']/following::input)[2]")));
 				Thread.sleep(1000);
 				WebElement waittill = driver.findElement(
-						By.xpath("//*[text()='Create Bank Account']/following::label[text()='" + param2 + "'][2]"));
+						By.xpath("(//*[text()='" +param1+ "']/following::label[text()='" + param2 + "']/following::input)[2]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
-				String xpath = "//*[text()='Create Bank Account']/following::label[text()='" + param2 + "'][2]";
+				String xpath = "(//*[text()='param1']/following::label[text()='param2']/following::input)[2]";
                        String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
