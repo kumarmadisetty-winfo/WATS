@@ -402,7 +402,7 @@ public class DataBaseEntryDao {
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		TestSetLine result = (TestSetLine) query.getSingleResult();
-//		em.refresh(result);
+		em.refresh(result);
 
 		return result;
 	}
