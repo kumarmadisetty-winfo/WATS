@@ -594,7 +594,7 @@ public class DataBaseEntryDao {
 				testRunExecutionVO
 						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
 				testRunExecutionVO.setTargetApplicationName(
-						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[23]));
+						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
 		} catch (Exception e) {
