@@ -204,8 +204,7 @@ public class DataBaseEntryDao {
 		try {
 			Session session = em.unwrap(Session.class);
 			String sqlQuery = "Update WIN_TA_TEST_SET_LINES  SET EXECUTION_END_TIME=TO_TIMESTAMP('" + end_time
-					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID ="
-					+ lineId;
+					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID =" + lineId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
@@ -520,8 +519,8 @@ public class DataBaseEntryDao {
 				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
 				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
 				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
-				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "      from\r\n"
-				+ "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
+				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION,\r\n"
+				+ "      from\r\n" + "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
 				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
 				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
 				+ "           win_ta_customers       wtc\r\n" + "     WHERE 1=1\r\n"
@@ -594,7 +593,8 @@ public class DataBaseEntryDao {
 						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				testRunExecutionVO
 						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
-
+				testRunExecutionVO.setTargetApplicationName(
+						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[23]));
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
 		} catch (Exception e) {

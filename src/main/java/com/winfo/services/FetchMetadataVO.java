@@ -38,6 +38,7 @@ public class FetchMetadataVO implements Serializable {
 //added executed_by
     private String executed_by;
 	private String smtp_from_mail;
+	private String targetApplicationName;
 	
  public String getSmtp_from_mail() {
 		return smtp_from_mail;
@@ -259,6 +260,14 @@ public void setConditional_popup(String conditional_popup) {
 	}
 	public void setInput_value(String input_value) {
 		this.input_value = input_value;
+	}
+
+	public String getTargetApplicationName() {
+		return targetApplicationName;
+	}
+
+	public void setTargetApplicationName(String targetApplicationName) {
+		this.targetApplicationName = targetApplicationName;
 	}
 	
 	

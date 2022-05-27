@@ -201,7 +201,7 @@ public class TestScriptExecService {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
 			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
-			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testSetId);
+			FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
@@ -361,7 +361,8 @@ public class TestScriptExecService {
 			dto.setBuckerName(ociBucketName);
 			dto.setOciNameSpace(ociNamespace);
 			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
-			dto.setScriptFileName(environment.getProperty("pyjab.customer.specific.name").split("\\.")[0]);
+			dto.setScriptFileName(fetchMetadataListVO.get(0).getTargetApplicationName().toLowerCase() + "_"
+					+ fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
 
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
@@ -753,8 +754,7 @@ public class TestScriptExecService {
 				}
 			}
 			args.setSuccess(scriptStatus);
-			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(),
-					args.getTestSetLineId());
+			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(), args.getTestSetLineId());
 			args.setStartDate(testSetLine.getExecutionStartTime());
 			args.setStartDate(testSetLine.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args.getTestSetId());
@@ -796,8 +796,7 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(args.getStartDate());
 			fetchConfigVO.setStarttime1(args.getStartDate());
 
-			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
-					: new Date();
+			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime() : new Date();
 
 			if (args.isSuccess()) {
 
@@ -909,7 +908,7 @@ public class TestScriptExecService {
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
-	
+
 	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
 
 		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
