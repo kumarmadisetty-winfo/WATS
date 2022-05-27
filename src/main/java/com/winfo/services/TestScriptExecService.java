@@ -361,7 +361,7 @@ public class TestScriptExecService {
 			dto.setBuckerName(ociBucketName);
 			dto.setOciNameSpace(ociNamespace);
 			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
-			dto.setScriptFileName(fetchMetadataListVO.get(0).getTargetApplicationName().toLowerCase() + "_"
+			dto.setScriptFileName(fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase() + "_"
 					+ fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
 
 			final Context ctx = new Context();
@@ -517,7 +517,11 @@ public class TestScriptExecService {
 
 		}
 		Collections.sort(listArgs);
-		listArgs.stream().map(val -> val.split(SPLIT)[1]).forEach(methodCall::add);
+		listArgs.stream().map(val -> {
+			int indexVal = val.indexOf(SPLIT);
+			val = val.substring(indexVal + 1);
+			return val;
+		}).forEach(methodCall::add);
 		methodCall.add(addQuotes(screenshotPath));
 		methodCall.add(testScriptParamId);
 		return methodCall.toString();
