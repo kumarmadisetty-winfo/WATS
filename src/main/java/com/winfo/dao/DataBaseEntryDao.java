@@ -519,7 +519,7 @@ public class DataBaseEntryDao {
 				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
 				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
 				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
-				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION,\r\n"
+				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION\r\n"
 				+ "      from\r\n" + "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
 				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
 				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
@@ -598,6 +598,7 @@ public class DataBaseEntryDao {
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
 		}
 		return listOfTestRunExecutionVo;
