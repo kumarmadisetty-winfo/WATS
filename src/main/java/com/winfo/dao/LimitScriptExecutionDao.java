@@ -107,7 +107,7 @@ public class LimitScriptExecutionDao {
 			if (results != null && !results.isEmpty()) {
 				logger.info("result" + results.get(0));
 				BigDecimal bigDecimal = results.get(0);
-				id = Integer.parseInt(bigDecimal.toString());
+				id = bigDecimal!=null ? Integer.parseInt(bigDecimal.toString()):0;
 			}
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500,
