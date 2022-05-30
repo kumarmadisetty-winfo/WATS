@@ -18,7 +18,6 @@ import com.lowagie.text.DocumentException;
 import com.winfo.services.TestScriptExec1Service;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.vo.MessageQueueDto;
-import com.winfo.vo.PyJabKafkaDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
 import com.winfo.vo.UpdateScriptParamStatus;
@@ -49,7 +48,7 @@ public class TestScriptExecController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStartScriptStatus")
-	public void updateStartScriptStatus(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult)
+	public void updateStartScriptStatus(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult)
 			throws ClassNotFoundException, SQLException {
 		testScriptExecService.updateStartStatus(args);
 	}
@@ -63,7 +62,7 @@ public class TestScriptExecController {
 
 	@ResponseBody 
 	@RequestMapping(value = "/generateScriptPdf")
-	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody PyJabKafkaDto args, BindingResult bindingResult) {
+	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult) {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 

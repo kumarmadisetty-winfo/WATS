@@ -3,7 +3,6 @@ package com.winfo.dao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Format;
@@ -30,6 +29,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.AuditStageLookup;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
@@ -714,6 +715,23 @@ public class DataBaseEntryDao {
 		cq.orderBy(cb.asc(from.get("lineNumber")));
 		Integer result = em.createQuery(cq).setMaxResults(1).getSingleResult();
 		return result;
+
+	}
+
+	public Integer findAuditStageIdByName(String stageName) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+		Root<AuditStageLookup> from = cq.from(AuditStageLookup.class);
+		Predicate condition = cb.equal(from.get("stageName"), stageName);
+		cq.select(from.get("stageId")).where(condition);
+		Integer result = em.createQuery(cq).getSingleResult();
+		return result;
+
+	}
+	
+	public AuditScriptExecTrail insertAuditScriptExecTrail(AuditScriptExecTrail auditScriptExecTrail) {
+		em.persist(auditScriptExecTrail);
+		return auditScriptExecTrail;
 
 	}
 

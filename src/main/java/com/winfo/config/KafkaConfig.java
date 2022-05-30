@@ -17,9 +17,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.winfo.vo.PyJabKafkaDto;
+import com.winfo.vo.MessageQueueDto;
 
 @Configuration
 public class KafkaConfig {
@@ -37,12 +36,12 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public ProducerFactory<String, PyJabKafkaDto> producerFactory() {
+	public ProducerFactory<String, MessageQueueDto> producerFactory() {
 		return new DefaultKafkaProducerFactory<>(producerConfigs());
 	}
 
 	@Bean
-	public KafkaTemplate<String, PyJabKafkaDto> kafkaTemplate() {
+	public KafkaTemplate<String, MessageQueueDto> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
 	}
 
@@ -58,14 +57,14 @@ public class KafkaConfig {
 	}
 
 	@Bean
-	public ConsumerFactory<String, PyJabKafkaDto> consumerFactory() {
+	public ConsumerFactory<String, MessageQueueDto> consumerFactory() {
 		return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(),
-				new JsonDeserializer<>(PyJabKafkaDto.class));
+				new JsonDeserializer<>(MessageQueueDto.class));
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, PyJabKafkaDto> kafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, PyJabKafkaDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+	public ConcurrentKafkaListenerContainerFactory<String, MessageQueueDto> kafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, MessageQueueDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 		return factory;
 	}

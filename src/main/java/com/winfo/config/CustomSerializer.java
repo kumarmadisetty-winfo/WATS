@@ -6,9 +6,9 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.winfo.vo.PyJabKafkaDto;
+import com.winfo.vo.MessageQueueDto;
 
-public class CustomSerializer implements Serializer<PyJabKafkaDto> {
+public class CustomSerializer implements Serializer<MessageQueueDto> {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
@@ -21,7 +21,7 @@ public class CustomSerializer implements Serializer<PyJabKafkaDto> {
 	}
 
 	@Override
-	public byte[] serialize(String topic, PyJabKafkaDto data) {
+	public byte[] serialize(String topic, MessageQueueDto data) {
 		try {
 			if (data == null) {
 				System.out.println("Null received at serializing");

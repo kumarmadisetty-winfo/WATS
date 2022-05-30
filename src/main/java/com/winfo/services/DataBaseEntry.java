@@ -4,7 +4,10 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -12,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 
@@ -22,6 +27,7 @@ import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 @RefreshScope
 @Transactional
 public class DataBaseEntry {
+	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	@Autowired
 	DataBaseEntryDao dao;
 
@@ -59,9 +65,9 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 	}
-	
+
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
-		return dao.getStatusAndSeqNum(testSetId);	
+		return dao.getStatusAndSeqNum(testSetId);
 	}
 
 	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
@@ -97,7 +103,7 @@ public class DataBaseEntry {
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
 		dao.updateExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
-		
+
 		dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 	}
 
@@ -173,7 +179,7 @@ public class DataBaseEntry {
 	public String pdfGenerationEnabled(long testSetId) {
 		return dao.getTestSetPdfGenerationEnableStatus(testSetId);
 	}
-	
+
 	public TestSetLine getTestSetLinesRecord(String testSetId, String testSetLineId) {
 		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
 	}
@@ -202,7 +208,7 @@ public class DataBaseEntry {
 			return true;
 		}
 	}
-	
+
 	public List<Object[]> getSeqNumAndStatus(String testSetId) {
 		return dao.getStatusAndSeqNum(testSetId);
 	}
@@ -221,5 +227,21 @@ public class DataBaseEntry {
 
 	public Date findMinExecutionStartDate(long testSetId) {
 		return dao.findMinExecutionStartDate(testSetId);
+	}
+
+
+	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage) {
+		try {
+			auditTrial.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
+			auditTrial.setEventTime(new Date());
+			dao.insertAuditScriptExecTrail(auditTrial);
+		} catch (Exception e) {
+			// no need of throwing exception, just print
+			logger.error(
+					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
+					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
+			e.printStackTrace();
+		}
+		return auditTrial;
 	}
 }

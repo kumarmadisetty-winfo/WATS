@@ -23,13 +23,10 @@ public class MessageQueueDto implements Serializable {
 	private boolean success;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private Date startDate;
-	private String localScreenshotPath;
-	private String obJectStoreScreenshotPath;
 	private boolean manualTrigger;
-	
+
 	public MessageQueueDto() {
 	}
-	
 
 	public MessageQueueDto(@NotNull String testSetId, @NotNull String testSetLineId, String scriptPath,
 			String localScreenshotPath, String obJectStoreScreenshotPath) {
@@ -37,8 +34,6 @@ public class MessageQueueDto implements Serializable {
 		this.testSetId = testSetId;
 		this.testSetLineId = testSetLineId;
 		this.scriptPath = scriptPath;
-		this.localScreenshotPath = localScreenshotPath;
-		this.obJectStoreScreenshotPath = obJectStoreScreenshotPath;
 	}
 
 	public String getTestSetId() {
@@ -65,7 +60,6 @@ public class MessageQueueDto implements Serializable {
 		this.scriptPath = scriptPath;
 	}
 
-
 	public boolean isSuccess() {
 		return success;
 	}
@@ -82,32 +76,12 @@ public class MessageQueueDto implements Serializable {
 		this.startDate = startDate;
 	}
 
-	public String getLocalScreenshotPath() {
-		return localScreenshotPath;
-	}
-
-	public void setLocalScreenshotPath(String localScreenshotPath) {
-		this.localScreenshotPath = localScreenshotPath;
-	}
-
-	public String getObJectStoreScreenshotPath() {
-		return obJectStoreScreenshotPath;
-	}
-
-	public void setObJectStoreScreenshotPath(String obJectStoreScreenshotPath) {
-		this.obJectStoreScreenshotPath = obJectStoreScreenshotPath;
-	}
-
-
 	public boolean isManualTrigger() {
 		return manualTrigger;
 	}
 
-
 	public void setManualTrigger(boolean manualTrigger) {
 		this.manualTrigger = manualTrigger;
 	}
-
-
 
 }

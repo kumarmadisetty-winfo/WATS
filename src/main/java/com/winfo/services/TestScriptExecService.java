@@ -35,6 +35,7 @@ import java.util.SortedMap;
 import java.util.StringJoiner;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -102,16 +103,18 @@ import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
+import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
-import com.winfo.vo.PyJabKafkaDto;
+import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.UpdateScriptParamStatus;
@@ -181,7 +184,7 @@ public class TestScriptExecService {
 	DynamicRequisitionNumber dynamicnumber;
 
 	@Autowired
-	private KafkaTemplate<String, PyJabKafkaDto> kafkaTemp;
+	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;
 
 	@Autowired
 	PyJabActionRepo actionRepo;
@@ -292,7 +295,10 @@ public class TestScriptExecService {
 
 		System.out
 				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
-
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTest_set_line_id()))
+				.triggeredBy(fetchMetadataListVO.get(0).getExecuted_by()).correlationId(UUID.randomUUID().toString())
+				.build(), AUDIT_TRAIL_STAGES.RR);
 		try {
 
 			String userName = null;
@@ -361,8 +367,9 @@ public class TestScriptExecService {
 			dto.setBuckerName(ociBucketName);
 			dto.setOciNameSpace(ociNamespace);
 			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
-			dto.setScriptFileName(fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase() + "_"
-					+ fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
+			dto.setScriptFileName(
+					fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase() + "_"
+							+ fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
 
 			final Context ctx = new Context();
 			ctx.setVariable("dto", dto);
@@ -373,11 +380,13 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
 			uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
+			dataBaseEntry.insertScriptExecAuditRecord(auditTrial,AUDIT_TRAIL_STAGES.SGC);
+			
 			logger.info(
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
-			this.kafkaTemp.send(topic, new PyJabKafkaDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
+			this.kafkaTemp.send(topic, new MessageQueueDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
 					screenShotFolderPath, objectStoreScreenShotPath));
 		} catch (Exception e) {
 			throw e;
@@ -747,7 +756,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	public ResponseDto generateTestScriptLineIdReports(PyJabKafkaDto args) {
+	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto args) {
 		try {
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
 			if (scriptStatus == null) {
@@ -1576,7 +1585,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	public void updateStartStatus(PyJabKafkaDto args) throws ClassNotFoundException, SQLException {
+	public void updateStartStatus(MessageQueueDto args) throws ClassNotFoundException, SQLException {
 		dataBaseEntry.updateInProgressScriptStatus(null, null, args.getTestSetLineId());
 		dataBaseEntry.updateStartTime(null, args.getTestSetLineId(), args.getTestSetId(), args.getStartDate());
 	}
