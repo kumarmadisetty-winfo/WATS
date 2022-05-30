@@ -73,13 +73,13 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.Alert;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 //import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -3634,11 +3634,52 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				System.out.println(fetchConfigVO.getSharepoint_drive_id());
 				System.out.println(fetchConfigVO.getSharepoint_item_id());
 				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+				
+				
+
+				//SITE-ID
+				ResponseEntity<Object> response1 = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/winfoconsulting.sharepoint.com:/sites/WATS120",
+						HttpMethod.GET, uploadSessionRequest, Object.class);
+				
+				Map<String, Object> linkedMap1 = response1.getBody() != null ? (LinkedHashMap<String, Object>) response1.getBody() : null;
+				String id = linkedMap1 != null ? StringUtils.convertToString(linkedMap1.get("id").toString().split(",")[1]) : null;
+				
+				
+				//DRIVE-ID
+				ResponseEntity<Object> response2 = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+id+"/drives",
+						HttpMethod.GET, uploadSessionRequest, Object.class);
+				
+				Map<String, Object> linkedMap2 = response2.getBody() != null ? (LinkedHashMap<String, Object>) response2.getBody() : null;
+//				String id1 = linkedMap2 != null ? StringUtils.convertToString(linkedMap2.get("value")) : null;
+				
+//				for(Map<String,>)
+				
+				List<Map<String,String>> list = (List<Map<String,String>>) linkedMap2.get("value");
+				
+				String id1 = null;
+				for(Map<String,String> map : list) {
+					if("Test_Library".equalsIgnoreCase(map.get("name"))) {
+						id1 = map.get("id");
+						break;
+					}
+				}
+				
+				System.out.println("id for Test_Library "+id1);
+				
+				//
+				ResponseEntity<Object> response3 = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
+						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
+						HttpMethod.POST, uploadSessionRequest, Object.class);
+				
 				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
 						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
 						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
+				
+				
 				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
@@ -3663,6 +3704,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 	}
+
 
 	public String getAccessTokenPdf(FetchConfigVO fetchConfigVO) {
 		String acessToken = null;
