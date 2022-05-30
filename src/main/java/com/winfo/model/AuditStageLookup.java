@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "audit_script_execution_trail")
+@Table(name = "audit_stage_lookup")
 public class AuditStageLookup {
 
 	@Id

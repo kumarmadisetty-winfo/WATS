@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lowagie.text.DocumentException;
-import com.winfo.services.TestScriptExec1Service;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.ResponseDto;
@@ -27,9 +26,7 @@ public class TestScriptExecController {
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
-	@Autowired
-	TestScriptExec1Service testScriptExec1Service;
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript")
 	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
@@ -56,8 +53,7 @@ public class TestScriptExecController {
 	@ResponseBody
 	@RequestMapping(value = "/updateEndScriptStatus")
 	public void updateEndScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult) {
-		testScriptExec1Service.generateTestScriptLineIdReports(msgQueueDto);
-//		testScriptExecService.generateTestScriptLineIdReports(args);
+		testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
 	}
 
 	@ResponseBody 
@@ -88,8 +84,7 @@ public class TestScriptExecController {
 	@ResponseBody
 	@RequestMapping(value = "/generateTestRunPdfs/{testSetId}")
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
-		return testScriptExec1Service.generateTestRunPdf(testSetId);
-//		return testScriptExecService.generateTestRunPdf(testSetId);
+		return testScriptExecService.generateTestRunPdf(testSetId);
 	}
 
 	@ResponseBody
