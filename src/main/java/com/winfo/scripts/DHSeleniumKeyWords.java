@@ -4927,7 +4927,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					//throw e;
 					}
 				try {
-					if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Action")) {
+					if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Action") || (param1.equalsIgnoreCase("Locations")) ){
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + keysToSend+ "')]/following::*[@title='" + param2 + "'][1]")));
 					WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" + keysToSend+ "')]/following::*[@title='" + param2 + "'][1]"));
