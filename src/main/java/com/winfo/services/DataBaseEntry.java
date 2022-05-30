@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -229,12 +228,15 @@ public class DataBaseEntry {
 		return dao.findMinExecutionStartDate(testSetId);
 	}
 
-
 	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage) {
 		try {
-			auditTrial.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
-			auditTrial.setEventTime(new Date());
-			dao.insertAuditScriptExecTrail(auditTrial);
+			logger.info("Audit Inserting stage {}", stage.getLabel());
+			AuditScriptExecTrail auditTrialNew = AuditScriptExecTrail.builder()
+					.correlationId(auditTrial.getCorrelationId()).testSetLineId(auditTrial.getTestSetLineId())
+					.triggeredBy(auditTrial.getTriggeredBy()).build();
+			auditTrialNew.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
+			auditTrialNew.setEventTime(new Date());
+			dao.insertAuditScriptExecTrail(auditTrialNew);
 		} catch (Exception e) {
 			// no need of throwing exception, just print
 			logger.error(

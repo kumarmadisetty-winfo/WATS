@@ -3,6 +3,7 @@ package com.winfo.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,12 +12,14 @@ import javax.persistence.Table;
 public class AuditScriptExecTrail {
 
 	@Id
+	@GeneratedValue
+	private int id;
 	private String correlationId;
 	private Integer testSetLineId;
 	private Integer stageId;
 	private Date eventTime;
 	private String triggeredBy;
-	
+
 	public String getCorrelationId() {
 		return correlationId;
 	}
@@ -113,6 +116,9 @@ public class AuditScriptExecTrail {
 		this.stageId = builder.stageId;
 		this.eventTime = builder.eventTime;
 		this.triggeredBy = builder.triggeredBy;
+	}
+
+	public AuditScriptExecTrail() {
 	}
 
 	public static Builder builder() {
