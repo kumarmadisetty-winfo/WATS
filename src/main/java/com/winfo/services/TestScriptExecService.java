@@ -820,7 +820,7 @@ public class TestScriptExecService {
 			}
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
 //			dataBaseEntry.updateSubscription();
-			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+//			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
 			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
