@@ -3609,6 +3609,52 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			System.out.println(imageDir);
+			
+			
+			RestTemplate restTemplate = new RestTemplate();
+			
+			// Outer header
+			HttpHeaders uploadSessionHeader = new HttpHeaders();
+			// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
+			uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
+			System.out.println(fetchConfigVO.getSharepoint_drive_id());
+			System.out.println(fetchConfigVO.getSharepoint_item_id());
+			HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+			
+			
+			//SITE-ID
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/winfoconsulting.sharepoint.com:/sites/WATS120",
+					HttpMethod.GET, uploadSessionRequest, Object.class);
+			
+			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody() : null;
+			String siteId = siteDetailsMap != null ? StringUtils.convertToString(siteDetailsMap.get("id").toString().split(",")[1]) : null;
+			
+			
+			//DRIVE-ID
+			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+siteId+"/drives",
+					HttpMethod.GET, uploadSessionRequest, Object.class);
+			
+			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) driveDetailsResponse.getBody() : null;
+			
+			List<Map<String,String>> list = (List<Map<String,String>>) driveDetailsMap.get("value");
+			
+			String driveId = null;
+			for(Map<String,String> map : list) {
+				if("Test_Library".equalsIgnoreCase(map.get("name"))) {
+					driveId = map.get("id");
+					break;
+				}
+			}
+			
+			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
+			
+			//SITE-ID
+			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test",
+					HttpMethod.GET, uploadSessionRequest, Object.class);
+			
+			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody() : null;
+			
+			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
 				System.out.println(imageFileName);
@@ -3624,60 +3670,24 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 				input.close();
 				byte[] data = bos.toByteArray();
-				RestTemplate restTemplate = new RestTemplate();
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
 				bodyMap.add("user-file", data);
-				// Outer header
-				HttpHeaders uploadSessionHeader = new HttpHeaders();
-				// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
-				uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
-				System.out.println(fetchConfigVO.getSharepoint_drive_id());
-				System.out.println(fetchConfigVO.getSharepoint_item_id());
-				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
-				
+
 				
 
-				//SITE-ID
-				ResponseEntity<Object> response1 = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/winfoconsulting.sharepoint.com:/sites/WATS120",
-						HttpMethod.GET, uploadSessionRequest, Object.class);
-				
-				Map<String, Object> linkedMap1 = response1.getBody() != null ? (LinkedHashMap<String, Object>) response1.getBody() : null;
-				String id = linkedMap1 != null ? StringUtils.convertToString(linkedMap1.get("id").toString().split(",")[1]) : null;
-				
-				
-				//DRIVE-ID
-				ResponseEntity<Object> response2 = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+id+"/drives",
-						HttpMethod.GET, uploadSessionRequest, Object.class);
-				
-				Map<String, Object> linkedMap2 = response2.getBody() != null ? (LinkedHashMap<String, Object>) response2.getBody() : null;
-//				String id1 = linkedMap2 != null ? StringUtils.convertToString(linkedMap2.get("value")) : null;
-				
-//				for(Map<String,>)
-				
-				List<Map<String,String>> list = (List<Map<String,String>>) linkedMap2.get("value");
-				
-				String id1 = null;
-				for(Map<String,String> map : list) {
-					if("Test_Library".equalsIgnoreCase(map.get("name"))) {
-						id1 = map.get("id");
-						break;
-					}
-				}
-				
-				System.out.println("id for Test_Library "+id1);
-				
-				//
-				ResponseEntity<Object> response3 = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
-						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
-						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
-						HttpMethod.POST, uploadSessionRequest, Object.class);
+
 				
 				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
-						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
-						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ driveId + "/items/" + itemId
+						+ ":/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
+				
+//				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+//						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
+//						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
+//						HttpMethod.POST, uploadSessionRequest, Object.class);
 				
 				
 				System.out.println(response);
