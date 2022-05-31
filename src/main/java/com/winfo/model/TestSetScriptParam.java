@@ -70,11 +70,11 @@ public class TestSetScriptParam {
 	private String lastUpdatedBy;
 
 	@Column(name = "CREATION_DATE")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
 
 	@Column(name = "UPDATE_DATE")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateDate;
 
 	@Column(name = "INPUT_VALUE")

@@ -103,8 +103,8 @@ import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
-import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
@@ -381,14 +381,15 @@ public class TestScriptExecService {
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
 					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
 			uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
-			dataBaseEntry.insertScriptExecAuditRecord(auditTrial,AUDIT_TRAIL_STAGES.SGC);
-			
+			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC);
+
 			logger.info(
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
 							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
-			this.kafkaTemp.send(topic, new MessageQueueDto(test_set_id, test_set_line_id, scriptPathForPyJabScript,
-					screenShotFolderPath, objectStoreScreenShotPath));
+			this.kafkaTemp.send(topic,
+					new MessageQueueDto(test_set_id, test_set_line_id, scriptPathForPyJabScript, auditTrial));
+			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -636,7 +637,6 @@ public class TestScriptExecService {
 		}
 	}
 
-
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String TestRunName,
 			String objectStoreScreenShotPath, String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
@@ -792,7 +792,8 @@ public class TestScriptExecService {
 					fetchMetadataListVO.get(0).getSeq_num() + "_");
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
-			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime() : new Date();
+			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
+					: dataBaseEntry.findStepMaxUpdatedDate(args.getTestSetLineId(), args.getStartDate());
 			String pdfName = null;
 			if (args.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
@@ -818,16 +819,17 @@ public class TestScriptExecService {
 						+ "_RUN" + failedScriptRunCount + ".pdf";
 
 			}
+
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
 //			dataBaseEntry.updateSubscription();
 //			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
 			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-					fetchConfigVO.getStatus1(), new Date(), enddate);
-
+					fetchConfigVO.getStatus1(), testSetLine.getExecutionStartTime(), enddate);
 			// final reports generation
 			if (!args.isManualTrigger()) {
+
 				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
 					boolean runFinalPdf = dataBaseEntry

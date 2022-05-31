@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.winfo.model.AuditScriptExecTrail;
 
 @JsonInclude(Include.NON_NULL)
 public class MessageQueueDto implements Serializable {
@@ -24,16 +25,18 @@ public class MessageQueueDto implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private Date startDate;
 	private boolean manualTrigger;
+	private AuditScriptExecTrail autditTrial;
 
 	public MessageQueueDto() {
 	}
 
 	public MessageQueueDto(@NotNull String testSetId, @NotNull String testSetLineId, String scriptPath,
-			String localScreenshotPath, String obJectStoreScreenshotPath) {
+			AuditScriptExecTrail autditTrial) {
 		super();
 		this.testSetId = testSetId;
 		this.testSetLineId = testSetLineId;
 		this.scriptPath = scriptPath;
+		this.autditTrial = autditTrial;
 	}
 
 	public String getTestSetId() {
@@ -82,6 +85,14 @@ public class MessageQueueDto implements Serializable {
 
 	public void setManualTrigger(boolean manualTrigger) {
 		this.manualTrigger = manualTrigger;
+	}
+
+	public AuditScriptExecTrail getAutditTrial() {
+		return autditTrial;
+	}
+
+	public void setAutditTrial(AuditScriptExecTrail autditTrial) {
+		this.autditTrial = autditTrial;
 	}
 
 }

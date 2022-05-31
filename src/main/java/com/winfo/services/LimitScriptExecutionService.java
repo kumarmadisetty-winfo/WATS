@@ -99,7 +99,9 @@ public class LimitScriptExecutionService {
 			executionAudit.setExecutionstarttime(startDate);
 			executionAudit.setExecutionendtime(endDate);
 			executionAudit.setStatus(status);
-			limitScriptExecutionDao.insertTestrundata(executionAudit);
+			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
+				limitScriptExecutionDao.insertTestrundata(executionAudit);
+			}
 			log.info("data added successfully");
 		} catch (Exception e) {
 			log.error("testrun data not added " + e);

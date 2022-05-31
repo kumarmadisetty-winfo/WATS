@@ -49,10 +49,12 @@ public class DataBaseEntryDao {
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status, String message) {
+		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String updateDateFormatStr = updateDateFormat.format(new Date());
 		try {
-			Query query = em.createQuery("Update TestSetScriptParam set lineExecutionStatus='" + status
-					+ "',line_error_message='" + message.replace("'", "''") + "' where testRunScriptParamId=" + "'"
-					+ testScriptParamId + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set updateDate=TO_TIMESTAMP('" + updateDateFormatStr
+					+ "','YYYY-MM-DD HH24:MI:SS'), lineExecutionStatus='" + status + "',line_error_message='"
+					+ message.replace("'", "''") + "' where testRunScriptParamId=" + "'" + testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500,
@@ -62,10 +64,13 @@ public class DataBaseEntryDao {
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status, String value, String message) {
+		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String updateDateFormatStr = updateDateFormat.format(new Date());
 		try {
-			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
-					+ "',input_value='" + value + "',line_error_message='" + message.replace("'", "''")
-					+ "' where test_script_param_id='" + testScriptParamId + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set updateDate=TO_TIMESTAMP('" + updateDateFormatStr
+					+ "','YYYY-MM-DD HH24:MI:SS'),line_execution_status='" + status + "',input_value='" + value
+					+ "',line_error_message='" + message.replace("'", "''") + "' where test_script_param_id='"
+					+ testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
@@ -706,6 +711,17 @@ public class DataBaseEntryDao {
 
 	}
 
+	public Date findStepMaxUpdatedDate(String testSetLineId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
+		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
+		Predicate condition = cb.equal(from.get("testSetLine").get("testRunScriptId"), testSetLineId);
+
+		cq.select(cb.greatest(from.<Date>get("updateDate"))).where(condition);
+		return em.createQuery(cq).getSingleResult();
+
+	}
+
 	public Integer findFirstStepIdInScript(String testSetLineId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
@@ -728,7 +744,7 @@ public class DataBaseEntryDao {
 		return result;
 
 	}
-	
+
 	public AuditScriptExecTrail insertAuditScriptExecTrail(AuditScriptExecTrail auditScriptExecTrail) {
 		em.persist(auditScriptExecTrail);
 		return auditScriptExecTrail;

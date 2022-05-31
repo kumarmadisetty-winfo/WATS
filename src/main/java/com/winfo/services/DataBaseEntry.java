@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,5 +247,15 @@ public class DataBaseEntry {
 			e.printStackTrace();
 		}
 		return auditTrial;
+	}
+
+	public Date findStepMaxUpdatedDate(String testSetLineId, Date startDate) {
+		Date endDate = null;
+		try {
+			endDate = dao.findStepMaxUpdatedDate(testSetLineId);
+		} catch (NoResultException e) {
+			endDate = startDate;
+		}
+		return endDate != null ? endDate : startDate;
 	}
 }
