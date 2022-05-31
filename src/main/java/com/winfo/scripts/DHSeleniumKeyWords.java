@@ -18496,6 +18496,12 @@ try {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		try {
+			String text = driver.findElement(By.xpath("//div[contains(text(),'Error')]")).getText();
+			return text;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		return null;
 	}
 
