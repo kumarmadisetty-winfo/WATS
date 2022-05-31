@@ -4772,7 +4772,31 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void selectAValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		
+		try {
+
+			if(param1.equalsIgnoreCase("Locations")){ 
+			Thread.sleep(5000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + param1
+			+ "')]/following::*[normalize-space(text())='" + keysToSend + "'][1]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" + param1
+			+ "')]/following::*[normalize-space(text())='" + keysToSend + "'][1]"));
+			Thread.sleep(2000);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(5000);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked selectAValue" + scripNumber);
+			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during selectAValue" + scripNumber);
+			System.out.println(e);
+			}
 		//DH 46
 		try {
 			if(param1.equalsIgnoreCase("shopByCategoryPopup")) {
@@ -4927,7 +4951,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					//throw e;
 					}
 				try {
-					if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Action") || (param1.equalsIgnoreCase("Locations")) ){
+					if(param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Action")){
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'" + keysToSend+ "')]/following::*[@title='" + param2 + "'][1]")));
 					WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),'" + keysToSend+ "')]/following::*[@title='" + param2 + "'][1]"));
