@@ -16,12 +16,12 @@ public class ScriptXpathService {
 	WatsXpathDao dao;
 	
 	@Transactional
-	public void saveXpathParams(String scriptID, String metadataID, String xpath) {
-//		dao.saveXpathParams(scriptID,metadataID,xpath);
+	public void saveXpathParams(String scriptID, String line_number, String xpath) {
+		dao.saveXpathParams(scriptID,line_number,xpath);
 	}
 	@Transactional
-	public String getXpathParams(String scriptID, String metadataID) {
-		return dao.getXpathParams(scriptID,metadataID);
+	public String getXpathParams(String scriptID, String line_number) {
+		return dao.getXpathParams(scriptID,line_number);
 	}
 	@Transactional
 	public String checkValidScript(String scriptID) {
