@@ -423,17 +423,17 @@ public class RunAutomation {
 //			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 //			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,scriptStatus);
 			
-			//driver = deriverConfiguration.getWebDriver(fetchConfigVO);
+			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
-			String os=dataBaseEntry.getNodeOs(Integer.parseInt(fetchMetadataListsVO.get(0).getScript_id()));
-			if(os!=null) {
-				driver = deriverConfiguration.getWebDriver(fetchConfigVO,os);
-			}
-			else {
-				isDriverError=true;
-				throw new Exception();
-			}
+//			String os=dataBaseEntry.getNodeOs(Integer.parseInt(fetchMetadataListsVO.get(0).getScript_id()));
+//			if(os!=null) {
+//				driver = deriverConfiguration.getWebDriver(fetchConfigVO,os);
+//			}
+//			else {
+//				isDriverError=true;
+//				throw new Exception();
+//			}
 			//isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,scriptStatus);
 
