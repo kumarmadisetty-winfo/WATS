@@ -1,12 +1,11 @@
 package com.winfo.services;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.NoResultException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +22,23 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.vo.EmailParamDto;
 
 @Service
 @RefreshScope
 @Transactional
 public class DataBaseEntry {
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
+	private static final String COMPLETED = "Completed";
+
 	@Autowired
 	DataBaseEntryDao dao;
 
 	@Autowired
 	CopyTestRunDao copyTestrunDao;
+
+	@Autowired
+	SendMailServiceImpl sendMailServiceImpl;
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
@@ -95,17 +100,68 @@ public class DataBaseEntry {
 		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
 	}
 
+	public void updateSubscription() {
+		List<Object[]> noOfHits = dao.getSumDetailsFromSubscription();
+		List<Object[]> subscriptionDtls = dao.getSubscriptionDetails();
+
+		BigDecimal sumQuantity = (BigDecimal) noOfHits.get(0)[0];
+		BigDecimal sumExecuted = (BigDecimal) noOfHits.get(0)[1];
+//		BigDecimal sumBalance = (BigDecimal) noOfHits.get(0)[2];
+
+		BigDecimal subsId = (BigDecimal) subscriptionDtls.get(0)[0];
+		BigDecimal executed = (BigDecimal) subscriptionDtls.get(0)[1];
+		BigDecimal balance = (BigDecimal) subscriptionDtls.get(0)[2];
+
+		Integer sum = dao.findGraceAllowance(subsId);
+
+		Integer graceValue = (sum == null) ? 0 : sum;
+
+		if (sumQuantity.intValue() + graceValue.intValue() - sumExecuted.intValue() > 0) {
+			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
+		}
+
+		if (Math.abs(balance.intValue() - 1) >= graceValue && (balance.intValue() - 1) <= 0) {
+			dao.updateSubscriptionStatus(COMPLETED, subsId);
+		}
+
+	}
+
 	@Transactional
-	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO) {
-		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
-				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(),
-				fetchConfigVO.getEndtime());
+	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
+			EmailParamDto emailParam) {
+
 		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
+		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
+				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(),
+				fetchScriptVO.getP_script_id());
 		dao.updateExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
 
-		dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
+		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
+
+		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(fetchScriptVO.getP_test_set_id());
+		emailParam.setRequestCount(requestCount.intValue());
+		if (requestCount.intValue() <= responseCount) {
+			dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
+			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
+			sendMailServiceImpl.sendMail(emailParam);
+		} else {
+			Integer inProgressCount = dao.getCountOfInProgressScript(fetchScriptVO.getP_test_set_id());
+			if (inProgressCount.equals(0)) {
+				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			}
+		}
+	}
+
+	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
+		dao.getPassAndFailCount(testSetId, emailParam);
+
+	}
+
+	public void getUserAndPrjManagerName(String userName, String testSetId, EmailParamDto emailParam) {
+		dao.getUserAndPrjManagerName(userName, testSetId, emailParam);
 	}
 
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,

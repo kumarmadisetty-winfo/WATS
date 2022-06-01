@@ -115,6 +115,7 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.vo.EmailParamDto;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
@@ -805,8 +806,6 @@ public class TestScriptExecService {
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
 				post.setP_status("Fail");
-//				int failedScriptRunCount = limitScriptExecutionService
-//						.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 				int failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
@@ -821,10 +820,18 @@ public class TestScriptExecService {
 			}
 
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
-//			dataBaseEntry.updateSubscription();
-//			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+			
 			dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
-			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
+//			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
+
+			/* Email processing Updating subscription table code */
+			if (!args.isManualTrigger()) {
+				dataBaseEntry.updateSubscription();
+				EmailParamDto emailParam = new EmailParamDto();
+				emailParam.setTestSetName(fetchMetadataListVO.get(0).getTest_run_name());
+				emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecuted_by());
+				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, emailParam);
+			}
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
 					fetchConfigVO.getStatus1(), testSetLine.getExecutionStartTime(), enddate);
