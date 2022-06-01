@@ -795,16 +795,16 @@ public class TestScriptExecService {
 			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
 					: dataBaseEntry.findStepMaxUpdatedDate(args.getTestSetLineId(), args.getStartDate());
 			String pdfName = null;
+			fetchConfigVO.setEndtime(enddate);
+
 			if (args.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ ".pdf";
 				post.setP_status("Pass");
-				fetchConfigVO.setEndtime(enddate);
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
 				post.setP_status("Fail");
-				fetchConfigVO.setEndtime(enddate);
 //				int failedScriptRunCount = limitScriptExecutionService
 //						.getFailedScriptRunCount(msgQueueDto.getTestSetLineId(), msgQueueDto.getTestSetId());
 				int failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
@@ -823,6 +823,7 @@ public class TestScriptExecService {
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
 //			dataBaseEntry.updateSubscription();
 //			dataBaseEntry.updateSetLinesStatusAndTestSetPath(post, fetchConfigVO);
+			dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
 			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
