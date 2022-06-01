@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,6 +61,12 @@ public class TestScriptExecController {
 	@RequestMapping(value = "/generateScriptPdf")
 	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult) {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
+	}
+	
+	
+	@KafkaListener(topics = "wats-not-reachable", groupId = "wats-group")
+	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) {
+		testScriptExecService.generateTestScriptLineIdReports(event);
 	}
 
 	@ResponseBody

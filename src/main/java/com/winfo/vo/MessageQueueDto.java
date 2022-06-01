@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 
 @JsonInclude(Include.NON_NULL)
 public class MessageQueueDto implements Serializable {
@@ -26,6 +27,7 @@ public class MessageQueueDto implements Serializable {
 	private Date startDate;
 	private boolean manualTrigger;
 	private AuditScriptExecTrail autditTrial;
+	private AUDIT_TRAIL_STAGES stage;
 
 	public MessageQueueDto() {
 	}
@@ -93,6 +95,14 @@ public class MessageQueueDto implements Serializable {
 
 	public void setAutditTrial(AuditScriptExecTrail autditTrial) {
 		this.autditTrial = autditTrial;
+	}
+
+	public AUDIT_TRAIL_STAGES getStage() {
+		return stage;
+	}
+
+	public void setStage(AUDIT_TRAIL_STAGES stage) {
+		this.stage = stage;
 	}
 
 }

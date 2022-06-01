@@ -62,6 +62,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -830,6 +831,7 @@ public class TestScriptExecService {
 					fetchConfigVO.getStatus1(), testSetLine.getExecutionStartTime(), enddate);
 			// final reports generation
 			if (!args.isManualTrigger()) {
+				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(),AUDIT_TRAIL_STAGES.ERG);
 
 				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
@@ -1834,6 +1836,11 @@ public class TestScriptExecService {
 			System.out.println("Not able to upload the pdf");
 			e.printStackTrace();
 		}
+	}
+
+	@KafkaListener(topics = "update-audit-logs", groupId = "wats-group")
+	public void consumeFromTopic(MessageQueueDto event) {
+		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage());
 	}
 
 }
