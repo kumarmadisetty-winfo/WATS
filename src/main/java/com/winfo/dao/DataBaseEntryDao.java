@@ -297,13 +297,15 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateTestSetLineStatus(String status, String testSetLineScriptPath, String testSetId,
-			String testSetLineId, String scriptId) {
+			String testSetLineId, String scriptId, Date endDate) {
+		Format startformat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
+		String endTime = startformat.format(endDate);
 
 		try {
 			Session session = em.unwrap(Session.class);
 			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status
 					+ "', TEST_SET_LINE_SCRIPT_PATH=REPLACE('" + testSetLineScriptPath
-					+ "','AAA','&') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID=" + testSetLineId
+					+ "','AAA','&'), EXECUTION_END_TIME=TO_TIMESTAMP('"+ endTime+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID=" + testSetLineId
 					+ " AND SCRIPT_ID=" + scriptId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
@@ -327,7 +329,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
+	public void insertExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
 		Format dateFormat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
 		String startTime = dateFormat.format(startDate);
 		String endTime = dateFormat.format(endDate);

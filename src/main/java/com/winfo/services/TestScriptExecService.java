@@ -115,7 +115,6 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
-import com.winfo.vo.EmailParamDto;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
@@ -797,11 +796,16 @@ public class TestScriptExecService {
 					fetchMetadataListVO.get(0).getSeq_num() + "_");
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
-			Date enddate = testSetLine.getExecutionEndTime() != null ? testSetLine.getExecutionEndTime()
-					: dataBaseEntry.findStepMaxUpdatedDate(args.getTestSetLineId(), args.getStartDate());
+			Date enddate = null;
+			boolean isEndDateUpdated = false;
+			if (testSetLine.getExecutionEndTime() != null) {
+				isEndDateUpdated = true;
+				enddate = testSetLine.getExecutionEndTime();
+			} else {
+				enddate = dataBaseEntry.findStepMaxUpdatedDate(args.getTestSetLineId(), args.getStartDate());
+			}
 			String pdfName = null;
 			fetchConfigVO.setEndtime(enddate);
-
 			if (args.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
 						+ ".pdf";
@@ -822,23 +826,15 @@ public class TestScriptExecService {
 						+ "_RUN" + failedScriptRunCount + ".pdf";
 
 			}
-
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
-
-			dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
+			dataBaseEntry.updateTestCaseEndDate(post, enddate);
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 
 			/* Email processing Updating subscription table code */
-			if (!args.isManualTrigger()) {
-				dataBaseEntry.updateSubscription();
-				EmailParamDto emailParam = new EmailParamDto();
-				emailParam.setTestSetName(fetchMetadataListVO.get(0).getTest_run_name());
-				emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecuted_by());
-				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, emailParam);
+			if (!isEndDateUpdated) {
+				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
+						testSetLine.getExecutionStartTime());
 			}
-			limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-					fetchConfigVO.getStatus1(), testSetLine.getExecutionStartTime(), enddate);
 			// final reports generation
 			if (!args.isManualTrigger()) {
 

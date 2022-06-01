@@ -40,6 +40,9 @@ public class DataBaseEntry {
 	@Autowired
 	SendMailServiceImpl sendMailServiceImpl;
 
+	@Autowired
+	LimitScriptExecutionService limitScriptExecutionService;
+
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
@@ -95,9 +98,9 @@ public class DataBaseEntry {
 		return dao.getPassword(args, userId, fetchConfigVO);
 	}
 
-	public void updateEndTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date end_time1)
+	public void updateEndTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date endTime)
 			throws ClassNotFoundException, SQLException {
-		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
+		dao.updateEndTime(fetchConfigVO, lineId, testSetId, endTime);
 	}
 
 	public void updateSubscription() {
@@ -126,16 +129,22 @@ public class DataBaseEntry {
 
 	}
 
-	@Transactional
-	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			EmailParamDto emailParam) {
-
+	public void updateTestCaseEndDate(FetchScriptVO fetchScriptVO, Date endDate) {
 		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
 		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
-				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(),
-				fetchScriptVO.getP_script_id());
-		dao.updateExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
+				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(),
+				endDate);
+	}
+
+	@Transactional
+	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
+			List<FetchMetadataVO> fetchMetadataListVO, Date startDate) {
+		EmailParamDto emailParam = new EmailParamDto();
+		emailParam.setTestSetName(fetchMetadataListVO.get(0).getTest_run_name());
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecuted_by());
+		updateSubscription();
+		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
 
 		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
@@ -153,6 +162,9 @@ public class DataBaseEntry {
 				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
 			}
 		}
+		limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+				fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
+				fetchConfigVO.getStatus1(), startDate, fetchConfigVO.getEndtime());
 	}
 
 	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
