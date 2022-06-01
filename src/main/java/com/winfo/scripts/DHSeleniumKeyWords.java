@@ -600,7 +600,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.info("Successfully menunavigation is clicked " + scripNumber);
-			String xpath1 = "//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']//div[2]/a/*[name()='svg'][1]";
+			String xpath1 = "//*[contains(@id,'popup-container')]//*[@title='param1']//div[2]/a/*[name()='svg'][1]";
 			String xpath2 = "//*[contains(@id,'popup-container')]//a[text()='Show More']";
 			String xpath3 = "//*[contains(@id,'popup-container')]//a[text()='Show Less']";
 			String xpath = xpath1+";"+xpath2+";"+xpath3;
