@@ -240,6 +240,10 @@ public class TestScriptExecService {
 							dataBaseEntry.updateStatusOfScript(testSetId,
 									metaData.getValue().get(0).getTest_set_line_id(),
 									Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+							Integer inProgressCount = dataBaseEntry.getCountOfInProgressScript(testSetId);
+							if (inProgressCount.equals(0)) {
+								dataBaseEntry.updateExecStatusFlag(testSetId);
+							}
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -820,7 +824,7 @@ public class TestScriptExecService {
 			}
 
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
-			
+
 			dataBaseEntry.updateEndTime(fetchConfigVO, args.getTestSetLineId(), args.getTestSetId(), enddate);
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 

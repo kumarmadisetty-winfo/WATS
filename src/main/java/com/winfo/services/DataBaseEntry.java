@@ -314,4 +314,13 @@ public class DataBaseEntry {
 		}
 		return endDate != null ? endDate : startDate;
 	}
+	
+	public Integer getCountOfInProgressScript(String testSetId) {
+		return dao.getCountOfInProgressScript(testSetId);
+	}
+	
+	public void updateExecStatusFlag(String testSetId) {
+		dao.updateExecStatusFlag(testSetId);
+	}
+	
 }

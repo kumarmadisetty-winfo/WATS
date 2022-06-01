@@ -408,7 +408,7 @@ public class DataBaseEntryDao {
 				+ testSetId;
 
 		String selectQry = "SELECT COUNT(1)\r\n" + "FROM WIN_TA_TEST_SET_LINES\r\n" + "	WHERE TEST_SET_ID = "
-				+ testSetId + "\r\n" + "AND UPPER(STATUS)='IN-PROGRESS'";
+				+ testSetId + "\r\n" + "AND UPPER(STATUS) in ('IN-PROGRESS','IN-QUEUE')";
 		try {
 			Session session = em.unwrap(Session.class);
 			String trMode = (String) session.createSQLQuery(qry).getSingleResult();
