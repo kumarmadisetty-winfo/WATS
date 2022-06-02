@@ -99,14 +99,38 @@ public class LimitScriptExecutionService {
 			executionAudit.setExecutionstarttime(startDate);
 			executionAudit.setExecutionendtime(endDate);
 			executionAudit.setStatus(status);
+			limitScriptExecutionDao.insertTestrundata(executionAudit);
+			log.info("data added successfully");
+		} catch (Exception e) {
+			log.error("testrun data not added " + e);
+			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
+		}
+	}
+
+	/*
+	 * Here we are checking if we need to update status in database when end status
+	 * api is triggered
+	 */
+	@Transactional
+	public boolean updateStatusCheckAfterScriptRun(FetchConfigVO fetchConfigVO,
+			List<FetchMetadataVO> fetchMetadataListVO, String scriptId, String scriptNumber, String status) {
+		try {
+			ExecutionAudit executionAudit = new ExecutionAudit();
+			String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
+			executionAudit.setTestsetid(testSetId);
+			executionAudit.setScriptid(scriptId);
+			executionAudit.setScriptnumber(scriptNumber);
+			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
+			executionAudit.setStatus(status);
 			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
-				limitScriptExecutionDao.insertTestrundata(executionAudit);
+				return true;
 			}
 			log.info("data added successfully");
 		} catch (Exception e) {
 			log.error("testrun data not added " + e);
 			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
 		}
+		return false;
 	}
 
 	@Transactional

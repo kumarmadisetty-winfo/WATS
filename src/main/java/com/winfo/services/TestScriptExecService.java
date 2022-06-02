@@ -757,7 +757,6 @@ public class TestScriptExecService {
 				return new ResponseDto(500, Constants.ERROR,
 						"Script didn't ran atleast once. So Pdf can't be generated");
 			}
-			args.setStartDate(testSetLine.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = fetchConfigVO(args.getTestSetId());
 
 			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
@@ -793,8 +792,8 @@ public class TestScriptExecService {
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 
-			fetchConfigVO.setStarttime(args.getStartDate());
-			fetchConfigVO.setStarttime1(args.getStartDate());
+			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
+			fetchConfigVO.setStarttime1(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(fetchConfigVO, fetchMetadataListVO);
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, fetchMetadataListVO.get(0).getCustomer_name(),
 					fetchMetadataListVO.get(0).getTest_run_name(), objectStoreScreenShotPath.toString(),
@@ -802,12 +801,14 @@ public class TestScriptExecService {
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
 			Date enddate = null;
-			boolean isEndDateUpdated = false;
-			if (testSetLine.getExecutionEndTime() != null) {
-				isEndDateUpdated = true;
+			boolean updateStatus = limitScriptExecutionService.updateStatusCheckAfterScriptRun(fetchConfigVO,
+					fetchMetadataListVO, fetchMetadataListVO.get(0).getScript_id(),
+					fetchMetadataListVO.get(0).getScript_number(), fetchConfigVO.getStatus1());
+			if (!updateStatus) {
 				enddate = testSetLine.getExecutionEndTime();
 			} else {
-				enddate = dataBaseEntry.findStepMaxUpdatedDate(args.getTestSetLineId(), args.getStartDate());
+				enddate = dataBaseEntry.findStepMaxUpdatedDate(args.getTestSetLineId(),
+						testSetLine.getExecutionStartTime());
 			}
 			String pdfName = null;
 			fetchConfigVO.setEndtime(enddate);
@@ -822,7 +823,7 @@ public class TestScriptExecService {
 				int failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
-				if (!isEndDateUpdated) {
+				if (updateStatus) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
 							args.getTestSetId());
@@ -831,12 +832,12 @@ public class TestScriptExecService {
 						+ "_RUN" + failedScriptRunCount + ".pdf";
 
 			}
-			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, args.getStartDate(), enddate);
+			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName);
 			dataBaseEntry.updateTestCaseEndDate(post, enddate);
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 
 			/* Email processing Updating subscription table code */
-			if (!isEndDateUpdated) {
+			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 						testSetLine.getExecutionStartTime());
 			}
@@ -890,9 +891,9 @@ public class TestScriptExecService {
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
 		fetchConfigVO.setEndtime(endDate);
 		try {
-			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", null, null);
-			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", null, null);
-			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", null, null);
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf");
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf");
+			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf");
 		} catch (com.itextpdf.text.DocumentException e) {
 			logger.error("Exception occured while creating TestLvlPDF" + e);
 		}
@@ -946,8 +947,8 @@ public class TestScriptExecService {
 		return startTime + "_" + executionTime;
 	}
 
-	private void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			Date starttime, Date endtime) throws com.itextpdf.text.DocumentException {
+	private void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
+			throws com.itextpdf.text.DocumentException {
 		try {
 			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH);
@@ -1027,8 +1028,8 @@ public class TestScriptExecService {
 			} else if (!("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
 					|| "Failed_Report.pdf".equalsIgnoreCase(pdffileName)
 					|| "Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {
-				generateScriptLvlPDF(document, starttime, endtime, watsLogo, fetchMetadataListVO, fetchConfigVO,
-						fileNameList);
+				generateScriptLvlPDF(document, fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime(), watsLogo,
+						fetchMetadataListVO, fetchConfigVO, fileNameList);
 			}
 			document.close();
 
