@@ -38,6 +38,7 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.vo.EmailParamDto;
 
 @Repository
 @RefreshScope
@@ -219,16 +220,93 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateTestSetLineStatus(String status, String testSetLineScriptPath, String testSetId,
-			String testSetLineId, String scriptId, Date endDate) {
-		String endTime = new SimpleDateFormat("M/dd/yyyy HH:mm:ss").format(endDate);
+	public List<Object[]> getSumDetailsFromSubscription() {
+		List<Object[]> result = null;
+		String qry = "select sum(quantity),sum(executed),sum(balance) from wats_subscription\r\n"
+				+ "where uom = 'Script' and status='Active'  and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date";
+		try {
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(qry);
+			result = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public List<Object[]> getSubscriptionDetails() {
+		String qry = "select subscription_id, executed,balance from (SELECT subscription_id,executed,balance\r\n"
+				+ "         FROM wats_subscription\r\n"
+				+ "         WHERE status = 'Active' and uom = 'Script' and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date\r\n"
+				+ "        ORDER BY subscription_id) where ROWNUM = 1";
+		List<Object[]> result = null;
+		try {
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(qry);
+			result = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public Integer findGraceAllowance(BigDecimal subscriptionId) {
+		Integer sum = null;
+		String qry = "select sum(round(WTC.GRACE_ALLOWANCE*WS.quantity/100)) \r\n"
+				+ "        from wats_subscription WS,WIN_TA_CUSTOMERS WTC\r\n"
+				+ "        where uom = 'Script' and status = 'Active'\r\n"
+				+ "        and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date\r\n"
+				+ "        and WTC.CUSTOMER_NAME= WS.CUSTOMER_NAME and WS.subscription_id = " + subscriptionId;
 
 		try {
 			Session session = em.unwrap(Session.class);
-			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status + "', TEST_SET_LINE_SCRIPT_PATH='"
-					+ testSetLineScriptPath + "', EXECUTION_END_TIME=TO_TIMESTAMP('" + endTime
-					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID="
-					+ testSetLineId + " AND SCRIPT_ID=" + scriptId;
+			Query query = session.createSQLQuery(qry);
+			sum = (Integer) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sum;
+	}
+
+	public void updateSubscriptionExecuteAndBalance(BigDecimal executedCount, BigDecimal updatedBalanceCount,
+			BigDecimal subscriptionId) {
+		String qry = " UPDATE wats_subscription\r\n" + "    SET executed = " + (executedCount.intValue() + 1)
+				+ ", balance = " + (updatedBalanceCount.intValue() - 1) + "\r\n" + "    WHERE subscription_id = "
+				+ subscriptionId;
+		try {
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(qry);
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateSubscriptionStatus(String status, BigDecimal subscriptionId) {
+
+		String qry = "UPDATE WATS_SUBSCRIPTION SET STATUS='" + status + "' WHERE subscription_id = " + subscriptionId;
+
+		try {
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(qry);
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void updateTestSetLineStatus(String status, String testSetLineScriptPath, String testSetId,
+			String testSetLineId, String scriptId, Date endDate) {
+		Format startformat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
+		String endTime = startformat.format(endDate);
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status
+					+ "', TEST_SET_LINE_SCRIPT_PATH=REPLACE('" + testSetLineScriptPath
+					+ "','AAA','&'), EXECUTION_END_TIME=TO_TIMESTAMP('"+ endTime+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID=" + testSetLineId
+					+ " AND SCRIPT_ID=" + scriptId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
@@ -241,8 +319,9 @@ public class DataBaseEntryDao {
 
 		try {
 			Session session = em.unwrap(Session.class);
-			String sqlQuery = "Update WIN_TA_TEST_SET SET PASS_PATH ='" + passPath + "', FAIL_PATH ='" + failPath
-					+ "', EXCEPTION_PATH ='" + executionPath + "'WHERE TEST_SET_ID=" + testSetId;
+			String sqlQuery = "Update WIN_TA_TEST_SET SET PASS_PATH =REPLACE('" + passPath
+					+ "','AAA','&') , FAIL_PATH =REPLACE('" + failPath + "','AAA','&') , EXCEPTION_PATH =REPLACE('"
+					+ executionPath + "','AAA','&') WHERE TEST_SET_ID=" + testSetId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
@@ -250,17 +329,17 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
+	public void insertExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
 		Format dateFormat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
 		String startTime = dateFormat.format(startDate);
 		String endTime = dateFormat.format(endDate);
 		try {
 			Session session = em.unwrap(Session.class);
 			int nextExecNo = getNextExecutionNum();
-			String instQry = "INSERT INTO WIN_TA_EXECUTION_HISTORY (EXECUTION_ID, TEST_SET_LINE_ID, EXECUTION_START_TIME, EXECUTION_END_TIME, STATUS) VALUES ('"
+			String instQry = "INSERT INTO WIN_TA_EXECUTION_HISTORY (EXECUTION_ID, TEST_SET_LINE_ID, EXECUTION_START_TIME, EXECUTION_END_TIME, CREATED_BY, STATUS) VALUES ('"
 					+ (nextExecNo) + "','" + testSetLineId + "'," + "TO_TIMESTAMP('" + startTime
 					+ "','MM/DD/YYYY HH24:MI:SS')" + "," + "TO_TIMESTAMP('" + endTime + "','MM/DD/YYYY HH24:MI:SS')"
-					+ ",'" + status + "')";
+					+ ",'APP_USER','" + status + "')";
 			Query instQuery = session.createSQLQuery(instQry);
 			instQuery.executeUpdate();
 
@@ -283,14 +362,77 @@ public class DataBaseEntryDao {
 		return listObj;
 	}
 
-	public void updateExecStatusTable(String testSetId) {
+	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
+		String passQry = "SELECT\r\n" + "COUNT(1)\r\n" + "FROM\r\n" + "WIN_TA_TEST_SET_LINES\r\n" + "WHERE\r\n"
+				+ "TEST_SET_ID = " + testSetId + "\r\n" + " AND UPPER(STATUS) = 'PASS'\r\n" + " AND ENABLED = 'Y'";
+		String failQry = "SELECT\r\n" + "COUNT(1)\r\n" + "FROM\r\n" + "WIN_TA_TEST_SET_LINES\r\n" + "WHERE\r\n"
+				+ "TEST_SET_ID = " + testSetId + "\r\n" + "AND UPPER(STATUS) = 'FAIL'\r\n" + "AND ENABLED = 'Y'";
+
+		try {
+			Session session = em.unwrap(Session.class);
+
+			BigDecimal passCount = (BigDecimal) session.createSQLQuery(passQry).getSingleResult();
+			BigDecimal failCount = (BigDecimal) session.createSQLQuery(failQry).getSingleResult();
+
+			emailParam.setPassCount(passCount.intValue());
+			emailParam.setFailCount(failCount.intValue());
+
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500,
+					"Exception occured while fetching total pass and fail count for test run script.", e);
+		}
+
+	}
+
+	public void getUserAndPrjManagerName(String userName, String testSetId, EmailParamDto emailParam) {
+
+		String fetchUserName = "SELECT EMAIL\r\n" + "FROM WIN_TA_USERS\r\n" + "WHERE UPPER(USER_ID) = UPPER('"
+				+ userName + "')";
+
+		String fetchManagerName = "SELECT PROJ.PROJECT_MANAGER_EMAIL\r\n"
+				+ "FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS PROJ\r\n" + "WHERE TS.PROJECT_ID=PROJ.PROJECT_ID\r\n"
+				+ "AND TS.TEST_SET_ID = " + testSetId + "\r\n" + "AND ROWNUM=1";
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String user = (String) session.createSQLQuery(fetchUserName).getSingleResult();
+			String manager = (String) session.createSQLQuery(fetchManagerName).getSingleResult();
+			emailParam.setReceiver(user);
+			emailParam.setCcPerson(manager);
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching email for user.", e);
+		}
+	}
+
+	public Integer getCountOfInProgressScript(String testSetId) {
+		Integer count = null;
+		String qry = " SELECT NVL(TR_MODE,'ACTIVE')\r\n" + "FROM WIN_TA_TEST_SET\r\n" + "WHERE TEST_SET_ID = "
+				+ testSetId;
+
+		String selectQry = "SELECT COUNT(1)\r\n" + "FROM WIN_TA_TEST_SET_LINES\r\n" + "	WHERE TEST_SET_ID = "
+				+ testSetId + "\r\n" + "AND UPPER(STATUS) in ('IN-PROGRESS','IN-QUEUE')";
+		try {
+			Session session = em.unwrap(Session.class);
+			String trMode = (String) session.createSQLQuery(qry).getSingleResult();
+			if (trMode.equalsIgnoreCase("STOPPED")) {
+				BigDecimal inProgressCount = (BigDecimal) session.createSQLQuery(selectQry).getSingleResult();
+				count = inProgressCount.intValue();
+			}
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching the running process count.", e);
+		}
+		return count;
+	}
+
+	public Integer updateExecStatusTable(String testSetId) {
+		Integer id = null;
 		try {
 			Session session = em.unwrap(Session.class);
 			String execQry = "SELECT RESPONSE_COUNT FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID =" + testSetId
 					+ " AND EXECUTION_ID = (SELECT MAX(EXECUTION_ID) FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID ="
 					+ testSetId + " )";
 			BigDecimal bigDecimal = (BigDecimal) session.createSQLQuery(execQry).getSingleResult();
-			Integer id = Integer.parseInt(bigDecimal.toString());
+			id = Integer.parseInt(bigDecimal.toString());
 			String updateQry = "UPDATE TEST_RUN_EXECUTE_STATUS SET RESPONSE_COUNT =" + (id + 1)
 					+ " WHERE TEST_RUN_ID = " + testSetId
 					+ " AND EXECUTION_ID = (SELECT MAX(EXECUTION_ID) FROM TEST_RUN_EXECUTE_STATUS WHERE TEST_RUN_ID = "
@@ -299,7 +441,39 @@ public class DataBaseEntryDao {
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while updating the response count", e);
 		}
+		return id + 1;
 
+	}
+
+	public void updateExecStatusFlag(String testSetId) {
+		String updateQry = "UPDATE EXECUTE_STATUS\r\n" + "SET\r\n" + "STATUS_FLAG = 'I'\r\n" + "WHERE\r\n"
+				+ "TEST_RUN_ID = " + testSetId;
+
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status flag for test run script.",
+					e);
+		}
+	}
+
+	public Object getRequestCountFromExecStatus(String testSetId) {
+
+		Object requestCount = null;
+		try {
+			Session session = em.unwrap(Session.class);
+
+			String execQry = " SELECT\r\n" + "REQUEST_COUNT\r\n" + "FROM\r\n" + "TEST_RUN_EXECUTE_STATUS\r\n"
+					+ "WHERE\r\n" + "TEST_RUN_ID =" + testSetId + "\r\n" + "AND EXECUTION_ID = (\r\n" + "SELECT\r\n"
+					+ "MAX(EXECUTION_ID)\r\n" + "FROM\r\n" + "TEST_RUN_EXECUTE_STATUS\r\n" + "WHERE\r\n"
+					+ "TEST_RUN_ID = " + testSetId + ")";
+			requestCount = session.createSQLQuery(execQry).getSingleResult();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
+					e);
+		}
+		return requestCount;
 	}
 
 	public int getNextExecutionNum() {

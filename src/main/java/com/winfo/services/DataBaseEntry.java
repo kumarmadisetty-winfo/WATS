@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +25,29 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.vo.EmailParamDto;
 
 @Service
 @RefreshScope
 @Transactional
 public class DataBaseEntry {
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
+	private static final String COMPLETED = "Completed";
+
 	@Autowired
 	DataBaseEntryDao dao;
 
 	@Autowired
 	CopyTestRunDao copyTestrunDao;
+
+	@Autowired
+	SendMailServiceImpl sendMailServiceImpl;
+
+	@Autowired
+	LimitScriptExecutionService limitScriptExecutionService;
+	
+	@Autowired
+	ApplicationContext appContext;
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
@@ -90,22 +104,82 @@ public class DataBaseEntry {
 		return dao.getPassword(args, userId, fetchConfigVO);
 	}
 
-	public void updateEndTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date end_time1)
+	public void updateEndTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date endTime)
 			throws ClassNotFoundException, SQLException {
-		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
+		dao.updateEndTime(fetchConfigVO, lineId, testSetId, endTime);
+	}
+
+	public void updateSubscription() {
+		List<Object[]> noOfHits = dao.getSumDetailsFromSubscription();
+		List<Object[]> subscriptionDtls = dao.getSubscriptionDetails();
+
+		BigDecimal sumQuantity = (BigDecimal) noOfHits.get(0)[0];
+		BigDecimal sumExecuted = (BigDecimal) noOfHits.get(0)[1];
+//		BigDecimal sumBalance = (BigDecimal) noOfHits.get(0)[2];
+
+		BigDecimal subsId = (BigDecimal) subscriptionDtls.get(0)[0];
+		BigDecimal executed = (BigDecimal) subscriptionDtls.get(0)[1];
+		BigDecimal balance = (BigDecimal) subscriptionDtls.get(0)[2];
+
+		Integer sum = dao.findGraceAllowance(subsId);
+
+		Integer graceValue = (sum == null) ? 0 : sum;
+
+		if (sumQuantity.intValue() + graceValue.intValue() - sumExecuted.intValue() > 0) {
+			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
+		}
+
+		if (Math.abs(balance.intValue() - 1) >= graceValue && (balance.intValue() - 1) <= 0) {
+			dao.updateSubscriptionStatus(COMPLETED, subsId);
+		}
+
+	}
+
+	public void updateTestCaseEndDate(FetchScriptVO fetchScriptVO, Date endDate) {
+		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
+				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
+		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
+				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(),
+				endDate);
 	}
 
 	@Transactional
-	public void updateSetLinesStatusAndTestSetPath(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO) {
-		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
-				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(),
-				fetchConfigVO.getEndtime());
-		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
-				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
-		dao.updateExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
+	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
+			List<FetchMetadataVO> fetchMetadataListVO, Date startDate) {
+		EmailParamDto emailParam = new EmailParamDto();
+		emailParam.setTestSetName(fetchMetadataListVO.get(0).getTest_run_name());
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecuted_by());
+		appContext.getBean(this.getClass()).updateSubscription();
+		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
 
-		dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
+		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
+
+		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(fetchScriptVO.getP_test_set_id());
+		emailParam.setRequestCount(requestCount.intValue());
+		if (requestCount.intValue() <= responseCount) {
+			dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
+			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
+			sendMailServiceImpl.sendMail(emailParam);
+		} else {
+			Integer inProgressCount = dao.getCountOfInProgressScript(fetchScriptVO.getP_test_set_id());
+			if (inProgressCount.equals(0)) {
+				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			}
+		}
+		limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+				fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
+				fetchConfigVO.getStatus1(), startDate, fetchConfigVO.getEndtime());
+	}
+
+	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
+		dao.getPassAndFailCount(testSetId, emailParam);
+
+	}
+
+	public void getUserAndPrjManagerName(String userName, String testSetId, EmailParamDto emailParam) {
+		dao.getUserAndPrjManagerName(userName, testSetId, emailParam);
 	}
 
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -258,4 +332,13 @@ public class DataBaseEntry {
 		}
 		return endDate != null ? endDate : startDate;
 	}
+	
+	public Integer getCountOfInProgressScript(String testSetId) {
+		return dao.getCountOfInProgressScript(testSetId);
+	}
+	
+	public void updateExecStatusFlag(String testSetId) {
+		dao.updateExecStatusFlag(testSetId);
+	}
+	
 }
