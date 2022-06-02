@@ -753,6 +753,10 @@ public class TestScriptExecService {
 			}
 			args.setSuccess(scriptStatus);
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(), args.getTestSetLineId());
+			if (args.isManualTrigger() && testSetLine.getExecutionStartTime() == null) {
+				return new ResponseDto(500, Constants.ERROR,
+						"Script didn't ran atleast once. So Pdf can't be generated");
+			}
 			args.setStartDate(testSetLine.getExecutionStartTime());
 			FetchConfigVO fetchConfigVO = fetchConfigVO(args.getTestSetId());
 
@@ -838,7 +842,7 @@ public class TestScriptExecService {
 			}
 			// final reports generation
 			if (!args.isManualTrigger()) {
-				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(),AUDIT_TRAIL_STAGES.ERG);
+				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.ERG);
 
 				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
