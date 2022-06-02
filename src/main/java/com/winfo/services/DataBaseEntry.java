@@ -5,11 +5,14 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import javax.persistence.NoResultException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +45,9 @@ public class DataBaseEntry {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
+	
+	@Autowired
+	ApplicationContext appContext;
 
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
@@ -143,7 +149,7 @@ public class DataBaseEntry {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(fetchMetadataListVO.get(0).getTest_run_name());
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecuted_by());
-		updateSubscription();
+		appContext.getBean(this.getClass()).updateSubscription();
 		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
 
