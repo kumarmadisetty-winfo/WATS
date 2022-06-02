@@ -818,7 +818,7 @@ public class TestScriptExecService {
 				int failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				fetchConfigVO.setStatus1("Fail");
-				if (!args.isManualTrigger()) {
+				if (!isEndDateUpdated) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
 							args.getTestSetId());
