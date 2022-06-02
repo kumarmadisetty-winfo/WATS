@@ -305,8 +305,9 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			String sqlQuery = "Update WIN_TA_TEST_SET_LINES SET STATUS='" + status
 					+ "', TEST_SET_LINE_SCRIPT_PATH=REPLACE('" + testSetLineScriptPath
-					+ "','AAA','&'), EXECUTION_END_TIME=TO_TIMESTAMP('"+ endTime+"','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID=" + testSetLineId
-					+ " AND SCRIPT_ID=" + scriptId;
+					+ "','AAA','&'), EXECUTION_END_TIME=TO_TIMESTAMP('" + endTime
+					+ "','MM/DD/YYYY HH24:MI:SS') WHERE  TEST_SET_ID=" + testSetId + " AND TEST_SET_LINE_ID="
+					+ testSetLineId + " AND SCRIPT_ID=" + scriptId;
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
@@ -404,20 +405,32 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public Integer getCountOfInProgressScript(String testSetId) {
+	public Integer getCountOfInProgressScriptForStoppedTestRun(String testSetId) {
 		Integer count = null;
 		String qry = " SELECT NVL(TR_MODE,'ACTIVE')\r\n" + "FROM WIN_TA_TEST_SET\r\n" + "WHERE TEST_SET_ID = "
 				+ testSetId;
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String trMode = (String) session.createSQLQuery(qry).getSingleResult();
+			if (trMode.equalsIgnoreCase("STOPPED")) {
+				count = getCountOfInProgressScript(testSetId);
+			}
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching the running process count.", e);
+		}
+		return count;
+	}
+
+	public Integer getCountOfInProgressScript(String testSetId) {
+		Integer count = null;
 
 		String selectQry = "SELECT COUNT(1)\r\n" + "FROM WIN_TA_TEST_SET_LINES\r\n" + "	WHERE TEST_SET_ID = "
 				+ testSetId + "\r\n" + "AND UPPER(STATUS) in ('IN-PROGRESS','IN-QUEUE')";
 		try {
 			Session session = em.unwrap(Session.class);
-			String trMode = (String) session.createSQLQuery(qry).getSingleResult();
-			if (trMode.equalsIgnoreCase("STOPPED")) {
-				BigDecimal inProgressCount = (BigDecimal) session.createSQLQuery(selectQry).getSingleResult();
-				count = inProgressCount.intValue();
-			}
+			BigDecimal inProgressCount = (BigDecimal) session.createSQLQuery(selectQry).getSingleResult();
+			count = inProgressCount.intValue();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while fetching the running process count.", e);
 		}
