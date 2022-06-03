@@ -133,13 +133,13 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String testSetId, String testSetLineId) {
+	public void updateInProgressScriptStatus(String testSetId, String testSetLineId,Date startDate) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
-			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
 				testLines.setStatus("IN-PROGRESS");
+				testLines.setExecutionStartTime(startDate);
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
@@ -159,21 +159,6 @@ public class DataBaseEntryDao {
 			}
 		} catch (Exception e) {
 			System.out.println("cant update script status to - " + status);
-			System.out.println(e);
-		}
-	}
-
-	public void updateStartTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date startTime1) {
-		Format startformat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
-		String startTime = startformat.format(startTime1);
-		try {
-			Session session = em.unwrap(Session.class);
-			Query query = session.createSQLQuery("Update WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"
-					+ startTime + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID=" + testSetId
-					+ " AND TEST_SET_LINE_ID = " + lineId);
-			query.executeUpdate();
-		} catch (Exception e) {
-			System.out.println("cant update starttime");
 			System.out.println(e);
 		}
 	}

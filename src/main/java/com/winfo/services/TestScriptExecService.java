@@ -246,6 +246,7 @@ public class TestScriptExecService {
 							}
 						}
 					} catch (Exception e) {
+						//suppressing error as dependant scripts are running in different thread
 						e.printStackTrace();
 					}
 				});
@@ -256,7 +257,7 @@ public class TestScriptExecService {
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Exception Occured while creating script for Test Run", e);
 		}
 		return executeTestrunVo;
 	}
@@ -356,11 +357,9 @@ public class TestScriptExecService {
 					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
 				}
 
-//				if(test_set_line_id.equalsIgnoreCase(""+17001)) {
 				methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName, screenshotPath,
 						testScriptParamId);
 				methods.add(methodCall);
-//				}
 			}
 			dto.setActions(methods);
 			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
@@ -484,34 +483,11 @@ public class TestScriptExecService {
 					}
 
 					if (value.equalsIgnoreCase("<Pick from Java>")) {
-//						if (actionName.equalsIgnoreCase("ebsPasteValue")) {
-//							String copynumberValue;
-//							dbValue = codeLineRepo.findByTestRunScriptId(
-//									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
-//							String[] arrOfStr = dbValue.split(">", 5);
-//							if (arrOfStr.length < 2) {
-//								copynumberValue = dbValue;
-//							} else {
-//								String Testrun_name = arrOfStr[0];
-//								String seq = arrOfStr[1];
-//								String line_number = arrOfStr[2];
-//								if (Testrun_name.equalsIgnoreCase(fetchMetadataVO.getTest_run_name())
-//										&& seq.equalsIgnoreCase(fetchMetadataVO.getSeq_num())) {
-//									copynumberValue = dynamicnumber.getCopynumberInputParameter(Testrun_name, seq,
-//											line_number, null, null);
-//								} else {
-//									copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, null,
-//											null);
-//								}
-//							}
-//							listArgs.add(index + SPLIT + addQuotes(copynumberValue));
-//						} else {
 						String image_dest = "C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\ebs\\\\"
 								+ fetchMetadataVO.getCustomer_name() + "\\\\" + fetchMetadataVO.getTest_run_name();
 
 						dbValue = image_dest;
 						listArgs.add(index + SPLIT + addQuotes(dbValue));
-//						}
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Parameter>")) {
 						dbValue = codeLineRepo.findByTestRunScriptIdInputParam(
@@ -528,6 +504,8 @@ public class TestScriptExecService {
 				}
 
 			} catch (Exception e) {
+				// suppressing error.. because the errors might happen because of user entered
+				// data as well which need not be handled
 				e.printStackTrace();
 			}
 
@@ -803,9 +781,9 @@ public class TestScriptExecService {
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
 			Date enddate = null;
-			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
-					fetchMetadataListVO, fetchMetadataListVO.get(0).getScript_id(),
-					fetchMetadataListVO.get(0).getScript_number(), fetchConfigVO.getStatus1());
+			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO, fetchMetadataListVO,
+					fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
+					fetchConfigVO.getStatus1());
 			if (!updateStatus) {
 				enddate = testSetLine.getExecutionEndTime();
 			} else {
@@ -1568,8 +1546,7 @@ public class TestScriptExecService {
 	}
 
 	public void updateStartStatus(MessageQueueDto args) throws ClassNotFoundException, SQLException {
-		dataBaseEntry.updateInProgressScriptStatus(null, null, args.getTestSetLineId());
-		dataBaseEntry.updateStartTime(null, args.getTestSetLineId(), args.getTestSetId(), args.getStartDate());
+		dataBaseEntry.updateInProgressScriptStatus( null, args.getTestSetLineId(),args.getStartDate());
 	}
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {

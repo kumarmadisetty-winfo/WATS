@@ -76,9 +76,9 @@ public class DataBaseEntry {
 		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
 
-	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
+	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id,Date startDate)
 			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
+		dao.updateInProgressScriptStatus( test_set_id, test_set_line_id,startDate);
 	}
 
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
@@ -90,10 +90,6 @@ public class DataBaseEntry {
 		dao.updateStatusOfScript(test_set_id, test_set_line_id, status);
 	}
 
-	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
-			throws ClassNotFoundException, SQLException {
-		dao.updateStartTime(fetchConfigVO, line_id, test_set_id, start_time1);
-	}
 
 	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
 		return dao.getTrMode(args, fetchConfigVO);

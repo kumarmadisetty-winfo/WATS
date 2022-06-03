@@ -93,8 +93,6 @@ public class TestCaseDataService {
 
 		}
 
-		System.out.println(testCaseMap);
-
 		return testCaseMap;
 
 	}

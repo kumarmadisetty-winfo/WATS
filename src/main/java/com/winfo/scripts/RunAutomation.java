@@ -526,8 +526,7 @@ public class RunAutomation {
 				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 			
-				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
-				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
+				dataBaseEntry.updateInProgressScriptStatus(test_set_id, test_set_line_id,startdate);
 				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id = fetchMetadataVO.getTest_script_param_id();
