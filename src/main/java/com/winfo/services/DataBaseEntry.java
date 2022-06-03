@@ -115,9 +115,9 @@ public class DataBaseEntry {
 		dao.getTestRunLevelDependentScriptNumbers(dependentScriptMap, dependentList,testSetId);
 	}
 	
-public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Integer, Status> scriptStatus) {
+public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Integer, Status> scriptStatus, int testRunDependencyCount) {
 		// TODO Auto-generated method stub
-		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus);
+		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus,testRunDependencyCount);
 	}
 	
 	@Transactional

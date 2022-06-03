@@ -285,10 +285,15 @@ public class DataBaseEntryDao {
 	}
 	
 
-public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus) {
+public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus, int testRunDependencyCount) {
 		// TODO Auto-generated method stub
-		String sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
-		
+	String sq1;
+	if(testRunDependencyCount>0) {
+		sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and test_set_line_id=:dependentScriptNo";
+	}
+	else {
+		sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
+	}
 		
 		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
 		query.setParameter("test_set_id",test_set_id);
