@@ -212,11 +212,6 @@ public class TestScriptExecService {
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
 					dependentScriptMap);
 
-			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-			fetchConfigVO.setStarttime1(date);
 
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
@@ -282,19 +277,9 @@ public class TestScriptExecService {
 		PropertyConfigurator.configure(log4jConfPath);
 		String actionName = null;
 
-		String passurl = null;
-		String failurl = null;
 
-		String detailurl = null;
-		String scripturl = null;
-		String test_set_id = null;
-		String test_set_line_id = null;
-		String script_id = null;
-		String script_id1 = null;
-		String script_Number = null;
-		String seq_num = null;
-		String step_description = null;
-		String line_number = null;
+		String testSetId = null;
+		String testSetLineId = null;
 		String testScriptParamId = null;
 		String methodCall;
 		ArrayList<String> methods = new ArrayList<>();
@@ -308,54 +293,20 @@ public class TestScriptExecService {
 				.build(), AUDIT_TRAIL_STAGES.RR);
 		try {
 
-			String userName = null;
-			Date startdate = new Date();
-			fetchConfigVO.setStarttime(startdate);
-			String instanceName = fetchConfigVO.getInstance_name();
 			String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
 
-			String objectStoreScreenShotPath = fetchConfigVO.getScreenshot_path()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/";
-
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
-				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
-				test_set_id = fetchMetadataVO.getTest_set_id();
-				test_set_line_id = fetchMetadataVO.getTest_set_line_id();
-				script_id = fetchMetadataVO.getScript_id();
-				script_Number = fetchMetadataVO.getScript_number();
-				line_number = fetchMetadataVO.getLine_number();
-				seq_num = fetchMetadataVO.getSeq_num();
-
-				step_description = fetchMetadataVO.getStep_description();
-				String screenParameter = fetchMetadataVO.getInput_parameter();
+				testSetId = fetchMetadataVO.getTest_set_id();
+				testSetLineId = fetchMetadataVO.getTest_set_line_id();
 				testScriptParamId = fetchMetadataVO.getTest_script_param_id();
 
 				String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
-
 						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-
 						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-
 						+ fetchMetadataVO.getLine_number();
-
-				String param1 = null;
-				String param2 = null;
-				String param3 = null;
-				String type1 = null;
-				String type2 = null;
-				String type3 = null;
-				String message = null;
-				String value1 = null;
-				String value2 = null;
-				int count = 0;
-				if (screenParameter != null) {
-					param1 = screenParameter.split(">").length > 0 ? screenParameter.split(">")[0] : "";
-					param2 = screenParameter.split(">").length > 1 ? screenParameter.split(">")[1] : "";
-				}
 
 				methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName, screenshotPath,
 						testScriptParamId);
@@ -389,10 +340,10 @@ public class TestScriptExecService {
 
 			logger.info(
 					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
-							+ test_set_id + " - " + test_set_line_id + " - " + scriptPathForPyJabScript + " - "
-							+ screenShotFolderPath + " - " + objectStoreScreenShotPath);
+							+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
+							+ screenShotFolderPath );
 			this.kafkaTemp.send(topic,
-					new MessageQueueDto(test_set_id, test_set_line_id, scriptPathForPyJabScript, auditTrial));
+					new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ);
 		} catch (Exception e) {
 			throw e;
