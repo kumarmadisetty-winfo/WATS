@@ -9647,7 +9647,8 @@ try {
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		//DH 32
 		try {
-			if (param1.equalsIgnoreCase("Select Learning Item")) {	
+			if (param1.equalsIgnoreCase("Select Learning Item")) {
+				Thread.sleep(5000);
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(
 		By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + keysToSend + "']/preceding::input[@type='radio']"))));
