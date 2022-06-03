@@ -112,7 +112,7 @@ public class LimitScriptExecutionService {
 	 * api is triggered
 	 */
 	@Transactional
-	public boolean updateStatusCheckAfterScriptRun(FetchConfigVO fetchConfigVO,
+	public boolean updateStatusCheck(FetchConfigVO fetchConfigVO,
 			List<FetchMetadataVO> fetchMetadataListVO, String scriptId, String scriptNumber, String status) {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
@@ -125,10 +125,8 @@ public class LimitScriptExecutionService {
 			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
 				return true;
 			}
-			log.info("data added successfully");
 		} catch (Exception e) {
-			log.error("testrun data not added " + e);
-			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
+			throw new WatsEBSCustomException(500, "Exception occured while checking update status of Script Run", e);
 		}
 		return false;
 	}

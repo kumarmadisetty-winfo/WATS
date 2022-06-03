@@ -816,7 +816,7 @@ public class DataBaseEntryDao {
 			query.select(root.get("pdfGenerationEnabled")).where(condition);
 			return em.createQuery(query).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while running test run pdfs", e);
+			throw new WatsEBSCustomException(500, "Exception occured while getting status of PDF Generation for the Test Run", e);
 		}
 
 	}

@@ -699,6 +699,8 @@ public class TestScriptExecService {
 					}
 				}
 			}
+		} catch (WatsEBSCustomException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while closing Object stroage path", e);
 		}
@@ -801,7 +803,7 @@ public class TestScriptExecService {
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
 			Date enddate = null;
-			boolean updateStatus = limitScriptExecutionService.updateStatusCheckAfterScriptRun(fetchConfigVO,
+			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
 					fetchMetadataListVO, fetchMetadataListVO.get(0).getScript_id(),
 					fetchMetadataListVO.get(0).getScript_number(), fetchConfigVO.getStatus1());
 			if (!updateStatus) {
