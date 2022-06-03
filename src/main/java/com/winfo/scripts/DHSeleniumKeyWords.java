@@ -10556,7 +10556,7 @@ try {
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		//DH
 		try {
-			if (param1.equalsIgnoreCase("Search for proposed manager")||(param1.equalsIgnoreCase("Select a value")||(param1.equalsIgnoreCase("Search for a Person")))) {
+			if (param1.equalsIgnoreCase("Search for proposed manager")||(param1.equalsIgnoreCase("Select a value")||(param1.equalsIgnoreCase("Search for a Person")|| (param1.equalsIgnoreCase("Search for a learning item"))))) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@placeholder='" +param1+ "'][1]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[@placeholder='" +param1+ "'][1]"));
@@ -14454,7 +14454,12 @@ try {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittext).build().perform();
 		waittext.click();
-		Thread.sleep(4000); String scripNumber = fetchMetadataVO.getScript_number();
+		Thread.sleep(4000);
+		WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "'][1]"));
+		actions.moveToElement(selectvalue).build().perform();
+		selectvalue.click();
+		Thread.sleep(500);
+		String scripNumber = fetchMetadataVO.getScript_number();
 		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
 		String scriptID = fetchMetadataVO.getScript_id();
 		String metadataID = fetchMetadataVO.getScript_meta_data_id();
