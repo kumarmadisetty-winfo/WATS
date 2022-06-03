@@ -1851,7 +1851,7 @@ public class TestScriptExecService {
 	}
 
 	@KafkaListener(topics = "update-audit-logs", groupId = "wats-group")
-	public void consumeFromTopic(MessageQueueDto event) {
+	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage());
 	}
 

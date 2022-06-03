@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.services.TestScriptExecService;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
@@ -67,6 +68,8 @@ public class TestScriptExecController {
 	@KafkaListener(topics = "wats-not-reachable", groupId = "wats-group")
 	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) {
 		testScriptExecService.generateTestScriptLineIdReports(event);
+		event.setStage(AUDIT_TRAIL_STAGES.SU);
+		testScriptExecService.updateAuditLogs(event);
 	}
 
 	@ResponseBody
