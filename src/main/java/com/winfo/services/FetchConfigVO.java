@@ -151,7 +151,17 @@ public class FetchConfigVO {
     
     private String OIC_JOB_SCHEDULER;
     
-   	public String getOIC_JOB_SCHEDULER() {
+    private Integer ACTION_WAIT_TIME;
+    
+   	public Integer getACTION_WAIT_TIME() {
+		return ACTION_WAIT_TIME;
+	}
+
+	public void setACTION_WAIT_TIME(Integer aCTION_WAIT_TIME) {
+		ACTION_WAIT_TIME = aCTION_WAIT_TIME;
+	}
+
+	public String getOIC_JOB_SCHEDULER() {
    		return OIC_JOB_SCHEDULER;
    	}
 

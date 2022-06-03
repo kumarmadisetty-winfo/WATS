@@ -18379,6 +18379,13 @@ public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, F
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		
+}
+
+@Override
+public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+		FetchConfigVO fetchConfigVO) {
+	// TODO Auto-generated method stub
+	
 }	
 
 }

@@ -17459,4 +17459,15 @@ public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, F
 		
 }
 
+@Override
+public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+		FetchConfigVO fetchConfigVO) {
+		try {
+			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }
