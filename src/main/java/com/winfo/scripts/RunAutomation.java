@@ -920,6 +920,9 @@ public class RunAutomation {
 					case "clickButton(Informatica)":
 					seleniumFactory.getInstanceObj(instanceName).InformaticaClickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 					break;
+					case "waitTillLoad":
+						seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+					break;
 				
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
