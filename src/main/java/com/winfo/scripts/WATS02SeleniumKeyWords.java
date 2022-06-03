@@ -5152,6 +5152,29 @@ public class WATS02SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		
+		try {
+			if (param1.equalsIgnoreCase("Continue")) {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittext = driver.findElement(By.xpath(("//input[@value='" +param1+ "']")));// screenshot(driver,
+			// "",
+			// fetchMetadataVO,
+			// fetchConfigVO);
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			waittext.click();
+			Thread.sleep(15000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			String xpath = "//input[@value='param1']";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			return;
+			}
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+			}
 		//Dh 39
 		try {
 			if (param1.equalsIgnoreCase("Generate Schedules")) {
