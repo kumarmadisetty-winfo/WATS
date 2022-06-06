@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -15,7 +17,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.CopyTestRunDao2;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
@@ -61,9 +62,13 @@ public class CopyTestRunService2 {
 //		copyTestrunDao.saveTestrun(setTestrundata);
 		// List<ScriptsData> listsScriptdata=new ArrayList<>();
 		// Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
-
+		Map<Integer,Integer> mapOfTestRunDependencyOldToNewId = new HashMap<Integer,Integer>();
+		Comparator<ScriptsData> scriptDataComp = (ScriptsData s1,
+				ScriptsData s2) -> s1.getSeqnum() - s2.getSeqnum();
+		Collections.sort(getTestrun.getScriptsdata(), scriptDataComp);
 		for (ScriptsData getScriptdata : getTestrun.getScriptsdata()) {
 
+//			mapOfSequenceAndDependency.pu
 			ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(getScriptdata.getScriptnumber(),
 					product_version);
 
@@ -72,7 +77,11 @@ public class CopyTestRunService2 {
 			ScriptsData setScriptdata = new ScriptsData();
 			if (scriptMaster != null) {
 				// setScriptdata.setTestsetlineid(sectiptid);
-
+				int id = copyTestrunDao.getscrtiptIds();
+//				if (getScriptdata.getDependency_tr() != null) {
+					mapOfTestRunDependencyOldToNewId.put(getScriptdata.getTestsetlineid(), id);
+//				}
+				setScriptdata.setTestsetlineid(id);
 				setScriptdata.setScriptid(scriptMaster.getScript_id());
 				setScriptdata.setCreatedby(copyTestrunvo.getCreated_by());
 				setScriptdata.setCreationdate(copyTestrunvo.getCreation_date());
@@ -90,6 +99,8 @@ public class CopyTestRunService2 {
 				setScriptdata.setExecutedby(null);
 				setScriptdata.setExecutionstarttime(null);
 				setScriptdata.setExecutionendtime(null);
+				setScriptdata.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(getScriptdata.getDependency_tr()));
+//				System.out.println("id :" + copyTestrunDao.getIds());
 				setTestrundata.addScriptsdata(setScriptdata);
 			} else {
 
