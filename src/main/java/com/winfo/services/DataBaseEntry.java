@@ -25,7 +25,9 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 @RefreshScope
@@ -141,10 +143,10 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<FetchMetadataVO> fetchMetadataListVO, Date startDate) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName) {
 		EmailParamDto emailParam = new EmailParamDto();
-		emailParam.setTestSetName(fetchMetadataListVO.get(0).getTest_run_name());
-		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecuted_by());
+		emailParam.setTestSetName(testRunName);
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
 		appContext.getBean(this.getClass()).updateSubscription();
 		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
@@ -164,9 +166,9 @@ public class DataBaseEntry {
 				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
 			}
 		}
-		limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-				fetchMetadataListVO.get(0).getScript_id(), fetchMetadataListVO.get(0).getScript_number(),
-				fetchConfigVO.getStatus1(), startDate, fetchConfigVO.getEndtime());
+		limitScriptExecutionService.insertTestRunScriptData(
+				fetchMetadataListVO.get(0).getScriptId(), fetchMetadataListVO.get(0).getScriptNumber(),
+				fetchConfigVO.getStatus1(), startDate, fetchConfigVO.getEndtime(), fetchScriptVO.getP_test_set_id());
 	}
 
 	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
@@ -227,6 +229,16 @@ public class DataBaseEntry {
 		} else {
 			return false;
 		}
+	}
+	
+	public CustomerProjectDto getCustomerDetails(String testSetId) {
+		
+		return dao.getCustomerDetails(testSetId);
+	}
+	
+	public List<ScriptDetailsDto> getScriptDetailsListVO(String testRunId, String testSetLineId, boolean finalPdf,
+			boolean executeApi) {
+		return dao.getScriptDetails(testRunId,testSetLineId,finalPdf,executeApi);
 	}
 
 	@Transactional
