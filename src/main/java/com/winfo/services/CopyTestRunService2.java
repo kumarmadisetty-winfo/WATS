@@ -63,9 +63,9 @@ public class CopyTestRunService2 {
 		// List<ScriptsData> listsScriptdata=new ArrayList<>();
 		// Collections.sort(getTestrun.getScriptsdata(),scriptComparator);
 		Map<Integer,Integer> mapOfTestRunDependencyOldToNewId = new HashMap<Integer,Integer>();
-		Comparator<ScriptsData> scriptDataComp = (ScriptsData s1,
-				ScriptsData s2) -> s1.getSeqnum() - s2.getSeqnum();
-		Collections.sort(getTestrun.getScriptsdata(), scriptDataComp);
+//		Comparator<ScriptsData> scriptDataComp = (ScriptsData s1,
+//				ScriptsData s2) -> s1.getSeqnum() - s2.getSeqnum();
+//		Collections.sort(getTestrun.getScriptsdata(), scriptDataComp);
 		for (ScriptsData getScriptdata : getTestrun.getScriptsdata()) {
 
 //			mapOfSequenceAndDependency.pu
@@ -99,7 +99,7 @@ public class CopyTestRunService2 {
 				setScriptdata.setExecutedby(null);
 				setScriptdata.setExecutionstarttime(null);
 				setScriptdata.setExecutionendtime(null);
-				setScriptdata.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(getScriptdata.getDependency_tr()));
+				setScriptdata.setDependency_tr(getScriptdata.getDependency_tr());
 //				System.out.println("id :" + copyTestrunDao.getIds());
 				setTestrundata.addScriptsdata(setScriptdata);
 			} else {
@@ -270,7 +270,13 @@ public class CopyTestRunService2 {
 
 //		setTestrundata.setScriptsdata(listsScriptdata);
 		System.out.println("before saveTestrun");
-
+		if(!mapOfTestRunDependencyOldToNewId.isEmpty()) {
+			for(ScriptsData scriptdata : setTestrundata.getScriptsdata()) {
+				if(scriptdata.getDependency_tr()!=null) {
+					scriptdata.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(scriptdata.getDependency_tr()));
+				}
+			}
+		}
 		int newtestrun = copyTestrunDao.saveTestrun(setTestrundata);
 		System.out.println("newtestrun 1:" + newtestrun);
 		return newtestrun;
