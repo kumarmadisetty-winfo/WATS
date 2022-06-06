@@ -1118,7 +1118,7 @@ public class TestScriptExecService {
 
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 					+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH) + pdffileName;
-//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
 		}
