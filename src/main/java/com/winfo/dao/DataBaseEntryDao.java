@@ -38,7 +38,9 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Repository
 @RefreshScope
@@ -133,7 +135,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateInProgressScriptStatus(String testSetId, String testSetLineId,Date startDate) {
+	public void updateInProgressScriptStatus(String testSetId, String testSetLineId, Date startDate) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
@@ -666,6 +668,161 @@ public class DataBaseEntryDao {
 
 	}
 
+	public CustomerProjectDto getCustomerDetails(String testSetId) {
+		CustomerProjectDto customerDetails = null;
+		String qry = "SELECT DISTINCT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
+				+ "          wtc.customer_name,\r\n" + "           wtts.project_id,\r\n"
+				+ "           wtp.project_name,\r\n" + "           wttsl.test_set_id,\r\n"
+				+ "         wtts.TEST_SET_NAME test_run_name\r\n" + "      from\r\n"
+				+ "      win_ta_test_set        wtts,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
+				+ "           win_ta_projects        wtp,\r\n" + "           win_ta_customers       wtc\r\n"
+				+ "     WHERE 1=1\r\n" + "       AND wttsl.test_set_id = wtts.test_set_id\r\n"
+				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
+				+ "       AND wtts.test_set_id=" + testSetId;
+		try {
+			String NULL_STRING = "null";
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(qry);
+			Object[] result = (Object[]) query.getSingleResult();
+			customerDetails = new CustomerProjectDto();
+			customerDetails
+					.setCustomerId(NULL_STRING.equals(String.valueOf(result[0])) ? null : String.valueOf(result[0]));
+			customerDetails.setCustomerNumber(
+					NULL_STRING.equals(String.valueOf(result[1])) ? null : String.valueOf(result[1]));
+			customerDetails
+					.setCustomerName(NULL_STRING.equals(String.valueOf(result[2])) ? null : String.valueOf(result[2]));
+			customerDetails
+					.setProjectId(NULL_STRING.equals(String.valueOf(result[3])) ? null : String.valueOf(result[3]));
+			customerDetails
+					.setProjectName(NULL_STRING.equals(String.valueOf(result[4])) ? null : String.valueOf(result[4]));
+			customerDetails
+					.setTestSetId(NULL_STRING.equals(String.valueOf(result[5])) ? null : String.valueOf(result[5]));
+			customerDetails
+					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
+		}
+		return customerDetails;
+
+	}
+
+	public List<ScriptDetailsDto> getScriptDetails(String testRunId, String testSetLineId, boolean finalPdf,
+			boolean executeApi) {
+
+		List<ScriptDetailsDto> listOfTestRunExecutionVo = new ArrayList<>();
+		String whereClause = "";
+		if (testSetLineId != null) {
+			whereClause = whereClause + "       AND wttsl.test_set_line_id=" + testSetLineId + "\r\n";
+		}
+		if (finalPdf) {
+			whereClause = whereClause + "      and  (upper(status) in ('PASS','FAIL'))\r\n";
+		}
+
+		if (executeApi) {
+			whereClause = whereClause + "      and wttsl.enabled = 'Y'\r\n";
+			whereClause = whereClause + "      and  (upper(status) in ('NEW','FAIL','IN-QUEUE'))\r\n";
+		}
+
+		String sqlQuery = "SELECT wttsl.test_set_line_id,\r\n" + "wtsmdata.script_id,\r\n"
+				+ "           wtsmdata.script_number,\r\n" + "           wtsmdata.line_number,\r\n"
+				+ "           CASE WHEN INSTR(wtsmdata.input_parameter,')',1,1) >4\r\n"
+				+ "               THEN wtsmdata.input_parameter\r\n"
+				+ "               ELSE regexp_replace( wtsmdata.input_parameter, '[*#()]', '') END input_parameter,\r\n"
+				+ "           wtsmdata.input_value,\r\n" + "           wtsmdata.action,\r\n"
+				+ "           wtsmdata.xpath_location,\r\n" + "           wtsmdata.xpath_location1,\r\n"
+				+ "           wtsmdata.field_type,\r\n" + "           wtsmdata.hint,\r\n"
+				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
+				+ "          , wttsl.SEQ_NUM\r\n"
+				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
+				+ ", wtsmdata.Line_ERROR_MESSAGE\r\n,  wtsmdata.test_run_param_desc\r\n"
+				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION\r\n"
+				+ "      from\r\n" + "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
+				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
+				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
+				+ "           win_ta_customers       wtc\r\n" + "     WHERE 1=1\r\n"
+				+ "     AND wtts.TEST_SET_ID = EX_ST.TEST_RUN_ID(+)\r\n" + "    and ma.script_id = wttsl.script_id\r\n"
+				+ "    and ma.script_number = wttsl.script_number\r\n"
+				+ "      -- AND wtts.test_set_id = :p_test_set_id\r\n"
+				+ "       AND wttsl.test_set_id = wtts.test_set_id\r\n"
+				+ "       AND wttsl.script_id = wtsmdata.script_id\r\n"
+				+ "       AND wtsmdata.test_set_line_id =wttsl.test_set_line_id\r\n"
+				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
+				+ "       AND wtts.test_set_id=" + testRunId + "\r\n" + whereClause + "       order by\r\n"
+				+ "       wttsl.SEQ_NUM,\r\n" + "         -- wtsmdata.script_number,\r\n"
+				+ "          wttsl.script_id,\r\n" + "          wtsmdata.line_number asc";
+
+		try {
+			String NULL_STRING = "null";
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(sqlQuery);
+			List<Object[]> resultList = query.getResultList();
+			Iterator<Object[]> itr = resultList.iterator();
+			while (itr.hasNext()) {
+				Object[] obj = itr.next();
+				ScriptDetailsDto scriptDetailsDto = new ScriptDetailsDto();
+
+				scriptDetailsDto
+						.setTestSetLineId(NULL_STRING.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
+				scriptDetailsDto
+						.setScriptId(NULL_STRING.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
+				scriptDetailsDto
+						.setScriptNumber(NULL_STRING.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
+				scriptDetailsDto
+						.setLineNumber(NULL_STRING.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
+				scriptDetailsDto
+						.setInputParameter(NULL_STRING.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
+				scriptDetailsDto
+						.setInputValue(NULL_STRING.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
+
+				scriptDetailsDto.setAction(NULL_STRING.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
+
+				scriptDetailsDto
+						.setXpathLocation(NULL_STRING.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
+				scriptDetailsDto
+						.setXpathLocation1(NULL_STRING.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
+
+				scriptDetailsDto
+						.setFieldType(NULL_STRING.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
+
+				// testRunExecutionVO.setHint( NULL_STRING.equals(String.valueOf(obj[10]))?
+				// null:String.valueOf(obj[10]));
+				scriptDetailsDto
+						.setScenarioName(NULL_STRING.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
+
+				scriptDetailsDto
+						.setDependency(NULL_STRING.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+
+				scriptDetailsDto
+						.setSeqNum(NULL_STRING.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+
+				scriptDetailsDto
+						.setStatus(NULL_STRING.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
+
+				scriptDetailsDto.setTestScriptParamId(
+						NULL_STRING.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
+
+				scriptDetailsDto
+						.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[16])) ? null : String.valueOf(obj[16]));
+
+				scriptDetailsDto.setTestRunParamDesc(
+						NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
+
+				scriptDetailsDto
+						.setExecutedBy(NULL_STRING.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
+
+				scriptDetailsDto.setTargetApplicationName(
+						NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+
+				listOfTestRunExecutionVo.add(scriptDetailsDto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
+		}
+		return listOfTestRunExecutionVo;
+	}
+
 	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
 			boolean executeApi) {
 
@@ -771,9 +928,9 @@ public class DataBaseEntryDao {
 				testRunExecutionVO.setTest_script_param_id(
 						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				testRunExecutionVO
-				.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
-				testRunExecutionVO
-				.setTestRunParamDesc(NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
+						.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
+				testRunExecutionVO.setTestRunParamDesc(
+						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
 				testRunExecutionVO
 						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[25])) ? null : String.valueOf(obj[25]));
 				testRunExecutionVO.setTargetApplicationName(
@@ -806,7 +963,8 @@ public class DataBaseEntryDao {
 			query.select(root.get("pdfGenerationEnabled")).where(condition);
 			return em.createQuery(query).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while getting status of PDF Generation for the Test Run", e);
+			throw new WatsEBSCustomException(500,
+					"Exception occured while getting status of PDF Generation for the Test Run", e);
 		}
 
 	}
