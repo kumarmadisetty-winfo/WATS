@@ -73,13 +73,13 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.Alert;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 //import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -168,6 +168,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public String Main_Window = "";
 	public WebElement fromElement;
 	public WebElement toElement;
+	
+	private static final DecimalFormat df = new DecimalFormat("00");
+
 
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
@@ -828,7 +831,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		long diffSeconds = diff / 1000 % 60;
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
@@ -999,7 +1002,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		long diffSeconds = diff / 1000 % 60;
 		long diffMinutes = diff / (60 * 1000) % 60;
 		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
@@ -1174,7 +1177,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
@@ -1364,7 +1367,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);;
 
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
@@ -1581,7 +1584,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
+			
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
@@ -1976,7 +1980,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//			String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
+//			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -2065,12 +2069,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 				Map<Date, Long> timeslist = limitScriptExecutionService
 						.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
+				
 				if (timeslist.size() == 0) {
 					StartTime = TStarttime1;
 					long TdiffSeconds = Tdiff / 1000 % 60;
 					long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 					long TdiffHours = Tdiff / (60 * 60 * 1000);
-					ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+					ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
 					if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 						limitScriptExecutionService.updateTestrunTimes(startTimestamp, endTimestamp, Tdiff,
 								fetchMetadataListVO.get(0).getTest_set_id());
@@ -2082,7 +2087,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						long TdiffSeconds = totalTime / 1000 % 60;
 						long TdiffMinutes = totalTime / (60 * 1000) % 60;
 						long TdiffHours = totalTime / (60 * 60 * 1000);
-						ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
+						ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
+						System.out.println("jxvbj");
 						if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 
 							limitScriptExecutionService.updateTestrunTimes1(endTimestamp, totalTime,
@@ -2676,7 +2682,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //					String ExecutedBy=fetchConfigVO.getApplication_user_name();
 					String StartTime = Starttime1;
 					String EndTime = endtime1;
-					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+					String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 
 					Map<String, TestSetScriptParam> map = databaseentry.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
 					
@@ -3233,6 +3239,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String Date = DateUtils.getSysdate();
 			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+//			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
 			String FILE = (Folder + pdffileName);
 			System.out.println(FILE);
 			List<String> fileNameList = null;
@@ -3304,7 +3311,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //			String ExecutedBy=fetchConfigVO.getApplication_user_name();
 			String StartTime = Starttime1;
 			String EndTime = endtime1;
-			String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+			String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
 
 			String TR = "Test Run Name";
 			String SN = "Script Number";
@@ -3602,6 +3609,52 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			System.out.println(imageDir);
+			
+			
+			RestTemplate restTemplate = new RestTemplate();
+			
+			// Outer header
+			HttpHeaders uploadSessionHeader = new HttpHeaders();
+			// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
+			uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
+			System.out.println(fetchConfigVO.getSharepoint_drive_id());
+			System.out.println(fetchConfigVO.getSharepoint_item_id());
+			HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+			
+			
+			//SITE-ID
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/winfoconsulting.sharepoint.com:/sites/WATS120",
+					HttpMethod.GET, uploadSessionRequest, Object.class);
+			
+			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody() : null;
+			String siteId = siteDetailsMap != null ? StringUtils.convertToString(siteDetailsMap.get("id").toString().split(",")[1]) : null;
+			
+			
+			//DRIVE-ID
+			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+siteId+"/drives",
+					HttpMethod.GET, uploadSessionRequest, Object.class);
+			
+			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) driveDetailsResponse.getBody() : null;
+			
+			List<Map<String,String>> list = (List<Map<String,String>>) driveDetailsMap.get("value");
+			
+			String driveId = null;
+			for(Map<String,String> map : list) {
+				if("Test_Library".equalsIgnoreCase(map.get("name"))) {
+					driveId = map.get("id");
+					break;
+				}
+			}
+			
+			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
+			
+			//SITE-ID
+			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test",
+					HttpMethod.GET, uploadSessionRequest, Object.class);
+			
+			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody() : null;
+			
+			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
 				System.out.println(imageFileName);
@@ -3617,21 +3670,26 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				}
 				input.close();
 				byte[] data = bos.toByteArray();
-				RestTemplate restTemplate = new RestTemplate();
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
 				bodyMap.add("user-file", data);
-				// Outer header
-				HttpHeaders uploadSessionHeader = new HttpHeaders();
-				// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
-				uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
-				System.out.println(fetchConfigVO.getSharepoint_drive_id());
-				System.out.println(fetchConfigVO.getSharepoint_item_id());
-				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+
+				
+
+
+				
 				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
-						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
-						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ driveId + "/items/" + itemId
+						+ ":/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
+				
+//				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+//						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
+//						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
+//						HttpMethod.POST, uploadSessionRequest, Object.class);
+				
+				
 				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
@@ -3656,6 +3714,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 	}
+
 
 	public String getAccessTokenPdf(FetchConfigVO fetchConfigVO) {
 		String acessToken = null;
