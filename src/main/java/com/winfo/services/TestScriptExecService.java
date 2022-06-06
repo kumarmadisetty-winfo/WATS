@@ -108,7 +108,6 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
-import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.DHSeleniumKeyWords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
@@ -974,7 +973,7 @@ public class TestScriptExecService {
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + BACK_SLASH
 					+ fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH) + pdffileName;
-			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
 		}
@@ -1033,62 +1032,76 @@ public class TestScriptExecService {
 
 		document.add(table1);
 		document.newPage();
-		// added step DEsc, Input PAram ,Input val in pdf
-		Map<String, TestSetScriptParam> map = dataBaseEntry
-				.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
+
 		int i = 0;
-		for (String image : fileNameList) {
-			i++;
-			Image img = Image.getInstance(
-					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/" + testRunName1 + "/" + image);
-
-			Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
-
-			String status = image.split("_")[6].split("\\.")[0];
-			String scenario = image.split("_")[2];
-			String steps = image.split("_")[5];
-
-			String stepDescription = map.get(steps).getTestRunParamDesc();
-			String inputParam = map.get(steps).getInputParameter();
-			String inputValue = map.get(steps).getInputValue();
-			document.setPageSize(pageSize);
-			document.newPage();
-
-			String s = "Status:" + " " + status;
-			String scenarios = "Scenario Name :" + "" + scenario;
-			watsLogo.scalePercent(65, 65);
-			watsLogo.setAlignment(Image.ALIGN_RIGHT);
-			document.add(watsLogo);
-			document.add(new Paragraph(s, fnt12));
-			document.add(new Paragraph(scenarios, fnt12));
-			String step = status.equals("Failed") ? "Failed at Line Number:" + "" + steps : "Step No :" + "" + steps;
-			String failMsg = status.equals("Failed") ? "Failed Message:" + "" + fetchConfigVO.getErrormessage() : null;
-			document.add(new Paragraph(step, fnt12));
-			if (failMsg != null) {
-				document.add(new Paragraph(failMsg, fnt12));
+		for (FetchMetadataVO metaDataVO : fetchMetadataListVO) {
+			String fileName = metaDataVO.getSeq_num() + "_" + metaDataVO.getLine_number() + "_"
+					+ metaDataVO.getScenario_name() + "_" + metaDataVO.getScript_number() + "_"
+					+ metaDataVO.getTest_run_name() + "_" + metaDataVO.getLine_number();
+			String image = null;
+			if (fileNameList.contains(fileName + "_Passed.png")) {
+				image = fileName + "_Passed.png";
+			} else if (fileNameList.contains(fileName + "_Passed.jpg")) {
+				image = fileName + "_Passed.jpg";
+			} else if (fileNameList.contains(fileName + "_Failed.png")) {
+				image = fileName + "_Failed.png";
+			} else if (fileNameList.contains(fileName + "_Failed.jpg")) {
+				image = fileName + "_Failed.jpg";
 			}
-			if (stepDescription != null) {
-				document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
-			}
-			if (inputParam != null && inputValue != null) {
-				document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
-				document.add(new Paragraph("Test Value: " + inputValue, fnt12));
-			}
-			document.add(Chunk.NEWLINE);
 
-			Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
-			p.setAlignment(Element.ALIGN_RIGHT);
-			img.setAlignment(Image.ALIGN_CENTER);
-			img.isScaleToFitHeight();
-			img.scalePercent(60, 62);
-			document.add(img);
-			document.add(p);
+			if (image != null) {
+				i++;
+				Image img = Image.getInstance(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/"
+						+ testRunName1 + "/" + image);
+
+				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
+				String status = image.split("_")[6].split("\\.")[0];
+				String scenario = image.split("_")[2];
+				String steps = image.split("_")[5];
+
+				String stepDescription = metaDataVO.getTestRunParamDesc();
+				String inputParam = metaDataVO.getInput_parameter();
+				String inputValue = metaDataVO.getInput_value();
+				document.setPageSize(pageSize);
+				document.newPage();
+				String s = "Status:" + " " + status;
+				String scenarios = "Scenario Name :" + "" + scenario;
+				watsLogo.scalePercent(65, 65);
+				watsLogo.setAlignment(Image.ALIGN_RIGHT);
+				document.add(watsLogo);
+				document.add(new Paragraph(s, fnt12));
+				document.add(new Paragraph(scenarios, fnt12));
+				String step = status.equals("Failed") ? "Failed at Line Number:" + "" + steps
+						: "Step No :" + "" + steps;
+				String failMsg = status.equals("Failed") ? "Failed Message:" + "" + metaDataVO.getLineErrorMsg() : null;
+				document.add(new Paragraph(step, fnt12));
+				if (failMsg != null) {
+					document.add(new Paragraph(failMsg, fnt12));
+				}
+				if (stepDescription != null) {
+					document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+				}
+				if (inputParam != null && inputValue != null) {
+					document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
+					document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+				}
+				document.add(Chunk.NEWLINE);
+
+				Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
+				p.setAlignment(Element.ALIGN_RIGHT);
+				img.setAlignment(Image.ALIGN_CENTER);
+				img.isScaleToFitHeight();
+				img.scalePercent(60, 62);
+				document.add(img);
+				document.add(p);
+			}
 		}
+
 	}
 
 	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
-			FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO) throws DocumentException,
-			IOException, ClassNotFoundException, SQLException, com.itextpdf.text.DocumentException {
+			FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO)
+			throws IOException, com.itextpdf.text.DocumentException {
 		int k = 0;
 		int l = 0;
 		String sno1 = "";
@@ -1179,148 +1192,161 @@ public class TestScriptExecService {
 
 		int i = 0;
 		int j = 0;
-		for (String image : fileNameList) {
-			i++;
-			Image img = Image.getInstance(
-					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/" + testRunName1 + "/" + image);
-			Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
-			String sno = image.split("_")[0];
-			String sNo = "Script Number";
-			String scriptNumber1 = image.split("_")[3];
-			String snm = "Scenario Name";
-			String scriptName = image.split("_")[2];
-			String testRunName = image.split("_")[4];
-			if (!sno.equalsIgnoreCase(sno1)) {
-				document.setPageSize(pageSize);
-				document.newPage();
+		for (FetchMetadataVO metaDataVO : fetchMetadataListVO) {
+			String fileName = metaDataVO.getSeq_num() + "_" + metaDataVO.getLine_number() + "_"
+					+ metaDataVO.getScenario_name() + "_" + metaDataVO.getScript_number() + "_"
+					+ metaDataVO.getTest_run_name() + "_" + metaDataVO.getLine_number();
+			String image = null;
+			if (fileNameList.contains(fileName + "_Passed.png")) {
+				image = fileName + "_Passed.png";
+			} else if (fileNameList.contains(fileName + "_Passed.jpg")) {
+				image = fileName + "_Passed.jpg";
+			} else if (fileNameList.contains(fileName + "_Failed.png")) {
+				image = fileName + "_Failed.png";
+			} else if (fileNameList.contains(fileName + "_Failed.jpg")) {
+				image = fileName + "_Failed.jpg";
+			}
+
+			if (image != null) {
+				i++;
+				Image img = Image.getInstance(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName + "/"
+						+ testRunName1 + "/" + image);
+				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
+				String sno = image.split("_")[0];
+				String sNo = "Script Number";
+				String scriptNumber1 = image.split("_")[3];
+				String snm = "Scenario Name";
+				String scriptName = image.split("_")[2];
+
+				if (!sno.equalsIgnoreCase(sno1)) {
+					document.setPageSize(pageSize);
+					document.newPage();
+					document.add(watsLogo);
+					Anchor target3 = new Anchor("Script Details", font23);
+					target3.setName(sno + "_" + scriptNumber1);
+					Paragraph pa = new Paragraph();
+					pa.add(target3);
+					document.add(pa);
+					document.add(Chunk.NEWLINE);
+					PdfPTable table2 = new PdfPTable(2);
+					table2.setWidths(new int[] { 1, 1 });
+					table2.setWidthPercentage(100f);
+					String[] strArr = { sNo, scriptNumber1, snm, scriptName };
+					for (String str : strArr) {
+						eBSSeleniumKeyWords.insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
+					}
+
+					for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
+						String str = entry1.getValue();
+						if (!str.equals("null")) {
+							eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+							eBSSeleniumKeyWords.insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
+						} else {
+							eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+							eBSSeleniumKeyWords.insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
+						}
+					}
+
+					document.add(table2);
+				}
+				if (sno != null) {
+					sno1 = sno;
+				}
+				String status = image.split("_")[6].split("\\.")[0];
+				String scenario = image.split("_")[2];
+
+				String scenarios = "Scenario Name :" + "" + scenario;
+
+				String sndo = image.split("_")[0];
+				watsLogo.scalePercent(65, 68);
+				Rectangle one1 = new Rectangle(1360, 1000);
+				watsLogo.setAlignment(Image.ALIGN_RIGHT);
+				if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+					document.setPageSize(one1);
+					document.newPage();
+				} else {
+
+					document.setPageSize(pageSize);
+					document.newPage();
+				}
 				document.add(watsLogo);
-				Anchor target3 = new Anchor("Script Details", font23);
-				target3.setName(sno + "_" + scriptNumber1);
-				Paragraph pa = new Paragraph();
-				pa.add(target3);
-				document.add(pa);
-				document.add(Chunk.NEWLINE);
-				PdfPTable table2 = new PdfPTable(2);
-				table2.setWidths(new int[] { 1, 1 });
-				table2.setWidthPercentage(100f);
-				String[] strArr = { sNo, scriptNumber1, snm, scriptName };
-				for (String str : strArr) {
-					eBSSeleniumKeyWords.insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
-				}
+				document.add(new Paragraph(scenarios, fnt12));
+				String reason = image.split("_")[5];
+				String step = "Step No :" + "" + reason;
 
-				for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
-					String str = entry1.getValue();
-					if (!str.equals("null")) {
-						eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
-						eBSSeleniumKeyWords.insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
-					} else {
-						eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
-						eBSSeleniumKeyWords.insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
+				String stepDescription = metaDataVO.getTestRunParamDesc();
+
+				String inputParam = metaDataVO.getInput_parameter();
+
+				String inputValue = metaDataVO.getInput_value();
+
+				Paragraph pr1 = new Paragraph();
+				pr1.add("Status:");
+
+				if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+					String message = "Failed at Line Number:" + "" + reason;
+					String error = metaDataVO.getLineErrorMsg();
+					String errorMessage = "Failed Message:" + "" + error;
+					Anchor target1 = new Anchor(status);
+					target1.setName(String.valueOf(status + j));
+					j++;
+					pr1.add(target1);
+					document.add(pr1);
+					document.add(new Paragraph(message, fnt12));
+					if (error != null) {
+						document.add(new Paragraph(errorMessage, fnt12));
 					}
-				}
-
-				document.add(table2);
-
-			}
-			if (sno != null) {
-				sno1 = sno;
-			}
-			String status = image.split("_")[6].split("\\.")[0];
-			String scenario = image.split("_")[2];
-
-			String scenarios = "Scenario Name :" + "" + scenario;
-
-			String sndo = image.split("_")[0];
-			watsLogo.scalePercent(65, 68);
-			Rectangle one1 = new Rectangle(1360, 1000);
-			watsLogo.setAlignment(Image.ALIGN_RIGHT);
-			if (image.startsWith(sndo + "_") && image.contains("Failed")) {
-				document.setPageSize(one1);
-				document.newPage();
-			} else {
-
-				document.setPageSize(pageSize);
-				document.newPage();
-			}
-			document.add(watsLogo);
-			document.add(new Paragraph(scenarios, fnt12));
-			String reason = image.split("_")[5];
-			String step = "Step No :" + "" + reason;
-			String message = "Failed at Line Number:" + "" + reason;
-			// new change-database to get error message
-			String error = dataBaseEntry.getErrorMessage(sndo, scriptNumber1, testRunName);
-			String errorMessage = "Failed Message:" + "" + error;
-
-			Map<String, Map<String, TestSetScriptParam>> descriptionList = dataBaseEntry
-					.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
-			String stepDescription = descriptionList.get(sno).get(reason).getTestRunParamDesc();
-
-			String inputParam = descriptionList.get(sno).get(reason).getInputParameter();
-
-			String inputValue = descriptionList.get(sno).get(reason).getInputValue();
-
-			Paragraph pr1 = new Paragraph();
-			pr1.add("Status:");
-
-			if (image.startsWith(sndo + "_") && image.contains("Failed")) {
-				Anchor target1 = new Anchor(status);
-				target1.setName(String.valueOf(status + j));
-				j++;
-				pr1.add(target1);
-				document.add(pr1);
-				document.add(new Paragraph(message, fnt12));
-				if (error != null) {
-					document.add(new Paragraph(errorMessage, fnt12));
-				}
-				if (stepDescription != null) {
-					document.add(new Paragraph("Step Description :" + stepDescription, fnt12));
-				}
-				if (inputParam != null) {
-					document.add(new Paragraph("Test Parameter :" + inputParam, fnt12));
-					if (inputValue != null) {
-						document.add(new Paragraph("Test Value :" + inputValue, fnt12));
+					if (stepDescription != null) {
+						document.add(new Paragraph("Step Description :" + stepDescription, fnt12));
 					}
-				}
-				document.add(Chunk.NEWLINE);
-				img.setAlignment(Image.ALIGN_CENTER);
-				img.isScaleToFitHeight();
-				// new change-change page size
-				img.scalePercent(60, 60);
-				document.add(img);
-
-			} else {
-				document.add(new Paragraph(step, fnt12));
-				Anchor target1 = new Anchor(status);
-				target1.setName(String.valueOf(status));
-				pr1.add(target1);
-				document.add(pr1);
-
-				if (stepDescription != null) {
-					document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
-				}
-				if (inputParam != null) {
-					document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
-					if (inputValue != null) {
-						document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+					if (inputParam != null) {
+						document.add(new Paragraph("Test Parameter :" + inputParam, fnt12));
+						if (inputValue != null) {
+							document.add(new Paragraph("Test Value :" + inputValue, fnt12));
+						}
 					}
+					document.add(Chunk.NEWLINE);
+					img.setAlignment(Image.ALIGN_CENTER);
+					img.isScaleToFitHeight();
+					// new change-change page size
+					img.scalePercent(60, 60);
+					document.add(img);
+
+				} else {
+					document.add(new Paragraph(step, fnt12));
+					Anchor target1 = new Anchor(status);
+					target1.setName(String.valueOf(status));
+					pr1.add(target1);
+					document.add(pr1);
+
+					if (stepDescription != null) {
+						document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+					}
+					if (inputParam != null) {
+						document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
+						if (inputValue != null) {
+							document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+						}
+					}
+					img.setAlignment(Image.ALIGN_CENTER);
+					img.isScaleToFitHeight();
+					img.scalePercent(60, 68);
+					document.add(img);
 				}
-				img.setAlignment(Image.ALIGN_CENTER);
-				img.isScaleToFitHeight();
-				img.scalePercent(60, 68);
-				document.add(img);
+
+				Anchor target = new Anchor(String.valueOf(i));
+				target.setName(String.valueOf(i));
+				Anchor target1 = new Anchor(String.valueOf("Back to Index"), bf16);
+				target1.setReference("#" + "details");
+				Paragraph p = new Paragraph();
+				p.add(target1);
+				p.add(new Chunk(new VerticalPositionMark()));
+				p.add(" page ");
+				p.add(target);
+				p.add(" of " + fileNameList.size());
+				document.add(p);
 			}
 
-			Anchor target = new Anchor(String.valueOf(i));
-			target.setName(String.valueOf(i));
-			Anchor target1 = new Anchor(String.valueOf("Back to Index"), bf16);
-			target1.setReference("#" + "details");
-			Paragraph p = new Paragraph();
-			p.add(target1);
-			p.add(new Chunk(new VerticalPositionMark()));
-			p.add(" page ");
-			p.add(target);
-			p.add(" of " + fileNameList.size());
-			document.add(p);
 		}
 
 	}
