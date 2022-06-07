@@ -697,7 +697,8 @@ public class TestScriptExecService {
 			args.setSuccess(scriptStatus);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName() + File.separator);
+					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+					+ File.separator);
 			String objectStore = fetchConfigVO.getScreenshot_path();
 			String[] arrOfStr = objectStore.split(FORWARD_SLASH, 5);
 			StringBuilder objectStoreScreenShotPath = new StringBuilder(arrOfStr[3]);
@@ -816,7 +817,8 @@ public class TestScriptExecService {
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true, false);
+		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
+				false);
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
 		fetchConfigVO.setEndtime(endDate);
 		try {
@@ -856,7 +858,10 @@ public class TestScriptExecService {
 			long tDiffSeconds = tdiff / 1000 % 60;
 			long tDiffMinutes = tdiff / (60 * 1000) % 60;
 			long tDiffHours = tdiff / (60 * 60 * 1000);
-			executionTime = tDiffHours + ":" + tDiffMinutes + ":" + tDiffSeconds;
+			String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
+			String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+			String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
+			executionTime = hr + min + sec;
 			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				limitScriptExecutionService.updateTestrunTimes(startTimestamp, endTimestamp, tdiff, testSetId);
 			}
@@ -867,7 +872,10 @@ public class TestScriptExecService {
 				long tDiffSeconds = totalTime / 1000 % 60;
 				long tDiffMinutes = totalTime / (60 * 1000) % 60;
 				long tDiffHours = totalTime / (60 * 60 * 1000);
-				executionTime = tDiffHours + ":" + tDiffMinutes + ":" + tDiffSeconds;
+				String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
+				String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+				String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
+				executionTime = hr + min + sec;
 				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 					limitScriptExecutionService.updateTestrunTimes1(endTimestamp, totalTime, testSetId);
 				}
@@ -1024,8 +1032,8 @@ public class TestScriptExecService {
 	private void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) throws com.itextpdf.text.DocumentException {
 		try {
-			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator);
+			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+					+ File.separator + customerDetails.getTestSetName() + File.separator);
 			String file = (folder + pdffileName);
 			findPassAndFailCount(fetchConfigVO, customerDetails.getTestSetId());
 
@@ -1117,7 +1125,7 @@ public class TestScriptExecService {
 
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
-//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
 		}
@@ -1134,12 +1142,14 @@ public class TestScriptExecService {
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
 		long diff = endTime.getTime() - startTime.getTime();
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000);
+		long time = 0;
+		String sec = (time = diff / 1000 % 60) > 0 ? time + "sec" : "";
+		String min = (time = diff / (60 * 1000) % 60) > 0 ? time + "min " : "";
+		String hr = (time = diff / (60 * 60 * 1000)) > 0 ? time + "hr " : "";
+
 		String scriptNumber2 = fetchMetadataListVO.get(0).getScenarioName();
 		String scenario1 = fetchConfigVO.getStatus1();
-		String executionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String executionTime = hr + min + sec;
 		String tr = "Test Run Name";
 		String sn = "Script Number";
 		String sn1 = "Scenario name";
