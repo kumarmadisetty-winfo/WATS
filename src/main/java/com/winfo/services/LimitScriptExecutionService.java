@@ -28,6 +28,7 @@ import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 @RefreshScope
@@ -88,6 +89,26 @@ public class LimitScriptExecutionService {
 	}
 
 	@Transactional
+	public void insertTestRunScriptData(String scriptId, String scriptNumber, String status, Date startDate,
+			Date endDate, String testRunId) {
+		try {
+			ExecutionAudit executionAudit = new ExecutionAudit();
+			String testSetId = testRunId;
+			executionAudit.setTestsetid(testSetId);
+			executionAudit.setScriptid(scriptId);
+			executionAudit.setScriptnumber(scriptNumber);
+			executionAudit.setExecutionstarttime(startDate);
+			executionAudit.setExecutionendtime(endDate);
+			executionAudit.setStatus(status);
+			limitScriptExecutionDao.insertTestrundata(executionAudit);
+			log.info("data added successfully");
+		} catch (Exception e) {
+			log.error("testrun data not added " + e);
+			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
+		}
+	}
+
+	@Transactional
 	public void insertTestRunScriptData(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
 			String scriptId, String scriptNumber, String status, Date startDate, Date endDate) {
 		try {
@@ -112,11 +133,11 @@ public class LimitScriptExecutionService {
 	 * api is triggered
 	 */
 	@Transactional
-	public boolean updateStatusCheck(FetchConfigVO fetchConfigVO,
-			List<FetchMetadataVO> fetchMetadataListVO, String scriptId, String scriptNumber, String status) {
+	public boolean updateStatusCheck(FetchConfigVO fetchConfigVO, String testRunId, String scriptId,
+			String scriptNumber, String status) {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
-			String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
+			String testSetId = testRunId;
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
