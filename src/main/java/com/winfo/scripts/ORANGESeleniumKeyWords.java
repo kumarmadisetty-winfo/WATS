@@ -18598,12 +18598,6 @@ try {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		try {
-			String text = driver.findElement(By.xpath("//div[contains(text(),'Error')]")).getText();
-			return text;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
 		return null;
 	}
 
@@ -20128,7 +20122,12 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

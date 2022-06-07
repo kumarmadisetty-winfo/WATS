@@ -43,7 +43,7 @@ public class DriverConfiguration {
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
-			if (os.contains("win")) {
+			if (!os.contains("win")) {
 				System.out.println("windows location");
 				options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
 																										// "C:\\Program
@@ -58,6 +58,8 @@ public class DriverConfiguration {
 //			options.setBinary("/usr/bin/google-chrome");
 //			options.addArguments("headless");
 			options.addArguments("start-maximized");
+			options.addArguments("--no-sandbox");
+			options.addArguments("--headless");
 			options.addArguments("--enable-automation");
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
