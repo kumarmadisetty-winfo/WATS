@@ -56,7 +56,7 @@ public class DriverConfiguration {
 
 //			options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
 //			options.setBinary("/usr/bin/google-chrome");
-//			options.addArguments("headless");
+			options.addArguments("headless");
 			options.addArguments("start-maximized");
 			options.addArguments("--enable-automation");
 			options.addArguments("test-type=browser");
