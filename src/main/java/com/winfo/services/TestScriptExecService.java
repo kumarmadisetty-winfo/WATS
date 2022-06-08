@@ -128,7 +128,6 @@ public class TestScriptExecService {
 	public static final String topic = "test-script-run";
 	private static final String PY_EXTN = ".py";
 	public static final String FORWARD_SLASH = "/";
-	public static final String BACK_SLASH = "\\";
 	public static final String SPLIT = "@";
 	private static final String[] CONST = { "Status", "Total", "Percentage" };
 	private static final String PASSED = "Passed";
@@ -637,7 +636,7 @@ public class TestScriptExecService {
 	public void deleteScreenshotsFromWindows(FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails,
 			String seqNums) {
 		File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-				+ BACK_SLASH + customerDetails.getTestSetName());
+				+ File.separator + customerDetails.getTestSetName());
 		if (!folder1.exists()) {
 			try {
 				folder1.mkdirs();
@@ -647,7 +646,7 @@ public class TestScriptExecService {
 		} else {
 
 			File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-					+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH);
+					+ File.separator + customerDetails.getTestSetName() + File.separator);
 			if (folder.exists()) {
 				File[] listOfFiles = folder.listFiles();
 
@@ -698,7 +697,8 @@ public class TestScriptExecService {
 			args.setSuccess(scriptStatus);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ customerDetails.getCustomerName() + BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH);
+					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+					+ File.separator);
 			String objectStore = fetchConfigVO.getScreenshot_path();
 			String[] arrOfStr = objectStore.split(FORWARD_SLASH, 5);
 			StringBuilder objectStoreScreenShotPath = new StringBuilder(arrOfStr[3]);
@@ -707,17 +707,17 @@ public class TestScriptExecService {
 			}
 
 			String scriptId = fetchMetadataListVO.get(0).getScriptId();
-			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf" + "AAAparent="
+			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
+					+ customerDetails.getTestSetName() + File.separator + "Passed_Report.pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "b/"
-					+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf" + "AAAparent="
+					+ customerDetails.getTestSetName() + File.separator + "Failed_Report.pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
-			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf" + "AAAparent="
+			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
+					+ customerDetails.getTestSetName() + File.separator + "Detailed_Report.pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
-			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName() + "/" + fetchMetadataListVO.get(0).getSeqNum() + "_"
+			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
+					+ customerDetails.getTestSetName() + File.separator + fetchMetadataListVO.get(0).getSeqNum() + "_"
 					+ fetchMetadataListVO.get(0).getScriptNumber() + ".pdf" + "AAAparent=" + fetchConfigVO.getImg_url();
 
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
@@ -817,7 +817,8 @@ public class TestScriptExecService {
 
 	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true, false);
+		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
+				false);
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
 		fetchConfigVO.setEndtime(endDate);
 		try {
@@ -857,7 +858,10 @@ public class TestScriptExecService {
 			long tDiffSeconds = tdiff / 1000 % 60;
 			long tDiffMinutes = tdiff / (60 * 1000) % 60;
 			long tDiffHours = tdiff / (60 * 60 * 1000);
-			executionTime = tDiffHours + ":" + tDiffMinutes + ":" + tDiffSeconds;
+			String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
+			String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+			String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
+			executionTime = hr + min + sec;
 			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 				limitScriptExecutionService.updateTestrunTimes(startTimestamp, endTimestamp, tdiff, testSetId);
 			}
@@ -868,7 +872,10 @@ public class TestScriptExecService {
 				long tDiffSeconds = totalTime / 1000 % 60;
 				long tDiffMinutes = totalTime / (60 * 1000) % 60;
 				long tDiffHours = totalTime / (60 * 60 * 1000);
-				executionTime = tDiffHours + ":" + tDiffMinutes + ":" + tDiffSeconds;
+				String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
+				String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+				String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
+				executionTime = hr + min + sec;
 				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 					limitScriptExecutionService.updateTestrunTimes1(endTimestamp, totalTime, testSetId);
 				}
@@ -1025,8 +1032,8 @@ public class TestScriptExecService {
 	private void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) throws com.itextpdf.text.DocumentException {
 		try {
-			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + BACK_SLASH
-					+ customerDetails.getTestSetName() + BACK_SLASH);
+			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+					+ File.separator + customerDetails.getTestSetName() + File.separator);
 			String file = (folder + pdffileName);
 			findPassAndFailCount(fetchConfigVO, customerDetails.getTestSetId());
 
@@ -1117,7 +1124,7 @@ public class TestScriptExecService {
 					+ customerDetails.getTestSetName() + FORWARD_SLASH) + pdffileName;
 
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
-					+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH) + pdffileName;
+					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
 			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
@@ -1135,12 +1142,14 @@ public class TestScriptExecService {
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
 		long diff = endTime.getTime() - startTime.getTime();
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000);
+		long time = 0;
+		String sec = (time = diff / 1000 % 60) > 0 ? time + "sec" : "";
+		String min = (time = diff / (60 * 1000) % 60) > 0 ? time + "min " : "";
+		String hr = (time = diff / (60 * 60 * 1000)) > 0 ? time + "hr " : "";
+
 		String scriptNumber2 = fetchMetadataListVO.get(0).getScenarioName();
 		String scenario1 = fetchConfigVO.getStatus1();
-		String executionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+		String executionTime = hr + min + sec;
 		String tr = "Test Run Name";
 		String sn = "Script Number";
 		String sn1 = "Scenario name";

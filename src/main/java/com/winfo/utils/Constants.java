@@ -1,5 +1,7 @@
 package com.winfo.utils;
 
+import java.io.File;
+
 public class Constants {
 
 	public enum TEST_SET_LINE_ID_STATUS {
@@ -59,12 +61,12 @@ public class Constants {
 			return this.label;
 		}
 	}
-
+	
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
 	public static final String SYS_USER_HOME_PATH = "user.home";
-	public static final String SCREENSHOT = "\\wats\\Screenshot\\";
-	public static final String PDF = "\\wats\\PDF\\";
+	public static final String SCREENSHOT = File.separator+"wats"+ File.separator+"Screenshot"+File.separator;
+	public static final String PDF = File.separator+"wats"+File.separator+"PDF"+File.separator;
 
 }
