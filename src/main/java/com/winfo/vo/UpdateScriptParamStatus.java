@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 public class UpdateScriptParamStatus {
 	@NotNull
 	private String scriptParamId;
-	private String message;
+	private String message="";
 	private boolean success;
 	private String result;
 
