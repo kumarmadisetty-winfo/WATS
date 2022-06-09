@@ -67,6 +67,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.itextpdf.awt.DefaultFontMapper;
@@ -273,20 +275,16 @@ public class TestScriptExecService {
 	}
 
 	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO,
-			Entry<Integer, List<FetchMetadataVO>> metaData) throws Exception {
+			Entry<Integer, List<FetchMetadataVO>> metaData)  {
 
-		try {
 
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, fetchMetadataListsVO, fetchConfigVO);
 
-		} catch (Exception e) {
-			throw e;
-		}
 	}
 
 	public void switchActions(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
+			{
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -305,7 +303,6 @@ public class TestScriptExecService {
 				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTest_set_line_id()))
 				.triggeredBy(fetchMetadataListVO.get(0).getExecuted_by()).correlationId(UUID.randomUUID().toString())
 				.build(), AUDIT_TRAIL_STAGES.RR);
-		try {
 
 			String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
@@ -359,9 +356,6 @@ public class TestScriptExecService {
 			this.kafkaTemp.send(topic,
 					new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ);
-		} catch (Exception e) {
-			throw e;
-		}
 
 	}
 
@@ -394,7 +388,7 @@ public class TestScriptExecService {
 	}
 
 	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName,
-			String screenshotPath, String testScriptParamId) throws Exception {
+			String screenshotPath, String testScriptParamId){
 		logger.info(actionName);
 
 		PyJabActions action = actionRepo.findByActionName(actionName);
@@ -408,8 +402,9 @@ public class TestScriptExecService {
 		List<String> listArgs = new ArrayList<>();
 
 		if (paramValue != null) {
-			HashMap<String, Object> result = new ObjectMapper().readValue(paramValue, HashMap.class);
+			HashMap<String, Object> result;
 			try {
+				result = new ObjectMapper().readValue(paramValue, HashMap.class);
 				for (Map.Entry<String, Object> entry : result.entrySet()) {
 					keyWithIndex = entry.getKey();
 					index = keyWithIndex.split(SPLIT)[0];
@@ -544,9 +539,8 @@ public class TestScriptExecService {
 
 			return response.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Exception Occured while uploading generated script to object store : "+e.getMessage(), e);
 		}
-		return response.toString();
 	}
 
 	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {

@@ -28,18 +28,14 @@ public class TestScriptExecController {
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript")
 	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
 			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 		ResponseDto status = null;
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
-			try {
-				status = testScriptExecService.run(testScriptDto.getTestScriptNo());
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			status = testScriptExecService.run(testScriptDto.getTestScriptNo());
 		}
 
 		return status;
@@ -58,13 +54,12 @@ public class TestScriptExecController {
 		testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
 	}
 
-	@ResponseBody 
+	@ResponseBody
 	@RequestMapping(value = "/generateScriptPdf")
 	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult) {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
 	}
-	
-	
+
 	@KafkaListener(topics = "wats-not-reachable", groupId = "wats-group")
 	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) {
 		testScriptExecService.generateTestScriptLineIdReports(event);
