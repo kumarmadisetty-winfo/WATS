@@ -131,7 +131,7 @@ public class RunAutomation {
 //			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
 
-//			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriverNew\\chromedriver.exe");
+//			fetchConfigVO.setChrome_driver_path("C:\\Users\\UdayPratapSingh\\Downloads\\chromedriver_win32\\chromedriver.exe");
 			fetchConfigVO.setPdf_path("C:\\\\Users\\\\UdayPratapSingh\\\\OneDrive - Winfo Solutions\\\\Desktop\\\\PDF");
 			fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\UdayPratapSingh\\\\OneDrive - Winfo Solutions\\\\Desktop\\\\SCREEN SHOT");
 
@@ -559,7 +559,9 @@ public class RunAutomation {
 					value2 = getValue != null ? getValue.split(">").length > 1 ? getValue.split(">")[1] : "" : "";
 
 				}
+				Date Starttime = new Date();
 				try {
+					
 					switch (actionName) {
 
 					case "Login into Application":
@@ -1252,6 +1254,13 @@ public class RunAutomation {
 						break;
 						
 					}
+					Date endtime = new Date();
+					long diff = endtime.getTime() - Starttime.getTime();
+					long diffSeconds = diff / 1000 % 60;
+					long diffMinutes = diff / (60 * 1000) % 60;
+					long diffHours = diff / (60 * 60 * 1000);
+					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+					System.out.println("ExecutionTime "+ExecutionTime);
 					i++;
 
 					// MetaData Webservice

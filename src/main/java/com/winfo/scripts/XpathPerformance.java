@@ -140,11 +140,12 @@ public class XpathPerformance {
 			catch (Exception e) {
 				
 				 if(count==0) {
+					 Thread.sleep(2000);
 					  count = 1; 
 					  System.out.println(" The Count Value is : "+count);
 						sendValue( driver,  param1,  param2,  keysToSend,
 								 fetchMetadataVO,  fetchConfigVO,count);
-			Thread.sleep(2000);
+			
 						}else if(count<=2) { 
 					  count = count+1;
 					  Thread.sleep(2000);
@@ -201,7 +202,7 @@ public class XpathPerformance {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath((paramsr))));
-			Thread.sleep(3000);
+			Thread.sleep(6000);
 			WebElement waittext = driver.findElement(By.xpath((paramsr)));
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Actions actions = new Actions(driver);
@@ -950,10 +951,11 @@ public class XpathPerformance {
 			
 				 if(count==0) {
 					  count = 1; 
+					  Thread.sleep(2000);
 					  System.out.println(" The Count Value is : "+count);
 					  selectByText( driver,  param1,  param2,  inputData,
 								 fetchMetadataVO,  fetchConfigVO,count);
-			Thread.sleep(2000);
+			
 						}else if(count<=2) { 
 					  count = count+1;
 					  Thread.sleep(2000);
