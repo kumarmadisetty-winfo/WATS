@@ -133,6 +133,23 @@ public class TestScriptExecService {
 	private static final String PASSED = "Passed";
 	private static final String FAILED = "Failed";
 	private static final String ARIAL = "Arial";
+	private static final String PASS = "Pass";
+	private static final String FAIL = "Fail";
+	private static final String IN_COMPLETE = "In Complete";
+	private static final String PDF_EXTENSION = ".pdf";
+	private static final String EXECUTION_REPORT = "Execution Report";
+	private static final String TEST_RUN_NAME = "Test Run Name";
+	private static final String EXECUTED_BY = "Executed By";
+	private static final String START_TIME = "Start Time";
+	private static final String END_TIME = "End Time";
+	private static final String EXECUTION_TIME = "Execution Time";
+	private static final String EXECUTION_SUMMARY = "Execution Summary";
+	private static final String SCRIPT_NUMBER = "Script Number";
+	private static final String STEP_DESC = "Step Description : ";
+	private static final String TEST_PARAM = "Test Parameter : ";
+	private static final String TEST_VALUE = "Test Value : ";
+	private static final String SCENARIO_NAME = "Scenario Name";
+	private static final String STEP_NO = "Step No : ";
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
@@ -572,8 +589,6 @@ public class TestScriptExecService {
 			String objectStoreScreenShotPath, String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
 		List<String> objNames = null;
-
-		System.out.println(objectStoreScreenShotPath);
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
@@ -600,14 +615,14 @@ public class TestScriptExecService {
 					.collect(Collectors.toList());
 			logger.info(objNames.size());
 			ListIterator<String> listIt = objNames.listIterator();
-			String imagePath = screenshotPath;
+			createDir(screenshotPath);
 			while (listIt.hasNext()) {
 				String objectName = listIt.next();
 				GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(ociNamespace)
 						.bucketName(ociBucketName).objectName(objectName).build());
 
 				String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
-				File file = new File(imagePath + imageName);
+				File file = new File(screenshotPath + File.separator + imageName);
 				if (!file.exists()) {
 					try (final InputStream stream = getResponse.getInputStream();
 							// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
@@ -633,35 +648,18 @@ public class TestScriptExecService {
 
 	}
 
-	public void deleteScreenshotsFromWindows(FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails,
-			String seqNums) {
-		File folder1 = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-				+ File.separator + customerDetails.getTestSetName());
-		if (!folder1.exists()) {
-			try {
-				folder1.mkdirs();
-			} catch (SecurityException se) {
-				logger.info(se.getMessage());
-			}
-		} else {
-
-			File folder = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-					+ File.separator + customerDetails.getTestSetName() + File.separator);
+	public void deleteScreenshotsFromWindows(String screenShotFolderPath) {
+		File folder1 = new File(screenShotFolderPath);
+		if (folder1.exists()) {
+			File folder = new File(screenShotFolderPath + File.separator);
 			if (folder.exists()) {
 				File[] listOfFiles = folder.listFiles();
-
 				for (File file : Arrays.asList(listOfFiles)) {
-					System.out.println("deleting ********* " + file.getName());
-					String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-					String seqnum1 = seqNums;
-					if (seqNum.equalsIgnoreCase(seqnum1)) {
-						Path imagesPath = Paths.get(file.getPath());
-						try {
-							Files.delete(imagesPath);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					Path imagesPath = Paths.get(file.getPath());
+					try {
+						Files.delete(imagesPath);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -697,8 +695,7 @@ public class TestScriptExecService {
 			args.setSuccess(scriptStatus);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
-					+ File.separator);
+					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 			String objectStore = fetchConfigVO.getScreenshot_path();
 			String[] arrOfStr = objectStore.split(FORWARD_SLASH, 5);
 			StringBuilder objectStoreScreenShotPath = new StringBuilder(arrOfStr[3]);
@@ -718,11 +715,12 @@ public class TestScriptExecService {
 					+ fetchConfigVO.getImg_url();
 			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
 					+ customerDetails.getTestSetName() + File.separator + fetchMetadataListVO.get(0).getSeqNum() + "_"
-					+ fetchMetadataListVO.get(0).getScriptNumber() + ".pdf" + "AAAparent=" + fetchConfigVO.getImg_url();
+					+ fetchMetadataListVO.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
+					+ fetchConfigVO.getImg_url();
 
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			fetchConfigVO.setStarttime1(testSetLine.getExecutionStartTime());
-			deleteScreenshotsFromWindows(fetchConfigVO, customerDetails, fetchMetadataListVO.get(0).getSeqNum());
+			deleteScreenshotsFromWindows(screenShotFolderPath);
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), objectStoreScreenShotPath.toString(),
 					fetchMetadataListVO.get(0).getSeqNum() + "_");
@@ -740,36 +738,37 @@ public class TestScriptExecService {
 			}
 			String pdfName = null;
 			fetchConfigVO.setEndtime(enddate);
+			int failedScriptRunCount = 0;
 			if (args.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
-						+ ".pdf";
+						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
-				post.setP_status("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
-				post.setP_status("Fail");
-				int failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
+				fetchConfigVO.setStatus1(FAIL);
+				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
-				fetchConfigVO.setStatus1("Fail");
-				if (updateStatus) {
-					failedScriptRunCount = failedScriptRunCount + 1;
-					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
-							args.getTestSetId());
-				}
 				pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
-						+ "_RUN" + failedScriptRunCount + ".pdf";
-
+						+ "_RUN" + failedScriptRunCount + PDF_EXTENSION;
 			}
-			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, customerDetails);
-			dataBaseEntry.updateTestCaseEndDate(post, enddate);
+			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName());
+				if (fetchConfigVO.getStatus1().equals(FAIL)) {
+					failedScriptRunCount = failedScriptRunCount + 1;
+					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
+							args.getTestSetId());
+					pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_"
+							+ fetchMetadataListVO.get(0).getScriptNumber() + "_RUN" + failedScriptRunCount
+							+ PDF_EXTENSION;
+				}
 			}
+			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, customerDetails);
 			// final reports generation
 			if (!args.isManualTrigger()) {
 				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.ERG);
@@ -779,11 +778,11 @@ public class TestScriptExecService {
 					boolean runFinalPdf = dataBaseEntry
 							.checkIfAllTestSetLinesCompleted(Long.valueOf(args.getTestSetId()), true);
 					if (runFinalPdf) {
-						Date date1 = new Date();
-						fetchConfigVO.setEndtime(date1);
+						Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(args.getTestSetId()));
+						fetchConfigVO.setEndtime(endDate);
 						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
 								BOOLEAN_STATUS.FALSE.getLabel());
-						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO, date1);
+						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO);
 					}
 				}
 			}
@@ -815,12 +814,11 @@ public class TestScriptExecService {
 		fetchConfigVO.setOtherCount(other);
 	}
 
-	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO, Date endDate) {
+	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO) {
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
 				false);
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
-		fetchConfigVO.setEndtime(endDate);
 		try {
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails);
 			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails);
@@ -833,14 +831,14 @@ public class TestScriptExecService {
 	private void createDir(String path) {
 		File folder1 = new File(path);
 		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
+			logger.info("creating directory: " + folder1.getName());
 			try {
 				folder1.mkdirs();
 			} catch (SecurityException se) {
 				se.printStackTrace();
 			}
 		} else {
-			System.out.println("Folder exist");
+			logger.info("Folder exist");
 		}
 	}
 
@@ -859,7 +857,7 @@ public class TestScriptExecService {
 			long tDiffMinutes = tdiff / (60 * 1000) % 60;
 			long tDiffHours = tdiff / (60 * 60 * 1000);
 			String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
-			String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+			String min = (tDiffMinutes > 0 && !hr.equals("")) ? tDiffMinutes + "min " : "";
 			String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
 			executionTime = hr + min + sec;
 			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
@@ -873,7 +871,7 @@ public class TestScriptExecService {
 				long tDiffMinutes = totalTime / (60 * 1000) % 60;
 				long tDiffHours = totalTime / (60 * 60 * 1000);
 				String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
-				String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+				String min = (tDiffMinutes > 0 && !hr.equals("")) ? tDiffMinutes + "min " : "";
 				String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
 				executionTime = hr + min + sec;
 				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
@@ -901,7 +899,7 @@ public class TestScriptExecService {
 		}
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
 		for (String fileNames : fileSeqList) {
-			if (fileNames.endsWith("Passed")) {
+			if (fileNames.endsWith(PASSED)) {
 				fileNames = new File(folder + fileNames + ".png").exists() ? fileNames + ".png" : fileNames;
 				fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames + ".jpg").exists()))
 						? fileNames + ".jpg"
@@ -1050,7 +1048,7 @@ public class TestScriptExecService {
 			String executedBy = fetchMetadataListVO.get(0).getExecutedBy();
 			createDir(folder);
 			Document document = new Document();
-			String report = "Execution Report";
+			String report = EXECUTION_REPORT;
 			Font font23 = FontFactory.getFont(ARIAL, 23);
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			Rectangle pageSize = new Rectangle(1360, 800);
@@ -1081,11 +1079,11 @@ public class TestScriptExecService {
 				String startTime = startAndExecTime[0];
 				String executionTime = startAndExecTime[1];
 				String endTime = tendtime1;
-				String tr = "Test Run Name";
-				String sn = "Executed By";
-				String sn1 = "Start Time";
-				String s1 = "End Time";
-				String scenarios1 = "Execution Time";
+				String tr = TEST_RUN_NAME;
+				String sn = EXECUTED_BY;
+				String sn1 = START_TIME;
+				String s1 = END_TIME;
+				String scenarios1 = EXECUTION_TIME;
 				String[] testArr = { tr, testRunName1, sn, executedBy, sn1, startTime, s1, endTime, scenarios1,
 						executionTime };
 				document.add(watsLogo);
@@ -1125,7 +1123,7 @@ public class TestScriptExecService {
 
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
-			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
 		}
@@ -1138,7 +1136,7 @@ public class TestScriptExecService {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
 		Font fnt12 = FontFactory.getFont(ARIAL, 12);
-		String report = "Execution Report";
+		String report = EXECUTION_REPORT;
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
 		long diff = endTime.getTime() - startTime.getTime();
@@ -1150,15 +1148,15 @@ public class TestScriptExecService {
 		String scriptNumber2 = fetchMetadataListVO.get(0).getScenarioName();
 		String scenario1 = fetchConfigVO.getStatus1();
 		String executionTime = hr + min + sec;
-		String tr = "Test Run Name";
-		String sn = "Script Number";
-		String sn1 = "Scenario name";
+		String tr = TEST_RUN_NAME;
+		String sn = SCRIPT_NUMBER;
+		String sn1 = SCENARIO_NAME;
 		String scenarios1 = "Status ";
 		String errorMsg = "ErrorMessage";
-		String eb = "Executed By";
-		String st = "Start Time";
-		String et = "End Time";
-		String ex = "Execution Time";
+		String eb = EXECUTED_BY;
+		String st = START_TIME;
+		String et = END_TIME;
+		String ex = EXECUTION_TIME;
 		String testRunName1 = customerDetails.getTestSetName();
 		String scriptNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String executedBy = fetchMetadataListVO.get(0).getExecutedBy();
@@ -1218,26 +1216,25 @@ public class TestScriptExecService {
 				String inputValue = metaDataVO.getInputValue();
 				document.setPageSize(pageSize);
 				document.newPage();
-				String s = "Status:" + " " + status;
-				String scenarios = "Scenario Name :" + "" + scenario;
+				String s = "Status: " + status;
+				String scenarios = SCENARIO_NAME + " :" + scenario;
 				watsLogo.scalePercent(65, 65);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				document.add(watsLogo);
 				document.add(new Paragraph(s, fnt12));
 				document.add(new Paragraph(scenarios, fnt12));
-				String step = status.equals("Failed") ? "Failed at Line Number:" + "" + steps
-						: "Step No :" + "" + steps;
-				String failMsg = status.equals("Failed") ? "Failed Message:" + "" + metaDataVO.getLineErrorMsg() : null;
+				String step = status.equals(FAILED) ? "Failed at Line Number:" + "" + steps : "Step No :" + "" + steps;
+				String failMsg = status.equals(FAILED) ? "Failed Message:" + "" + metaDataVO.getLineErrorMsg() : null;
 				document.add(new Paragraph(step, fnt12));
 				if (failMsg != null) {
 					document.add(new Paragraph(failMsg, fnt12));
 				}
 				if (stepDescription != null) {
-					document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+					document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 				}
 				if (inputParam != null && inputValue != null) {
-					document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
-					document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+					document.add(new Paragraph(TEST_PARAM + inputParam, fnt12));
+					document.add(new Paragraph(TEST_VALUE + inputValue, fnt12));
 				}
 				document.add(Chunk.NEWLINE);
 
@@ -1367,9 +1364,9 @@ public class TestScriptExecService {
 						+ testRunName1 + "/" + image);
 				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 				String sno = image.split("_")[0];
-				String sNo = "Script Number";
+				String sNo = SCRIPT_NUMBER;
 				String scriptNumber1 = image.split("_")[3];
-				String snm = "Scenario Name";
+				String snm = SCENARIO_NAME;
 				String scriptName = image.split("_")[2];
 
 				if (!sno.equalsIgnoreCase(sno1)) {
@@ -1409,13 +1406,13 @@ public class TestScriptExecService {
 				String status = image.split("_")[6].split("\\.")[0];
 				String scenario = image.split("_")[2];
 
-				String scenarios = "Scenario Name :" + "" + scenario;
+				String scenarios = SCENARIO_NAME + " :" + scenario;
 
 				String sndo = image.split("_")[0];
 				watsLogo.scalePercent(65, 68);
 				Rectangle one1 = new Rectangle(1360, 1000);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
-				if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					document.setPageSize(one1);
 					document.newPage();
 				} else {
@@ -1426,7 +1423,7 @@ public class TestScriptExecService {
 				document.add(watsLogo);
 				document.add(new Paragraph(scenarios, fnt12));
 				String reason = image.split("_")[5];
-				String step = "Step No :" + "" + reason;
+				String step = STEP_NO + "" + reason;
 
 				String stepDescription = metaDataVO.getTestRunParamDesc();
 
@@ -1437,7 +1434,7 @@ public class TestScriptExecService {
 				Paragraph pr1 = new Paragraph();
 				pr1.add("Status:");
 
-				if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					String message = "Failed at Line Number:" + "" + reason;
 					String error = metaDataVO.getLineErrorMsg();
 					String errorMessage = "Failed Message:" + "" + error;
@@ -1451,12 +1448,12 @@ public class TestScriptExecService {
 						document.add(new Paragraph(errorMessage, fnt12));
 					}
 					if (stepDescription != null) {
-						document.add(new Paragraph("Step Description :" + stepDescription, fnt12));
+						document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 					}
 					if (inputParam != null) {
-						document.add(new Paragraph("Test Parameter :" + inputParam, fnt12));
+						document.add(new Paragraph(TEST_PARAM + inputParam, fnt12));
 						if (inputValue != null) {
-							document.add(new Paragraph("Test Value :" + inputValue, fnt12));
+							document.add(new Paragraph(TEST_VALUE + inputValue, fnt12));
 						}
 					}
 					document.add(Chunk.NEWLINE);
@@ -1474,12 +1471,12 @@ public class TestScriptExecService {
 					document.add(pr1);
 
 					if (stepDescription != null) {
-						document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+						document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 					}
 					if (inputParam != null) {
-						document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
+						document.add(new Paragraph(TEST_PARAM + inputParam, fnt12));
 						if (inputValue != null) {
-							document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+							document.add(new Paragraph(TEST_VALUE + inputValue, fnt12));
 						}
 					}
 					img.setAlignment(Image.ALIGN_CENTER);
@@ -1508,7 +1505,7 @@ public class TestScriptExecService {
 	public void generateFailedPDF(Document document, int passcount, int failcount)
 			throws DocumentException, com.itextpdf.text.DocumentException {
 		Font font23 = FontFactory.getFont(ARIAL, 23);
-		String start = "Execution Summary";
+		String start = EXECUTION_SUMMARY;
 		document.add(Chunk.NEWLINE);
 		Paragraph executionSummery = new Paragraph(start, font23);
 		document.add(executionSummery);
@@ -1537,7 +1534,7 @@ public class TestScriptExecService {
 	public void generatePassPDF(Document document, int passCount, int failCount)
 			throws DocumentException, com.itextpdf.text.DocumentException {
 		Font font23 = FontFactory.getFont(ARIAL, 23);
-		String start = "Execution Summary";
+		String start = EXECUTION_SUMMARY;
 		document.add(Chunk.NEWLINE);
 		Paragraph executionSummery = new Paragraph(start, font23);
 		document.add(executionSummery);
@@ -1566,7 +1563,7 @@ public class TestScriptExecService {
 
 	public void generateDetailsPDF(Document document, Image watsLogo, int passCount, int failCount, int others,
 			PdfWriter writer) throws DocumentException, com.itextpdf.text.DocumentException {
-		String start = "Execution Summary";
+		String start = EXECUTION_SUMMARY;
 		String pichart = "Pie-Chart";
 		Font font23 = FontFactory.getFont(ARIAL, 23);
 		Font fontWhite23 = FontFactory.getFont(ARIAL, 23, BaseColor.WHITE);
@@ -1581,24 +1578,24 @@ public class TestScriptExecService {
 		double other = Math.round(others * 100.0) / (passCount + failCount + others);
 		DefaultPieDataset dataSet = new DefaultPieDataset();
 		if (passCount == 0 && others == 0) {
-			dataSet.setValue("Fail", fail);
+			dataSet.setValue(FAIL, fail);
 		} else if (failCount == 0 && others == 0) {
-			dataSet.setValue("Pass", pass);
+			dataSet.setValue(PASS, pass);
 		} else if (passCount == 0 && failCount == 0) {
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(IN_COMPLETE, other);
 		} else if (passCount != 0 && others != 0 && failCount == 0) {
-			dataSet.setValue("Pass", pass);
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(PASS, pass);
+			dataSet.setValue(IN_COMPLETE, other);
 		} else if (passCount == 0 && others != 0 && failCount != 0) {
-			dataSet.setValue("Fail", fail);
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(FAIL, fail);
+			dataSet.setValue(IN_COMPLETE, other);
 		} else if (passCount != 0 && others == 0 && failCount != 0) {
-			dataSet.setValue("Pass", pass);
-			dataSet.setValue("Fail", fail);
+			dataSet.setValue(PASS, pass);
+			dataSet.setValue(FAIL, fail);
 		} else if (passCount != 0 && others != 0 && failCount != 0) {
-			dataSet.setValue("Pass", pass);
-			dataSet.setValue("Fail", fail);
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(PASS, pass);
+			dataSet.setValue(FAIL, fail);
+			dataSet.setValue(IN_COMPLETE, other);
 		}
 		PdfPTable table = new PdfPTable(3);
 		table.setWidths(new int[] { 1, 1, 1 });
@@ -1677,7 +1674,7 @@ public class TestScriptExecService {
 	}
 
 	public void updateStartStatus(MessageQueueDto args) throws ClassNotFoundException, SQLException {
-		dataBaseEntry.updateInProgressScriptStatus(null, args.getTestSetLineId(),new Date());
+		dataBaseEntry.updateInProgressScriptStatus(null, args.getTestSetLineId(), new Date());
 	}
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
@@ -1737,7 +1734,7 @@ public class TestScriptExecService {
 				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
 						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
 				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
-				testRunPdfGeneration(testSetId, fetchConfigVO, endDate);
+				testRunPdfGeneration(testSetId, fetchConfigVO);
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1807,7 +1804,7 @@ public class TestScriptExecService {
 			img1.scalePercent(65, 68);
 			img1.setAlignment(Image.ALIGN_RIGHT);
 			Font bfBold12 = FontFactory.getFont("Arial", 23);
-			String Report = "Execution Report";
+			String Report = EXECUTION_REPORT;
 			Font fnt = FontFactory.getFont("Arial", 12);
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
 			String Starttime1 = dateFormat.format(Starttime);

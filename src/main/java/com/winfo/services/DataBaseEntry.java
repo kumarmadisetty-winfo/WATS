@@ -47,7 +47,7 @@ public class DataBaseEntry {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
-	
+
 	@Autowired
 	ApplicationContext appContext;
 
@@ -78,9 +78,9 @@ public class DataBaseEntry {
 		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
 
-	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id,Date startDate)
+	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id, Date startDate)
 			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus( test_set_id, test_set_line_id,startDate);
+		dao.updateInProgressScriptStatus(test_set_id, test_set_line_id, startDate);
 	}
 
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
@@ -91,7 +91,6 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateStatusOfScript(test_set_id, test_set_line_id, status);
 	}
-
 
 	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
 		return dao.getTrMode(args, fetchConfigVO);
@@ -133,12 +132,11 @@ public class DataBaseEntry {
 
 	}
 
-	public void updateTestCaseEndDate(FetchScriptVO fetchScriptVO, Date endDate) {
+	public void updateTestCaseEndDate(FetchScriptVO fetchScriptVO, Date endDate, String status) {
 		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
-		dao.updateTestSetLineStatus(fetchScriptVO.getP_status(), fetchScriptVO.getP_test_set_line_path(),
-				fetchScriptVO.getP_test_set_id(), fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(),
-				endDate);
+		dao.updateTestSetLineStatus(status, fetchScriptVO.getP_test_set_line_path(), fetchScriptVO.getP_test_set_id(),
+				fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(), endDate);
 	}
 
 	@Transactional
@@ -149,7 +147,7 @@ public class DataBaseEntry {
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
 		appContext.getBean(this.getClass()).updateSubscription();
 		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
-				fetchConfigVO.getEndtime(), fetchScriptVO.getP_status());
+				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
 
 		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 
@@ -159,16 +157,20 @@ public class DataBaseEntry {
 			dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
 			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
 			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
-			sendMailServiceImpl.sendMail(emailParam);
+			boolean sendMail = appContext.getBean(this.getClass())
+					.checkIfAllTestSetLinesCompleted(Long.valueOf(fetchScriptVO.getP_test_set_id()), true);
+			if (sendMail) {
+				sendMailServiceImpl.sendMail(emailParam);
+			}
 		} else {
 			Integer inProgressCount = dao.getCountOfInProgressScript(fetchScriptVO.getP_test_set_id());
 			if (inProgressCount.equals(0)) {
 				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
 			}
 		}
-		limitScriptExecutionService.insertTestRunScriptData(
-				fetchMetadataListVO.get(0).getScriptId(), fetchMetadataListVO.get(0).getScriptNumber(),
-				fetchConfigVO.getStatus1(), startDate, fetchConfigVO.getEndtime(), fetchScriptVO.getP_test_set_id());
+		limitScriptExecutionService.insertTestRunScriptData(fetchMetadataListVO.get(0).getScriptId(),
+				fetchMetadataListVO.get(0).getScriptNumber(), fetchConfigVO.getStatus1(), fetchConfigVO.getStarttime(),
+				fetchConfigVO.getEndtime(), fetchScriptVO.getP_test_set_id());
 	}
 
 	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
@@ -230,15 +232,15 @@ public class DataBaseEntry {
 			return false;
 		}
 	}
-	
+
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
-		
+
 		return dao.getCustomerDetails(testSetId);
 	}
-	
+
 	public List<ScriptDetailsDto> getScriptDetailsListVO(String testRunId, String testSetLineId, boolean finalPdf,
 			boolean executeApi) {
-		return dao.getScriptDetails(testRunId,testSetLineId,finalPdf,executeApi);
+		return dao.getScriptDetails(testRunId, testSetLineId, finalPdf, executeApi);
 	}
 
 	@Transactional
@@ -340,13 +342,13 @@ public class DataBaseEntry {
 		}
 		return endDate != null ? endDate : startDate;
 	}
-	
+
 	public Integer getCountOfInProgressScript(String testSetId) {
 		return dao.getCountOfInProgressScript(testSetId);
 	}
-	
+
 	public void updateExecStatusFlag(String testSetId) {
 		dao.updateExecStatusFlag(testSetId);
 	}
-	
+
 }
