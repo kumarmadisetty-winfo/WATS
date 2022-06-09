@@ -715,7 +715,8 @@ public class TestScriptExecService {
 					+ fetchConfigVO.getImg_url();
 			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
 					+ customerDetails.getTestSetName() + File.separator + fetchMetadataListVO.get(0).getSeqNum() + "_"
-					+ fetchMetadataListVO.get(0).getScriptNumber() + ".pdf" + "AAAparent=" + fetchConfigVO.getImg_url();
+					+ fetchMetadataListVO.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
+					+ fetchConfigVO.getImg_url();
 
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			fetchConfigVO.setStarttime1(testSetLine.getExecutionStartTime());
@@ -740,12 +741,12 @@ public class TestScriptExecService {
 			int failedScriptRunCount = 0;
 			if (args.isSuccess()) {
 				pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
-						+ ".pdf";
+						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 			} else {
 				fetchConfigVO.setErrormessage("EBS Execution Failed");
-				fetchConfigVO.setStatus1("Fail");
+				fetchConfigVO.setStatus1(FAIL);
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
@@ -758,7 +759,7 @@ public class TestScriptExecService {
 			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName());
-				if (fetchConfigVO.getStatus1().equals("Fail")) {
+				if (fetchConfigVO.getStatus1().equals(FAIL)) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
 							args.getTestSetId());
@@ -830,14 +831,14 @@ public class TestScriptExecService {
 	private void createDir(String path) {
 		File folder1 = new File(path);
 		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
+			logger.info("creating directory: " + folder1.getName());
 			try {
 				folder1.mkdirs();
 			} catch (SecurityException se) {
 				se.printStackTrace();
 			}
 		} else {
-			System.out.println("Folder exist");
+			logger.info("Folder exist");
 		}
 	}
 
@@ -856,7 +857,7 @@ public class TestScriptExecService {
 			long tDiffMinutes = tdiff / (60 * 1000) % 60;
 			long tDiffHours = tdiff / (60 * 60 * 1000);
 			String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
-			String min = (tDiffMinutes > 0 &&  !hr.equals(""))? tDiffMinutes + "min " : "";
+			String min = (tDiffMinutes > 0 && !hr.equals("")) ? tDiffMinutes + "min " : "";
 			String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
 			executionTime = hr + min + sec;
 			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
@@ -870,7 +871,7 @@ public class TestScriptExecService {
 				long tDiffMinutes = totalTime / (60 * 1000) % 60;
 				long tDiffHours = totalTime / (60 * 60 * 1000);
 				String hr = tDiffHours > 0 ? tDiffHours + "hr " : "";
-				String min = tDiffMinutes > 0 ? tDiffMinutes + "min " : "";
+				String min = (tDiffMinutes > 0 && !hr.equals("")) ? tDiffMinutes + "min " : "";
 				String sec = tDiffSeconds > 0 ? tDiffSeconds + "sec" : "";
 				executionTime = hr + min + sec;
 				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
@@ -898,7 +899,7 @@ public class TestScriptExecService {
 		}
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
 		for (String fileNames : fileSeqList) {
-			if (fileNames.endsWith("Passed")) {
+			if (fileNames.endsWith(PASSED)) {
 				fileNames = new File(folder + fileNames + ".png").exists() ? fileNames + ".png" : fileNames;
 				fileNames = (!(fileNames.endsWith(".png")) && (new File(folder + fileNames + ".jpg").exists()))
 						? fileNames + ".jpg"
@@ -1047,7 +1048,7 @@ public class TestScriptExecService {
 			String executedBy = fetchMetadataListVO.get(0).getExecutedBy();
 			createDir(folder);
 			Document document = new Document();
-			String report = "Execution Report";
+			String report = EXECUTION_REPORT;
 			Font font23 = FontFactory.getFont(ARIAL, 23);
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			Rectangle pageSize = new Rectangle(1360, 800);
@@ -1122,7 +1123,7 @@ public class TestScriptExecService {
 
 			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
-			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
+//			uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
 		}
@@ -1135,7 +1136,7 @@ public class TestScriptExecService {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
 		Font fnt12 = FontFactory.getFont(ARIAL, 12);
-		String report = "Execution Report";
+		String report = EXECUTION_REPORT;
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
 		long diff = endTime.getTime() - startTime.getTime();
@@ -1215,26 +1216,25 @@ public class TestScriptExecService {
 				String inputValue = metaDataVO.getInputValue();
 				document.setPageSize(pageSize);
 				document.newPage();
-				String s = "Status:" + " " + status;
-				String scenarios = "Scenario Name :" + "" + scenario;
+				String s = "Status: " + status;
+				String scenarios = SCENARIO_NAME + " :" + scenario;
 				watsLogo.scalePercent(65, 65);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				document.add(watsLogo);
 				document.add(new Paragraph(s, fnt12));
 				document.add(new Paragraph(scenarios, fnt12));
-				String step = status.equals("Failed") ? "Failed at Line Number:" + "" + steps
-						: "Step No :" + "" + steps;
-				String failMsg = status.equals("Failed") ? "Failed Message:" + "" + metaDataVO.getLineErrorMsg() : null;
+				String step = status.equals(FAILED) ? "Failed at Line Number:" + "" + steps : "Step No :" + "" + steps;
+				String failMsg = status.equals(FAILED) ? "Failed Message:" + "" + metaDataVO.getLineErrorMsg() : null;
 				document.add(new Paragraph(step, fnt12));
 				if (failMsg != null) {
 					document.add(new Paragraph(failMsg, fnt12));
 				}
 				if (stepDescription != null) {
-					document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+					document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 				}
 				if (inputParam != null && inputValue != null) {
-					document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
-					document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+					document.add(new Paragraph(TEST_PARAM + inputParam, fnt12));
+					document.add(new Paragraph(TEST_VALUE + inputValue, fnt12));
 				}
 				document.add(Chunk.NEWLINE);
 
@@ -1364,9 +1364,9 @@ public class TestScriptExecService {
 						+ testRunName1 + "/" + image);
 				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 				String sno = image.split("_")[0];
-				String sNo = "Script Number";
+				String sNo = SCRIPT_NUMBER;
 				String scriptNumber1 = image.split("_")[3];
-				String snm = "Scenario Name";
+				String snm = SCENARIO_NAME;
 				String scriptName = image.split("_")[2];
 
 				if (!sno.equalsIgnoreCase(sno1)) {
@@ -1406,13 +1406,13 @@ public class TestScriptExecService {
 				String status = image.split("_")[6].split("\\.")[0];
 				String scenario = image.split("_")[2];
 
-				String scenarios = "Scenario Name :" + "" + scenario;
+				String scenarios = SCENARIO_NAME + " :" + scenario;
 
 				String sndo = image.split("_")[0];
 				watsLogo.scalePercent(65, 68);
 				Rectangle one1 = new Rectangle(1360, 1000);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
-				if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					document.setPageSize(one1);
 					document.newPage();
 				} else {
@@ -1423,7 +1423,7 @@ public class TestScriptExecService {
 				document.add(watsLogo);
 				document.add(new Paragraph(scenarios, fnt12));
 				String reason = image.split("_")[5];
-				String step = "Step No :" + "" + reason;
+				String step = STEP_NO + "" + reason;
 
 				String stepDescription = metaDataVO.getTestRunParamDesc();
 
@@ -1434,7 +1434,7 @@ public class TestScriptExecService {
 				Paragraph pr1 = new Paragraph();
 				pr1.add("Status:");
 
-				if (image.startsWith(sndo + "_") && image.contains("Failed")) {
+				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					String message = "Failed at Line Number:" + "" + reason;
 					String error = metaDataVO.getLineErrorMsg();
 					String errorMessage = "Failed Message:" + "" + error;
@@ -1448,12 +1448,12 @@ public class TestScriptExecService {
 						document.add(new Paragraph(errorMessage, fnt12));
 					}
 					if (stepDescription != null) {
-						document.add(new Paragraph("Step Description :" + stepDescription, fnt12));
+						document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 					}
 					if (inputParam != null) {
-						document.add(new Paragraph("Test Parameter :" + inputParam, fnt12));
+						document.add(new Paragraph(TEST_PARAM + inputParam, fnt12));
 						if (inputValue != null) {
-							document.add(new Paragraph("Test Value :" + inputValue, fnt12));
+							document.add(new Paragraph(TEST_VALUE + inputValue, fnt12));
 						}
 					}
 					document.add(Chunk.NEWLINE);
@@ -1471,12 +1471,12 @@ public class TestScriptExecService {
 					document.add(pr1);
 
 					if (stepDescription != null) {
-						document.add(new Paragraph("Step Description: " + stepDescription, fnt12));
+						document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 					}
 					if (inputParam != null) {
-						document.add(new Paragraph("Test Parameter: " + inputParam, fnt12));
+						document.add(new Paragraph(TEST_PARAM + inputParam, fnt12));
 						if (inputValue != null) {
-							document.add(new Paragraph("Test Value: " + inputValue, fnt12));
+							document.add(new Paragraph(TEST_VALUE + inputValue, fnt12));
 						}
 					}
 					img.setAlignment(Image.ALIGN_CENTER);
@@ -1505,7 +1505,7 @@ public class TestScriptExecService {
 	public void generateFailedPDF(Document document, int passcount, int failcount)
 			throws DocumentException, com.itextpdf.text.DocumentException {
 		Font font23 = FontFactory.getFont(ARIAL, 23);
-		String start = "Execution Summary";
+		String start = EXECUTION_SUMMARY;
 		document.add(Chunk.NEWLINE);
 		Paragraph executionSummery = new Paragraph(start, font23);
 		document.add(executionSummery);
@@ -1534,7 +1534,7 @@ public class TestScriptExecService {
 	public void generatePassPDF(Document document, int passCount, int failCount)
 			throws DocumentException, com.itextpdf.text.DocumentException {
 		Font font23 = FontFactory.getFont(ARIAL, 23);
-		String start = "Execution Summary";
+		String start = EXECUTION_SUMMARY;
 		document.add(Chunk.NEWLINE);
 		Paragraph executionSummery = new Paragraph(start, font23);
 		document.add(executionSummery);
@@ -1563,7 +1563,7 @@ public class TestScriptExecService {
 
 	public void generateDetailsPDF(Document document, Image watsLogo, int passCount, int failCount, int others,
 			PdfWriter writer) throws DocumentException, com.itextpdf.text.DocumentException {
-		String start = "Execution Summary";
+		String start = EXECUTION_SUMMARY;
 		String pichart = "Pie-Chart";
 		Font font23 = FontFactory.getFont(ARIAL, 23);
 		Font fontWhite23 = FontFactory.getFont(ARIAL, 23, BaseColor.WHITE);
@@ -1578,24 +1578,24 @@ public class TestScriptExecService {
 		double other = Math.round(others * 100.0) / (passCount + failCount + others);
 		DefaultPieDataset dataSet = new DefaultPieDataset();
 		if (passCount == 0 && others == 0) {
-			dataSet.setValue("Fail", fail);
+			dataSet.setValue(FAIL, fail);
 		} else if (failCount == 0 && others == 0) {
-			dataSet.setValue("Pass", pass);
+			dataSet.setValue(PASS, pass);
 		} else if (passCount == 0 && failCount == 0) {
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(IN_COMPLETE, other);
 		} else if (passCount != 0 && others != 0 && failCount == 0) {
-			dataSet.setValue("Pass", pass);
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(PASS, pass);
+			dataSet.setValue(IN_COMPLETE, other);
 		} else if (passCount == 0 && others != 0 && failCount != 0) {
-			dataSet.setValue("Fail", fail);
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(FAIL, fail);
+			dataSet.setValue(IN_COMPLETE, other);
 		} else if (passCount != 0 && others == 0 && failCount != 0) {
-			dataSet.setValue("Pass", pass);
-			dataSet.setValue("Fail", fail);
+			dataSet.setValue(PASS, pass);
+			dataSet.setValue(FAIL, fail);
 		} else if (passCount != 0 && others != 0 && failCount != 0) {
-			dataSet.setValue("Pass", pass);
-			dataSet.setValue("Fail", fail);
-			dataSet.setValue("In Complete", other);
+			dataSet.setValue(PASS, pass);
+			dataSet.setValue(FAIL, fail);
+			dataSet.setValue(IN_COMPLETE, other);
 		}
 		PdfPTable table = new PdfPTable(3);
 		table.setWidths(new int[] { 1, 1, 1 });
@@ -1734,7 +1734,7 @@ public class TestScriptExecService {
 				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
 						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
 				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
-				testRunPdfGeneration(testSetId, fetchConfigVO, endDate);
+				testRunPdfGeneration(testSetId, fetchConfigVO);
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1804,7 +1804,7 @@ public class TestScriptExecService {
 			img1.scalePercent(65, 68);
 			img1.setAlignment(Image.ALIGN_RIGHT);
 			Font bfBold12 = FontFactory.getFont("Arial", 23);
-			String Report = "Execution Report";
+			String Report = EXECUTION_REPORT;
 			Font fnt = FontFactory.getFont("Arial", 12);
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
 			String Starttime1 = dateFormat.format(Starttime);
