@@ -3610,6 +3610,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			System.out.println(imageDir);
 			
+			String str = "https://winfoconsulting.sharepoint.com/sites/DBAGroup/Shared%20Documents/WATS_Testing/WATS/";
+			List<String> fit = str.split("/");
+			
+			
 			
 			RestTemplate restTemplate = new RestTemplate();
 			
@@ -3679,7 +3683,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				
 				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
 						+ driveId + "/items/" + itemId
-						+ ":/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ ":/" + fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getProject_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
 				

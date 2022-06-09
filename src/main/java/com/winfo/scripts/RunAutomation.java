@@ -130,6 +130,12 @@ public class RunAutomation {
 			System.out.println("fetchConfigVO.getDownlod_file_path()" + fetchConfigVO.getScreenshot_path()
 					+ fetchConfigVO.getUri_config() + fetchConfigVO.getPdf_path());
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
+			if (!"SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
+						fetchConfigVO);
+				return executeTestrunVo;
+			}
+			
 			System.out.println(fetchMetadataListVO.size());
 			Map<Integer, Status> scriptStatus = new HashMap<Integer, Status>();
 			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
