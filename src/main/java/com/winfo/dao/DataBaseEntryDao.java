@@ -1027,9 +1027,22 @@ public class DataBaseEntryDao {
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
-
 		cq.select(cb.greatest(from.<Date>get("executionEndTime"))).where(condition);
 		Date query = em.createQuery(cq).getSingleResult();
+		return query;
+
+	}
+
+	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String testRunPdfName) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testRunId);
+		Predicate condition2 = cb.equal(from.get("status"), testRunPdfName);
+		Predicate condition3 = (testRunPdfName != null) ? cb.and(condition1, condition2) : condition1;
+		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
+		List<Object[]> query = em.createQuery(cq).getResultList();
 		return query;
 
 	}
@@ -1038,9 +1051,8 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
-		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
-
-		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition);
+		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
+		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition1);
 		Date query = em.createQuery(cq).getSingleResult();
 		return query;
 

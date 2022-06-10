@@ -308,6 +308,10 @@ public class DataBaseEntry {
 		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
 	}
 
+	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String testRunPdfName) {
+		return dao.findStartAndEndTimeForTestRun(testRunId, testRunPdfName);
+	}
+
 	public Date findMaxExecutionEndDate(long testSetId) {
 		return dao.findMaxExecutionEndDate(testSetId);
 	}

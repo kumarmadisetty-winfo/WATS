@@ -22,4 +22,27 @@ public class DateUtils {
 		return sysdate;
 	}
 	
+	public static long getTotalDifferenceInTime(String startTime, String endTime) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		long diff = 0;
+		try {
+			Date d1 = sdf.parse(startTime);
+			Date d2 = sdf.parse(endTime);
+			
+			diff = d2.getTime() - d1.getTime();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return diff;
+	}
+	
+	public static String findTimeDifference(long diffInTime) {
+		long time = 0;
+		String days = (time = diffInTime / (1000 * 60 * 60 * 24) % 365) > 0 ? time + "days " : "";
+		String hr = (time = (diffInTime / (1000 * 60 * 60)) % 24) > 0 || !days.equals("") ? time + "hr " : "";
+		String min = (time = (diffInTime / (1000 * 60)) % 60) > 0 || !hr.equals("") ? time + "min " : "";
+		String sec = (time = (diffInTime / 1000) % 60) > 0 ? time + "sec" : "";
+		
+		return days+hr+min+sec;
+	}
 }
