@@ -3648,7 +3648,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 				}
 				else {
-					if ("Document".equalsIgnoreCase(map.get("name"))) {
+					if ("Documents".equalsIgnoreCase(map.get("name"))) {
 						driveId = map.get("id");
 						break;
 					}
