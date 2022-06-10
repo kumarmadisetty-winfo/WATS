@@ -263,11 +263,37 @@ public class DataBaseEntryDao {
 		
 	}
 	
-
-public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus) {
+	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, List<Integer> dependentList,String test_set_id) {
 		// TODO Auto-generated method stub
-		String sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
+		String sql = "Select script_id,dependency_tr from win_ta_test_set_lines where script_id in (:dependentList) and test_set_id = :test_set_id";
+		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList",dependentList).setParameter("test_set_id",test_set_id);
 		
+		List<Object[]> scriptList = query.getResultList();
+		//Object[] objectArray = scriptList.toArray();
+		Map<Integer,Integer> map =new HashMap<Integer,Integer>();
+		
+		for(Object[] obj:scriptList) {
+			map.put(Integer.parseInt(obj[0].toString()),Integer.parseInt(obj[1].toString()));
+		}
+		
+		
+		for(Entry<String, List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
+			element.getValue().get(0).setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
+			
+		}
+		
+	}
+	
+
+public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus, int testRunDependencyCount) {
+		// TODO Auto-generated method stub
+	String sq1;
+	if(testRunDependencyCount>0) {
+		sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and test_set_line_id=:dependentScriptNo";
+	}
+	else {
+		sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
+	}
 		
 		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
 		query.setParameter("test_set_id",test_set_id);
@@ -303,6 +329,13 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 			scriptStatus.put(dependentScriptNo, status);
 		}
 		
+	}
+
+	public int getTestRunDependentCount(String testSetId) {
+		String sq1 = "select count(*) from win_ta_test_set_lines where dependency_tr is not null and test_set_id = :test_set_id";
+		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
+		query.setParameter("test_set_id", testSetId);
+		return Integer.parseInt(query.getSingleResult().toString());
 	}
 	
 	

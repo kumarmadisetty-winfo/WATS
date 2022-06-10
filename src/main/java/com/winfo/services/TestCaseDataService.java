@@ -31,7 +31,7 @@ public class TestCaseDataService {
 
 	//public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
-	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, String dependencyLevelCheck) {
 
 		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
 
@@ -42,8 +42,13 @@ public class TestCaseDataService {
 			for (FetchMetadataVO testcase : list) {
 
 				String test_line_id = testcase.getTest_set_line_id();
+				String dependency;
 
-				String dependency = testcase.getDependency();
+				if (dependencyLevelCheck.equalsIgnoreCase("TestRunDependency")) {
+					dependency = testcase.getDependency_tr();
+				} else {
+					dependency = testcase.getDependency();
+				}
 
 				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
 

@@ -58,6 +58,8 @@ public class DriverConfiguration {
 //			options.setBinary("/usr/bin/google-chrome");
 //			options.addArguments("headless");
 			options.addArguments("start-maximized");
+			options.addArguments("--no-sandbox");
+//			options.addArguments("--headless");
 			options.addArguments("--enable-automation");
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
