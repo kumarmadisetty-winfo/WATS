@@ -150,7 +150,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateStatusOfScript(String testSetId, String testSetLineId, String status) {
+	public void updateStatusOfScript( String testSetLineId, String status) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 

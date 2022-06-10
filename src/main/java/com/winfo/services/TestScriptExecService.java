@@ -67,8 +67,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.itextpdf.awt.DefaultFontMapper;
@@ -233,7 +231,7 @@ public class TestScriptExecService {
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				logger.info(" Running Independent - " + metaData.getKey());
-				executorMethodPyJab(testSetId, fetchConfigVO, metaData);
+				executorMethodPyJab(testSetId, fetchConfigVO, metaData, true);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
@@ -241,26 +239,10 @@ public class TestScriptExecService {
 				logger.info(" Running Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
 					logger.info(" Running Dependent in executor - " + metaData.getKey());
-					try {
-						boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
-								metaData.getValue().get(0).getScript_id());
-						logger.info(
-								" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
-						if (run) {
-							executorMethodPyJab(testSetId, fetchConfigVO, metaData);
-						} else {
-							dataBaseEntry.updateStatusOfScript(testSetId,
-									metaData.getValue().get(0).getTest_set_line_id(),
-									Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
-							Integer inProgressCount = dataBaseEntry.getCountOfInProgressScript(testSetId);
-							if (inProgressCount.equals(0)) {
-								dataBaseEntry.updateExecStatusFlag(testSetId);
-							}
-						}
-					} catch (Exception e) {
-						// suppressing error as dependant scripts are running in different thread
-						e.printStackTrace();
-					}
+					boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
+							metaData.getValue().get(0).getScript_id());
+					logger.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
+					executorMethodPyJab(testSetId, fetchConfigVO, metaData, run);
 				});
 			}
 			executordependent.shutdown();
@@ -269,93 +251,103 @@ public class TestScriptExecService {
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
+			if (e instanceof WatsEBSCustomException)
+				throw e;
 			throw new WatsEBSCustomException(500, "Exception Occured while creating script for Test Run", e);
 		}
 		return executeTestrunVo;
 	}
 
 	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO,
-			Entry<Integer, List<FetchMetadataVO>> metaData)  {
-
-
-			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
-			switchActions(args, fetchMetadataListsVO, fetchConfigVO);
+			Entry<Integer, List<FetchMetadataVO>> metaData, boolean run) {
+		List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
+		switchActions(args, fetchMetadataListsVO, fetchConfigVO, run);
 
 	}
 
-	public void switchActions(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			{
-
+	public void switchActions(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			boolean run) {
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
 		String actionName = null;
 
-		String testSetId = null;
-		String testSetLineId = null;
+		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
+		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
 		String testScriptParamId = null;
 		String methodCall;
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
+		if (run) {
+			try {
+				System.out.println(
+						"Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
+				AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail
+						.builder().testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTest_set_line_id()))
+						.triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
+						.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR);
 
-		System.out
-				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
-		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
-				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTest_set_line_id()))
-				.triggeredBy(fetchMetadataListVO.get(0).getExecuted_by()).correlationId(UUID.randomUUID().toString())
-				.build(), AUDIT_TRAIL_STAGES.RR);
+				String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+						+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
+						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
 
-			String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
+				for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
+					actionName = fetchMetadataVO.getAction();
+					testScriptParamId = fetchMetadataVO.getTest_script_param_id();
 
-			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
-				actionName = fetchMetadataVO.getAction();
-				testSetId = fetchMetadataVO.getTest_set_id();
-				testSetLineId = fetchMetadataVO.getTest_set_line_id();
-				testScriptParamId = fetchMetadataVO.getTest_script_param_id();
+					String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
+							+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+							+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+							+ fetchMetadataVO.getLine_number();
 
-				String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
-						+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-						+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-						+ fetchMetadataVO.getLine_number();
+					methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName,
+							screenshotPath, testScriptParamId);
+					methods.add(methodCall);
+				}
+				dto.setActions(methods);
+				dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
+				dto.setCopiedValueUrl(copiedValueUrl);
+				dto.setChromeDriverPath(chromeDriverPath);
+				dto.setApplicationName(fetchConfigVO.getEBS_APPLICATION_NAME());
+				dto.setDllPath(dllPath);
+				dto.setOciConfigPath(ociConfigPath);
+				dto.setOciConfigName(ociConfigName);
+				dto.setBuckerName(ociBucketName);
+				dto.setOciNameSpace(ociNamespace);
+				dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
+				dto.setScriptFileName(
+						fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase()
+								+ "_" + fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
 
-				methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName, screenshotPath,
-						testScriptParamId);
-				methods.add(methodCall);
+				final Context ctx = new Context();
+				ctx.setVariable("dto", dto);
+				final String scriptContent = this.templateEngine.process(templateName, ctx);
+
+				String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
+						+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
+						+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
+						+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
+				uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC);
+
+				logger.info(
+						"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
+								+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
+								+ screenShotFolderPath);
+				this.kafkaTemp.send(topic,
+						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ);
+			} catch (Exception e) {
+				// suppressing error so that other scripts run if there data has no issue
+				run = false;
+				e.printStackTrace();
 			}
-			dto.setActions(methods);
-			dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
-			dto.setCopiedValueUrl(copiedValueUrl);
-			dto.setChromeDriverPath(chromeDriverPath);
-			dto.setApplicationName(fetchConfigVO.getEBS_APPLICATION_NAME());
-			dto.setDllPath(dllPath);
-			dto.setOciConfigPath(ociConfigPath);
-			dto.setOciConfigName(ociConfigName);
-			dto.setBuckerName(ociBucketName);
-			dto.setOciNameSpace(ociNamespace);
-			dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
-			dto.setScriptFileName(
-					fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase() + "_"
-							+ fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
-
-			final Context ctx = new Context();
-			ctx.setVariable("dto", dto);
-			final String scriptContent = this.templateEngine.process(templateName, ctx);
-
-			String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
-					+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
-			uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
-			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC);
-
-			logger.info(
-					"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
-							+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
-							+ screenShotFolderPath);
-			this.kafkaTemp.send(topic,
-					new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
-			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ);
+		} 
+		if(!run){
+			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+			dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
+		}
 
 	}
 
@@ -388,7 +380,7 @@ public class TestScriptExecService {
 	}
 
 	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName,
-			String screenshotPath, String testScriptParamId){
+			String screenshotPath, String testScriptParamId) {
 		logger.info(actionName);
 
 		PyJabActions action = actionRepo.findByActionName(actionName);
@@ -539,7 +531,8 @@ public class TestScriptExecService {
 
 			return response.toString();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception Occured while uploading generated script to object store : "+e.getMessage(), e);
+			throw new WatsEBSCustomException(500, "Exception Occured while uploading generated script to object store",
+					e);
 		}
 	}
 

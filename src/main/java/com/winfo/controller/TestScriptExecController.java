@@ -1,7 +1,6 @@
 package com.winfo.controller;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 
 import javax.validation.Valid;

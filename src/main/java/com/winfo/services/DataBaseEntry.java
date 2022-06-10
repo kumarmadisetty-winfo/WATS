@@ -87,9 +87,8 @@ public class DataBaseEntry {
 		return dao.getStatusAndSeqNum(testSetId);
 	}
 
-	public void updateStatusOfScript(String test_set_id, String test_set_line_id, String status)
-			throws ClassNotFoundException, SQLException {
-		dao.updateStatusOfScript(test_set_id, test_set_line_id, status);
+	public void updateStatusOfScript(String test_set_line_id, String status) {
+		dao.updateStatusOfScript(test_set_line_id, status);
 	}
 
 	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
@@ -277,10 +276,7 @@ public class DataBaseEntry {
 	public Boolean checkAllStepsStatusForAScript(String testSetLineId) throws ClassNotFoundException, SQLException {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
-			int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
-			dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "",
-					SCRIPT_PARAM_STATUS.FAIL.getLabel(),
-					"System could not launch the script. Try to re-execute. If it continues to fail, please contact WATS Support Team");
+			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
 			return false;
 		}
 
@@ -292,6 +288,12 @@ public class DataBaseEntry {
 		} else {
 			return true;
 		}
+	}
+
+	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId) {
+		int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
+		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel(),
+				"System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team");
 	}
 
 	public List<Object[]> getSeqNumAndStatus(String testSetId) {
@@ -343,12 +345,11 @@ public class DataBaseEntry {
 		return endDate != null ? endDate : startDate;
 	}
 
-	public Integer getCountOfInProgressScript(String testSetId) {
-		return dao.getCountOfInProgressScript(testSetId);
-	}
-
-	public void updateExecStatusFlag(String testSetId) {
-		dao.updateExecStatusFlag(testSetId);
+	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
+		Integer inProgressCount = dao.getCountOfInProgressScript(testSetId);
+		if (inProgressCount.equals(0)) {
+			dao.updateExecStatusFlag(testSetId);
+		}
 	}
 
 }
