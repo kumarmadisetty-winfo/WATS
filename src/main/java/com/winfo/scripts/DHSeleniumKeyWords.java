@@ -3609,10 +3609,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			System.out.println(imageDir);
-			
-			String str = "https://winfoconsulting.sharepoint.com/sites/DBAGroup/Shared%20Documents/WATS_Testing/WATS/";
-			List<String> fit = str.split("/");
-			
+	
 			
 			
 			RestTemplate restTemplate = new RestTemplate();
@@ -18636,12 +18633,12 @@ try {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		try {
-			String text = driver.findElement(By.xpath("//div[contains(text(),'Error')]")).getText();
-			return text;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+//		try {
+//			String text = driver.findElement(By.xpath("//div[contains(text(),'Error')]"))
+//			return text;
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
 		return null;
 	}
 

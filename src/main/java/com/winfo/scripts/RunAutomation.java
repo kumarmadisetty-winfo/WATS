@@ -122,19 +122,14 @@ public class RunAutomation {
 			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
 
-//			fetchConfigVO.setChrome_driver_path("C:\\Users\\abhiram.bvs\\Desktop\\MyProj\\chromedriverNew\\chromedriver.exe");
-//			fetchConfigVO.setPdf_path("E:\\abhiram\\Pdf_Screenshot\\pdf\\");
-//			fetchConfigVO.setScreenshot_path("E:\\abhiram\\Pdf_Screenshot\\screenshot\\");
+			fetchConfigVO.setChrome_driver_path("C:\\Users\\UdayPratapSingh\\Downloads\\chromedriver_win32\\chromedriver.exe");
+			fetchConfigVO.setPdf_path("C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\PDFWATS");
+			fetchConfigVO.setScreenshot_path("C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\SCREEN SHOTWATS");
 
 			final String uri = fetchConfigVO.getMETADATA_URL() + args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()" + fetchConfigVO.getScreenshot_path()
 					+ fetchConfigVO.getUri_config() + fetchConfigVO.getPdf_path());
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
-			if (!"SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
-						fetchConfigVO);
-				return executeTestrunVo;
-			}
 			
 			System.out.println(fetchMetadataListVO.size());
 			Map<Integer, Status> scriptStatus = new HashMap<Integer, Status>();
