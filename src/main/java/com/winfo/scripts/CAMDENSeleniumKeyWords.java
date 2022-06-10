@@ -17194,6 +17194,60 @@ try {
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+			//Copytext
+			try {
+
+
+
+			if (inputParam1.equalsIgnoreCase("Delivery") && (inputParam2.equalsIgnoreCase("Requester"))) {
+
+
+
+			Thread.sleep(5000);
+
+
+
+			WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1 + "']/following::*[text()='" + inputParam2 + "']/following::input[1]"));
+
+			
+
+			Actions actions = new Actions(driver);
+
+
+
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getAttribute("value");
+			/*
+			 * System.out.println(stringToSearch); value1 = copywholething(stringToSearch);
+			 * 
+			 * 
+			 * System.out.println(value1);
+			 */ Thread.sleep(5000);
+
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[text()='inputParam1']/following::*[text()='inputParam2']/following::input[1]";
+			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath); String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+			log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+
+			return stringToSearch;
+
+
+
+			}
+
+
+
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+
+
+
+			}
 		
 		//Dh 611
 		try {
