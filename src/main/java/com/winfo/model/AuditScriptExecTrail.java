@@ -19,6 +19,7 @@ public class AuditScriptExecTrail {
 	private Integer stageId;
 	private Date eventTime;
 	private String triggeredBy;
+	private String message;
 
 	public String getCorrelationId() {
 		return correlationId;
@@ -59,6 +60,17 @@ public class AuditScriptExecTrail {
 	public void setTriggeredBy(String triggeredBy) {
 		this.triggeredBy = triggeredBy;
 	}
+	
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
 
 	public static class Builder {
 

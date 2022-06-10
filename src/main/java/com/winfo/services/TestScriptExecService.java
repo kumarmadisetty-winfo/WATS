@@ -271,21 +271,21 @@ public class TestScriptExecService {
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
 		String actionName = null;
-
+		String errorMessage = null;
 		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
 		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
 		String testScriptParamId = null;
 		String methodCall;
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail
+				.builder().testSetLineId(Integer.valueOf(testSetLineId))
+				.triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR,null);
 		if (run) {
 			try {
 				System.out.println(
 						"Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
-				AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail
-						.builder().testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTest_set_line_id()))
-						.triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
-						.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR);
 
 				String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 						+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
@@ -328,7 +328,7 @@ public class TestScriptExecService {
 						+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
 						+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
 				uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
-				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC);
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC,null);
 
 				logger.info(
 						"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
@@ -336,14 +336,15 @@ public class TestScriptExecService {
 								+ screenShotFolderPath);
 				this.kafkaTemp.send(topic,
 						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
-				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ);
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ,null);
 			} catch (Exception e) {
 				// suppressing error so that other scripts run if there data has no issue
-				run = false;
+				run = false; errorMessage = e.getMessage();
 				e.printStackTrace();
 			}
 		} 
 		if(!run){
+			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.EIP,errorMessage);
 			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
 			dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
@@ -758,7 +759,7 @@ public class TestScriptExecService {
 			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, customerDetails);
 			// final reports generation
 			if (!args.isManualTrigger()) {
-				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.ERG);
+				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.ERG,null);
 
 				String pdfGenerationEnabled = dataBaseEntry.pdfGenerationEnabled(Long.valueOf(args.getTestSetId()));
 				if (BOOLEAN_STATUS.TRUE.getLabel().equalsIgnoreCase(pdfGenerationEnabled)) {
@@ -1946,7 +1947,7 @@ public class TestScriptExecService {
 
 	@KafkaListener(topics = "update-audit-logs", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
-		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage());
+		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(),null);
 	}
 
 }

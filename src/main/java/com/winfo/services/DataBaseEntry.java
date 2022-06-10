@@ -316,7 +316,7 @@ public class DataBaseEntry {
 		return dao.findMinExecutionStartDate(testSetId);
 	}
 
-	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage) {
+	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage,String errorMessage) {
 		try {
 			logger.info("Audit Inserting stage {}", stage.getLabel());
 			AuditScriptExecTrail auditTrialNew = AuditScriptExecTrail.builder()
@@ -324,6 +324,7 @@ public class DataBaseEntry {
 					.triggeredBy(auditTrial.getTriggeredBy()).build();
 			auditTrialNew.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
 			auditTrialNew.setEventTime(new Date());
+			auditTrialNew.setMessage(errorMessage);
 			dao.insertAuditScriptExecTrail(auditTrialNew);
 		} catch (Exception e) {
 			// no need of throwing exception, just print
