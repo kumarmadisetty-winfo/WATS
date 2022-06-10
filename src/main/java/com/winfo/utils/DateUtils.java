@@ -22,7 +22,7 @@ public class DateUtils {
 		return sysdate;
 	}
 	
-	public static long getTotalDifferenceInTime(String startTime, String endTime) {
+	public static long findTimeDifference(String startTime, String endTime) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		long diff = 0;
 		try {
@@ -36,7 +36,7 @@ public class DateUtils {
 		return diff;
 	}
 	
-	public static String findTimeDifference(long diffInTime) {
+	public static String convertMiliSecToDayFormat(long diffInTime) {
 		long time = 0;
 		String days = (time = diffInTime / (1000 * 60 * 60 * 24) % 365) > 0 ? time + "days " : "";
 		String hr = (time = (diffInTime / (1000 * 60 * 60)) % 24) > 0 || !days.equals("") ? time + "hr " : "";

@@ -150,7 +150,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateStatusOfScript( String testSetLineId, String status) {
+	public void updateStatusOfScript(String testSetLineId, String status) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
@@ -700,8 +700,7 @@ public class DataBaseEntryDao {
 			customerDetails
 					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
+			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.", e);
 		}
 		return customerDetails;
 
@@ -1033,14 +1032,14 @@ public class DataBaseEntryDao {
 
 	}
 
-	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String testRunPdfName) {
+	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testRunId);
-		Predicate condition2 = cb.equal(from.get("status"), testRunPdfName);
-		Predicate condition3 = (testRunPdfName != null) ? cb.and(condition1, condition2) : condition1;
+		Predicate condition2 = cb.equal(from.get("status"), scriptStatus);
+		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2) : condition1;
 		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
 		List<Object[]> query = em.createQuery(cq).getResultList();
 		return query;

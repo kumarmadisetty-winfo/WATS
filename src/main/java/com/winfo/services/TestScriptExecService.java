@@ -569,6 +569,8 @@ public class TestScriptExecService {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
+		} catch (WatsEBSCustomException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
@@ -583,67 +585,71 @@ public class TestScriptExecService {
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
 		}
+		try {
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
-		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
-		try (ObjectStorage client = new ObjectStorageClient(provider);) {
+				String seqnum = (seqNum == null) ? "" : seqNum;
+				String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH
+						+ testRunName + FORWARD_SLASH + seqnum;
 
-			String seqnum = (seqNum == null) ? "" : seqNum;
-			String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH + testRunName
-					+ FORWARD_SLASH + seqnum;
+				ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).prefix(objectStoreScreenshotPath).delimiter("/").build();
 
-			ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
-					.bucketName(ociBucketName).prefix(objectStoreScreenshotPath).delimiter("/").build();
+				/* Send request to the Client */
+				ListObjectsResponse response = client.listObjects(listObjectsRequest);
 
-			/* Send request to the Client */
-			ListObjectsResponse response = client.listObjects(listObjectsRequest);
+				objNames = response.getListObjects().getObjects().stream().map((objSummary) -> objSummary.getName())
+						.collect(Collectors.toList());
+				logger.info(objNames.size());
+				ListIterator<String> listIt = objNames.listIterator();
+				createDir(screenshotPath);
+				while (listIt.hasNext()) {
+					String objectName = listIt.next();
+					GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder()
+							.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 
-			objNames = response.getListObjects().getObjects().stream().map((objSummary) -> objSummary.getName())
-					.collect(Collectors.toList());
-			logger.info(objNames.size());
-			ListIterator<String> listIt = objNames.listIterator();
-			createDir(screenshotPath);
-			while (listIt.hasNext()) {
-				String objectName = listIt.next();
-				GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(objectName).build());
+					String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
+					File file = new File(screenshotPath + File.separator + imageName);
+					if (!file.exists()) {
+						try (final InputStream stream = getResponse.getInputStream();
+								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
 
-				String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
-				File file = new File(screenshotPath + File.separator + imageName);
-				if (!file.exists()) {
-					try (final InputStream stream = getResponse.getInputStream();
-							// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
-
-							final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
-						// use fileStream
-						byte[] buf = new byte[8192];
-						int bytesRead;
-						while ((bytesRead = stream.read(buf)) > 0) {
-							outputStream.write(buf, 0, bytesRead);
+								final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
+							// use fileStream
+							byte[] buf = new byte[8192];
+							int bytesRead;
+							while ((bytesRead = stream.read(buf)) > 0) {
+								outputStream.write(buf, 0, bytesRead);
+							}
+						} catch (IOException e1) {
+							throw new WatsEBSCustomException(500,
+									"Exception occured while read or write screenshot from Object Storage", e1);
 						}
-					} catch (IOException e1) {
-						throw new WatsEBSCustomException(500,
-								"Exception occured while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
 		} catch (WatsEBSCustomException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while closing Object stroage path", e);
+			System.out.println("1");
+			throw new WatsEBSCustomException(500,
+					"Exception occured while downloading screenshots from object path location.", e);
 		}
 
 	}
 
-	public void deleteScreenshotsFromWindows(String screenShotFolderPath, String seqNums) {
+	public void deleteScreenshotsFromWindows(String screenShotFolderPath, String seqNum) {
 		File folder1 = new File(screenShotFolderPath);
 		if (folder1.exists()) {
 			File folder = new File(screenShotFolderPath + File.separator);
 			if (folder.exists()) {
 				File[] listOfFiles = folder.listFiles();
 				for (File file : Arrays.asList(listOfFiles)) {
-					String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-					if (seqNum.equalsIgnoreCase(seqNums)) {
+					String seqNumFromScreenshot = String
+							.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+					if (seqNum.equalsIgnoreCase(seqNumFromScreenshot)) {
 						Path imagesPath = Paths.get(file.getPath());
 						try {
 							Files.delete(imagesPath);
@@ -713,6 +719,7 @@ public class TestScriptExecService {
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), objectStoreScreenShotPath.toString(),
 					fetchMetadataListVO.get(0).getSeqNum() + "_");
+
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
 			Date enddate = null;
@@ -773,7 +780,8 @@ public class TestScriptExecService {
 					}
 				}
 			}
-
+		} catch (WatsEBSCustomException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while generating the pdf", e);
 		}
@@ -801,7 +809,7 @@ public class TestScriptExecService {
 		fetchConfigVO.setOtherCount(other);
 	}
 
-	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO) {
+	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO) throws Exception {
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
 				false);
@@ -849,13 +857,10 @@ public class TestScriptExecService {
 				}
 			}
 		}
-		try {
-			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails);
-			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails);
-			createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
-		} catch (com.itextpdf.text.DocumentException e) {
-			logger.error("Exception occured while creating TestLvlPDF" + e);
-		}
+		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails);
+		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails);
+		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
+
 	}
 
 	private void createDir(String path) {
@@ -887,10 +892,10 @@ public class TestScriptExecService {
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
 		long totalDiff = 0;
 		for (Object[] date : startAndEndDates) {
-			totalDiff += DateUtils.getTotalDifferenceInTime(date[0].toString(), date[1].toString());
+			totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
 		}
 
-		return DateUtils.findTimeDifference(totalDiff);
+		return DateUtils.convertMiliSecToDayFormat(totalDiff);
 	}
 
 	public List<String> getPassedPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
@@ -1039,7 +1044,7 @@ public class TestScriptExecService {
 	}
 
 	private void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			CustomerProjectDto customerDetails) throws com.itextpdf.text.DocumentException {
+			CustomerProjectDto customerDetails) {
 		try {
 			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 					+ File.separator + customerDetails.getTestSetName() + File.separator);
@@ -1146,10 +1151,10 @@ public class TestScriptExecService {
 		String report = EXECUTION_REPORT;
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
-		long diff = DateUtils.getTotalDifferenceInTime(startTime.toString(), endTime.toString());
+		long diff = DateUtils.findTimeDifference(startTime.toString(), endTime.toString());
 		String scriptNumber2 = fetchMetadataListVO.get(0).getScenarioName();
 		String scenario1 = fetchConfigVO.getStatus1();
-		String executionTime = DateUtils.findTimeDifference(diff);
+		String executionTime = DateUtils.convertMiliSecToDayFormat(diff);
 		String tr = TEST_RUN_NAME;
 		String sn = SCRIPT_NUMBER;
 		String sn1 = SCENARIO_NAME;

@@ -273,7 +273,7 @@ public class DataBaseEntry {
 
 	}
 
-	public Boolean checkAllStepsStatusForAScript(String testSetLineId) throws ClassNotFoundException, SQLException {
+	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
 			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
@@ -308,8 +308,8 @@ public class DataBaseEntry {
 		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
 	}
 
-	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String testRunPdfName) {
-		return dao.findStartAndEndTimeForTestRun(testRunId, testRunPdfName);
+	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
+		return dao.findStartAndEndTimeForTestRun(testRunId, scriptStatus);
 	}
 
 	public Date findMaxExecutionEndDate(long testSetId) {
