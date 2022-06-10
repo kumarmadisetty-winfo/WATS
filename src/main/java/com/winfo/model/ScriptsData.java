@@ -22,8 +22,8 @@ import javax.persistence.Table;
 @Table(name = "WIN_TA_TEST_SET_LINES")
 public class ScriptsData {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRunLines_generator")
-	@SequenceGenerator(name = "testRunLines_generator", sequenceName = "WIN_TA_TEST_SET_LINE_SEQ", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRunLines_generator")
+//	@SequenceGenerator(name = "testRunLines_generator", sequenceName = "WIN_TA_TEST_SET_LINE_SEQ", allocationSize = 1)
 	@Column(name = "TEST_SET_LINE_ID")
 	private int testsetlineid;
 
@@ -78,10 +78,18 @@ public class ScriptsData {
 	private Testrundata Testrundata;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "Scriptsdata")
-
 	private List<ScritplinesData> Scriptslinedata = new ArrayList<ScritplinesData>();
 	
-    public void addScriptlines(ScritplinesData scriptslinedata) {
+	@Column(name = "DEPENDENCY_TR")
+	private Integer dependency_tr;
+	
+    public Integer getDependency_tr() {
+		return dependency_tr;
+	}
+	public void setDependency_tr(Integer dependency_tr) {
+		this.dependency_tr = dependency_tr;
+	}
+	public void addScriptlines(ScritplinesData scriptslinedata) {
     	Scriptslinedata.add(scriptslinedata);
     	scriptslinedata.setScriptsdata(this);
     }

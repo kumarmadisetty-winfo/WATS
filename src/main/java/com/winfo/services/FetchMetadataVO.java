@@ -39,8 +39,18 @@ public class FetchMetadataVO implements Serializable {
     private String executed_by;
 	private String smtp_from_mail;
 	private Integer dependencyScriptNumber;
+	private String dependency_tr;
 	
- public String getSmtp_from_mail() {
+	
+ public String getDependency_tr() {
+		return dependency_tr;
+	}
+
+	public void setDependency_tr(String dependency_tr) {
+		this.dependency_tr = dependency_tr;
+	}
+
+public String getSmtp_from_mail() {
 		return smtp_from_mail;
 	}
 

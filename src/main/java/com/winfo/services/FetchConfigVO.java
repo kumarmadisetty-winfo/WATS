@@ -153,7 +153,51 @@ public class FetchConfigVO {
     
     private Integer ACTION_WAIT_TIME;
     
-   	public Integer getACTION_WAIT_TIME() {
+    @JsonProperty("SharePoint_URL")
+    private String SharePoint_URL;
+    
+    @JsonProperty("Site Name")
+    private String Site_Name;
+    
+    @JsonProperty("SharePoint Library Name")
+    private String SharePoint_Library_Name;
+    
+    @JsonProperty("Directory Name")
+    private String Directory_Name;
+    
+   	public String getSharePoint_URL() {
+		return SharePoint_URL;
+	}
+
+	public void setSharePoint_URL(String sharePoint_URL) {
+		SharePoint_URL = sharePoint_URL;
+	}
+
+	public String getSite_Name() {
+		return Site_Name;
+	}
+
+	public void setSite_Name(String site_Name) {
+		Site_Name = site_Name;
+	}
+
+	public String getSharePoint_Library_Name() {
+		return SharePoint_Library_Name;
+	}
+
+	public void setSharePoint_Library_Name(String sharePoint_Library_Name) {
+		SharePoint_Library_Name = sharePoint_Library_Name;
+	}
+
+	public String getDirectory_Name() {
+		return Directory_Name;
+	}
+
+	public void setDirectory_Name(String directory_Name) {
+		Directory_Name = directory_Name;
+	}
+
+	public Integer getACTION_WAIT_TIME() {
 		return ACTION_WAIT_TIME;
 	}
 
