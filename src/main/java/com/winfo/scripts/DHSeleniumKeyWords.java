@@ -3624,7 +3624,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			
 			
 			//SITE-ID
-			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/winfoconsulting.sharepoint.com:/sites/WATS120",
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+fetchConfigVO.getSharePoint_URL()+":/sites/"+fetchConfigVO.getSite_Name(),
 					HttpMethod.GET, uploadSessionRequest, Object.class);
 			
 			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody() : null;
@@ -3641,16 +3641,24 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			
 			String driveId = null;
 			for(Map<String,String> map : list) {
-				if("Test_Library".equalsIgnoreCase(map.get("name"))) {
-					driveId = map.get("id");
-					break;
+				if (fetchConfigVO.getSharePoint_Library_Name() != null) {
+					if (fetchConfigVO.getSharePoint_Library_Name().equalsIgnoreCase(map.get("name"))) {
+						driveId = map.get("id");
+						break;
+					}
+				}
+				else {
+					if ("Document".equalsIgnoreCase(map.get("name"))) {
+						driveId = map.get("id");
+						break;
+					}
 				}
 			}
 			
-			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
+//			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
 			
 			//SITE-ID
-			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test",
+			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/"+fetchConfigVO.getDirectory_Name(),
 					HttpMethod.GET, uploadSessionRequest, Object.class);
 			
 			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody() : null;
