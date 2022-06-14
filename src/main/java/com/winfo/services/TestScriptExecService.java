@@ -822,6 +822,7 @@ public class TestScriptExecService {
 		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
 		String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 				+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
+		createDir(screenShotFolderPath);
 		File folder = new File(screenShotFolderPath);
 		String objectStore = fetchConfigVO.getScreenshot_path();
 		String[] arrOfStr = objectStore.split(FORWARD_SLASH, 5);
