@@ -908,8 +908,8 @@ public class TestScriptExecService {
 	public List<String> getPassedPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + "\\"
-				+ customerDetails.getTestSetName() + "\\";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator;
 
 		/* FOR MP4 FUNCTIONALITY */
 		String videoRec = "no";
@@ -945,8 +945,8 @@ public class TestScriptExecService {
 	public List<String> getFailedPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getTestSetName() + "/";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator;
 		String videoRec = "no";
 		Map<String, String> seqNumMap = new HashMap<>();
 		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
@@ -979,8 +979,8 @@ public class TestScriptExecService {
 	public List<String> getDetailPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getTestSetName() + "/";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator;
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
 		List<String> detailsFileName = new ArrayList<>();
@@ -1005,8 +1005,8 @@ public class TestScriptExecService {
 	public List<String> getFileNameListNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getTestSetName() + "/";
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator;
 		String videoRec = "no";
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
