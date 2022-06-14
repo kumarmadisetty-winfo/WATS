@@ -662,7 +662,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto args) {
+	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto args) throws Exception {
 		try {
 			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
 			if (scriptStatus == null) {
@@ -686,7 +686,7 @@ public class TestScriptExecService {
 
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(args.getTestSetId());
 
-			List<ScriptDetailsDto> fetchMetadataListVO = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
+			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
 					args.getTestSetLineId(), false, false);
 			args.setSuccess(scriptStatus);
 
@@ -699,7 +699,7 @@ public class TestScriptExecService {
 				objectStoreScreenShotPath.append(FORWARD_SLASH + arrOfStr[i]);
 			}
 
-			String scriptId = fetchMetadataListVO.get(0).getScriptId();
+			String scriptId = testLinesDetails.get(0).getScriptId();
 			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
 					+ customerDetails.getTestSetName() + File.separator + "Passed_Report.pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
@@ -710,22 +710,22 @@ public class TestScriptExecService {
 					+ customerDetails.getTestSetName() + File.separator + "Detailed_Report.pdf" + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + fetchMetadataListVO.get(0).getSeqNum() + "_"
-					+ fetchMetadataListVO.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
+					+ customerDetails.getTestSetName() + File.separator + testLinesDetails.get(0).getSeqNum() + "_"
+					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
 					+ fetchConfigVO.getImg_url();
 
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
-			deleteScreenshotsFromWindows(screenShotFolderPath, fetchMetadataListVO.get(0).getSeqNum());
+			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), objectStoreScreenShotPath.toString(),
-					fetchMetadataListVO.get(0).getSeqNum() + "_");
+					testLinesDetails.get(0).getSeqNum() + "_");
 
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
 			Date enddate = null;
 			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
-					customerDetails.getTestSetId(), fetchMetadataListVO.get(0).getScriptId(),
-					fetchMetadataListVO.get(0).getScriptNumber(), fetchConfigVO.getStatus1());
+					customerDetails.getTestSetId(), testLinesDetails.get(0).getScriptId(),
+					testLinesDetails.get(0).getScriptNumber(), fetchConfigVO.getStatus1());
 			if (!updateStatus) {
 				enddate = testSetLine.getExecutionEndTime();
 			} else {
@@ -736,7 +736,7 @@ public class TestScriptExecService {
 			fetchConfigVO.setEndtime(enddate);
 			int failedScriptRunCount = 0;
 			if (args.isSuccess()) {
-				pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
+				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber()
 						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
@@ -745,26 +745,25 @@ public class TestScriptExecService {
 				fetchConfigVO.setStatus1(FAIL);
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
-				pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
-						+ "_RUN" + failedScriptRunCount + PDF_EXTENSION;
+				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
+						+ failedScriptRunCount + PDF_EXTENSION;
 			}
 			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
-				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
+				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName());
 				if (fetchConfigVO.getStatus1().equals(FAIL)) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
 							args.getTestSetId());
-					pdfName = fetchMetadataListVO.get(0).getSeqNum() + "_"
-							+ fetchMetadataListVO.get(0).getScriptNumber() + "_RUN" + failedScriptRunCount
-							+ PDF_EXTENSION;
+					pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber()
+							+ "_RUN" + failedScriptRunCount + PDF_EXTENSION;
 				}
 			}
-			createPdf(fetchMetadataListVO, fetchConfigVO, pdfName, customerDetails);
+			createPdf(testLinesDetails, fetchConfigVO, pdfName, customerDetails);
 			// final reports generation
 			if (!args.isManualTrigger()) {
 				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.ERG, null);
@@ -780,9 +779,17 @@ public class TestScriptExecService {
 					}
 				}
 			}
-		} catch (WatsEBSCustomException e) {
-			throw e;
 		} catch (Exception e) {
+			if (args.getAutditTrial() != null) {
+				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.EISU,
+						e.getMessage());
+			}
+			dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(),
+					Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(args.getTestSetId());
+			if (e instanceof WatsEBSCustomException) {
+				throw e;
+			}
 			throw new WatsEBSCustomException(500, "Exception occured while generating the pdf", e);
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
