@@ -633,7 +633,6 @@ public class TestScriptExecService {
 		} catch (WatsEBSCustomException e) {
 			throw e;
 		} catch (Exception e) {
-			System.out.println("1");
 			throw new WatsEBSCustomException(500,
 					"Exception occured while downloading screenshots from object path location.", e);
 		}
