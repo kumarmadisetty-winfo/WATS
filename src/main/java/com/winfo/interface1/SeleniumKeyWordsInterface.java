@@ -231,4 +231,5 @@ public interface SeleniumKeyWordsInterface {
 				String input_value, String password) throws Exception;
 		public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO);
+		public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath);
 }

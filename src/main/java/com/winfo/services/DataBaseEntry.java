@@ -13,15 +13,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetLine;
-import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -37,6 +40,16 @@ import com.winfo.vo.Status;
 public class DataBaseEntry {
 	@Autowired
 	DataBaseEntryDao dao;
+	@Autowired
+	SendMailServiceImpl sendMailServiceImpl;
+
+	@Autowired
+	LimitScriptExecutionService limitScriptExecutionService;
+
+	@Autowired
+	ApplicationContext appContext;
+	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
+	private static final String COMPLETED = "Completed";
 	
 	public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
@@ -49,6 +62,10 @@ public class DataBaseEntry {
 	}
 	public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {
 		return dao.getErrorMessage(sndo, ScriptName, testRunName, fetchConfigVO);
+	}
+	public String getErrorMessage(String sndo, String ScriptName, String testRunName)
+			throws ClassNotFoundException, SQLException {
+		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
 	
 	public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String test_set_id,String test_set_line_id) throws ClassNotFoundException, SQLException {
@@ -85,7 +102,7 @@ public class DataBaseEntry {
 	}
 	@Transactional
 	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id){
-			TestSetLines testSetLine  =	dao.getTestSetLine(test_set_line_id);
+			TestSetLine testSetLine  =	dao.getTestSetLine(test_set_line_id);
 			return dao.getTestScriptMap(testSetLine);
 	}
 
@@ -296,25 +313,7 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 		dao.updateInProgressScriptStatus(test_set_id, test_set_line_id, startDate);
 	}
 	
-	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage,String errorMessage) {
-		try {
-			logger.info("Audit Inserting stage {}", stage.getLabel());
-			AuditScriptExecTrail auditTrialNew = AuditScriptExecTrail.builder()
-					.correlationId(auditTrial.getCorrelationId()).testSetLineId(auditTrial.getTestSetLineId())
-					.triggeredBy(auditTrial.getTriggeredBy()).build();
-			auditTrialNew.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
-			auditTrialNew.setEventTime(new Date());
-			auditTrialNew.setMessage(errorMessage);
-			dao.insertAuditScriptExecTrail(auditTrialNew);
-		} catch (Exception e) {
-			// no need of throwing exception, just print
-			logger.error(
-					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
-					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
-			e.printStackTrace();
-		}
-		return auditTrial;
-	}
+
 	
 	public Date findMinExecutionStartDate(long testSetId) {
 		return dao.findMinExecutionStartDate(testSetId);
@@ -335,6 +334,62 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);
 	}
 	
+	@Transactional
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
+			boolean executeApi) {
+		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf, executeApi);
+	}
+	
+	@Transactional
+	public boolean checkRunStatusOfDependantScript(String testSetId, String scriptId) {
+		ScriptMaster scriptMaster = dao.findScriptMasterByScriptId(Integer.valueOf(scriptId));
+		TestSetLine testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId),
+				scriptMaster.getDependency());
+
+		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
+				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			testLines = dao.checkTestSetLinesByScriptId(Integer.valueOf(testSetId), scriptMaster.getDependency());
+
+		}
+
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void updateSubscription() {
+		List<Object[]> noOfHits = dao.getSumDetailsFromSubscription();
+		List<Object[]> subscriptionDtls = dao.getSubscriptionDetails();
+
+		BigDecimal sumQuantity = (BigDecimal) noOfHits.get(0)[0];
+		BigDecimal sumExecuted = (BigDecimal) noOfHits.get(0)[1];
+//		BigDecimal sumBalance = (BigDecimal) noOfHits.get(0)[2];
+
+		BigDecimal subsId = (BigDecimal) subscriptionDtls.get(0)[0];
+		BigDecimal executed = (BigDecimal) subscriptionDtls.get(0)[1];
+		BigDecimal balance = (BigDecimal) subscriptionDtls.get(0)[2];
+
+		Integer sum = dao.findGraceAllowance(subsId);
+
+		Integer graceValue = (sum == null) ? 0 : sum;
+
+		if (sumQuantity.intValue() + graceValue.intValue() - sumExecuted.intValue() > 0) {
+			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
+		}
+
+		if (Math.abs(balance.intValue() - 1) >= graceValue && (balance.intValue() - 1) <= 0) {
+			dao.updateSubscriptionStatus(COMPLETED, subsId);
+		}
+
+	}
+
 }
 
 

@@ -218,47 +218,6 @@ public class TestScriptExecService {
 
 	}
 
-	public ResponseDto run(String testSetId) throws MalformedURLException {
-		ResponseDto executeTestrunVo = new ResponseDto();
-		try {
-			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
-			FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
-			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
-			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
-			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
-					dependentScriptMap);
-
-			// Independent
-			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
-				logger.info(" Running Independent - " + metaData.getKey());
-				executorMethodPyJab(testSetId, fetchConfigVO, metaData, true);
-			}
-
-			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
-			for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
-				logger.info(" Running Dependent - " + metaData.getKey());
-				executordependent.execute(() -> {
-					logger.info(" Running Dependent in executor - " + metaData.getKey());
-					boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
-							metaData.getValue().get(0).getScript_id());
-					logger.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
-					executorMethodPyJab(testSetId, fetchConfigVO, metaData, run);
-				});
-			}
-			executordependent.shutdown();
-
-			executeTestrunVo.setStatusCode(200);
-			executeTestrunVo.setStatusMessage("SUCCESS");
-			executeTestrunVo.setStatusDescr("SUCCESS");
-		} catch (Exception e) {
-			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
-			if (e instanceof WatsEBSCustomException)
-				throw e;
-			throw new WatsEBSCustomException(500, "Exception Occured while creating script for Test Run", e);
-		}
-		return executeTestrunVo;
-	}
-
 	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO,
 			Entry<Integer, List<FetchMetadataVO>> metaData, boolean run) {
 		List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();

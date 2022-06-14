@@ -18520,5 +18520,11 @@ public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMe
 	
 }
 
+@Override
+public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
 
 }

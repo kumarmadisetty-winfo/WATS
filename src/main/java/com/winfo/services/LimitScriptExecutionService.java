@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
 
 @Service
@@ -246,5 +247,54 @@ public class LimitScriptExecutionService {
 		
 	}
 	
+	@Transactional
+	public void insertTestRunScriptData(String scriptId, String scriptNumber, String status, Date startDate,
+			Date endDate, String testRunId) {
+		try {
+			ExecutionAudit executionAudit = new ExecutionAudit();
+			String testSetId = testRunId;
+			executionAudit.setTestsetid(testSetId);
+			executionAudit.setScriptid(scriptId);
+			executionAudit.setScriptnumber(scriptNumber);
+			executionAudit.setExecutionstarttime(startDate);
+			executionAudit.setExecutionendtime(endDate);
+			executionAudit.setStatus(status);
+			limitScriptExecutionDao.insertTestrundata(executionAudit);
+			log.info("data added successfully");
+		} catch (Exception e) {
+			log.error("testrun data not added " + e);
+			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
+		}
+	}
+
+	@Transactional
+	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
+		return limitScriptExecutionDao.getFailScriptRunCount(testSetLineId, testSetId);
+	}
+
+	@Transactional
+	public void updateFailScriptRunCount(int failedRunCount, String testSetLineId, String testSetId) {
+		limitScriptExecutionDao.updateFailScriptRunCount(failedRunCount, testSetId, testSetLineId);
+	}
+	
+	@Transactional
+	public boolean updateStatusCheck(FetchConfigVO fetchConfigVO, String testRunId, String scriptId,
+			String scriptNumber, String status) {
+		try {
+			ExecutionAudit executionAudit = new ExecutionAudit();
+			String testSetId = testRunId;
+			executionAudit.setTestsetid(testSetId);
+			executionAudit.setScriptid(scriptId);
+			executionAudit.setScriptnumber(scriptNumber);
+			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
+			executionAudit.setStatus(status);
+			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
+				return true;
+			}
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while checking update status of Script Run", e);
+		}
+		return false;
+	}
 
 }

@@ -28,17 +28,17 @@ public class TestScriptExecController {
 	@Autowired
 	TestScriptExecService testScriptExecService;
 
-	@ResponseBody
-	@RequestMapping(value = "/executeTestScript")
-	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
-			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-		ResponseDto status = null;
-		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
-			status = testScriptExecService.run(testScriptDto.getTestScriptNo());
-		}
-
-		return status;
-	}
+//	@ResponseBody
+//	@RequestMapping(value = "/executeTestScript")
+//	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
+//			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
+//		ResponseDto status = null;
+//		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
+////			status = testScriptExecService.run(testScriptDto.getTestScriptNo());
+//		}
+//
+//		return status;
+//	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStartScriptStatus")

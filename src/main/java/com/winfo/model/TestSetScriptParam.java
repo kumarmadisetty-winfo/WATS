@@ -97,17 +97,15 @@ public class TestSetScriptParam {
 	
 	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_LINE_ID")
-	
-	
-	private TestSetLines testSetLines;
+	private TestSetLine testSetLine;
 
 	
-	public TestSetLines getTestSetLines() {
-		return testSetLines;
+	public TestSetLine getTestSetLine() {
+		return testSetLine;
 	}
 
-	public void setTestSetLines(TestSetLines testSetLines) {
-		this.testSetLines = testSetLines;
+	public void setTestSetLine(TestSetLine testSetLine) {
+		this.testSetLine = testSetLine;
 	}
 
 	public Integer getTest_script_param_id() {
@@ -302,6 +300,5 @@ public class TestSetScriptParam {
 		this.validation_name = validation_name;
 	}
 
-		
 	
 }

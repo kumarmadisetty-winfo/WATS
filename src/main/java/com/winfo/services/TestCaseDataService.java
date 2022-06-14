@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -98,6 +99,61 @@ public class TestCaseDataService {
 			testCaseMap.put(test_line_id, testcasedata);
 
 		}
+
+	}
+ 
+	private void prepareTestData(SortedMap<Integer, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+			Integer seq) {
+
+		if (testCaseMap.containsKey(seq)) {
+
+			List<FetchMetadataVO> testcasedata = testCaseMap.get(seq);
+
+			testcasedata.add(testcase);
+
+			testCaseMap.put(seq, testcasedata);
+
+		} else {
+
+			List<FetchMetadataVO> testcasedata = new ArrayList<FetchMetadataVO>();
+
+			testcasedata.add(testcase);
+
+			testCaseMap.put(seq, testcasedata);
+
+		}
+
+	}
+ 
+	public SortedMap<Integer, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,
+			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap) {
+
+		SortedMap<Integer, List<FetchMetadataVO>> testCaseMap = new TreeMap<Integer, List<FetchMetadataVO>>();
+
+		if (list != null) {
+
+			for (FetchMetadataVO testcase : list) {
+
+				String test_line_id = testcase.getTest_set_line_id();
+
+				Integer seq = Integer.parseInt(testcase.getSeq_num());
+
+				String dependency = testcase.getDependency();
+				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
+
+					prepareTestData(testCaseMap, testcase, seq);
+
+				} else {
+
+					prepareTestData(dependentScriptMap, testcase, seq);
+
+				}
+
+			}
+
+		}
+
+		return testCaseMap;
 
 	}
 

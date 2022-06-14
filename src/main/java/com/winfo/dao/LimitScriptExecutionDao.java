@@ -18,6 +18,7 @@ import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
 import com.winfo.model.ScriptsData;
 import com.winfo.services.TestCaseDataService;
@@ -147,6 +148,53 @@ public class LimitScriptExecutionDao {
 
 		
 	}
-
 	
+	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "SELECT RUN_COUNT from WIN_TA_TEST_SET_LINES where TEST_SET_LINE_ID=" + testSetLineId
+				+ " AND TEST_SET_ID=" + testSetId + "";
+		Integer id = 0;
+		try {
+			NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
+
+			List<BigDecimal> results = query.list();
+			if (results != null && !results.isEmpty()) {
+				logger.info("result" + results.get(0));
+				BigDecimal bigDecimal = results.get(0);
+				id = bigDecimal != null ? Integer.parseInt(bigDecimal.toString()) : 0;
+			}
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500,
+					"Exception occured while selecting the run count for Script level pdf", e);
+		}
+		return id;
+	}
+	
+	public void updateFailScriptRunCount(int failedScriptRunCount, String testSetId, String testSetLineId) {
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
+					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
+			Query query = session.createSQLQuery(sql1);
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500,
+					"Exception occured while updating the fail run count for script level pdf", e);
+		}
+	}
+	
+	public Long findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		Root<ExecutionAudit> from = cq.from(ExecutionAudit.class);
+		Predicate condition1 = cb.equal(from.get("testSetId"), executionAudit.getTestsetid());
+		Predicate condition2 = cb.equal(from.get("scriptId"), executionAudit.getScriptid());
+		Predicate condition3 = cb.equal(from.get("scriptNumber"), executionAudit.getScriptnumber());
+		Predicate condition4 = cb.equal(from.get("executionStartTime"), executionAudit.getExecutionstarttime());
+		Predicate condition = cb.and(condition1, condition2, condition3, condition4);
+		cq.select(cb.count(from)).where(condition);
+		return entityManager.createQuery(cq).getSingleResult();
+
+	}
 }

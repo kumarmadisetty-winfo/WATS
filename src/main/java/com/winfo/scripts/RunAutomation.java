@@ -38,6 +38,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
+import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.Status;
@@ -69,6 +70,9 @@ public class RunAutomation {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
+	
+	@Autowired
+	TestScriptExecService testScriptExecService;
 
 	/*
 	 * public void report() throws IOException, DocumentException,
@@ -129,7 +133,7 @@ public class RunAutomation {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
 			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
-			FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
@@ -138,7 +142,7 @@ public class RunAutomation {
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				log.info(" Running Independent - " + metaData.getKey());
-				executorMethodPyJab(testSetId, fetchConfigVO, metaData, true);
+				testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, true);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
@@ -149,7 +153,7 @@ public class RunAutomation {
 					boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
 							metaData.getValue().get(0).getScript_id());
 					log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
-					executorMethodPyJab(testSetId, fetchConfigVO, metaData, run);
+					testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, run);
 				});
 			}
 			executordependent.shutdown();
@@ -347,6 +351,7 @@ public class RunAutomation {
 								post.setP_exception_path(detailurl);
 								post.setP_test_set_line_path(scripturl);
 								failcount = failcount + 1;
+								System.out.println("Came here to check fail condition");
 								// Date enddate = new Date();
 								// fetchConfigVO.setEndtime(enddate);
 								dataService.updateTestCaseStatus(post, args, fetchConfigVO);

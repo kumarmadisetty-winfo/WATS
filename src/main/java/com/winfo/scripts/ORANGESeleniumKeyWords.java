@@ -20130,4 +20130,10 @@ public void oicMouseHover(WebDriver driver, String param1, String param2,
 		}
 		
 	}
+
+	@Override
+	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -7070,4 +7070,10 @@ public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, F
 		
 	}
 
+	@Override
+	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

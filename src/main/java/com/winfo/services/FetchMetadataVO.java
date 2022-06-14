@@ -35,14 +35,42 @@ public class FetchMetadataVO implements Serializable {
 	private String script_description;
 	private String test_script_param_id;
 	private String conditional_popup;
+	private String lineErrorMsg;
+	private String testRunParamDesc;
 //added executed_by
     private String executed_by;
 	private String smtp_from_mail;
 	private Integer dependencyScriptNumber;
 	private String dependency_tr;
+	private String targetApplicationName;
 	
 	
- public String getDependency_tr() {
+	
+ public String getTargetApplicationName() {
+		return targetApplicationName;
+	}
+
+	public void setTargetApplicationName(String targetApplicationName) {
+		this.targetApplicationName = targetApplicationName;
+	}
+
+public String getLineErrorMsg() {
+		return lineErrorMsg;
+	}
+
+	public void setLineErrorMsg(String lineErrorMsg) {
+		this.lineErrorMsg = lineErrorMsg;
+	}
+
+	public String getTestRunParamDesc() {
+		return testRunParamDesc;
+	}
+
+	public void setTestRunParamDesc(String testRunParamDesc) {
+		this.testRunParamDesc = testRunParamDesc;
+	}
+
+public String getDependency_tr() {
 		return dependency_tr;
 	}
 

@@ -82,14 +82,27 @@ public class TestSet {
 	@Column(name = "TR_MODE")
 	private String  tr_mode;
 	
+	@Column(name = "TR_MODE")
+	private String  testRunMode;
+	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSet")
 
-	private List<TestSetLines> testSetLinesDatalist = new ArrayList<TestSetLines>();
+	private List<TestSetLine> testSetLinesDatalist = new ArrayList<TestSetLine>();
 	
-	public void addTestSetLinesdata(TestSetLines setlines) {
+	
+	
+	public String getTestRunMode() {
+		return testRunMode;
+	}
+
+	public void setTestRunMode(String testRunMode) {
+		this.testRunMode = testRunMode;
+	}
+
+	public void addTestSetLinesdata(TestSetLine setlines) {
 		testSetLinesDatalist.add(setlines);
-		setlines.setTestSet(this);
+		setlines.setTestRun(this);
 	}
 
 	public Integer getTest_set_id() {
@@ -252,11 +265,11 @@ public class TestSet {
 		this.tr_mode = tr_mode;
 	}
 
-	public List<TestSetLines> getTestSetLinesDatalist() {
+	public List<TestSetLine> getTestSetLinesDatalist() {
 		return testSetLinesDatalist;
 	}
 
-	public void setTestSetLinesDatalist(List<TestSetLines> testSetLinesDatalist) {
+	public void setTestSetLinesDatalist(List<TestSetLine> testSetLinesDatalist) {
 		this.testSetLinesDatalist = testSetLinesDatalist;
 	}
 		

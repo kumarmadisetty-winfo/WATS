@@ -173,7 +173,17 @@ public class FetchConfigVO {
     
     private List<Object[]> seqNumAndStatus; 
     
-   	public String getWINDOWS_PDF_LOCATION() {
+    private int otherCount;
+    
+   	public int getOtherCount() {
+		return otherCount;
+	}
+
+	public void setOtherCount(int otherCount) {
+		this.otherCount = otherCount;
+	}
+
+	public String getWINDOWS_PDF_LOCATION() {
 		return WINDOWS_PDF_LOCATION;
 	}
 
