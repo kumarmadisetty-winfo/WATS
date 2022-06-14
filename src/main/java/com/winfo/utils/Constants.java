@@ -21,7 +21,7 @@ public class Constants {
 	public enum AUDIT_TRAIL_STAGES {
 		RR("Received Request"), SGC("Script Generation Completed"), SQ("Script Queued"), CP("Consumer Picked"),
 		SES("Script Execution Started"),SEE("Script Execution Ended"), SSU("Sent for Status Update"), SU("Status Updated"),
-		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer");
+		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer"),EISU("Error In Status Updation After Script Run");
 
 		public final String label;
 
