@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
+import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.EmailParamDto;
+import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
 
 @Service
@@ -123,6 +133,206 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 	@Transactional
 	public int getTestRunDependentCount(String testSetId) {
 		return dao.getTestRunDependentCount(testSetId);
+	}
+	public String getPackage(String args) {
+		return dao.getPackage(args);
+	}
+	
+	public String getTestSetMode(Long testSetId) {
+		return dao.getTestSetMode(testSetId);
+
+	}
+	
+	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage,String errorMessage) {
+		try {
+			logger.info("Audit Inserting stage {}", stage.getLabel());
+			AuditScriptExecTrail auditTrialNew = AuditScriptExecTrail.builder()
+					.correlationId(auditTrial.getCorrelationId()).testSetLineId(auditTrial.getTestSetLineId())
+					.triggeredBy(auditTrial.getTriggeredBy()).build();
+			auditTrialNew.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
+			auditTrialNew.setEventTime(new Date());
+			auditTrialNew.setMessage(errorMessage);
+			dao.insertAuditScriptExecTrail(auditTrialNew);
+		} catch (Exception e) {
+			// no need of throwing exception, just print
+			logger.error(
+					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
+					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
+			e.printStackTrace();
+		}
+		return auditTrial;
+	}
+	
+	public void updateStatusOfScript(String test_set_line_id, String status) {
+		dao.updateStatusOfScript(test_set_line_id, status);
+	}
+	
+	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId) {
+		int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
+		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel(),
+				"System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team");
+	}
+	
+	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
+		Integer inProgressCount = dao.getCountOfInProgressScript(testSetId);
+		if (inProgressCount.equals(0)) {
+			dao.updateExecStatusFlag(testSetId);
+		}
+	}
+	public TestSetLine getTestSetLinesRecord(String testSetId, String testSetLineId) {
+		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
+	}
+	
+	public Boolean checkAllStepsStatusForAScript(String testSetLineId) throws ClassNotFoundException, SQLException {
+		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
+			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
+			return false;
+		}
+
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+			return false;
+		} else if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+			return null;
+		} else {
+			return true;
+		}
+	}
+	
+	public CustomerProjectDto getCustomerDetails(String testSetId) {
+
+		return dao.getCustomerDetails(testSetId);
+	}
+	public List<ScriptDetailsDto> getScriptDetailsListVO(String testRunId, String testSetLineId, boolean finalPdf,
+			boolean executeApi) {
+		return dao.getScriptDetails(testRunId, testSetLineId, finalPdf, executeApi);
+	}
+	
+	public Date findStepMaxUpdatedDate(String testSetLineId, Date startDate) {
+		Date endDate = null;
+		try {
+			endDate = dao.findStepMaxUpdatedDate(testSetLineId);
+		} catch (NoResultException e) {
+			endDate = startDate;
+		}
+		return endDate != null ? endDate : startDate;
+	}
+	
+	public void updateTestCaseEndDate(FetchScriptVO fetchScriptVO, Date endDate, String status) {
+		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
+				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
+		dao.updateTestSetLineStatus(status, fetchScriptVO.getP_test_set_line_path(), fetchScriptVO.getP_test_set_id(),
+				fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(), endDate);
+	}
+	
+	@Transactional
+	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName) {
+		EmailParamDto emailParam = new EmailParamDto();
+		emailParam.setTestSetName(testRunName);
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
+		appContext.getBean(this.getClass()).updateSubscription();
+		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
+				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
+
+		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
+
+		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(fetchScriptVO.getP_test_set_id());
+		emailParam.setRequestCount(requestCount.intValue());
+		if (requestCount.intValue() <= responseCount) {
+			dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
+			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
+			boolean sendMail = appContext.getBean(this.getClass())
+					.checkIfAllTestSetLinesCompleted(Long.valueOf(fetchScriptVO.getP_test_set_id()), true);
+			if (sendMail) {
+				sendMailServiceImpl.sendMail(emailParam);
+			}
+		} else {
+			Integer inProgressCount = dao.getCountOfInProgressScript(fetchScriptVO.getP_test_set_id());
+			if (inProgressCount.equals(0)) {
+				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			}
+		}
+		limitScriptExecutionService.insertTestRunScriptData(fetchMetadataListVO.get(0).getScriptId(),
+				fetchMetadataListVO.get(0).getScriptNumber(), fetchConfigVO.getStatus1(), fetchConfigVO.getStarttime(),
+				fetchConfigVO.getEndtime(), fetchScriptVO.getP_test_set_id());
+	}
+	
+	public String pdfGenerationEnabled(long testSetId) {
+		return dao.getTestSetPdfGenerationEnableStatus(testSetId);
+	}
+	
+	public boolean checkIfAllTestSetLinesCompleted(long testSetId, Boolean enable) {
+		List<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId, enable);
+		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
+
+	}
+	public Date findMaxExecutionEndDate(long testSetId) {
+		return dao.findMaxExecutionEndDate(testSetId);
+	}
+	
+	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
+		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
+	}
+	
+	@Transactional
+	public List<String> getStatusByTestSetId(String testSetId) {
+		return dao.getStatusByTestSetId(testSetId);
+	}
+	public List<Object[]> getStatusAndSeqNum(String testSetId) {
+		return dao.getStatusAndSeqNum(testSetId);
+	}
+	
+	@Transactional
+	public void setPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
+		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
+	}
+	
+	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id, Date startDate)
+			throws ClassNotFoundException, SQLException {
+		dao.updateInProgressScriptStatus(test_set_id, test_set_line_id, startDate);
+	}
+	
+	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage,String errorMessage) {
+		try {
+			logger.info("Audit Inserting stage {}", stage.getLabel());
+			AuditScriptExecTrail auditTrialNew = AuditScriptExecTrail.builder()
+					.correlationId(auditTrial.getCorrelationId()).testSetLineId(auditTrial.getTestSetLineId())
+					.triggeredBy(auditTrial.getTriggeredBy()).build();
+			auditTrialNew.setStageId(dao.findAuditStageIdByName(stage.getLabel()));
+			auditTrialNew.setEventTime(new Date());
+			auditTrialNew.setMessage(errorMessage);
+			dao.insertAuditScriptExecTrail(auditTrialNew);
+		} catch (Exception e) {
+			// no need of throwing exception, just print
+			logger.error(
+					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
+					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
+			e.printStackTrace();
+		}
+		return auditTrial;
+	}
+	
+	public Date findMinExecutionStartDate(long testSetId) {
+		return dao.findMinExecutionStartDate(testSetId);
+	}
+	
+	public List<Object[]> getConfigurationDetails(String testSetId) {
+		return dao.getConfigurationDetails(testSetId);
+	}
+	
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
+		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
+	}
+
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status, String value, String message)
+			throws ClassNotFoundException, SQLException {
+		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);
 	}
 	
 }

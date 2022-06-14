@@ -1,6 +1,7 @@
 			package com.winfo.services;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -165,7 +166,46 @@ public class FetchConfigVO {
     @JsonProperty("Directory Name")
     private String Directory_Name;
     
-   	public String getSharePoint_URL() {
+    private String WINDOWS_PDF_LOCATION;
+    private String WINDOWS_SCREENSHOT_LOCATION;
+    
+    private String EBS_APPLICATION_NAME;
+    
+    private List<Object[]> seqNumAndStatus; 
+    
+   	public String getWINDOWS_PDF_LOCATION() {
+		return WINDOWS_PDF_LOCATION;
+	}
+
+	public void setWINDOWS_PDF_LOCATION(String wINDOWS_PDF_LOCATION) {
+		WINDOWS_PDF_LOCATION = wINDOWS_PDF_LOCATION;
+	}
+
+	public String getWINDOWS_SCREENSHOT_LOCATION() {
+		return WINDOWS_SCREENSHOT_LOCATION;
+	}
+
+	public void setWINDOWS_SCREENSHOT_LOCATION(String wINDOWS_SCREENSHOT_LOCATION) {
+		WINDOWS_SCREENSHOT_LOCATION = wINDOWS_SCREENSHOT_LOCATION;
+	}
+
+	public String getEBS_APPLICATION_NAME() {
+		return EBS_APPLICATION_NAME;
+	}
+
+	public void setEBS_APPLICATION_NAME(String eBS_APPLICATION_NAME) {
+		EBS_APPLICATION_NAME = eBS_APPLICATION_NAME;
+	}
+
+	public List<Object[]> getSeqNumAndStatus() {
+		return seqNumAndStatus;
+	}
+
+	public void setSeqNumAndStatus(List<Object[]> seqNumAndStatus) {
+		this.seqNumAndStatus = seqNumAndStatus;
+	}
+
+	public String getSharePoint_URL() {
 		return SharePoint_URL;
 	}
 

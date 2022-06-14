@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.SortedMap;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Service;
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -35,7 +38,8 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
-import com.winfo.vo.ExecuteTestrunVo;
+import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.vo.ResponseDto;
 import com.winfo.vo.Status;
 
 @Service
@@ -107,10 +111,65 @@ public class RunAutomation {
 	}
 
 	long increment = 0;
-
-	public ExecuteTestrunVo run(String args) throws MalformedURLException {
+	
+	public ResponseDto run(String args) throws MalformedURLException {
 		System.out.println(args);
-		ExecuteTestrunVo executeTestrunVo = new ExecuteTestrunVo();
+		ResponseDto executeTestrunVo = new ResponseDto();
+		String checkPackage = dataBaseEntry.getPackage(args);
+		if(checkPackage.contains("EBS")) {
+			ebsRun(args);
+		}
+		else {
+			cloudRun(args);
+		}
+		return executeTestrunVo;
+	}
+	
+	public ResponseDto ebsRun(String testSetId) throws MalformedURLException {
+		ResponseDto executeTestrunVo = new ResponseDto();
+		try {
+			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
+			FetchConfigVO fetchConfigVO = fetchConfigVO(testSetId);
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
+			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
+			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
+					dependentScriptMap);
+
+			// Independent
+			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
+				log.info(" Running Independent - " + metaData.getKey());
+				executorMethodPyJab(testSetId, fetchConfigVO, metaData, true);
+			}
+
+			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
+			for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
+				log.info(" Running Dependent - " + metaData.getKey());
+				executordependent.execute(() -> {
+					log.info(" Running Dependent in executor - " + metaData.getKey());
+					boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
+							metaData.getValue().get(0).getScript_id());
+					log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
+					executorMethodPyJab(testSetId, fetchConfigVO, metaData, run);
+				});
+			}
+			executordependent.shutdown();
+
+			executeTestrunVo.setStatusCode(200);
+			executeTestrunVo.setStatusMessage("SUCCESS");
+			executeTestrunVo.setStatusDescr("SUCCESS");
+		} catch (Exception e) {
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
+			if (e instanceof WatsEBSCustomException)
+				throw e;
+			throw new WatsEBSCustomException(500, "Exception Occured while creating script for Test Run", e);
+		}
+		return executeTestrunVo;
+	}
+
+
+	public ResponseDto cloudRun(String args) throws MalformedURLException {
+		System.out.println(args);
+		ResponseDto executeTestrunVo = new ResponseDto();
 
 		try {
 			// Config Webservice

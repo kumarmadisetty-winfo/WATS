@@ -22,6 +22,7 @@ import org.hibernate.Session;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.model.Project;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLines;
 import com.winfo.model.TestSetScriptParam;
@@ -336,6 +337,11 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
 		query.setParameter("test_set_id", testSetId);
 		return Integer.parseInt(query.getSingleResult().toString());
+	}
+	public String getPackage(String args) {
+		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, args);
+		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProject_id());
+		return project.getWatsPackage();
 	}
 	
 	
