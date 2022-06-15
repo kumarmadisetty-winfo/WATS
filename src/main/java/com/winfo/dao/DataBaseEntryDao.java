@@ -307,7 +307,7 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 	}
 	public String getPackage(String args) {
 		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, args);
-		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProject_id());
+		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return project.getWatsPackage();
 	}
 	
