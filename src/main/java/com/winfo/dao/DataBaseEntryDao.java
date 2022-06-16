@@ -180,7 +180,7 @@ public class DataBaseEntryDao {
 		// TODO Auto-generated method stub
 		//FetchMetadataVO metadataVO=new FetchMetadataVO();
 		Map<String,Map<String,TestSetScriptParam>> map=new HashMap<String,Map<String,TestSetScriptParam>> ();
-		String sql="from TestSetLine where testSet=:testSet";
+		String sql="from TestSetLine where testRun=:testSet";
 		Integer test_run_id2=Integer.parseInt(test_run_id);
 		Query query = em.createQuery(sql);
 		query.setParameter("testSet",em.find(TestSet.class,test_run_id2) );
