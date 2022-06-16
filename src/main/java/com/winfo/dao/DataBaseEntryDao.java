@@ -305,8 +305,8 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		query.setParameter("test_set_id", testSetId);
 		return Integer.parseInt(query.getSingleResult().toString());
 	}
-	public String getPackage(String args) {
-		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, args);
+	public String getPackage(String args) {	
+		TestSet testSet = em.unwrap(Session.class).find(TestSet.class,Integer.parseInt(args));
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return project.getWatsPackage();
 	}

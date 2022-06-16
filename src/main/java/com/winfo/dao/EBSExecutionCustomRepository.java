@@ -1,7 +1,5 @@
 package com.winfo.dao;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
 

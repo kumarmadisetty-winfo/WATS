@@ -5,11 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.winfo.dao.EBSExecutionCustomRepository;
 import com.winfo.model.Actions;
 import com.winfo.model.CodeLines;
 
-@Repository
+//@Repository
 public interface CodeLinesRepository extends JpaRepository<CodeLines, Long>,EBSExecutionCustomRepository{
 	 List<CodeLines>findAll();
 	// Actions findByActionName(String actionName);
