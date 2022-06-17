@@ -277,6 +277,7 @@ public class TestScriptExecService {
 		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
 		String testScriptParamId = null;
 		String methodCall;
+		String targetApplication = fetchMetadataListVO.get(0).getTargetApplicationName();
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
@@ -314,7 +315,13 @@ public class TestScriptExecService {
 				dto.setOciConfigName(ociConfigName);
 				dto.setBuckerName(ociBucketName);
 				dto.setOciNameSpace(ociNamespace);
-				dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
+				if(targetApplication.contains(Constants.EBS)) {
+					dto.setEbsApplicationUrl(fetchConfigVO.getEBS_URL());
+				}else if(targetApplication.contains(Constants.SAP_CONCUR)){
+					dto.setEbsApplicationUrl(fetchConfigVO.getSAP_CONCUR_URL());
+				}else {
+					dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
+				}
 				dto.setScriptFileName(
 						fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase()
 								+ "_" + fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());

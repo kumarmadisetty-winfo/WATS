@@ -68,5 +68,6 @@ public class Constants {
 	public static final String SYS_USER_HOME_PATH = "user.home";
 	public static final String SCREENSHOT = File.separator+"wats"+ File.separator+"Screenshot"+File.separator;
 	public static final String PDF = File.separator+"wats"+File.separator+"PDF"+File.separator;
-
+	public static final String EBS = "ebs";
+	public static final String SAP_CONCUR = "sap_concur";
 }
