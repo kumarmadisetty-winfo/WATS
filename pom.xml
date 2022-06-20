@@ -195,7 +195,7 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
@@ -432,6 +432,16 @@
 			<artifactId>javacpp</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>2.5.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-json</artifactId>
+			<version>2.5.13</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -524,84 +534,84 @@
 			</properties>
 		</profile>
 
-	<profile>
-		<id>orange</id>
-		<activation>
-			<activeByDefault>false</activeByDefault>
-		</activation>
-		<build>
-			<finalName>wats</finalName>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>${maven-resources-plugin.version}</version>
-					<executions>
-						<execution>
-							<id>default-resources</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>copy-resources</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>target/classes</outputDirectory>
-								<useDefaultDelimiters>false</useDefaultDelimiters>
-								<delimiters>
-									<delimiter>#</delimiter>
-								</delimiters>
-								<resources>
-									<resource>
-										<directory>src/main/resources/</directory>
-										<filtering>true</filtering>
-										<includes>
-											<include>*.properties</include>
-											<include>Images/</include>
-										</includes>
-									</resource>
-									<resource>
-										<directory>src/main/resources/</directory>
-										<filtering>true</filtering>
-										<includes>
-											<include>*.properties</include>
-											<include>oci/</include>
-										</includes>
-									</resource>
-								</resources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<configuration>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<archive>
-							<manifestEntries>
-								<Specification-Title>${project.name}</Specification-Title>
-								<Specification-Version>${project.version}
-								</Specification-Version>
-								<Implementation-Version>${build.number}
-								</Implementation-Version>
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
-			</plugins>
-		</build>
-		<properties>
-			<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-			<app.name>application</app.name>
-			<profiles>orange</profiles>
-			<instance>orange</instance>
-		</properties>
-	</profile>
+		<profile>
+			<id>orange</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<finalName>wats</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${maven-resources-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>default-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/classes</outputDirectory>
+									<useDefaultDelimiters>false</useDefaultDelimiters>
+									<delimiters>
+										<delimiter>#</delimiter>
+									</delimiters>
+									<resources>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>Images/</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/main/resources/</directory>
+											<filtering>true</filtering>
+											<includes>
+												<include>*.properties</include>
+												<include>oci/</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<archive>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}
+									</Specification-Version>
+									<Implementation-Version>${build.number}
+									</Implementation-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<properties>
+				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>application</app.name>
+				<profiles>orange</profiles>
+				<instance>orange</instance>
+			</properties>
+		</profile>
 
 
 		<profile>
@@ -768,15 +778,15 @@
 				<app.name>application</app.name>
 				<profiles>prd</profiles>
 				<instance>prd</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
-	
-		
+
+
+
 		<profile>
 			<id>dh</id>
 			<activation>
@@ -858,15 +868,15 @@
 				<app.name>application</app.name>
 				<profiles>dh</profiles>
 				<instance>dh</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
 
 
-	<profile>
+		<profile>
 			<id>bennett</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -947,9 +957,9 @@
 				<app.name>application</app.name>
 				<profiles>bennett</profiles>
 				<instance>bennett</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
@@ -1035,19 +1045,19 @@
 				<app.name>application</app.name>
 				<profiles>tst</profiles>
 				<instance>tst</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
 
 
 
 
-		
-		
+
+
+
 		<profile>
 			<id>hs2</id>
 			<activation>
@@ -1117,7 +1127,7 @@
 				<instance>hs2</instance>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>wats</id>
 			<activation>
@@ -1199,13 +1209,13 @@
 				<app.name>application</app.name>
 				<profiles>wats</profiles>
 				<instance>wats</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
+
 		<profile>
 			<id>camden</id>
 			<activation>
@@ -1287,13 +1297,13 @@
 				<app.name>application</app.name>
 				<profiles>camden</profiles>
 				<instance>camden</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
+
 		<profile>
 			<id>lumentum</id>
 			<activation>
@@ -1375,13 +1385,13 @@
 				<app.name>application</app.name>
 				<profiles>lumentum</profiles>
 				<instance>lumentum</instance>
-				
-				
-				
+
+
+
 			</properties>
 
-		</profile>		
-		
+		</profile>
+
 		<profile>
 			<id>wats01</id>
 			<activation>
@@ -1463,13 +1473,13 @@
 				<app.name>application</app.name>
 				<profiles>wats01</profiles>
 				<instance>wats01</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
+
 		<profile>
 			<id>wats02</id>
 			<activation>
@@ -1551,13 +1561,13 @@
 				<app.name>application</app.name>
 				<profiles>wats02</profiles>
 				<instance>wats02</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
+
 		<profile>
 			<id>wats03</id>
 			<activation>
@@ -1639,31 +1649,31 @@
 				<app.name>application</app.name>
 				<profiles>wats03</profiles>
 				<instance>wats03</instance>
-				
-				
-				
+
+
+
 			</properties>
 
 		</profile>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		<profile>
 			<id>uat</id>
 			<activation>
