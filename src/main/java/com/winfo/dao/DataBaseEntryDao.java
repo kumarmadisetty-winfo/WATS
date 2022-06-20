@@ -142,40 +142,55 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
-	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id) throws SQLException {
-		try {
-		String folder = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
 
-				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+	public int getNextExecutionNum() {
+		Session session = em.unwrap(Session.class);
+		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
+		SQLQuery query = session.createSQLQuery(sql);
 
-				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+		List results = query.list();
+		if (results.size() > 0) {
+			System.out.println(results.get(0));
 
-				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-
-				+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
-		
-		 File file=new File(folder);
-		 byte[] screenshotArray=new byte[(int)file.length()];
-		 try {
-			FileInputStream fileInputStream = new FileInputStream(file);
-			fileInputStream.read(screenshotArray);
-			fileInputStream.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			BigDecimal bigDecimal = (BigDecimal) results.get(0);
+			Integer id = Integer.parseInt(bigDecimal.toString());
+			return id;
+		} else {
+			return 0;
 		}
-		String sql="Update WATS_PROD.WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"+test_script_param_id+"'";
-		Query query=em.unwrap(Session.class).createSQLQuery(sql);
-		query.setParameter("screenshot",screenshotArray);
-		query.executeUpdate();
-		}catch(Exception e) {
+	}
+
+	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String testScriptParamId) throws SQLException {
+		try {
+			String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name() + "\\"
+
+					+ fetchMetadataVO.getTest_run_name() + "\\" + fetchMetadataVO.getSeq_num() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
+
+			File file = new File(folder);
+			byte[] screenshotArray = new byte[(int) file.length()];
+			try (FileInputStream fileInputStream = new FileInputStream(file);) {
+				fileInputStream.read(screenshotArray);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"
+					+ testScriptParamId + "'";
+			Query query = em.unwrap(Session.class).createSQLQuery(sql);
+			query.setParameter("screenshot", screenshotArray);
+			query.executeUpdate();
+		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
+
+	
 	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
 		// TODO Auto-generated method stub
 		//FetchMetadataVO metadataVO=new FetchMetadataVO();
@@ -598,8 +613,7 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 			customerDetails
 					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
+			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.", e);
 		}
 		return customerDetails;
 
@@ -1244,14 +1258,39 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		return requestCount;
 	}
 
-	public int getNextExecutionNum() {
-		Session session = em.unwrap(Session.class);
-		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
-		SQLQuery query = session.createSQLQuery(sql);
+	public Date findMaxExecutionEndDate(long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
+		cq.select(cb.greatest(from.<Date>get("executionEndTime"))).where(condition);
+		Date query = em.createQuery(cq).getSingleResult();
+		return query;
 
-		List results = query.list();
-		if (results.size() > 0) {
-			System.out.println(results.get(0));
+	}
+
+	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testRunId);
+		Predicate condition2 = cb.equal(from.get("status"), scriptStatus);
+		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2) : condition1;
+		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
+		List<Object[]> query = em.createQuery(cq).getResultList();
+		return query;
+
+	}
+
+	public Date findMinExecutionStartDate(long testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
+		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition1);
+		Date query = em.createQuery(cq).getSingleResult();
+		return query;
 
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());

@@ -21,6 +21,10 @@ public class FetchConfigVO {
 	
 	private String APPLICATION_URL;
 	
+	private String EBS_URL;
+	
+	private String SAP_CONCUR_URL;
+	
 	private String APPLICATION_USER_NAME;
 
 	private String CHROME_DRIVER_PATH;
@@ -586,6 +590,23 @@ public int getMax_num_scripts() {
 	public void setApplication_url(String application_url) {
 		this.APPLICATION_URL = application_url;
 	}
+	
+	public String getEBS_URL() {
+		return EBS_URL;
+	}
+
+	public void setEBS_URL(String eBS_URL) {
+		EBS_URL = eBS_URL;
+	}
+
+	public String getSAP_CONCUR_URL() {
+		return SAP_CONCUR_URL;
+	}
+
+	public void setSAP_CONCUR_URL(String sAP_CONCUR_URL) {
+		SAP_CONCUR_URL = sAP_CONCUR_URL;
+	}
+
 	public String getApplication_user_name() {
 		return APPLICATION_USER_NAME;
 	}

@@ -200,7 +200,7 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
 	}
 	
-	public Boolean checkAllStepsStatusForAScript(String testSetLineId) throws ClassNotFoundException, SQLException {
+	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
 			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
@@ -392,33 +392,9 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
+		return dao.findStartAndEndTimeForTestRun(testRunId, scriptStatus);
+	}
 
 
 

@@ -13,7 +13,7 @@ public class FetchScriptVO {
 	private String p_exception_path;
 	private String p_test_set_line_path;
 	
-	public FetchScriptVO() {}
+	public FetchScriptVO() {};
 	
 	public FetchScriptVO(String p_test_set_id, String p_script_id, String p_test_set_line_id, String p_pass_path, String p_fail_path, String p_exception_path, String p_test_set_line_path) {
 		
@@ -25,6 +25,7 @@ public class FetchScriptVO {
 		this.p_exception_path = p_exception_path;
 		this.p_test_set_line_path = p_test_set_line_path;	
 	}
+	
 	
 	public String getP_test_set_line_path() {
 		return p_test_set_line_path;

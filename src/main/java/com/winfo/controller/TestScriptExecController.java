@@ -49,18 +49,20 @@ public class TestScriptExecController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateEndScriptStatus")
-	public void updateEndScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult) {
+	public void updateEndScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult)
+			throws Exception {
 		testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/generateScriptPdf")
-	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult) {
+	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult)
+			throws Exception {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
 	@KafkaListener(topics = "wats-not-reachable", groupId = "wats-group")
-	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) {
+	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) throws Exception {
 		testScriptExecService.generateTestScriptLineIdReports(event);
 		event.setStage(AUDIT_TRAIL_STAGES.SU);
 		testScriptExecService.updateAuditLogs(event);

@@ -75,6 +75,7 @@ public class FetchData {
 	private String attribute10;
 	@JsonProperty("DEPENDENT_SCRIPT_NUM")
     private String dependent_script_num;
+	private String targetApplication;
 	
 	
 	public String getDependent_script_num() {
@@ -281,6 +282,12 @@ public class FetchData {
 	}
 	public void setAttribute10(String attribute10) {
 		this.attribute10 = attribute10;
+	}
+	public String getTargetApplication() {
+		return targetApplication;
+	}
+	public void setTargetApplication(String targetApplication) {
+		this.targetApplication = targetApplication;
 	}
 	
 	

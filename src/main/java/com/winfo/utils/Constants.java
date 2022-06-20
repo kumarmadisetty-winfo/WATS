@@ -21,7 +21,7 @@ public class Constants {
 	public enum AUDIT_TRAIL_STAGES {
 		RR("Received Request"), SGC("Script Generation Completed"), SQ("Script Queued"), CP("Consumer Picked"),
 		SES("Script Execution Started"),SEE("Script Execution Ended"), SSU("Sent for Status Update"), SU("Status Updated"),
-		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer");
+		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer"),EISU("Error In Status Updation After Script Run");
 
 		public final String label;
 
@@ -68,5 +68,6 @@ public class Constants {
 	public static final String SYS_USER_HOME_PATH = "user.home";
 	public static final String SCREENSHOT = File.separator+"wats"+ File.separator+"Screenshot"+File.separator;
 	public static final String PDF = File.separator+"wats"+File.separator+"PDF"+File.separator;
-
+	public static final String EBS = "ebs";
+	public static final String SAP_CONCUR = "sap_concur";
 }

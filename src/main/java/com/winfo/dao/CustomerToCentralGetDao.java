@@ -74,7 +74,7 @@ public class CustomerToCentralGetDao {
 			if(product_version.equals(product_version_db))
 			{
 			
-		Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_id="+script_Id);
+		Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority,TARGET_APPLICATION from ScriptMaster where script_id="+script_Id);
 		Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name   from ScriptMetaData where script_id="+script_Id);
 		List<Object> result = (List<Object>) query.list(); 
 		List<FetchData> finalresult=new ArrayList<FetchData>();
@@ -289,6 +289,12 @@ public class CustomerToCentralGetDao {
 			   }
 	           
 	           fetchData.setPriority(Integer.parseInt(String.valueOf(obj[33])));
+	           if(String.valueOf(obj[34]).equals("null")) {
+				   fetchData.setAttribute10(null);
+	           }
+			   else {
+			   fetchData.setAttribute10(String.valueOf(obj[32]));
+			   }
 			 
 			   finalresult.add(fetchData);
 			}
@@ -417,6 +423,7 @@ public class CustomerToCentralGetDao {
                jsonMaster.put("standard_custom", slist.getStandard_custom());
                jsonMaster.put("test_script_status", slist.getTest_script_status());
                jsonMaster.put("priority", slist.getPriority());
+               jsonMaster.put("target_application", slist.getTargetApplication());
                if(customerId==0) {
             	   jsonMaster.put("customer_id",null);
                }
