@@ -222,7 +222,7 @@ public class DataBaseEntryDao {
 		List<TestSetScriptParam> testScriptParamList = query.getResultList();
 		Map<String, TestSetScriptParam> map2 = new HashMap<>();
 		for (TestSetScriptParam scriptParam : testScriptParamList) {
-			map2.put(String.valueOf(scriptParam.getLine_number()), scriptParam);
+			map2.put(String.valueOf(scriptParam.getLineNumber()), scriptParam);
 		}
 		// map.put(String.valueOf(test_set_line.getSeq_num()),map2);
 		return map2;
@@ -920,7 +920,7 @@ public class DataBaseEntryDao {
 			 * if(scriptParam==null) { throw new RuntimeException(); }
 			 */
 			if (scriptParam != null) {
-				scriptParam.setLine_execution_statues(status);
+				scriptParam.setLineExecutionStatus(status);
 				em.merge(scriptParam);
 			}
 		} catch (Exception e) {
