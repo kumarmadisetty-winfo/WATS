@@ -3064,11 +3064,11 @@ public class LumentumSeleniumKeyWords implements SeleniumKeyWordsInterface {
 							System.out.println("error message is not there");
 						}
 					
-					String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+					String stepDescription = descriptionList.get(sno).get(Reason).getTestRunParamDesc();
 					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
-					String inputParam = descriptionList.get(sno).get(Reason).getInput_parameter();
+					String inputParam = descriptionList.get(sno).get(Reason).getInputParameter();
 					//String inputValue = fetchMetadataListVO.get(metadataCounter).getInput_value();
-					String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+					String inputValue = descriptionList.get(sno).get(Reason).getInputValue();
 					//metadataCounter++;
 		
 					Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
@@ -3331,11 +3331,11 @@ public class LumentumSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						
 						
 						
-						String stepDescription = map.get(steps).getTest_run_param_desc(); 
+						String stepDescription = map.get(steps).getTestRunParamDesc(); 
 						//String inputParam = fetchMetadataListVO.get(metaDataCounter).getInput_parameter();
-						String inputParam = map.get(steps).getInput_parameter();
+						String inputParam = map.get(steps).getInputParameter();
 						//String inputValue = fetchMetadataListVO.get(metaDataCounter).getInput_value();
-						String inputValue = map.get(steps).getInput_value();
+						String inputValue = map.get(steps).getInputValue();
 						
 						
 						
@@ -4235,9 +4235,9 @@ public class LumentumSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				
 				
 				
-				String stepDescription = map.get(Reason).getTest_run_param_desc();
-				String inputParam = map.get(Reason).getInput_parameter();
-				String inputValue = map.get(Reason).getInput_value();
+				String stepDescription = map.get(Reason).getTestRunParamDesc();				
+				String inputParam = map.get(Reason).getInputParameter();			
+				String inputValue = map.get(Reason).getInputValue();
 			
 				
 				
