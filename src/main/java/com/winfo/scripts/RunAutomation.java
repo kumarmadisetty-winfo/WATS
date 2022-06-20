@@ -121,7 +121,7 @@ public class RunAutomation {
 		System.out.println(args);
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String checkPackage = dataBaseEntry.getPackage(args);
-		if(checkPackage.toLowerCase().contains(Constants.EBS)) {
+		if(checkPackage!=null && checkPackage.toLowerCase().contains(Constants.EBS)) {
 			executeTestrunVo = ebsRun(args);
 		}
 		else {
