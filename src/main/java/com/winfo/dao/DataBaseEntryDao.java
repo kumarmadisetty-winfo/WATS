@@ -1277,7 +1277,11 @@ public class DataBaseEntryDao {
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testRunId);
 		Predicate condition2 = cb.equal(from.get("status"), scriptStatus);
-		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2) : condition1;
+		Predicate passCondtion = cb.equal(from.get("status"), "Pass");
+		Predicate failCondition = cb.equal(from.get("status"), "Fail");
+		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2)
+				: cb.and(condition1, passCondtion, failCondition);
+
 		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
 		List<Object[]> query = em.createQuery(cq).getResultList();
 		return query;
