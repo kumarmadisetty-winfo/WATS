@@ -95,7 +95,7 @@ public class TestSetLine {
 
 	public void addTestScriptParam(TestSetScriptParam scriptParam) {
 		testRunScriptParam.add(scriptParam);
-		scriptParam.setTestSetLine(this);
+		scriptParam.setTestRunScripts(this);
 	}
 
 	public Integer getTestRunScriptId() {
