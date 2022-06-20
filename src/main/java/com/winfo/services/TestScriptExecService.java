@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,12 +29,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedMap;
 import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
@@ -106,7 +102,7 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
-import com.winfo.scripts.DHSeleniumKeyWords;
+import com.winfo.scripts.EBSSeleniumKeyWords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -209,7 +205,7 @@ public class TestScriptExecService {
 	PyJabActionRepo actionRepo;
 
 	@Autowired
-	DHSeleniumKeyWords eBSSeleniumKeyWords;
+	EBSSeleniumKeyWords eBSSeleniumKeyWords;
 
 	@Autowired
 	Environment environment;
@@ -274,11 +270,11 @@ public class TestScriptExecService {
 				dto.setOciConfigName(ociConfigName);
 				dto.setBuckerName(ociBucketName);
 				dto.setOciNameSpace(ociNamespace);
-				if(targetApplication.contains(Constants.EBS)) {
+				if (targetApplication.contains(Constants.EBS)) {
 					dto.setEbsApplicationUrl(fetchConfigVO.getEBS_URL());
-				}else if(targetApplication.contains(Constants.SAP_CONCUR)){
+				} else if (targetApplication.contains(Constants.SAP_CONCUR)) {
 					dto.setEbsApplicationUrl(fetchConfigVO.getSAP_CONCUR_URL());
-				}else {
+				} else {
 					dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
 				}
 				dto.setScriptFileName(
@@ -874,8 +870,8 @@ public class TestScriptExecService {
 	public List<String> getPassedPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
-				+ customerDetails.getTestSetName() + File.separator;
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+				+ File.separator + customerDetails.getTestSetName() + File.separator;
 
 		/* FOR MP4 FUNCTIONALITY */
 		String videoRec = "no";
@@ -911,8 +907,8 @@ public class TestScriptExecService {
 	public List<String> getFailedPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
-				+ customerDetails.getTestSetName() + File.separator;
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+				+ File.separator + customerDetails.getTestSetName() + File.separator;
 		String videoRec = "no";
 		Map<String, String> seqNumMap = new HashMap<>();
 		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
@@ -945,8 +941,8 @@ public class TestScriptExecService {
 	public List<String> getDetailPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
-				+ customerDetails.getTestSetName() + File.separator;
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+				+ File.separator + customerDetails.getTestSetName() + File.separator;
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
 		List<String> detailsFileName = new ArrayList<>();
@@ -971,8 +967,8 @@ public class TestScriptExecService {
 	public List<String> getFileNameListNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 
-		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + File.separator
-				+ customerDetails.getTestSetName() + File.separator;
+		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+				+ File.separator + customerDetails.getTestSetName() + File.separator;
 		String videoRec = "no";
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
