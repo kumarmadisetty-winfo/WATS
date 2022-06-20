@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,60 +48,77 @@ public class DataBaseEntry {
 	ApplicationContext appContext;
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
-	
-	public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
+
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
 	}
-	public  void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status,String error_message) throws ClassNotFoundException, SQLException {
+
+	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status, String error_message)
+			throws ClassNotFoundException, SQLException {
 		dao.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, error_message);
 	}
-	public  void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id,String status) throws ClassNotFoundException, SQLException {
+
+	public void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
 	}
-	public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {
+
+	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
+			throws ClassNotFoundException, SQLException {
 		return dao.getErrorMessage(sndo, ScriptName, testRunName, fetchConfigVO);
 	}
+
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName)
 			throws ClassNotFoundException, SQLException {
 		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
-	
-	public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String test_set_id,String test_set_line_id) throws ClassNotFoundException, SQLException {
+
+	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
+			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 	}
-	public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String test_set_id,Date start_time1) throws ClassNotFoundException, SQLException{
+
+	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
+			throws ClassNotFoundException, SQLException {
 		dao.updateStartTime(fetchConfigVO, line_id, test_set_id, start_time1);
 	}
-	public String getTrMode(String args,FetchConfigVO fetchConfigVO) throws SQLException {
+
+	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
 		return dao.getTrMode(args, fetchConfigVO);
 	}
+
 	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
 			throws SQLException, ClassNotFoundException {
 		return dao.getPassword(args, userId, fetchConfigVO);
 	}
-	public void updateEndTime(FetchConfigVO fetchConfigVO,String line_id,String test_set_id,Date end_time1) throws ClassNotFoundException, SQLException{
+
+	public void updateEndTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date end_time1)
+			throws ClassNotFoundException, SQLException {
 		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
 	}
+
 	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id) throws SQLException {
-			dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+		dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 	}
-	
 
 	@Transactional
 	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
 		try {
-			Map<String, Map<String, TestSetScriptParam>>map =  dao.getTestRunMap(test_run_id);
+			Map<String, Map<String, TestSetScriptParam>> map = dao.getTestRunMap(test_run_id);
 			return map;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
 	@Transactional
-	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id){
-			TestSetLine testSetLine  =	dao.getTestSetLine(test_set_line_id);
-			return dao.getTestScriptMap(testSetLine);
+	public Map<String, TestSetScriptParam> getTestScriptMap(String test_set_line_id) {
+		TestSetLine testSetLine = dao.getTestSetLine(test_set_line_id);
+		return dao.getTestScriptMap(testSetLine);
 	}
 
 	@Transactional
@@ -113,8 +128,6 @@ public class DataBaseEntry {
 			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
 
 		}
-		
-		
 
 		dao.getDependentScriptNumbers(dependentScriptMap, dependentList);
 		/*
@@ -131,36 +144,40 @@ public class DataBaseEntry {
 		 */
 
 	}
-	
+
 	@Transactional
-	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,String testSetId) {
+	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
+			String testSetId) {
 		List<Integer> dependentList = new ArrayList();
 		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
 			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
 
 		}
-		dao.getTestRunLevelDependentScriptNumbers(dependentScriptMap, dependentList,testSetId);
+		dao.getTestRunLevelDependentScriptNumbers(dependentScriptMap, dependentList, testSetId);
 	}
-	
-public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Integer, Status> scriptStatus, int testRunDependencyCount) {
+
+	public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Integer, Status> scriptStatus,
+			int testRunDependencyCount) {
 		// TODO Auto-generated method stub
-		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus,testRunDependencyCount);
+		dao.getStatus(dependentScriptNo, test_set_id, scriptStatus, testRunDependencyCount);
 	}
-	
+
 	@Transactional
 	public int getTestRunDependentCount(String testSetId) {
 		return dao.getTestRunDependentCount(testSetId);
 	}
+
 	public String getPackage(String args) {
 		return dao.getPackage(args);
 	}
-	
+
 	public String getTestSetMode(Long testSetId) {
 		return dao.getTestSetMode(testSetId);
 
 	}
-	
-	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage,String errorMessage) {
+
+	public AuditScriptExecTrail insertScriptExecAuditRecord(AuditScriptExecTrail auditTrial, AUDIT_TRAIL_STAGES stage,
+			String errorMessage) {
 		try {
 			logger.info("Audit Inserting stage {}", stage.getLabel());
 			AuditScriptExecTrail auditTrialNew = AuditScriptExecTrail.builder()
@@ -179,27 +196,28 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 		}
 		return auditTrial;
 	}
-	
+
 	public void updateStatusOfScript(String test_set_line_id, String status) {
 		dao.updateStatusOfScript(test_set_line_id, status);
 	}
-	
+
 	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId) {
 		int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
 		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel(),
 				"System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team");
 	}
-	
+
 	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
 		Integer inProgressCount = dao.getCountOfInProgressScript(testSetId);
 		if (inProgressCount.equals(0)) {
 			dao.updateExecStatusFlag(testSetId);
 		}
 	}
+
 	public TestSetLine getTestSetLinesRecord(String testSetId, String testSetLineId) {
 		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
 	}
-	
+
 	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
@@ -216,16 +234,17 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 			return true;
 		}
 	}
-	
+
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
 
 		return dao.getCustomerDetails(testSetId);
 	}
+
 	public List<ScriptDetailsDto> getScriptDetailsListVO(String testRunId, String testSetLineId, boolean finalPdf,
 			boolean executeApi) {
 		return dao.getScriptDetails(testRunId, testSetLineId, finalPdf, executeApi);
 	}
-	
+
 	public Date findStepMaxUpdatedDate(String testSetLineId, Date startDate) {
 		Date endDate = null;
 		try {
@@ -235,14 +254,14 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 		}
 		return endDate != null ? endDate : startDate;
 	}
-	
+
 	public void updateTestCaseEndDate(FetchScriptVO fetchScriptVO, Date endDate, String status) {
 		dao.updateTestSetPaths(fetchScriptVO.getP_pass_path(), fetchScriptVO.getP_fail_path(),
 				fetchScriptVO.getP_exception_path(), fetchScriptVO.getP_test_set_id());
 		dao.updateTestSetLineStatus(status, fetchScriptVO.getP_test_set_line_path(), fetchScriptVO.getP_test_set_id(),
 				fetchScriptVO.getP_test_set_line_id(), fetchScriptVO.getP_script_id(), endDate);
 	}
-	
+
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
 			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName) {
@@ -276,53 +295,53 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 				fetchMetadataListVO.get(0).getScriptNumber(), fetchConfigVO.getStatus1(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_test_set_id());
 	}
-	
+
 	public String pdfGenerationEnabled(long testSetId) {
 		return dao.getTestSetPdfGenerationEnableStatus(testSetId);
 	}
-	
+
 	public boolean checkIfAllTestSetLinesCompleted(long testSetId, Boolean enable) {
 		List<String> result = dao.getTestSetLinesStatusByTestSetId(testSetId, enable);
 		return !(result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel()::equalsIgnoreCase)
 				|| result.stream().anyMatch(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase));
 
 	}
+
 	public Date findMaxExecutionEndDate(long testSetId) {
 		return dao.findMaxExecutionEndDate(testSetId);
 	}
-	
+
 	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
 		dao.updatePdfGenerationEnableStatus(testSetId, enabled);
 	}
-	
+
 	@Transactional
 	public List<String> getStatusByTestSetId(String testSetId) {
 		return dao.getStatusByTestSetId(testSetId);
 	}
+
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
 		return dao.getStatusAndSeqNum(testSetId);
 	}
-	
+
 	@Transactional
 	public void setPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
 		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
 	}
-	
+
 	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id, Date startDate)
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptStatus(test_set_id, test_set_line_id, startDate);
 	}
-	
 
-	
 	public Date findMinExecutionStartDate(long testSetId) {
 		return dao.findMinExecutionStartDate(testSetId);
 	}
-	
+
 	public List<Object[]> getConfigurationDetails(String testSetId) {
 		return dao.getConfigurationDetails(testSetId);
 	}
-	
+
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
@@ -333,13 +352,13 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 			throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);
 	}
-	
+
 	@Transactional
 	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
 			boolean executeApi) {
 		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf, executeApi);
 	}
-	
+
 	@Transactional
 	public boolean checkRunStatusOfDependantScript(String testSetId, String scriptId) {
 		ScriptMaster scriptMaster = dao.findScriptMasterByScriptId(Integer.valueOf(scriptId));
@@ -363,7 +382,7 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 			return false;
 		}
 	}
-	
+
 	public void updateSubscription() {
 		List<Object[]> noOfHits = dao.getSumDetailsFromSubscription();
 		List<Object[]> subscriptionDtls = dao.getSubscriptionDetails();
@@ -390,14 +409,8 @@ public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Intege
 
 	}
 
-}
-
 	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
 		return dao.findStartAndEndTimeForTestRun(testRunId, scriptStatus);
 	}
-
-
-
-
-
-
+	
+}

@@ -39,6 +39,7 @@ import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
+import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.Status;
@@ -120,7 +121,7 @@ public class RunAutomation {
 		System.out.println(args);
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String checkPackage = dataBaseEntry.getPackage(args);
-		if(checkPackage.contains("EBS")) {
+		if(checkPackage.toLowerCase().contains(Constants.EBS)) {
 			executeTestrunVo = ebsRun(args);
 		}
 		else {

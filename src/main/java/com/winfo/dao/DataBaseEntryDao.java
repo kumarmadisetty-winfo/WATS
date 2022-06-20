@@ -3,7 +3,6 @@ package com.winfo.dao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Format;
@@ -38,7 +37,6 @@ import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
-import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -53,45 +51,48 @@ import com.winfo.vo.Status;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
-	
+
 	private static final String TEST_SET_ID = "testRunId";
 	private static final String TR_MODE = "testRunMode";
-	
-	public  void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO,FetchConfigVO fetchConfigVO,String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
+
+	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		try {
-		Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='Pass' where test_script_param_id="+"'"+test_script_param_id+"'");
-		query.executeUpdate();
-		}catch(Exception e) {
+			Query query = em.createQuery(
+					"Update TestSetScriptParam set line_execution_status='Pass' where test_script_param_id=" + "'"
+							+ test_script_param_id + "'");
+			query.executeUpdate();
+		} catch (Exception e) {
 			System.out.println("cant update passed script line status");
 			System.out.println(e);
 		}
 	}
-	public  String getErrorMessage(String sndo,String ScriptName,String testRunName,FetchConfigVO fetchConfigVO) throws ClassNotFoundException, SQLException {	
-		String errorMessage="";
-	    String sqlQuery="SELECT PARAM.LINE_ERROR_MESSAGE "
+
+	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
+			throws ClassNotFoundException, SQLException {
+		String errorMessage = "";
+		String sqlQuery = "SELECT PARAM.LINE_ERROR_MESSAGE "
 				+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
-				+ "WHERE TS.TEST_SET_ID = LINES.TEST_SET_ID "
-				+ "AND LINES.TEST_SET_LINE_ID = PARAM.TEST_SET_LINE_ID "
-				+ "AND TS.TEST_SET_ID = (SELECT TEST_SET_ID FROM WIN_TA_TEST_SET WHERE UPPER(TEST_SET_NAME)=UPPER('"+testRunName+"'))"
-				+ "AND UPPER(LINES.SCRIPT_NUMBER) = UPPER('"+ScriptName+"') "
-				+ "AND LINES.SEQ_NUM = "+sndo+" "
-				+ "AND PARAM.LINE_ERROR_MESSAGE IS NOT NULL";
-	    			
-	    try {
-	    			Session session = em.unwrap(Session.class);
-	    			Query query = session.createSQLQuery(sqlQuery);
-	    			errorMessage  = (String) query.getResultList().get(0);
-					/*
-					 * if(errorMessage==null) { throw new RuntimeException(); }
-					 */
-	    }catch(Exception e) {
-	    	System.out.println("cant get error message");
-	    	System.out.println(e);
-	    }
-		
+				+ "WHERE TS.TEST_SET_ID = LINES.TEST_SET_ID " + "AND LINES.TEST_SET_LINE_ID = PARAM.TEST_SET_LINE_ID "
+				+ "AND TS.TEST_SET_ID = (SELECT TEST_SET_ID FROM WIN_TA_TEST_SET WHERE UPPER(TEST_SET_NAME)=UPPER('"
+				+ testRunName + "'))" + "AND UPPER(LINES.SCRIPT_NUMBER) = UPPER('" + ScriptName + "') "
+				+ "AND LINES.SEQ_NUM = " + sndo + " " + "AND PARAM.LINE_ERROR_MESSAGE IS NOT NULL";
+
+		try {
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(sqlQuery);
+			errorMessage = (String) query.getResultList().get(0);
+			/*
+			 * if(errorMessage==null) { throw new RuntimeException(); }
+			 */
+		} catch (Exception e) {
+			System.out.println("cant get error message");
+			System.out.println(e);
+		}
+
 		return errorMessage;
 	}
-	
+
 	public String getErrorMessage(String sndo, String scriptName, String testRunName) {
 		String errorMessage = "";
 		String sqlQuery = "SELECT PARAM.LINE_ERROR_MESSAGE "
@@ -115,29 +116,35 @@ public class DataBaseEntryDao {
 
 		return errorMessage;
 	}
-	
-	public  void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO,String test_set_id,String test_set_line_id) throws ClassNotFoundException, SQLException {
+
+	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
+			throws ClassNotFoundException, SQLException {
 		try {
-		TestSetLine testLines=em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
-		
-		/* if(testLines==null) { throw new RuntimeException(); } */
-		if(testLines!=null) { 
-		testLines.setStatus("IN-PROGRESS");
-		em.merge(testLines);
-		}
-		}catch(Exception e) {
+			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
+
+			/* if(testLines==null) { throw new RuntimeException(); } */
+			if (testLines != null) {
+				testLines.setStatus("IN-PROGRESS");
+				em.merge(testLines);
+			}
+		} catch (Exception e) {
 			System.out.println("cant update in progress script status");
 			System.out.println(e);
 		}
 	}
-	public void updateStartTime(FetchConfigVO fetchConfigVO,String line_id, String test_set_id,Date start_time1) throws ClassNotFoundException, SQLException{
-		Format startformat=new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
-		String start_time= startformat.format(start_time1);
+
+	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
+			throws ClassNotFoundException, SQLException {
+		Format startformat = new SimpleDateFormat("M/dd/yyyy HH:mm:ss");
+		String start_time = startformat.format(start_time1);
 		try {
-		Session session = em.unwrap(Session.class);
-		Query query=session.createSQLQuery("Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"+start_time+"','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID="+test_set_id+" AND TEST_SET_LINE_ID = "+line_id);
-		query.executeUpdate();
-		}catch(Exception e) {
+			Session session = em.unwrap(Session.class);
+			Query query = session
+					.createSQLQuery("Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"
+							+ start_time + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID=" + test_set_id
+							+ " AND TEST_SET_LINE_ID = " + line_id);
+			query.executeUpdate();
+		} catch (Exception e) {
 			System.out.println("cant update starttime");
 			System.out.println(e);
 		}
@@ -190,24 +197,24 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	
 	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
 		// TODO Auto-generated method stub
-		//FetchMetadataVO metadataVO=new FetchMetadataVO();
-		Map<String,Map<String,TestSetScriptParam>> map=new HashMap<String,Map<String,TestSetScriptParam>> ();
-		String sql="from TestSetLine where testRun=:testSet";
-		Integer test_run_id2=Integer.parseInt(test_run_id);
+		// FetchMetadataVO metadataVO=new FetchMetadataVO();
+		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<String, Map<String, TestSetScriptParam>>();
+		String sql = "from TestSetLine where testRun=:testSet";
+		Integer test_run_id2 = Integer.parseInt(test_run_id);
 		Query query = em.createQuery(sql);
-		query.setParameter("testSet",em.find(TestSet.class,test_run_id2) );
+		query.setParameter("testSet", em.find(TestSet.class, test_run_id2));
 		List<TestSetLine> test_set_lines_list = query.getResultList();
-		for(TestSetLine test_set_line:test_set_lines_list) {
-			Map<String,TestSetScriptParam> map2	= getTestScriptMap(test_set_line);
-			map.put(String.valueOf(test_set_line.getSeqNum()),map2);
-				
+		for (TestSetLine test_set_line : test_set_lines_list) {
+			Map<String, TestSetScriptParam> map2 = getTestScriptMap(test_set_line);
+			map.put(String.valueOf(test_set_line.getSeqNum()), map2);
+
 		}
 		return map;
-		
+
 	}
+
 	public Map<String, TestSetScriptParam> getTestScriptMap(TestSetLine testSetLine) {
 		String sql = "from TestSetScriptParam where testSetLine=:testSetLines";
 		Query query = em.createQuery(sql);
@@ -220,98 +227,102 @@ public class DataBaseEntryDao {
 		// map.put(String.valueOf(test_set_line.getSeq_num()),map2);
 		return map2;
 	}
-	
+
 	public TestSetLine getTestSetLine(String test_set_line_id) {
 		// TODO Auto-generated method stub
 		return em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 	}
 
-	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, List<Integer> dependentList) {
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
+			List<Integer> dependentList) {
 		// TODO Auto-generated method stub
 		String sql = "Select script_id,dependency from ScriptMaster where script_id in (:dependentList)";
-		Query query = em.unwrap(Session.class).createQuery(sql).setParameterList("dependentList",dependentList);
-		
+		Query query = em.unwrap(Session.class).createQuery(sql).setParameterList("dependentList", dependentList);
+
 		List<Object[]> scriptList = query.getResultList();
-		//Object[] objectArray = scriptList.toArray();
-		Map<Integer,Integer> map =new HashMap<Integer,Integer>();
-		
-		for(Object[] obj:scriptList) {
-			map.put((Integer)obj[0],(Integer)obj[1]);
+		// Object[] objectArray = scriptList.toArray();
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+		for (Object[] obj : scriptList) {
+			map.put((Integer) obj[0], (Integer) obj[1]);
 		}
-		
-		for(Entry<String, List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
-			element.getValue().get(0).setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
-			
+
+		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
+			element.getValue().get(0)
+					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
+
 		}
-		
+
 	}
-	
-	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, List<Integer> dependentList,String test_set_id) {
+
+	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
+			List<Integer> dependentList, String test_set_id) {
 		// TODO Auto-generated method stub
 		String sql = "Select script_id,dependency_tr from win_ta_test_set_lines where script_id in (:dependentList) and test_set_id = :test_set_id";
-		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList",dependentList).setParameter("test_set_id",test_set_id);
-		
-		List<Object[]> scriptList = query.getResultList();
-		//Object[] objectArray = scriptList.toArray();
-		Map<Integer,Integer> map =new HashMap<Integer,Integer>();
-		
-		for(Object[] obj:scriptList) {
-			map.put(Integer.parseInt(obj[0].toString()),Integer.parseInt(obj[1].toString()));
-		}
-		
-		
-		for(Entry<String, List<FetchMetadataVO>> element:dependentScriptMap.entrySet()) {
-			element.getValue().get(0).setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
-			
-		}
-		
-	}
-	
+		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList", dependentList)
+				.setParameter("test_set_id", test_set_id);
 
-public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer, Status> scriptStatus, int testRunDependencyCount) {
+		List<Object[]> scriptList = query.getResultList();
+		// Object[] objectArray = scriptList.toArray();
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+		for (Object[] obj : scriptList) {
+			map.put(Integer.parseInt(obj[0].toString()), Integer.parseInt(obj[1].toString()));
+		}
+
+		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
+			element.getValue().get(0)
+					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
+
+		}
+
+	}
+
+	public void getStatus(Integer dependentScriptNo, Integer test_set_id, Map<Integer, Status> scriptStatus,
+			int testRunDependencyCount) {
 		// TODO Auto-generated method stub
-	String sq1;
-	if(testRunDependencyCount>0) {
-		sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and test_set_line_id=:dependentScriptNo";
-	}
-	else {
-		sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
-	}
-		
+		String sq1;
+		if (testRunDependencyCount > 0) {
+			sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and test_set_line_id=:dependentScriptNo";
+		} else {
+			sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and script_id=:dependentScriptNo";
+		}
+
 		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
-		query.setParameter("test_set_id",test_set_id);
-		query.setParameter("dependentScriptNo",dependentScriptNo);
-		//query.setPara
-		
-		List<String>list =	query.getResultList();
-		
-		
-		Status status=new Status();
-		int awaitCount=0;
-		if(list!=null) {
-		if((list.size()>0)&&(!(list.contains("Fail") || list.contains("FAIL"))) && (!(list.contains("New")||list.contains("NEW")))) {
-		if((list.contains("In-Progress") || list.contains("IN-PROGRESS")) || (list.contains("In-Queue")||list.contains("IN-QUEUE"))) {
-			status.setStatus("Wait");
-			for(String stat:list) {
-				if(!stat.equalsIgnoreCase("Pass")) {
-					awaitCount++;
+		query.setParameter("test_set_id", test_set_id);
+		query.setParameter("dependentScriptNo", dependentScriptNo);
+		// query.setPara
+
+		List<String> list = query.getResultList();
+
+		Status status = new Status();
+		int awaitCount = 0;
+		if (list != null) {
+			if ((list.size() > 0) && (!(list.contains("Fail") || list.contains("FAIL")))
+					&& (!(list.contains("New") || list.contains("NEW")))) {
+				if ((list.contains("In-Progress") || list.contains("IN-PROGRESS"))
+						|| (list.contains("In-Queue") || list.contains("IN-QUEUE"))) {
+					status.setStatus("Wait");
+					for (String stat : list) {
+						if (!stat.equalsIgnoreCase("Pass")) {
+							awaitCount++;
+						}
+					}
+					status.setInExecutionCount(awaitCount);
+					scriptStatus.put(dependentScriptNo, status);
+				} else {
+					status.setStatus("Pass");
+					scriptStatus.put(dependentScriptNo, status);
 				}
+			} else {
+				status.setStatus("Fail");
+				scriptStatus.put(dependentScriptNo, status);
 			}
-			status.setInExecutionCount(awaitCount);
-			scriptStatus.put(dependentScriptNo, status);
-		}else {
-		status.setStatus("Pass");
-		scriptStatus.put(dependentScriptNo, status);
-		}
-		}else {
+		} else {
 			status.setStatus("Fail");
 			scriptStatus.put(dependentScriptNo, status);
 		}
-		}else {
-			status.setStatus("Fail");
-			scriptStatus.put(dependentScriptNo, status);
-		}
-		
+
 	}
 
 	public int getTestRunDependentCount(String testSetId) {
@@ -320,12 +331,13 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		query.setParameter("test_set_id", testSetId);
 		return Integer.parseInt(query.getSingleResult().toString());
 	}
-	public String getPackage(String args) {	
-		TestSet testSet = em.unwrap(Session.class).find(TestSet.class,Integer.parseInt(args));
+
+	public String getPackage(String args) {
+		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(args));
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return project.getWatsPackage();
 	}
-	
+
 	public String getTestSetMode(Long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> query = cb.createQuery(String.class);
@@ -335,7 +347,7 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		return em.createQuery(query).getSingleResult();
 
 	}
-	
+
 	public Integer findAuditStageIdByName(String stageName) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
@@ -346,7 +358,7 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		return result;
 
 	}
-	
+
 	public AuditScriptExecTrail insertAuditScriptExecTrail(AuditScriptExecTrail auditScriptExecTrail) {
 		em.persist(auditScriptExecTrail);
 		return auditScriptExecTrail;
@@ -467,7 +479,6 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		return result;
 
 	}
-
 
 	public ScriptMaster findScriptMasterByScriptId(int scriptId) {
 
@@ -613,7 +624,8 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 			customerDetails
 					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.", e);
+			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.",
+					e);
 		}
 		return customerDetails;
 
@@ -855,7 +867,7 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		}
 		return listOfTestRunExecutionVo;
 	}
-	
+
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status, String message) {
 		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -932,7 +944,7 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		}
 	}
 
-	public void updateStatusOfScript( String testSetLineId, String status) {
+	public void updateStatusOfScript(String testSetLineId, String status) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
@@ -1258,17 +1270,6 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 		return requestCount;
 	}
 
-	public Date findMaxExecutionEndDate(long testSetId) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
-		Root<TestSetLine> from = cq.from(TestSetLine.class);
-		Predicate condition = cb.equal(from.get("testRun").get("testRunId"), testSetId);
-		cq.select(cb.greatest(from.<Date>get("executionEndTime"))).where(condition);
-		Date query = em.createQuery(cq).getSingleResult();
-		return query;
-
-	}
-
 	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -1283,72 +1284,4 @@ public void getStatus(Integer dependentScriptNo,Integer test_set_id, Map<Integer
 
 	}
 
-	public Date findMinExecutionStartDate(long testSetId) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
-		Root<TestSetLine> from = cq.from(TestSetLine.class);
-		Predicate condition1 = cb.equal(from.get("testRun").get("testRunId"), testSetId);
-		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition1);
-		Date query = em.createQuery(cq).getSingleResult();
-		return query;
-
-			BigDecimal bigDecimal = (BigDecimal) results.get(0);
-			Integer id = Integer.parseInt(bigDecimal.toString());
-			return id;
-		} else {
-			return 0;
-		}
-	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
