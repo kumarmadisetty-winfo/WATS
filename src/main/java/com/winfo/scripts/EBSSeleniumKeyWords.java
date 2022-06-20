@@ -3077,11 +3077,11 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String errorMessage = "Failed Message:" + "" + error;
 					
 					
-					String stepDescription = descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+					String stepDescription = descriptionList.get(sno).get(Reason).getTestRunParamDesc();
 				
-					String inputParam = descriptionList.get(sno).get(Reason).getInput_parameter();
+					String inputParam = descriptionList.get(sno).get(Reason).getInputParameter();
 				
-					String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+					String inputValue = descriptionList.get(sno).get(Reason).getInputValue();
 					
 					Paragraph pr1 = new Paragraph();
 					pr1.add("Status:");
@@ -3229,9 +3229,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						String Scenario = image.split("_")[2];
 						String steps = image.split("_")[5];
 						
-						String stepDescription = map.get(steps).getTest_run_param_desc(); 
-						String inputParam = map.get(steps).getInput_parameter();
-						String inputValue = map.get(steps).getInput_value();
+						String stepDescription = map.get(steps).getTestRunParamDesc(); 
+						String inputParam = map.get(steps).getInputParameter();
+						String inputValue = map.get(steps).getInputValue();
 						document.setPageSize(img);
 						document.newPage();
 
@@ -3998,9 +3998,9 @@ public class EBSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String Scenarios = "Scenario Name :" + "" + Scenario;
 				String Message = "Failed at Line Number:" + "" + Reason;
 				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
-				String stepDescription = map.get(Reason).getTest_run_param_desc();
-				String inputParam = map.get(Reason).getInput_parameter();
-				String inputValue = map.get(Reason).getInput_value();
+				String stepDescription = map.get(Reason).getTestRunParamDesc();				
+				String inputParam = map.get(Reason).getInputParameter();			
+				String inputValue = map.get(Reason).getInputValue();
 				
 				// String message = "Failed at
 				// :"+fetchMetadataListVO.get(0).getInput_parameter();

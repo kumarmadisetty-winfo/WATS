@@ -3402,9 +3402,9 @@ public class CAMDENSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				
 				
 				
-				String stepDescription = map.get(Reason).getTest_run_param_desc();
-				String inputParam = map.get(Reason).getInput_parameter();
-				String inputValue = map.get(Reason).getInput_value();
+				String stepDescription = map.get(Reason).getTestRunParamDesc();
+				String inputParam = map.get(Reason).getInputParameter();
+				String inputValue = map.get(Reason).getInputValue();
 			
 				
 				
