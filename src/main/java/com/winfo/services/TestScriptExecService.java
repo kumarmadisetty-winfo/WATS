@@ -226,7 +226,6 @@ public class TestScriptExecService {
 			boolean run) {
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
-		String actionName = null;
 		String errorMessage = null;
 		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
 		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
@@ -248,7 +247,7 @@ public class TestScriptExecService {
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
 
 				for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
-					actionName = fetchMetadataVO.getAction();
+
 					testScriptParamId = fetchMetadataVO.getTest_script_param_id();
 
 					String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
@@ -256,8 +255,9 @@ public class TestScriptExecService {
 							+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 							+ fetchMetadataVO.getLine_number();
 
-					methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), actionName,
-							screenshotPath, testScriptParamId);
+					methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(),
+							fetchMetadataVO.getAction(), fetchMetadataVO.getInput_value(), screenshotPath,
+							testScriptParamId);
 					methods.add(methodCall);
 				}
 				dto.setActions(methods);
@@ -343,7 +343,7 @@ public class TestScriptExecService {
 
 	}
 
-	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName,
+	public String ebsActions(FetchMetadataVO fetchMetadataVO, String testrunId, String actionName, String inputValue,
 			String screenshotPath, String testScriptParamId) {
 		logger.info(actionName);
 
@@ -372,9 +372,8 @@ public class TestScriptExecService {
 						listArgs.add(index + SPLIT + addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Value>")) {
+						dbValue = inputValue;
 						if (actionName.equalsIgnoreCase("ebsSelectMenu")) {
-							dbValue = codeLineRepo.findByTestRunScriptId(
-									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 							if (dbValue.contains(">")) {
 								String[] arrOfStr = dbValue.split(">", 5);
 								if (arrOfStr.length < 2) {
@@ -382,17 +381,13 @@ public class TestScriptExecService {
 								} else {
 									String menu = arrOfStr[0];
 									String subMenu = arrOfStr[1];
-									String menu_link = menu + "    " + subMenu;
-									listArgs.add(index + SPLIT + addQuotes(menu_link));
+									String menuLink = menu + "    " + subMenu;
+									listArgs.add(index + SPLIT + addQuotes(menuLink));
 								}
 							} else {
-								dbValue = codeLineRepo.findByTestRunScriptId(
-										Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 								listArgs.add(index + SPLIT + addQuotes(dbValue));
 							}
 						} else {
-							dbValue = codeLineRepo.findByTestRunScriptId(
-									Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
 							listArgs.add(index + SPLIT + addQuotes(dbValue));
 						}
 
