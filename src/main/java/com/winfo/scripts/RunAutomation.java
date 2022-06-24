@@ -187,8 +187,8 @@ public class RunAutomation {
 			// dataService.getFetchMetaData(args, uri);
 
 //			fetchConfigVO.setChrome_driver_path("C:\\Users\\UdayPratapSingh\\Downloads\\chromedriver_win32\\chromedriver.exe");
-			fetchConfigVO.setPdf_path("C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\PDFWATS");
-			fetchConfigVO.setScreenshot_path("C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\SCREEN SHOTWATS");
+//			fetchConfigVO.setPdf_path("C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\PDFWATS");
+//			fetchConfigVO.setScreenshot_path("C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\SCREEN SHOTWATS");
 
 			final String uri = fetchConfigVO.getMETADATA_URL() + args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()" + fetchConfigVO.getScreenshot_path()
