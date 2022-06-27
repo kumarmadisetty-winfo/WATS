@@ -202,12 +202,23 @@ public class XpathPerformance {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath((paramsr))));
-			Thread.sleep(6000);
-			WebElement waittext = driver.findElement(By.xpath((paramsr)));
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			WebElement waittext = driver.findElement(By.xpath((paramsr)));
+			Thread.sleep(6000);
+			if(!waittext.isEnabled()) {
+				Thread.sleep(15000);
+			}
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			if(param1.equalsIgnoreCase("Approval")) {
+				waittext.click();
+			}
+			else {
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			}
+//			if(ExpectedConditions.elementToBeClickable(By.xpath((paramsr))) != null) {
+//				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+//			}
 			Thread.sleep(2000);
 			System.out.println("it's working clickButton.......");
 
@@ -277,8 +288,7 @@ public class XpathPerformance {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				Thread.sleep(1000);
-				System.out.println("it's working textarea.......");
+				Thread.sleep(1000);				System.out.println("it's working textarea.......");
 				
 			return keysToSend;
 			}
@@ -544,7 +554,7 @@ public class XpathPerformance {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
-			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+//			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			System.out.println("it's working ClickLink.......");
 
 		}
@@ -655,57 +665,54 @@ public class XpathPerformance {
 
 		}
 	}
+
 	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, int count) throws Exception {
 //		int count=0;
-		String scriptID=fetchMetadataVO.getScript_id();
-		String action =fetchMetadataVO.getAction();
-		String lineNumber=fetchMetadataVO.getLine_number();String xpathlocation=service.getXpathParams(scriptID,lineNumber);
-		
-		if(xpathlocation!=null) {
-			String param1r=xpathlocation.replace("param1",param1 );
-			String paramsr=param1r.replace("param2", param2);
-		try {
+		String scriptID = fetchMetadataVO.getScript_id();
+		String action = fetchMetadataVO.getAction();
+		String lineNumber = fetchMetadataVO.getLine_number();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+
+		if (xpathlocation != null) {
+			String param1r = xpathlocation.replace("param1", param1);
+			String paramsr = param1r.replace("param2", param2);
+			try {
 //			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 //			wait.until(ExpectedConditions
 //					.presenceOfElementLocated(By.xpath((paramsr))));
-			WebElement waittext = driver.findElement(By.xpath((paramsr)));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			System.out.println("it's working clickImage.......");
+				WebElement waittext = driver.findElement(By.xpath((paramsr)));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				waittext.click();
+//				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				System.out.println("it's working clickImage.......");
 
-		}
-		catch(Exception e) {
-			
-				 if(count==0) {
-					  count = 1; 
-					  System.out.println(" The Count Value is : "+count);
-					  clickImage( driver,  param1,  param2,  fetchMetadataVO,
-								 fetchConfigVO,count);
-			Thread.sleep(2000);
-						}else if(count<=2) { 
-					  count = count+1;
-					  Thread.sleep(2000);
-				  System.out.println(" The Count Value is : "+count); 
-				  clickImage( driver,  param1,  param2,  fetchMetadataVO,
-							 fetchConfigVO,count);
-					}
-				  else 
-				  {
-				  System.out.println("Count value exceeds the limit"); 
+			} catch (Exception e) {
+
+				if (count == 0) {
+					count = 1;
+					System.out.println(" The Count Value is : " + count);
+					clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+					Thread.sleep(2000);
+				} else if (count <= 2) {
+					count = count + 1;
+					Thread.sleep(2000);
+					System.out.println(" The Count Value is : " + count);
+					clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+				} else {
+					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
 //					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
-				  }
+				}
 			}
-		
+
+		} else {
+			throw new Exception("XpathLocation is null");
 		}
-		else {
-			throw  new Exception("XpathLocation is null");
-		}		
 	}
 	public void clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO, int count) throws Exception {
@@ -1519,7 +1526,7 @@ public class XpathPerformance {
 			waittext.click();
 
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			Thread.sleep(30000);
+			Thread.sleep(5000);
 
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			System.out.println("It's working in Dropdownvalues..... ");
@@ -1549,44 +1556,44 @@ public class XpathPerformance {
 					throw e;
 				  }
 			}
-		try {
-//			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-//			wait.until(ExpectedConditions
-//					.presenceOfElementLocated(By.xpath((paramsr))));
-			WebElement waittext = driver.findElement(By.xpath(mainparam));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			System.out.println("It's working in DropdownValues..... ");
-			return;
-		}
-		catch(Exception e) {
-			
-				 if(count==0) {
-					  count = 1; 
-					  System.out.println(" The Count Value is : "+count);
-					  dropdownValues( driver,  param1,  param2,  param3,  keysToSend,
-								 fetchMetadataVO,  fetchConfigVO,count);
-			Thread.sleep(2000);
-						}else if(count<=2) { 
-					  count = count+1;
-					  Thread.sleep(2000);
-				  System.out.println(" The Count Value is : "+count); 
-				  dropdownValues( driver,  param1,  param2,  param3,  keysToSend,
-							 fetchMetadataVO,  fetchConfigVO,count);
-					}
-				  else 
-				  {
-				  System.out.println("Count value exceeds the limit"); 
-					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + param1);
-					throw e;
-				  }
-			}
-		
+//		try {
+////			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+////			wait.until(ExpectedConditions
+////					.presenceOfElementLocated(By.xpath((paramsr))));
+//			WebElement waittext = driver.findElement(By.xpath(mainparam));
+//			Actions actions = new Actions(driver);
+//			actions.moveToElement(waittext).build().perform();
+//			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+//			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			System.out.println("It's working in DropdownValues..... ");
+//			return;
+//		}
+//		catch(Exception e) {
+//			
+//				 if(count==0) {
+//					  count = 1; 
+//					  System.out.println(" The Count Value is : "+count);
+//					  dropdownValues( driver,  param1,  param2,  param3,  keysToSend,
+//								 fetchMetadataVO,  fetchConfigVO,count);
+//			Thread.sleep(2000);
+//						}else if(count<=2) { 
+//					  count = count+1;
+//					  Thread.sleep(2000);
+//				  System.out.println(" The Count Value is : "+count); 
+//				  dropdownValues( driver,  param1,  param2,  param3,  keysToSend,
+//							 fetchMetadataVO,  fetchConfigVO,count);
+//					}
+//				  else 
+//				  {
+//				  System.out.println("Count value exceeds the limit"); 
+//					log.error("Failed During SendValue");
+////					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+//					System.out.println("Not able to SendValue to the :" + "" + param1);
+//					throw e;
+//				  }
+//			}
+//		
 		}
 		
 		else {

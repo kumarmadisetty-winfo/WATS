@@ -449,7 +449,7 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -604,7 +604,7 @@
 		<profile>
 			<id>prd</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>

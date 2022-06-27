@@ -1,6 +1,8 @@
 package com.winfo.scripts;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +45,9 @@ import com.winfo.vo.Status;
 
 public class RunAutomation {
 	Logger log = Logger.getLogger("Logger");
-
+//	String logsPath = "C:\\Users\\UdayPratapSingh\\wats\\log.txt";
+//	String logsPath1 = "C:\\Users\\UdayPratapSingh\\wats\\log1.txt";
+//	String logsPath2 = "C:\\Users\\UdayPratapSingh\\wats\\log2.txt";
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
 	@Autowired
@@ -132,9 +136,9 @@ public class RunAutomation {
 			// dataService.getFetchMetaData(args, uri);
 
 //			fetchConfigVO.setChrome_driver_path("C:\\Users\\UdayPratapSingh\\Downloads\\chromedriver_win32\\chromedriver.exe");
-			fetchConfigVO.setPdf_path("C:\\\\Users\\\\UdayPratapSingh\\\\OneDrive - Winfo Solutions\\\\Desktop\\\\PDF");
-			fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\UdayPratapSingh\\\\OneDrive - Winfo Solutions\\\\Desktop\\\\SCREEN SHOT");
-
+//			fetchConfigVO.setPdf_path("C:\\\\Users\\\\UdayPratapSingh\\\\OneDrive - Winfo Solutions\\\\Desktop\\\\PDF");
+//			fetchConfigVO.setScreenshot_path("C:\\\\Users\\\\UdayPratapSingh\\\\OneDrive - Winfo Solutions\\\\Desktop\\\\SCREEN SHOT");
+//			fetchConfigVO.setInstance_name("DH");
 			final String uri = fetchConfigVO.getMETADATA_URL()+ args;
 			System.out.println("fetchConfigVO.getDownlod_file_path()"+fetchConfigVO.getScreenshot_path()+fetchConfigVO.getUri_config()+fetchConfigVO.getPdf_path());
 		 	List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
@@ -517,7 +521,7 @@ public class RunAutomation {
 			//XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScript_id();
 			String checkValidScript= xpathService.checkValidScript(scriptID);
-//			String checkValidScript="No";
+//			String checkValidScript="Yes";
 			System.out.println("checkValidScript.......::"+checkValidScript);
 	
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
@@ -561,6 +565,10 @@ public class RunAutomation {
 				}
 				Date Starttime = new Date();
 				try {
+					
+					if(fetchMetadataVO.getLine_number().equals(223)) {
+						System.out.println("hey");
+					}
 					
 					switch (actionName) {
 
@@ -704,7 +712,7 @@ public class RunAutomation {
 						              }
 								  }
 						        catch(Exception e) {
-						        		seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+						        		seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 												fetchConfigVO);
 						        		break;
 						        }
@@ -712,12 +720,30 @@ public class RunAutomation {
 							}
 						case "Dropdown Values":
 							if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-								seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
-										fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+								
 								break;
 							} else {
 								break;
 							}
+//							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+//								try {
+//									if(checkValidScript.equalsIgnoreCase("Yes")) {
+//						        
+//						        		xpathPerformance.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+//						        		break;  
+//									}
+//						              else {
+//								
+//						        	throw  new Exception("ScriptNotValid");
+//						              }
+//								  }
+//						        catch(Exception e) {
+//						        	seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+//											fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+//						        	break;
+//						        }
+//						        	
+//							}
 						case "Table SendKeys":
 							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 								try {
@@ -1254,15 +1280,30 @@ public class RunAutomation {
 						break;
 						
 					}
-					Date endtime = new Date();
-					long diff = endtime.getTime() - Starttime.getTime();
-					long diffSeconds = diff / 1000 % 60;
-					long diffMinutes = diff / (60 * 1000) % 60;
-					long diffHours = diff / (60 * 60 * 1000);
-					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
-					System.out.println("ExecutionTime "+ExecutionTime);
-					i++;
-
+					
+//					Date endtime = new Date();
+//					long diff = endtime.getTime() - Starttime.getTime();
+//					long diffSeconds = diff / 1000 % 60;
+//					long diffMinutes = diff / (60 * 1000) % 60;
+//					long diffHours = diff / (60 * 60 * 1000);
+//					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+//					System.out.println("ExecutionTime "+ExecutionTime);
+//					i++;
+//					if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.008")) {
+//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath, true))) {
+//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
+//						}
+//					}
+//					else if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.6848")) {
+//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath1, true))) {
+//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
+//						}
+//					}
+//					else {
+//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath2, true))) {
+//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
+//						}
+//					}
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
