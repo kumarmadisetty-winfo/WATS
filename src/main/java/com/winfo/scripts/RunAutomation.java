@@ -1098,8 +1098,8 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-//							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-//									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
+							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 						}
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
