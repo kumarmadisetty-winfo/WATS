@@ -71,7 +71,7 @@ public class RunAutomation {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
-	
+
 	@Autowired
 	TestScriptExecService testScriptExecService;
 
@@ -116,20 +116,19 @@ public class RunAutomation {
 	}
 
 	long increment = 0;
-	
+
 	public ResponseDto run(String args) throws MalformedURLException {
 		System.out.println(args);
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String checkPackage = dataBaseEntry.getPackage(args);
-		if(checkPackage!=null && checkPackage.toLowerCase().contains(Constants.EBS)) {
+		if (checkPackage != null && checkPackage.toLowerCase().contains(Constants.EBS)) {
 			executeTestrunVo = ebsRun(args);
-		}
-		else {
+		} else {
 			executeTestrunVo = cloudRun(args);
 		}
 		return executeTestrunVo;
 	}
-	
+
 	public ResponseDto ebsRun(String testSetId) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
@@ -171,7 +170,6 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 
-
 	public ResponseDto cloudRun(String args) throws MalformedURLException {
 		System.out.println(args);
 		ResponseDto executeTestrunVo = new ResponseDto();
@@ -194,7 +192,7 @@ public class RunAutomation {
 			System.out.println("fetchConfigVO.getDownlod_file_path()" + fetchConfigVO.getScreenshot_path()
 					+ fetchConfigVO.getUri_config() + fetchConfigVO.getPdf_path());
 			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
-			
+
 			System.out.println(fetchMetadataListVO.size());
 			Map<Integer, Status> scriptStatus = new HashMap<Integer, Status>();
 			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
@@ -202,7 +200,7 @@ public class RunAutomation {
 
 			int testRunDependencyCount = dataBaseEntry.getTestRunDependentCount(args);
 			Queue<Entry<String, List<FetchMetadataVO>>> dependentQueue = new LinkedList<Entry<String, List<FetchMetadataVO>>>();
-			
+
 			if (testRunDependencyCount > 0) {
 				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
 						TEST_RUN_LEVEL_DEPENDENCY);
@@ -370,7 +368,8 @@ public class RunAutomation {
 							}
 						} else {
 							dataBaseEntry.getStatus(dependentScriptNo,
-									Integer.parseInt(metadata.getValue().get(0).getTest_set_id()), scriptStatus,testRunDependencyCount);
+									Integer.parseInt(metadata.getValue().get(0).getTest_set_id()), scriptStatus,
+									testRunDependencyCount);
 
 							if (scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Pass")) {
 
@@ -1044,12 +1043,13 @@ public class RunAutomation {
 								fetchMetadataVO, fetchConfigVO);
 						break;
 					case "clickButton(Informatica)":
-					seleniumFactory.getInstanceObj(instanceName).InformaticaClickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-					break;
+						seleniumFactory.getInstanceObj(instanceName).InformaticaClickButton(driver, param1, param2,
+								fetchMetadataVO, fetchConfigVO);
+						break;
 					case "waitTillLoad":
-						seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-					break;
-
+						seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
+								fetchMetadataVO, fetchConfigVO);
+						break;
 
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
@@ -1100,6 +1100,7 @@ public class RunAutomation {
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
+
 						}
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 								script_id1, script_Number, "pass", startdate, enddate);
@@ -1144,27 +1145,14 @@ public class RunAutomation {
 					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
 							test_set_id);
-					if (failedScriptRunCount == 1) {
-						seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
 
-					} else if (failedScriptRunCount == 2) {
-						limitScriptExecutionService.renameFailedFile(fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + ".pdf", failedScriptRunCount);
-						seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate,
-								enddate);
-
-					} else {
-						seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate,
-								enddate);
-					}
+					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
 					if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 								fetchConfigVO);
 					}
-					// uploadPDF(fetchMetadataListVO, fetchConfigVO);
+//					 uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
 							script_Number, "Fail", startdate, enddate);
 					throw e;
