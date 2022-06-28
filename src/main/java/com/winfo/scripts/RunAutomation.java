@@ -1,6 +1,8 @@
 package com.winfo.scripts;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -37,6 +39,7 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
 import com.winfo.services.LimitScriptExecutionService;
+import com.winfo.services.ScriptXpathService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
@@ -48,8 +51,10 @@ import com.winfo.vo.Status;
 
 public class RunAutomation {
 	Logger log = Logger.getLogger("Logger");
+
 	private static final String TEST_RUN_LEVEL_DEPENDENCY = "TestRunDependency";
 	private static final String SCRIPT_LEVEL_DEPENDENCY = "ScriptDependency";
+
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
 	@Autowired
@@ -71,9 +76,12 @@ public class RunAutomation {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
-
 	@Autowired
 	TestScriptExecService testScriptExecService;
+	@Autowired
+	XpathPerformance xpathPerformance;
+	@Autowired
+	ScriptXpathService xpathService;
 
 	/*
 	 * public void report() throws IOException, DocumentException,
@@ -181,7 +189,13 @@ public class RunAutomation {
 //	        String start_time=dtf.format(now);
 //			System.out.println("instanceName"+instanceName);
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
-			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
+//			fetchConfigVO.setParallel_independent(3);
+//			fetchConfigVO.setChrome_driver_path("C:\\wats\\chromdriver\\chromedriver.exe");
+//			fetchConfigVO.setDownlod_file_path("C:\\wats\\wats_stand\\download_path");
+//			fetchConfigVO.setPdf_path("C:\\wats\\wats_stand\\pdf_path");
+//			fetchConfigVO.setScreenshot_path("C:\\wats\\wats_stand\\screenshot_path");
+//			fetchConfigVO.setUpload_file_path("C:\\wats\\wats_stand\\upload_path");
+//			// FetchMetadataVO fetchMetadataVO = (FetchMetadataVO)
 			// dataService.getFetchMetaData(args, uri);
 
 //			fetchConfigVO.setChrome_driver_path("C:\\Users\\UdayPratapSingh\\Downloads\\chromedriver_win32\\chromedriver.exe");
@@ -451,6 +465,7 @@ public class RunAutomation {
 				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
 						fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
+
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 							fetchConfigVO);
@@ -502,10 +517,16 @@ public class RunAutomation {
 		boolean isDriverError = true;
 		try {
 
+//			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
+//			isDriverError = false;
+//			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
+//			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO,scriptStatus);
+			
 			driver = deriverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
 			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
+
 
 		} catch (Exception e) {
 //			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO, "0", inputParam);
@@ -540,7 +561,10 @@ public class RunAutomation {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
-
+		
+		//XpathPerformance code for cases added
+		long startTime=System.currentTimeMillis();
+		System.out.println("startTime:::::::::::::"+startTime);
 		int i = 0;
 		String passurl = null;
 		String failurl = null;
@@ -579,7 +603,15 @@ public class RunAutomation {
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
-			List<String> excellSteps = new ArrayList<String>();
+
+
+			List<String>excellSteps = new ArrayList<String>();
+			//XpathPerformance code for cases added
+			String scriptID = fetchMetadataListVO.get(0).getScript_id();
+			String checkValidScript= xpathService.checkValidScript(scriptID);
+//			String checkValidScript="Yes";
+			System.out.println("checkValidScript.......::"+checkValidScript);
+
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
@@ -619,7 +651,13 @@ public class RunAutomation {
 					value2 = getValue != null ? getValue.split(">").length > 1 ? getValue.split(">")[1] : "" : "";
 
 				}
+				Date Starttime = new Date();
 				try {
+					
+					if(fetchMetadataVO.getLine_number().equals(223)) {
+						System.out.println("hey");
+					}
+					
 					switch (actionName) {
 
 					case "Login into Application":
@@ -707,14 +745,30 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO, fetchMetadataVO,
 								type1, type2, type3, param1, param2, param3);
 						break;
+						
+						//XpathPerformance code for cases added
+						
 					case "SendKeys":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
+						if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+					        	break;
+					              }
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+					        		seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+					        		break;
+					        }
+					        	
 						}
+
 					case "sendvalues(OIC)":
 						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 							seleniumFactory.getInstanceObj(instanceName).oicSendValue(driver, param1, param2,
@@ -723,104 +777,8 @@ public class RunAutomation {
 						} else {
 							break;
 						}
-					case "textarea":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
 
-					case "Dropdown Values":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "Table SendKeys":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).tableSendKeys(driver, param1, param2, param3,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "multiplelinestableSendKeys":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1,
-									param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-
-					case "Table Dropdown Values":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).tableDropdownValues(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "clickLinkAction":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "clickCheckbox":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "clickRadiobutton":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "selectAValue":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							break;
-						} else {
-							break;
-						}
-					case "clickTableLink":
-						seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
-								fetchMetadataVO, fetchConfigVO);
-						break;
-					case "clickLink":
-						seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2, fetchMetadataVO,
-								fetchConfigVO);
-						break;
-					case "clickNotificationLink":
-						seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
-								fetchMetadataVO, fetchConfigVO);
-						break;
-					case "clickMenu":
-						seleniumFactory.getInstanceObj(instanceName).clickMenu(driver, param1, param2, fetchMetadataVO,
-								fetchConfigVO);
-						break;
-					case "clickImage":
-						seleniumFactory.getInstanceObj(instanceName).clickImage(driver, param1, param2, fetchMetadataVO,
-								fetchConfigVO);
-						break;
-					case "clickTableImage":
-						seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1, param2,
-								fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-						break;
+								
 					case "clickExpandorcollapse":
 						seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
@@ -834,61 +792,412 @@ public class RunAutomation {
 								fetchMetadataVO, fetchConfigVO);
 						break;
 
-					case "clickButton":
-						seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
-								fetchMetadataVO, fetchConfigVO);
-						message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-						String message1 = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-
-						seleniumFactory.getInstanceObj(instanceName).clickButtonCheckPopup(driver, param1, param2,
-								fetchMetadataVO, fetchConfigVO);
-
-						if (message != null && !message.startsWith("Example") && !message.startsWith("Offer Comments")
-								&& !message.startsWith("Context Value") && !message.startsWith("Select Book")
-								&& !message.startsWith("Enter a date between")
-								&& !message.startsWith("Accounting Period") && !message.startsWith("Source")
-								&& !message.startsWith("Add Collaborator Type") && !message.startsWith("Batch")
-								&& !message.startsWith("Added to Cart") && !message.startsWith("Journal")
-								&& !message.startsWith("Project Number") && !message.startsWith("Regional Information")
-								&& !message.startsWith("Distribution") && !message.startsWith("Salary Basis")
-								&& !message.startsWith("Enter a date on or after")
-								&& !message.startsWith("Legislative Data Group") && !message.startsWith("item")
-								&& !message.startsWith("Select Subinventories") && !message.startsWith("Comments")
-								&& !message.startsWith("Employee Name")
-								&& !message.startsWith("All higher-level managers can see comments")
-								&& !message.startsWith("Shift")
-								&& !message.startsWith("Copy tasks and selected attributes to the new project")
-								&& !message.startsWith("Course Title")) {
-
-							fetchConfigVO.setErrormessage(message);
-							seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
-									fetchConfigVO);
-							throw new IllegalArgumentException("Error occured");
-						}
-						seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO,
-								fetchConfigVO);
-						break;
-					case "tableRowSelect":
-						seleniumFactory.getInstanceObj(instanceName).tableRowSelect(driver, param1, param2,
-								fetchMetadataVO, fetchConfigVO);
-						break;
-					case "clickButton Dropdown":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-							https: // watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/
+						case "textarea":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        		xpathPerformance.textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;
+						              }
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        		seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+												fetchConfigVO);
+						        		break;
+						        }
+						        	
+							}
+						case "Dropdown Values":
+							if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								
+								break;
+							} else {
+								break;
+							}
+//							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+//								try {
+//									if(checkValidScript.equalsIgnoreCase("Yes")) {
+//						        
+//						        		xpathPerformance.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+//						        		break;  
+//									}
+//						              else {
+//								
+//						        	throw  new Exception("ScriptNotValid");
+//						              }
+//								  }
+//						        catch(Exception e) {
+//						        	seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+//											fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+//						        	break;
+//						        }
+//						        	
+//							}
+						case "Table SendKeys":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        		xpathPerformance.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        	seleniumFactory.getInstanceObj(instanceName).tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						        	break;
+						        }
+						        	
+							}
+							
+						case "multiplelinestableSendKeys":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        		xpathPerformance.multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						    		seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						    		break;
+						        }
+							}				
+						case "Table Dropdown Values":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        	   xpathPerformance.tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        	   break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        	seleniumFactory.getInstanceObj(instanceName).tableDropdownValues(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						        	break;
+						        }
+						        	
+							}
+							
+						case "clickLinkAction":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {					        	
+						        		xpathPerformance.clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						    		seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						    		break;
+						        }
+						        	
+							}
+							
+						case "clickCheckbox":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {					        	
+						        		xpathPerformance.clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break; 
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+									break;
+						        }
+						        	
+							}
+						
+						case "clickRadiobutton":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {					        
+						        		xpathPerformance.clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        	seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						        	break;
+						        }
+						        	
+							}
+						case "selectAValue":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        		xpathPerformance.selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        	seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						        }
+						        	
+							}
+							
+						case "clickTableLink":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+					 
+						case "clickLink":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+					  
+						case "clickNotificationLink":
+							seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
+									fetchMetadataVO, fetchConfigVO);
 							break;
-						} else {
-							break;
-						}
-					case "mousehover":
-						seleniumFactory.getInstanceObj(instanceName).mousehover(driver, param1, param2, fetchMetadataVO,
-								fetchConfigVO);
-						break;
-					case "scrollUsingElement":
-						seleniumFactory.getInstanceObj(instanceName).scrollUsingElement(driver,
-								fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
-						break;
+					     
+						case "clickMenu":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {				        
+					        		xpathPerformance.clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO,count);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+
+								seleniumFactory.getInstanceObj(instanceName).clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+					     
+						case "clickImage":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+					        		break; 
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+					     
+
+						case "clickTableImage":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+					        		break;
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+										fetchConfigVO);
+								break;
+					        }
+					     
+
+
+						
+
+
+						
+			
+					
+
+					
+						case "clickButton":
+						    try {
+						        if (checkValidScript.equalsIgnoreCase("Yes")) {
+
+						            xpathPerformance.clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+						            break;
+						        } else {
+
+						            throw new Exception("ScriptNotValid");
+						        }
+						    } catch (Exception e) {
+						        seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+						        message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
+						        String message1 = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
+						        
+						        if (message != null && !message.startsWith("Example") && !message.startsWith("Offer Comments")
+										&& !message.startsWith("Context Value") && !message.startsWith("Select Book")
+										&& !message.startsWith("Enter a date between")
+										&& !message.startsWith("Accounting Period") && !message.startsWith("Source")
+										&& !message.startsWith("Add Collaborator Type") && !message.startsWith("Batch")
+										&& !message.startsWith("Added to Cart") && !message.startsWith("Journal")
+										&& !message.startsWith("Project Number") && !message.startsWith("Regional Information")
+										&& !message.startsWith("Distribution") && !message.startsWith("Salary Basis")
+										&& !message.startsWith("Enter a date on or after")
+										&& !message.startsWith("Legislative Data Group") && !message.startsWith("item")
+										&& !message.startsWith("Select Subinventories") && !message.startsWith("Comments")
+										&& !message.startsWith("Employee Name")
+										&& !message.startsWith("All higher-level managers can see comments")
+										&& !message.startsWith("Shift")
+										&& !message.startsWith("Copy tasks and selected attributes to the new project")
+										&& !message.startsWith("Course Title")) {
+						        	
+						            fetchConfigVO.setErrormessage(message);
+						            seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "", fetchMetadataVO,
+						                fetchConfigVO);
+						            throw new IllegalArgumentException("Error occured");
+						        }
+						        seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						        break;
+						    }
+						     
+
+						case "tableRowSelect":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+							     
+								seleniumFactory.getInstanceObj(instanceName).tableRowSelect(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+
+						case "clickButton Dropdown":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        		xpathPerformance.clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        	seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						        	break;
+						        }
+						        	
+							}
+							
+						case "mousehover":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {				        
+					        		xpathPerformance.mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+
+								seleniumFactory.getInstanceObj(instanceName).mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+					     
+						case "scrollUsingElement":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {				        
+									xpathPerformance.scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,count);
+									break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).scrollUsingElement(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO,
+										fetchConfigVO);
+								break;
+					        }
+
+
+
+						
+
 					case "moveToElement":
 						seleniumFactory.getInstanceObj(instanceName).moveToElement(driver,
 								fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
@@ -896,10 +1205,7 @@ public class RunAutomation {
 					case "switchToDefaultFrame":
 						seleniumFactory.getInstanceObj(instanceName).switchToDefaultFrame(driver);
 						break;
-					case "switchToFrame":
-						seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver,
-								fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
-						break;
+
 					case "windowhandle":
 						seleniumFactory.getInstanceObj(instanceName).windowhandle(driver, fetchMetadataVO,
 								fetchConfigVO);
@@ -913,33 +1219,81 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
-					case "selectByText":
-						if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-							seleniumFactory.getInstanceObj(instanceName).selectByText(driver, param1, param2,
-									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+
+
+							
+	
+					
+						case "switchToFrame":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,count);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+
+								seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+					     
+
+						case "selectByText":
+							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
+								try {
+									if(checkValidScript.equalsIgnoreCase("Yes")) {
+						        
+						        		xpathPerformance.selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
+						        		break;  
+									}
+						              else {
+								
+						        	throw  new Exception("ScriptNotValid");
+						              }
+								  }
+						        catch(Exception e) {
+						        	seleniumFactory.getInstanceObj(instanceName).selectByText(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
+											fetchConfigVO);
+						        	break;
+						        }
+						        	
+							}
+							
+						case "copy":
+							seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO, fetchConfigVO);
 							break;
-						} else {
+						case "copynumber":
+							globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 							break;
-						}
-					case "copy":
-						seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO, fetchConfigVO);
-						break;
-					case "copynumber":
-						globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver, param1,
-								param2, fetchMetadataVO, fetchConfigVO);
-						break;
-					case "copyy":
-						seleniumFactory.getInstanceObj(instanceName).copyy(driver, fetchMetadataVO.getXpath_location(),
-								fetchMetadataVO, fetchConfigVO);
-						break;
-					case "copytext":
-						seleniumFactory.getInstanceObj(instanceName).copytext(driver,
-								fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
-						break;
-					case "clear":
-						seleniumFactory.getInstanceObj(instanceName).clear(driver, param1, param2, fetchMetadataVO,
-								fetchConfigVO);
-						break;
+						case "copyy":
+							seleniumFactory.getInstanceObj(instanceName).copyy(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+							break;
+						case "copytext":
+							seleniumFactory.getInstanceObj(instanceName).copytext(driver, fetchMetadataVO.getXpath_location(), fetchMetadataVO, fetchConfigVO);
+							break;
+						case "clear":
+							try {
+								if(checkValidScript.equalsIgnoreCase("Yes")) {
+					        
+					        		xpathPerformance.clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO,count);
+					        		break;  
+								}
+					              else {
+							
+					        	throw  new Exception("ScriptNotValid");
+					              }
+							  }
+					        catch(Exception e) {
+
+								seleniumFactory.getInstanceObj(instanceName).clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+								break;
+					        }
+							//XpathPerformance code for cases ended 
 					case "enter":
 						seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO, fetchConfigVO);
 						break;
@@ -1058,8 +1412,30 @@ public class RunAutomation {
 						break;
 
 					}
-					i++;
-
+					
+//					Date endtime = new Date();
+//					long diff = endtime.getTime() - Starttime.getTime();
+//					long diffSeconds = diff / 1000 % 60;
+//					long diffMinutes = diff / (60 * 1000) % 60;
+//					long diffHours = diff / (60 * 60 * 1000);
+//					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+//					System.out.println("ExecutionTime "+ExecutionTime);
+//					i++;
+//					if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.008")) {
+//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath, true))) {
+//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
+//						}
+//					}
+//					else if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.6848")) {
+//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath1, true))) {
+//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
+//						}
+//					}
+//					else {
+//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath2, true))) {
+//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
+//						}
+//					}
 					// MetaData Webservice
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
@@ -1072,6 +1448,13 @@ public class RunAutomation {
 						post.setP_exception_path(detailurl);
 						post.setP_test_set_line_path(scripturl);
 						// passcount = passcount+1;
+						//XpathPerformance code added
+						long endTime=System.currentTimeMillis();
+						System.out.println("endTime:::::::::::::"+endTime);
+
+						long gap = startTime-endTime;
+						System.out.println("gap:::::::::::::"+gap);
+
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
 						try {
@@ -1097,11 +1480,13 @@ public class RunAutomation {
 						}
 						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 						}
+
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 								script_id1, script_Number, "pass", startdate, enddate);
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
@@ -1152,7 +1537,6 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 								fetchConfigVO);
 					}
-//					 uploadPDF(fetchMetadataListVO, fetchConfigVO);
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
 							script_Number, "Fail", startdate, enddate);
 					throw e;
