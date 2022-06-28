@@ -17,26 +17,26 @@ public class WatsXpathDao {
 	@Autowired
 	private EntityManager entityManager;
 
-	public int saveXpathParams(String scriptID, String metadataID, String xpath) {
+	public int saveXpathParams(String scriptID, String line_number, String xpath) {
 
 		Session session = entityManager.unwrap(Session.class);
-  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_id=:scriptID and m.script_meta_data_id=:metadataID;";
+  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_id=:scriptID and m.line_number=:line_number";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("xpath", xpath);
 		query.setParameter("scriptID", scriptID);
-		query.setParameter("metadataID", metadataID);
+		query.setParameter("line_number", line_number);
 		int i =query.executeUpdate();
 		//System.out.println("update:::::"+i);
 		return i;
 	}
 
-	public String getXpathParams(String scriptID, String metadataID) {
+	public String getXpathParams(String scriptID, String line_number) {
 		
 		Session session = entityManager.unwrap(Session.class);
-		String sql="select m.xpath_location from  win_ta_script_metadata m WHERE m.script_id=:scriptID and m.script_meta_data_id=:metadataID;";
+		String sql="select m.xpath_location from  win_ta_script_metadata m WHERE m.script_id=:scriptID and m.line_number=:line_number";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("scriptID", scriptID);
-		query.setParameter("metadataID", metadataID);
+		query.setParameter("line_number", line_number);
 		List results = query.list();
 		if(results.size()>0) {
 			//System.out.println("xpath::::::"+(String) results.get(0));
@@ -48,7 +48,7 @@ public class WatsXpathDao {
 	}
 	public Timestamp executionDate(String scriptID) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql="select CAST(EXECUTION_START_TIME AS DATE)  from WIN_TA_TEST_SET_LINES where script_id=:scriptID and status='Pass' order by EXECUTION_START_TIME desc fetch first 1 rows only;";
+		String sql="select CAST(EXECUTION_START_TIME AS DATE)  from WIN_TA_TEST_SET_LINES where script_id=:scriptID and status='Pass' order by EXECUTION_START_TIME desc fetch first 1 rows only";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("scriptID", scriptID);
 		List results = query.list();
@@ -214,4 +214,5 @@ public class WatsXpathDao {
 //	}
 //
 //
+
 //}
