@@ -93,10 +93,4 @@ public class TestScriptExecController {
 		return testScriptExecService.generateTestRunPdf(testSetId);
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/pushScriptsToObjectStore")
-	public void writeToObjectStore() {
-		testScriptExecService.movePyjabScriptFilesToObjectStore();
-	}
-
 }
