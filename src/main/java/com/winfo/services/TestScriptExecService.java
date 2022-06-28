@@ -1715,16 +1715,6 @@ public class TestScriptExecService {
 		}
 	}
 
-	public void movePyjabScriptFilesToObjectStore() {
-		String actionsFilePath = environment.getProperty("pyjab.scripts.git.path")
-				+ environment.getProperty("pyjab.actions.script.name");
-		String customerSpecificScriptPath = environment.getProperty("pyjab.scripts.git.path")
-				+ environment.getProperty("pyjab.customer.specific.name");
-		uploadObjectToObjectStore(actionsFilePath, environment.getProperty("pyjab.script.path.in.oci")
-				+ environment.getProperty("pyjab.actions.script.name"));
-		uploadObjectToObjectStore(customerSpecificScriptPath, environment.getProperty("pyjab.script.path.in.oci")
-				+ environment.getProperty("pyjab.customer.specific.name"));
-	}
 
 	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, Date Starttime, Date endtime)

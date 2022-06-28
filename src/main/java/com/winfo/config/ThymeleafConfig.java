@@ -1,5 +1,7 @@
 package com.winfo.config;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,8 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+
+import com.winfo.utils.Constants;
 
 /***
  * @author winfo References :: 1)
@@ -29,7 +33,8 @@ public class ThymeleafConfig {
 
 	private ITemplateResolver fileTemplateResolver() {
 		FileTemplateResolver templateResolver = new FileTemplateResolver();
-		templateResolver.setPrefix(env.getProperty("pyjab.template.path"));
+		templateResolver.setPrefix(System.getProperty(Constants.SYS_USER_HOME_PATH)
+				+ env.getProperty("pyjab.template.path").replace("/", File.separator));
 		templateResolver.setSuffix(".txt");
 		templateResolver.setTemplateMode(TemplateMode.TEXT);
 		templateResolver.setCharacterEncoding("UTF8");
