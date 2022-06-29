@@ -32,6 +32,12 @@ public class ExecutionAudit {
 	@Column(name = "EXECUTION_END_TIME")
 	private Date executionEndTime;
 
+	@Column(name = "EXECUTION_Start_Time", insertable = false, updatable = false)
+	private String execStartDate;
+
+	@Column(name = "EXECUTION_END_TIME", insertable = false, updatable = false)
+	private String execEndDate;
+
 	@Column(name = "STATUS")
 	private String status;
 
@@ -67,9 +73,7 @@ public class ExecutionAudit {
 	public void setScriptnumber(String scriptnumber) {
 		this.scriptNumber = scriptnumber;
 	}
-
-
-
+	
 	public Date getExecutionstarttime() {
 		return executionStartTime;
 	}
@@ -78,14 +82,28 @@ public class ExecutionAudit {
 		this.executionStartTime = executionstarttime;
 	}
 
-	
-
 	public Date getExecutionendtime() {
 		return executionEndTime;
 	}
 
 	public void setExecutionendtime(Date executionendtime) {
 		this.executionEndTime = executionendtime;
+	}
+
+	public String getExecStartDate() {
+		return execStartDate;
+	}
+
+	public void setExecStartDate(String execStartDate) {
+		this.execStartDate = execStartDate;
+	}
+
+	public String getExecEndDate() {
+		return execEndDate;
+	}
+
+	public void setExecEndDate(String execEndDate) {
+		this.execEndDate = execEndDate;
 	}
 
 	public String getStatus() {

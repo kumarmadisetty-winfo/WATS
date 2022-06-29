@@ -183,18 +183,16 @@ public class LimitScriptExecutionDao {
 					"Exception occured while updating the fail run count for script level pdf", e);
 		}
 	}
-	
-	public Long findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
+		
+	public List<String> findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<ExecutionAudit> from = cq.from(ExecutionAudit.class);
 		Predicate condition1 = cb.equal(from.get("testSetId"), executionAudit.getTestsetid());
 		Predicate condition2 = cb.equal(from.get("scriptId"), executionAudit.getScriptid());
 		Predicate condition3 = cb.equal(from.get("scriptNumber"), executionAudit.getScriptnumber());
-		Predicate condition4 = cb.equal(from.get("executionStartTime"), executionAudit.getExecutionstarttime());
-		Predicate condition = cb.and(condition1, condition2, condition3, condition4);
-		cq.select(cb.count(from)).where(condition);
-		return entityManager.createQuery(cq).getSingleResult();
-
+		Predicate condition = cb.and(condition1, condition2, condition3);
+		cq.select(from.get("execStartDate")).where(condition);
+		return entityManager.createQuery(cq).getResultList();
 	}
 }
