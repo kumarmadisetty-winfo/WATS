@@ -65,7 +65,7 @@ public class WatsPluginService {
 		master.setTest_script_status(mastervo.getTest_script_status());
 		master.setCreated_by(mastervo.getCreated_by());
 		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
-		master.setPlugin_flag(true);
+		master.setPluginFlag("true");
 		for(WatsPluginMetaDataVO metadatavo:mastervo.getMetaDataList()) {
 			ScriptMetaData metadata = new ScriptMetaData();
 			metadata.setAction(metadatavo.getAction());

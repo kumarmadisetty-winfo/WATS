@@ -82,7 +82,7 @@ public class CopyDataCustomerDao {
         	  String script_num=script_numbers.get(i);
         	  
   			
-        	Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority from ScriptMaster where script_number='"+script_num+"' and product_version='"+productVersionOld+"'");		
+        	Query query=session.createQuery("select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority,pluginFlag,targetApplication from ScriptMaster where script_number='"+script_num+"' and product_version='"+productVersionOld+"'");		
         	List<Object> result = (List<Object>) query.list();
         	Iterator itr6 = result.iterator();
         	Integer scriptId=null;
@@ -96,7 +96,7 @@ public class CopyDataCustomerDao {
  			   break;
  			   }
         	
-        	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name from ScriptMetaData where script_id="+scriptId);
+        	Query query1=session.createQuery("select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name,metadataInputValue from ScriptMetaData where script_id="+scriptId);
         	List<Object> result1 = (List<Object>) query1.list();
         	Iterator itr1 = result1.iterator();
 		List<FetchData> finalresult=new ArrayList<FetchData>();
@@ -251,8 +251,13 @@ public class CopyDataCustomerDao {
 				   master.setCreated_by(String.valueOf(obj[17]));
 			   }
 	           
-	        
-	           master.setCreation_date((Date) ( obj[18]));
+	           if(String.valueOf(obj[18]).equals("null")) {
+	        	   master.setCreation_date(null);
+	           }
+			   else {
+				   master.setCreation_date((Date) ( obj[18]));
+			   }
+	           
 	           if(String.valueOf(obj[19]).equals("null")) {
 	        	   master.setUpdated_by(null);
 	           }
@@ -260,7 +265,13 @@ public class CopyDataCustomerDao {
 				   master.setUpdated_by(String.valueOf(obj[19]));
 			   }
 	           
-	           master.setUpdate_date((Date )(obj[20]));
+	           if(String.valueOf(obj[20]).equals("null")) {
+	        	   master.setUpdate_date(null);
+	           }
+			   else {
+				   master.setUpdate_date((Date )(obj[20]));
+			   }
+	           
 	           if(String.valueOf(obj[21]).equals("null")) {
 	              
 	               master.setCustomer_id(null);
@@ -338,6 +349,18 @@ public class CopyDataCustomerDao {
 			   }
 	           
 	           master.setPriority(Integer.parseInt(String.valueOf(obj[33])));
+	           if(String.valueOf(obj[34]).equals("null")) {
+	        	   master.setPluginFlag(null);
+	           }
+			   else {
+				   master.setPluginFlag(String.valueOf(obj[34]));
+			   }
+	           if(String.valueOf(obj[35]).equals("null")) {
+	        	   master.setTargetApplication(null);
+	           }
+			   else {
+				   master.setTargetApplication(String.valueOf(obj[35]));
+			   }
 	           master.setAppr_for_migration(null); 
 			   
 			
@@ -449,7 +472,11 @@ public class CopyDataCustomerDao {
  		 else {
      metadata.setValidation_name(String.valueOf(obj1[16]));
  		 }
-
+			if (String.valueOf(obj1[17]).equals("null")) {
+				metadata.setMetadata_inputvalue("NA");
+				} else {
+				metadata.setMetadata_inputvalue(String.valueOf(obj1[17]));
+			}
 
 
           master.addMetadata(metadata);

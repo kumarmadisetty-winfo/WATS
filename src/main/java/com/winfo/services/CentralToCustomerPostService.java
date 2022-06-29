@@ -64,7 +64,7 @@ public class CentralToCustomerPostService {
 		master.setAttribute8(masterdata.getAttribute8());
 		master.setAttribute9(masterdata.getAttribute9());
 		master.setAttribute10(masterdata.getAttribute10());
-		
+		master.setTargetApplication(masterdata.getTargetApplication());
 		for(WatsMetaDataVO metadatavo:masterdata.getMetaDataList()) {
 			ScriptMetaData metadata = new ScriptMetaData();
 			metadata.setAction(metadatavo.getAction());
@@ -85,7 +85,7 @@ public class CentralToCustomerPostService {
 	            metadata.setUnique_mandatory(metadatavo.getUnique_mandatory());
 	            metadata.setValidation_type(metadatavo.getValidation_type());
 	            metadata.setValidation_name(metadatavo.getValidation_name());
-	          
+	            metadata.setMetadata_inputvalue(metadatavo.getMetadataInputValue());
 			master.addMetadata(metadata);
 			
 		}
