@@ -740,8 +740,8 @@ public class TestScriptExecService {
 				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.EISU,
 						e.getMessage());
 			}
-			dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(),
-					Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+//			dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(),
+//					Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(args.getTestSetId());
 			if (e instanceof WatsEBSCustomException) {
 				throw e;
