@@ -1,8 +1,6 @@
 package com.winfo.services;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,19 +11,12 @@ import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
-import javax.mail.internet.MimeMultipart;
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,21 +271,29 @@ public class LimitScriptExecutionService {
 	@Transactional
 	public boolean updateStatusCheck(FetchConfigVO fetchConfigVO, String testRunId, String scriptId,
 			String scriptNumber, String status) {
+		List<String> auditStartDate = null;
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy hh.mm.ss");
+		boolean isNotStartDate = true;
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
 			String testSetId = testRunId;
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
-			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
+			Date testLinesStartTime = fetchConfigVO.getStarttime();
 			executionAudit.setStatus(status);
-			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
-				return true;
+			auditStartDate = limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit);
+			for (String startDate : auditStartDate) {
+				Date execStartDate = formatter.parse(startDate);
+				if (execStartDate.equals(testLinesStartTime)) {
+					isNotStartDate = false;
+					break;
+				}
 			}
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while checking update status of Script Run", e);
 		}
-		return false;
+		return isNotStartDate;
 	}
 
 }
