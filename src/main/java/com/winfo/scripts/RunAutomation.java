@@ -1436,7 +1436,7 @@ public class RunAutomation {
 //					long diffHours = diff / (60 * 60 * 1000);
 //					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
 //					System.out.println("ExecutionTime "+ExecutionTime);
-//					i++;
+					
 //					if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.008")) {
 //						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath, true))) {
 //							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
@@ -1453,6 +1453,7 @@ public class RunAutomation {
 //						}
 //					}
 					// MetaData Webservice
+					i++;
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
