@@ -76,11 +76,22 @@ public class WatsMasterVO {
 	private String attribute10;
 	@JsonProperty("priority")
 	private Integer priority;
-	@JsonProperty("DEPENDENT_SCRIPT_NUM")
+	@JsonProperty("dependent_script_num")
     private String dependent_script_num;
+	@JsonProperty("target_application")
+    private String targetApplication;
 
 	@JsonProperty("MetaDataList")
 	private List<WatsMetaDataVO> MetaDataList= new ArrayList<WatsMetaDataVO>();
+
+	
+	public String getTargetApplication() {
+		return targetApplication;
+	}
+
+	public void setTargetApplication(String targetApplication) {
+		this.targetApplication = targetApplication;
+	}
 
 	public Integer getScript_id() {
 		return script_id;

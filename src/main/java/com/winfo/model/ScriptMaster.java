@@ -99,24 +99,35 @@ public class ScriptMaster {
     @Column(name = "APPR_FOR_MIGRATION")
     private String appr_for_migration;
     @Column(name = "PLUGIN_FLAG")
-    private Boolean plugin_flag;
+    private String pluginFlag;
+    @Column(name = "TARGET_APPLICATION")
+    private String targetApplication;
     
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "scriptMaster")
 
 	private List<ScriptMetaData> scriptMetaDatalist = new ArrayList<ScriptMetaData>();
 
+	
+	public String getPluginFlag() {
+		return pluginFlag;
+	}
+
+	public void setPluginFlag(String pluginFlag) {
+		this.pluginFlag = pluginFlag;
+	}
+
+	public String getTargetApplication() {
+		return targetApplication;
+	}
+
+	public void setTargetApplication(String targetApplication) {
+		this.targetApplication = targetApplication;
+	}
+
 	public void addMetadata(ScriptMetaData metadata) {
 		scriptMetaDatalist.add(metadata);
 		metadata.setScriptMaster(this);
-	}
-
-	public Boolean isPlugin_flag() {
-		return plugin_flag;
-	}
-
-	public void setPlugin_flag(Boolean plugin_flag) {
-		this.plugin_flag = plugin_flag;
 	}
 
 	public String getDependent_script_num() {
