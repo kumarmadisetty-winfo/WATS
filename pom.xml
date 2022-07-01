@@ -529,7 +529,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>dev</profiles>
+				<profiles>default,dev</profiles>
 				<instance>dev</instance>
 			</properties>
 		</profile>
@@ -608,7 +608,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>orange</profiles>
+				<profiles>default,orange</profiles>
 				<instance>orange</instance>
 			</properties>
 		</profile>
@@ -692,7 +692,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hub</profiles>
+				<profiles>default,hub</profiles>
 				<instance>hub</instance>
 			</properties>
 
@@ -776,7 +776,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>prd</profiles>
+				<profiles>default,prd</profiles>
 				<instance>prd</instance>
 
 
@@ -866,7 +866,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>dh</profiles>
+				<profiles>default,dh</profiles>
 				<instance>dh</instance>
 
 
@@ -955,7 +955,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>bennett</profiles>
+				<profiles>default,bennett</profiles>
 				<instance>bennett</instance>
 
 
@@ -1043,7 +1043,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>tst</profiles>
+				<profiles>default,tst</profiles>
 				<instance>tst</instance>
 
 
@@ -1123,7 +1123,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>hs2</profiles>
+				<profiles>default,hs2</profiles>
 				<instance>hs2</instance>
 			</properties>
 		</profile>
@@ -1207,7 +1207,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>wats</profiles>
+				<profiles>default,wats</profiles>
 				<instance>wats</instance>
 
 
@@ -1295,7 +1295,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>camden</profiles>
+				<profiles>default,camden</profiles>
 				<instance>camden</instance>
 
 
@@ -1383,7 +1383,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>lumentum</profiles>
+				<profiles>default,lumentum</profiles>
 				<instance>lumentum</instance>
 
 
@@ -1471,7 +1471,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>wats01</profiles>
+				<profiles>default,wats01</profiles>
 				<instance>wats01</instance>
 
 
@@ -1559,7 +1559,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>wats02</profiles>
+				<profiles>default,wats02</profiles>
 				<instance>wats02</instance>
 
 
@@ -1647,7 +1647,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>wats03</profiles>
+				<profiles>default,wats03</profiles>
 				<instance>wats03</instance>
 
 
@@ -1753,7 +1753,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>uat</profiles>
+				<profiles>default,uat</profiles>
 				<instance>uat</instance>
 			</properties>
 
@@ -1836,7 +1836,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>rep</profiles>
+				<profiles>default,rep</profiles>
 				<instance>rep</instance>
 			</properties>
 
@@ -1919,7 +1919,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>arlodev</profiles>
+				<profiles>default,arlodev</profiles>
 				<instance>arlodev</instance>
 			</properties>
 
@@ -2004,7 +2004,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>arlop</profiles>
+				<profiles>default,arlop</profiles>
 				<instance>arlop</instance>
 			</properties>
 
@@ -2088,7 +2088,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>udgs</profiles>
+				<profiles>default,udgs</profiles>
 				<instance>udgs</instance>
 			</properties>
 
@@ -2172,7 +2172,7 @@
 			<properties>
 				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 				<app.name>application</app.name>
-				<profiles>verisure</profiles>
+				<profiles>default,verisure</profiles>
 				<instance>verisure</instance>
 			</properties>
 
