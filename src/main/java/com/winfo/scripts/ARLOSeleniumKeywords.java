@@ -1885,7 +1885,7 @@ public  class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				
 				String TR = "Test Run Name";
 				String SN = "Script Number";
-				String SN1 = "Scenario name";
+				String SN1 = "Scenario Name";
 				String Scenarios1 = "Status ";
 				String EB = "Executed By" ;
 				String ST = "Start Time";
