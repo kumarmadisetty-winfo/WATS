@@ -2593,7 +2593,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -2650,7 +2650,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -2858,7 +2858,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -3524,7 +3524,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ",
+						Chunk inputparamchunk = new Chunk("Input Parameter: ",
 								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
@@ -3580,7 +3580,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ",
+						Chunk inputparamchunk = new Chunk("Input Parameter: ",
 								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
