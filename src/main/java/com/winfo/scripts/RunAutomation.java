@@ -829,31 +829,10 @@ public class RunAutomation {
 						        	
 							}
 						case "Dropdown Values":
-							if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-								
-								break;
-							} else {
-								break;
-							}
-//							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-//								try {
-//									if(checkValidScript.equalsIgnoreCase("Yes")) {
-//						        
-//						        		xpathPerformance.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
-//						        		break;  
-//									}
-//						              else {
-//								
-//						        	throw  new Exception("ScriptNotValid");
-//						              }
-//								  }
-//						        catch(Exception e) {
-//						        	seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
-//											fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-//						        	break;
-//						        }
-//						        	
-//							}
+							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							break;
+
 						case "Table SendKeys":
 							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 								try {
