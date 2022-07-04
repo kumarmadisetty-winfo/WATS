@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -670,9 +671,10 @@ public class RunAutomation {
 				Date Starttime = new Date();
 				try {
 					
-					if(fetchMetadataVO.getLine_number().equals(223)) {
-						System.out.println("hey");
-					}
+//					JavascriptExecutor jse = (JavascriptExecutor) driver;
+//					Object response = jse.executeScript("browserstack_executor: {\"action\": \"getSessionDetails\"}");
+//			        System.out.println(response);
+//			        System.out.println(jse.executeScript("browserstack_executor: {\"action\": \"fileExists\"}"));
 					
 					switch (actionName) {
 
@@ -968,6 +970,7 @@ public class RunAutomation {
 						        catch(Exception e) {
 						        	seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 											fetchConfigVO);
+						        	break;
 						        }
 						        	
 							}
