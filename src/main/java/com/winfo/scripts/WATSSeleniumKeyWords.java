@@ -2901,7 +2901,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if(inputParam!=null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
 							phraseinputParam.add(inputparamchunk);
@@ -2952,7 +2952,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if(inputParam!=null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
 							phraseinputParam.add(inputparamchunk);
@@ -3151,7 +3151,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if(inputParam!=null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
 							phraseinputParam.add(inputparamchunk);
@@ -3946,7 +3946,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if(inputParam!=null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
 						phraseinputParam.add(inputparamchunk);
@@ -4000,7 +4000,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if(inputParam!=null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
 						phraseinputParam.add(inputparamchunk);

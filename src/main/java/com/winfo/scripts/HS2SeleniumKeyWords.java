@@ -2591,7 +2591,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -2648,7 +2648,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -2738,7 +2738,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String TR = "Test Run Name";
 					String SN = "Script Number";
-					String SN1 = "Scenario name";
+					String SN1 = "Scenario Name";
 					String Scenarios1 = "Status ";
 					String EB = "Executed By";
 					String ST = "Start Time";
@@ -2856,7 +2856,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -3522,7 +3522,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ",
+						Chunk inputparamchunk = new Chunk("Input Parameter: ",
 								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
@@ -3578,7 +3578,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ",
+						Chunk inputparamchunk = new Chunk("Input Parameter: ",
 								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
