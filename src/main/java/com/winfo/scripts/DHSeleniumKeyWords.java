@@ -2593,7 +2593,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -2650,7 +2650,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -2740,7 +2740,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String TR = "Test Run Name";
 					String SN = "Script Number";
-					String SN1 = "Scenario name";
+					String SN1 = "Scenario Name";
 					String Scenarios1 = "Status ";
 					String EB = "Executed By";
 					String ST = "Start Time";
@@ -2858,7 +2858,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ",
+							Chunk inputparamchunk = new Chunk("Input Parameter: ",
 									FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
@@ -3524,7 +3524,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ",
+						Chunk inputparamchunk = new Chunk("Input Parameter: ",
 								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
@@ -3580,7 +3580,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ",
+						Chunk inputparamchunk = new Chunk("Input Parameter: ",
 								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
@@ -18122,7 +18122,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
 
-					+ 5 + "_" + fetchMetadataVO.getScenario_name() + "_"
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
 
 					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 

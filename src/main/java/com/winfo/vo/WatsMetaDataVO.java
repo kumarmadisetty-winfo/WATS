@@ -42,7 +42,15 @@ public class WatsMetaDataVO {
 	    private String validation_type;
 	    @JsonProperty( "validation_name")
 	    private String validation_name;
-
+	    @JsonProperty( "metadata_input_value")
+	    private String metadataInputValue;
+	    
+	public String getMetadataInputValue() {
+			return metadataInputValue;
+		}
+		public void setMetadataInputValue(String metadataInputValue) {
+			this.metadataInputValue = metadataInputValue;
+		}
 	public Integer getScript_meta_data_id() {
 		return script_meta_data_id;
 	}

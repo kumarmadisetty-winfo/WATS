@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -340,15 +341,19 @@ public class RunAutomation {
 							} else {
 								String passurl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 								String failurl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
 								String detailurl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
 								String scripturl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
 										+ fetchMetadataListVO.get(0).getSeq_num() + "_"
 										+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
@@ -410,15 +415,19 @@ public class RunAutomation {
 							} else {
 								String passurl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 								String failurl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
 								String detailurl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
 								String scripturl = fetchConfigVO.getImg_url()
 										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
+										+ fetchMetadataListVO.get(0).getProject_name() + "/"
 										+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
 										+ fetchMetadataListVO.get(0).getSeq_num() + "_"
 										+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
@@ -503,12 +512,16 @@ public class RunAutomation {
 
 		String script_id = fetchMetadataListVO.get(0).getScript_id();
 		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getProject_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getProject_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
 		String detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getProject_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
 		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListVO.get(0).getProject_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num() + "_"
 				+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
 		System.out.println(passurl);
@@ -587,12 +600,16 @@ public class RunAutomation {
 		try {
 			script_id = fetchMetadataListVO.get(0).getScript_id();
 			passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getProject_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
 			failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getProject_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
 			detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getProject_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
 			scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+					+ fetchMetadataListVO.get(0).getProject_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + fetchMetadataListVO.get(0).getSeq_num()
 					+ "_" + fetchMetadataListVO.get(0).getScript_number() + ".pdf";
 
@@ -654,9 +671,10 @@ public class RunAutomation {
 				Date Starttime = new Date();
 				try {
 					
-					if(fetchMetadataVO.getLine_number().equals(223)) {
-						System.out.println("hey");
-					}
+//					JavascriptExecutor jse = (JavascriptExecutor) driver;
+//					Object response = jse.executeScript("browserstack_executor: {\"action\": \"getSessionDetails\"}");
+//			        System.out.println(response);
+//			        System.out.println(jse.executeScript("browserstack_executor: {\"action\": \"fileExists\"}"));
 					
 					switch (actionName) {
 
@@ -813,31 +831,10 @@ public class RunAutomation {
 						        	
 							}
 						case "Dropdown Values":
-							if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-								
-								break;
-							} else {
-								break;
-							}
-//							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-//								try {
-//									if(checkValidScript.equalsIgnoreCase("Yes")) {
-//						        
-//						        		xpathPerformance.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
-//						        		break;  
-//									}
-//						              else {
-//								
-//						        	throw  new Exception("ScriptNotValid");
-//						              }
-//								  }
-//						        catch(Exception e) {
-//						        	seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
-//											fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-//						        	break;
-//						        }
-//						        	
-//							}
+							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							break;
+
 						case "Table SendKeys":
 							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 								try {
@@ -973,6 +970,7 @@ public class RunAutomation {
 						        catch(Exception e) {
 						        	seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 											fetchConfigVO);
+						        	break;
 						        }
 						        	
 							}
@@ -1420,7 +1418,7 @@ public class RunAutomation {
 //					long diffHours = diff / (60 * 60 * 1000);
 //					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
 //					System.out.println("ExecutionTime "+ExecutionTime);
-//					i++;
+					
 //					if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.008")) {
 //						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath, true))) {
 //							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
@@ -1437,6 +1435,7 @@ public class RunAutomation {
 //						}
 //					}
 					// MetaData Webservice
+					i++;
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
