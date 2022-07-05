@@ -121,7 +121,6 @@ import com.winfo.vo.UpdateScriptParamStatus;
 public class TestScriptExecService {
 
 	public final Logger logger = LogManager.getLogger(TestScriptExecService.class);
-	public static final String topic = "test-script-run";
 	private static final String PY_EXTN = ".py";
 	private static final String PNG_EXTENSION = ".png";
 	private static final String JPG_EXTENSION = ".jpg";
@@ -180,6 +179,9 @@ public class TestScriptExecService {
 
 	@Value("${pyjab.template.name}")
 	private String templateName;
+	
+	@Value("${kafka.topic.name.test.run}")
+	private String testScriptRunTopicName;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -297,7 +299,7 @@ public class TestScriptExecService {
 						"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 								+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
 								+ screenShotFolderPath);
-				this.kafkaTemp.send(topic,
+				this.kafkaTemp.send(testScriptRunTopicName,
 						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 			} catch (Exception e) {
@@ -1917,7 +1919,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	@KafkaListener(topics = "update-audit-logs", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
