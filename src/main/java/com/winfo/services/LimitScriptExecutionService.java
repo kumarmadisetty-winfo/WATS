@@ -279,31 +279,21 @@ public class LimitScriptExecutionService {
 	@Transactional
 	public boolean updateStatusCheck(FetchConfigVO fetchConfigVO, String testRunId, String scriptId,
 			String scriptNumber, String status) {
-		List<String> auditStartDate = null;
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy hh.mm.ss");
-		DateFormat df = new SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss");
-		boolean isNotStartDate = true;
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
 			String testSetId = testRunId;
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
-			String testLinesStartTime = df.format(df.parse(fetchConfigVO.getStarttime().toLocaleString()));
+			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
 			executionAudit.setStatus(status);
-			auditStartDate = limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit);
-			for (String startDate : auditStartDate) {
-				startDate = startDate.replace(":", ".");
-				String execStartDate = df.format(formatter.parse(startDate));
-				if (execStartDate.equals(testLinesStartTime)) {
-					isNotStartDate = false;
-					break;
-				}
+			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
+				return true;
 			}
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while checking update status of Script Run", e);
 		}
-		return isNotStartDate;
+		return false;
 	}
 
 }
