@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "WIN_TA_EXECUTION_AUDIT")
@@ -27,9 +29,11 @@ public class ExecutionAudit {
 	private String scriptNumber;
 
 	@Column(name = "EXECUTION_Start_Time")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date executionStartTime;
 
 	@Column(name = "EXECUTION_END_TIME")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date executionEndTime;
 
 	@Column(name = "STATUS")

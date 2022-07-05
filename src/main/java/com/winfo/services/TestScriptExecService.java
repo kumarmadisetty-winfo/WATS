@@ -534,7 +534,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	public void downloadScreenshotsFromObjectStore(String screenshotPath, String objectStoreScreenShotPath,
+	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
 		List<String> objNames = null;
@@ -549,11 +549,12 @@ public class TestScriptExecService {
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 				String seqnum = (seqNum == null) ? "" : seqNum;
-				
-				String objectStoreScreenshotPath = objectStoreScreenShotPath + FORWARD_SLASH + seqnum;
+
+				String objectStoreScreenShotPath = SCREENSHOT + BACK_SLASH + customerName + BACK_SLASH + testSetName
+						+ FORWARD_SLASH + seqnum;
 
 				ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).prefix(objectStoreScreenshotPath).delimiter("/").build();
+						.bucketName(ociBucketName).prefix(objectStoreScreenShotPath).delimiter("/").build();
 
 				/* Send request to the Client */
 				ListObjectsResponse response = client.listObjects(listObjectsRequest);
@@ -670,8 +671,8 @@ public class TestScriptExecService {
 
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
-			downloadScreenshotsFromObjectStore(screenShotFolderPath, objectStore,
-					testLinesDetails.get(0).getSeqNum() + "_");
+			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
+					customerDetails.getTestSetName(), testLinesDetails.get(0).getSeqNum() + "_");
 
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
@@ -778,8 +779,6 @@ public class TestScriptExecService {
 				+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 		createDir(screenShotFolderPath);
 		File folder = new File(screenShotFolderPath);
-		String objectStore = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName() + BACK_SLASH
-				+ customerDetails.getTestSetName();
 		Map<String, String> screenShotsMap = new HashMap<>();
 		for (ScriptDetailsDto scriptDetailsData : fetchMetadataListVOFinal) {
 			String seqNum = scriptDetailsData.getSeqNum();
@@ -809,7 +808,8 @@ public class TestScriptExecService {
 					screenShotName = value + "_" + FAILED + JPG_EXTENSION;
 				}
 				if (screenShotName == null) {
-					downloadScreenshotsFromObjectStore(screenShotFolderPath, objectStore, seqNum);
+					downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
+							customerDetails.getTestSetName(), seqNum);
 				}
 			}
 		}
