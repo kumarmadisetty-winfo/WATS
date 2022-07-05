@@ -655,9 +655,6 @@ public class TestScriptExecService {
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
-			String objectStore = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName() + BACK_SLASH
-					+ customerDetails.getTestSetName();
-
 			String scriptId = testLinesDetails.get(0).getScriptId();
 			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
 					+ customerDetails.getTestSetName() + File.separator + "Passed_Report.pdf" + "AAAparent="

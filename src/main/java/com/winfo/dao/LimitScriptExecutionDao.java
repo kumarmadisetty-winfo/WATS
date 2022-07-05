@@ -119,7 +119,7 @@ public class LimitScriptExecutionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		int failedScriptRunCount=id + 1;
+		int failedScriptRunCount = id + 1;
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
 					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
@@ -134,7 +134,7 @@ public class LimitScriptExecutionDao {
 	}
 
 	public void updateFaileScriptscount(String testSetLineId, String testSetId) {
-		int failedScriptRunCount=0;
+		int failedScriptRunCount = 0;
 		Session session = entityManager.unwrap(Session.class);
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
@@ -146,9 +146,8 @@ public class LimitScriptExecutionDao {
 			e.printStackTrace();
 		}
 
-		
 	}
-	
+
 	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT RUN_COUNT from WIN_TA_TEST_SET_LINES where TEST_SET_LINE_ID=" + testSetLineId
@@ -169,7 +168,7 @@ public class LimitScriptExecutionDao {
 		}
 		return id;
 	}
-	
+
 	public void updateFailScriptRunCount(int failedScriptRunCount, String testSetId, String testSetLineId) {
 		try {
 			Session session = entityManager.unwrap(Session.class);
@@ -183,16 +182,18 @@ public class LimitScriptExecutionDao {
 					"Exception occured while updating the fail run count for script level pdf", e);
 		}
 	}
-		
-	public List<String> findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
+
+	public Long findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 		Root<ExecutionAudit> from = cq.from(ExecutionAudit.class);
 		Predicate condition1 = cb.equal(from.get("testSetId"), executionAudit.getTestsetid());
 		Predicate condition2 = cb.equal(from.get("scriptId"), executionAudit.getScriptid());
 		Predicate condition3 = cb.equal(from.get("scriptNumber"), executionAudit.getScriptnumber());
-		Predicate condition = cb.and(condition1, condition2, condition3);
-		cq.select(from.get("execStartDate")).where(condition);
-		return entityManager.createQuery(cq).getResultList();
+		Predicate condition4 = cb.equal(from.get("executionStartTime"), executionAudit.getExecutionstarttime());
+		Predicate condition = cb.and(condition1, condition2, condition3, condition4);
+		cq.select(cb.count(from)).where(condition);
+		return entityManager.createQuery(cq).getSingleResult();
+
 	}
 }
