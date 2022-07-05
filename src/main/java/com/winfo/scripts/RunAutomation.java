@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -670,9 +671,10 @@ public class RunAutomation {
 				Date Starttime = new Date();
 				try {
 					
-					if(fetchMetadataVO.getLine_number().equals(223)) {
-						System.out.println("hey");
-					}
+//					JavascriptExecutor jse = (JavascriptExecutor) driver;
+//					Object response = jse.executeScript("browserstack_executor: {\"action\": \"getSessionDetails\"}");
+//			        System.out.println(response);
+//			        System.out.println(jse.executeScript("browserstack_executor: {\"action\": \"fileExists\"}"));
 					
 					switch (actionName) {
 
@@ -829,31 +831,10 @@ public class RunAutomation {
 						        	
 							}
 						case "Dropdown Values":
-							if (fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-								
-								break;
-							} else {
-								break;
-							}
-//							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
-//								try {
-//									if(checkValidScript.equalsIgnoreCase("Yes")) {
-//						        
-//						        		xpathPerformance.tableSendKeys(driver, param1, param2, param3, fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO, count);
-//						        		break;  
-//									}
-//						              else {
-//								
-//						        	throw  new Exception("ScriptNotValid");
-//						              }
-//								  }
-//						        catch(Exception e) {
-//						        	seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
-//											fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
-//						        	break;
-//						        }
-//						        	
-//							}
+							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+									fetchMetadataVO.getInput_value(), fetchMetadataVO, fetchConfigVO);
+							break;
+
 						case "Table SendKeys":
 							if(fetchMetadataVO.getInput_value() != null || fetchMetadataVO.getInput_value() == "") {
 								try {
@@ -989,6 +970,7 @@ public class RunAutomation {
 						        catch(Exception e) {
 						        	seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2, fetchMetadataVO.getInput_value(), fetchMetadataVO,
 											fetchConfigVO);
+						        	break;
 						        }
 						        	
 							}

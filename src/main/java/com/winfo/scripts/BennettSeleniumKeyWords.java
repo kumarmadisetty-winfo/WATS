@@ -2909,7 +2909,7 @@ public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if(inputParam!=null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
 							phraseinputParam.add(inputparamchunk);
@@ -2960,7 +2960,7 @@ public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if(inputParam!=null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
 							phraseinputParam.add(inputparamchunk);
@@ -3047,7 +3047,7 @@ public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					
 					String TR = "Test Run Name";
 					String SN = "Script Number";
-					String SN1 = "Scenario name";
+					String SN1 = "Scenario Name";
 					String Scenarios1 = "Status ";
 					String EB = "Executed By";
 					String ST = "Start Time";
@@ -3159,7 +3159,7 @@ public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						}
 
 						if(inputParam!=null) {
-							Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+							Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 							Phrase phraseinputParam = new Phrase();
 							phraseinputParam.add(inputparamchunk);
@@ -3955,7 +3955,7 @@ public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if(inputParam!=null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
 						phraseinputParam.add(inputparamchunk);
@@ -4009,7 +4009,7 @@ public class BennettSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					}
 
 					if(inputParam!=null) {
-						Chunk inputparamchunk = new Chunk("Input Prameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk inputparamchunk = new Chunk("Input Parameter: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
 						Phrase phraseinputParam = new Phrase();
 						phraseinputParam.add(inputparamchunk);
