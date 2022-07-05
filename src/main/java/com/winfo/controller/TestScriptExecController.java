@@ -61,7 +61,7 @@ public class TestScriptExecController {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
-	@KafkaListener(topics = "wats-not-reachable", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.wats.not.reachable}'.split(',')}", groupId = "wats-group")
 	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) throws Exception {
 		testScriptExecService.generateTestScriptLineIdReports(event);
 		event.setStage(AUDIT_TRAIL_STAGES.SU);

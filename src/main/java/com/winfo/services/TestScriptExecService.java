@@ -108,6 +108,7 @@ import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.utils.Constants.UPDATE_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.MessageQueueDto;
@@ -120,7 +121,6 @@ import com.winfo.vo.UpdateScriptParamStatus;
 public class TestScriptExecService {
 
 	public final Logger logger = LogManager.getLogger(TestScriptExecService.class);
-	public static final String topic = "test-script-run";
 	private static final String PY_EXTN = ".py";
 	private static final String PNG_EXTENSION = ".png";
 	private static final String JPG_EXTENSION = ".jpg";
@@ -179,6 +179,9 @@ public class TestScriptExecService {
 
 	@Value("${pyjab.template.name}")
 	private String templateName;
+	
+	@Value("${kafka.topic.name.test.run}")
+	private String testScriptRunTopicName;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -296,7 +299,7 @@ public class TestScriptExecService {
 						"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 								+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
 								+ screenShotFolderPath);
-				this.kafkaTemp.send(topic,
+				this.kafkaTemp.send(testScriptRunTopicName,
 						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 			} catch (Exception e) {
@@ -619,16 +622,16 @@ public class TestScriptExecService {
 	}
 
 	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto args) throws Exception {
+		String scriptStatus = null;
 		try {
-			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
-			if (scriptStatus == null) {
+			scriptStatus = dataBaseEntry.getScriptStatus(args.getTestSetLineId());
+			if (scriptStatus.equalsIgnoreCase(UPDATE_STATUS.IN_PROGRESS.getLabel())) {
 				if (args.isManualTrigger()) {
 					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
 				} else {
-					scriptStatus = false;
+					scriptStatus = UPDATE_STATUS.FAIL.getLabel();
 				}
 			}
-			args.setSuccess(scriptStatus);
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(), args.getTestSetLineId());
 			if (args.isManualTrigger() && testSetLine.getExecutionStartTime() == null) {
 				return new ResponseDto(500, Constants.ERROR,
@@ -644,7 +647,6 @@ public class TestScriptExecService {
 
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
 					args.getTestSetLineId(), false, false);
-			args.setSuccess(scriptStatus);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
@@ -691,7 +693,7 @@ public class TestScriptExecService {
 			String pdfName = null;
 			fetchConfigVO.setEndtime(enddate);
 			int failedScriptRunCount = 0;
-			if (args.isSuccess()) {
+			if (scriptStatus != null && scriptStatus.equalsIgnoreCase(UPDATE_STATUS.PASS.getLabel())) {
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber()
 						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
@@ -740,8 +742,9 @@ public class TestScriptExecService {
 				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.EISU,
 						e.getMessage());
 			}
-//			dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(),
-//					Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+			if (scriptStatus != null) {
+				dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(), scriptStatus);
+			}
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(args.getTestSetId());
 			if (e instanceof WatsEBSCustomException) {
 				throw e;
@@ -1715,7 +1718,6 @@ public class TestScriptExecService {
 		}
 	}
 
-
 	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, Date Starttime, Date endtime)
 			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
@@ -1917,7 +1919,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	@KafkaListener(topics = "update-audit-logs", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
