@@ -554,8 +554,8 @@ public class TestScriptExecService {
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 				String seqnum = (seqNum == null) ? "" : seqNum;
-
-				String objectStoreScreenShotPath = SCREENSHOT + BACK_SLASH + customerName + BACK_SLASH + testSetName
+				
+				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerName + FORWARD_SLASH + testSetName
 						+ FORWARD_SLASH + seqnum;
 
 				ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
