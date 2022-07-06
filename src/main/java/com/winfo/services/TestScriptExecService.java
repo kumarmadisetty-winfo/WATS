@@ -850,7 +850,9 @@ public class TestScriptExecService {
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
 		long totalDiff = 0;
 		for (Object[] date : startAndEndDates) {
-			totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
+			if (date[0] != null && date[1] != null) {
+				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
+			}
 		}
 
 		return DateUtils.convertMiliSecToDayFormat(totalDiff);
