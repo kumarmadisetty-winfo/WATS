@@ -2,6 +2,7 @@ package com.winfo.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.winfo.constants.DateConstants;
@@ -44,5 +45,12 @@ public class DateUtils {
 		String sec = (time = (diffInTime / 1000) % 60) > 0 ? time + "sec" : "";
 		
 		return days+hr+min+sec;
+	}
+	
+	public static Date trimMiliSecond(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 }
