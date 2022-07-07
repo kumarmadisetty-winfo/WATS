@@ -116,6 +116,7 @@ import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.UpdateScriptParamStatus;
+import com.winfo.vo.UpdateScriptStepStatus;
 
 @Service
 public class TestScriptExecService {
@@ -179,7 +180,7 @@ public class TestScriptExecService {
 
 	@Value("${pyjab.template.name}")
 	private String templateName;
-	
+
 	@Value("${kafka.topic.name.test.run}")
 	private String testScriptRunTopicName;
 
@@ -1653,6 +1654,21 @@ public class TestScriptExecService {
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.getLabel() : SCRIPT_PARAM_STATUS.FAIL.getLabel();
+		if (StringUtils.isBlank(args.getResult())) {
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+		} else {
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
+					args.getMessage());
+		}
+	}
+
+	public void updateScriptStepStatus(UpdateScriptStepStatus args) throws ClassNotFoundException, SQLException {
+		String status = SCRIPT_PARAM_STATUS.FAIL.getLabel();
+		if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+			status = SCRIPT_PARAM_STATUS.PASS.getLabel();
+		} else if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
+		}
 		if (StringUtils.isBlank(args.getResult())) {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
 		} else {
