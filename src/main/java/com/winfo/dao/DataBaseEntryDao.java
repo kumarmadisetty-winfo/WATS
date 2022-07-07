@@ -275,7 +275,7 @@ public class DataBaseEntryDao {
 	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
 			List<Integer> dependentList, String test_set_id) {
 		// TODO Auto-generated method stub
-		String sql = "Select script_id,dependency_tr from win_ta_test_set_lines where script_id in (:dependentList) and test_set_id = :test_set_id";
+		String sql = "Select script_id,dependency_tr from win_ta_test_set_lines where script_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
 		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList", dependentList)
 				.setParameter("test_set_id", test_set_id);
 
