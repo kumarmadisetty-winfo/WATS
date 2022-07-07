@@ -220,20 +220,19 @@ public class DataBaseEntry {
 	}
 
 	public String getScriptStatus(String testSetLineId) {
-			List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
-			if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
-				appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
-				return UPDATE_STATUS.FAIL.getLabel();
-			}
+		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
+			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
+			return UPDATE_STATUS.FAIL.getLabel();
+		}
 
-			if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
-					|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
-				return UPDATE_STATUS.FAIL.getLabel();
-			} else if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
-				return UPDATE_STATUS.IN_PROGRESS.getLabel();
-			} else {
-				return UPDATE_STATUS.PASS.getLabel();
-			}
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+			return UPDATE_STATUS.FAIL.getLabel();
+		} else {
+			return UPDATE_STATUS.PASS.getLabel();
+		}
 	}
 
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
