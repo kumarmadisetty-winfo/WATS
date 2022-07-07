@@ -626,13 +626,6 @@ public class TestScriptExecService {
 		String scriptStatus = null;
 		try {
 			scriptStatus = dataBaseEntry.getScriptStatus(args.getTestSetLineId());
-			if (scriptStatus.equalsIgnoreCase(UPDATE_STATUS.IN_PROGRESS.getLabel())) {
-				if (args.isManualTrigger()) {
-					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
-				} else {
-					scriptStatus = UPDATE_STATUS.FAIL.getLabel();
-				}
-			}
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(), args.getTestSetLineId());
 			if (args.isManualTrigger() && testSetLine.getExecutionStartTime() == null) {
 				return new ResponseDto(500, Constants.ERROR,
