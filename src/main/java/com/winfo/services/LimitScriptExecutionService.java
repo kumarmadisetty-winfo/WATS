@@ -97,11 +97,7 @@ public class LimitScriptExecutionService {
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
-			startDate = DateUtils.trimMiliSecond(startDate);
-
 			executionAudit.setExecutionstarttime(startDate);
-
-			endDate = DateUtils.trimMiliSecond(endDate);
 			executionAudit.setExecutionendtime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
