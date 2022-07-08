@@ -3,17 +3,14 @@ package com.winfo.dao;
 import java.math.BigDecimal;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
-import com.winfo.model.ScriptsData;
 import com.winfo.services.TestCaseDataService;
 
 @Repository
@@ -209,8 +205,7 @@ public class LimitScriptExecutionDao {
 			String sql1 = "select count(*) from WIN_TA_EXECUTION_AUDIT where test_set_id = "
 					+ executionAudit.getTestsetid() + " AND SCRIPT_ID = " + executionAudit.getScriptid()
 					+ " AND SCRIPT_NUMBER = '" + executionAudit.getScriptnumber()
-					+ "' AND to_char(EXECUTION_START_TIME,'YYYY-MM-DD HH24:MI:SS') = to_char(" + "TO_TIMESTAMP('"
-					+ startExecTime + "','YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')";
+					+ "' AND to_char(EXECUTION_START_TIME,'YYYY-MM-DD HH24:MI:SS') = '" + startExecTime + "'";
 
 			Query query = session.createSQLQuery(sql1);
 			count = (BigDecimal) query.getSingleResult();

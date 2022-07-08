@@ -46,11 +46,4 @@ public class DateUtils {
 		
 		return days+hr+min+sec;
 	}
-	
-	public static Date trimMiliSecond(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal.getTime();
-	}
 }
