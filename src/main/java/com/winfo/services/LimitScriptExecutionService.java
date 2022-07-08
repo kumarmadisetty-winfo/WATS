@@ -1,7 +1,6 @@
 package com.winfo.services;
 
 import java.io.File;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +28,7 @@ import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
+import com.winfo.utils.DateUtils;
 
 @Service
 @RefreshScope
@@ -97,13 +97,18 @@ public class LimitScriptExecutionService {
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
+			startDate = DateUtils.trimMiliSecond(startDate);
+
 			executionAudit.setExecutionstarttime(startDate);
+
+			endDate = DateUtils.trimMiliSecond(endDate);
 			executionAudit.setExecutionendtime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
 			System.out.println("data added successfully");
 			log.info("data added successfully");
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("testrun data not added " + e);
 			log.error("testrun data not added " + e);
 		}
@@ -287,7 +292,7 @@ public class LimitScriptExecutionService {
 			executionAudit.setScriptnumber(scriptNumber);
 			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
 			executionAudit.setStatus(status);
-			if (limitScriptExecutionDao.findCountOfExecAuditRecords(executionAudit) == 0) {
+			if (limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit).longValue() == 0) {
 				return true;
 			}
 		} catch (Exception e) {

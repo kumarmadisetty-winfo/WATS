@@ -1,6 +1,9 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +53,6 @@ public class LimitScriptExecutionDao {
 	public void insertTestrundata(ExecutionAudit executionAudit) {
 		logger.info("executionAudit savaed");
 		entityManager.persist(executionAudit);
-
 	}
 
 	public int getPassedScriptsCount(String startDate, String endDate) {
@@ -196,4 +199,25 @@ public class LimitScriptExecutionDao {
 		return entityManager.createQuery(cq).getSingleResult();
 
 	}
+
+	public BigDecimal findCountsOfExecAuditRecords(ExecutionAudit executionAudit) {
+		BigDecimal count = null;
+		Format sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startExecTime = sdf.format(executionAudit.getExecutionstarttime());
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			String sql1 = "select count(*) from WIN_TA_EXECUTION_AUDIT where test_set_id = "
+					+ executionAudit.getTestsetid() + " AND SCRIPT_ID = " + executionAudit.getScriptid()
+					+ " AND SCRIPT_NUMBER = '" + executionAudit.getScriptnumber()
+					+ "' AND to_char(EXECUTION_START_TIME,'YYYY-MM-DD HH24:MI:SS') = to_char(" + "TO_TIMESTAMP('"
+					+ startExecTime + "','YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')";
+
+			Query query = session.createSQLQuery(sql1);
+			count = (BigDecimal) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 }
