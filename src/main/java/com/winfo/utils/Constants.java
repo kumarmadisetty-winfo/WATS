@@ -47,6 +47,20 @@ public class Constants {
 			return this.label;
 		}
 	}
+	
+	public enum UPDATE_STATUS {
+		PASS("Pass"), FAIL("Fail"),  IN_PROGRESS("IN-PROGRESS");
+
+		public final String label;
+
+		private UPDATE_STATUS(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return this.label;
+		}
+	}
 
 	public enum BOOLEAN_STATUS {
 		TRUE("Y"), FALSE("N");

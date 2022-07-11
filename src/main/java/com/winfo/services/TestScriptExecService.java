@@ -108,6 +108,7 @@ import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.utils.Constants.UPDATE_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.MessageQueueDto;
@@ -115,11 +116,14 @@ import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.UpdateScriptParamStatus;
+import com.winfo.vo.UpdateScriptStepStatus;
 
 @Service
 public class TestScriptExecService {
 
 	public final Logger logger = LogManager.getLogger(TestScriptExecService.class);
+
+	public static final String BACK_SLASH = "\\\\";
 	public static final String topic = "test-script-run";
 	private static final String PY_EXTN = ".py";
 	private static final String PNG_EXTENSION = ".png";
@@ -147,6 +151,7 @@ public class TestScriptExecService {
 	private static final String TEST_VALUE = "Test Value : ";
 	private static final String SCENARIO_NAME = "Scenario Name";
 	private static final String STEP_NO = "Step No : ";
+	private static final String SCREENSHOT = "Screenshot";
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
@@ -179,6 +184,9 @@ public class TestScriptExecService {
 
 	@Value("${pyjab.template.name}")
 	private String templateName;
+
+	@Value("${kafka.topic.name.test.run}")
+	private String testScriptRunTopicName;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -242,9 +250,8 @@ public class TestScriptExecService {
 				System.out.println(
 						"Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
 
-				String screenShotFolderPath = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-						+ fetchMetadataListVO.get(0).getCustomer_name() + "\\\\"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\\\";
+				String screenShotFolderPath = SCREENSHOT + BACK_SLASH + fetchMetadataListVO.get(0).getCustomer_name()
+						+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH;
 
 				for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 
@@ -296,7 +303,7 @@ public class TestScriptExecService {
 						"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 								+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
 								+ screenShotFolderPath);
-				this.kafkaTemp.send(topic,
+				this.kafkaTemp.send(testScriptRunTopicName,
 						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 			} catch (Exception e) {
@@ -533,8 +540,8 @@ public class TestScriptExecService {
 		}
 	}
 
-	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testRunName,
-			String objectStoreScreenShotPath, String seqNum) {
+	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
+			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
 		List<String> objNames = null;
 		try {
@@ -548,11 +555,12 @@ public class TestScriptExecService {
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 				String seqnum = (seqNum == null) ? "" : seqNum;
-				String objectStoreScreenshotPath = objectStoreScreenShotPath + customerName + FORWARD_SLASH
-						+ testRunName + FORWARD_SLASH + seqnum;
+				
+				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerName + FORWARD_SLASH + testSetName
+						+ FORWARD_SLASH + seqnum;
 
 				ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).prefix(objectStoreScreenshotPath).delimiter("/").build();
+						.bucketName(ociBucketName).prefix(objectStoreScreenShotPath).delimiter("/").build();
 
 				/* Send request to the Client */
 				ListObjectsResponse response = client.listObjects(listObjectsRequest);
@@ -619,16 +627,9 @@ public class TestScriptExecService {
 	}
 
 	public ResponseDto generateTestScriptLineIdReports(MessageQueueDto args) throws Exception {
+		String scriptStatus = null;
 		try {
-			Boolean scriptStatus = dataBaseEntry.checkAllStepsStatusForAScript(args.getTestSetLineId());
-			if (scriptStatus == null) {
-				if (args.isManualTrigger()) {
-					return new ResponseDto(200, Constants.WARNING, "Script Run In Progress");
-				} else {
-					scriptStatus = false;
-				}
-			}
-			args.setSuccess(scriptStatus);
+			scriptStatus = dataBaseEntry.getScriptStatus(args.getTestSetLineId());
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(), args.getTestSetLineId());
 			if (args.isManualTrigger() && testSetLine.getExecutionStartTime() == null) {
 				return new ResponseDto(500, Constants.ERROR,
@@ -644,16 +645,9 @@ public class TestScriptExecService {
 
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
 					args.getTestSetLineId(), false, false);
-			args.setSuccess(scriptStatus);
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
-			String objectStore = fetchConfigVO.getScreenshot_path();
-			String[] arrOfStr = objectStore.split(FORWARD_SLASH, 5);
-			StringBuilder objectStoreScreenShotPath = new StringBuilder(arrOfStr[3]);
-			for (int i = 4; i < arrOfStr.length; i++) {
-				objectStoreScreenShotPath.append(FORWARD_SLASH + arrOfStr[i]);
-			}
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
 			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
@@ -673,8 +667,7 @@ public class TestScriptExecService {
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
-					customerDetails.getTestSetName(), objectStoreScreenShotPath.toString(),
-					testLinesDetails.get(0).getSeqNum() + "_");
+					customerDetails.getTestSetName(), testLinesDetails.get(0).getSeqNum() + "_");
 
 			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
 					failurl, detailurl, scripturl);
@@ -691,7 +684,7 @@ public class TestScriptExecService {
 			String pdfName = null;
 			fetchConfigVO.setEndtime(enddate);
 			int failedScriptRunCount = 0;
-			if (args.isSuccess()) {
+			if (scriptStatus != null && scriptStatus.equalsIgnoreCase(UPDATE_STATUS.PASS.getLabel())) {
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber()
 						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
@@ -740,8 +733,9 @@ public class TestScriptExecService {
 				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.EISU,
 						e.getMessage());
 			}
-//			dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(),
-//					Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+			if (scriptStatus != null) {
+				dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(), scriptStatus);
+			}
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(args.getTestSetId());
 			if (e instanceof WatsEBSCustomException) {
 				throw e;
@@ -781,12 +775,6 @@ public class TestScriptExecService {
 				+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 		createDir(screenShotFolderPath);
 		File folder = new File(screenShotFolderPath);
-		String objectStore = fetchConfigVO.getScreenshot_path();
-		String[] arrOfStr = objectStore.split(FORWARD_SLASH, 5);
-		StringBuilder objectStoreScreenShotPath = new StringBuilder(arrOfStr[3]);
-		for (int i = 4; i < arrOfStr.length; i++) {
-			objectStoreScreenShotPath.append(FORWARD_SLASH + arrOfStr[i]);
-		}
 		Map<String, String> screenShotsMap = new HashMap<>();
 		for (ScriptDetailsDto scriptDetailsData : fetchMetadataListVOFinal) {
 			String seqNum = scriptDetailsData.getSeqNum();
@@ -817,7 +805,7 @@ public class TestScriptExecService {
 				}
 				if (screenShotName == null) {
 					downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
-							customerDetails.getTestSetName(), objectStoreScreenShotPath.toString(), seqNum);
+							customerDetails.getTestSetName(), seqNum);
 				}
 			}
 		}
@@ -856,7 +844,9 @@ public class TestScriptExecService {
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
 		long totalDiff = 0;
 		for (Object[] date : startAndEndDates) {
-			totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
+			if (date[0] != null && date[1] != null) {
+				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
+			}
 		}
 
 		return DateUtils.convertMiliSecToDayFormat(totalDiff);
@@ -1658,6 +1648,21 @@ public class TestScriptExecService {
 		}
 	}
 
+	public void updateScriptStepStatus(UpdateScriptStepStatus args) throws ClassNotFoundException, SQLException {
+		String status = SCRIPT_PARAM_STATUS.FAIL.getLabel();
+		if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+			status = SCRIPT_PARAM_STATUS.PASS.getLabel();
+		} else if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
+		}
+		if (StringUtils.isBlank(args.getResult())) {
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+		} else {
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
+					args.getMessage());
+		}
+	}
+
 	public String getCopiedValue(String copyPath) {
 		String copynumberValue;
 		String[] arrOfStr = copyPath.split(">", 5);
@@ -1714,7 +1719,6 @@ public class TestScriptExecService {
 			return new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
 	}
-
 
 	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, Date Starttime, Date endtime)
@@ -1917,7 +1921,7 @@ public class TestScriptExecService {
 		}
 	}
 
-	@KafkaListener(topics = "update-audit-logs", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}

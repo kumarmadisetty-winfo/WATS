@@ -1,13 +1,14 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
-import com.winfo.model.ScriptsData;
 import com.winfo.services.TestCaseDataService;
 
 @Repository
@@ -49,7 +49,6 @@ public class LimitScriptExecutionDao {
 	public void insertTestrundata(ExecutionAudit executionAudit) {
 		logger.info("executionAudit savaed");
 		entityManager.persist(executionAudit);
-
 	}
 
 	public int getPassedScriptsCount(String startDate, String endDate) {
@@ -119,7 +118,7 @@ public class LimitScriptExecutionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		int failedScriptRunCount=id + 1;
+		int failedScriptRunCount = id + 1;
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
 					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
@@ -134,7 +133,7 @@ public class LimitScriptExecutionDao {
 	}
 
 	public void updateFaileScriptscount(String testSetLineId, String testSetId) {
-		int failedScriptRunCount=0;
+		int failedScriptRunCount = 0;
 		Session session = entityManager.unwrap(Session.class);
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
@@ -146,9 +145,8 @@ public class LimitScriptExecutionDao {
 			e.printStackTrace();
 		}
 
-		
 	}
-	
+
 	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT RUN_COUNT from WIN_TA_TEST_SET_LINES where TEST_SET_LINE_ID=" + testSetLineId
@@ -169,7 +167,7 @@ public class LimitScriptExecutionDao {
 		}
 		return id;
 	}
-	
+
 	public void updateFailScriptRunCount(int failedScriptRunCount, String testSetId, String testSetLineId) {
 		try {
 			Session session = entityManager.unwrap(Session.class);
@@ -183,16 +181,38 @@ public class LimitScriptExecutionDao {
 					"Exception occured while updating the fail run count for script level pdf", e);
 		}
 	}
-		
-	public List<String> findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
+
+	public Long findCountOfExecAuditRecords(ExecutionAudit executionAudit) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 		Root<ExecutionAudit> from = cq.from(ExecutionAudit.class);
 		Predicate condition1 = cb.equal(from.get("testSetId"), executionAudit.getTestsetid());
 		Predicate condition2 = cb.equal(from.get("scriptId"), executionAudit.getScriptid());
 		Predicate condition3 = cb.equal(from.get("scriptNumber"), executionAudit.getScriptnumber());
-		Predicate condition = cb.and(condition1, condition2, condition3);
-		cq.select(from.get("execStartDate")).where(condition);
-		return entityManager.createQuery(cq).getResultList();
+		Predicate condition4 = cb.equal(from.get("executionStartTime"), executionAudit.getExecutionstarttime());
+		Predicate condition = cb.and(condition1, condition2, condition3, condition4);
+		cq.select(cb.count(from)).where(condition);
+		return entityManager.createQuery(cq).getSingleResult();
+
 	}
+
+	public BigDecimal findCountsOfExecAuditRecords(ExecutionAudit executionAudit) {
+		BigDecimal count = null;
+		Format sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startExecTime = sdf.format(executionAudit.getExecutionstarttime());
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			String sql1 = "select count(*) from WIN_TA_EXECUTION_AUDIT where test_set_id = "
+					+ executionAudit.getTestsetid() + " AND SCRIPT_ID = " + executionAudit.getScriptid()
+					+ " AND SCRIPT_NUMBER = '" + executionAudit.getScriptnumber()
+					+ "' AND to_char(EXECUTION_START_TIME,'YYYY-MM-DD HH24:MI:SS') = '" + startExecTime + "'";
+
+			Query query = session.createSQLQuery(sql1);
+			count = (BigDecimal) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 }

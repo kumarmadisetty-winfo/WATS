@@ -27,6 +27,7 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
+import com.winfo.utils.Constants.UPDATE_STATUS;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
 import com.winfo.vo.ScriptDetailsDto;
@@ -218,20 +219,19 @@ public class DataBaseEntry {
 		return dao.getScript(Long.valueOf(testSetId), Long.valueOf(testSetLineId));
 	}
 
-	public Boolean checkAllStepsStatusForAScript(String testSetLineId) {
+	public String getScriptStatus(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
 			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
-			return false;
+			return UPDATE_STATUS.FAIL.getLabel();
 		}
 
 		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)
-				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
-			return false;
-		} else if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
-			return null;
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)
+				|| result.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+			return UPDATE_STATUS.FAIL.getLabel();
 		} else {
-			return true;
+			return UPDATE_STATUS.PASS.getLabel();
 		}
 	}
 
@@ -412,5 +412,5 @@ public class DataBaseEntry {
 	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
 		return dao.findStartAndEndTimeForTestRun(testRunId, scriptStatus);
 	}
-	
+
 }
