@@ -1,6 +1,5 @@
 package com.winfo.controller;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.validation.Valid;
@@ -14,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lowagie.text.DocumentException;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.ResponseDto;
-import com.winfo.vo.TestScriptDto;
 import com.winfo.vo.UpdateScriptParamStatus;
+import com.winfo.vo.UpdateScriptStepStatus;
 
 @Controller
 public class TestScriptExecController {
@@ -39,6 +37,7 @@ public class TestScriptExecController {
 //
 //		return status;
 //	}
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStartScriptStatus")
@@ -61,7 +60,7 @@ public class TestScriptExecController {
 		return testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
-	@KafkaListener(topics = "wats-not-reachable", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.wats.not.reachable}'.split(',')}", groupId = "wats-group")
 	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) throws Exception {
 		testScriptExecService.generateTestScriptLineIdReports(event);
 		event.setStage(AUDIT_TRAIL_STAGES.SU);
@@ -73,6 +72,13 @@ public class TestScriptExecController {
 	public void updateScriptParamStatus(@Valid @RequestBody UpdateScriptParamStatus args)
 			throws ClassNotFoundException, SQLException {
 		testScriptExecService.updateScriptParamStatus(args);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/updateScriptStepStatus")
+	public void updateScriptStepStatus(@Valid @RequestBody UpdateScriptStepStatus args)
+			throws ClassNotFoundException, SQLException {
+		testScriptExecService.updateScriptStepStatus(args);
 	}
 
 	@ResponseBody

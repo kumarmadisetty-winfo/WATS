@@ -22,7 +22,6 @@ public class MessageQueueDto implements Serializable {
 	@NotNull
 	private String testSetLineId;
 	private String scriptPath;
-	private boolean success;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private Date startDate;
 	private boolean manualTrigger;
@@ -63,14 +62,6 @@ public class MessageQueueDto implements Serializable {
 
 	public void setScriptPath(String scriptPath) {
 		this.scriptPath = scriptPath;
-	}
-
-	public boolean isSuccess() {
-		return success;
-	}
-
-	public void setSuccess(boolean success) {
-		this.success = success;
 	}
 
 	public Date getStartDate() {
