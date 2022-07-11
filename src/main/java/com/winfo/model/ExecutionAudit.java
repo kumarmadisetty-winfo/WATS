@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 public class ExecutionAudit {
 	@Id
 	@Column(name = "EXECUTION_AUDIT_ID")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int executionAuditId;
 
 	@Column(name = "TEST_SET_ID")
@@ -36,16 +36,9 @@ public class ExecutionAudit {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date executionEndTime;
 
-	@Column(name = "EXECUTION_Start_Time", insertable = false, updatable = false)
-	private String execStartDate;
-
-	@Column(name = "EXECUTION_END_TIME", insertable = false, updatable = false)
-	private String execEndDate;
-
 	@Column(name = "STATUS")
 	private String status;
 
-	
 	public int getExecutionAuditId() {
 		return executionAuditId;
 	}
@@ -77,7 +70,7 @@ public class ExecutionAudit {
 	public void setScriptnumber(String scriptnumber) {
 		this.scriptNumber = scriptnumber;
 	}
-	
+
 	public Date getExecutionstarttime() {
 		return executionStartTime;
 	}
@@ -92,22 +85,6 @@ public class ExecutionAudit {
 
 	public void setExecutionendtime(Date executionendtime) {
 		this.executionEndTime = executionendtime;
-	}
-
-	public String getExecStartDate() {
-		return execStartDate;
-	}
-
-	public void setExecStartDate(String execStartDate) {
-		this.execStartDate = execStartDate;
-	}
-
-	public String getExecEndDate() {
-		return execEndDate;
-	}
-
-	public void setExecEndDate(String execEndDate) {
-		this.execEndDate = execEndDate;
 	}
 
 	public String getStatus() {
