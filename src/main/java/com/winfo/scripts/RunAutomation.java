@@ -379,6 +379,7 @@ public class RunAutomation {
 				executeTestrunVo.setStatusDescr("SUCCESS");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				System.out.println("Exception in dependant block of code");
 				Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
