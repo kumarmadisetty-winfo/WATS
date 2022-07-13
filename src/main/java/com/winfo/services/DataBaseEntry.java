@@ -382,7 +382,28 @@ public class DataBaseEntry {
 			return false;
 		}
 	}
+	
+	@Transactional
+	public boolean checkRunStatusOfTestRunLevelDependantScript(String testSetId, Integer testSetLineId) {
+		TestSetLine testLines = dao.checkTestSetLinesByTestSetLineId(Integer.valueOf(testSetId),testSetLineId);
 
+		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
+				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			testLines = dao.checkTestSetLinesByTestSetLineId(Integer.valueOf(testSetId), testSetLineId);
+
+		}
+
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public void updateSubscription() {
 		List<Object[]> noOfHits = dao.getSumDetailsFromSubscription();
 		List<Object[]> subscriptionDtls = dao.getSubscriptionDetails();

@@ -297,7 +297,6 @@ public class DataBaseEntryDao {
 
 	public void getStatus(Integer dependentScriptNo, Integer testSetId, Map<Integer, Status> scriptStatus,
 			int testRunDependencyCount) {
-		// TODO Auto-generated method stub
 		String sq1;
 		if (testRunDependencyCount > 0) {
 			sq1 = "select status from win_ta_test_set_lines where test_set_id=:test_set_id and test_set_line_id=:dependentScriptNo";
@@ -517,6 +516,23 @@ public class DataBaseEntryDao {
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
 		Predicate condition1 = cb.equal(from.get("scriptId"), scriptId);
+		Predicate condition2 = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
+		Predicate condition = cb.and(condition1, condition2);
+		cq.where(condition);
+		Query query = em.createQuery(cq);
+		TestSetLine result = (TestSetLine) query.getSingleResult();
+		em.refresh(result);
+
+		return result;
+	}
+	
+	public TestSetLine checkTestSetLinesByTestSetLineId(int testSetId, int testSetLineId) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+
+		Predicate condition1 = cb.equal(from.get("testRunScriptId"), testSetLineId);
 		Predicate condition2 = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
 		Predicate condition = cb.and(condition1, condition2);
 		cq.where(condition);
