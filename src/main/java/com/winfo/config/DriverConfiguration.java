@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jfree.util.Log;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -25,12 +27,15 @@ import com.winfo.services.FetchConfigVO;
 @Component
 @RefreshScope
 public class DriverConfiguration {
+	
+	public final Logger logger = LogManager.getLogger(DriverConfiguration.class);
 
 	@Value("${configvO.config_url}")
 	private String config_url;
 
 	@SuppressWarnings("deprecation")
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
+		logger.info("Start of get web driver method");
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
@@ -50,7 +55,7 @@ public class DriverConfiguration {
 																										// Files
 																										// (x86)\\Google\\Chrome\\Application\\chrome.exe");
 			} else {
-				System.out.println("linex location");
+				System.out.println("linux location");
 				options.setBinary("/usr/bin/google-chrome");
 			}
 
@@ -83,7 +88,7 @@ public class DriverConfiguration {
 			driver = new InternetExplorerDriver();
 		}
 		if (driver != null) {
-			System.out.println("Browser launched...");
+			logger.info("Browser launched...");
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		}
