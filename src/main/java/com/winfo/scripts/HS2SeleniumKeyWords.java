@@ -18730,6 +18730,36 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+		
+		try {
+
+			if (inputParam1.equalsIgnoreCase("Purchase Order")) {
+				Thread.sleep(5000);
+				WebElement webElement = driver
+						.findElement(By.xpath("//label[text()='" + inputParam1 + "']/following::a[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(webElement).build().perform();
+				String stringToSearch = webElement.getText();
+				System.out.println(stringToSearch);
+				value = copyValuesWithSpc(stringToSearch);
+				// value = copyValuesWithSpc(webElement);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//label[text()='inputParam1']/following::a[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+				log.info("Sucessfully Clicked copynumber" + scripNumber);
+				return value;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+		}
 
 		// Dh 611
 		try {
