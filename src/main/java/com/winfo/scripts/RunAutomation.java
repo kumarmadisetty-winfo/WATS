@@ -316,9 +316,16 @@ public class RunAutomation {
 						log.info(" Running Dependent - " + metaData.getKey());
 						executordependent.execute(() -> {
 							log.info(" Running Dependent in executor - " + metaData.getKey());
-							boolean run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(args,
-									metaData.getValue().get(0).getDependencyScriptNumber());
+							boolean run;
+							if (testRunDependencyCount > 0) {
+								run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(args,
+										metaData.getValue().get(0).getDependencyScriptNumber());
+							} else {
+								run = dataBaseEntry.checkRunStatusOfDependantScript(args,
+										metaData.getValue().get(0).getDependencyScriptNumber().toString());
+							}
 							log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
+							
 							try {
 								String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
 								if (flag.equalsIgnoreCase("STOPPED")) {
