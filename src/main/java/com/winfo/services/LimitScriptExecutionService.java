@@ -288,7 +288,8 @@ public class LimitScriptExecutionService {
 			executionAudit.setScriptnumber(scriptNumber);
 			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
 			executionAudit.setStatus(status);
-			if (limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit).longValue() == 0) {
+			if (limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit) != null
+					&& limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit).longValue() == 0) {
 				return true;
 			}
 		} catch (Exception e) {

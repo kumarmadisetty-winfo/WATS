@@ -418,13 +418,14 @@ public class RunAutomation {
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
+		List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
+
 		try {
 			driver = driverConfiguration.getWebDriver(fetchConfigVO);
 			isDriverError = false;
-			List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 		} catch (Exception e) {
-			log.info("Exception occured while running script - {} ", fetchMetadataListVO.get(0).getScript_number());
+			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScript_number());
 			e.printStackTrace();
 			if (isDriverError) {
 				FetchScriptVO post = new FetchScriptVO();
@@ -440,7 +441,7 @@ public class RunAutomation {
 				failList.add(scriptId);
 			}
 		} finally {
-			log.info("Execution is completed for script  - {}", fetchMetadataListVO.get(0).getScript_number());
+			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScript_number());
 			if (driver != null) {
 				driver.quit();
 			}
