@@ -66,7 +66,28 @@ public class WatsXpathDao {
 			return null;
 		}
 	}
+	
+	public Timestamp executionEndDate(String scriptID) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql="select CAST(EXECUTION_START_TIME AS DATE)  from WIN_TA_TEST_SET_LINES where script_id=:scriptID and status='Pass' order by EXECUTION_END_TIME desc fetch first 1 rows only";
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setParameter("scriptID", scriptID);
+		List results = query.list();
+		System.out.println("results1:;:"+results);
+		if(!results.isEmpty()) {
+			java.sql.Timestamp  obj= (java.sql.Timestamp)results.get(0);
+//		    java.sql.Timestamp ts2 = java.sql.Timestamp.valueOf("2005-04-06 09:01:10");
 
+//			  Timestamp ts=new Timestamp(obj);  
+           //   Date date=new Date(obj.getTime()); 
+			System.out.println("executionDate::::::"+obj);
+			return obj;
+		}
+		else {
+			return null;
+		}
+	}
+	
 	public Timestamp scriptUpdateDate(String scriptID) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql="select update_date from win_ta_script_metadata where script_id=:scriptID order by update_date desc fetch first 1 rows only";
