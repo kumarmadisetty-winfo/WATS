@@ -33,7 +33,7 @@ public class ScriptXpathService {
 		  long l1 = executionStartDate.getTime();
 		    long l2 = scriptUpdateDate.getTime();
 		    long l3 = executionEndDate.getTime();
-		    if (l1 > l2 && l2==l3)
+		    if (l1 > l2 || l2==l3)
 		    	status= "Yes";
 		    else 
 		    	status= "No";

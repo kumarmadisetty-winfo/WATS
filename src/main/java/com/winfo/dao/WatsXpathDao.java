@@ -69,7 +69,7 @@ public class WatsXpathDao {
 	
 	public Timestamp executionEndDate(String scriptID) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql="select CAST(EXECUTION_START_TIME AS DATE)  from WIN_TA_TEST_SET_LINES where script_id=:scriptID and status='Pass' order by EXECUTION_END_TIME desc fetch first 1 rows only";
+		String sql="select CAST(EXECUTION_END_TIME AS DATE)  from WIN_TA_TEST_SET_LINES where script_id=:scriptID and status='Pass' order by EXECUTION_END_TIME desc fetch first 1 rows only";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("scriptID", scriptID);
 		List results = query.list();
