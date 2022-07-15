@@ -52,6 +52,8 @@ import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 //import blank.FFmpegFrameRecorder;
 //import blank.IplImage;
 //import blank.OpenCVFrameConverter;
@@ -73,13 +75,11 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 //import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -131,6 +131,7 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
+import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
@@ -3417,8 +3418,8 @@ public class ORANGESeleniumKeyWords implements SeleniumKeyWordsInterface {
 					System.out.println("error message is not there");
 				}
 
-				String stepDescription = map.get(Reason).getTestRunParamDesc();				
-				String inputParam = map.get(Reason).getInputParameter();			
+				String stepDescription = map.get(Reason).getTestRunParamDesc();
+				String inputParam = map.get(Reason).getInputParameter();
 				String inputValue = map.get(Reason).getInputValue();
 
 				// String message = "Failed at
@@ -18829,6 +18830,33 @@ public class ORANGESeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public String copytext(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
+
+		try {
+			Thread.sleep(5000);
+
+			WebElement webElement = driver.findElement(By.xpath(
+					("(//a[contains(text(),'OBS_GL_JOURNALIMPOR')]/following::*[text()='SUMMARYSTATUS'])[1]/following::span[1]")));
+
+			String message = webElement.getText();
+//			String message = "Error";
+			System.out.println(message);
+
+			// value = copyValuesWithSpc(webElement);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			xpath = "(//a[contains(text(),'OBS_GL_JOURNALIMPOR')]/following::*[text()='SUMMARYSTATUS'])[1]/following::span[1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String lineNumber = fetchMetadataVO.getLine_number();
+			service.saveXpathParams(scriptID, lineNumber, xpath);
+			String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			dynamicnumber.saveCopyNumber(message, testParamId, testSetId);
+			log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copytext" + scripNumber);
+			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
+		}
 		try {
 			java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
 			ArrayList<String> texts = new ArrayList<String>();
@@ -20750,6 +20778,77 @@ public class ORANGESeleniumKeyWords implements SeleniumKeyWordsInterface {
 			throw e;
 		}
 
+	}
+	
+	public void compareValue(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String globalValueForSteps) throws Exception {
+		try {
+			String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			String inputValue = fetchMetadataVO.getInput_value();
+			inputValue = inputValue.trim();
+			int startIdx = inputValue.lastIndexOf('(');
+			int lastIdx = inputValue.lastIndexOf(')');
+			String inputParam2 = inputValue.substring(startIdx + 1, lastIdx);
+
+			inputValue = inputValue.substring(0, startIdx);
+
+			inputValue = inputValue.trim();
+
+			startIdx = inputValue.indexOf('(');
+
+			lastIdx = inputValue.indexOf(')');
+
+			String inputParam1 = inputValue.substring(startIdx + 1, lastIdx);
+			inputValue = inputValue.substring(lastIdx);
+
+			inputValue = inputValue.trim();
+
+			String operator = inputValue.contains("<=") ? "<="
+					: inputValue.contains("<") ? "<"
+							: inputValue.contains(">=") ? ">="
+									: inputValue.contains(">") ? ">"
+											: inputValue.contains("!=") ? "!=" : inputValue.contains("=") ? "=" : null;
+			String copynumberValue1;
+			String[] arrOfStr1 = inputParam1.split(">", 5);
+			String[] arrOfStr2 = inputParam2.split(">", 5);
+			if (arrOfStr1.length < 2) {
+				copynumberValue1 = inputParam1;
+			} else {
+				String Testrun_name = arrOfStr1[0];
+				String seq = arrOfStr1[1];
+				// String Script_num=arrOfStr[2];
+				String line_number = arrOfStr1[2];
+				copynumberValue1 = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
+			}
+			String copynumberValue2;
+			if (arrOfStr2.length < 2) {
+				copynumberValue2 = inputParam2;
+			} else {
+				String Testrun_name = arrOfStr2[0];
+				String seq = arrOfStr2[1];
+				// String Script_num=arrOfStr[2];
+				String line_number = arrOfStr2[2];
+				copynumberValue2 = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
+			}
+
+			if (NumberUtils.isParsable(copynumberValue1) && NumberUtils.isParsable(copynumberValue2)) {
+				if (!(ArithmeticUtils.numericComparision(Double.parseDouble(copynumberValue1),
+						Double.parseDouble(copynumberValue2), operator))) {
+					throw new Exception();
+				}
+			} else {
+				if (!ArithmeticUtils.stringComparision(copynumberValue1, copynumberValue2)) {
+					throw new Exception();
+				}
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during compare value " + scripNumber);
+			screenshotFail(driver, "Failed during compare value", fetchMetadataVO, fetchConfigVO);
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override
