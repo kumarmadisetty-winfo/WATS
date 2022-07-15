@@ -149,7 +149,7 @@ public class TestScriptExecService {
 	private static final String STEP_DESC = "Step Description : ";
 	private static final String TEST_PARAM = "Test Parameter : ";
 	private static final String TEST_VALUE = "Test Value : ";
-	private static final String SCENARIO_NAME = "Scenario Name";
+	private static final String SCENARIO_NAME = "Test Case Name";
 	private static final String STEP_NO = "Step No : ";
 	private static final String SCREENSHOT = "Screenshot";
 
@@ -1794,7 +1794,7 @@ public class TestScriptExecService {
 
 			String TR = "Test Run Name";
 			String SN = "Script Number";
-			String SN1 = "Scenario Name";
+			String SN1 = "Test Case Name";
 			String Scenarios1 = "Status ";
 			String showErrorMessage = "	ErrorMessage ";
 			String EB = "Executed By";
@@ -1859,7 +1859,7 @@ public class TestScriptExecService {
 //						String SN = "Script Number:" + " " + ScriptNumber;
 				String S = "Status:" + " " + status;
 				String step = "Step No :" + "" + Reason;
-				String Scenarios = "Scenario Name :" + "" + Scenario;
+				String Scenarios = "Test Case Name :" + "" + Scenario;
 				String Message = "Failed at Line Number:" + "" + Reason;
 				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
 				// String message = "Failed at

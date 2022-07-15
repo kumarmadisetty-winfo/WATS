@@ -193,7 +193,7 @@ public class JiraTicketBugService {
 				List fields = new ArrayList();
 				String summary = "Test run name=" + slist.getTest_set_name().toString() + " Seqnumber="
 						+ slist.getSeq_num().toString() + " Script Number=" + slist.getScript_number().toString()
-						+ " Scenario Name=" + slist.getScenario_name().toString();
+						+ " Test Case Name=" + slist.getScenario_name().toString();
 
 				JSONArray jsonarray = new JSONArray();
 				JSONObject jsonobject = new JSONObject();

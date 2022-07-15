@@ -547,7 +547,7 @@
 //				String sno = image.split("_")[0];
 //				String SNO = "Script Number";
 //				String ScriptNumber = image.split("_")[3];
-//				String SNM = "Scenario Name";
+//				String SNM = "Test Case Name";
 //				String ScriptName = image.split("_")[2];
 //				String testRunName = image.split("_")[4];
 ////			String scrtipt=;
@@ -598,7 +598,7 @@
 ////			String TR = "Test Run Name:" + " " + TestRun;
 ////			String SN = "Script Number:" + " " + ScriptNumber;
 //
-//				String Scenarios = "Scenario Name :" + "" + Scenario;
+//				String Scenarios = "Test Case Name :" + "" + Scenario;
 //
 //				String sndo = image.split("_")[0];
 //				img1.scalePercent(65, 68);
@@ -750,7 +750,7 @@
 //					document.newPage();
 //
 //					String S = "Status:" + " " + status;
-//					String Scenarios = "Scenario Name :" + "" + Scenario;
+//					String Scenarios = "Test Case Name :" + "" + Scenario;
 //					String step = "Step No :" + "" + steps;
 //					img1.scalePercent(65, 65);
 //					img1.setAlignment(Image.ALIGN_RIGHT);
@@ -946,7 +946,7 @@
 //		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 //		g.drawString("Test Run Name : " + TName, 50, 125);
 //		g.drawString("Script Number : " + ScriptNumber, 50, 200);
-//		g.drawString("Scenario Name :" + Scenario, 50, 275);
+//		g.drawString("Test Case Name :" + Scenario, 50, 275);
 //		g.drawString("Status : " + status, 50, 350);
 //		g.drawString("Executed By :" + ExeBy, 50, 425);
 //		g.drawImage(logo, 1012, 15, null);
@@ -1135,7 +1135,7 @@
 //		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 //		g.drawString("Test Run Name : " + TName, 50, 125);
 //		g.drawString("Script Number : " + ScriptNumber, 50, 200);
-//		g.drawString("Scenario Name :" + Scenario, 50, 275);
+//		g.drawString("Test Case Name :" + Scenario, 50, 275);
 //		g.drawString("Status : " + status, 50, 350);
 //		g.drawString("Executed By :" + ExeBy, 50, 425);
 //		g.drawImage(logo, 1150, 15, null);
@@ -1349,7 +1349,7 @@
 //		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 //		g.drawString("Test Run Name : " + TName, 50, 125);
 //		g.drawString("Script Number : " + ScriptNumber, 50, 200);
-//		g.drawString("Scenario Name :" + Scenario, 50, 275);
+//		g.drawString("Test Case Name :" + Scenario, 50, 275);
 //		g.drawString("Status : " + status, 50, 350);
 //		g.drawString("Executed By :" + ExeBy, 50, 425);
 //		g.drawImage(logo, 1012, 15, null);
@@ -1587,7 +1587,7 @@
 //	g.drawString("TEST SCRIPT DETAILS", 450, 50);
 //	g.drawString("Test Run Name : " + TName, 50, 100);
 //	g.drawString("Script Number : " + ScriptNumber, 50, 150);
-//	g.drawString("Scenario Name :" + Scenario, 50, 200);
+//	g.drawString("Test Case Name :" + Scenario, 50, 200);
 //	g.drawString("Status : " + status, 50, 250);
 //	g.drawString("Executed By :" + ExeBy, 50, 300);
 //	g.drawString("Start Time :" + Starttime1, 50, 350);
@@ -1968,7 +1968,7 @@
 //
 //		String TR = "Test Run Name";
 //		String SN = "Script Number";
-//		String SN1 = "Scenario Name";
+//		String SN1 = "Test Case Name";
 //		String Scenarios1 = "Status ";
 //		String showErrorMessage = "	ErrorMessage ";
 //		String EB = "Executed By";
@@ -2033,7 +2033,7 @@
 ////					String SN = "Script Number:" + " " + ScriptNumber;
 //			String S = "Status:" + " " + status;
 //			String step = "Step No :" + "" + Reason;
-//			String Scenarios = "Scenario Name :" + "" + Scenario;
+//			String Scenarios = "Test Case Name :" + "" + Scenario;
 //			String Message = "Failed at Line Number:" + "" + Reason;
 //			String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
 //			// String message = "Failed at
