@@ -21292,4 +21292,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
