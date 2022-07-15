@@ -1,11 +1,11 @@
 package com.winfo.controller;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lowagie.text.DocumentException;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
@@ -22,33 +21,26 @@ import com.winfo.vo.TestScriptDto;
 @CrossOrigin("*")
 @RestController
 public class JobController {
-	private static final Logger logger = Logger.getLogger(JobController.class);
-	
+
+	public final Logger logger = LogManager.getLogger(JobController.class);
+
 	/*
 	 * @Autowired RunAutomation runAutomation;
 	 */
 	@Autowired
 	RunAutomation runAutomation;
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript")
-	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
-			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
+	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto,
+			BindingResult bindingResult) throws IOException {
 		ResponseDto status = null;
-		if(testScriptDto !=null && testScriptDto.getTestScriptNo() != null) {
-			System.out.println("Parameter test script # : "+testScriptDto.getTestScriptNo());
-			try {
-				status=runAutomation.run(testScriptDto.getTestScriptNo());
-			//runAutomation.report();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-//		runAutomation.run(parameters.getTestScriptNo());
-		System.out.println("Test script # : ");
+		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
+			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
+			status = runAutomation.run(testScriptDto.getTestScriptNo());
 
+		}
+		logger.info("End of Test Script Run # : " + testScriptDto.getTestScriptNo());
 		return status;
 	}
 }

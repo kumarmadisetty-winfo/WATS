@@ -50,7 +50,7 @@ public class LimitScriptExecutionService {
 	@Value("${smpt.from.mail}")
 	private String fromMail;
 
-	public Map<Integer, Boolean> getLimitedCoundiationExaption(FetchConfigVO fetchConfigVO,
+	public Map<Integer, Boolean> getLimitedConditionException(FetchConfigVO fetchConfigVO,
 			List<FetchMetadataVO> fetchMetadataListVO, LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap,
 			String args) {
 		boolean flag = false;
@@ -74,8 +74,8 @@ public class LimitScriptExecutionService {
 
 			}
 		} catch (Exception e) {
-			System.out.println("limited sctipt condiation filed " + e);
-			log.error("limited sctipt condiation filed " + e);
+			System.out.println("limited sctipt condition filed " + e);
+			log.error("limited sctipt condition filed " + e);
 		}
 		mutableMap.put(remaingScriptsCount, flag);
 		return mutableMap;
@@ -288,7 +288,8 @@ public class LimitScriptExecutionService {
 			executionAudit.setScriptnumber(scriptNumber);
 			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
 			executionAudit.setStatus(status);
-			if (limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit).longValue() == 0) {
+			if (limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit) != null
+					&& limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit).longValue() == 0) {
 				return true;
 			}
 		} catch (Exception e) {
