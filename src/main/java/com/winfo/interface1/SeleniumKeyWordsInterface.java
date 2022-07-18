@@ -232,4 +232,7 @@ public interface SeleniumKeyWordsInterface {
 		public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 				FetchConfigVO fetchConfigVO);
 		public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath);
+		
+		public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+				FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception;
 }

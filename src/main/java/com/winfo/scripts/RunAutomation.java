@@ -1414,6 +1414,11 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
+						
+					case "compareValue":
+						seleniumFactory.getInstanceObj(instanceName).compareValue(driver, fetchMetadataVO.getInput_parameter(),
+								fetchMetadataVO, fetchConfigVO, globalValueForSteps);
+						break;
 
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);

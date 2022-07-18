@@ -17463,4 +17463,11 @@ public String uploadObjectToObjectStore(String sourceFilePath, String destinatio
 	return null;
 }
 
+@Override
+public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+		FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
 }
