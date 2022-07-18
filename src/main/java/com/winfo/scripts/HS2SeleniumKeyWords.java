@@ -878,7 +878,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Scenario Name :" + Scenario, 50, 200);
+		g.drawString("Test Case :" + Scenario, 50, 200);
 		g.drawString("Status : " + status, 50, 250);
 		g.drawString("Executed By :" + ExeBy, 50, 300);
 		g.drawString("Start Time :" + Starttime1, 50, 350);
@@ -1049,7 +1049,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Scenario Name :" + Scenario, 50, 200);
+		g.drawString("Test Case :" + Scenario, 50, 200);
 		g.drawString("Status : " + status, 50, 250);
 		g.drawString("Executed By :" + ExeBy, 50, 300);
 		g.drawString("Start Time :" + Starttime1, 50, 350);
@@ -1224,7 +1224,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Scenario Name :" + Scenario, 50, 275);
+			g.drawString("Test Case :" + Scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
 			g.drawString("Executed By :" + ExeBy, 50, 425);
 			g.drawImage(logo, 1012, 15, null);
@@ -1415,7 +1415,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Scenario Name :" + Scenario, 50, 275);
+			g.drawString("Test Case :" + Scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
 			g.drawString("Executed By :" + ExeBy, 50, 425);
 			g.drawImage(logo, 1150, 15, null);
@@ -1632,7 +1632,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Scenario Name :" + Scenario, 50, 275);
+			g.drawString("Test Case :" + Scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
 			g.drawString("Executed By :" + ExeBy, 50, 425);
 			g.drawImage(logo, 1012, 15, null);
@@ -2424,7 +2424,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String sno = image.split("_")[0];
 					String SNO = "Script Number";
 					String ScriptNumber = image.split("_")[3];
-					String SNM = "Scenario Name";
+					String SNM = "Test Case";
 					String ScriptName = image.split("_")[2];
 					String testRunName = image.split("_")[4];
 
@@ -2487,8 +2487,8 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 //				String TR = "Test Run Name:" + " " + TestRun;
 //				String SN = "Script Number:" + " " + ScriptNumber;
 
-					String Scenarios = "Scenario Name :" + "" + Scenario;
-					Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					String Scenarios = "Test Case :" + "" + Scenario;
+					Chunk scenarioChunk = new Chunk("Test Case: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 					Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
 					Phrase scenarioPhrase = new Phrase();
 					scenarioPhrase.add(scenarioChunk);
@@ -2738,7 +2738,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					String TR = "Test Run Name";
 					String SN = "Script Number";
-					String SN1 = "Scenario Name";
+					String SN1 = "Test Case";
 					String Scenarios1 = "Status ";
 					String EB = "Executed By";
 					String ST = "Start Time";
@@ -2804,8 +2804,8 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 						statusPhrase.add(statusChunk);
 						statusPhrase.add(statusChunk2);
 
-						String Scenarios = "Scenario Name :" + "" + Scenario;
-						Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						String Scenarios = "Test Case :" + "" + Scenario;
+						Chunk scenarioChunk = new Chunk("Test Case: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
 						Phrase scenarioPhrase = new Phrase();
 						scenarioPhrase.add(scenarioChunk);
@@ -3264,7 +3264,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String TR = "Test Run Name:" + " " + TestRun;
 				String SN = "Script Number:" + " " + ScriptNumber;
 				String S = "Status:" + " " + status;
-				String Scenarios = "Scenario Name :" + "" + Scenario;
+				String Scenarios = "Test Case :" + "" + Scenario;
 				document.add(new Paragraph(TR, fnt));
 				document.add(new Paragraph(SN, fnt));
 				document.add(new Paragraph(S, fnt));
@@ -3361,7 +3361,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			String TR = "Test Run Name";
 			String SN = "Script Number";
-			String SN1 = "Scenario Name";
+			String SN1 = "Test Case";
 			String Scenarios1 = "Status ";
 			String showErrorMessage = "	ErrorMessage ";
 			String EB = "Executed By";
@@ -3445,8 +3445,8 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				stepPhrase.add(stepChunk);
 				stepPhrase.add(stepChunk2);
 
-				String Scenarios = "Scenario Name :" + "" + Scenario;
-				Chunk scenarioChunk = new Chunk("Scenario Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				String Scenarios = "Test Case :" + "" + Scenario;
+				Chunk scenarioChunk = new Chunk("Test Case: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 				Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
 				Phrase scenarioPhrase = new Phrase();
 				scenarioPhrase.add(scenarioChunk);
