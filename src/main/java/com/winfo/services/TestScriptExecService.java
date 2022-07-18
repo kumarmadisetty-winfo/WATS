@@ -176,7 +176,7 @@ public class TestScriptExecService {
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
 
-	@Value("${url.update.script.param}")
+	@Value("${url.update.script.step.status}")
 	private String scriptParamStatusUpdateUrl;
 
 	@Value("${url.get.copied.value}")
