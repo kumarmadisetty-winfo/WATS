@@ -279,8 +279,12 @@ public class ErrorMessagesHandler {
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						error_message);
 
+			}else if (actionName.equalsIgnoreCase("compareValue")) {
+				error_message = "Failed : Expected value is not matching with the Actual value";
+				fetchConfigVO.setErrormessage(error_message);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
+						error_message);
 			}
-
 			else {
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						error_message);
