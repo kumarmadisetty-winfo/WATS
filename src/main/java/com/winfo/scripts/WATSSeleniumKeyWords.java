@@ -794,7 +794,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Test Case :" + Scenario, 50, 200);
+		g.drawString("Test Case Name :" + Scenario, 50, 200);
 		g.drawString("Status : " + status, 50, 250);
 		g.drawString("Executed By :" + ExeBy, 50, 300);
 		g.drawString("Start Time :" + Starttime1, 50, 350);
@@ -966,7 +966,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		g.drawString("TEST SCRIPT DETAILS", 450, 50);
 		g.drawString("Test Run Name : " + TName, 50, 100);
 		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Test Case :" + Scenario, 50, 200);
+		g.drawString("Test Case Name :" + Scenario, 50, 200);
 		g.drawString("Status : " + status, 50, 250);
 		g.drawString("Executed By :" + ExeBy, 50, 300);
 		g.drawString("Start Time :" + Starttime1, 50, 350);
@@ -1141,7 +1141,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case :" + Scenario, 50, 275);
+			g.drawString("Test Case Name :" + Scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
 			g.drawString("Executed By :" + ExeBy, 50, 425);
 			g.drawImage(logo, 1012, 15, null);
@@ -1332,7 +1332,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case :" + Scenario, 50, 275);
+			g.drawString("Test Case Name :" + Scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
 			g.drawString("Executed By :" + ExeBy, 50, 425);
 			g.drawImage(logo, 1150, 15, null);
@@ -1548,7 +1548,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case :" + Scenario, 50, 275);
+			g.drawString("Test Case Name :" + Scenario, 50, 275);
 			g.drawString("Status : " + status, 50, 350);
 			g.drawString("Executed By :" + ExeBy, 50, 425);
 			g.drawImage(logo, 1012, 15, null);
@@ -2197,7 +2197,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	 * Image.getInstance( fetchConfigVO.getScreenshot_path() + customer_Name + "/" +
 	 * test_Run_Name + "/" + image); // Start to add script details String sno =
 	 * image.split("_")[0]; String SNO = "Script Number"; String ScriptNumber =
-	 * image.split("_")[3]; String SNM = "Test Case"; String ScriptName =
+	 * image.split("_")[3]; String SNM = "Test Case Name"; String ScriptName =
 	 * image.split("_")[2]; String testRunName = image.split("_")[4]; // String
 	 * scrtipt=; if (!sno.equalsIgnoreCase(sno1)) { document.setPageSize(img);
 	 * document.newPage(); document.add(img1); Anchor target3 = new
@@ -2228,7 +2228,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	 * // String TR = "Test Run Name:" + " " + TestRun; // String SN =
 	 * "Script Number:" + " " + ScriptNumber;
 	 * 
-	 * String Scenarios = "Test Case :" + "" + Scenario;
+	 * String Scenarios = "Test Case Name :" + "" + Scenario;
 	 * 
 	 * String sndo = image.split("_")[0]; img1.scalePercent(65, 68);
 	 * 
@@ -2285,7 +2285,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	 * + diffMinutes + ":" + diffSeconds;
 	 * 
 	 * String TR = "Test Run Name"; String SN = "Script Number"; String SN1 =
-	 * "Test Case"; String Scenarios1 = "Status "; String EB = "Executed By";
+	 * "Test Case Name"; String Scenarios1 = "Status "; String EB = "Executed By";
 	 * String ST = "Start Time"; String ET = "End Time"; String EX =
 	 * "Execution Time"; document.add(img1);
 	 * 
@@ -2320,7 +2320,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	 * String Scenario = image.split("_")[2]; String steps = image.split("_")[5];
 	 * document.setPageSize(img); document.newPage();
 	 * 
-	 * String S = "Status:" + " " + status; String Scenarios = "Test Case :" +
+	 * String S = "Status:" + " " + status; String Scenarios = "Test Case Name :" +
 	 * "" + Scenario; String step = "Step No :" + "" + steps; img1.scalePercent(65,
 	 * 65); img1.setAlignment(Image.ALIGN_RIGHT); document.add(img1);
 	 * document.add(new Paragraph(S, fnt)); document.add(new Paragraph(Scenarios,
@@ -2738,7 +2738,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					String sno = image.split("_")[0];
 					String SNO = "Script Number";
 					String ScriptNumber = image.split("_")[3];
-					String SNM = "Test Case";
+					String SNM = "Test Case Name";
 					String ScriptName = image.split("_")[2];
 					String testRunName = image.split("_")[4];
 					
@@ -2801,8 +2801,8 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 //				String TR = "Test Run Name:" + " " + TestRun;
 //				String SN = "Script Number:" + " " + ScriptNumber;
 
-					String Scenarios = "Test Case :" + "" + Scenario;
-					Chunk scenarioChunk = new Chunk("Test Case: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+					String Scenarios = "Test Case Name :" + "" + Scenario;
+					Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 					Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
 					Phrase scenarioPhrase = new Phrase();
 					scenarioPhrase.add(scenarioChunk);
@@ -3039,7 +3039,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 					
 					String TR = "Test Run Name";
 					String SN = "Script Number";
-					String SN1 = "Test Case";
+					String SN1 = "Test Case Name";
 					String Scenarios1 = "Status ";
 					String EB = "Executed By";
 					String ST = "Start Time";
@@ -3100,8 +3100,8 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 						statusPhrase.add(statusChunk);
 						statusPhrase.add(statusChunk2);
 						
-						String Scenarios = "Test Case :" + "" + Scenario;
-						Chunk scenarioChunk = new Chunk("Test Case: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						String Scenarios = "Test Case Name :" + "" + Scenario;
+						Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
 						Phrase scenarioPhrase = new Phrase();
 						scenarioPhrase.add(scenarioChunk);
@@ -3557,7 +3557,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String TR = "Test Run Name:" + " " + TestRun;
 				String SN = "Script Number:" + " " + ScriptNumber;
 				String S = "Status:" + " " + status;
-				String Scenarios = "Test Case :" + "" + Scenario;
+				String Scenarios = "Test Case Name :" + "" + Scenario;
 				document.add(new Paragraph(TR, fnt));
 				document.add(new Paragraph(SN, fnt));
 				document.add(new Paragraph(S, fnt));
@@ -3625,7 +3625,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	 * + diffMinutes + ":" + diffSeconds;
 	 * 
 	 * String TR = "Test Run Name"; String SN = "Script Number"; String SN1 =
-	 * "Test Case"; String Scenarios1 = "Status "; String showErrorMessage =
+	 * "Test Case Name"; String Scenarios1 = "Status "; String showErrorMessage =
 	 * "	ErrorMessage "; String EB = "Executed By"; String ST = "Start Time";
 	 * String ET = "End Time"; String EX = "Execution Time";
 	 * 
@@ -3668,7 +3668,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	 * document.add(img1); String Reason = image.split("_")[5]; // String TR =
 	 * "Test Run Name:" + " " + TestRun; // String SN = "Script Number:" + " " +
 	 * ScriptNumber; String S = "Status:" + " " + status; String step = "Step No :"
-	 * + "" + Reason; String Scenarios = "Test Case :" + "" + Scenario; String
+	 * + "" + Reason; String Scenarios = "Test Case Name :" + "" + Scenario; String
 	 * Message = "Failed at Line Number:" + "" + Reason; String errorMessage =
 	 * "Failed Message:" + "" + fetchConfigVO.getErrormessage(); // String message =
 	 * "Failed at // :"+fetchMetadataListVO.get(0).getInput_parameter(); //
@@ -3777,7 +3777,7 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 			String TR = "Test Run Name";
 			String SN = "Script Number";
-			String SN1 = "Test Case";
+			String SN1 = "Test Case Name";
 			String Scenarios1 = "Status ";
 			String showErrorMessage = "	ErrorMessage ";
 			String EB = "Executed By";
@@ -3858,8 +3858,8 @@ public class WATSSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				
 				
 				
-				String Scenarios = "Test Case :" + "" + Scenario;
-				Chunk scenarioChunk = new Chunk("Test Case: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+				String Scenarios = "Test Case Name :" + "" + Scenario;
+				Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
 				Chunk scenarioChunk2 = new Chunk(Scenario,fnt);
 				Phrase scenarioPhrase = new Phrase();
 				scenarioPhrase.add(scenarioChunk);
