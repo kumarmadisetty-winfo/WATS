@@ -286,7 +286,7 @@ public class TestScriptExecService {
 				}
 				dto.setScriptFileName(
 						fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase()
-								+ "_" + fetchMetadataListVO.get(0).getCustomer_name().toLowerCase());
+								+ "_" + fetchMetadataListVO.get(0).getCustomer_name().replaceAll("\\s+", "_").toLowerCase());
 
 				final Context ctx = new Context();
 				ctx.setVariable("dto", dto);
