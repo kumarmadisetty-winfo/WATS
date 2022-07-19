@@ -13635,6 +13635,28 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+			if((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Characteristic")||param2.equalsIgnoreCase("Result"))) {
+				WebElement waittill = driver
+						.findElement(By.xpath("(//*[contains(text(),'" +param1+ "')]/following::label[text()='" +param2+ "']/preceding::input[1][not(@value)])[1]"));
+				Thread.sleep(1000);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding::input[1][not(@value)])[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 			if((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Expiry Date")||param2.equalsIgnoreCase("Receiving Time")||param2.equalsIgnoreCase("Received on Condition "))) {
 				WebElement waittill = driver
 						.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::*[text()='" +param2+ "']/following::input[not(@value)][2]"));
