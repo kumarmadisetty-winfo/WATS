@@ -18198,7 +18198,98 @@ public class ORANGESeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+		
+		try {
 
+
+
+			if (inputParam1.equalsIgnoreCase("PF vs SLA Reconciliation")&&(inputParam2.equalsIgnoreCase("Grand Total"))) {
+
+
+
+			Thread.sleep(5000);
+
+
+
+			WebElement webElement = driver.findElement(By.xpath("//*[text()='" +inputParam1+ "']/following::td[text()='" +inputParam2+ "']/following::td[contains(@style,'bold')][1]"));
+
+
+
+			Actions actions = new Actions(driver);
+
+
+
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getText() ;
+			System.out.println(stringToSearch);
+//			value = copyValuesWithSpc(stringToSearch);
+
+
+
+			// value = copyValuesWithSpc(webElement);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[text()='inputParam1']/following::td[text()='inputParam2']/following::td[contains(@style,'bold')][1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String metadataID = fetchMetadataVO.getScript_meta_data_id();
+			service.saveXpathParams(scriptID, metadataID, xpath);
+			String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+			log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+
+
+			return value;
+
+
+
+			}
+
+
+
+			} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+
+
+
+			}
+		try {
+			if (inputParam2.equalsIgnoreCase("SUMMARYSTATUS")) {
+			WebElement webElement = driver.findElement(By.xpath("(//a[contains(text(),'OBS_GL_JOURNALIMPOR')]/following::*[text()='" +inputParam2+ "'])[1]/following::span[1]"));
+
+			Actions actions = new Actions(driver);
+
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getText() ;
+
+			Thread.sleep(5000);
+
+			if (webElement.isDisplayed() == true) {
+
+	//			value = copyMethod(webElement, value);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "(//a[contains(text(),'OBS_GL_JOURNALIMPOR')]/following::*[text()='inputParam2'])[1]/following::span[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+				log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+				return stringToSearch;
+
+			}
+
+		}} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+
+			System.out.println(inputParam1);
+
+		}
 		// Dh 611
 		try {
 
