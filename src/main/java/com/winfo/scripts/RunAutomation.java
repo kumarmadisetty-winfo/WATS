@@ -247,11 +247,11 @@ public class RunAutomation {
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			try {
 				for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
-					
+
 					String scriptNumber = metaData.getValue().get(0).getScript_number();
 
 					executor.execute(() -> {
-						log.info("Start of Independent Script Execution of {}",scriptNumber);
+						log.info("Start of Independent Script Execution of {}", scriptNumber);
 						try {
 							long starttimeIntermediate = System.currentTimeMillis();
 							String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
@@ -266,10 +266,10 @@ public class RunAutomation {
 							increment = increment + i;
 							log.info("time , {} ", increment / 1000 % 60);
 						} catch (Exception e) {
-							log.info("Exception occured while executing Independent Script of {}",scriptNumber);
+							log.info("Exception occured while executing Independent Script of {}", scriptNumber);
 							e.printStackTrace();
 						}
-						log.info("End of Independent Script Execution of {}",scriptNumber);
+						log.info("End of Independent Script Execution of {}", scriptNumber);
 					});
 				}
 				executor.shutdown();
@@ -287,7 +287,7 @@ public class RunAutomation {
 					 */
 					// int[] iteration= {1};
 					// System.out.println(iteration);
-					
+
 					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						log.info(" Running Dependent - " + metaData.getKey());
 						executordependent.execute(() -> {
@@ -300,8 +300,9 @@ public class RunAutomation {
 								run = dataBaseEntry.checkRunStatusOfDependantScript(args,
 										metaData.getValue().get(0).getDependencyScriptNumber().toString());
 							}
-							log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
-							
+							log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " "
+									+ run);
+
 							try {
 								String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
 								if (flag.equalsIgnoreCase("STOPPED")) {
@@ -312,27 +313,29 @@ public class RunAutomation {
 									if (run) {
 										executorMethod(args, fetchConfigVO, fetchMetadataListVO, metaData,
 												scriptStatus);
-									}
-									else {
+									} else {
 										String passurl = fetchConfigVO.getImg_url()
 												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
 												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
+												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+												+ "Passed_Report.pdf";
 										String failurl = fetchConfigVO.getImg_url()
 												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
 												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
+												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+												+ "Failed_Report.pdf";
 										String detailurl = fetchConfigVO.getImg_url()
 												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
 												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
+												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+												+ "Detailed_Report.pdf";
 										String scripturl = fetchConfigVO.getImg_url()
 												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
 												+ fetchMetadataListVO.get(0).getProject_name() + "/"
 												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
 												+ fetchMetadataListVO.get(0).getSeq_num() + "_"
 												+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
-		
+
 										FetchMetadataVO fd = metaData.getValue().get(0);
 										FetchScriptVO post = new FetchScriptVO();
 										post.setP_test_set_id(fd.getTest_set_id());
@@ -352,7 +355,7 @@ public class RunAutomation {
 										// enddate);
 										errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
 												fd.getTest_script_param_id(), null, null, null, null);
-		
+
 									}
 								}
 							} catch (Exception e) {
@@ -362,7 +365,7 @@ public class RunAutomation {
 							}
 						});
 					}
-					
+
 //					System.out.println(dependentScriptMap.toString());
 //
 //					while (!dependentQueue.isEmpty()) {
@@ -592,19 +595,17 @@ public class RunAutomation {
 		} catch (Exception e) {
 			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScript_number());
 			e.printStackTrace();
-			if (isDriverError) {
-				FetchScriptVO post = new FetchScriptVO();
-				post.setP_test_set_id(testSetId);
-				post.setP_status("Fail");
-				post.setP_script_id(scriptId);
-				post.setP_test_set_line_id(testSetLineId);
-				post.setP_pass_path(passurl);
-				post.setP_fail_path(failurl);
-				post.setP_exception_path(detailurl);
-				post.setP_test_set_line_path(scripturl);
-				dataService.updateTestCaseStatus(post, args, fetchConfigVO);
-				failList.add(scriptId);
-			}
+			FetchScriptVO post = new FetchScriptVO();
+			post.setP_test_set_id(testSetId);
+			post.setP_status("Fail");
+			post.setP_script_id(scriptId);
+			post.setP_test_set_line_id(testSetLineId);
+			post.setP_pass_path(passurl);
+			post.setP_fail_path(failurl);
+			post.setP_exception_path(detailurl);
+			post.setP_test_set_line_path(scripturl);
+			dataService.updateTestCaseStatus(post, args, fetchConfigVO);
+			failList.add(scriptId);
 		} finally {
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScript_number());
 			if (driver != null) {
