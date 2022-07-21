@@ -151,7 +151,7 @@ public class DataBaseEntry {
 			String testSetId) {
 		List<Integer> dependentList = new ArrayList();
 		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
-			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
+			dependentList.add(Integer.parseInt(element.getValue().get(0).getTest_set_line_id()));
 
 		}
 		dao.getTestRunLevelDependentScriptNumbers(dependentScriptMap, dependentList, testSetId);
