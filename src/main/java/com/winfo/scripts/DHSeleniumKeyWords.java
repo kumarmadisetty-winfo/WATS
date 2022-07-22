@@ -15499,10 +15499,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		selectvalue.click();
 		Thread.sleep(500);
 		String scripNumber = fetchMetadataVO.getScript_number();
-		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
+		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]"+";"+"//*[text()='keysToSend'][1]";
 		String scriptID = fetchMetadataVO.getScript_id();
-		String metadataID = fetchMetadataVO.getScript_meta_data_id();
-		service.saveXpathParams(scriptID, metadataID, xpath);
+		String lineNumber = fetchMetadataVO.getLine_number();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
 		log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 		return;
 		} catch (Exception e) {
@@ -15552,12 +15552,19 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//*[text()='param1']/following::*[@title='param2']"
-			+ ";" + "//a[contains(text(),'Search')]" + ";"
-			+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
-			+ ";"
-			+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]";
-			String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+			String scripNumber = fetchMetadataVO.getScript_number(); 
+			String xpath = "//*[text()='param1']/following::a[@title=' param2']"
+					+";"
+					+"//table[contains(@id,'dropdownPopup')]//*[text()='Search...']"
+					+";"
+					+"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
+					+";"
+					+"//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
+					+";"
+					+"//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String lineNumber = fetchMetadataVO.getLine_number();
+			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
 
