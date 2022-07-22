@@ -103,6 +103,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.aspose.cells.Cell;
+import com.aspose.cells.Cells;
+import com.aspose.cells.FindOptions;
+import com.aspose.cells.LookAtType;
+import com.aspose.cells.Row;
+import com.aspose.cells.Workbook;
+import com.aspose.cells.Worksheet;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -2814,7 +2821,8 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 						statusPhrase.add(statusChunk2);
 
 						String Scenarios = "Test Case Name :" + "" + Scenario;
-						Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+						Chunk scenarioChunk = new Chunk("Test Case Name: ",
+								FontFactory.getFont("Arial", 12, Font.BOLD));
 						Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
 						Phrase scenarioPhrase = new Phrase();
 						scenarioPhrase.add(scenarioChunk);
@@ -18720,11 +18728,88 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	}
 
+	private String getData(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+		String value = null;
+		try {
+			JavascriptExecutor jse = (JavascriptExecutor) driver;
+			jse.executeScript("window.open()");
+			ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
+
+			/* Download Window Open */
+			Thread.sleep(10000);
+			String fileName = (String) jse.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+			log.info("File Name*** " + fileName);
+
+			String sourceURL = (String) jse.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').href");
+			log.info("Source URL**** " + sourceURL);
+
+			String donwloadedAt = (String) jse.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div.is-active.focus-row-active #file-icon-wrapper img').src");
+
+			log.info("Donwloaded path*** " + donwloadedAt);
+
+			File file = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+
+			log.info(file.exists());
+
+			Workbook workbook = new Workbook(file.getPath());
+
+			// Access the first worksheet in the Excel file
+			Worksheet worksheet = workbook.getWorksheets().get(0);
+
+			// Get all the cells in CellCollections
+			Cells cells = worksheet.getCells();
+			// Initialize FindOptions
+			FindOptions findOptions = new FindOptions();
+
+			// Find the cell containing a string value
+			findOptions.setLookAtType(LookAtType.ENTIRE_CONTENT);
+			Cell cell = cells.find("Grand Total", null, findOptions);
+
+			Row row = cells.getRow(cell.getRow());
+			value = String.valueOf(row.getLastDataCell().getDoubleValue());
+			log.info("Name of the cell containing String: " + cell.getRow());
+			// Show the cell name and its value
+			log.info("Name of the cell containing String: " + cell.getName());
+			log.info("the cell value is: " + cell.getValue());
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  clickValidateXpath" + scripNumber);
+			e.printStackTrace();
+		}
+		return value;
+	}
+
 	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
 
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+
+		try {
+			if (inputParam1.equalsIgnoreCase("copy number") && inputParam2.equalsIgnoreCase("excel")) {
+				Thread.sleep(5000);
+				value = getData(driver, fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+				log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copy number" + scripNumber);
+			screenshotFail(driver, "Failed during copynumber Method", fetchMetadataVO, fetchConfigVO);
+		}
 
 		try {
 
@@ -21428,7 +21513,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 
 	}
-	
+
 	public void compareValue(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps) throws Exception {
 		try {
