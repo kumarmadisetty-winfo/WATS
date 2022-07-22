@@ -478,7 +478,7 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -1318,7 +1318,7 @@
 		<profile>
 			<id>lumentum</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -2195,6 +2195,7 @@
 			</activation>
 			<build>
 				<finalName>wats</finalName>
+
 				<plugins>
 
 					<plugin>
