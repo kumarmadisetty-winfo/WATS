@@ -123,7 +123,7 @@ public class HealthCheck {
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Please check oci config file.");
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -148,7 +148,7 @@ public class HealthCheck {
 				if (e1 instanceof WatsEBSCustomException) {
 					throw new WatsEBSCustomException(500, e1.getMessage());
 				} else {
-					e1.printStackTrace();
+					throw new WatsEBSCustomException(500, "Not able to fetch the details from object store");
 				}
 			}
 
@@ -156,7 +156,7 @@ public class HealthCheck {
 			if (e instanceof WatsEBSCustomException) {
 				throw new WatsEBSCustomException(500, e.getMessage());
 			} else {
-				e.printStackTrace();
+				throw new WatsEBSCustomException(500, "Authentication failed with object store");
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
@@ -178,8 +178,6 @@ public class HealthCheck {
 			ResponseEntity<Object> response = restTemplate.exchange(
 					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
-			System.out.println(response);
-
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
@@ -187,7 +185,6 @@ public class HealthCheck {
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "SharePoint access denied.");
 		}
-		System.out.println(acessToken);
 		return acessToken;
 	}
 
