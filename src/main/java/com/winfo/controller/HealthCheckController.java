@@ -17,8 +17,8 @@ public class HealthCheckController {
 	HealthCheck healthCheck;
 	
 	@ResponseBody
-	@RequestMapping(value = "/healthCheckUp")
-	public ResponseDto updateStartScriptStatus(@RequestBody TestScriptDto testSetId){
+	@RequestMapping(value = "/sanityCheckForExecuteApi")
+	public ResponseDto healthCheckStatus(@RequestBody TestScriptDto testSetId){
 		return healthCheck.sanityCheckMethod(testSetId.getTestScriptNo());
 	}
 

@@ -3,7 +3,6 @@ package com.winfo.services;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -57,10 +56,10 @@ public class HealthCheck {
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
-	
+
 	public static final String FORWARD_SLASH = "/";
 	private static final String SCREENSHOT = "Screenshot";
-	
+
 	public ResponseDto sanityCheckMethod(String testSetId) {
 		try {
 			dbAccessibilityCheck();
@@ -113,7 +112,7 @@ public class HealthCheck {
 
 	public void storageAccessChecks(String testSetId) throws WatsEBSCustomException {
 		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
-		objectStoreAccessChecks(fetchConfigVO,testSetId);
+		objectStoreAccessChecks(fetchConfigVO, testSetId);
 		if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 			getSharePointAccess(fetchConfigVO);
 		}
@@ -162,7 +161,6 @@ public class HealthCheck {
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
-	
 
 	public String getSharePointAccess(FetchConfigVO fetchConfigVO) throws WatsEBSCustomException {
 		String acessToken = null;
