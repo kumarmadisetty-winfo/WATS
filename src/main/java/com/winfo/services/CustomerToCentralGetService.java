@@ -49,7 +49,7 @@ public class CustomerToCentralGetService {
 		List<WatsMasterVO> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
 		Session session = entityManager.unwrap(Session.class);
 		Query query4 = session.createQuery(
-				"select VALUE_NAME from APPLICATION_PROPERTIES where KEY_NAME='" + scriptDtls.getCustomerName() + "'");
+				"select valueName from ApplicationProperties where keyName='" + scriptDtls.getCustomerName() + "'");
 		List<String> result4 = query4.list();
 //		String customerUri = result4.isEmpty() ? "http://localhost:38081/wats" : result4.get(0);
 		String customerUri = result4.isEmpty() ? "" : result4.get(0);
