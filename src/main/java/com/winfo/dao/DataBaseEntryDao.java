@@ -1321,4 +1321,12 @@ public class DataBaseEntryDao {
 
 	}
 
+	public int dbAccessibilityCheck() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Object> cq = cb.createQuery(Object.class);
+		cq.multiselect(cb.count(cq.from(TestSet.class)));
+		Object result = em.createQuery(cq).getSingleResult();
+		return Integer.parseInt(result.toString());
+	}
+
 }
