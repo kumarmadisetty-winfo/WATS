@@ -70,11 +70,10 @@ public class HealthCheck {
 			storageAccessChecks(testSetId);
 		} catch (Exception e) {
 			if (e instanceof WatsEBSCustomException) {
-				return new ResponseDto(500, "RED", e.getMessage());
+				return new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		}
-		return new ResponseDto(200, "GREEN", "Yes, I am up");
-
+		return new ResponseDto(200, Constants.SUCCESS, "Yes, I am up");
 	}
 
 	public ResponseDto dbAccessibilityCheck() {
@@ -141,7 +140,7 @@ public class HealthCheck {
 				}
 			} catch (Exception e1) {
 				if (e1 instanceof WatsEBSCustomException) {
-					throw new WatsEBSCustomException(500, e1.getMessage());
+					throw e1;
 				} else {
 					throw new WatsEBSCustomException(500, "Not able to fetch the details from object store");
 				}
