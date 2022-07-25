@@ -79,16 +79,11 @@ public class HealthCheck {
 
 	public ResponseDto dbAccessibilityCheck() {
 		try {
-			int result = dao.dbAccessibilityCheck();
-			if (result > 0) {
-				return new ResponseDto(200, Constants.SUCCESS, null);
-			} else {
-				throw new WatsEBSCustomException(500, "Database connection is down");
-			}
+			dao.dbAccessibilityCheck();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Database connection is down");
 		}
-
+		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
 
 	public ResponseDto seleniumGridCheck() {
