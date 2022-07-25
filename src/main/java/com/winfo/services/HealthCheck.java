@@ -104,7 +104,7 @@ public class HealthCheck {
 		}
 	}
 
-	public void storageAccessChecks(String testSetId) throws WatsEBSCustomException {
+	public void storageAccessChecks(String testSetId) throws Exception {
 		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 		objectStoreAccessChecks(fetchConfigVO, testSetId);
 		if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -112,45 +112,35 @@ public class HealthCheck {
 		}
 	}
 
-	public ResponseDto objectStoreAccessChecks(FetchConfigVO fetchConfigVO, String testSetId) {
+	public ResponseDto objectStoreAccessChecks(FetchConfigVO fetchConfigVO, String testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Please check oci config file.");
 		}
-		try {
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			try (ObjectStorage client = new ObjectStorageClient(provider);) {
-				CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-				String objectStoreScreenShotPath = SCREENSHOT;
-				String objectStorePdfPath = customerDetails.getCustomerName();
-				ListObjectsRequest listScreenShotObjectsRequest = ListObjectsRequest.builder()
-						.namespaceName(ociNamespace).bucketName(ociBucketName).prefix(objectStoreScreenShotPath)
-						.delimiter("/").build();
-				ListObjectsRequest listPdfObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).prefix(objectStorePdfPath).delimiter("/").build();
-				ListObjectsResponse responseScreenShot = client.listObjects(listScreenShotObjectsRequest);
-				ListObjectsResponse responsePdf = client.listObjects(listPdfObjectsRequest);
-				List<String> screenShotResponseList = responseScreenShot.getListObjects().getPrefixes();
-				List<String> pdfResponseList = responsePdf.getListObjects().getPrefixes();
-				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
-						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
-				}
-			} catch (Exception e1) {
-				if (e1 instanceof WatsEBSCustomException) {
-					throw e1;
-				} else {
-					throw new WatsEBSCustomException(500, "Not able to fetch the details from object store");
-				}
+		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+		try (ObjectStorage client = new ObjectStorageClient(provider);) {
+			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
+			String objectStoreScreenShotPath = SCREENSHOT;
+			String objectStorePdfPath = customerDetails.getCustomerName();
+			ListObjectsRequest listScreenShotObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+					.bucketName(ociBucketName).prefix(objectStoreScreenShotPath).delimiter("/").build();
+			ListObjectsRequest listPdfObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+					.bucketName(ociBucketName).prefix(objectStorePdfPath).delimiter("/").build();
+			ListObjectsResponse responseScreenShot = client.listObjects(listScreenShotObjectsRequest);
+			ListObjectsResponse responsePdf = client.listObjects(listPdfObjectsRequest);
+			List<String> screenShotResponseList = responseScreenShot.getListObjects().getPrefixes();
+			List<String> pdfResponseList = responsePdf.getListObjects().getPrefixes();
+			if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
+					&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
+				throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
 			}
-
-		} catch (Exception e) {
-			if (e instanceof WatsEBSCustomException) {
-				throw new WatsEBSCustomException(500, e.getMessage());
+		} catch (Exception e1) {
+			if (e1 instanceof WatsEBSCustomException) {
+				throw e1;
 			} else {
-				throw new WatsEBSCustomException(500, "Authentication failed with object store");
+				throw new WatsEBSCustomException(500, "Not able to fetch the details from object store");
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
