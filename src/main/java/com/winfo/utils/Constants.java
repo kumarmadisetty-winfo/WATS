@@ -21,7 +21,8 @@ public class Constants {
 	public enum AUDIT_TRAIL_STAGES {
 		RR("Received Request"), SGC("Script Generation Completed"), SQ("Script Queued"), CP("Consumer Picked"),
 		SES("Script Execution Started"),SEE("Script Execution Ended"), SSU("Sent for Status Update"), SU("Status Updated"),
-		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer"),EISU("Error In Status Updation After Script Run");
+		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer"),
+		EISU("Error In Status Updation After Script Run"),DSF("Dependant Script Failed");
 
 		public final String label;
 
@@ -47,9 +48,9 @@ public class Constants {
 			return this.label;
 		}
 	}
-	
+
 	public enum UPDATE_STATUS {
-		PASS("Pass"), FAIL("Fail"),  IN_PROGRESS("IN-PROGRESS");
+		PASS("Pass"), FAIL("Fail"), IN_PROGRESS("IN-PROGRESS");
 
 		public final String label;
 
@@ -75,13 +76,15 @@ public class Constants {
 			return this.label;
 		}
 	}
-	
+
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
 	public static final String SYS_USER_HOME_PATH = "user.home";
-	public static final String SCREENSHOT = File.separator+"wats"+ File.separator+"Screenshot"+File.separator;
-	public static final String PDF = File.separator+"wats"+File.separator+"PDF"+File.separator;
+	public static final String SCREENSHOT = File.separator + "wats" + File.separator + "Screenshot" + File.separator;
+	public static final String PDF = File.separator + "wats" + File.separator + "PDF" + File.separator;
 	public static final String EBS = "ebs";
 	public static final String SAP_CONCUR = "sap_concur";
+	public static final String ERR_MSG_FOR_SCRIPT_RUN = "System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team";
+	public static final String ERR_MSG_FOR_DEP_FAILED = "Dependent Script Failed";
 }
