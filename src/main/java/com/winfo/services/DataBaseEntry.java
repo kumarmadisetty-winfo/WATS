@@ -384,8 +384,8 @@ public class DataBaseEntry {
 	}
 	
 	@Transactional
-	public boolean checkRunStatusOfTestRunLevelDependantScript(String testSetId, Integer testSetLineId) {
-		TestSetLine testLines = dao.checkTestSetLinesByTestSetLineId(Integer.valueOf(testSetId),testSetLineId);
+	public boolean checkRunStatusOfTestRunLevelDependantScript(Integer testSetLineId) {
+		TestSetLine testLines = dao.checkTestSetLinesByTestSetLineId(testSetLineId);
 
 		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
 				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
@@ -394,7 +394,7 @@ public class DataBaseEntry {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			testLines = dao.checkTestSetLinesByTestSetLineId(Integer.valueOf(testSetId), testSetLineId);
+			testLines = dao.checkTestSetLinesByTestSetLineId( testSetLineId);
 
 		}
 

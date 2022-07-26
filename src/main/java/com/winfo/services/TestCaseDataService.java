@@ -138,9 +138,9 @@ public class TestCaseDataService {
 
 				Integer seq = Integer.parseInt(testcase.getSeq_num());
 
-				String dependency = testcase.getDependency();
-				if (test_line_id != null && "N".equalsIgnoreCase(dependency)) {
-
+				Integer dependency = testcase.getDependencyScriptNumber();
+				if (test_line_id != null && dependency==null) {
+					
 					prepareTestData(testCaseMap, testcase, seq);
 
 				} else {
