@@ -72,8 +72,6 @@ public class ScriptMaster {
 	private Integer customer_id;
 	@Column(name = "CUSTOMISATION_REFERENCE")
 	private String customisation_reference;
-	@Column(name = "ATTRIBUTE1")
-	private String attribute1;
 	@Column(name = "ATTRIBUTE2")
 	private String attribute2;
 	@Column(name = "ATTRIBUTE3")
@@ -336,14 +334,6 @@ public class ScriptMaster {
 
 	public void setCustomisation_reference(String customisation_reference) {
 		this.customisation_reference = customisation_reference;
-	}
-
-	public String getAttribute1() {
-		return attribute1;
-	}
-
-	public void setAttribute1(String attribute1) {
-		this.attribute1 = attribute1;
 	}
 
 	public String getAttribute2() {

@@ -35,6 +35,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
 import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
@@ -68,6 +69,19 @@ public class DataBaseEntryDao {
 	private static final String STATUS = "status";
 	private static final String IN_QUEUE = "In-Queue";
 
+	
+	@SuppressWarnings("unchecked")
+	public List<ScriptMetaData> getScriptMetaDataList(Integer scriptId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<ScriptMetaData> cq = cb.createQuery(ScriptMetaData.class);
+		Root<ScriptMetaData> from = cq.from(ScriptMetaData.class);
+		Predicate condition = cb.equal(from.get("scriptMaster").get("script_id"), scriptId);
+		cq.where(condition);
+		Query query = em.createQuery(cq);
+		return query.getResultList();
+	}
+	
+	
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status) throws ClassNotFoundException, SQLException {
 		try {
@@ -79,6 +93,22 @@ public class DataBaseEntryDao {
 			System.out.println("cant update passed script line status");
 			System.out.println(e);
 		}
+	}
+	
+	public String getProductVersionByScriptId(Integer scriptId) {
+		String productVersion = "";
+		String sqlQuery = "select product_version from WIN_TA_SCRIPT_MASTER where script_id=" + scriptId;
+
+		try {
+			Session session = em.unwrap(Session.class);
+			Query query = session.createSQLQuery(sqlQuery);
+			productVersion = (String) query.getResultList().get(0);
+		} catch (Exception e) {
+			System.out.println("cant get product version.");
+			System.out.println(e);
+		}
+
+		return productVersion;
 	}
 
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
