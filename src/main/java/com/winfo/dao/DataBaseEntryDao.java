@@ -30,7 +30,9 @@ import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
+
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
 import com.winfo.model.Project;
@@ -46,6 +48,7 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
+import com.winfo.utils.Constants;
 
 @Repository
 @RefreshScope
@@ -1355,16 +1358,18 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Object> cq = cb.createQuery(Object.class);
 		cq.multiselect(cb.count(cq.from(TestSet.class)));
-		Object result = em.createQuery(cq).getSingleResult();
+		Object result = em.createQuery(cq);
 		return Integer.parseInt(result.toString());
 	}
 
 	public String getCentralRepoUrl() {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Object> cq = cb.createQuery(Object.class);
-		cq.multiselect(cb.count(cq.from(TestSet.class)));
-		Object result = em.createQuery(cq).getSingleResult();
-		return null;
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		Root<ApplicationProperties> from = cq.from(ApplicationProperties.class);
+		Predicate condition = cb.equal(from.get("keyName"), Constants.WATS_CENTRAL);
+		cq.multiselect(from.get("valueName")).where(condition);
+		List<String> result = em.createQuery(cq).getResultList();
+		return result.get(0);
 	}
 
 }

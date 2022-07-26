@@ -57,7 +57,7 @@ public class HealthCheck {
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
-	
+
 	@Autowired
 	CentralRepoStatusCheckService centralRepoStatusCheckService;
 
@@ -66,6 +66,8 @@ public class HealthCheck {
 
 	public static final String FORWARD_SLASH = "/";
 	private static final String SCREENSHOT = "Screenshot";
+	private static final String GREEN = "GREEN";
+	private static final String RED = "RED";
 
 	public ResponseDto sanityCheckMethod(Optional<TestScriptDto> testSetId) throws Exception {
 		try {
@@ -78,8 +80,7 @@ public class HealthCheck {
 		} catch (Exception e) {
 			if (e instanceof WatsEBSCustomException) {
 				return new ResponseDto(500, Constants.ERROR, e.getMessage());
-			}
-			else {
+			} else {
 				throw e;
 			}
 		}
@@ -88,33 +89,39 @@ public class HealthCheck {
 
 	public SanityCheckVO sanityCheckForAdminMethod() {
 		HealthCheckVO healthCheckVO = new HealthCheckVO();
-		String flag = "GREEN";
+		int count = 0;
+		String flag = GREEN;
 		try {
 			dbAccessibilityCheck();
-			healthCheckVO.setDatabase("GREEN");
+			healthCheckVO.setDatabase(GREEN);
 		} catch (Exception e) {
-			healthCheckVO.setDatabase("RED");
-			flag = "AMBER";
+			healthCheckVO.setDatabase(RED);
+			count++;
 		}
 		try {
 			seleniumGridCheck();
-			healthCheckVO.setSeleniumGrid("GREEN");
+			healthCheckVO.setSeleniumGrid(GREEN);
 		} catch (Exception e) {
-			healthCheckVO.setSeleniumGrid("RED");
-			flag = "AMBER";
+			healthCheckVO.setSeleniumGrid(RED);
+			count++;
 		}
 		try {
 			objectStoreAccessChecks(null);
-			healthCheckVO.setObjectStoreAccess("GREEN");
+			healthCheckVO.setObjectStoreAccess(GREEN);
 		} catch (Exception e) {
-			healthCheckVO.setObjectStoreAccess("RED");
-			flag = "AMBER";
+			healthCheckVO.setObjectStoreAccess(RED);
+			count++;
 		}
 		try {
 			centralRepoStatusCheckService.centralRepoStatus();
-			healthCheckVO.setCentralRepo("GREEN");
+			healthCheckVO.setCentralRepo(GREEN);
 		} catch (Exception e) {
-			healthCheckVO.setCentralRepo("RED");
+			healthCheckVO.setCentralRepo(RED);
+			count++;
+		}
+		if (count == 4) {
+			flag = RED;
+		} else if (count > 0 && count < 4) {
 			flag = "AMBER";
 		}
 		return new SanityCheckVO(flag, healthCheckVO);
@@ -166,11 +173,12 @@ public class HealthCheck {
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
 			String objectStoreScreenShotPath = SCREENSHOT;
-			
+
 			String objectStorePdfPath = null;
 			List<String> pdfResponseList = null;
 			if (testSetId != null) {
-				CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId.get().getTestScriptNo());
+				CustomerProjectDto customerDetails = dataBaseEntry
+						.getCustomerDetails(testSetId.get().getTestScriptNo());
 
 				objectStorePdfPath = customerDetails.getCustomerName();
 

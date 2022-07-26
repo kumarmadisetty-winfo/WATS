@@ -1,6 +1,5 @@
 package com.winfo.services;
 
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,14 +16,13 @@ public class CentralRepoStatusCheckService {
 
 	public ResponseDto centralRepoStatus() {
 		try {
-			JSONParser jsonParser = new JSONParser();
 			RestTemplate restTemplate = new RestTemplate();
 			String url = dataBaseEntry.getCentralRepoUrl();
-			String result = restTemplate.getForObject(url, String.class);
+			restTemplate.getForObject(url, String.class);
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Central repo is not accessible");
 		}
-		return new ResponseDto(200, Constants.SUCCESS, null);
+		return new ResponseDto(200, Constants.SUCCESS, "Central repo is up");
 	}
 
 }
