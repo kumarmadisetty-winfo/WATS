@@ -14959,6 +14959,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+
 		try {
 			if (param1.equalsIgnoreCase("Add Enrollment") && (param2.equalsIgnoreCase("Select Plan"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -16670,34 +16671,23 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				else if (param2.equalsIgnoreCase("Business Unit") || param2.equalsIgnoreCase("Accounting Period")) {
 
 					WebElement search = driver.findElement(
-
 							By.xpath("//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]"));
-
-					// clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
-
 					search.click();
-
 					Thread.sleep(1000);
-
 					WebElement values = driver.findElement(By.xpath("(//span[text()='Name']/following::input)[1]"));
-
-					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+					values.sendKeys("US1");
+					Thread.sleep(5000);
 
 					enter(driver, fetchMetadataVO, fetchConfigVO);
 
-					WebElement select = driver.findElement(By
-
-							.xpath("//*[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
-
-					// clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+					WebElement select = driver
+							.findElement(By.xpath("//*[text()='Name']/following::div[@title='" + keysToSend + "']"));
 
 					select.click();
 
 					WebElement move = driver.findElement(By
 
 							.xpath("//td[@title='Move']"));
-
-					// clickValidateXpath(driver, fetchMetadataVO, move, fetchConfigVO);
 
 					move.click();
 
@@ -18770,7 +18760,10 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			Cell cell = cells.find("Grand Total", null, findOptions);
 
 			Row row = cells.getRow(cell.getRow());
-			value = String.valueOf(row.getLastDataCell().getDoubleValue());
+			
+			log.info("double value **"+row.getLastDataCell().getDoubleValue());
+			
+			value = Double.toString(row.getLastDataCell().getDoubleValue());
 			log.info("Name of the cell containing String: " + cell.getRow());
 			// Show the cell name and its value
 			log.info("Name of the cell containing String: " + cell.getName());
