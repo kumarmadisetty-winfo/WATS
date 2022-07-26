@@ -3,6 +3,7 @@ package com.winfo.services;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,7 +32,10 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.HealthCheckVO;
 import com.winfo.vo.ResponseDto;
+import com.winfo.vo.SanityCheckVO;
+import com.winfo.vo.TestScriptDto;
 
 @Service
 public class HealthCheck {
@@ -53,6 +57,9 @@ public class HealthCheck {
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
+	
+	@Autowired
+	CentralRepoStatusCheckService centralRepoStatusCheckService;
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
@@ -60,10 +67,10 @@ public class HealthCheck {
 	public static final String FORWARD_SLASH = "/";
 	private static final String SCREENSHOT = "Screenshot";
 
-	public ResponseDto sanityCheckMethod(String testSetId) {
+	public ResponseDto sanityCheckMethod(Optional<TestScriptDto> testSetId) throws Exception {
 		try {
 			dbAccessibilityCheck();
-			String checkPackage = dataBaseEntry.getPackage(testSetId);
+			String checkPackage = dataBaseEntry.getPackage(testSetId.get().getTestScriptNo());
 			if (checkPackage != null && !(checkPackage.toLowerCase().contains(Constants.EBS))) {
 				seleniumGridCheck();
 			}
@@ -72,8 +79,45 @@ public class HealthCheck {
 			if (e instanceof WatsEBSCustomException) {
 				return new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
+			else {
+				throw e;
+			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, "Yes, I am up");
+	}
+
+	public SanityCheckVO sanityCheckForAdminMethod() {
+		HealthCheckVO healthCheckVO = new HealthCheckVO();
+		String flag = "GREEN";
+		try {
+			dbAccessibilityCheck();
+			healthCheckVO.setDatabase("GREEN");
+		} catch (Exception e) {
+			healthCheckVO.setDatabase("RED");
+			flag = "AMBER";
+		}
+		try {
+			seleniumGridCheck();
+			healthCheckVO.setSeleniumGrid("GREEN");
+		} catch (Exception e) {
+			healthCheckVO.setSeleniumGrid("RED");
+			flag = "AMBER";
+		}
+		try {
+			objectStoreAccessChecks(null);
+			healthCheckVO.setObjectStoreAccess("GREEN");
+		} catch (Exception e) {
+			healthCheckVO.setObjectStoreAccess("RED");
+			flag = "AMBER";
+		}
+		try {
+			centralRepoStatusCheckService.centralRepoStatus();
+			healthCheckVO.setCentralRepo("GREEN");
+		} catch (Exception e) {
+			healthCheckVO.setCentralRepo("RED");
+			flag = "AMBER";
+		}
+		return new SanityCheckVO(flag, healthCheckVO);
 	}
 
 	public ResponseDto dbAccessibilityCheck() {
@@ -104,37 +148,51 @@ public class HealthCheck {
 		}
 	}
 
-	public void storageAccessChecks(String testSetId) throws Exception {
-		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
-		objectStoreAccessChecks(fetchConfigVO, testSetId);
+	public void storageAccessChecks(Optional<TestScriptDto> testSetId) throws Exception {
+		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId.get().getTestScriptNo());
+		objectStoreAccessChecks(testSetId);
 		if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 			getSharePointAccess(fetchConfigVO);
 		}
 	}
 
-	public ResponseDto objectStoreAccessChecks(FetchConfigVO fetchConfigVO, String testSetId) throws Exception {
+	public ResponseDto objectStoreAccessChecks(Optional<TestScriptDto> testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Please check oci config file.");
+			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
-			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			String objectStoreScreenShotPath = SCREENSHOT;
-			String objectStorePdfPath = customerDetails.getCustomerName();
+			
+			String objectStorePdfPath = null;
+			List<String> pdfResponseList = null;
+			if (testSetId != null) {
+				CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId.get().getTestScriptNo());
+
+				objectStorePdfPath = customerDetails.getCustomerName();
+
+				ListObjectsRequest listPdfObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).prefix(objectStorePdfPath).delimiter("/").build();
+				ListObjectsResponse responsePdf = client.listObjects(listPdfObjectsRequest);
+				pdfResponseList = responsePdf.getListObjects().getPrefixes();
+			}
 			ListObjectsRequest listScreenShotObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
 					.bucketName(ociBucketName).prefix(objectStoreScreenShotPath).delimiter("/").build();
-			ListObjectsRequest listPdfObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
-					.bucketName(ociBucketName).prefix(objectStorePdfPath).delimiter("/").build();
 			ListObjectsResponse responseScreenShot = client.listObjects(listScreenShotObjectsRequest);
-			ListObjectsResponse responsePdf = client.listObjects(listPdfObjectsRequest);
+
 			List<String> screenShotResponseList = responseScreenShot.getListObjects().getPrefixes();
-			List<String> pdfResponseList = responsePdf.getListObjects().getPrefixes();
-			if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
-					&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-				throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
+			if (testSetId != null) {
+				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
+						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
+					throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
+				}
+			} else {
+				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH))) {
+					throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
+				}
 			}
 		} catch (Exception e1) {
 			if (e1 instanceof WatsEBSCustomException) {

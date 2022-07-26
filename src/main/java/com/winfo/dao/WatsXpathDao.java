@@ -20,7 +20,7 @@ public class WatsXpathDao {
 	public int saveXpathParams(String scriptID, String line_number, String xpath) {
 
 		Session session = entityManager.unwrap(Session.class);
-  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_id=:scriptID and m.line_number=:line_number";
+  String sql= "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath,m.xpath_location = m.xpath_location WHERE m.script_id=:scriptID and m.line_number=:line_number";
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setParameter("xpath", xpath);
 		query.setParameter("scriptID", scriptID);

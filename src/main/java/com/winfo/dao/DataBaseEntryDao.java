@@ -1329,4 +1329,12 @@ public class DataBaseEntryDao {
 		return Integer.parseInt(result.toString());
 	}
 
+	public String getCentralRepoUrl() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Object> cq = cb.createQuery(Object.class);
+		cq.multiselect(cb.count(cq.from(TestSet.class)));
+		Object result = em.createQuery(cq).getSingleResult();
+		return null;
+	}
+
 }
