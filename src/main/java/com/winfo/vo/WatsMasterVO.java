@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.winfo.model.ScriptMaster;
 
 public class WatsMasterVO {
 
@@ -54,8 +55,6 @@ public class WatsMasterVO {
 	private Integer customer_id;
 	@JsonProperty("customisation_reference")
 	private String customisation_reference;
-	@JsonProperty("attribute1")
-	private String attribute1;
 	@JsonProperty("attribute2")
 	private String attribute2;
 	@JsonProperty("attribute3")
@@ -77,14 +76,54 @@ public class WatsMasterVO {
 	@JsonProperty("priority")
 	private Integer priority;
 	@JsonProperty("dependent_script_num")
-    private String dependent_script_num;
+	private String dependent_script_num;
 	@JsonProperty("target_application")
-    private String targetApplication;
+	private String targetApplication;
 
 	@JsonProperty("MetaDataList")
-	private List<WatsMetaDataVO> MetaDataList= new ArrayList<WatsMetaDataVO>();
+	private List<WatsMetaDataVO> metaDataList = new ArrayList<>();
 
-	
+	public WatsMasterVO() {
+	}
+
+	public WatsMasterVO(ScriptMaster scriptMaster) {
+		this.setAttribute2(scriptMaster.getAttribute2());
+		this.setAttribute10(scriptMaster.getAttribute10());
+		this.setAttribute3(scriptMaster.getAttribute3());
+		this.setAttribute4(scriptMaster.getAttribute4());
+		this.setAttribute5(scriptMaster.getAttribute5());
+		this.setAttribute6(scriptMaster.getAttribute6());
+		this.setAttribute7(scriptMaster.getAttribute7());
+		this.setAttribute8(scriptMaster.getAttribute8());
+		this.setAttribute9(scriptMaster.getAttribute9());
+		this.setAuthor(scriptMaster.getAuthor());
+		this.setCreated_by(scriptMaster.getCreated_by());
+		this.setCreation_date(scriptMaster.getCreation_date());
+		this.setCustomer_id(scriptMaster.getCustomer_id());
+		this.setCustomisation_reference(scriptMaster.getCustomisation_reference());
+		this.setDependency(scriptMaster.getDependency());
+		this.setDependent_script_num(scriptMaster.getDependent_script_num());
+		this.setEnd2end_scenario(scriptMaster.getEnd2end_scenario());
+		this.setExpected_result(scriptMaster.getExpected_result());
+		this.setModule(scriptMaster.getModule());
+		this.setPriority(scriptMaster.getPriority());
+		this.setProcess_area(scriptMaster.getProcess_area());
+		this.setProduct_version(scriptMaster.getProduct_version());
+		this.setRole(scriptMaster.getRole());
+		this.setScenario_description(scriptMaster.getScenario_description());
+		this.setScenario_name(scriptMaster.getScenario_name());
+		this.setScript_id(scriptMaster.getScript_id());
+		this.setScript_number(scriptMaster.getScript_number());
+		this.setSelenium_test_method(scriptMaster.getSelenium_test_method());
+		this.setSelenium_test_script_name(scriptMaster.getSelenium_test_script_name());
+		this.setStandard_custom(scriptMaster.getStandard_custom());
+		this.setSub_process_area(scriptMaster.getSub_process_area());
+		this.setTargetApplication(scriptMaster.getTargetApplication());
+		this.setTest_script_status(scriptMaster.getTest_script_status());
+		this.setUpdate_date(scriptMaster.getUpdate_date());
+		this.setUpdated_by(scriptMaster.getUpdated_by());
+	}
+
 	public String getTargetApplication() {
 		return targetApplication;
 	}
@@ -285,14 +324,6 @@ public class WatsMasterVO {
 		this.customisation_reference = customisation_reference;
 	}
 
-	public String getAttribute1() {
-		return attribute1;
-	}
-
-	public void setAttribute1(String attribute1) {
-		this.attribute1 = attribute1;
-	}
-
 	public String getAttribute2() {
 		return attribute2;
 	}
@@ -374,12 +405,11 @@ public class WatsMasterVO {
 	}
 
 	public List<WatsMetaDataVO> getMetaDataList() {
-		return MetaDataList;
+		return metaDataList;
 	}
 
 	public void setMetaDataList(List<WatsMetaDataVO> metaDataList) {
-		MetaDataList = metaDataList;
+		this.metaDataList = metaDataList;
 	}
-	
-	
+
 }

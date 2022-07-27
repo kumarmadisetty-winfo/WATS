@@ -35,6 +35,13 @@
 		<phase>package</phase> <goals> <goal>single</goal> </goals> </execution> 
 		</executions> </plugin -->
 
+	<repositories>
+		<repository>
+			<id>AsposeJavaAPI</id>
+			<name>Aspose Java API</name>
+			<url>https://repository.aspose.com/repo/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -440,7 +447,11 @@
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-json</artifactId>
-			<version>2.5.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-cells</artifactId>
+			<version>22.1</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -467,7 +478,7 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -1307,7 +1318,7 @@
 		<profile>
 			<id>lumentum</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -2184,6 +2195,7 @@
 			</activation>
 			<build>
 				<finalName>wats</finalName>
+
 				<plugins>
 
 					<plugin>
