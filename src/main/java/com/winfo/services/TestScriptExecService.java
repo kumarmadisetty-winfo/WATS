@@ -286,7 +286,8 @@ public class TestScriptExecService {
 				}
 				dto.setScriptFileName(
 						fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase()
-								+ "_" + fetchMetadataListVO.get(0).getCustomer_name().replaceAll("\\s+", "_").toLowerCase());
+								+ "_"
+								+ fetchMetadataListVO.get(0).getCustomer_name().replaceAll("\\s+", "_").toLowerCase());
 
 				final Context ctx = new Context();
 				ctx.setVariable("dto", dto);
@@ -314,9 +315,16 @@ public class TestScriptExecService {
 			}
 		}
 		if (!run) {
-			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.EIP, errorMessage);
+			if (errorMessage == null) {
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DSF, errorMessage);
+				dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
+						Constants.ERR_MSG_FOR_DEP_FAILED);
+			} else {
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.EIP, errorMessage);
+				dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
+						Constants.ERR_MSG_FOR_SCRIPT_RUN);
+			}
 			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
-			dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
 		}
 
@@ -555,9 +563,9 @@ public class TestScriptExecService {
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 				String seqnum = (seqNum == null) ? "" : seqNum;
-				
-				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerName + FORWARD_SLASH + testSetName
-						+ FORWARD_SLASH + seqnum;
+
+				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerName + FORWARD_SLASH
+						+ testSetName + FORWARD_SLASH + seqnum;
 
 				ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
 						.bucketName(ociBucketName).prefix(objectStoreScreenShotPath).delimiter("/").build();

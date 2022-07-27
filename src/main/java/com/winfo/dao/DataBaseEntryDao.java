@@ -65,10 +65,10 @@ public class DataBaseEntryDao {
 	private static final String IN_PROGRESS = "In-Progress";
 	private static final String[] SPECIAL_CHAR = { "_", ".", "'" };
 	private static final String PASSED = "Passed";
-	private static final String JPG = "jpg"; 
+	private static final String JPG = "jpg";
 	private static final String PASS = "Pass";
 	private static final String FAIL = "Fail";
-	private static final String NEW  = "New";
+	private static final String NEW = "New";
 	private static final String STATUS = "status";
 	private static final String IN_QUEUE = "In-Queue";
 
@@ -228,7 +228,7 @@ public class DataBaseEntryDao {
 					+ fetchMetadataVO.getScript_number() + SPECIAL_CHAR[0] + fetchMetadataVO.getTest_run_name()
 					+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getLine_number() + SPECIAL_CHAR[0] + PASSED).concat(SPECIAL_CHAR[1] +JPG);
+					+ fetchMetadataVO.getLine_number() + SPECIAL_CHAR[0] + PASSED).concat(SPECIAL_CHAR[1] + JPG);
 
 			File file = new File(folder);
 			byte[] screenshotArray = new byte[(int) file.length()];
@@ -323,7 +323,6 @@ public class DataBaseEntryDao {
 		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
 			element.getValue().get(0)
 					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getTest_set_line_id())));
-
 		}
 
 	}
@@ -558,16 +557,14 @@ public class DataBaseEntryDao {
 
 		return result;
 	}
-	
-	public TestSetLine checkTestSetLinesByTestSetLineId(int testSetId, int testSetLineId) {
+
+	public TestSetLine checkTestSetLinesByTestSetLineId( int testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 
-		Predicate condition1 = cb.equal(from.get("testRunScriptId"), testSetLineId);
-		Predicate condition2 = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
-		Predicate condition = cb.and(condition1, condition2);
+		Predicate condition = cb.equal(from.get(TEST_RUN_SCRIPT_ID), testSetLineId);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		TestSetLine result = (TestSetLine) query.getSingleResult();
@@ -841,7 +838,7 @@ public class DataBaseEntryDao {
 				+ "           wtsmdata.input_value,\r\n" + "           wtsmdata.action,\r\n"
 				+ "           wtsmdata.xpath_location,\r\n" + "           wtsmdata.xpath_location1,\r\n"
 				+ "           wtsmdata.field_type,\r\n" + "           wtsmdata.hint,\r\n"
-				+ "           ma.SCENARIO_NAME,\r\n" + "    decode(ma.dependency, null, 'N', 'Y') dependency\r\n"
+				+ "           ma.SCENARIO_NAME,\r\n" + "    wttsl.dependency_tr\r\n"
 				+ "          ,wtts.TEST_SET_NAME test_run_name, wttsl.SEQ_NUM\r\n"
 				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
 				+ ", wtsmdata.Line_ERROR_MESSAGE\r\n,  wtsmdata.test_run_param_desc\r\n"
@@ -907,8 +904,8 @@ public class DataBaseEntryDao {
 				// null:String.valueOf(obj[16]));
 				testRunExecutionVO
 						.setScenario_name(NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
-				testRunExecutionVO
-						.setDependency(NULL_STRING.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
+				testRunExecutionVO.setDependencyScriptNumber(
+						NULL_STRING.equals(String.valueOf(obj[18])) ? null : Integer.valueOf((String) obj[18]));
 				testRunExecutionVO
 						.setTest_run_name(NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
 				testRunExecutionVO

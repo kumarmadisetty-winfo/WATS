@@ -24,6 +24,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
@@ -202,10 +203,10 @@ public class DataBaseEntry {
 		dao.updateStatusOfScript(test_set_line_id, status);
 	}
 
-	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId) {
+	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId, String errMessage) {
 		int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
 		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel(),
-				"System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team");
+				errMessage);
 	}
 
 	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
@@ -222,7 +223,8 @@ public class DataBaseEntry {
 	public String getScriptStatus(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
-			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId);
+			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
+					Constants.ERR_MSG_FOR_SCRIPT_RUN);
 			return UPDATE_STATUS.FAIL.getLabel();
 		}
 
@@ -382,10 +384,10 @@ public class DataBaseEntry {
 			return false;
 		}
 	}
-	
+
 	@Transactional
-	public boolean checkRunStatusOfTestRunLevelDependantScript(String testSetId, Integer testSetLineId) {
-		TestSetLine testLines = dao.checkTestSetLinesByTestSetLineId(Integer.valueOf(testSetId),testSetLineId);
+	public boolean checkRunStatusOfTestRunLevelDependantScript(Integer testSetLineId) {
+		TestSetLine testLines = dao.checkTestSetLinesByTestSetLineId(testSetLineId);
 
 		while (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_QUEUE.getLabel())
 				|| testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.IN_PROGRESS.getLabel())) {
@@ -394,7 +396,7 @@ public class DataBaseEntry {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			testLines = dao.checkTestSetLinesByTestSetLineId(Integer.valueOf(testSetId), testSetLineId);
+			testLines = dao.checkTestSetLinesByTestSetLineId(testSetLineId);
 
 		}
 
@@ -404,6 +406,7 @@ public class DataBaseEntry {
 			return false;
 		}
 	}
+
 	public void updateSubscription() {
 		List<Object[]> noOfHits = dao.getSumDetailsFromSubscription();
 		List<Object[]> subscriptionDtls = dao.getSubscriptionDetails();
