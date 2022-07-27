@@ -308,7 +308,7 @@ public class DataBaseEntryDao {
 	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
 			List<Integer> dependentList, String test_set_id) {
 		// TODO Auto-generated method stub
-		String sql = "Select script_id,dependency_tr from win_ta_test_set_lines where script_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
+		String sql = "Select test_set_line_id,dependency_tr from win_ta_test_set_lines where test_set_line_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
 		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList", dependentList)
 				.setParameter("test_set_id", test_set_id);
 
@@ -322,7 +322,7 @@ public class DataBaseEntryDao {
 
 		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
 			element.getValue().get(0)
-					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
+					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getTest_set_line_id())));
 
 		}
 
@@ -1358,7 +1358,7 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Object> cq = cb.createQuery(Object.class);
 		cq.multiselect(cb.count(cq.from(TestSet.class)));
-		Object result = em.createQuery(cq);
+		Object result = em.createQuery(cq).getSingleResult();
 		return Integer.parseInt(result.toString());
 	}
 
@@ -1370,6 +1370,18 @@ public class DataBaseEntryDao {
 		cq.multiselect(from.get("valueName")).where(condition);
 		List<String> result = em.createQuery(cq).getResultList();
 		return result.get(0);
+	}
+
+
+	public void updateTestSetLineStatusForSanity(String testSetId) {
+		String updateQry = "UPDATE win_ta_test_set_lines SET status = 'Fail' where test_set_id = "+testSetId+" and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS')";
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.",
+					e);
+		}
 	}
 
 }

@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -123,7 +124,7 @@ public class RunAutomation {
 	}
 
 	long increment = 0;
-
+	@Async
 	public ResponseDto run(String args) throws MalformedURLException {
 		ResponseDto executeTestrunVo;
 		String checkPackage = dataBaseEntry.getPackage(args);

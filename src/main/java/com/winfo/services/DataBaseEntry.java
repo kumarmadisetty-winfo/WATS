@@ -438,4 +438,8 @@ public class DataBaseEntry {
 		return dao.getCentralRepoUrl();
 	}
 
+	public void updateTestSetLineStatusForSanity(String testSetId) {
+		dao.updateTestSetLineStatusForSanity(testSetId);
+	}
+
 }

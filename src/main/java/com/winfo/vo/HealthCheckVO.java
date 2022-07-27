@@ -1,8 +1,9 @@
 package com.winfo.vo;
+
 public class HealthCheckVO {
 	private String database;
 	private String seleniumGrid;
-	private String ObjectStoreAccess;
+	private String objectStoreAccess;
 	private String centralRepo;
 
 	public String getDatabase() {
@@ -22,11 +23,11 @@ public class HealthCheckVO {
 	}
 
 	public String getObjectStoreAccess() {
-		return ObjectStoreAccess;
+		return objectStoreAccess;
 	}
 
 	public void setObjectStoreAccess(String objectStoreAccess) {
-		ObjectStoreAccess = objectStoreAccess;
+		this.objectStoreAccess = objectStoreAccess;
 	}
 
 	public String getCentralRepo() {

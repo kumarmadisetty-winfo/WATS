@@ -35,7 +35,6 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.HealthCheckVO;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.SanityCheckVO;
-import com.winfo.vo.TestScriptDto;
 
 @Service
 public class HealthCheck {
@@ -69,19 +68,20 @@ public class HealthCheck {
 	private static final String GREEN = "GREEN";
 	private static final String RED = "RED";
 
-	public ResponseDto sanityCheckMethod(Optional<TestScriptDto> testSetId) throws Exception {
+	public ResponseDto sanityCheckMethod(String testSetId) throws Exception {
 		try {
 			dbAccessibilityCheck();
-			String checkPackage = dataBaseEntry.getPackage(testSetId.get().getTestScriptNo());
+			String checkPackage = dataBaseEntry.getPackage(testSetId);
 			if (checkPackage != null && !(checkPackage.toLowerCase().contains(Constants.EBS))) {
 				seleniumGridCheck();
 			}
 			storageAccessChecks(testSetId);
 		} catch (Exception e) {
+			dataBaseEntry.updateTestSetLineStatusForSanity(testSetId);
 			if (e instanceof WatsEBSCustomException) {
-				return new ResponseDto(500, Constants.ERROR, e.getMessage());
-			} else {
 				throw e;
+			} else {
+				return new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, "Yes, I am up");
@@ -155,15 +155,15 @@ public class HealthCheck {
 		}
 	}
 
-	public void storageAccessChecks(Optional<TestScriptDto> testSetId) throws Exception {
-		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId.get().getTestScriptNo());
-		objectStoreAccessChecks(testSetId);
+	public void storageAccessChecks(String testSetId) throws Exception {
+		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
+		objectStoreAccessChecks(Optional.of(testSetId));
 		if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 			getSharePointAccess(fetchConfigVO);
 		}
 	}
 
-	public ResponseDto objectStoreAccessChecks(Optional<TestScriptDto> testSetId) throws Exception {
+	public ResponseDto objectStoreAccessChecks(Optional<String> testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
@@ -177,8 +177,7 @@ public class HealthCheck {
 			String objectStorePdfPath = null;
 			List<String> pdfResponseList = null;
 			if (testSetId != null) {
-				CustomerProjectDto customerDetails = dataBaseEntry
-						.getCustomerDetails(testSetId.get().getTestScriptNo());
+				CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId.get());
 
 				objectStorePdfPath = customerDetails.getCustomerName();
 
