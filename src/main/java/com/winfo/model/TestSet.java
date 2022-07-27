@@ -93,7 +93,7 @@ public class TestSet {
 	private String pdfGenerationEnabled;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 
 //	private List<TestSetLine> testRunScriptDatalist = new ArrayList<TestSetLine>();
 	
