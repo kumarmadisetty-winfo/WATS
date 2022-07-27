@@ -18796,6 +18796,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String testSetId = fetchMetadataVO.getTest_set_line_id();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
+				return value;
 
 			}
 		} catch (Exception e) {
