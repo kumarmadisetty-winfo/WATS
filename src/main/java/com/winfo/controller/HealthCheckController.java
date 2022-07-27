@@ -15,7 +15,7 @@ public class HealthCheckController {
 	HealthCheck healthCheck;
 
 	@ResponseBody
-	@RequestMapping(value = "/sanityCheckForAdminApi")
+	@RequestMapping(value = "/sanityCheckForAdmin")
 	public SanityCheckVO healthCheckStatusForAdmin() {
 		return healthCheck.sanityCheckForAdminMethod();
 	}
