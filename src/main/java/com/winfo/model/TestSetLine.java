@@ -1,19 +1,12 @@
 package com.winfo.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -85,18 +78,27 @@ public class TestSetLine {
 	@Column(name = "SCRIPT_UPDATED")
 	private String scriptUpadated;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-
-	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
-	private TestSet testRun;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine")
-	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
-
-	public void addTestScriptParam(TestSetScriptParam scriptParam) {
-		testRunScriptParam.add(scriptParam);
-		scriptParam.setTestRunScripts(this);
+	@Column(name = "DEPENDENCY_TR")
+	private Integer dependency_tr;
+	
+    public Integer getDependency_tr() {
+		return dependency_tr;
 	}
+	public void setDependency_tr(Integer dependency_tr) {
+		this.dependency_tr = dependency_tr;
+	}
+	
+//	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
+//	private TestSet testRun;
+
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
+//	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
+
+//	public void addTestScriptParam(TestSetScriptParam scriptParam) {
+//		testRunScriptParam.add(scriptParam);
+//		scriptParam.setTestRunScripts(this);
+//	}
 
 	public Integer getTestRunScriptId() {
 		return testRunScriptId;
@@ -218,21 +220,21 @@ public class TestSetLine {
 		this.issueKey = issueKey;
 	}
 
-	public TestSet getTestRun() {
-		return testRun;
-	}
+//	public TestSet getTestRun() {
+//		return testRun;
+//	}
+//
+//	public void setTestRun(TestSet testRun) {
+//		this.testRun = testRun;
+//	}
 
-	public void setTestRun(TestSet testRun) {
-		this.testRun = testRun;
-	}
-
-	public List<TestSetScriptParam> getTestRunScriptParam() {
-		return testRunScriptParam;
-	}
-
-	public void setTestRunScriptParam(List<TestSetScriptParam> testRunScriptParam) {
-		this.testRunScriptParam = testRunScriptParam;
-	}
+//	public List<TestSetScriptParam> getTestRunScriptParam() {
+//		return testRunScriptParam;
+//	}
+//
+//	public void setTestRunScriptParam(List<TestSetScriptParam> testRunScriptParam) {
+//		this.testRunScriptParam = testRunScriptParam;
+//	}
 
 	public Integer getRunCount() {
 		return runCount;
@@ -248,6 +250,5 @@ public class TestSetLine {
 	public void setScriptUpadated(String scriptUpadated) {
 		this.scriptUpadated = scriptUpadated;
 	}
-		
 
 }

@@ -144,7 +144,6 @@ public class RunAutomation {
 			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
 					dependentScriptMap);
-
 			// Independent
 			for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 				log.info(" Running Independent - " + metaData.getKey());
@@ -156,8 +155,8 @@ public class RunAutomation {
 				log.info(" Running Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
 					log.info(" Running Dependent in executor - " + metaData.getKey());
-					boolean run = dataBaseEntry.checkRunStatusOfDependantScript(testSetId,
-							metaData.getValue().get(0).getScript_id());
+					boolean run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
+							metaData.getValue().get(0).getDependencyScriptNumber());
 					log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " " + run);
 					testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, run);
 				});
@@ -294,7 +293,7 @@ public class RunAutomation {
 							log.info(" Running Dependent in executor - " + metaData.getKey());
 							boolean run;
 							if (testRunDependencyCount > 0) {
-								run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(args,
+								run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
 										metaData.getValue().get(0).getDependencyScriptNumber());
 							} else {
 								run = dataBaseEntry.checkRunStatusOfDependantScript(args,
@@ -1415,10 +1414,11 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
 								fetchMetadataVO, fetchConfigVO);
 						break;
-						
+
 					case "compareValue":
-						seleniumFactory.getInstanceObj(instanceName).compareValue(driver, fetchMetadataVO.getInput_parameter(),
-								fetchMetadataVO, fetchConfigVO, globalValueForSteps);
+						seleniumFactory.getInstanceObj(instanceName).compareValue(driver,
+								fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,
+								globalValueForSteps);
 						break;
 
 					default:
