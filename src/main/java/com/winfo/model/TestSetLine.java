@@ -2,11 +2,15 @@ package com.winfo.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -88,9 +92,9 @@ public class TestSetLine {
 		this.dependency_tr = dependency_tr;
 	}
 	
-//	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
-//	private TestSet testRun;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
+	private TestSet testRun;
 
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
 //	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
@@ -220,13 +224,13 @@ public class TestSetLine {
 		this.issueKey = issueKey;
 	}
 
-//	public TestSet getTestRun() {
-//		return testRun;
-//	}
-//
-//	public void setTestRun(TestSet testRun) {
-//		this.testRun = testRun;
-//	}
+	public TestSet getTestRun() {
+		return testRun;
+	}
+
+	public void setTestRun(TestSet testRun) {
+		this.testRun = testRun;
+	}
 
 //	public List<TestSetScriptParam> getTestRunScriptParam() {
 //		return testRunScriptParam;
