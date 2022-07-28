@@ -124,7 +124,7 @@ public class RunAutomation {
 	}
 
 	long increment = 0;
-	@Async
+//	@Async
 	public ResponseDto run(String args) throws MalformedURLException {
 		ResponseDto executeTestrunVo;
 		String checkPackage = dataBaseEntry.getPackage(args);
