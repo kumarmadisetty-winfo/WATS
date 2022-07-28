@@ -179,34 +179,39 @@ public class RunAutomation {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		log.info("Start of cloud run method");
 		try {
-			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
-
-			final String uri = fetchConfigVO.getMETADATA_URL() + args;
-			log.info("Screenshotpath, uri config, pdf path - {} , {} , {}", fetchConfigVO.getScreenshot_path(),
-					fetchConfigVO.getUri_config(), fetchConfigVO.getPdf_path());
-			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
-
-			log.info("Metadata vo list size - {} ", fetchMetadataListVO.size());
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(args);
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args, null, false, true);
+			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
+			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
+					dependentScriptMap);
+//			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
+//
+//			final String uri = fetchConfigVO.getMETADATA_URL() + args;
+//			log.info("Screenshotpath, uri config, pdf path - {} , {} , {}", fetchConfigVO.getScreenshot_path(),
+//					fetchConfigVO.getUri_config(), fetchConfigVO.getPdf_path());
+//			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
+//
+//			log.info("Metadata vo list size - {} ", fetchMetadataListVO.size());
 			Map<Integer, Status> scriptStatus = new HashMap<>();
-			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap = new LinkedHashMap<>();
-			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap;
+//			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap = new LinkedHashMap<>();
+//			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap;
 
-			int testRunDependencyCount = dataBaseEntry.getTestRunDependentCount(args);
-			Queue<Entry<String, List<FetchMetadataVO>>> dependentQueue = new LinkedList<>();
+//			int testRunDependencyCount = dataBaseEntry.getTestRunDependentCount(args);
+//			Queue<Entry<Integer, List<FetchMetadataVO>>> dependentQueue = new LinkedList<>();
 
-			if (testRunDependencyCount > 0) {
-				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
-						TEST_RUN_LEVEL_DEPENDENCY);
-				dataBaseEntry.getTestRunLevelDependentScriptNumbers(dependentScriptMap, args);
-			} else {
-				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
-						SCRIPT_LEVEL_DEPENDENCY);
-				dataBaseEntry.getDependentScriptNumbers(dependentScriptMap);
-			}
+//			if (testRunDependencyCount > 0) {
+//				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
+//						TEST_RUN_LEVEL_DEPENDENCY);
+//				dataBaseEntry.getTestRunLevelDependentScriptNumbers(dependentScriptMap, args);
+//			} else {
+//				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
+//						SCRIPT_LEVEL_DEPENDENCY);
+//				dataBaseEntry.getDependentScriptNumbers(dependentScriptMap);
+//			}
 
-			for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
-				dependentQueue.add(element);
-			}
+//			for (Entry<Integer, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
+//				dependentQueue.add(element);
+//			}
 
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedConditionException(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
@@ -245,7 +250,7 @@ public class RunAutomation {
 			log.info("Independent scripts # - {} ", metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			try {
-				for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
+				for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 
 					String scriptNumber = metaData.getValue().get(0).getScript_number();
 
@@ -287,18 +292,18 @@ public class RunAutomation {
 					// int[] iteration= {1};
 					// System.out.println(iteration);
 
-					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
+					for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						log.info(" Running Dependent - " + metaData.getKey());
 						executordependent.execute(() -> {
 							log.info(" Running Dependent in executor - " + metaData.getKey());
 							boolean run;
-							if (testRunDependencyCount > 0) {
-								run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
-										metaData.getValue().get(0).getDependencyScriptNumber());
-							} else {
-								run = dataBaseEntry.checkRunStatusOfDependantScript(args,
-										metaData.getValue().get(0).getDependencyScriptNumber().toString());
-							}
+//							if (testRunDependencyCount > 0) {
+							run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
+									metaData.getValue().get(0).getDependencyScriptNumber());
+//							} else {
+//								run = dataBaseEntry.checkRunStatusOfDependantScript(args,
+//										metaData.getValue().get(0).getDependencyScriptNumber().toString());
+//							}
 							log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " "
 									+ run);
 
@@ -560,7 +565,7 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
+			Entry<Integer, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
 		List<String> failList = new ArrayList<>();
 		WebDriver driver = null;
 
