@@ -19959,8 +19959,8 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
-		String param4 = "User name or email";
-		String param5 = "password";
+		String param4 = "Sign in";
+		String param5 = "Password";
 		// String param6 = "Sign In";
 		navigateOICUrl(driver, fetchConfigVO, fetchMetadataVO);
 		String xpath1 = oicLoginPage(driver, param4, keysToSend, fetchMetadataVO, fetchConfigVO);
@@ -19998,6 +19998,38 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) {
 		String xpath = null;
 		try {
+			if (param1.equalsIgnoreCase("Sign in")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions
+						.presenceOfElementLocated(By.xpath("//*[text()='" +param1+ "']/following::input[1]")));
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='" +param1+ "']/following::input[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO);
+				//if("password".equalsIgnoreCase(param1))
+				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(1000);
+				//WebElement search = driver.findElement(
+				//By.xpath("//input[@value='Next']"));
+				//clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
+				//search.click();
+				Thread.sleep(1000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				xpath = "//*[text()='param1']/following::input[1]";
+				log.info("Successfully entered data " + scripNumber);
+				return xpath;
+			}}catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Failed during login page " + scripNumber);
+				screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+				System.out.println("Failed During Login page");
+		}
+		try {
 			if (param1.equalsIgnoreCase("Password")) {
 				String title1 = driver.getTitle();
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -20009,6 +20041,9 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				// if("password".equalsIgnoreCase(param1))
 				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 				String title2 = driver.getTitle();
@@ -20205,6 +20240,28 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+		if(param1.equalsIgnoreCase("Inventory_Transaction") && param2.equalsIgnoreCase("Run")) {
+		Thread.sleep(3000);
+		Actions action = new Actions(driver);
+		WebElement we = driver.findElement(By.xpath("(//*[text()='Inventory_Transaction'])[1]/following::*[text()='Scheduled Orchestration'][1]"));
+		action.moveToElement(we).perform();
+		Thread.sleep(5000);
+		WebElement run = driver.findElement(By.xpath("(//*[text()='Inventory_Transaction'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
+		run.click();
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		Thread.sleep(5000);
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+		String xpath = "(//*[text()='Inventory_Transaction'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
+		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		return;
+		}
+		}catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScript_number();
+		log.error("Failed during clickButton" + scripNumber);
+		System.out.println(e);
+		}
 		try {
 			if (param1.equalsIgnoreCase("Oracle ERP OPERA Trigger Synchronization") && param2.equalsIgnoreCase("Run")) {
 				Thread.sleep(3000);
