@@ -1481,10 +1481,10 @@ public class RunAutomation {
 						fetchConfigVO.setEndtime(enddate);
 						try {
 							// dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-							if (fetchMetadataVO.getDependency().equalsIgnoreCase("Y")) {
+							if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
 								if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
 									Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
-									if (!s.getStatus().equalsIgnoreCase("Fail")) {
+									if (!"Fail".equalsIgnoreCase(s.getStatus())) {
 										int awaitCounter = s.getInExecutionCount();
 										s.setInExecutionCount(--awaitCounter);
 										if (awaitCounter <= 0) {
@@ -1498,7 +1498,7 @@ public class RunAutomation {
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 						} catch (Exception e) {
-							System.out.println("e");
+							e.printStackTrace();
 						}
 						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
