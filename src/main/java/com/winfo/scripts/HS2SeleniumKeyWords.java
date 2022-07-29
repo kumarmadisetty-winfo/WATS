@@ -20036,7 +20036,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'" + param1 + "')]")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("document.getElementById('idcs-signin-basic-signin-form-password|input').value = '"
+				jse.executeScript("document.getElementById('i0118').value = '"
 						+ keysToSend + "';");
 				// if("password".equalsIgnoreCase(param1))
 				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
