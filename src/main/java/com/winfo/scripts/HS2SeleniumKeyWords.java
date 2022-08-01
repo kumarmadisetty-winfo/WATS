@@ -20241,6 +20241,26 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+		if(param1.equalsIgnoreCase("Accept all")) {
+			WebElement iframe = driver.findElement(By.xpath("//iframe[@title='TrustArc Cookie Consent Manager']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(iframe).build().perform();
+			driver.switchTo().frame(iframe);
+			WebElement Acceptall = driver.findElement(By.xpath("//a[text()='Accept all']"));
+			Acceptall.click();
+			Thread.sleep(2000);
+			// deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
+			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(10000);
+			return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 		if(param1.equalsIgnoreCase("Inventory_Transaction") && param2.equalsIgnoreCase("Run")) {
 		Thread.sleep(3000);
 		Actions action = new Actions(driver);
