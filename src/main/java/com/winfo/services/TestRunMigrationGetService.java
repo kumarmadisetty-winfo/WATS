@@ -47,29 +47,28 @@ public class TestRunMigrationGetService {
 
 	@Transactional
 	public DomGenericResponseBean3 centralRepoData(List<WatsMasterDataVOListForTestRunMig> mastervo) {
-		
+
 		TestRunExistsVO testRunExistsVO = new TestRunExistsVO();
-		
+
 		List<ExistsTestRun> listOfExistsTestRun = new ArrayList<>();
-		
+
 		List<DomGenericResponseBean2> bean = new ArrayList<>();
-		
+
 		DomGenericResponseBean3 domGenericResponseBean3 = new DomGenericResponseBean3();
-		
+
 		for (WatsMasterDataVOListForTestRunMig mastervolist : mastervo) {
 			Session session = entityManager.unwrap(Session.class);
-			
+
 //			ExistsTestRun existsTestRun = new ExistsTestRun();
-			
+
 			BigDecimal checkTest = (BigDecimal) session
 					.createNativeQuery("select count(*) from WIN_TA_TEST_SET where test_set_name ='"
 							+ mastervolist.getTest_set_name() + "'")
 					.getSingleResult();
 
 			int checkTestRun = Integer.parseInt(checkTest.toString());
-			
-			
-			if(checkTestRun>0 && !mastervolist.isTestRunExists()) {
+
+			if (checkTestRun > 0 && !mastervolist.isTestRunExists()) {
 				DomGenericResponseBean2 domGenericResponseBean = new DomGenericResponseBean2();
 				domGenericResponseBean.setStatus(0);
 				domGenericResponseBean.setStatusMessage("Already Exists");
@@ -78,9 +77,6 @@ public class TestRunMigrationGetService {
 				domGenericResponseBean3.setResponse(bean);
 				continue;
 			}
-			
-			
-			
 			int customerId = 0;
 			try {
 				BigDecimal checkCustomer = (BigDecimal) session
@@ -104,7 +100,7 @@ public class TestRunMigrationGetService {
 
 			for (Map.Entry<String, LookUpVO> entry : mastervolist.getLookUpData().entrySet()) {
 
-				String value = entry.getValue().getLOOKUP_NAME();
+				String value = entry.getValue().getLookup_name();
 				BigDecimal countOfLookups = (BigDecimal) session
 						.createNativeQuery("select count(*) from win_ta_lookups where lookup_name = '" + value + "'")
 						.getSingleResult();
@@ -121,8 +117,8 @@ public class TestRunMigrationGetService {
 						Integer id = Integer.parseInt(bigDecimal.toString());
 
 						String query1 = "insert into win_ta_lookups(LOOKUP_ID,LOOKUP_NAME,LOOKUP_DESC,CREATED_BY,LAST_UPDATED_BY) VALUES("
-								+ id + ",'" + value + "','" + entry.getValue().getLOOKUP_DESC() + "','"
-								+ entry.getValue().getCREATED_BY() + "','" + entry.getValue().getLAST_UPDATED_BY()
+								+ id + ",'" + value + "','" + entry.getValue().getLookup_desc() + "','"
+								+ entry.getValue().getCreated_by() + "','" + entry.getValue().getLast_updated_by()
 								+ "')";
 						session.createNativeQuery(query1).executeUpdate();
 					}
@@ -136,12 +132,12 @@ public class TestRunMigrationGetService {
 
 				for (Map.Entry<String, LookUpCodeVO> secondEntry : entry.getValue().getMapOfData().entrySet()) {
 
-					if (secondEntry.getValue().getLOOKUP_NAME().equalsIgnoreCase(entry.getValue().getLOOKUP_NAME())) {
+					if (secondEntry.getValue().getLOOKUP_NAME().equalsIgnoreCase(entry.getValue().getLookup_name())) {
 
 						BigDecimal countOflookupCode = (BigDecimal) session.createNativeQuery(
 								"select count(*) from WATS_PROD.win_ta_lookup_codes where lookup_name = '"
 										+ secondEntry.getValue().getLOOKUP_NAME() + "' and lookup_code = '"
-										+ secondEntry.getValue().getLOOKUP_CODE()+ "'")
+										+ secondEntry.getValue().getLOOKUP_CODE() + "'")
 								.getSingleResult();
 
 						Integer dataOflookupCode = Integer.parseInt(countOflookupCode.toString());
@@ -158,9 +154,9 @@ public class TestRunMigrationGetService {
 
 								String query1 = "insert into win_ta_lookup_codes(LOOKUP_CODES_ID,LOOKUP_ID,LOOKUP_NAME,LOOKUP_CODE,TARGET_CODE,MEANING) VALUES("
 										+ id + "," + getlookupId + ",'" + value + "','"
-										+ secondEntry.getValue().getLookup_code() + "','"
-										+ secondEntry.getValue().getTarget_code() + "','"
-										+ secondEntry.getValue().getMeaning() + "')";
+										+ secondEntry.getValue().getLOOKUP_CODE() + "','"
+										+ secondEntry.getValue().getTARGET_CODE() + "','"
+										+ secondEntry.getValue().getMEANING() + "')";
 								session.createNativeQuery(query1).executeUpdate();
 							}
 						}
@@ -194,7 +190,7 @@ public class TestRunMigrationGetService {
 				master.setUpdated_by(masterdata.getUpdated_by());
 				master.setUpdate_date(masterdata.getUpdate_date());
 				master.setCustomisation_reference(masterdata.getCustomisation_reference());
-				master.setAttribute1(masterdata.getAttribute1());
+//				master.setAttribute1(masterdata.getAttribute1());
 				master.setAttribute2(masterdata.getAttribute2());
 				master.setAttribute3(masterdata.getAttribute3());
 				master.setAttribute4(masterdata.getAttribute4());
@@ -205,7 +201,7 @@ public class TestRunMigrationGetService {
 				master.setAttribute9(masterdata.getAttribute9());
 				master.setAttribute10(masterdata.getAttribute10());
 
-				for (WatsMetaDataVO metadatavo : masterdata.getScriptMetaData()) {
+				for (WatsMetaDataVO metadatavo : masterdata.getMetaDataList()) {
 					ScriptMetaData metadata = new ScriptMetaData();
 					metadata.setAction(metadatavo.getAction());
 					metadata.setLine_number(metadatavo.getLine_number());
@@ -318,7 +314,7 @@ public class TestRunMigrationGetService {
 				ScriptsData testSetLineData = new ScriptsData();
 				int sectiptid = copyTestrunDao.getscrtiptIds();
 				testSetLineData.setTestsetlineid(sectiptid);
-				testSetLineData.setScriptid(mapOfScriptIdsOldToNew.get(Integer.parseInt(lineVo.getScript_id())));
+				testSetLineData.setScriptid(mapOfScriptIdsOldToNew.get(lineVo.getScript_id()));
 				testSetLineData.setCreatedby(lineVo.getCreatedby());
 				testSetLineData.setCreationdate(lineVo.getCreationdate());
 				testSetLineData.setEnabled(lineVo.getEnabled());
@@ -328,7 +324,7 @@ public class TestRunMigrationGetService {
 				testSetLineData.setLastupdatedby(lineVo.getLastupdatedby());
 				testSetLineData.setScriptnumber(lineVo.getScriptnumber());
 				testSetLineData.setScriptUpadated(lineVo.getScriptUpadated());
-				testSetLineData.setSeqnum(Integer.parseInt(lineVo.getSeqnum()));
+				testSetLineData.setSeqnum(lineVo.getSeqnum());
 				testSetLineData.setStatus(lineVo.getStatus());
 				testSetLineData.setTestsstlinescriptpath(lineVo.getTestsstlinescriptpath());
 				testSetLineData.setUpdateddate(lineVo.getUpdateddate());
@@ -337,7 +333,7 @@ public class TestRunMigrationGetService {
 					ScritplinesData testSetParam = new ScritplinesData();
 					int sectiptlineid = copyTestrunDao.getscrtiptlineIds();
 					testSetParam.setTestscriptperamid(sectiptlineid);
-					testSetParam.setScript_id(mapOfScriptIdsOldToNew.get(Integer.parseInt(lineVo.getScript_id())));
+					testSetParam.setScript_id(mapOfScriptIdsOldToNew.get(lineVo.getScript_id()));
 					testSetParam.setAction(paramVo.getAction());
 					testSetParam.setLine_number(paramVo.getLine_number());
 					testSetParam.setInput_parameter(paramVo.getInput_parameter());
@@ -375,21 +371,18 @@ public class TestRunMigrationGetService {
 			domGenericResponseBean.setTestRunName(testrundata.getTestsetname());
 			bean.add(domGenericResponseBean);
 			domGenericResponseBean3.setResponse(bean);
-//			return bean;
-		}
-		if(!listOfExistsTestRun.isEmpty()) {
-			testRunExistsVO.setTestRunNameList(listOfExistsTestRun);
-			for(ExistsTestRun existsTestRun : listOfExistsTestRun) {
-				System.out.println("Test Run "+existsTestRun.getTestRunName());
-			}
 		}
 		return domGenericResponseBean3;
 	}
 
-	public int dependent(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,Map<Integer, Integer> mapOfNewToOld, Map<Integer, Integer> mapOfOldToNew, Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
+	public int dependent(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,
+			Map<Integer, Integer> mapOfNewToOld, Map<Integer, Integer> mapOfOldToNew,
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
-			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProduct_version(),scriptMaster.getScript_number());
-			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScript_id()) && !mapOfOldToNew.containsKey(scriptMaster.getScript_id())) {
+			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProduct_version(),
+					scriptMaster.getScript_number());
+			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScript_id())
+					&& !mapOfOldToNew.containsKey(scriptMaster.getScript_id())) {
 				if (id.equals(scriptMaster.getScript_id())) {
 					if (scriptMaster.getDependency() == null) {
 						int originalId = scriptMaster.getScript_id();
@@ -404,7 +397,8 @@ public class TestRunMigrationGetService {
 						mapOfOldToNew.put(originalId, insertedScriptaId);
 						return insertedScriptaId;
 					} else {
-						insertedScriptaId = dependent(scriptMaster.getDependency(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
+						insertedScriptaId = dependent(scriptMaster.getDependency(), listOfScriptMaster,
+								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
 						scriptMaster.setDependency(insertedScriptaId);
 						int originalId = scriptMaster.getScript_id();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
@@ -428,19 +422,21 @@ public class TestRunMigrationGetService {
 		return insertedScriptaId;
 	}
 
-
-
-	public Map<Integer, Integer> Independent(List<ScriptMaster> listOfScriptMaster,Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
+	public Map<Integer, Integer> Independent(List<ScriptMaster> listOfScriptMaster,
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
 		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
 		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 
-			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProduct_version(),scriptMaster.getScript_number());
+			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProduct_version(),
+					scriptMaster.getScript_number());
 
-			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScript_id()) && !mapOfOldToNew.containsKey(scriptMaster.getScript_id())) {
+			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScript_id())
+					&& !mapOfOldToNew.containsKey(scriptMaster.getScript_id())) {
 				if (scriptMaster.getDependency() != null) {
 					int insertedScriptaId = 0;
-					dependent(scriptMaster.getScript_id(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
+					dependent(scriptMaster.getScript_id(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
+							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
 				} else {
 					int originalId = scriptMaster.getScript_id();
 					scriptMaster.setScript_id(null);

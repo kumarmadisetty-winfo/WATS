@@ -7,6 +7,8 @@ import com.winfo.model.ScriptMetaData;
 
 public class WatsMetaDataVO {
 
+	// SCRIPTMETADATA TABLE
+
 	@JsonProperty("script_meta_data_id")
 	private Integer script_meta_data_id;
 	@JsonProperty("script_number")
@@ -45,10 +47,10 @@ public class WatsMetaDataVO {
 	private String validation_name;
 	@JsonProperty("metadata_input_value")
 	private String metadataInputValue;
-	
-	
-	public WatsMetaDataVO() {}
-	
+
+	public WatsMetaDataVO() {
+	}
+
 	public WatsMetaDataVO(ScriptMetaData scriptMetaData) {
 		this.setAction(scriptMetaData.getAction());
 		this.setCreated_by(scriptMetaData.getCreated_by());
@@ -221,6 +223,14 @@ public class WatsMetaDataVO {
 
 	public void setHint(String hint) {
 		this.hint = hint;
+	}
+
+	@Override
+	public String toString() {
+		return this.step_desc + " " + this.unique_mandatory + " " + this.created_by + " " + this.xpath_location1 + " "
+				+ this.datatypes + " " + this.validation_type + " " + this.xpath_location + " " + this.line_number + " "
+				+ this.hint + " " + this.script_meta_data_id + " " + this.updated_by + " " + this.action + " "
+				+ this.script_number + " " + this.input_parameter + " " + this.field_type + " " + this.validation_name;
 	}
 
 }

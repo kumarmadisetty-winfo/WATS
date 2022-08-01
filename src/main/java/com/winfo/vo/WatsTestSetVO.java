@@ -5,17 +5,19 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.winfo.model.ScriptsData;
 
 public class WatsTestSetVO {
-	
+	// #################TestSetLinesAndParaData
+
 	@JsonProperty("test_set_line_id")
 	private String test_set_line_id;
-	
+
 	@JsonProperty("test_set_id")
 	private String test_set_id;
-	
+
 	@JsonProperty("script_id")
-	private String script_id;
+	private int script_id;
 
 	@JsonProperty("executedby")
 	private String executedby;
@@ -24,7 +26,7 @@ public class WatsTestSetVO {
 	@JsonProperty("executionendtime")
 	private Date executionendtime;
 	@JsonProperty("seqnum")
-	private String seqnum;
+	private int seqnum;
 	@JsonProperty("scriptnumber")
 	private String scriptnumber;
 	@JsonProperty("testsstlinescriptpath")
@@ -43,9 +45,28 @@ public class WatsTestSetVO {
 	private Date executionstarttime;
 	@JsonProperty("status")
 	private String status;
-
 	@JsonProperty("ScriptParam")
 	private List<WatsTestSetParamVO> ScriptParam = new ArrayList<WatsTestSetParamVO>();
+
+	public WatsTestSetVO() {
+	}
+
+	public WatsTestSetVO(ScriptsData scriptData) {
+		this.script_id = scriptData.getScriptid();
+		this.scriptnumber = scriptData.getScriptnumber();
+		this.status = scriptData.getScriptnumber();
+		this.enabled = scriptData.getEnabled();
+		this.seqnum = scriptData.getSeqnum();
+		this.createdby = scriptData.getCreatedby();
+		this.testsstlinescriptpath = scriptData.getTestsstlinescriptpath();
+		this.executedby = scriptData.getExecutedby();
+		this.scriptUpadated = null;
+		this.lastupdatedby = null;
+		this.creationdate = null;
+		this.updateddate = null;
+		this.executionendtime = null;
+		this.executionstarttime = null;
+	}
 
 	public String getExecutedby() {
 		return executedby;
@@ -71,11 +92,11 @@ public class WatsTestSetVO {
 		this.executionendtime = executionendtime;
 	}
 
-	public String getSeqnum() {
+	public int getSeqnum() {
 		return seqnum;
 	}
 
-	public void setSeqnum(String seqnum) {
+	public void setSeqnum(int seqnum) {
 		this.seqnum = seqnum;
 	}
 
@@ -175,14 +196,19 @@ public class WatsTestSetVO {
 		this.test_set_id = test_set_id;
 	}
 
-	public String getScript_id() {
+	public int getScript_id() {
 		return script_id;
 	}
 
-	public void setScript_id(String script_id) {
+	public void setScript_id(int script_id) {
 		this.script_id = script_id;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return this.executedby + " " + this.creationdate + " " + this.executionendtime + " " + this.seqnum + " "
+				+ this.scriptnumber + " " + this.script_id + " " + this.testsstlinescriptpath + " " + this.enabled + " "
+				+ this.createdby + " " + this.status;
+	}
 
 }

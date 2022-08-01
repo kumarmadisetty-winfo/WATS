@@ -9,6 +9,8 @@ import com.winfo.model.ScriptMaster;
 
 public class WatsMasterVO {
 
+	// SCRIPTMASTER TABLE
+
 	@JsonProperty("script_id")
 	private Integer script_id;
 	@JsonProperty("script_number")
@@ -410,6 +412,16 @@ public class WatsMasterVO {
 
 	public void setMetaDataList(List<WatsMetaDataVO> metaDataList) {
 		this.metaDataList = metaDataList;
+	}
+
+	@Override
+	public String toString() {
+		return this.role + " " + this.scenario_name + " " + this.scenario_description + " "
+				+ this.selenium_test_script_name + " " + this.process_area + " " + this.standard_custom + " "
+				+ this.selenium_test_method + " " + this.sub_process_area + " " + this.product_version + " "
+				+ this.test_script_status + " " + this.dependency + " " + this.author + " " + this.module + " "
+				+ this.customisation_reference + " " + this.priority + " " + this.created_by + " " + this.updated_by
+				+ " " + this.script_number;
 	}
 
 }

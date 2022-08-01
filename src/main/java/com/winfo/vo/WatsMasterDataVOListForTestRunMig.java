@@ -1,11 +1,11 @@
 package com.winfo.vo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.winfo.model.Testrundata;
 
 public class WatsMasterDataVOListForTestRunMig {
 	
@@ -76,7 +76,7 @@ public class WatsMasterDataVOListForTestRunMig {
 	private String effective_from;
 	
 	@JsonProperty("configuration_id")
-	private String configuration_id;
+	private int configuration_id;
 	
 	@JsonProperty("ScriptMasterData")
 	private List<WatsMasterVO> ScriptMasterData= new ArrayList<WatsMasterVO>();
@@ -92,7 +92,29 @@ public class WatsMasterDataVOListForTestRunMig {
 	
 	
 
+	public WatsMasterDataVOListForTestRunMig() {}
+	
+	public WatsMasterDataVOListForTestRunMig(Testrundata testRunData) {
 
+		this.configuration_id = testRunData.getConfigurationid();
+		this.created_by = testRunData.getCreatedby();
+		this.project_id = testRunData.getProjectid();
+		this.test_set_name = testRunData.getTestsetname();
+		this.test_set_desc = testRunData.getTest_set_desc();
+		this.test_set_comments = testRunData.getTest_set_comments();
+		this.enabled = testRunData.getEnabled();
+		this.description = testRunData.getDescription();
+		this.effective_from = testRunData.getEffective_from();
+		this.effective_to = testRunData.getEffective_to();
+		this.ts_complete_flag = testRunData.getTscompleteflag();
+		this.pass_path = testRunData.getPasspath();
+		this.fail_path = testRunData.getFailpath();
+		this.exeception_path =  testRunData.getExceptionpath();
+		this.tr_mode = testRunData.getTrmode();
+		this.last_updated_by = null;
+		this.creation_date = null;
+		this.update_date = null;
+	}
 
 	public boolean isTestRunExists() {
 		return testRunExists;
@@ -222,11 +244,11 @@ public class WatsMasterDataVOListForTestRunMig {
 		this.effective_from = effective_from;
 	}
 
-	public String getConfiguration_id() {
+	public int getConfiguration_id() {
 		return configuration_id;
 	}
 
-	public void setConfiguration_id(String configuration_id) {
+	public void setConfiguration_id(int configuration_id) {
 		this.configuration_id = configuration_id;
 	}
 
@@ -309,8 +331,6 @@ public class WatsMasterDataVOListForTestRunMig {
 	public void setCustomer(String customer) {
 		this.customer = customer;
 	}
-	
-	
 
 }
 	

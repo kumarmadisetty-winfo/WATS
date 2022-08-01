@@ -7,8 +7,6 @@ public class TestRunDetails {
 	private List<ExistsTestRun> id;
 	private String customerName;
 
-	
-
 	public List<ExistsTestRun> getId() {
 		return id;
 	}
@@ -24,7 +22,5 @@ public class TestRunDetails {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
-	
-	
 
 }

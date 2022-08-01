@@ -42,6 +42,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.model.Testrundata;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants;
@@ -73,12 +74,65 @@ public class DataBaseEntryDao {
 	private static final String STATUS = "status";
 	private static final String IN_QUEUE = "In-Queue";
 
+	public Testrundata getTestSetObjByTestSetId(Integer testSetId) {
+		Session session = em.unwrap(Session.class);
+		return session.find(Testrundata.class, testSetId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public String findCustomerUriByName(String customerName) {
+		Session session = em.unwrap(Session.class);
+		List<String> result = (List<String>) session
+				.createNativeQuery(
+						"select value_name from APPLICATION_PROPERTIES where KEY_NAME='" + customerName + "'")
+				.getResultList();
+		return result.isEmpty() ? "" : result.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ScriptMaster> getScriptMasterListByScriptId(int scriptId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<ScriptMaster> cq = cb.createQuery(ScriptMaster.class);
+		Root<ScriptMaster> from = cq.from(ScriptMaster.class);
+		Predicate condition = cb.equal(from.get("script_id"), scriptId);
+		cq.where(condition);
+		Query query = em.createQuery(cq);
+		return query.getResultList();
+	}
+
+	public String getConfiNameByConfigId(Integer configId) {
+		Session session = em.unwrap(Session.class);
+		String configurationName = (String) session
+				.createNativeQuery("select config_name from win_ta_config where configuration_id ='" + configId + "'")
+				.getSingleResult();
+		return configurationName;
+	}
+
+	public String getProjectNameById(int projectId) {
+		Session session = em.unwrap(Session.class);
+		String projectName = (String) session
+				.createNativeQuery("select project_name from win_ta_projects where project_id =" + projectId)
+				.getSingleResult();
+		return projectName;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<ScriptMetaData> getScriptMetaDataList(Integer scriptId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ScriptMetaData> cq = cb.createQuery(ScriptMetaData.class);
 		Root<ScriptMetaData> from = cq.from(ScriptMetaData.class);
 		Predicate condition = cb.equal(from.get("scriptMaster").get("script_id"), scriptId);
+		cq.where(condition);
+		Query query = em.createQuery(cq);
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<TestSetScriptParam> getScriptParamList(Integer testSetLineId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TestSetScriptParam> cq = cb.createQuery(TestSetScriptParam.class);
+		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
+		Predicate condition = cb.equal(from.get("testSetLine").get("testRunScriptId"), testSetLineId);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		return query.getResultList();

@@ -1,34 +1,58 @@
 package com.winfo.vo;
 
+import java.util.Date;
+
+import com.winfo.model.LookUpCode;
+
 public class LookUpCodeVO {
 
-	private String LOOKUP_CODES_ID;
-	private String LOOKUP_ID;
+	private Integer LOOKUP_CODES_ID;
+	private Integer LOOKUP_ID;
 	private String LOOKUP_NAME;
 	private String LOOKUP_CODE;
 	private String TARGET_CODE;
 	private String MEANING;
 	private String DESCRIPTION;
-	private String EFFECTIVE_FROM;
-	private String EFFECTIVE_TO;
+	private Date EFFECTIVE_FROM;
+	private Date EFFECTIVE_TO;
 	private String CREATED_BY;
 	private String LAST_UPDATED_BY;
-	private String CREATION_DATE;
-	private String UPDATE_DATE;
+	private Date CREATION_DATE;
+	private Date UPDATE_DATE;
 	private String DATA_VALIDATION;
 	private String UNIQUE_MANDATORY;
 	private String PROCESS_CODE;
 	private String MODULE_CODE;
-	public String getLOOKUP_CODES_ID() {
+	
+	public LookUpCodeVO() {};
+	
+	public LookUpCodeVO(LookUpCode lookUpCode) {
+		this.LOOKUP_CODES_ID = lookUpCode.getLookUpCodeId();
+		this.LOOKUP_ID = lookUpCode.getLookUpId();
+		this.LOOKUP_NAME = lookUpCode.getLookUpName();
+		this.LOOKUP_CODE = lookUpCode.getLookUpCode();
+		this.MEANING = lookUpCode.getMeaning();
+		this.DESCRIPTION = lookUpCode.getDescription();
+		this.EFFECTIVE_FROM = lookUpCode.getEffectiveFrom();
+		this.EFFECTIVE_TO = lookUpCode.getEffectiveTo();
+		this.CREATED_BY = lookUpCode.getCreatedBy();
+		this.LAST_UPDATED_BY = lookUpCode.getLastUpdatedBy();
+		this.CREATION_DATE = lookUpCode.getCreationDate();
+		this.UPDATE_DATE = lookUpCode.getUpdateDate();
+		this.PROCESS_CODE = lookUpCode.getProcessCode();
+		this.MODULE_CODE = lookUpCode.getModuleCode();
+	}
+	
+	public Integer getLOOKUP_CODES_ID() {
 		return LOOKUP_CODES_ID;
 	}
-	public void setLOOKUP_CODES_ID(String lOOKUP_CODES_ID) {
+	public void setLOOKUP_CODES_ID(Integer lOOKUP_CODES_ID) {
 		LOOKUP_CODES_ID = lOOKUP_CODES_ID;
 	}
-	public String getLOOKUP_ID() {
+	public Integer getLOOKUP_ID() {
 		return LOOKUP_ID;
 	}
-	public void setLOOKUP_ID(String lOOKUP_ID) {
+	public void setLOOKUP_ID(Integer lOOKUP_ID) {
 		LOOKUP_ID = lOOKUP_ID;
 	}
 	public String getLOOKUP_NAME() {
@@ -61,16 +85,16 @@ public class LookUpCodeVO {
 	public void setDESCRIPTION(String dESCRIPTION) {
 		DESCRIPTION = dESCRIPTION;
 	}
-	public String getEFFECTIVE_FROM() {
+	public Date getEFFECTIVE_FROM() {
 		return EFFECTIVE_FROM;
 	}
-	public void setEFFECTIVE_FROM(String eFFECTIVE_FROM) {
+	public void setEFFECTIVE_FROM(Date eFFECTIVE_FROM) {
 		EFFECTIVE_FROM = eFFECTIVE_FROM;
 	}
-	public String getEFFECTIVE_TO() {
+	public Date getEFFECTIVE_TO() {
 		return EFFECTIVE_TO;
 	}
-	public void setEFFECTIVE_TO(String eFFECTIVE_TO) {
+	public void setEFFECTIVE_TO(Date eFFECTIVE_TO) {
 		EFFECTIVE_TO = eFFECTIVE_TO;
 	}
 	public String getCREATED_BY() {
@@ -85,16 +109,16 @@ public class LookUpCodeVO {
 	public void setLAST_UPDATED_BY(String lAST_UPDATED_BY) {
 		LAST_UPDATED_BY = lAST_UPDATED_BY;
 	}
-	public String getCREATION_DATE() {
+	public Date getCREATION_DATE() {
 		return CREATION_DATE;
 	}
-	public void setCREATION_DATE(String cREATION_DATE) {
+	public void setCREATION_DATE(Date cREATION_DATE) {
 		CREATION_DATE = cREATION_DATE;
 	}
-	public String getUPDATE_DATE() {
+	public Date getUPDATE_DATE() {
 		return UPDATE_DATE;
 	}
-	public void setUPDATE_DATE(String uPDATE_DATE) {
+	public void setUPDATE_DATE(Date uPDATE_DATE) {
 		UPDATE_DATE = uPDATE_DATE;
 	}
 	public String getDATA_VALIDATION() {
