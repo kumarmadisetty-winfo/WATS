@@ -15,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.winfo.dao.DataBaseEntryDao;
-import com.winfo.dao.TestRunMigrationDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.ScriptsData;
@@ -24,12 +23,12 @@ import com.winfo.model.Testrundata;
 import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
-import com.winfo.vo.TestRunDetails;
-import com.winfo.vo.TestRunMigrationDto;
 import com.winfo.vo.ScriptMasterDto;
 import com.winfo.vo.ScriptMetaDataDto;
-import com.winfo.vo.WatsTestSetParamVO;
+import com.winfo.vo.TestRunDetails;
+import com.winfo.vo.TestRunMigrationDto;
 import com.winfo.vo.TestSetLineDto;
+import com.winfo.vo.WatsTestSetParamVO;
 
 import reactor.core.publisher.Mono;
 
@@ -43,17 +42,14 @@ public class TestRunMigrationService {
 	
 
 	@Autowired
-	TestRunMigrationDao dao;
-
-	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
 
-	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customer_uri)
+	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUri)
 			throws JsonMappingException, JsonProcessingException {
 
 		System.out.println("json data**" + listOfTestRunMigrate);
 
-		String uri = customer_uri + "/testRunMigrationToCustomer";
+		String uri = customerUri + "/testRunMigrationToCustomer";
 		WebClient webClient = WebClient.create(uri);
 		Mono<String> result = webClient.post().syncBody(listOfTestRunMigrate).retrieve().bodyToMono(String.class);
 		String response = result.block();
@@ -174,8 +170,6 @@ public class TestRunMigrationService {
 		}
 //		return webClientService(testRunMigrationDto, "http://localhost:38080/wats");
 		return webClientService(testRunMigrationDto, customerURI);
-
-		// return dao.testRunMigration(testRunDetails);
 
 	}
 

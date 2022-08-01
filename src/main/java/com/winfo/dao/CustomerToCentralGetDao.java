@@ -32,7 +32,7 @@ public class CustomerToCentralGetDao {
 
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
 
@@ -476,15 +476,15 @@ public class CustomerToCentralGetDao {
 			String productVersionDb = dataBaseEntryDao.getProductVersionByScriptId(scriptId);
 			if (productVersion.equals(productVersionDb)) {
 				ScriptMaster scriptMasterDtls = dataBaseEntryDao.findScriptMasterByScriptId(scriptId);
-				List<ScriptMetaData> scriptMetaDataList =  dataBaseEntryDao.getScriptMetaDataList(scriptId);
-				ScriptMasterDto watsMetaVO = new ScriptMasterDto(scriptMasterDtls);
+				List<ScriptMetaData> scriptMetaDataList = dataBaseEntryDao.getScriptMetaDataList(scriptId);
+				ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMasterDtls);
 				List<ScriptMetaDataDto> scriptMetaDataListDto = new ArrayList<>();
-				for(ScriptMetaData scriptMetaData : scriptMetaDataList) {
-					ScriptMetaDataDto watsMetadataVO = new ScriptMetaDataDto(scriptMetaData);
-					scriptMetaDataListDto.add(watsMetadataVO);
+				for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
+					ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
+					scriptMetaDataListDto.add(scriptMetaDataDto);
 				}
-				watsMetaVO.setMetaDataList(scriptMetaDataListDto);
-				scriptMasterList.add(watsMetaVO);
+				scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
+				scriptMasterList.add(scriptMasterDto);
 			}
 		}
 		return scriptMasterList;

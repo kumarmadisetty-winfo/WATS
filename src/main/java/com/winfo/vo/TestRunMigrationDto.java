@@ -207,8 +207,8 @@ public class TestRunMigrationDto {
 		return trMode;
 	}
 
-	public void setTrMode(String tr_mode) {
-		this.trMode = tr_mode;
+	public void setTrMode(String trMode) {
+		this.trMode = trMode;
 	}
 
 	public String getUpdateDate() {
