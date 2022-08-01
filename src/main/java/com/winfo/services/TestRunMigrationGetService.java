@@ -21,14 +21,11 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.ScriptsData;
 import com.winfo.model.ScritplinesData;
 import com.winfo.model.Testrundata;
-import com.winfo.vo.DomGenericResponseBean2;
-import com.winfo.vo.DomGenericResponseBeanList;
-import com.winfo.vo.ExistTestRunDto;
+import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
 import com.winfo.vo.ScriptMasterDto;
 import com.winfo.vo.ScriptMetaDataDto;
-import com.winfo.vo.TestRunExistVO;
 import com.winfo.vo.TestRunMigrationDto;
 import com.winfo.vo.TestSetLineDto;
 import com.winfo.vo.WatsTestSetParamVO;
@@ -46,47 +43,41 @@ public class TestRunMigrationGetService {
 	private EntityManager entityManager;
 
 	@Transactional
-	public DomGenericResponseBeanList centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
+	public List<DomGenericResponseBean> centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
 
-		List<DomGenericResponseBean2> bean = new ArrayList<>();
+		List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
 
-		DomGenericResponseBeanList domGenericResponseBeanList = new DomGenericResponseBeanList();
-
-		for (TestRunMigrationDto mastervolist : listOfTestRunDto) {
+		for (TestRunMigrationDto testRunMigrateDto : listOfTestRunDto) {
 			Session session = entityManager.unwrap(Session.class);
-
-//			ExistsTestRun existsTestRun = new ExistsTestRun();
 
 			BigDecimal checkTest = (BigDecimal) session
 					.createNativeQuery("select count(*) from WIN_TA_TEST_SET where test_set_name ='"
-							+ mastervolist.getTestSetName() + "'")
+							+ testRunMigrateDto.getTestSetName() + "'")
 					.getSingleResult();
 
 			int checkTestRun = Integer.parseInt(checkTest.toString());
 
-			if (checkTestRun > 0 && !mastervolist.isTestRunExists()) {
-				DomGenericResponseBean2 domGenericResponseBean = new DomGenericResponseBean2();
+			if (checkTestRun > 0 && !testRunMigrateDto.isTestRunExists()) {
+				DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatus(0);
 				domGenericResponseBean.setStatusMessage("Already Exists");
-				domGenericResponseBean.setTestRunName(mastervolist.getTestSetName());
-				bean.add(domGenericResponseBean);
-				domGenericResponseBeanList.setResponse(bean);
+				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
+				listOfResponseBean.add(domGenericResponseBean);
 				continue;
 			}
 			int customerId = 0;
 			try {
 				BigDecimal checkCustomer = (BigDecimal) session
 						.createNativeQuery("select customer_id from win_ta_customers where customer_name ='"
-								+ mastervolist.getCustomer() + "'")
+								+ testRunMigrateDto.getCustomer() + "'")
 						.getSingleResult();
 				customerId = Integer.parseInt(checkCustomer.toString());
 			} catch (Exception e) {
-				DomGenericResponseBean2 domGenericResponseBean = new DomGenericResponseBean2();
+				DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatusMessage("Customer Not Found");
-				domGenericResponseBean.setTestRunName(mastervolist.getTestSetName());
-				bean.add(domGenericResponseBean);
-				domGenericResponseBeanList.setResponse(bean);
-				return domGenericResponseBeanList;
+				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
+				listOfResponseBean.add(domGenericResponseBean);
+				return listOfResponseBean;
 			}
 
 			List<ScriptMaster> listOfScriptMaster = new ArrayList<>();
@@ -94,7 +85,7 @@ public class TestRunMigrationGetService {
 			Map<Integer, Integer> mapOfScriptIdsOldToNew = new HashMap<>();
 			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew = new HashMap<>();
 
-			for (Map.Entry<String, LookUpVO> entry : mastervolist.getLookUpData().entrySet()) {
+			for (Map.Entry<String, LookUpVO> entry : testRunMigrateDto.getLookUpData().entrySet()) {
 
 				String value = entry.getValue().getLookupName();
 				BigDecimal countOfLookups = (BigDecimal) session
@@ -114,8 +105,7 @@ public class TestRunMigrationGetService {
 
 						String query1 = "insert into win_ta_lookups(LOOKUP_ID,LOOKUP_NAME,LOOKUP_DESC,CREATED_BY,LAST_UPDATED_BY) VALUES("
 								+ id + ",'" + value + "','" + entry.getValue().getLookupDesc() + "','"
-								+ entry.getValue().getCreatedBy() + "','" + entry.getValue().getLastUpdatedBy()
-								+ "')";
+								+ entry.getValue().getCreatedBy() + "','" + entry.getValue().getLastUpdatedBy() + "')";
 						session.createNativeQuery(query1).executeUpdate();
 					}
 
@@ -160,7 +150,7 @@ public class TestRunMigrationGetService {
 				}
 
 			}
-			for (ScriptMasterDto masterdata : mastervolist.getScriptMasterData()) {
+			for (ScriptMasterDto masterdata : testRunMigrateDto.getScriptMasterData()) {
 				ScriptMaster master = new ScriptMaster();
 				master.setScript_id(masterdata.getScriptId());
 				master.setModule(masterdata.getModule());
@@ -226,7 +216,7 @@ public class TestRunMigrationGetService {
 
 			BigDecimal checkConfig1 = (BigDecimal) session
 					.createNativeQuery("select count(*) from win_ta_config where config_name ='"
-							+ mastervolist.getConfigurationName() + "'")
+							+ testRunMigrateDto.getConfigurationName() + "'")
 					.getSingleResult();
 			Integer checkConfig = Integer.parseInt(checkConfig1.toString());
 
@@ -236,18 +226,20 @@ public class TestRunMigrationGetService {
 				Integer id = Integer.parseInt(bigDecimal.toString());
 				session.createNativeQuery(
 						"Insert into WIN_TA_CONFIG (CONFIGURATION_ID,CREATED_BY,LAST_UPDATED_BY,CONFIG_NAME) values ("
-								+ id + ",'SUPER_ADMIN','SUPER_ADMIN','" + mastervolist.getConfigurationName() + "')")
+								+ id + ",'SUPER_ADMIN','SUPER_ADMIN','" + testRunMigrateDto.getConfigurationName()
+								+ "')")
 						.executeUpdate();
 			}
 			BigDecimal configuration = (BigDecimal) session
 					.createNativeQuery("select configuration_id from win_ta_config where config_name ='"
-							+ mastervolist.getConfigurationName() + "'")
+							+ testRunMigrateDto.getConfigurationName() + "'")
 					.getSingleResult();
 			int configuration_id1 = Integer.parseInt(configuration.toString());
 
 //==========================================
-			BigDecimal checkProject = (BigDecimal) session.createNativeQuery(
-					"select count(*) from win_ta_projects where project_name ='" + mastervolist.getProjectName() + "'")
+			BigDecimal checkProject = (BigDecimal) session
+					.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
+							+ testRunMigrateDto.getProjectName() + "'")
 					.getSingleResult();
 
 			int checkProjectId = Integer.parseInt(checkProject.toString());
@@ -264,8 +256,8 @@ public class TestRunMigrationGetService {
 				session.createNativeQuery(
 						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,CUSTOMER_ID,PRODUCT_VERSION) VALUES("
 								+ newNextValueProject + "," + newNextValueProjectNumber + ",'"
-								+ mastervolist.getProjectName() + "'," + customerId + ",'"
-								+ mastervolist.getScriptMasterData().get(0).getProductVersion() + "')")
+								+ testRunMigrateDto.getProjectName() + "'," + customerId + ",'"
+								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + "')")
 						.executeUpdate();
 
 			}
@@ -281,32 +273,32 @@ public class TestRunMigrationGetService {
 			System.out.println("checkTestRun " + checkTestRun);
 			int testrunid = copyTestrunDao.getIds();
 			if (checkTestRun > 0) {
-				testrundata.setTestsetname(mastervolist.getTestSetName() + "-" + testrunid);
+				testrundata.setTestsetname(testRunMigrateDto.getTestSetName() + "-" + testrunid);
 			} else {
-				testrundata.setTestsetname(mastervolist.getTestSetName());
+				testrundata.setTestsetname(testRunMigrateDto.getTestSetName());
 			}
 			testrundata.setTestsetid(testrunid);
 			testrundata.setConfigurationid(configuration_id1);
 
 			BigDecimal project = (BigDecimal) session
 					.createNativeQuery("select project_id from win_ta_projects where project_name ='"
-							+ mastervolist.getProjectName() + "'")
+							+ testRunMigrateDto.getProjectName() + "'")
 					.getSingleResult();
 			int projectId = Integer.parseInt(project.toString());
 
 			testrundata.setProjectid(projectId);
 
-			testrundata.setDescription(mastervolist.getDescription());
-			testrundata.setTest_set_desc(mastervolist.getTestSetDesc());
-			testrundata.setTest_set_comments(mastervolist.getTestSetComments());
-			testrundata.setEnabled(mastervolist.getEnabled());
+			testrundata.setDescription(testRunMigrateDto.getDescription());
+			testrundata.setTest_set_desc(testRunMigrateDto.getTestSetDesc());
+			testrundata.setTest_set_comments(testRunMigrateDto.getTestSetComments());
+			testrundata.setEnabled(testRunMigrateDto.getEnabled());
 
-			testrundata.setPasspath(mastervolist.getPassPath());
-			testrundata.setFailpath(mastervolist.getFailPath());
-			testrundata.setExceptionpath(mastervolist.getExeceptionPath());
+			testrundata.setPasspath(testRunMigrateDto.getPassPath());
+			testrundata.setFailpath(testRunMigrateDto.getFailPath());
+			testrundata.setExceptionpath(testRunMigrateDto.getExeceptionPath());
 			testrundata.setTscompleteflag("ACTIVE");
 
-			for (TestSetLineDto lineVo : mastervolist.getTestSetLinesAndParaData()) {
+			for (TestSetLineDto lineVo : testRunMigrateDto.getTestSetLinesAndParaData()) {
 				ScriptsData testSetLineData = new ScriptsData();
 				int sectiptid = copyTestrunDao.getscrtiptIds();
 				testSetLineData.setTestsetlineid(sectiptid);
@@ -361,14 +353,13 @@ public class TestRunMigrationGetService {
 				testrundata.addScriptsdata(testSetLineData);
 			}
 			dao.insertTestRun(testrundata);
-			DomGenericResponseBean2 domGenericResponseBean = new DomGenericResponseBean2();
+			DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
 			domGenericResponseBean.setStatusMessage("Migrated Successfully");
 			domGenericResponseBean.setTestRunName(testrundata.getTestsetname());
-			bean.add(domGenericResponseBean);
-			domGenericResponseBeanList.setResponse(bean);
+			listOfResponseBean.add(domGenericResponseBean);
 		}
-		return domGenericResponseBeanList;
+		return listOfResponseBean;
 	}
 
 	public int dependentScript(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,

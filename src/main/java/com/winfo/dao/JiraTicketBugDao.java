@@ -1,60 +1,16 @@
 package com.winfo.dao;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.json.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.reactive.function.BodyInserters;
-//import org.springframework.web.multipart.MultipartRequest;
-//import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.winfo.model.FetchData;
-import com.winfo.model.FetchDataMetadata;
-import com.winfo.model.TestSet;
-import com.winfo.services.JiraTicketBugService;
-import com.winfo.vo.BugDetails;
-import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.DomGenericResponseBean1;
 
 import com.winfo.vo.TestRunVO;
-
-import reactor.core.publisher.Mono;
 
 
 @Repository

@@ -7,11 +7,14 @@ public class DomGenericResponseBean{
 	private String description;
 	private String failed_Script;
 	private int scriptID;
+	private String testRunName;
 	
-	
-	
-	
-	
+	public String getTestRunName() {
+		return testRunName;
+	}
+	public void setTestRunName(String testRunName) {
+		this.testRunName = testRunName;
+	}
 	public int getScriptID() {
 		return scriptID;
 	}
