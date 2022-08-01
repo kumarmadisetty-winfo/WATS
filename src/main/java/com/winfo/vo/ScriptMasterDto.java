@@ -99,31 +99,31 @@ public class ScriptMasterDto {
 		this.setAttribute8(scriptMaster.getAttribute8());
 		this.setAttribute9(scriptMaster.getAttribute9());
 		this.setAuthor(scriptMaster.getAuthor());
-		this.setCreated_by(scriptMaster.getCreated_by());
-		this.setCreation_date(scriptMaster.getCreation_date());
-		this.setCustomer_id(scriptMaster.getCustomer_id());
-		this.setCustomisation_reference(scriptMaster.getCustomisation_reference());
+		this.setCreatedBy(scriptMaster.getCreated_by());
+		this.setCreationDate(scriptMaster.getCreation_date());
+		this.setCustomerId(scriptMaster.getCustomer_id());
+		this.setCustomisationReference(scriptMaster.getCustomisation_reference());
 		this.setDependency(scriptMaster.getDependency());
-		this.setDependent_script_num(scriptMaster.getDependent_script_num());
-		this.setEnd2end_scenario(scriptMaster.getEnd2end_scenario());
-		this.setExpected_result(scriptMaster.getExpected_result());
+		this.setDependentScriptNum(scriptMaster.getDependent_script_num());
+		this.setEnd2endScenario(scriptMaster.getEnd2end_scenario());
+		this.setExpectedResult(scriptMaster.getExpected_result());
 		this.setModule(scriptMaster.getModule());
 		this.setPriority(scriptMaster.getPriority());
-		this.setProcess_area(scriptMaster.getProcess_area());
-		this.setProduct_version(scriptMaster.getProduct_version());
+		this.setProcessArea(scriptMaster.getProcess_area());
+		this.setProductVersion(scriptMaster.getProduct_version());
 		this.setRole(scriptMaster.getRole());
-		this.setScenario_description(scriptMaster.getScenario_description());
-		this.setScenario_name(scriptMaster.getScenario_name());
-		this.setScript_id(scriptMaster.getScript_id());
-		this.setScript_number(scriptMaster.getScript_number());
-		this.setSelenium_test_method(scriptMaster.getSelenium_test_method());
-		this.setSelenium_test_script_name(scriptMaster.getSelenium_test_script_name());
-		this.setStandard_custom(scriptMaster.getStandard_custom());
-		this.setSub_process_area(scriptMaster.getSub_process_area());
+		this.setScenarioDescription(scriptMaster.getScenario_description());
+		this.setScenarioName(scriptMaster.getScenario_name());
+		this.setScriptId(scriptMaster.getScript_id());
+		this.setScriptNumber(scriptMaster.getScript_number());
+		this.setSeleniumTestMethod(scriptMaster.getSelenium_test_method());
+		this.setSeleniumTestScriptName(scriptMaster.getSelenium_test_script_name());
+		this.setStandardCustom(scriptMaster.getStandard_custom());
+		this.setSubProcessArea(scriptMaster.getSub_process_area());
 		this.setTargetApplication(scriptMaster.getTargetApplication());
-		this.setTest_script_status(scriptMaster.getTest_script_status());
-		this.setUpdate_date(scriptMaster.getUpdate_date());
-		this.setUpdated_by(scriptMaster.getUpdated_by());
+		this.setTestScriptStatus(scriptMaster.getTest_script_status());
+		this.setUpdateDate(scriptMaster.getUpdate_date());
+		this.setUpdatedBy(scriptMaster.getUpdated_by());
 	}
 
 	public String getTargetApplication() {
@@ -134,43 +134,43 @@ public class ScriptMasterDto {
 		this.targetApplication = targetApplication;
 	}
 
-	public Integer getScript_id() {
+	public Integer getScriptId() {
 		return scriptId;
 	}
 
-	public void setScript_id(Integer scriptId) {
+	public void setScriptId(Integer scriptId) {
 		this.scriptId = scriptId;
 	}
 
-	public String getDependent_script_num() {
+	public String getDependentScriptNum() {
 		return dependentScriptNum;
 	}
 
-	public void setDependent_script_num(String dependentScriptNum) {
+	public void setDependentScriptNum(String dependentScriptNum) {
 		this.dependentScriptNum = dependentScriptNum;
 	}
 
-	public String getScript_number() {
+	public String getScriptNumber() {
 		return scriptNumber;
 	}
 
-	public void setScript_number(String scriptNumber) {
+	public void setScriptNumber(String scriptNumber) {
 		this.scriptNumber = scriptNumber;
 	}
 
-	public String getProcess_area() {
+	public String getProcessArea() {
 		return processArea;
 	}
 
-	public void setProcess_area(String processArea) {
+	public void setProcessArea(String processArea) {
 		this.processArea = processArea;
 	}
 
-	public String getSub_process_area() {
+	public String getSubProcessArea() {
 		return subProcessArea;
 	}
 
-	public void setSub_process_area(String subProcessArea) {
+	public void setSubProcessArea(String subProcessArea) {
 		this.subProcessArea = subProcessArea;
 	}
 
@@ -190,51 +190,51 @@ public class ScriptMasterDto {
 		this.role = role;
 	}
 
-	public String getEnd2end_scenario() {
+	public String getEnd2endScenario() {
 		return end2endScenario;
 	}
 
-	public void setEnd2end_scenario(String end2endScenario) {
+	public void setEnd2endScenario(String end2endScenario) {
 		this.end2endScenario = end2endScenario;
 	}
 
-	public String getScenario_name() {
+	public String getScenarioName() {
 		return scenarioName;
 	}
 
-	public void setScenario_name(String scenarioName) {
+	public void setScenarioName(String scenarioName) {
 		this.scenarioName = scenarioName;
 	}
 
-	public String getScenario_description() {
+	public String getScenarioDescription() {
 		return scenarioDescription;
 	}
 
-	public void setScenario_description(String scenarioDescription) {
+	public void setScenarioDescription(String scenarioDescription) {
 		this.scenarioDescription = scenarioDescription;
 	}
 
-	public String getExpected_result() {
+	public String getExpectedResult() {
 		return expectedResult;
 	}
 
-	public void setExpected_result(String expectedResult) {
+	public void setExpectedResult(String expectedResult) {
 		this.expectedResult = expectedResult;
 	}
 
-	public String getSelenium_test_script_name() {
+	public String getSeleniumTestScriptName() {
 		return seleniumTestScriptName;
 	}
 
-	public void setSelenium_test_script_name(String seleniumTestScriptName) {
+	public void setSeleniumTestScriptName(String seleniumTestScriptName) {
 		this.seleniumTestScriptName = seleniumTestScriptName;
 	}
 
-	public String getSelenium_test_method() {
+	public String getSeleniumTestMethod() {
 		return seleniumTestMethod;
 	}
 
-	public void setSelenium_test_method(String seleniumTestMethod) {
+	public void setSeleniumTestMethod(String seleniumTestMethod) {
 		this.seleniumTestMethod = seleniumTestMethod;
 	}
 
@@ -246,27 +246,27 @@ public class ScriptMasterDto {
 		this.dependency = dependency;
 	}
 
-	public String getProduct_version() {
+	public String getProductVersion() {
 		return productVersion;
 	}
 
-	public void setProduct_version(String productVersion) {
+	public void setProductVersion(String productVersion) {
 		this.productVersion = productVersion;
 	}
 
-	public String getStandard_custom() {
+	public String getStandardCustom() {
 		return standardCustom;
 	}
 
-	public void setStandard_custom(String standardCustom) {
+	public void setStandardCustom(String standardCustom) {
 		this.standardCustom = standardCustom;
 	}
 
-	public String getTest_script_status() {
+	public String getTestScriptStatus() {
 		return testScriptStatus;
 	}
 
-	public void setTest_script_status(String testScriptStatus) {
+	public void setTestScriptStatus(String testScriptStatus) {
 		this.testScriptStatus = testScriptStatus;
 	}
 
@@ -278,51 +278,51 @@ public class ScriptMasterDto {
 		this.author = author;
 	}
 
-	public String getCreated_by() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreated_by(String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public Date getCreation_date() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreation_date(Date creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public String getUpdated_by() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdated_by(String updatedBy) {
+	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdate_date() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdate_date(Date updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public Integer getCustomer_id() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomer_id(Integer customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
 
-	public String getCustomisation_reference() {
+	public String getCustomisationReference() {
 		return customisationReference;
 	}
 
-	public void setCustomisation_reference(String customisationReference) {
+	public void setCustomisationReference(String customisationReference) {
 		this.customisationReference = customisationReference;
 	}
 

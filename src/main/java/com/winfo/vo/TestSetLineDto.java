@@ -180,27 +180,27 @@ public class TestSetLineDto {
 		this.scriptParam = scriptParam;
 	}
 
-	public String getTest_set_line_id() {
+	public String getTestSetLineId() {
 		return testSetLineId;
 	}
 
-	public void setTest_set_line_id(String testSetLineId) {
+	public void setTestSetLineId(String testSetLineId) {
 		this.testSetLineId = testSetLineId;
 	}
 
-	public String getTest_set_id() {
+	public String getTestSetId() {
 		return testSetId;
 	}
 
-	public void setTest_set_id(String testSetId) {
+	public void setTestSetId(String testSetId) {
 		this.testSetId = testSetId;
 	}
 
-	public int getScript_id() {
+	public int getScriptId() {
 		return scriptId;
 	}
 
-	public void setScript_id(int scriptId) {
+	public void setScriptId(int scriptId) {
 		this.scriptId = scriptId;
 	}
 

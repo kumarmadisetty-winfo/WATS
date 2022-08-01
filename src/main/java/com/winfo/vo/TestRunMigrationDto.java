@@ -147,116 +147,116 @@ public class TestRunMigrationDto {
 		this.scriptMasterData = scriptMasterData;
 	}
 
-	public String getLast_executed_by() {
+	public String getLastExecuted_by() {
 		return lastExecutedBy;
 	}
 
-	public void setLast_executed_by(String lastExecutedBy) {
+	public void setLastExecutedBy(String lastExecutedBy) {
 		this.lastExecutedBy = lastExecutedBy;
 	}
 
-	public String getTs_complete_flag() {
+	public String getTsComplete_flag() {
 		return tsCompleteFlag;
 	}
 
-	public void setTs_complete_flag(String tsCompleteFlag) {
+	public void setTsCompleteFlag(String tsCompleteFlag) {
 		this.tsCompleteFlag = tsCompleteFlag;
 	}
 
-	public String getPass_path() {
+	public String getPassPath() {
 		return passPath;
 	}
 
-	public void setPass_path(String passPath) {
+	public void setPassPath(String passPath) {
 		this.passPath = passPath;
 	}
 
-	public String getEffective_to() {
+	public String getEffectiveTo() {
 		return effectiveTo;
 	}
 
-	public void setEffective_to(String effectiveTo) {
+	public void setEffectiveTo(String effectiveTo) {
 		this.effectiveTo = effectiveTo;
 	}
 
-	public String getExeception_path() {
+	public String getExeceptionPath() {
 		return execeptionPath;
 	}
 
-	public void setExeception_path(String execeptionPath) {
+	public void setExeceptionPath(String execeptionPath) {
 		this.execeptionPath = execeptionPath;
 	}
 
-	public String getCreation_date() {
+	public String getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreation_date(String creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public String getCreated_by() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreated_by(String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public String getTr_mode() {
+	public String getTrMode() {
 		return trMode;
 	}
 
-	public void setTr_mode(String tr_mode) {
+	public void setTrMode(String tr_mode) {
 		this.trMode = tr_mode;
 	}
 
-	public String getUpdate_date() {
+	public String getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdate_date(String updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public String getLast_updated_by() {
+	public String getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
-	public void setLast_updated_by(String lastUpdatedBy) {
+	public void setLastUpdatedBy(String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	public String getFail_path() {
+	public String getFailPath() {
 		return failPath;
 	}
 
-	public void setFail_path(String fail_path) {
-		this.failPath = fail_path;
+	public void setFailPath(String failPath) {
+		this.failPath = failPath;
 	}
 
-	public String getEffective_from() {
+	public String getEffectiveFrom() {
 		return effectiveFrom;
 	}
 
-	public void setEffective_from(String effective_from) {
-		this.effectiveFrom = effective_from;
+	public void setEffectiveFrom(String effectiveFrom) {
+		this.effectiveFrom = effectiveFrom;
 	}
 
-	public int getConfiguration_id() {
+	public int getConfigurationId() {
 		return configurationId;
 	}
 
-	public void setConfiguration_id(int configuration_id) {
-		this.configurationId = configuration_id;
+	public void setConfigurationId(int configurationId) {
+		this.configurationId = configurationId;
 	}
 
-	public int getProject_id() {
+	public int getProjectId() {
 		return projectId;
 	}
 
-	public void setProject_id(int project_id) {
-		this.projectId = project_id;
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
 	}
 
 	public String getDescription() {
@@ -267,20 +267,20 @@ public class TestRunMigrationDto {
 		this.description = description;
 	}
 
-	public String getTest_set_desc() {
+	public String getTestSetDesc() {
 		return testSetDesc;
 	}
 
-	public void setTest_set_desc(String test_set_desc) {
-		this.testSetDesc = test_set_desc;
+	public void setTestSetDesc(String testSetDesc) {
+		this.testSetDesc = testSetDesc;
 	}
 
-	public String getTest_set_comments() {
+	public String getTestSetComments() {
 		return testSetComments;
 	}
 
-	public void setTest_set_comments(String test_set_comments) {
-		this.testSetComments = test_set_comments;
+	public void setTestSetComments(String testSetComments) {
+		this.testSetComments = testSetComments;
 	}
 
 	public String getEnabled() {
@@ -291,19 +291,19 @@ public class TestRunMigrationDto {
 		this.enabled = enabled;
 	}
 
-	public String getTest_set_name() {
+	public String getTestSetName() {
 		return testSetName;
 	}
 
-	public void setTest_set_name(String test_set_name) {
-		this.testSetName = test_set_name;
+	public void setTestSetName(String testSetName) {
+		this.testSetName = testSetName;
 	}
 
-	public int getTest_set_id() {
+	public int getTestSetId() {
 		return testSetId;
 	}
 
-	public void setTest_set_id(int testSetId) {
+	public void setTestSetId(int testSetId) {
 		this.testSetId = testSetId;
 	}
 

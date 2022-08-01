@@ -40,59 +40,59 @@ public class LookUpVO {
 		
 	}
 	
-	public Integer getLookup_id() {
+	public Integer getLookupId() {
 		return lookupId;
 	}
 
-	public void setLookup_id(Integer lookup_id) {
-		this.lookupId = lookup_id;
+	public void setLookupId(Integer lookupId) {
+		this.lookupId = lookupId;
 	}
 
-	public String getLookup_name() {
+	public String getLookupName() {
 		return lookupName;
 	}
 
-	public void setLookup_name(String lookupName) {
+	public void setLookupName(String lookupName) {
 		this.lookupName = lookupName;
 	}
 
-	public String getLookup_desc() {
+	public String getLookupDesc() {
 		return lookupDesc;
 	}
 
-	public void setLookup_desc(String lookupDesc) {
+	public void setLookupDesc(String lookupDesc) {
 		this.lookupDesc = lookupDesc;
 	}
 
-	public String getCreated_by() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreated_by(String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public String getLast_updated_by() {
+	public String getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
-	public void setLast_updated_by(String lastUpdatedBy) {
+	public void setLastUpdatedBy(String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	public Date getCreation_date() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreation_date(Date creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public Date getUpdate_date() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdate_date(Date updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 

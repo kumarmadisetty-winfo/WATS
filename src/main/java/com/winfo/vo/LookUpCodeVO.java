@@ -42,109 +42,142 @@ public class LookUpCodeVO {
 		this.processCode = lookUpCode.getProcessCode();
 		this.moduleCode = lookUpCode.getModuleCode();
 	}
-	
-	public Integer getLOOKUP_CODES_ID() {
+
+	public Integer getLookUpCodeId() {
 		return lookUpCodeId;
 	}
-	public void setLOOKUP_CODES_ID(Integer lookUpCodeId) {
+
+	public void setLookUpCodeId(Integer lookUpCodeId) {
 		this.lookUpCodeId = lookUpCodeId;
 	}
-	public Integer getLOOKUP_ID() {
+
+	public Integer getLookUpId() {
 		return lookUpId;
 	}
-	public void setLOOKUP_ID(Integer lookUpId) {
+
+	public void setLookUpId(Integer lookUpId) {
 		this.lookUpId = lookUpId;
 	}
-	public String getLOOKUP_NAME() {
+
+	public String getLookUpName() {
 		return lookUpName;
 	}
-	public void setLOOKUP_NAME(String lookUpName) {
+
+	public void setLookUpName(String lookUpName) {
 		this.lookUpName = lookUpName;
 	}
-	public String getLOOKUP_CODE() {
+
+	public String getLookUpCode() {
 		return lookUpCode;
 	}
-	public void setLOOKUP_CODE(String lookUpCode) {
+
+	public void setLookUpCode(String lookUpCode) {
 		this.lookUpCode = lookUpCode;
 	}
-	public String getTARGET_CODE() {
+
+	public String getTargetCode() {
 		return targetCode;
 	}
-	public void setTARGET_CODE(String targetCode) {
+
+	public void setTargetCode(String targetCode) {
 		this.targetCode = targetCode;
 	}
-	public String getMEANING() {
+
+	public String getMeaning() {
 		return meaning;
 	}
-	public void setMEANING(String meaning) {
+
+	public void setMeaning(String meaning) {
 		this.meaning = meaning;
 	}
-	public String getDESCRIPTION() {
+
+	public String getDescription() {
 		return description;
 	}
-	public void setDESCRIPTION(String description) {
+
+	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Date getEFFECTIVE_FROM() {
+
+	public Date getEffectiveFrom() {
 		return effectiveFrom;
 	}
-	public void setEFFECTIVE_FROM(Date effectiveFrom) {
+
+	public void setEffectiveFrom(Date effectiveFrom) {
 		this.effectiveFrom = effectiveFrom;
 	}
-	public Date getEFFECTIVE_TO() {
+
+	public Date getEffectiveTo() {
 		return effectiveTo;
 	}
-	public void setEFFECTIVE_TO(Date effectiveTo) {
+
+	public void setEffectiveTo(Date effectiveTo) {
 		this.effectiveTo = effectiveTo;
 	}
-	public String getCREATED_BY() {
+
+	public String getCreatedBy() {
 		return createdBy;
 	}
-	public void setCREATED_BY(String createdBy) {
+
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String getLAST_UPDATED_BY() {
+
+	public String getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
-	public void setLAST_UPDATED_BY(String lastUpdatedBy) {
+
+	public void setLastUpdatedBy(String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
-	public Date getCREATION_DATE() {
+
+	public Date getCreationDate() {
 		return creationDate;
 	}
-	public void setCREATION_DATE(Date creationDate) {
+
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	public Date getUPDATE_DATE() {
+
+	public Date getUpdateDate() {
 		return updateDate;
 	}
-	public void setUPDATE_DATE(Date updateDate) {
+
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
-	public String getDATA_VALIDATION() {
+
+	public String getDataValidation() {
 		return dataValidation;
 	}
-	public void setDATA_VALIDATION(String dataValidation) {
+
+	public void setDataValidation(String dataValidation) {
 		this.dataValidation = dataValidation;
 	}
-	public String getUNIQUE_MANDATORY() {
+
+	public String getUniqueMendatory() {
 		return uniqueMendatory;
 	}
-	public void setUNIQUE_MANDATORY(String uniqueMendatory) {
+
+	public void setUniqueMendatory(String uniqueMendatory) {
 		this.uniqueMendatory = uniqueMendatory;
 	}
-	public String getPROCESS_CODE() {
+
+	public String getProcessCode() {
 		return processCode;
 	}
-	public void setPROCESS_CODE(String processCode) {
+
+	public void setProcessCode(String processCode) {
 		this.processCode = processCode;
 	}
-	public String getMODULE_CODE() {
+
+	public String getModuleCode() {
 		return moduleCode;
 	}
-	public void setMODULE_CODE(String moduleCode) {
+
+	public void setModuleCode(String moduleCode) {
 		this.moduleCode = moduleCode;
 	}
-	
+
 
 }

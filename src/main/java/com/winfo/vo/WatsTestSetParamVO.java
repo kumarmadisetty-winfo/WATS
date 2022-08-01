@@ -115,27 +115,27 @@ public class WatsTestSetParamVO {
 
 	}
 
-	public String getScript_number() {
+	public String getScriptNumber() {
 		return scriptNumber;
 	}
 
-	public void setScript_number(String scriptNumber) {
+	public void setScriptNumber(String scriptNumber) {
 		this.scriptNumber = scriptNumber;
 	}
 
-	public Integer getLine_number() {
+	public Integer getLineNumber() {
 		return lineNumber;
 	}
 
-	public void setLine_number(Integer lineNumber) {
+	public void setLineNumber(Integer lineNumber) {
 		this.lineNumber = lineNumber;
 	}
 
-	public String getInput_parameter() {
+	public String getInputParameter() {
 		return inputParameter;
 	}
 
-	public void setInput_parameter(String inputParameter) {
+	public void setInputParameter(String inputParameter) {
 		this.inputParameter = inputParameter;
 	}
 
@@ -147,67 +147,67 @@ public class WatsTestSetParamVO {
 		this.action = action;
 	}
 
-	public String getXpath_location() {
+	public String getXpathLocation() {
 		return xpathLocation;
 	}
 
-	public void setXpath_location(String xpathLocation) {
+	public void setXpathLocation(String xpathLocation) {
 		this.xpathLocation = xpathLocation;
 	}
 
-	public String getXpath_location1() {
+	public String getXpathLocation1() {
 		return xpathLocation1;
 	}
 
-	public void setXpath_location1(String xpathLocation1) {
+	public void setXpathLocation1(String xpathLocation1) {
 		this.xpathLocation1 = xpathLocation1;
 	}
 
-	public String getCreated_by() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreated_by(String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public Date getCreation_date() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreation_date(Date creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public String getUpdated_by() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdated_by(String updatedBy) {
+	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdate_date() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdate_date(Date updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public String getStep_desc() {
+	public String getStepDesc() {
 		return stepDesc;
 	}
 
-	public void setStep_desc(String stepDesc) {
+	public void setStepDesc(String stepDesc) {
 		this.stepDesc = stepDesc;
 	}
 
-	public String getField_type() {
+	public String getFieldType() {
 		return fieldType;
 	}
 
-	public void setField_type(String fieldType) {
+	public void setFieldType(String fieldType) {
 		this.fieldType = fieldType;
 	}
 
@@ -227,99 +227,99 @@ public class WatsTestSetParamVO {
 		this.datatypes = datatypes;
 	}
 
-	public String getUnique_mandatory() {
+	public String getUniqueMandatory() {
 		return uniqueMandatory;
 	}
 
-	public void setUnique_mandatory(String uniqueMandatory) {
+	public void setUniqueMandatory(String uniqueMandatory) {
 		this.uniqueMandatory = uniqueMandatory;
 	}
 
-	public String getValidation_type() {
+	public String getValidationType() {
 		return validationType;
 	}
 
-	public void setValidation_type(String validationType) {
+	public void setValidationType(String validationType) {
 		this.validationType = validationType;
 	}
 
-	public String getValidation_name() {
+	public String getValidationName() {
 		return validationName;
 	}
 
-	public void setValidation_name(String validationName) {
+	public void setValidationName(String validationName) {
 		this.validationName = validationName;
 	}
 
-	public String getLine_execution_status() {
+	public String getLineExecutionStatus() {
 		return lineExecutionStatus;
 	}
 
-	public void setLine_execution_status(String lineExecutionStatus) {
+	public void setLineExecutionStatus(String lineExecutionStatus) {
 		this.lineExecutionStatus = lineExecutionStatus;
 	}
 
-	public String getInput_value() {
+	public String getInputValue() {
 		return inputValue;
 	}
 
-	public void setInput_value(String inputValue) {
+	public void setInputValue(String inputValue) {
 		this.inputValue = inputValue;
 	}
 
-	public String getTest_run_param_desc() {
+	public String getTestRunParamDesc() {
 		return testRunParamDesc;
 	}
 
-	public void setTest_run_param_desc(String testRunParamDesc) {
+	public void setTestRunParamDesc(String testRunParamDesc) {
 		this.testRunParamDesc = testRunParamDesc;
 	}
 
-	public String getLine_error_message() {
+	public String getLineErrorMessage() {
 		return lineErrorMessage;
 	}
 
-	public void setLine_error_message(String lineErrorMessage) {
+	public void setLineErrorMessage(String lineErrorMessage) {
 		this.lineErrorMessage = lineErrorMessage;
 	}
 
-	public String getTest_run_param_name() {
+	public String getTestRunParamName() {
 		return testRunParamName;
 	}
 
-	public void setTest_run_param_name(String testRunParamName) {
+	public void setTestRunParamName(String testRunParamName) {
 		this.testRunParamName = testRunParamName;
 	}
 
-	public String getLast_updated_by() {
+	public String getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
-	public void setLast_updated_by(String lastUpdatedBy) {
+	public void setLastUpdatedBy(String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	public Integer getMetadata_id() {
+	public Integer getMetadataId() {
 		return metadataId;
 	}
 
-	public void setMetadata_id(Integer metadataId) {
+	public void setMetadataId(Integer metadataId) {
 		this.metadataId = metadataId;
 	}
 
-	public String getData_types() {
+	public String getDataTypes() {
 		return dataTypes;
 	}
 
-	public void setData_types(String dataTypes) {
+	public void setDataTypes(String dataTypes) {
 		this.dataTypes = dataTypes;
 	}
 
-	public Integer getScript_meta_data_id() {
+	public Integer getScriptMetaDataId() {
 		return scriptMetaDataId;
 	}
 
-	public void setScript_meta_data_id(Integer scriptMetaDataId) {
+	public void setScriptMetaDataId(Integer scriptMetaDataId) {
 		this.scriptMetaDataId = scriptMetaDataId;
 	}
 

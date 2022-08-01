@@ -53,24 +53,24 @@ public class ScriptMetaDataDto {
 
 	public ScriptMetaDataDto(ScriptMetaData scriptMetaData) {
 		this.setAction(scriptMetaData.getAction());
-		this.setCreated_by(scriptMetaData.getCreated_by());
-		this.setCreation_date(scriptMetaData.getCreation_date());
+		this.setCreatedBy(scriptMetaData.getCreated_by());
+		this.setCreationDate(scriptMetaData.getCreation_date());
 		this.setDatatypes(scriptMetaData.getDatatypes());
-		this.setField_type(scriptMetaData.getField_type());
+		this.setFieldType(scriptMetaData.getField_type());
 		this.setHint(scriptMetaData.getHint());
-		this.setInput_parameter(scriptMetaData.getInput_parameter());
-		this.setLine_number(scriptMetaData.getLine_number());
+		this.setInputParameter(scriptMetaData.getInput_parameter());
+		this.setLineNumber(scriptMetaData.getLine_number());
 		this.setMetadataInputValue(scriptMetaData.getMetadata_inputvalue());
-		this.setScript_meta_data_id(scriptMetaData.getScript_meta_data_id());
-		this.setScript_number(scriptMetaData.getScript_number());
-		this.setStep_desc(scriptMetaData.getStep_desc());
-		this.setUnique_mandatory(scriptMetaData.getUnique_mandatory());
-		this.setUpdate_date(scriptMetaData.getUpdate_date());
-		this.setUpdated_by(scriptMetaData.getUpdated_by());
-		this.setValidation_name(scriptMetaData.getValidation_name());
-		this.setValidation_type(scriptMetaData.getValidation_type());
-		this.setXpath_location(scriptMetaData.getXpath_location());
-		this.setXpath_location1(scriptMetaData.getXpath_location1());
+		this.setScriptMetaDataId(scriptMetaData.getScript_meta_data_id());
+		this.setScriptNumber(scriptMetaData.getScript_number());
+		this.setStepDesc(scriptMetaData.getStep_desc());
+		this.setUniqueMandatory(scriptMetaData.getUnique_mandatory());
+		this.setUpdateDate(scriptMetaData.getUpdate_date());
+		this.setUpdatedBy(scriptMetaData.getUpdated_by());
+		this.setValidationName(scriptMetaData.getValidation_name());
+		this.setValidationType(scriptMetaData.getValidation_type());
+		this.setXpathLocation(scriptMetaData.getXpath_location());
+		this.setXpathLocation1(scriptMetaData.getXpath_location1());
 	}
 
 	public String getMetadataInputValue() {
@@ -81,15 +81,15 @@ public class ScriptMetaDataDto {
 		this.metadataInputValue = metadataInputValue;
 	}
 
-	public Integer getScript_meta_data_id() {
+	public Integer getScriptMetaDataId() {
 		return scriptMetaDataId;
 	}
 
-	public void setScript_meta_data_id(Integer scriptMetaDataId) {
+	public void setScriptMetaDataId(Integer scriptMetaDataId) {
 		this.scriptMetaDataId = scriptMetaDataId;
 	}
 
-	public String getScript_number() {
+	public String getScriptNumber() {
 		return scriptNumber;
 	}
 
@@ -101,47 +101,47 @@ public class ScriptMetaDataDto {
 		this.datatypes = datatypes;
 	}
 
-	public String getUnique_mandatory() {
+	public String getUniqueMandatory() {
 		return uniqueMandatory;
 	}
 
-	public void setUnique_mandatory(String uniqueMandatory) {
+	public void setUniqueMandatory(String uniqueMandatory) {
 		this.uniqueMandatory = uniqueMandatory;
 	}
 
-	public String getValidation_type() {
+	public String getValidationType() {
 		return validationType;
 	}
 
-	public void setValidation_type(String validationType) {
+	public void setValidationType(String validationType) {
 		this.validationType = validationType;
 	}
 
-	public String getValidation_name() {
+	public String getValidationName() {
 		return validationName;
 	}
 
-	public void setValidation_name(String validationName) {
+	public void setValidationName(String validationName) {
 		this.validationName = validationName;
 	}
 
-	public void setScript_number(String scriptNumber) {
+	public void setScriptNumber(String scriptNumber) {
 		this.scriptNumber = scriptNumber;
 	}
 
-	public Integer getLine_number() {
+	public Integer getLineNumber() {
 		return lineNumber;
 	}
 
-	public void setLine_number(Integer lineNumber) {
+	public void setLineNumber(Integer lineNumber) {
 		this.lineNumber = lineNumber;
 	}
 
-	public String getInput_parameter() {
+	public String getInputParameter() {
 		return inputParameter;
 	}
 
-	public void setInput_parameter(String inputParameter) {
+	public void setInputParameter(String inputParameter) {
 		this.inputParameter = inputParameter;
 	}
 
@@ -153,67 +153,67 @@ public class ScriptMetaDataDto {
 		this.action = action;
 	}
 
-	public String getXpath_location() {
+	public String getXpathLocation() {
 		return xpathLocation;
 	}
 
-	public void setXpath_location(String xpathLocation) {
+	public void setXpathLocation(String xpathLocation) {
 		this.xpathLocation = xpathLocation;
 	}
 
-	public String getXpath_location1() {
+	public String getXpathLocation1() {
 		return xpathLocation1;
 	}
 
-	public void setXpath_location1(String xpathLocation1) {
+	public void setXpathLocation1(String xpathLocation1) {
 		this.xpathLocation1 = xpathLocation1;
 	}
 
-	public String getCreated_by() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreated_by(String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public Date getCreation_date() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreation_date(Date creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public String getUpdated_by() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdated_by(String updatedBy) {
+	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdate_date() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdate_date(Date updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public String getStep_desc() {
+	public String getStepDesc() {
 		return stepDesc;
 	}
 
-	public void setStep_desc(String stepDesc) {
+	public void setStepDesc(String stepDesc) {
 		this.stepDesc = stepDesc;
 	}
 
-	public String getField_type() {
+	public String getFieldType() {
 		return fieldType;
 	}
 
-	public void setField_type(String fieldType) {
+	public void setFieldType(String fieldType) {
 		this.fieldType = fieldType;
 	}
 

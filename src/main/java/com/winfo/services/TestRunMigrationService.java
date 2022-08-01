@@ -78,17 +78,17 @@ public class TestRunMigrationService {
 
 			Testrundata testRunData = dataBaseEntryDao.getTestSetObjByTestSetId(testRunId);
 
-			TestRunMigrationDto watsMasterDataVOForTestRunMig = new TestRunMigrationDto(testRunData);
+			TestRunMigrationDto testRunMigrateDto = new TestRunMigrationDto(testRunData);
 			Map<String, LookUpVO> lookUpDataMap = new HashMap<>();
 
 			String configurationName = dataBaseEntryDao.getConfiNameByConfigId(testRunData.getConfigurationid());
 
 			String projectName = dataBaseEntryDao.getProjectNameById(testRunData.getProjectid());
 
-			watsMasterDataVOForTestRunMig.setCustomer(testRunDetails.getCustomerName());
-			watsMasterDataVOForTestRunMig.setProjectName(projectName);
-			watsMasterDataVOForTestRunMig.setConfigurationName(configurationName);
-			watsMasterDataVOForTestRunMig.setTestRunExists(id.isFlag());
+			testRunMigrateDto.setCustomer(testRunDetails.getCustomerName());
+			testRunMigrateDto.setProjectName(projectName);
+			testRunMigrateDto.setConfigurationName(configurationName);
+			testRunMigrateDto.setTestRunExists(id.isFlag());
 
 			List<Integer> testSetLineIDs = dataBaseEntryDao.getListOfLineIdByTestSetId(testRunId);
 
@@ -164,13 +164,13 @@ public class TestRunMigrationService {
 				}
 
 			}
-			watsMasterDataVOForTestRunMig.setTestSetLinesAndParaData(testSetLinesAndParaData);
-			watsMasterDataVOForTestRunMig.setScriptMasterData(listOfMasterVO);
+			testRunMigrateDto.setTestSetLinesAndParaData(testSetLinesAndParaData);
+			testRunMigrateDto.setScriptMasterData(listOfMasterVO);
 			lookUpDataMap.put(ACTION.toLowerCase(), dataBaseEntryDao.lookups(ACTION, lookUpCodeAction));
 			lookUpDataMap.put(UNIQUE_MANDATORY.toLowerCase(), dataBaseEntryDao.lookups(UNIQUE_MANDATORY, lookUpCodeUnique));
 			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.lookups(DATATYPES, lookUpCodeDataTypes));
-			watsMasterDataVOForTestRunMig.setLookUpData(lookUpDataMap);
-			testRunMigrationDto.add(watsMasterDataVOForTestRunMig);
+			testRunMigrateDto.setLookUpData(lookUpDataMap);
+			testRunMigrationDto.add(testRunMigrateDto);
 		}
 		return webClientService(testRunMigrationDto, "http://localhost:38080/wats");
 //		return webClientService(testRunMigrationDto, customerURI);
