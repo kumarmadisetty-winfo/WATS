@@ -20637,7 +20637,7 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			if (param1.equalsIgnoreCase("Submit Now")
 					|| param1.equalsIgnoreCase("Test") && param2.equalsIgnoreCase("")) {
-				WebElement waittext = driver.findElement(By.xpath("//a[text()='" + param1 + "'][1]"));// screenshot(driver,
+				WebElement waittext = driver.findElement(By.xpath("//a[text()='"+param1+"'][1]"));// screenshot(driver,
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
