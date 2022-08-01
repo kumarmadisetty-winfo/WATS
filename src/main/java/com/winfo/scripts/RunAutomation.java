@@ -82,25 +82,7 @@ public class RunAutomation {
 	@Autowired
 	ScriptXpathService xpathService;
 
-	/*
-	 * public void report() throws IOException, DocumentException,
-	 * com.itextpdf.text.DocumentException {
-	 * 
-	 * FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
-	 * List<FetchMetadataVO> fetchMetadataListVO = new ArrayList<FetchMetadataVO>();
-	 * fetchMetadataListVO.add(fetchMetadataVO); FetchConfigVO fetchConfigVO = new
-	 * FetchConfigVO();
-	 * 
-	 * createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount,
-	 * failcount);
-	 * 
-	 * createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount,
-	 * failcount); createPdf(fetchMetadataListVO, fetchConfigVO,
-	 * "Detailed_Report.pdf", passcount, failcount);
-	 * 
-	 * 
-	 * }
-	 */
+
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
 		FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
