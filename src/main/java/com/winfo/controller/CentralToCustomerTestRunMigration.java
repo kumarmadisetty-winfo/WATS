@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.services.TestRunMigrationGetService;
 import com.winfo.vo.DomGenericResponseBean3;
-import com.winfo.vo.WatsMasterDataVOListForTestRunMig;
+import com.winfo.vo.TestRunMigrationDto;
 
 @RestController
-public class TestRunMigrationGet {
+public class CentralToCustomerTestRunMigration {
 	
 	@Autowired
 	TestRunMigrationGetService service;
 	
-	@PostMapping("/fromCentralRepoTestRunMigration")
-	public DomGenericResponseBean3 pluginData(@RequestBody List<WatsMasterDataVOListForTestRunMig> mastervolist) {
+	@PostMapping("/testRunMigrationToCustomer")
+	public DomGenericResponseBean3 pluginData(@RequestBody List<TestRunMigrationDto> mastervolist) {
 		return service.centralRepoData(mastervolist);
 		
 	}

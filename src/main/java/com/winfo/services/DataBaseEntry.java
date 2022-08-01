@@ -437,8 +437,8 @@ public class DataBaseEntry {
 		return dao.findStartAndEndTimeForTestRun(testRunId, scriptStatus);
 	}
 
-	public String getCentralRepoUrl() {
-		return dao.getCentralRepoUrl();
+	public String getCentralRepoUrl(String customerName) {
+		return dao.getCentralRepoUrl(customerName);
 	}
 
 	public void updateTestSetLineStatusForSanity(String testSetId) {

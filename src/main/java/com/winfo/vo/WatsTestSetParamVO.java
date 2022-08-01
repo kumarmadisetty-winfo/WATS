@@ -7,136 +7,136 @@ import com.winfo.model.TestSetScriptParam;
 
 public class WatsTestSetParamVO {
 
-	@JsonProperty("script_meta_data_id")
-	private Integer script_meta_data_id;
-	@JsonProperty("script_number")
-	private String script_number;
-	@JsonProperty("line_number")
-	private Integer line_number;
-	@JsonProperty("input_parameter")
-	private String input_parameter;
+	@JsonProperty("scriptMetaDataId")
+	private Integer scriptMetaDataId;
+	@JsonProperty("scriptNumber")
+	private String scriptNumber;
+	@JsonProperty("lineNumber")
+	private Integer lineNumber;
+	@JsonProperty("inputParameter")
+	private String inputParameter;
 	@JsonProperty("action")
 	private String action;
-	@JsonProperty("xpath_location")
-	private String xpath_location;
-	@JsonProperty("xpath_location1")
-	private String xpath_location1;
-	@JsonProperty("created_by")
-	private String created_by;
-	@JsonProperty("creation_date")
-	private Date creation_date;
-	@JsonProperty("updated_by")
-	private String updated_by;
-	@JsonProperty("update_date")
-	private Date update_date;
-	@JsonProperty("step_desc")
-	private String step_desc;
-	@JsonProperty("field_type")
-	private String field_type;
+	@JsonProperty("xpathLocation")
+	private String xpathLocation;
+	@JsonProperty("xpathLocation1")
+	private String xpathLocation1;
+	@JsonProperty("createdBy")
+	private String createdBy;
+	@JsonProperty("creationDate")
+	private Date creationDate;
+	@JsonProperty("updatedBy")
+	private String updatedBy;
+	@JsonProperty("updateDate")
+	private Date updateDate;
+	@JsonProperty("stepDesc")
+	private String stepDesc;
+	@JsonProperty("fieldType")
+	private String fieldType;
 	@JsonProperty("hint")
 	private String hint;
 	@JsonProperty("datatypes")
 	private String datatypes;
-	@JsonProperty("unique_mandatory")
-	private String unique_mandatory;
-	@JsonProperty("validation_type")
-	private String validation_type;
-	@JsonProperty("validation_name")
-	private String validation_name;
-	@JsonProperty("line_execution_status")
-	private String line_execution_status;
-	@JsonProperty("input_value")
-	private String input_value;
-	@JsonProperty("test_run_param_desc")
-	private String test_run_param_desc;
-	@JsonProperty("line_error_message")
-	private String line_error_message;
-	@JsonProperty("test_run_param_name")
-	private String test_run_param_name;
-	@JsonProperty("last_updated_by")
-	private String last_updated_by;
-	@JsonProperty("metadata_id")
-	private Integer metadata_id;
-	@JsonProperty("data_types")
-	private String data_types;
+	@JsonProperty("uniqueMandatory")
+	private String uniqueMandatory;
+	@JsonProperty("validationType")
+	private String validationType;
+	@JsonProperty("validationName")
+	private String validationName;
+	@JsonProperty("lineExecutionStatus")
+	private String lineExecutionStatus;
+	@JsonProperty("inputValue")
+	private String inputValue;
+	@JsonProperty("testRunParamDesc")
+	private String testRunParamDesc;
+	@JsonProperty("lineErrorMessage")
+	private String lineErrorMessage;
+	@JsonProperty("testRunParamName")
+	private String testRunParamName;
+	@JsonProperty("lastUpdatedBy")
+	private String lastUpdatedBy;
+	@JsonProperty("metadataId")
+	private Integer metadataId;
+	@JsonProperty("dataTypes")
+	private String dataTypes;
 
 	public WatsTestSetParamVO() {
 	}
 
 	public WatsTestSetParamVO(TestSetScriptParam testSetScriptParam) {
-		this.script_number = testSetScriptParam.getScriptNumber();
-		this.line_error_message = testSetScriptParam.getLineErrorMessage();
-		this.line_number = testSetScriptParam.getLineNumber();
-		this.input_parameter = testSetScriptParam.getInputParameter();
+		this.scriptNumber = testSetScriptParam.getScriptNumber();
+		this.lineErrorMessage = testSetScriptParam.getLineErrorMessage();
+		this.lineNumber = testSetScriptParam.getLineNumber();
+		this.inputParameter = testSetScriptParam.getInputParameter();
 		this.action = testSetScriptParam.getAction();
-		this.xpath_location = testSetScriptParam.getXpathLocation();
-		this.xpath_location1 = testSetScriptParam.getXpathLocation1();
-		this.test_run_param_name = testSetScriptParam.getTestRunParamName();
-		this.test_run_param_desc = testSetScriptParam.getTestRunParamDesc();
-		this.created_by = testSetScriptParam.getCreatedBy();
-		this.last_updated_by = null;
-		this.update_date = null;
-		this.input_value = testSetScriptParam.getInputValue();
-		this.metadata_id = testSetScriptParam.getMetadataId();
+		this.xpathLocation = testSetScriptParam.getXpathLocation();
+		this.xpathLocation1 = testSetScriptParam.getXpathLocation1();
+		this.testRunParamName = testSetScriptParam.getTestRunParamName();
+		this.testRunParamDesc = testSetScriptParam.getTestRunParamDesc();
+		this.createdBy = testSetScriptParam.getCreatedBy();
+		this.lastUpdatedBy = null;
+		this.updateDate = null;
+		this.inputValue = testSetScriptParam.getInputValue();
+		this.metadataId = testSetScriptParam.getMetadataId();
 		this.hint = testSetScriptParam.getHint();
-		this.field_type = testSetScriptParam.getFieldType();
-		this.data_types = testSetScriptParam.getDataTypes();
-		this.line_execution_status = testSetScriptParam.getLineExecutionStatus();
-		this.unique_mandatory = testSetScriptParam.getUniqueMandatory();
-		this.validation_type = testSetScriptParam.getValidationType();
-		this.validation_name = testSetScriptParam.getValidationName();
+		this.fieldType = testSetScriptParam.getFieldType();
+		this.dataTypes = testSetScriptParam.getDataTypes();
+		this.lineExecutionStatus = testSetScriptParam.getLineExecutionStatus();
+		this.uniqueMandatory = testSetScriptParam.getUniqueMandatory();
+		this.validationType = testSetScriptParam.getValidationType();
+		this.validationName = testSetScriptParam.getValidationName();
 
 	}
 
 	public WatsTestSetParamVO(TestSetScriptParam testSetScriptParam, Integer testRunScriptParamId) {
-		this.script_meta_data_id = testRunScriptParamId;
-		this.script_number = testSetScriptParam.getScriptNumber();
-		this.line_error_message = testSetScriptParam.getLineErrorMessage();
-		this.line_number = testSetScriptParam.getLineNumber();
-		this.input_parameter = testSetScriptParam.getInputParameter();
+		this.scriptMetaDataId = testRunScriptParamId;
+		this.scriptNumber = testSetScriptParam.getScriptNumber();
+		this.lineErrorMessage = testSetScriptParam.getLineErrorMessage();
+		this.lineNumber = testSetScriptParam.getLineNumber();
+		this.inputParameter = testSetScriptParam.getInputParameter();
 		this.action = testSetScriptParam.getAction();
-		this.xpath_location = testSetScriptParam.getXpathLocation();
-		this.xpath_location1 = testSetScriptParam.getXpathLocation1();
-		this.test_run_param_name = testSetScriptParam.getTestRunParamName();
-		this.test_run_param_desc = testSetScriptParam.getTestRunParamDesc();
-		this.created_by = testSetScriptParam.getCreatedBy();
-		this.last_updated_by = null;
-		this.creation_date = null;
-		this.update_date = null;
-		this.input_value = testSetScriptParam.getInputValue();
-		this.metadata_id = testSetScriptParam.getMetadataId();
+		this.xpathLocation = testSetScriptParam.getXpathLocation();
+		this.xpathLocation1 = testSetScriptParam.getXpathLocation1();
+		this.testRunParamName = testSetScriptParam.getTestRunParamName();
+		this.testRunParamDesc = testSetScriptParam.getTestRunParamDesc();
+		this.createdBy = testSetScriptParam.getCreatedBy();
+		this.lastUpdatedBy = null;
+		this.creationDate = null;
+		this.updateDate = null;
+		this.inputValue = testSetScriptParam.getInputValue();
+		this.metadataId = testSetScriptParam.getMetadataId();
 		this.hint = testSetScriptParam.getHint();
-		this.field_type = testSetScriptParam.getFieldType();
-		this.data_types = testSetScriptParam.getDataTypes();
-		this.line_execution_status = testSetScriptParam.getLineExecutionStatus();
-		this.unique_mandatory = testSetScriptParam.getUniqueMandatory();
-		this.validation_type = testSetScriptParam.getValidationType();
-		this.validation_name = testSetScriptParam.getValidationName();
+		this.fieldType = testSetScriptParam.getFieldType();
+		this.dataTypes = testSetScriptParam.getDataTypes();
+		this.lineExecutionStatus = testSetScriptParam.getLineExecutionStatus();
+		this.uniqueMandatory = testSetScriptParam.getUniqueMandatory();
+		this.validationType = testSetScriptParam.getValidationType();
+		this.validationName = testSetScriptParam.getValidationName();
 
 	}
 
 	public String getScript_number() {
-		return script_number;
+		return scriptNumber;
 	}
 
-	public void setScript_number(String script_number) {
-		this.script_number = script_number;
+	public void setScript_number(String scriptNumber) {
+		this.scriptNumber = scriptNumber;
 	}
 
 	public Integer getLine_number() {
-		return line_number;
+		return lineNumber;
 	}
 
-	public void setLine_number(Integer line_number) {
-		this.line_number = line_number;
+	public void setLine_number(Integer lineNumber) {
+		this.lineNumber = lineNumber;
 	}
 
 	public String getInput_parameter() {
-		return input_parameter;
+		return inputParameter;
 	}
 
-	public void setInput_parameter(String input_parameter) {
-		this.input_parameter = input_parameter;
+	public void setInput_parameter(String inputParameter) {
+		this.inputParameter = inputParameter;
 	}
 
 	public String getAction() {
@@ -148,67 +148,67 @@ public class WatsTestSetParamVO {
 	}
 
 	public String getXpath_location() {
-		return xpath_location;
+		return xpathLocation;
 	}
 
-	public void setXpath_location(String xpath_location) {
-		this.xpath_location = xpath_location;
+	public void setXpath_location(String xpathLocation) {
+		this.xpathLocation = xpathLocation;
 	}
 
 	public String getXpath_location1() {
-		return xpath_location1;
+		return xpathLocation1;
 	}
 
-	public void setXpath_location1(String xpath_location1) {
-		this.xpath_location1 = xpath_location1;
+	public void setXpath_location1(String xpathLocation1) {
+		this.xpathLocation1 = xpathLocation1;
 	}
 
 	public String getCreated_by() {
-		return created_by;
+		return createdBy;
 	}
 
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
+	public void setCreated_by(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	public Date getCreation_date() {
-		return creation_date;
+		return creationDate;
 	}
 
-	public void setCreation_date(Date creation_date) {
-		this.creation_date = creation_date;
+	public void setCreation_date(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public String getUpdated_by() {
-		return updated_by;
+		return updatedBy;
 	}
 
-	public void setUpdated_by(String updated_by) {
-		this.updated_by = updated_by;
+	public void setUpdated_by(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	public Date getUpdate_date() {
-		return update_date;
+		return updateDate;
 	}
 
-	public void setUpdate_date(Date update_date) {
-		this.update_date = update_date;
+	public void setUpdate_date(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getStep_desc() {
-		return step_desc;
+		return stepDesc;
 	}
 
-	public void setStep_desc(String step_desc) {
-		this.step_desc = step_desc;
+	public void setStep_desc(String stepDesc) {
+		this.stepDesc = stepDesc;
 	}
 
 	public String getField_type() {
-		return field_type;
+		return fieldType;
 	}
 
-	public void setField_type(String field_type) {
-		this.field_type = field_type;
+	public void setField_type(String fieldType) {
+		this.fieldType = fieldType;
 	}
 
 	public String getHint() {
@@ -228,108 +228,99 @@ public class WatsTestSetParamVO {
 	}
 
 	public String getUnique_mandatory() {
-		return unique_mandatory;
+		return uniqueMandatory;
 	}
 
-	public void setUnique_mandatory(String unique_mandatory) {
-		this.unique_mandatory = unique_mandatory;
+	public void setUnique_mandatory(String uniqueMandatory) {
+		this.uniqueMandatory = uniqueMandatory;
 	}
 
 	public String getValidation_type() {
-		return validation_type;
+		return validationType;
 	}
 
-	public void setValidation_type(String validation_type) {
-		this.validation_type = validation_type;
+	public void setValidation_type(String validationType) {
+		this.validationType = validationType;
 	}
 
 	public String getValidation_name() {
-		return validation_name;
+		return validationName;
 	}
 
-	public void setValidation_name(String validation_name) {
-		this.validation_name = validation_name;
+	public void setValidation_name(String validationName) {
+		this.validationName = validationName;
 	}
 
 	public String getLine_execution_status() {
-		return line_execution_status;
+		return lineExecutionStatus;
 	}
 
-	public void setLine_execution_status(String line_execution_status) {
-		this.line_execution_status = line_execution_status;
+	public void setLine_execution_status(String lineExecutionStatus) {
+		this.lineExecutionStatus = lineExecutionStatus;
 	}
 
 	public String getInput_value() {
-		return input_value;
+		return inputValue;
 	}
 
-	public void setInput_value(String input_value) {
-		this.input_value = input_value;
+	public void setInput_value(String inputValue) {
+		this.inputValue = inputValue;
 	}
 
 	public String getTest_run_param_desc() {
-		return test_run_param_desc;
+		return testRunParamDesc;
 	}
 
-	public void setTest_run_param_desc(String test_run_param_desc) {
-		this.test_run_param_desc = test_run_param_desc;
+	public void setTest_run_param_desc(String testRunParamDesc) {
+		this.testRunParamDesc = testRunParamDesc;
 	}
 
 	public String getLine_error_message() {
-		return line_error_message;
+		return lineErrorMessage;
 	}
 
-	public void setLine_error_message(String line_error_message) {
-		this.line_error_message = line_error_message;
+	public void setLine_error_message(String lineErrorMessage) {
+		this.lineErrorMessage = lineErrorMessage;
 	}
 
 	public String getTest_run_param_name() {
-		return test_run_param_name;
+		return testRunParamName;
 	}
 
-	public void setTest_run_param_name(String test_run_param_name) {
-		this.test_run_param_name = test_run_param_name;
+	public void setTest_run_param_name(String testRunParamName) {
+		this.testRunParamName = testRunParamName;
 	}
 
 	public String getLast_updated_by() {
-		return last_updated_by;
+		return lastUpdatedBy;
 	}
 
-	public void setLast_updated_by(String last_updated_by) {
-		this.last_updated_by = last_updated_by;
+	public void setLast_updated_by(String lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 	public Integer getMetadata_id() {
-		return metadata_id;
+		return metadataId;
 	}
 
-	public void setMetadata_id(Integer metadata_id) {
-		this.metadata_id = metadata_id;
+	public void setMetadata_id(Integer metadataId) {
+		this.metadataId = metadataId;
 	}
 
 	public String getData_types() {
-		return data_types;
+		return dataTypes;
 	}
 
-	public void setData_types(String data_types) {
-		this.data_types = data_types;
+	public void setData_types(String dataTypes) {
+		this.dataTypes = dataTypes;
 	}
 
 	public Integer getScript_meta_data_id() {
-		return script_meta_data_id;
+		return scriptMetaDataId;
 	}
 
-	public void setScript_meta_data_id(Integer script_meta_data_id) {
-		this.script_meta_data_id = script_meta_data_id;
-	}
-
-	@Override
-	public String toString() {
-		return this.line_execution_status + " " + this.creation_date + " " + this.unique_mandatory + " "
-				+ this.created_by + " " + this.input_value + " " + this.xpath_location1 + " " + this.test_run_param_desc
-				+ " " + this.line_error_message + " " + this.test_run_param_name + " " + this.validation_type + " "
-				+ this.xpath_location1 + " " + this.line_number+" "+this.metadata_id
-				+" "+this.action+" "+this.script_number+" "+this.input_parameter+ " "+this.script_meta_data_id;
+	public void setScript_meta_data_id(Integer scriptMetaDataId) {
+		this.scriptMetaDataId = scriptMetaDataId;
 	}
 
 }

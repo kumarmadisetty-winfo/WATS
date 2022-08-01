@@ -7,56 +7,56 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.winfo.model.ScriptMaster;
 
-public class WatsMasterVO {
+public class ScriptMasterDto {
 
 	// SCRIPTMASTER TABLE
 
-	@JsonProperty("script_id")
-	private Integer script_id;
-	@JsonProperty("script_number")
-	private String script_number;
-	@JsonProperty("process_area")
-	private String process_area;
-	@JsonProperty("sub_process_area")
-	private String sub_process_area;
+	@JsonProperty("scriptId")
+	private Integer scriptId;
+	@JsonProperty("scriptNumber")
+	private String scriptNumber;
+	@JsonProperty("processArea")
+	private String processArea;
+	@JsonProperty("subProcessArea")
+	private String subProcessArea;
 	@JsonProperty("module")
 	private String module;
 	@JsonProperty("role")
 	private String role;
-	@JsonProperty("end2end_scenario")
-	private String end2end_scenario;
-	@JsonProperty("scenario_name")
-	private String scenario_name;
-	@JsonProperty("scenario_description")
-	private String scenario_description;
-	@JsonProperty("expected_result")
-	private String expected_result;
-	@JsonProperty("selenium_test_script_name")
-	private String selenium_test_script_name;
-	@JsonProperty("selenium_test_method")
-	private String selenium_test_method;
+	@JsonProperty("end2endScenario")
+	private String end2endScenario;
+	@JsonProperty("scenarioName")
+	private String scenarioName;
+	@JsonProperty("scenarioDescription")
+	private String scenarioDescription;
+	@JsonProperty("expectedResult")
+	private String expectedResult;
+	@JsonProperty("seleniumTestScriptName")
+	private String seleniumTestScriptName;
+	@JsonProperty("seleniumTestMethod")
+	private String seleniumTestMethod;
 	@JsonProperty("dependency")
 	private Integer dependency;
-	@JsonProperty("product_version")
-	private String product_version;
-	@JsonProperty("standard_custom")
-	private String standard_custom;
-	@JsonProperty("test_script_status")
-	private String test_script_status;
+	@JsonProperty("productVersion")
+	private String productVersion;
+	@JsonProperty("standardCustom")
+	private String standardCustom;
+	@JsonProperty("testScriptStatus")
+	private String testScriptStatus;
 	@JsonProperty("author")
 	private String author;
-	@JsonProperty("created_by")
-	private String created_by;
-	@JsonProperty("creation_date")
-	private Date creation_date;
-	@JsonProperty("updated_by")
-	private String updated_by;
-	@JsonProperty("update_date")
-	private Date update_date;
-	@JsonProperty("customer_id")
-	private Integer customer_id;
-	@JsonProperty("customisation_reference")
-	private String customisation_reference;
+	@JsonProperty("createdBy")
+	private String createdBy;
+	@JsonProperty("creationDate")
+	private Date creationDate;
+	@JsonProperty("updatedBy")
+	private String updatedBy;
+	@JsonProperty("updateDate")
+	private Date updateDate;
+	@JsonProperty("customerId")
+	private Integer customerId;
+	@JsonProperty("customisationReference")
+	private String customisationReference;
 	@JsonProperty("attribute2")
 	private String attribute2;
 	@JsonProperty("attribute3")
@@ -77,18 +77,18 @@ public class WatsMasterVO {
 	private String attribute10;
 	@JsonProperty("priority")
 	private Integer priority;
-	@JsonProperty("dependent_script_num")
-	private String dependent_script_num;
-	@JsonProperty("target_application")
+	@JsonProperty("dependentScriptNum")
+	private String dependentScriptNum;
+	@JsonProperty("targetApplication")
 	private String targetApplication;
 
-	@JsonProperty("MetaDataList")
-	private List<WatsMetaDataVO> metaDataList = new ArrayList<>();
+	@JsonProperty("metaDataList")
+	private List<ScriptMetaDataDto> metaDataList = new ArrayList<>();
 
-	public WatsMasterVO() {
+	public ScriptMasterDto() {
 	}
 
-	public WatsMasterVO(ScriptMaster scriptMaster) {
+	public ScriptMasterDto(ScriptMaster scriptMaster) {
 		this.setAttribute2(scriptMaster.getAttribute2());
 		this.setAttribute10(scriptMaster.getAttribute10());
 		this.setAttribute3(scriptMaster.getAttribute3());
@@ -135,43 +135,43 @@ public class WatsMasterVO {
 	}
 
 	public Integer getScript_id() {
-		return script_id;
+		return scriptId;
 	}
 
-	public void setScript_id(Integer script_id) {
-		this.script_id = script_id;
+	public void setScript_id(Integer scriptId) {
+		this.scriptId = scriptId;
 	}
 
 	public String getDependent_script_num() {
-		return dependent_script_num;
+		return dependentScriptNum;
 	}
 
-	public void setDependent_script_num(String dependent_script_num) {
-		this.dependent_script_num = dependent_script_num;
+	public void setDependent_script_num(String dependentScriptNum) {
+		this.dependentScriptNum = dependentScriptNum;
 	}
 
 	public String getScript_number() {
-		return script_number;
+		return scriptNumber;
 	}
 
-	public void setScript_number(String script_number) {
-		this.script_number = script_number;
+	public void setScript_number(String scriptNumber) {
+		this.scriptNumber = scriptNumber;
 	}
 
 	public String getProcess_area() {
-		return process_area;
+		return processArea;
 	}
 
-	public void setProcess_area(String process_area) {
-		this.process_area = process_area;
+	public void setProcess_area(String processArea) {
+		this.processArea = processArea;
 	}
 
 	public String getSub_process_area() {
-		return sub_process_area;
+		return subProcessArea;
 	}
 
-	public void setSub_process_area(String sub_process_area) {
-		this.sub_process_area = sub_process_area;
+	public void setSub_process_area(String subProcessArea) {
+		this.subProcessArea = subProcessArea;
 	}
 
 	public String getModule() {
@@ -191,51 +191,51 @@ public class WatsMasterVO {
 	}
 
 	public String getEnd2end_scenario() {
-		return end2end_scenario;
+		return end2endScenario;
 	}
 
-	public void setEnd2end_scenario(String end2end_scenario) {
-		this.end2end_scenario = end2end_scenario;
+	public void setEnd2end_scenario(String end2endScenario) {
+		this.end2endScenario = end2endScenario;
 	}
 
 	public String getScenario_name() {
-		return scenario_name;
+		return scenarioName;
 	}
 
-	public void setScenario_name(String scenario_name) {
-		this.scenario_name = scenario_name;
+	public void setScenario_name(String scenarioName) {
+		this.scenarioName = scenarioName;
 	}
 
 	public String getScenario_description() {
-		return scenario_description;
+		return scenarioDescription;
 	}
 
-	public void setScenario_description(String scenario_description) {
-		this.scenario_description = scenario_description;
+	public void setScenario_description(String scenarioDescription) {
+		this.scenarioDescription = scenarioDescription;
 	}
 
 	public String getExpected_result() {
-		return expected_result;
+		return expectedResult;
 	}
 
-	public void setExpected_result(String expected_result) {
-		this.expected_result = expected_result;
+	public void setExpected_result(String expectedResult) {
+		this.expectedResult = expectedResult;
 	}
 
 	public String getSelenium_test_script_name() {
-		return selenium_test_script_name;
+		return seleniumTestScriptName;
 	}
 
-	public void setSelenium_test_script_name(String selenium_test_script_name) {
-		this.selenium_test_script_name = selenium_test_script_name;
+	public void setSelenium_test_script_name(String seleniumTestScriptName) {
+		this.seleniumTestScriptName = seleniumTestScriptName;
 	}
 
 	public String getSelenium_test_method() {
-		return selenium_test_method;
+		return seleniumTestMethod;
 	}
 
-	public void setSelenium_test_method(String selenium_test_method) {
-		this.selenium_test_method = selenium_test_method;
+	public void setSelenium_test_method(String seleniumTestMethod) {
+		this.seleniumTestMethod = seleniumTestMethod;
 	}
 
 	public Integer getDependency() {
@@ -247,27 +247,27 @@ public class WatsMasterVO {
 	}
 
 	public String getProduct_version() {
-		return product_version;
+		return productVersion;
 	}
 
-	public void setProduct_version(String product_version) {
-		this.product_version = product_version;
+	public void setProduct_version(String productVersion) {
+		this.productVersion = productVersion;
 	}
 
 	public String getStandard_custom() {
-		return standard_custom;
+		return standardCustom;
 	}
 
-	public void setStandard_custom(String standard_custom) {
-		this.standard_custom = standard_custom;
+	public void setStandard_custom(String standardCustom) {
+		this.standardCustom = standardCustom;
 	}
 
 	public String getTest_script_status() {
-		return test_script_status;
+		return testScriptStatus;
 	}
 
-	public void setTest_script_status(String test_script_status) {
-		this.test_script_status = test_script_status;
+	public void setTest_script_status(String testScriptStatus) {
+		this.testScriptStatus = testScriptStatus;
 	}
 
 	public String getAuthor() {
@@ -279,51 +279,51 @@ public class WatsMasterVO {
 	}
 
 	public String getCreated_by() {
-		return created_by;
+		return createdBy;
 	}
 
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
+	public void setCreated_by(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	public Date getCreation_date() {
-		return creation_date;
+		return creationDate;
 	}
 
-	public void setCreation_date(Date creation_date) {
-		this.creation_date = creation_date;
+	public void setCreation_date(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public String getUpdated_by() {
-		return updated_by;
+		return updatedBy;
 	}
 
-	public void setUpdated_by(String updated_by) {
-		this.updated_by = updated_by;
+	public void setUpdated_by(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	public Date getUpdate_date() {
-		return update_date;
+		return updateDate;
 	}
 
-	public void setUpdate_date(Date update_date) {
-		this.update_date = update_date;
+	public void setUpdate_date(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public Integer getCustomer_id() {
-		return customer_id;
+		return customerId;
 	}
 
-	public void setCustomer_id(Integer customer_id) {
-		this.customer_id = customer_id;
+	public void setCustomer_id(Integer customerId) {
+		this.customerId = customerId;
 	}
 
 	public String getCustomisation_reference() {
-		return customisation_reference;
+		return customisationReference;
 	}
 
-	public void setCustomisation_reference(String customisation_reference) {
-		this.customisation_reference = customisation_reference;
+	public void setCustomisation_reference(String customisationReference) {
+		this.customisationReference = customisationReference;
 	}
 
 	public String getAttribute2() {
@@ -406,22 +406,12 @@ public class WatsMasterVO {
 		this.priority = priority;
 	}
 
-	public List<WatsMetaDataVO> getMetaDataList() {
+	public List<ScriptMetaDataDto> getMetaDataList() {
 		return metaDataList;
 	}
 
-	public void setMetaDataList(List<WatsMetaDataVO> metaDataList) {
+	public void setMetaDataList(List<ScriptMetaDataDto> metaDataList) {
 		this.metaDataList = metaDataList;
-	}
-
-	@Override
-	public String toString() {
-		return this.role + " " + this.scenario_name + " " + this.scenario_description + " "
-				+ this.selenium_test_script_name + " " + this.process_area + " " + this.standard_custom + " "
-				+ this.selenium_test_method + " " + this.sub_process_area + " " + this.product_version + " "
-				+ this.test_script_status + " " + this.dependency + " " + this.author + " " + this.module + " "
-				+ this.customisation_reference + " " + this.priority + " " + this.created_by + " " + this.updated_by
-				+ " " + this.script_number;
 	}
 
 }

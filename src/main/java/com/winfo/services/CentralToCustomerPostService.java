@@ -13,8 +13,8 @@ import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsMasterDataVOList;
-import com.winfo.vo.WatsMasterVO;
-import com.winfo.vo.WatsMetaDataVO;
+import com.winfo.vo.ScriptMasterDto;
+import com.winfo.vo.ScriptMetaDataDto;
 
 @Service
 public class CentralToCustomerPostService {
@@ -27,7 +27,7 @@ public class CentralToCustomerPostService {
 
 		List<DomGenericResponseBean> bean = new ArrayList<>();
 
-		for (WatsMasterVO masterdata : mastervolist.getData()) {
+		for (ScriptMasterDto masterdata : mastervolist.getData()) {
 			ScriptMaster master = new ScriptMaster();
 			master.setModule(masterdata.getModule());
 			master.setScenario_name(masterdata.getScenario_name());
@@ -63,7 +63,7 @@ public class CentralToCustomerPostService {
 			master.setAttribute9(masterdata.getAttribute9());
 			master.setAttribute10(masterdata.getAttribute10());
 			master.setTargetApplication(masterdata.getTargetApplication());
-			for (WatsMetaDataVO metadatavo : masterdata.getMetaDataList()) {
+			for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 				ScriptMetaData metadata = new ScriptMetaData();
 				metadata.setAction(metadatavo.getAction());
 				metadata.setLine_number(metadatavo.getLine_number());

@@ -9,13 +9,13 @@ import com.winfo.model.ScriptMaster;
 public class WatsMasterDataVOList {
 	
 	@JsonProperty("data")
-	private List<WatsMasterVO> data= new ArrayList<>();
+	private List<ScriptMasterDto> data= new ArrayList<>();
 
-	public List<WatsMasterVO> getData() {
+	public List<ScriptMasterDto> getData() {
 		return data;
 	}
 
-	public void setData(List<WatsMasterVO> data) {
+	public void setData(List<ScriptMasterDto> data) {
 		this.data = data;
 	}
 	

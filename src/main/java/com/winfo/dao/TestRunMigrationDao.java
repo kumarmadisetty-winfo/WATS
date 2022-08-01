@@ -23,15 +23,15 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.ScriptsData;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.model.Testrundata;
-import com.winfo.vo.ExistsTestRun;
+import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
 import com.winfo.vo.TestRunDetails;
-import com.winfo.vo.WatsMasterDataVOListForTestRunMig;
-import com.winfo.vo.WatsMasterVO;
-import com.winfo.vo.WatsMetaDataVO;
+import com.winfo.vo.TestRunMigrationDto;
+import com.winfo.vo.ScriptMasterDto;
+import com.winfo.vo.ScriptMetaDataDto;
 import com.winfo.vo.WatsTestSetParamVO;
-import com.winfo.vo.WatsTestSetVO;
+import com.winfo.vo.TestSetLineDto;
 
 import reactor.core.publisher.Mono;
 
@@ -44,12 +44,12 @@ public class TestRunMigrationDao {
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
 
-	public String webClientService(List<WatsMasterDataVOListForTestRunMig> listOfTestRunMigrate, String customer_uri)
+	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customer_uri)
 			throws JsonMappingException, JsonProcessingException {
 
 		System.out.println("json data**" + listOfTestRunMigrate);
 
-		String uri = customer_uri + "/fromCentralRepoTestRunMigration";
+		String uri = customer_uri + "/testRunMigrationToCustomer";
 		WebClient webClient = WebClient.create(uri);
 		Mono<String> result = webClient.post().syncBody(listOfTestRunMigrate).retrieve().bodyToMono(String.class);
 		String response = result.block();
@@ -83,20 +83,20 @@ public class TestRunMigrationDao {
 	@SuppressWarnings("unchecked")
 	public String testRunMigration(TestRunDetails testRunDetails) throws ParseException, JsonProcessingException {
 
-		List<WatsMasterDataVOListForTestRunMig> watsMasterDataVOListForTestRunMig = new ArrayList<>();
+		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
 
 		Session session = entityManager.unwrap(Session.class);
 
-		String customerURI = dataBaseEntryDao.findCustomerUriByName(testRunDetails.getCustomerName());
+		String customerURI = dataBaseEntryDao.getCentralRepoUrl(testRunDetails.getCustomerName());
 
-		for (ExistsTestRun id : testRunDetails.getId()) {
+		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
 
-			List<WatsMasterVO> listOfMasterVO = new ArrayList<>();
+			List<ScriptMasterDto> listOfMasterVO = new ArrayList<>();
 
 			Testrundata testRunData = dataBaseEntryDao.getTestSetObjByTestSetId(testRunId);
 
-			WatsMasterDataVOListForTestRunMig watsMasterDataVOForTestRunMig = new WatsMasterDataVOListForTestRunMig(
+			TestRunMigrationDto watsMasterDataVOForTestRunMig = new TestRunMigrationDto(
 					testRunData);
 			Map<String, LookUpVO> lookUpDataMap = new HashMap<>();
 
@@ -112,7 +112,7 @@ public class TestRunMigrationDao {
 			List<Integer> testSetLineIDs = session
 					.createQuery("select testsetlineid from ScriptsData where Testrundata.testsetid = " + testRunId)
 					.getResultList();
-			List<WatsTestSetVO> testSetLinesAndParaData = new ArrayList<>();
+			List<TestSetLineDto> testSetLinesAndParaData = new ArrayList<>();
 
 			Map<String, LookUpCodeVO> lookUpCodeAction = new HashMap<>();
 			Map<String, LookUpCodeVO> lookUpCodeUnique = new HashMap<>();
@@ -121,7 +121,7 @@ public class TestRunMigrationDao {
 			for (int testSetLineID : testSetLineIDs) {
 				ScriptsData scriptsData = session.find(ScriptsData.class, testSetLineID);
 				System.out.println("scriptsData " + scriptsData.getTestsetlineid());
-				WatsTestSetVO watsTestSetVO = new WatsTestSetVO(scriptsData);
+				TestSetLineDto testSetLineDto = new TestSetLineDto(scriptsData);
 
 				List<WatsTestSetParamVO> ScriptParamMetaData = new ArrayList<>();
 
@@ -134,25 +134,25 @@ public class TestRunMigrationDao {
 					ScriptParamMetaData.add(watsTestSetParamVO);
 
 				}
-				watsTestSetVO.setScriptParam(ScriptParamMetaData);
+				testSetLineDto.setScriptParam(ScriptParamMetaData);
 
-				testSetLinesAndParaData.add(watsTestSetVO);
+				testSetLinesAndParaData.add(testSetLineDto);
 
 				List<ScriptMaster> listOfScriptMaster = dataBaseEntryDao
 						.getScriptMasterListByScriptId(scriptsData.getScriptid());
 
 				for (ScriptMaster scriptMaster : listOfScriptMaster) {
-					WatsMasterVO watsMasterVO = new WatsMasterVO(scriptMaster);
+					ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMaster);
 
 					List<ScriptMetaData> listOfMetaData = dataBaseEntryDao
 							.getScriptMetaDataList(scriptsData.getScriptid());
 
 					JSONObject jsonScriptMetadata = new JSONObject();
-					List<WatsMetaDataVO> metaDataList = new ArrayList<>();
+					List<ScriptMetaDataDto> metaDataList = new ArrayList<>();
 					Map<String, LookUpCodeVO> validationMap = new HashMap<>();
 					for (ScriptMetaData scriptMetaData : listOfMetaData) {
-						WatsMetaDataVO watsMetaDataVO = new WatsMetaDataVO(scriptMetaData);
-						metaDataList.add(watsMetaDataVO);
+						ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
+						metaDataList.add(scriptMetaDataDto);
 
 						if (scriptMetaData.getAction() != null || !"NA".equals(scriptMetaData.getAction())) {
 							lookUpCodeAction.put(scriptMetaData.getAction(),
@@ -180,8 +180,8 @@ public class TestRunMigrationDao {
 
 						}
 					}
-					watsMasterVO.setMetaDataList(metaDataList);
-					listOfMasterVO.add(watsMasterVO);
+					scriptMasterDto.setMetaDataList(metaDataList);
+					listOfMasterVO.add(scriptMasterDto);
 
 				}
 
@@ -192,10 +192,10 @@ public class TestRunMigrationDao {
 			lookUpDataMap.put("unique_mandatory", lookups("UNIQUE_MANDATORY", lookUpCodeUnique, session));
 			lookUpDataMap.put("datatypes", lookups("DATATYPES", lookUpCodeDataTypes, session));
 			watsMasterDataVOForTestRunMig.setLookUpData(lookUpDataMap);
-			watsMasterDataVOListForTestRunMig.add(watsMasterDataVOForTestRunMig);
+			testRunMigrationDto.add(watsMasterDataVOForTestRunMig);
 		}
-		return webClientService(watsMasterDataVOListForTestRunMig, "http://localhost:38083/wats");
-//		return webClientService(watsMasterDataVOListForTestRunMig, customerURI);
+//		return webClientService(watsMasterDataVOListForTestRunMig, "http://localhost:38083/wats");
+		return webClientService(testRunMigrationDto, customerURI);
 	}
 
 }

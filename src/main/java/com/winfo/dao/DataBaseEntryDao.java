@@ -36,19 +36,23 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
+import com.winfo.model.LookUp;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.model.ScriptsData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.model.Testrundata;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
-import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
+import com.winfo.vo.LookUpCodeVO;
+import com.winfo.vo.LookUpVO;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
 
@@ -79,14 +83,39 @@ public class DataBaseEntryDao {
 		return session.find(Testrundata.class, testSetId);
 	}
 
-	@SuppressWarnings("unchecked")
-	public String findCustomerUriByName(String customerName) {
+	public ScriptsData getScriptDataByLineID(int lineId) {
 		Session session = em.unwrap(Session.class);
-		List<String> result = (List<String>) session
-				.createNativeQuery(
-						"select value_name from APPLICATION_PROPERTIES where KEY_NAME='" + customerName + "'")
+		return session.find(ScriptsData.class, lineId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public LookUpCodeVO lookupCode(String lookUpName, String lookupCode) {
+		Session session = em.unwrap(Session.class);
+		List<LookUpCode> listOfLookUpCode = session
+				.createQuery(
+						"from LookUpCode where lookUpName = '" + lookUpName + "' and lookUpCode = '" + lookupCode + "'")
 				.getResultList();
-		return result.isEmpty() ? "" : result.get(0);
+		LookUpCodeVO lookUpCodeVo = listOfLookUpCode.isEmpty() ? null : new LookUpCodeVO(listOfLookUpCode.get(0));
+		return lookUpCodeVo;
+	}
+
+	@SuppressWarnings("unchecked")
+	public LookUpVO lookups(String lookUpName, Map<String, LookUpCodeVO> mapOfData) {
+		Session session = em.unwrap(Session.class);
+		List<LookUp> listOfLookUp = session.createQuery("from LookUp where lookUpName = '" + lookUpName + "'")
+				.getResultList();
+		LookUp lookUpObj = listOfLookUp.isEmpty() ? null : listOfLookUp.get(0);
+		LookUpVO lookupVo = new LookUpVO(lookUpObj, mapOfData);
+		return lookupVo;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Integer> getListOfLineIdByTestSetId(int testSetId) {
+		Session session = em.unwrap(Session.class);
+		List<Integer> testSetLineIDs = session
+				.createQuery("select testsetlineid from ScriptsData where Testrundata.testsetid = " + testSetId)
+				.getResultList();
+		return testSetLineIDs;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1414,11 +1443,11 @@ public class DataBaseEntryDao {
 		return Integer.parseInt(result.toString());
 	}
 
-	public String getCentralRepoUrl() {
+	public String getCentralRepoUrl(String name) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<ApplicationProperties> from = cq.from(ApplicationProperties.class);
-		Predicate condition = cb.equal(from.get("keyName"), Constants.WATS_CENTRAL);
+		Predicate condition = cb.equal(from.get("keyName"), name);
 		cq.multiselect(from.get("valueName")).where(condition);
 		List<String> result = em.createQuery(cq).getResultList();
 		return result.get(0);

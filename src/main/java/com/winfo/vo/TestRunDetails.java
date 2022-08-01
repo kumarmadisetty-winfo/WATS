@@ -4,15 +4,15 @@ import java.util.List;
 
 public class TestRunDetails {
 	
-	private List<ExistsTestRun> id;
+	private List<ExistTestRunDto> listOfTestRun;
 	private String customerName;
 
-	public List<ExistsTestRun> getId() {
-		return id;
+	public List<ExistTestRunDto> getListOfTestRun() {
+		return listOfTestRun;
 	}
 
-	public void setId(List<ExistsTestRun> id) {
-		this.id = id;
+	public void setListOfTestRun(List<ExistTestRunDto> listOfTestRun) {
+		this.listOfTestRun = listOfTestRun;
 	}
 
 	public String getCustomerName() {

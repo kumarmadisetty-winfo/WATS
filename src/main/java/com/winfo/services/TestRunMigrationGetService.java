@@ -23,15 +23,15 @@ import com.winfo.model.ScritplinesData;
 import com.winfo.model.Testrundata;
 import com.winfo.vo.DomGenericResponseBean2;
 import com.winfo.vo.DomGenericResponseBean3;
-import com.winfo.vo.ExistsTestRun;
+import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
-import com.winfo.vo.TestRunExistsVO;
-import com.winfo.vo.WatsMasterDataVOListForTestRunMig;
-import com.winfo.vo.WatsMasterVO;
-import com.winfo.vo.WatsMetaDataVO;
+import com.winfo.vo.TestRunExistVO;
+import com.winfo.vo.TestRunMigrationDto;
+import com.winfo.vo.ScriptMasterDto;
+import com.winfo.vo.ScriptMetaDataDto;
 import com.winfo.vo.WatsTestSetParamVO;
-import com.winfo.vo.WatsTestSetVO;
+import com.winfo.vo.TestSetLineDto;
 
 @Service
 public class TestRunMigrationGetService {
@@ -46,17 +46,17 @@ public class TestRunMigrationGetService {
 	private EntityManager entityManager;
 
 	@Transactional
-	public DomGenericResponseBean3 centralRepoData(List<WatsMasterDataVOListForTestRunMig> mastervo) {
+	public DomGenericResponseBean3 centralRepoData(List<TestRunMigrationDto> mastervo) {
 
-		TestRunExistsVO testRunExistsVO = new TestRunExistsVO();
+		TestRunExistVO testRunExistVO = new TestRunExistVO();
 
-		List<ExistsTestRun> listOfExistsTestRun = new ArrayList<>();
+		List<ExistTestRunDto> listOfExistsTestRun = new ArrayList<>();
 
 		List<DomGenericResponseBean2> bean = new ArrayList<>();
 
 		DomGenericResponseBean3 domGenericResponseBean3 = new DomGenericResponseBean3();
 
-		for (WatsMasterDataVOListForTestRunMig mastervolist : mastervo) {
+		for (TestRunMigrationDto mastervolist : mastervo) {
 			Session session = entityManager.unwrap(Session.class);
 
 //			ExistsTestRun existsTestRun = new ExistsTestRun();
@@ -164,7 +164,7 @@ public class TestRunMigrationGetService {
 				}
 
 			}
-			for (WatsMasterVO masterdata : mastervolist.getScriptMasterData()) {
+			for (ScriptMasterDto masterdata : mastervolist.getScriptMasterData()) {
 				ScriptMaster master = new ScriptMaster();
 				master.setScript_id(masterdata.getScript_id());
 				master.setModule(masterdata.getModule());
@@ -201,7 +201,7 @@ public class TestRunMigrationGetService {
 				master.setAttribute9(masterdata.getAttribute9());
 				master.setAttribute10(masterdata.getAttribute10());
 
-				for (WatsMetaDataVO metadatavo : masterdata.getMetaDataList()) {
+				for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 					ScriptMetaData metadata = new ScriptMetaData();
 					metadata.setAction(metadatavo.getAction());
 					metadata.setLine_number(metadatavo.getLine_number());
@@ -310,7 +310,7 @@ public class TestRunMigrationGetService {
 			testrundata.setExceptionpath(mastervolist.getExeception_path());
 			testrundata.setTscompleteflag("ACTIVE");
 
-			for (WatsTestSetVO lineVo : mastervolist.getTestSetLinesAndParaData()) {
+			for (TestSetLineDto lineVo : mastervolist.getTestSetLinesAndParaData()) {
 				ScriptsData testSetLineData = new ScriptsData();
 				int sectiptid = copyTestrunDao.getscrtiptIds();
 				testSetLineData.setTestsetlineid(sectiptid);

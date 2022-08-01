@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.winfo.dao.CustomerToCentralGetDao;
 import com.winfo.vo.ScriptDtlsDto;
 import com.winfo.vo.WatsMasterDataVOList;
-import com.winfo.vo.WatsMasterVO;
+import com.winfo.vo.ScriptMasterDto;
 
 import reactor.core.publisher.Mono;
 
@@ -46,7 +46,7 @@ public class CustomerToCentralGetService {
 	@Transactional
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String scriptMetaData(ScriptDtlsDto scriptDtls) {
-		List<WatsMasterVO> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
+		List<ScriptMasterDto> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
 		Session session = entityManager.unwrap(Session.class);
 		Query query4 = session.createQuery(
 				"select valueName from ApplicationProperties where keyName='" + scriptDtls.getCustomerName() + "'");

@@ -1,6 +1,6 @@
 package com.winfo.vo;
 
-public class ExistsTestRun {
+public class ExistTestRunDto {
 	private Integer testSetId;
 	private boolean flag = false;
 	

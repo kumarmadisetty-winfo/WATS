@@ -7,17 +7,17 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.winfo.model.ScriptsData;
 
-public class WatsTestSetVO {
+public class TestSetLineDto {
 	// #################TestSetLinesAndParaData
 
-	@JsonProperty("test_set_line_id")
-	private String test_set_line_id;
+	@JsonProperty("testSetLineId")
+	private String testSetLineId;
 
-	@JsonProperty("test_set_id")
-	private String test_set_id;
+	@JsonProperty("testSetId")
+	private String testSetId;
 
-	@JsonProperty("script_id")
-	private int script_id;
+	@JsonProperty("scriptId")
+	private int scriptId;
 
 	@JsonProperty("executedby")
 	private String executedby;
@@ -45,14 +45,14 @@ public class WatsTestSetVO {
 	private Date executionstarttime;
 	@JsonProperty("status")
 	private String status;
-	@JsonProperty("ScriptParam")
-	private List<WatsTestSetParamVO> ScriptParam = new ArrayList<WatsTestSetParamVO>();
+	@JsonProperty("scriptParam")
+	private List<WatsTestSetParamVO> scriptParam = new ArrayList<WatsTestSetParamVO>();
 
-	public WatsTestSetVO() {
+	public TestSetLineDto() {
 	}
 
-	public WatsTestSetVO(ScriptsData scriptData) {
-		this.script_id = scriptData.getScriptid();
+	public TestSetLineDto(ScriptsData scriptData) {
+		this.scriptId = scriptData.getScriptid();
 		this.scriptnumber = scriptData.getScriptnumber();
 		this.status = scriptData.getScriptnumber();
 		this.enabled = scriptData.getEnabled();
@@ -173,42 +173,35 @@ public class WatsTestSetVO {
 	}
 
 	public List<WatsTestSetParamVO> getScriptParam() {
-		return ScriptParam;
+		return scriptParam;
 	}
 
 	public void setScriptParam(List<WatsTestSetParamVO> scriptParam) {
-		ScriptParam = scriptParam;
+		this.scriptParam = scriptParam;
 	}
 
 	public String getTest_set_line_id() {
-		return test_set_line_id;
+		return testSetLineId;
 	}
 
-	public void setTest_set_line_id(String test_set_line_id) {
-		this.test_set_line_id = test_set_line_id;
+	public void setTest_set_line_id(String testSetLineId) {
+		this.testSetLineId = testSetLineId;
 	}
 
 	public String getTest_set_id() {
-		return test_set_id;
+		return testSetId;
 	}
 
-	public void setTest_set_id(String test_set_id) {
-		this.test_set_id = test_set_id;
+	public void setTest_set_id(String testSetId) {
+		this.testSetId = testSetId;
 	}
 
 	public int getScript_id() {
-		return script_id;
+		return scriptId;
 	}
 
-	public void setScript_id(int script_id) {
-		this.script_id = script_id;
-	}
-
-	@Override
-	public String toString() {
-		return this.executedby + " " + this.creationdate + " " + this.executionendtime + " " + this.seqnum + " "
-				+ this.scriptnumber + " " + this.script_id + " " + this.testsstlinescriptpath + " " + this.enabled + " "
-				+ this.createdby + " " + this.status;
+	public void setScript_id(int scriptId) {
+		this.scriptId = scriptId;
 	}
 
 }
