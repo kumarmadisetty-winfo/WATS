@@ -1,8 +1,10 @@
 package com.winfo.services;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +12,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
@@ -24,6 +31,7 @@ import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants;
+import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.DeleteScriptDto;
 import com.winfo.vo.ResponseDto;
@@ -45,13 +53,17 @@ public class DeletionOfScriptService {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
+	@Autowired
+	HealthCheck healthCheck;
+
+	@Autowired
+	TestScriptExecService testScriptExecService;
+
 	private static final String SCREENSHOT = "Screenshot";
 	public static final String FORWARD_SLASH = "/";
 
 	public ResponseDto deleteScriptFromTestRun(DeleteScriptDto testScriptDto) throws Exception {
 		String testSetId = testScriptDto.getTestSetId();
-		String testSetLineId = testScriptDto.getTestSetLineId();
-		TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(testSetId, testSetLineId);
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		ConfigFileReader.ConfigFile configFile = null;
 
@@ -62,8 +74,16 @@ public class DeletionOfScriptService {
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			deleteScreenShot(testSetLine, customerDetails, provider);
-			deletePdf(testSetLine, customerDetails, provider);
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
+			for (String testSetLineId : testScriptDto.getTestSetLineId()) {
+				TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(testSetId, testSetLineId);
+				deleteScreenShot(testSetLine, customerDetails, provider);
+				deletePdf(testSetLine, customerDetails, provider);
+				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+					String access = healthCheck.getSharePointAccess(fetchConfigVO);
+					deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine);
+				}
+			}
 		} catch (Exception e) {
 			if (e instanceof WatsEBSCustomException) {
 				throw e;
@@ -131,7 +151,6 @@ public class DeletionOfScriptService {
 
 			if (objNames.size() > 0) {
 				ListIterator<String> listIt = objNames.listIterator();
-
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
 					DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
@@ -146,6 +165,99 @@ public class DeletionOfScriptService {
 			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}
 		return new ResponseDto(200, Constants.SUCCESS, "Pdf deleted successfully");
+	}
+
+	public void deletePdfFromSharePoint(FetchConfigVO fetchConfigVO, String accessToken,
+			CustomerProjectDto customerDetails, TestSetLine testSetLine) {
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+
+			// Outer header
+			HttpHeaders deleteSessionHeader = new HttpHeaders();
+			deleteSessionHeader.add("Authorization", "Bearer " + accessToken);
+			HttpEntity<byte[]> deleteSessionRequest = new HttpEntity<>(null, deleteSessionHeader);
+
+			// SITE-ID
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"
+					+ fetchConfigVO.getSharePoint_URL() + ":/sites/" + fetchConfigVO.getSite_Name(), HttpMethod.GET,
+					deleteSessionRequest, Object.class);
+
+			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody()
+					: null;
+			String siteId = siteDetailsMap != null
+					? StringUtils.convertToString(siteDetailsMap.get("id").toString().split(",")[1])
+					: null;
+
+			// DRIVE-ID
+			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange(
+					"https://graph.microsoft.com/v1.0/sites/" + siteId + "/drives", HttpMethod.GET,
+					deleteSessionRequest, Object.class);
+
+			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) driveDetailsResponse.getBody()
+					: null;
+
+			List<Map<String, String>> list = (List<Map<String, String>>) driveDetailsMap.get("value");
+
+			String driveId = null;
+			for (Map<String, String> map : list) {
+				if (fetchConfigVO.getSharePoint_Library_Name() != null) {
+					if (fetchConfigVO.getSharePoint_Library_Name().equalsIgnoreCase(map.get("name"))) {
+						driveId = map.get("id");
+						break;
+					}
+				} else {
+					if ("Documents".equalsIgnoreCase(map.get("name"))) {
+						driveId = map.get("id");
+						break;
+					}
+				}
+			}
+			System.out.println("https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
+					+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
+					+ customerDetails.getProjectName() + "/" + testSetLine.getTestRun().getTestRunName());
+			// SITE-ID
+			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange(
+					"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/" + fetchConfigVO.getDirectory_Name()
+							+ "/" + customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
+							+ testSetLine.getTestRun().getTestRunName(),
+					HttpMethod.GET, deleteSessionRequest, Object.class);
+
+			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody()
+					: null;
+
+			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
+
+			// Child-Name
+			ResponseEntity<Object> listOfItemDetailsResponse = restTemplate.exchange(
+					"https://graph.microsoft.com/v1.0/drives/" + driveId + "/items/" + itemId + "/children",
+					HttpMethod.GET, deleteSessionRequest, Object.class);
+
+			Map<String, Object> listOfItemDetailsMap = listOfItemDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) listOfItemDetailsResponse.getBody()
+					: null;
+
+			List<Map<String, Object>> listOfMaps = (List<Map<String, Object>>) listOfItemDetailsMap.get("value");
+
+			for (Map<String, Object> listOfName : listOfMaps) {
+				String pdfName = listOfName.get("name").toString();
+				String pdfNameToFind = testSetLine.getSeqNum() + "_" + testSetLine.getScriptNumber();
+				if (pdfName.contains(pdfNameToFind)) {
+					ResponseEntity<Object> deletionOfPdf = restTemplate
+							.exchange(
+									"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
+											+ fetchConfigVO.getDirectory_Name() + "/"
+											+ customerDetails.getCustomerName() + "/" + customerDetails.getProjectName()
+											+ "/" + testSetLine.getTestRun().getTestRunName() + "/" + pdfName,
+									HttpMethod.DELETE, deleteSessionRequest, Object.class);
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println("Pdf is not present in sharepoint");
+		}
 	}
 
 }

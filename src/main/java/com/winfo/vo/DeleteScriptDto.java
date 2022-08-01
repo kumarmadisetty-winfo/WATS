@@ -1,9 +1,11 @@
 package com.winfo.vo;
 
+import java.util.List;
+
 public class DeleteScriptDto {
 
 	private String testSetId = "false";
-	private String testSetLineId = "false";
+	private List<String> testSetLineId;
 
 	public String getTestSetId() {
 		return testSetId;
@@ -13,12 +15,14 @@ public class DeleteScriptDto {
 		this.testSetId = testSetId;
 	}
 
-	public String getTestSetLineId() {
+	public List<String> getTestSetLineId() {
 		return testSetLineId;
 	}
 
-	public void setTestSetLineId(String testSetLineId) {
+	public void setTestSetLineId(List<String> testSetLineId) {
 		this.testSetLineId = testSetLineId;
 	}
+
+	
 
 }
