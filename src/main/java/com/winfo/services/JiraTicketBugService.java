@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.dao.JiraTicketBugDao;
 import com.winfo.vo.BugDetails;
-import com.winfo.vo.DomGenericResponseBean1;
+import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestRunVO;
 
 import reactor.core.publisher.Mono;
@@ -115,9 +115,9 @@ public class JiraTicketBugService {
 	}
 
 	@Transactional
-	public List<DomGenericResponseBean1> createJiraTicket(BugDetails bugdetails) throws ParseException {
+	public List<DomGenericResponseBean> createJiraTicket(BugDetails bugdetails) throws ParseException {
 
-		List<DomGenericResponseBean1> bean = new ArrayList<DomGenericResponseBean1>();
+		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
 		Integer testsetid = bugdetails.getTest_set_id();
 		int testSetLineId = bugdetails.getTestSetLineId();
 		List<Integer> scriptIds = bugdetails.getScript_id();
@@ -280,7 +280,7 @@ public class JiraTicketBugService {
 
 		System.out.println(count + " Record(s) Updated.");
 
-		DomGenericResponseBean1 response = new DomGenericResponseBean1();
+		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count > 0) {
 			response.setStatus(200);
 			response.setStatusMessage("SUCCESS");

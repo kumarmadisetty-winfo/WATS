@@ -24,15 +24,15 @@ import com.winfo.model.FetchDataMetadata;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.ScriptDtlsDto;
-import com.winfo.vo.WatsMasterVO;
-import com.winfo.vo.WatsMetaDataVO;
+import com.winfo.vo.ScriptMasterDto;
+import com.winfo.vo.ScriptMetaDataDto;
 
 @Repository
 public class CustomerToCentralGetDao {
 
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
 
@@ -467,26 +467,26 @@ public class CustomerToCentralGetDao {
 		return finalJSONObject;
 	}
 
-	public List<WatsMasterVO> fecthMetaDataList(ScriptDtlsDto scriptDtls) {
+	public List<ScriptMasterDto> fecthMetaDataList(ScriptDtlsDto scriptDtls) {
 		String productVersion = scriptDtls.getProductVersion();
 		List<Integer> scriptIds = scriptDtls.getScriptId();
-		List<WatsMasterVO> watsMasterVOList = new ArrayList<>();
+		List<ScriptMasterDto> scriptMasterList = new ArrayList<>();
 		for (int i = 0; i < scriptIds.size(); i++) {
 			Integer scriptId = scriptIds.get(i);
 			String productVersionDb = dataBaseEntryDao.getProductVersionByScriptId(scriptId);
 			if (productVersion.equals(productVersionDb)) {
 				ScriptMaster scriptMasterDtls = dataBaseEntryDao.findScriptMasterByScriptId(scriptId);
-				List<ScriptMetaData> scriptMetaDataList =  dataBaseEntryDao.getScriptMetaDataList(scriptId);
-				WatsMasterVO watsMetaVO = new WatsMasterVO(scriptMasterDtls);
-				List<WatsMetaDataVO> watsMetaDataVOList = new ArrayList<>();
-				for(ScriptMetaData scriptMetaData : scriptMetaDataList) {
-					WatsMetaDataVO watsMetadataVO = new WatsMetaDataVO(scriptMetaData);
-					watsMetaDataVOList.add(watsMetadataVO);
+				List<ScriptMetaData> scriptMetaDataList = dataBaseEntryDao.getScriptMetaDataList(scriptId);
+				ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMasterDtls);
+				List<ScriptMetaDataDto> scriptMetaDataListDto = new ArrayList<>();
+				for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
+					ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
+					scriptMetaDataListDto.add(scriptMetaDataDto);
 				}
-				watsMetaVO.setMetaDataList(watsMetaDataVOList);
-				watsMasterVOList.add(watsMetaVO);
+				scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
+				scriptMasterList.add(scriptMasterDto);
 			}
 		}
-		return watsMasterVOList;
+		return scriptMasterList;
 	}
 }
