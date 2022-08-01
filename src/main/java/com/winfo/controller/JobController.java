@@ -1,7 +1,5 @@
 package com.winfo.controller;
 
-import java.io.IOException;
-
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.scripts.RunAutomation;
+import com.winfo.services.HealthCheck;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
 
@@ -30,13 +29,17 @@ public class JobController {
 	@Autowired
 	RunAutomation runAutomation;
 
+	@Autowired
+	HealthCheck healthCheck;
+
 	@ResponseBody
 	@RequestMapping(value = "/executeTestScript")
-	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto,
-			BindingResult bindingResult) throws IOException {
+	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto, BindingResult bindingResult)
+			throws Exception {
 		ResponseDto status = null;
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
 			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
+//			status = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
 			status = runAutomation.run(testScriptDto.getTestScriptNo());
 
 		}

@@ -85,6 +85,8 @@ public class Constants {
 	public static final String PDF = File.separator + "wats" + File.separator + "PDF" + File.separator;
 	public static final String EBS = "ebs";
 	public static final String SAP_CONCUR = "sap_concur";
+	public static final String WATS_CENTRAL = "WATS_CENTRAL";
 	public static final String ERR_MSG_FOR_SCRIPT_RUN = "System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team";
 	public static final String ERR_MSG_FOR_DEP_FAILED = "Dependent Script Failed";
 }
+

@@ -16862,8 +16862,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					WebElement values = driver.findElement(By.xpath("(//span[text()='Name']/following::input)[1]"));
 
-					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+					//typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
 
+					values.sendKeys(keysToSend);
 					enter(driver, fetchMetadataVO, fetchConfigVO);
 
 					Thread.sleep(10000);

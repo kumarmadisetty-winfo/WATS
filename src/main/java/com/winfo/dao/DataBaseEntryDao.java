@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -31,6 +33,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
 import com.winfo.model.Project;
@@ -41,6 +44,7 @@ import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
+import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
@@ -69,7 +73,6 @@ public class DataBaseEntryDao {
 	private static final String STATUS = "status";
 	private static final String IN_QUEUE = "In-Queue";
 
-	
 	@SuppressWarnings("unchecked")
 	public List<ScriptMetaData> getScriptMetaDataList(Integer scriptId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -80,8 +83,7 @@ public class DataBaseEntryDao {
 		Query query = em.createQuery(cq);
 		return query.getResultList();
 	}
-	
-	
+
 	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status) throws ClassNotFoundException, SQLException {
 		try {
@@ -94,7 +96,7 @@ public class DataBaseEntryDao {
 			System.out.println(e);
 		}
 	}
-	
+
 	public String getProductVersionByScriptId(Integer scriptId) {
 		String productVersion = "";
 		String sqlQuery = "select product_version from WIN_TA_SCRIPT_MASTER where script_id=" + scriptId;
@@ -305,7 +307,7 @@ public class DataBaseEntryDao {
 	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
 			List<Integer> dependentList, String test_set_id) {
 		// TODO Auto-generated method stub
-		String sql = "Select script_id,dependency_tr from win_ta_test_set_lines where script_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
+		String sql = "Select test_set_line_id,dependency_tr from win_ta_test_set_lines where test_set_line_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
 		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList", dependentList)
 				.setParameter("test_set_id", test_set_id);
 
@@ -555,7 +557,7 @@ public class DataBaseEntryDao {
 		return result;
 	}
 
-	public TestSetLine checkTestSetLinesByTestSetLineId( int testSetLineId) {
+	public TestSetLine checkTestSetLinesByTestSetLineId(int testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
@@ -1337,15 +1339,46 @@ public class DataBaseEntryDao {
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition1 = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testRunId);
 		Predicate condition2 = cb.equal(from.get(STATUS), scriptStatus);
-		Predicate passCondtion = cb.equal(from.get(STATUS), PASS);
-		Predicate failCondition = cb.equal(from.get(STATUS), FAIL);
+		List<String> statusList = Arrays.asList(new String[] { PASS, FAIL });
+		Expression<String> inExpression = from.get("status");
+		Predicate inPredicate = inExpression.in(statusList);
+
 		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2)
-				: cb.and(condition1, passCondtion, failCondition);
+				: cb.and(condition1, inPredicate);
 
 		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
 		List<Object[]> query = em.createQuery(cq).getResultList();
 		return query;
 
+	}
+
+	public int dbAccessibilityCheck() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Object> cq = cb.createQuery(Object.class);
+		cq.multiselect(cb.count(cq.from(TestSet.class)));
+		Object result = em.createQuery(cq).getSingleResult();
+		return Integer.parseInt(result.toString());
+	}
+
+	public String getCentralRepoUrl() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		Root<ApplicationProperties> from = cq.from(ApplicationProperties.class);
+		Predicate condition = cb.equal(from.get("keyName"), Constants.WATS_CENTRAL);
+		cq.multiselect(from.get("valueName")).where(condition);
+		List<String> result = em.createQuery(cq).getResultList();
+		return result.get(0);
+	}
+
+	public void updateTestSetLineStatusForSanity(String testSetId) {
+		String updateQry = "UPDATE win_ta_test_set_lines SET status = 'Fail' where test_set_id = " + testSetId
+				+ " and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS')";
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
+		}
 	}
 
 }
