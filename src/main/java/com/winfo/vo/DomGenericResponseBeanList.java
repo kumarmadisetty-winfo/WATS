@@ -2,7 +2,7 @@ package com.winfo.vo;
 
 import java.util.List;
 
-public class DomGenericResponseBean3 {
+public class DomGenericResponseBeanList {
 	
 	private List<DomGenericResponseBean2> response;
 	

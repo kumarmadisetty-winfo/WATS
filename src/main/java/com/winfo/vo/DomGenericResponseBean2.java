@@ -1,7 +1,5 @@
 package com.winfo.vo;
 
-import java.util.List;
-
 public class DomGenericResponseBean2 {
 	
 	private int status;

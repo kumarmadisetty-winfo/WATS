@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.winfo.services.TestRunMigrationGetService;
 import com.winfo.services.TestRunMigrationService;
-import com.winfo.vo.DomGenericResponseBean3;
+import com.winfo.vo.DomGenericResponseBeanList;
 import com.winfo.vo.TestRunDetails;
 import com.winfo.vo.TestRunMigrationDto;
 
@@ -33,7 +33,7 @@ public class TestRunMigration {
 	
 
 	@PostMapping("/testRunMigrationToCustomer")
-	public DomGenericResponseBean3 pluginData(@RequestBody List<TestRunMigrationDto> listOfTestRunDto) {
+	public DomGenericResponseBeanList pluginData(@RequestBody List<TestRunMigrationDto> listOfTestRunDto) {
 		return testRunMigrateGetService.centralRepoData(listOfTestRunDto);
 		
 	}

@@ -22,7 +22,7 @@ import com.winfo.model.ScriptsData;
 import com.winfo.model.ScritplinesData;
 import com.winfo.model.Testrundata;
 import com.winfo.vo.DomGenericResponseBean2;
-import com.winfo.vo.DomGenericResponseBean3;
+import com.winfo.vo.DomGenericResponseBeanList;
 import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -46,11 +46,11 @@ public class TestRunMigrationGetService {
 	private EntityManager entityManager;
 
 	@Transactional
-	public DomGenericResponseBean3 centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
+	public DomGenericResponseBeanList centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
 
 		List<DomGenericResponseBean2> bean = new ArrayList<>();
 
-		DomGenericResponseBean3 domGenericResponseBean3 = new DomGenericResponseBean3();
+		DomGenericResponseBeanList domGenericResponseBeanList = new DomGenericResponseBeanList();
 
 		for (TestRunMigrationDto mastervolist : listOfTestRunDto) {
 			Session session = entityManager.unwrap(Session.class);
@@ -70,7 +70,7 @@ public class TestRunMigrationGetService {
 				domGenericResponseBean.setStatusMessage("Already Exists");
 				domGenericResponseBean.setTestRunName(mastervolist.getTestSetName());
 				bean.add(domGenericResponseBean);
-				domGenericResponseBean3.setResponse(bean);
+				domGenericResponseBeanList.setResponse(bean);
 				continue;
 			}
 			int customerId = 0;
@@ -85,8 +85,8 @@ public class TestRunMigrationGetService {
 				domGenericResponseBean.setStatusMessage("Customer Not Found");
 				domGenericResponseBean.setTestRunName(mastervolist.getTestSetName());
 				bean.add(domGenericResponseBean);
-				domGenericResponseBean3.setResponse(bean);
-				return domGenericResponseBean3;
+				domGenericResponseBeanList.setResponse(bean);
+				return domGenericResponseBeanList;
 			}
 
 			List<ScriptMaster> listOfScriptMaster = new ArrayList<>();
@@ -366,9 +366,9 @@ public class TestRunMigrationGetService {
 			domGenericResponseBean.setStatusMessage("Migrated Successfully");
 			domGenericResponseBean.setTestRunName(testrundata.getTestsetname());
 			bean.add(domGenericResponseBean);
-			domGenericResponseBean3.setResponse(bean);
+			domGenericResponseBeanList.setResponse(bean);
 		}
-		return domGenericResponseBean3;
+		return domGenericResponseBeanList;
 	}
 
 	public int dependentScript(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,
