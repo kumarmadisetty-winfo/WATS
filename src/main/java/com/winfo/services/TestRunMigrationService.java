@@ -34,12 +34,11 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class TestRunMigrationService {
-	
+
 	private static final String NA = "NA";
 	private static final String ACTION = "ACTION";
 	private static final String UNIQUE_MANDATORY = "UNIQUE_MANDATORY";
 	private static final String DATATYPES = "DATATYPES";
-	
 
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
@@ -86,7 +85,7 @@ public class TestRunMigrationService {
 			testRunMigrateDto.setConfigurationName(configurationName);
 			testRunMigrateDto.setTestRunExists(id.isFlag());
 			testRunMigrateDto.setWatsPackage(projectNameAndWatsPackage.get(0)[1].toString());
-			
+
 			List<Integer> testSetLineIDs = dataBaseEntryDao.getListOfLineIdByTestSetId(testRunId);
 
 			List<TestSetLineDto> testSetLinesAndParaData = new ArrayList<>();
@@ -123,7 +122,7 @@ public class TestRunMigrationService {
 
 					List<ScriptMetaData> listOfMetaData = dataBaseEntryDao
 							.getScriptMetaDataList(scriptsData.getScriptid());
-					
+
 					List<ScriptMetaDataDto> metaDataList = new ArrayList<>();
 					Map<String, LookUpCodeVO> validationMap = new HashMap<>();
 					for (ScriptMetaData scriptMetaData : listOfMetaData) {
@@ -164,13 +163,14 @@ public class TestRunMigrationService {
 			testRunMigrateDto.setTestSetLinesAndParaData(testSetLinesAndParaData);
 			testRunMigrateDto.setScriptMasterData(listOfMasterVO);
 			lookUpDataMap.put(ACTION.toLowerCase(), dataBaseEntryDao.lookups(ACTION, lookUpCodeAction));
-			lookUpDataMap.put(UNIQUE_MANDATORY.toLowerCase(), dataBaseEntryDao.lookups(UNIQUE_MANDATORY, lookUpCodeUnique));
+			lookUpDataMap.put(UNIQUE_MANDATORY.toLowerCase(),
+					dataBaseEntryDao.lookups(UNIQUE_MANDATORY, lookUpCodeUnique));
 			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.lookups(DATATYPES, lookUpCodeDataTypes));
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
 		}
-		return webClientService(testRunMigrationDto, "http://localhost:38083/wats");
-//		return webClientService(testRunMigrationDto, customerURI);
+//		return webClientService(testRunMigrationDto, "http://localhost:38080/wats");
+		return webClientService(testRunMigrationDto, customerURI);
 
 	}
 

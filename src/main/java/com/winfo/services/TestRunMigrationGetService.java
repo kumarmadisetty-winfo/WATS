@@ -258,7 +258,7 @@ public class TestRunMigrationGetService {
 						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
 								+ newNextValueProject + "," + newNextValueProjectNumber + ",'"
 								+ testRunMigrateDto.getProjectName() + "'," + customerId + ",'"
-								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + ",'"
+								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + "','"
 								+ testRunMigrateDto.getWatsPackage() + "')")
 						.executeUpdate();
 
