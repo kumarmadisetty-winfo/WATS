@@ -11,6 +11,9 @@ public class TestRunMigrationDto {
 
 	@JsonProperty("projectName")
 	private String projectName;
+	
+	@JsonProperty("watsPackage")
+	private String watsPackage;
 
 	@JsonProperty("customer")
 	private String customer;
@@ -113,6 +116,14 @@ public class TestRunMigrationDto {
 		this.lastUpdatedBy = null;
 		this.creationDate = null;
 		this.updateDate = null;
+	}
+
+	public String getWatsPackage() {
+		return watsPackage;
+	}
+
+	public void setWatsPackage(String watsPackage) {
+		this.watsPackage = watsPackage;
 	}
 
 	public boolean isTestRunExists() {

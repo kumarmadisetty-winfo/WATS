@@ -137,12 +137,13 @@ public class DataBaseEntryDao {
 		return configurationName;
 	}
 
-	public String getProjectNameById(int projectId) {
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getProjectNameById(int projectId) {
 		Session session = em.unwrap(Session.class);
-		String projectName = (String) session
-				.createNativeQuery("select project_name from win_ta_projects where project_id =" + projectId)
-				.getSingleResult();
-		return projectName;
+		List<Object[]> projectNameAndWatsPackage = (List<Object[]>) session
+				.createNativeQuery("select project_name, wats_package from win_ta_projects where project_id =" + projectId)
+				.getResultList();
+		return projectNameAndWatsPackage;
 	}
 
 	@SuppressWarnings("unchecked")
