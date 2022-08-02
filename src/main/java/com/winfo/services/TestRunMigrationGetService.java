@@ -43,6 +43,7 @@ public class TestRunMigrationGetService {
 	private EntityManager entityManager;
 
 	@Transactional
+	@SuppressWarnings("unchecked")
 	public List<DomGenericResponseBean> centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
 
 		List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
@@ -214,27 +215,29 @@ public class TestRunMigrationGetService {
 			}
 			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew);
 
-			BigDecimal checkConfig1 = (BigDecimal) session
-					.createNativeQuery("select count(*) from win_ta_config where config_name ='"
-							+ testRunMigrateDto.getConfigurationName() + "'")
-					.getSingleResult();
-			Integer checkConfig = Integer.parseInt(checkConfig1.toString());
-
-			if (checkConfig == 0) {
-				BigDecimal bigDecimal = (BigDecimal) session.createSQLQuery("SELECT CONFIG_ID_SEQ.nextval FROM DUAL")
-						.getSingleResult();
-				Integer id = Integer.parseInt(bigDecimal.toString());
-				session.createNativeQuery(
-						"Insert into WIN_TA_CONFIG (CONFIGURATION_ID,CREATED_BY,LAST_UPDATED_BY,CONFIG_NAME) values ("
-								+ id + ",'SUPER_ADMIN','SUPER_ADMIN','" + testRunMigrateDto.getConfigurationName()
-								+ "')")
-						.executeUpdate();
-			}
-			BigDecimal configuration = (BigDecimal) session
-					.createNativeQuery("select configuration_id from win_ta_config where config_name ='"
-							+ testRunMigrateDto.getConfigurationName() + "'")
-					.getSingleResult();
-			int configuration_id1 = Integer.parseInt(configuration.toString());
+//			BigDecimal checkConfig1 = (BigDecimal) session
+//					.createNativeQuery("select count(*) from win_ta_config where config_name ='"
+//							+ testRunMigrateDto.getConfigurationName() + "'")
+//					.getSingleResult();
+//			Integer checkConfig = Integer.parseInt(checkConfig1.toString());
+//
+//			if (checkConfig == 0) {
+//				BigDecimal bigDecimal = (BigDecimal) session.createSQLQuery("SELECT CONFIG_ID_SEQ.nextval FROM DUAL")
+//						.getSingleResult();
+//				Integer id = Integer.parseInt(bigDecimal.toString());
+//				session.createNativeQuery(
+//						"Insert into WIN_TA_CONFIG (CONFIGURATION_ID,CREATED_BY,LAST_UPDATED_BY,CONFIG_NAME) values ("
+//								+ id + ",'SUPER_ADMIN','SUPER_ADMIN','" + testRunMigrateDto.getConfigurationName()
+//								+ "')")
+//						.executeUpdate();
+//			}
+			
+			List<BigDecimal> listOfConfig = session
+					.createNativeQuery("select configuration_id from win_ta_config").getResultList();
+			
+			int configurationId = Integer.parseInt(listOfConfig.get(0).toString());
+			
+			
 
 //==========================================
 			BigDecimal checkProject = (BigDecimal) session
@@ -263,13 +266,6 @@ public class TestRunMigrationGetService {
 			}
 
 			Testrundata testrundata = new Testrundata();
-
-//			BigDecimal checkTest = (BigDecimal) session
-//					.createNativeQuery("select count(*) from WIN_TA_TEST_SET where test_set_name ='"
-//							+ mastervolist.getTest_set_name() + "'")
-//					.getSingleResult();
-//
-//			int checkTestRun = Integer.parseInt(checkTest.toString());
 			System.out.println("checkTestRun " + checkTestRun);
 			int testrunid = copyTestrunDao.getIds();
 			if (checkTestRun > 0) {
@@ -278,7 +274,7 @@ public class TestRunMigrationGetService {
 				testrundata.setTestsetname(testRunMigrateDto.getTestSetName());
 			}
 			testrundata.setTestsetid(testrunid);
-			testrundata.setConfigurationid(configuration_id1);
+			testrundata.setConfigurationid(configurationId);
 
 			BigDecimal project = (BigDecimal) session
 					.createNativeQuery("select project_id from win_ta_projects where project_name ='"
