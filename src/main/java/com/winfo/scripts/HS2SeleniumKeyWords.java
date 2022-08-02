@@ -20253,6 +20253,12 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Sucessfully Clicked Accept all clickButton" + scripNumber);
+			String xpath = "//a[text()='Accept all']";
+			String scriptID = fetchMetadataVO.getScript_id();
+			String lineNumber = fetchMetadataVO.getLine_number();
+			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 			}
 		} catch (Exception e) {
@@ -20273,8 +20279,12 @@ public class HS2SeleniumKeyWords implements SeleniumKeyWordsInterface {
 		Thread.sleep(5000);
 		String scripNumber = fetchMetadataVO.getScript_number();
 		log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-		String xpath = "(//*[text()='Inventory_Transaction'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
-		String scriptID=fetchMetadataVO.getScript_id();String metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(scriptID,metadataID,xpath);
+		String xpath1 = "(//*[text()='Inventory_Transaction'])[1]/following::*[text()='Scheduled Orchestration'][1]";
+		String xpath2 = "(//*[text()='Inventory_Transaction'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
+		String xpath = xpath1 + ";" + xpath2;
+		String scriptID = fetchMetadataVO.getScript_id();
+		String lineNumber = fetchMetadataVO.getLine_number();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
 		return;
 		}
 		}catch (Exception e) {
