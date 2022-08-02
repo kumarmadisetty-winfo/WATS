@@ -215,23 +215,6 @@ public class TestRunMigrationGetService {
 			}
 			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew);
 
-//			BigDecimal checkConfig1 = (BigDecimal) session
-//					.createNativeQuery("select count(*) from win_ta_config where config_name ='"
-//							+ testRunMigrateDto.getConfigurationName() + "'")
-//					.getSingleResult();
-//			Integer checkConfig = Integer.parseInt(checkConfig1.toString());
-//
-//			if (checkConfig == 0) {
-//				BigDecimal bigDecimal = (BigDecimal) session.createSQLQuery("SELECT CONFIG_ID_SEQ.nextval FROM DUAL")
-//						.getSingleResult();
-//				Integer id = Integer.parseInt(bigDecimal.toString());
-//				session.createNativeQuery(
-//						"Insert into WIN_TA_CONFIG (CONFIGURATION_ID,CREATED_BY,LAST_UPDATED_BY,CONFIG_NAME) values ("
-//								+ id + ",'SUPER_ADMIN','SUPER_ADMIN','" + testRunMigrateDto.getConfigurationName()
-//								+ "')")
-//						.executeUpdate();
-//			}
-
 			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
 					.getResultList();
 
