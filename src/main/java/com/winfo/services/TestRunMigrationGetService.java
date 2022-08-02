@@ -231,13 +231,11 @@ public class TestRunMigrationGetService {
 //								+ "')")
 //						.executeUpdate();
 //			}
-			
-			List<BigDecimal> listOfConfig = session
-					.createNativeQuery("select configuration_id from win_ta_config").getResultList();
-			
+
+			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
+					.getResultList();
+
 			int configurationId = Integer.parseInt(listOfConfig.get(0).toString());
-			
-			
 
 //==========================================
 			BigDecimal checkProject = (BigDecimal) session
@@ -257,10 +255,11 @@ public class TestRunMigrationGetService {
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
 
 				session.createNativeQuery(
-						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,CUSTOMER_ID,PRODUCT_VERSION) VALUES("
+						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
 								+ newNextValueProject + "," + newNextValueProjectNumber + ",'"
 								+ testRunMigrateDto.getProjectName() + "'," + customerId + ",'"
-								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + "')")
+								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + ",'"
+								+ testRunMigrateDto.getWatsPackage() + "')")
 						.executeUpdate();
 
 			}

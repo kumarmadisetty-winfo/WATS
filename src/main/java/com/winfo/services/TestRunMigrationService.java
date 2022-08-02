@@ -79,13 +79,14 @@ public class TestRunMigrationService {
 
 			String configurationName = dataBaseEntryDao.getConfiNameByConfigId(testRunData.getConfigurationid());
 
-			String projectName = dataBaseEntryDao.getProjectNameById(testRunData.getProjectid());
+			List<Object[]> projectNameAndWatsPackage = dataBaseEntryDao.getProjectNameById(testRunData.getProjectid());
 
 			testRunMigrateDto.setCustomer(testRunDetails.getCustomerName());
-			testRunMigrateDto.setProjectName(projectName);
+			testRunMigrateDto.setProjectName(projectNameAndWatsPackage.get(0)[0].toString());
 			testRunMigrateDto.setConfigurationName(configurationName);
 			testRunMigrateDto.setTestRunExists(id.isFlag());
-
+			testRunMigrateDto.setWatsPackage(projectNameAndWatsPackage.get(0)[1].toString());
+			
 			List<Integer> testSetLineIDs = dataBaseEntryDao.getListOfLineIdByTestSetId(testRunId);
 
 			List<TestSetLineDto> testSetLinesAndParaData = new ArrayList<>();
