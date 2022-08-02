@@ -7,12 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -83,25 +80,7 @@ public class RunAutomation {
 	@Autowired
 	ScriptXpathService xpathService;
 
-	/*
-	 * public void report() throws IOException, DocumentException,
-	 * com.itextpdf.text.DocumentException {
-	 * 
-	 * FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
-	 * List<FetchMetadataVO> fetchMetadataListVO = new ArrayList<FetchMetadataVO>();
-	 * fetchMetadataListVO.add(fetchMetadataVO); FetchConfigVO fetchConfigVO = new
-	 * FetchConfigVO();
-	 * 
-	 * createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", passcount,
-	 * failcount);
-	 * 
-	 * createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", passcount,
-	 * failcount); createPdf(fetchMetadataListVO, fetchConfigVO,
-	 * "Detailed_Report.pdf", passcount, failcount);
-	 * 
-	 * 
-	 * }
-	 */
+
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
 		FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
@@ -180,34 +159,13 @@ public class RunAutomation {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		log.info("Start of cloud run method");
 		try {
-			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(args);
-
-			final String uri = fetchConfigVO.getMETADATA_URL() + args;
-			log.info("Screenshotpath, uri config, pdf path - {} , {} , {}", fetchConfigVO.getScreenshot_path(),
-					fetchConfigVO.getUri_config(), fetchConfigVO.getPdf_path());
-			List<FetchMetadataVO> fetchMetadataListVO = dataService.getFetchMetaData(args, uri);
-
-			log.info("Metadata vo list size - {} ", fetchMetadataListVO.size());
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(args);
+			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(args, null, false, true);
+			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap = new TreeMap<Integer, List<FetchMetadataVO>>();
+			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
+					dependentScriptMap);
 			Map<Integer, Status> scriptStatus = new HashMap<>();
-			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap = new LinkedHashMap<>();
-			LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap;
 
-			int testRunDependencyCount = dataBaseEntry.getTestRunDependentCount(args);
-			Queue<Entry<String, List<FetchMetadataVO>>> dependentQueue = new LinkedList<>();
-
-			if (testRunDependencyCount > 0) {
-				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
-						TEST_RUN_LEVEL_DEPENDENCY);
-				dataBaseEntry.getTestRunLevelDependentScriptNumbers(dependentScriptMap, args);
-			} else {
-				metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO, dependentScriptMap,
-						SCRIPT_LEVEL_DEPENDENCY);
-				dataBaseEntry.getDependentScriptNumbers(dependentScriptMap);
-			}
-
-			for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
-				dependentQueue.add(element);
-			}
 
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedConditionException(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
@@ -246,7 +204,7 @@ public class RunAutomation {
 			log.info("Independent scripts # - {} ", metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			try {
-				for (Entry<String, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
+				for (Entry<Integer, List<FetchMetadataVO>> metaData : metaDataMap.entrySet()) {
 
 					String scriptNumber = metaData.getValue().get(0).getScript_number();
 
@@ -281,25 +239,14 @@ public class RunAutomation {
 				if (executor.isTerminated() && dependentScriptMap.size() > 0) {
 					ExecutorService executordependent = Executors
 							.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
-					/*
-					 * LinkedHashMap<String, List<FetchMetadataVO>> dependantmetaDataMap =
-					 * dataService .getDependentScriptMap();
-					 */
-					// int[] iteration= {1};
-					// System.out.println(iteration);
 
-					for (Entry<String, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
+					for (Entry<Integer, List<FetchMetadataVO>> metaData : dependentScriptMap.entrySet()) {
 						log.info(" Running Dependent - " + metaData.getKey());
 						executordependent.execute(() -> {
 							log.info(" Running Dependent in executor - " + metaData.getKey());
 							boolean run;
-							if (testRunDependencyCount > 0) {
-								run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
-										metaData.getValue().get(0).getDependencyScriptNumber());
-							} else {
-								run = dataBaseEntry.checkRunStatusOfDependantScript(args,
-										metaData.getValue().get(0).getDependencyScriptNumber().toString());
-							}
+							run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
+									metaData.getValue().get(0).getDependencyScriptNumber());
 							log.info(" Dependant Script run status" + metaData.getValue().get(0).getScript_id() + " "
 									+ run);
 
@@ -366,165 +313,6 @@ public class RunAutomation {
 						});
 					}
 
-//					System.out.println(dependentScriptMap.toString());
-//
-//					while (!dependentQueue.isEmpty()) {
-//						Entry<String, List<FetchMetadataVO>> metadata = dependentQueue.poll();
-//						Integer dependentScriptNo = metadata.getValue().get(0).getDependencyScriptNumber();
-//						if (scriptStatus.containsKey(dependentScriptNo)) {
-//							if (scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Pass")) {
-//
-//								executordependent.execute(() -> {
-//									try {
-//										String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
-//										if (flag.equalsIgnoreCase("STOPPED")) {
-//											metadata.getValue().clear();
-//											executor.shutdown();
-//											System.out.println("treminattion is succeed");
-//										} else {
-//											executorMethod(args, fetchConfigVO, fetchMetadataListVO, metadata,
-//													scriptStatus);
-//										}
-//									} catch (Exception e) {
-//										// TODO Auto-generated catch block
-//										e.printStackTrace();
-//
-//									}
-//								});
-//							} else if (!scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Fail")) {
-//								dataBaseEntry.getStatus(dependentScriptNo,
-//										Integer.parseInt(metadata.getValue().get(0).getTest_set_id()), scriptStatus,
-//										testRunDependencyCount);
-//								dependentQueue.add(metadata);
-//							} else {
-//								String passurl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
-//								String failurl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
-//								String detailurl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
-//								String scripturl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
-//										+ fetchMetadataListVO.get(0).getSeq_num() + "_"
-//										+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
-//
-//								FetchMetadataVO fd = metadata.getValue().get(0);
-//								FetchScriptVO post = new FetchScriptVO();
-//								post.setP_test_set_id(fd.getTest_set_id());
-//								post.setP_status("Fail");
-//								post.setP_script_id(fd.getScript_id());
-//								post.setP_test_set_line_id(fd.getTest_set_line_id());
-//								post.setP_pass_path(passurl);
-//								post.setP_fail_path(failurl);
-//								post.setP_exception_path(detailurl);
-//								post.setP_test_set_line_path(scripturl);
-//								failcount = failcount + 1;
-//								System.out.println("Came here to check fail condition");
-//								// Date enddate = new Date();
-//								// fetchConfigVO.setEndtime(enddate);
-//								dataService.updateTestCaseStatus(post, args, fetchConfigVO);
-//								// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
-//								// enddate);
-//								if (scriptStatus
-//										.containsKey(Integer.parseInt(metadata.getValue().get(0).getScript_id()))) {
-//									Status s = scriptStatus
-//											.get(Integer.parseInt(metadata.getValue().get(0).getScript_id()));
-//									s.setStatus("Fail");
-//								}
-//								errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
-//										fd.getTest_script_param_id(), null, null, null, null);
-//
-//							}
-//						} else {
-//							
-//							dataBaseEntry.getStatus1(dependentScriptNo,
-//									Integer.parseInt(metadata.getValue().get(0).getTest_set_id()), scriptStatus,
-//									testRunDependencyCount);
-//							
-//							dataBaseEntry.getStatus(dependentScriptNo,
-//									Integer.parseInt(metadata.getValue().get(0).getTest_set_id()), scriptStatus,
-//									testRunDependencyCount);
-//
-//							if (scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Pass")) {
-//
-//								executordependent.execute(() -> {
-//									try {
-//										String flag = dataBaseEntry.getTrMode(args, fetchConfigVO);
-//										if (flag.equalsIgnoreCase("STOPPED")) {
-//											metadata.getValue().clear();
-//											executor.shutdown();
-//											System.out.println("treminattion is succeed");
-//										} else {
-//											executorMethod(args, fetchConfigVO, fetchMetadataListVO, metadata,
-//													scriptStatus);
-//										}
-//									} catch (Exception e) {
-//										// TODO Auto-generated catch block
-//										e.printStackTrace();
-//
-//									}
-//								});
-//
-//							} else if (!scriptStatus.get(dependentScriptNo).getStatus().equalsIgnoreCase("Fail")) {
-//								dependentQueue.add(metadata);
-//							} else {
-//								String passurl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Passed_Report.pdf";
-//								String failurl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Failed_Report.pdf";
-//								String detailurl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + "Detailed_Report.pdf";
-//								String scripturl = fetchConfigVO.getImg_url()
-//										+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-//										+ fetchMetadataListVO.get(0).getProject_name() + "/"
-//										+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
-//										+ fetchMetadataListVO.get(0).getSeq_num() + "_"
-//										+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
-//
-//								FetchMetadataVO fd = metadata.getValue().get(0);
-//								FetchScriptVO post = new FetchScriptVO();
-//								post.setP_test_set_id(fd.getTest_set_id());
-//								post.setP_status("Fail");
-//								post.setP_script_id(fd.getScript_id());
-//								post.setP_test_set_line_id(fd.getTest_set_line_id());
-//								post.setP_pass_path(passurl);
-//								post.setP_fail_path(failurl);
-//								post.setP_exception_path(detailurl);
-//								post.setP_test_set_line_path(scripturl);
-//								failcount = failcount + 1;
-//								// Date enddate = new Date();
-//								// fetchConfigVO.setEndtime(enddate);
-//								dataService.updateTestCaseStatus(post, args, fetchConfigVO);
-//								// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
-//								// enddate);
-//								if (scriptStatus
-//										.containsKey(Integer.parseInt(metadata.getValue().get(0).getScript_id()))) {
-//									Status s = scriptStatus
-//											.get(Integer.parseInt(metadata.getValue().get(0).getScript_id()));
-//									s.setStatus("Fail");
-//								}
-//								errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
-//										fd.getTest_script_param_id(), null, null, null, null);
-//
-//							}
-//
-//						}
-//
-//					}
 					executordependent.shutdown();
 					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
@@ -561,7 +349,7 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			Entry<String, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
+			Entry<Integer, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
 		List<String> failList = new ArrayList<>();
 		WebDriver driver = null;
 
@@ -1477,10 +1265,10 @@ public class RunAutomation {
 						fetchConfigVO.setEndtime(enddate);
 						try {
 							// dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-							if (fetchMetadataVO.getDependency().equalsIgnoreCase("Y")) {
+							if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
 								if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
 									Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
-									if (!s.getStatus().equalsIgnoreCase("Fail")) {
+									if (!"Fail".equalsIgnoreCase(s.getStatus())) {
 										int awaitCounter = s.getInExecutionCount();
 										s.setInExecutionCount(--awaitCounter);
 										if (awaitCounter <= 0) {
@@ -1494,7 +1282,7 @@ public class RunAutomation {
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
 						} catch (Exception e) {
-							System.out.println("e");
+							e.printStackTrace();
 						}
 						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);

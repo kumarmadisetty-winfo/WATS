@@ -4,10 +4,10 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.mail.Message;
@@ -28,7 +28,6 @@ import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
-import com.winfo.utils.DateUtils;
 
 @Service
 @RefreshScope
@@ -51,7 +50,7 @@ public class LimitScriptExecutionService {
 	private String fromMail;
 
 	public Map<Integer, Boolean> getLimitedConditionException(FetchConfigVO fetchConfigVO,
-			List<FetchMetadataVO> fetchMetadataListVO, LinkedHashMap<String, List<FetchMetadataVO>> metaDataMap,
+			List<FetchMetadataVO> fetchMetadataListVO, SortedMap<Integer, List<FetchMetadataVO>> metaDataMap,
 			String args) {
 		boolean flag = false;
 		int remaingScriptsCount = 0;
