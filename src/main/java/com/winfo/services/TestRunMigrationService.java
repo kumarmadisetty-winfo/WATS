@@ -169,7 +169,6 @@ public class TestRunMigrationService {
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
 		}
-//		return webClientService(testRunMigrationDto, "http://localhost:38080/wats");
 		return webClientService(testRunMigrationDto, customerURI);
 
 	}
