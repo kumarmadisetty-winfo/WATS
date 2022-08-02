@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winfo.dao.WatsPluginDao;
-import com.winfo.model.PluginMaster;
-import com.winfo.model.PluginMetadata;
-import com.winfo.model.ScriptsData;
-import com.winfo.model.ScritplinesData;
-import com.winfo.model.Testrundata;
+import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
+import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsPluginMasterVO;
 import com.winfo.vo.WatsPluginMetaDataVO;
@@ -27,7 +27,7 @@ public class PluginTestrunService {
 
 	@Transactional
 	public DomGenericResponseBean updateTestrun(WatsPluginMasterVO mastervo) {
-		ScriptsData setScriptdata=new ScriptsData();
+		TestSetLine setScriptdata=new TestSetLine();
 
 		String module=mastervo.getModule();
 		String processArea=mastervo.getProcess_area();
@@ -54,7 +54,7 @@ public class PluginTestrunService {
 		}
 		
 		
-		PluginMaster master = new PluginMaster();
+		ScriptMaster master = new ScriptMaster();
 		int masterScriptId=dao.getMasterScriptId();
 		master.setScript_id(masterScriptId);
 		master.setModule(mastervo.getModule());
@@ -72,7 +72,7 @@ public class PluginTestrunService {
 		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
 		
 		for(WatsPluginMetaDataVO metadatavo:mastervo.getMetaDataList()) {
-			PluginMetadata metadata = new PluginMetadata();
+			ScriptMetaData metadata = new ScriptMetaData();
 			int metaDataId=dao.getMetaDataId();
 			metadata.setScript_meta_data_id(metaDataId);
 			metadata.setAction(metadatavo.getAction());
@@ -84,29 +84,28 @@ public class PluginTestrunService {
 			metadata.setValidation_name("NA");
 			metadata.setUnique_mandatory("NA");
 			metadata.setDatatypes("NA");
-			metadata.setConditional_popup("NA");
 			metadata.setCreated_by(mastervo.getCreated_by());
 			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
 			master.addMetadata(metadata);
 			
-			ScritplinesData setScriptlinedata=new ScritplinesData();
+			TestSetScriptParam setScriptlinedata=new TestSetScriptParam();
 			int sectiptlineid=dao.getParam_id();
 			 System.out.println("sectiptlineid"+sectiptlineid);
 			
-			setScriptlinedata.setTestscriptperamid(sectiptlineid);
-			setScriptlinedata.setInput_parameter(metadatavo.getInput_parameter());
-			setScriptlinedata.setScript_id(master.getScript_id());
-			setScriptlinedata.setScript_number(master.getScript_number());
-			setScriptlinedata.setLine_number(metadatavo.getLine_number());
-			setScriptlinedata.setInput_value(metadatavo.getInput_value());
+			setScriptlinedata.setTestRunScriptParamId(sectiptlineid);
+			setScriptlinedata.setInputParameter(metadatavo.getInput_parameter());
+			setScriptlinedata.setScriptId(master.getScript_id());
+			setScriptlinedata.setScriptNumber(master.getScript_number());
+			setScriptlinedata.setLineNumber(metadatavo.getLine_number());
+			setScriptlinedata.setInputValue(metadatavo.getInput_value());
 			setScriptlinedata.setAction(metadatavo.getAction());
-			setScriptlinedata.setTest_run_param_desc(metadatavo.getStep_desc());
-			setScriptlinedata.setMetadata_id(metaDataId);
+			setScriptlinedata.setTestRunParamDesc(metadatavo.getStep_desc());
+			setScriptlinedata.setMetadataId(metaDataId);
 
-			setScriptlinedata.setLastupdatedby(null);
-			setScriptlinedata.setLineexecutionstatues("New");
-			setScriptlinedata.setLineerrormessage(null);			
-			setScriptdata.addScriptlines(setScriptlinedata);
+			setScriptlinedata.setLastUpdatedBy(null);
+			setScriptlinedata.setLineExecutionStatus("New");
+			setScriptlinedata.setLineErrorMessage(null);			
+			setScriptdata.addTestScriptParam(setScriptlinedata);
 			
 			
 			
@@ -117,18 +116,18 @@ public class PluginTestrunService {
 		 int testSetId=dao.getTestsetIde(testsetName);
 		 int seqNum=dao.getseqNum(testSetId);
 		 int newSeqNum=seqNum+1;
-			Testrundata getTestrun=dao.getTestrunData(testSetId);
+		 TestSet getTestrun=dao.getTestrunData(testSetId);
 			
 			int Testsetlineid=dao.getTest_set_line_id();
-			setScriptdata.setTestsetlineid(Testsetlineid);
-			setScriptdata.setScriptid(master.getScript_id());
+			setScriptdata.setTestRunScriptId(Testsetlineid);
+			setScriptdata.setScriptId(master.getScript_id());
 
 			setScriptdata.setEnabled("Y");
-			setScriptdata.setScriptnumber(master.getScript_number());
-			setScriptdata.setSeqnum(newSeqNum);
+			setScriptdata.setScriptNumber(master.getScript_number());
+			setScriptdata.setSeqNum(newSeqNum);
 			setScriptdata.setStatus("New");
 
-			getTestrun.addScriptsdata(setScriptdata);	
+			getTestrun.addTestRunScriptData(setScriptdata);	
 			
 			dao.updateTestrun(getTestrun);
 

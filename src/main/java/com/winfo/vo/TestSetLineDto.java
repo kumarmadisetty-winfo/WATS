@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.winfo.model.ScriptsData;
+import com.winfo.model.TestSetLine;
 
 public class TestSetLineDto {
 	// #################TestSetLinesAndParaData
@@ -51,15 +51,15 @@ public class TestSetLineDto {
 	public TestSetLineDto() {
 	}
 
-	public TestSetLineDto(ScriptsData scriptData) {
-		this.scriptId = scriptData.getScriptid();
-		this.scriptnumber = scriptData.getScriptnumber();
-		this.status = scriptData.getScriptnumber();
+	public TestSetLineDto(TestSetLine scriptData) {
+		this.scriptId = scriptData.getScriptId();
+		this.scriptnumber = scriptData.getScriptNumber();
+		this.status = scriptData.getScriptNumber();
 		this.enabled = scriptData.getEnabled();
-		this.seqnum = scriptData.getSeqnum();
-		this.createdby = scriptData.getCreatedby();
-		this.testsstlinescriptpath = scriptData.getTestsstlinescriptpath();
-		this.executedby = scriptData.getExecutedby();
+		this.seqnum = scriptData.getSeqNum();
+		this.createdby = scriptData.getCreatedBy();
+		this.testsstlinescriptpath = scriptData.getTestRunScriptPath();
+		this.executedby = scriptData.getExecutedBy();
 		this.scriptUpadated = null;
 		this.lastupdatedby = null;
 		this.creationdate = null;

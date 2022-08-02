@@ -1,25 +1,20 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
 
 import org.apache.log4j.Logger;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.Map;
-import java.util.TreeMap;
-
-import com.winfo.model.ScriptsData;
 @Transactional
 @Repository
 public class VmInstanceDAO {

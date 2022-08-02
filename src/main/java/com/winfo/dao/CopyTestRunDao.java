@@ -1,7 +1,6 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,22 +10,21 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.winfo.model.Testrundata;
+import com.winfo.model.TestSet;
 @Repository
 public class CopyTestRunDao {
 	@Autowired
 	private EntityManager entityManager;
-	public Testrundata getdata(int testScriptNo) {
-		Testrundata getTestrun=entityManager.find(Testrundata.class, testScriptNo);
+	public TestSet getdata(int testScriptNo) {
+		TestSet getTestrun=entityManager.find(TestSet.class, testScriptNo);
 		return getTestrun;
 	}
 
-	public int saveTestrun(Testrundata setTestrundata) {
-		// TODO Auto-generated method stub
+	public int saveTestrun(TestSet setTestrundata) {
 		
 		entityManager.persist(setTestrundata);
-		System.out.println("setTestrundata.getTestsetid() 1:"+setTestrundata.getTestsetid());
-		return setTestrundata.getTestsetid();
+		System.out.println("setTestrundata.getTestsetid() 1:"+setTestrundata.getTestRunId());
+		return setTestrundata.getTestRunId();
 	}
 
 	public int getIds() {
@@ -80,9 +78,9 @@ public class CopyTestRunDao {
 		return 0;
 		}	
 	}
-	public int update(Testrundata getTestrun) {
+	public int update(TestSet getTestrun) {
 		entityManager.merge(getTestrun);
-		System.out.println("getTestrun.getTestsetid() 2:"+getTestrun.getTestsetid());
-		return getTestrun.getTestsetid();
+		System.out.println("getTestrun.getTestsetid() 2:"+getTestrun.getTestRunId());
+		return getTestrun.getTestRunId();
 	}
 }

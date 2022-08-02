@@ -18,9 +18,9 @@ import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.TestRunMigrationGetDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
-import com.winfo.model.ScriptsData;
-import com.winfo.model.ScritplinesData;
-import com.winfo.model.Testrundata;
+import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -247,16 +247,16 @@ public class TestRunMigrationGetService {
 
 			}
 
-			Testrundata testrundata = new Testrundata();
+			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
 			int testrunid = copyTestrunDao.getIds();
 			if (checkTestRun > 0) {
-				testrundata.setTestsetname(testRunMigrateDto.getTestSetName() + "-" + testrunid);
+				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + testrunid);
 			} else {
-				testrundata.setTestsetname(testRunMigrateDto.getTestSetName());
+				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
-			testrundata.setTestsetid(testrunid);
-			testrundata.setConfigurationid(configurationId);
+			testrundata.setTestRunId(testrunid);
+			testrundata.setConfigurationId(configurationId);
 
 			BigDecimal project = (BigDecimal) session
 					.createNativeQuery("select project_id from win_ta_projects where project_name ='"
@@ -264,77 +264,77 @@ public class TestRunMigrationGetService {
 					.getSingleResult();
 			int projectId = Integer.parseInt(project.toString());
 
-			testrundata.setProjectid(projectId);
+			testrundata.setProjectId(projectId);
 
 			testrundata.setDescription(testRunMigrateDto.getDescription());
-			testrundata.setTest_set_desc(testRunMigrateDto.getTestSetDesc());
-			testrundata.setTest_set_comments(testRunMigrateDto.getTestSetComments());
+			testrundata.setTestRunDesc(testRunMigrateDto.getTestSetDesc());
+			testrundata.setTestRunComments(testRunMigrateDto.getTestSetComments());
 			testrundata.setEnabled(testRunMigrateDto.getEnabled());
 
-			testrundata.setPasspath(testRunMigrateDto.getPassPath());
-			testrundata.setFailpath(testRunMigrateDto.getFailPath());
-			testrundata.setExceptionpath(testRunMigrateDto.getExeceptionPath());
-			testrundata.setTscompleteflag("ACTIVE");
+			testrundata.setPassPath(testRunMigrateDto.getPassPath());
+			testrundata.setFailPath(testRunMigrateDto.getFailPath());
+			testrundata.setExceptionPath(testRunMigrateDto.getExeceptionPath());
+			testrundata.setTsCompleteFlag("ACTIVE");
 
 			for (TestSetLineDto lineVo : testRunMigrateDto.getTestSetLinesAndParaData()) {
-				ScriptsData testSetLineData = new ScriptsData();
+				TestSetLine testSetLineData = new TestSetLine();
 				int sectiptid = copyTestrunDao.getscrtiptIds();
-				testSetLineData.setTestsetlineid(sectiptid);
-				testSetLineData.setScriptid(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
-				testSetLineData.setCreatedby(lineVo.getCreatedby());
-				testSetLineData.setCreationdate(lineVo.getCreationdate());
+				testSetLineData.setTestRunScriptId(sectiptid);
+				testSetLineData.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
+				testSetLineData.setCreatedBy(lineVo.getCreatedby());
+				testSetLineData.setCreationDate(lineVo.getCreationdate());
 				testSetLineData.setEnabled(lineVo.getEnabled());
-				testSetLineData.setExecutedby(lineVo.getExecutedby());
-				testSetLineData.setExecutionendtime(lineVo.getExecutionendtime());
-				testSetLineData.setExecutionstarttime(lineVo.getExecutionstarttime());
-				testSetLineData.setLastupdatedby(lineVo.getLastupdatedby());
-				testSetLineData.setScriptnumber(lineVo.getScriptnumber());
+				testSetLineData.setExecutedBy(lineVo.getExecutedby());
+				testSetLineData.setExecutionEndTime(lineVo.getExecutionendtime());
+				testSetLineData.setExecutionStartTime(lineVo.getExecutionstarttime());
+				testSetLineData.setLastUpdatedBy(lineVo.getLastupdatedby());
+				testSetLineData.setScriptNumber(lineVo.getScriptnumber());
 				testSetLineData.setScriptUpadated(lineVo.getScriptUpadated());
-				testSetLineData.setSeqnum(lineVo.getSeqnum());
+				testSetLineData.setSeqNum(lineVo.getSeqnum());
 				testSetLineData.setStatus(lineVo.getStatus());
-				testSetLineData.setTestsstlinescriptpath(lineVo.getTestsstlinescriptpath());
-				testSetLineData.setUpdateddate(lineVo.getUpdateddate());
+				testSetLineData.setTestRunScriptPath(lineVo.getTestsstlinescriptpath());
+				testSetLineData.setUpdateDate(lineVo.getUpdateddate());
 
 				for (WatsTestSetParamVO paramVo : lineVo.getScriptParam()) {
-					ScritplinesData testSetParam = new ScritplinesData();
+					TestSetScriptParam testSetParam = new TestSetScriptParam();
 					int sectiptlineid = copyTestrunDao.getscrtiptlineIds();
-					testSetParam.setTestscriptperamid(sectiptlineid);
-					testSetParam.setScript_id(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
+					testSetParam.setTestRunScriptParamId(sectiptlineid);
+					testSetParam.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 					testSetParam.setAction(paramVo.getAction());
-					testSetParam.setLine_number(paramVo.getLineNumber());
-					testSetParam.setInput_parameter(paramVo.getInputParameter());
-					testSetParam.setField_type(paramVo.getFieldType());
+					testSetParam.setLineNumber(paramVo.getLineNumber());
+					testSetParam.setInputParameter(paramVo.getInputParameter());
+					testSetParam.setFieldType(paramVo.getFieldType());
 					testSetParam.setHint(paramVo.getHint());
-					testSetParam.setScript_number(paramVo.getScriptNumber());
-					testSetParam.setDatatypes(paramVo.getDatatypes());
-					testSetParam.setCreatedby(paramVo.getCreatedBy());
-					testSetParam.setCreationdate(paramVo.getCreationDate());
-					testSetParam.setInput_value(paramVo.getInputValue());
-					testSetParam.setLastupdatedby(paramVo.getLastUpdatedBy());
-					testSetParam.setLineerrormessage(paramVo.getLineErrorMessage());
-					testSetParam.setLineexecutionstatues(paramVo.getLineExecutionStatus());
+					testSetParam.setScriptNumber(paramVo.getScriptNumber());
+					testSetParam.setDataTypes(paramVo.getDatatypes());
+					testSetParam.setCreatedBy(paramVo.getCreatedBy());
+					testSetParam.setCreationDate(paramVo.getCreationDate());
+					testSetParam.setInputValue(paramVo.getInputValue());
+					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());
+					testSetParam.setLineErrorMessage(paramVo.getLineErrorMessage());
+					testSetParam.setLineExecutionStatus(paramVo.getLineExecutionStatus());
 //				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
 //				testSetParam.setScript_id();
-					testSetParam.setScript_number(paramVo.getScriptNumber());
+					testSetParam.setScriptNumber(paramVo.getScriptNumber());
 //				testSetParam.setScriptsdata(paramVo.getT);
-					testSetParam.setTest_run_param_desc(paramVo.getTestRunParamDesc());
-					testSetParam.setTest_run_param_name(paramVo.getTestRunParamName());
+					testSetParam.setTestRunParamDesc(paramVo.getTestRunParamDesc());
+					testSetParam.setTestRunParamName(paramVo.getTestRunParamName());
 //				testSetParam.setTestscriptperamid(paramVo.test);
-					testSetParam.setUniquemandatory(paramVo.getUniqueMandatory());
-					testSetParam.setUpdateddate(paramVo.getUpdateDate());
-					testSetParam.setXpathlocation(paramVo.getXpathLocation());
-					testSetParam.setXpathlocation1(paramVo.getXpathLocation1());
+					testSetParam.setUniqueMandatory(paramVo.getUniqueMandatory());
+					testSetParam.setUpdateDate(paramVo.getUpdateDate());
+					testSetParam.setXpathLocation(paramVo.getXpathLocation());
+					testSetParam.setXpathLocation1(paramVo.getXpathLocation1());
 //				testSetLineData.addMetadata(metadata);
-					testSetLineData.addScriptlines(testSetParam);
+					testSetLineData.addTestScriptParam(testSetParam);
 
 				}
-				testrundata.addScriptsdata(testSetLineData);
+				testrundata.addTestRunScriptData(testSetLineData);
 			}
 			dao.insertTestRun(testrundata);
 			DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
 			domGenericResponseBean.setStatusMessage("Migrated Successfully");
-			domGenericResponseBean.setTestRunName(testrundata.getTestsetname());
+			domGenericResponseBean.setTestRunName(testrundata.getTestRunName());
 			listOfResponseBean.add(domGenericResponseBean);
 		}
 		return listOfResponseBean;
