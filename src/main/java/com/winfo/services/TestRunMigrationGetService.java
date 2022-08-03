@@ -119,32 +119,34 @@ public class TestRunMigrationGetService {
 
 				for (Map.Entry<String, LookUpCodeVO> secondEntry : entry.getValue().getMapOfData().entrySet()) {
 
-					if (secondEntry.getValue().getLookUpName().equalsIgnoreCase(entry.getValue().getLookupName())) {
+					if (secondEntry.getValue() != null && entry.getValue() != null) {
+						if (secondEntry.getValue().getLookUpName().equalsIgnoreCase(entry.getValue().getLookupName())) {
 
-						BigDecimal countOflookupCode = (BigDecimal) session.createNativeQuery(
-								"select count(*) from WATS_PROD.win_ta_lookup_codes where lookup_name = '"
-										+ secondEntry.getValue().getLookUpName() + "' and lookup_code = '"
-										+ secondEntry.getValue().getLookUpCode() + "'")
-								.getSingleResult();
+							BigDecimal countOflookupCode = (BigDecimal) session.createNativeQuery(
+									"select count(*) from WATS_PROD.win_ta_lookup_codes where lookup_name = '"
+											+ secondEntry.getValue().getLookUpName() + "' and lookup_code = '"
+											+ secondEntry.getValue().getLookUpCode() + "'")
+									.getSingleResult();
 
-						Integer dataOflookupCode = Integer.parseInt(countOflookupCode.toString());
+							Integer dataOflookupCode = Integer.parseInt(countOflookupCode.toString());
 
-						if (dataOflookupCode == 0) {
-							String sql = "SELECT LOOKUP_CODES_ID_S.nextval FROM DUAL";
-							SQLQuery query = session.createSQLQuery(sql);
+							if (dataOflookupCode == 0) {
+								String sql = "SELECT LOOKUP_CODES_ID_S.nextval FROM DUAL";
+								SQLQuery query = session.createSQLQuery(sql);
 
-							List results = query.list();
-							if (results.size() > 0) {
+								List results = query.list();
+								if (results.size() > 0) {
 
-								BigDecimal bigDecimal = (BigDecimal) results.get(0);
-								Integer id = Integer.parseInt(bigDecimal.toString());
+									BigDecimal bigDecimal = (BigDecimal) results.get(0);
+									Integer id = Integer.parseInt(bigDecimal.toString());
 
-								String query1 = "insert into win_ta_lookup_codes(LOOKUP_CODES_ID,LOOKUP_ID,LOOKUP_NAME,LOOKUP_CODE,TARGET_CODE,MEANING) VALUES("
-										+ id + "," + getlookupId + ",'" + value + "','"
-										+ secondEntry.getValue().getLookUpCode() + "','"
-										+ secondEntry.getValue().getTargetCode() + "','"
-										+ secondEntry.getValue().getMeaning() + "')";
-								session.createNativeQuery(query1).executeUpdate();
+									String query1 = "insert into win_ta_lookup_codes(LOOKUP_CODES_ID,LOOKUP_ID,LOOKUP_NAME,LOOKUP_CODE,TARGET_CODE,MEANING) VALUES("
+											+ id + "," + getlookupId + ",'" + value + "','"
+											+ secondEntry.getValue().getLookUpCode() + "','"
+											+ secondEntry.getValue().getTargetCode() + "','"
+											+ secondEntry.getValue().getMeaning() + "')";
+									session.createNativeQuery(query1).executeUpdate();
+								}
 							}
 						}
 					}
