@@ -159,7 +159,7 @@ public class DeletionService {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						break;
-					} else {
+					} else if(!flag){
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 					}
@@ -208,7 +208,7 @@ public class DeletionService {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						break;
-					} else {
+					} else if(!flag){
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 					}
@@ -301,7 +301,7 @@ public class DeletionService {
 								+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
 								+ customerDetails.getProjectName() + "/" + testSetLine.getTestRun().getTestRunName(),
 						HttpMethod.DELETE, deleteSessionRequest, Object.class);
-			} else {
+			} else if(!flag){
 				for (Map<String, Object> listOfName : listOfMaps) {
 					String pdfName = listOfName.get("name").toString();
 					String pdfNameToFind = testSetLine.getSeqNum() + "_" + testSetLine.getScriptNumber();
