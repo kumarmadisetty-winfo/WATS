@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winfo.dao.CopyTestRunDao2;
+import com.winfo.dao.CopyTestRunDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -28,22 +28,33 @@ import com.winfo.vo.CopytestrunVo;
 @Service
 public class CopyTestRunService {
 	@Autowired
-	CopyTestRunDao2 copyTestrunDao;
+	CopyTestRunDao copyTestrunDao;
 
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
 		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		testSetObj.setEnabled("Y");
-		testSetObj.setTestRunName(copyTestrunvo.getNewtestrunname());
-		testSetObj.setConfigurationId(copyTestrunvo.getConfiguration());
-		testSetObj.setProjectId(copyTestrunvo.getProject());
-		testSetObj.setCreatedBy(copyTestrunvo.getCreated_by());
-		testSetObj.setLastUpdatedBy(null);
-		testSetObj.setCreationDate(copyTestrunvo.getCreation_date());
-		testSetObj.setUpdateDate(null);
-		testSetObj.setTsCompleteFlag("Active");
-		testSetObj.setTestRunMode("ACTIVE");
-		testSetObj.setLastExecutBy(null);
+		TestSet newTestSetObj = new TestSet();
+
+		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
+		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
+		newTestSetObj.setEnabled("Y");
+		newTestSetObj.setDescription(testSetObj.getDescription());
+		newTestSetObj.setEffectiveFrom(testSetObj.getEffectiveFrom());
+		newTestSetObj.setEffectiveTo(testSetObj.getEffectiveTo());
+		newTestSetObj.setTestRunName(copyTestrunvo.getNewtestrunname());
+		newTestSetObj.setConfigurationId(copyTestrunvo.getConfiguration());
+		newTestSetObj.setProjectId(copyTestrunvo.getProject());
+		newTestSetObj.setCreatedBy(copyTestrunvo.getCreated_by());
+		newTestSetObj.setLastUpdatedBy(null);
+		newTestSetObj.setCreationDate(copyTestrunvo.getCreation_date());
+		newTestSetObj.setUpdateDate(null);
+		newTestSetObj.setTsCompleteFlag("Active");
+		newTestSetObj.setPassPath(testSetObj.getPassPath());
+		newTestSetObj.setFailPath(testSetObj.getFailPath());
+		newTestSetObj.setExceptionPath(testSetObj.getExceptionPath());
+		newTestSetObj.setTestRunMode("ACTIVE");
+		newTestSetObj.setLastExecutBy(null);
+
 		String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
 		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<Integer, Integer>();
 		for (TestSetLine testSetLineObj : testSetObj.getTestRunScriptDatalist()) {// getScriptdata
@@ -77,7 +88,7 @@ public class CopyTestRunService {
 				testSetLineRecords.setExecutionEndTime(null);
 				testSetLineRecords.setDependency_tr(testSetLineObj.getDependency_tr());
 //				System.out.println("id :" + copyTestrunDao.getIds());
-				testSetObj.addTestRunScriptData(testSetLineRecords);
+				newTestSetObj.addTestRunScriptData(testSetLineRecords);
 			} else {
 
 				continue;
@@ -177,7 +188,7 @@ public class CopyTestRunService {
 					if (setScriptlinedata.getAction().equalsIgnoreCase(getScriptlinedata.getAction())
 							&& setScriptlinedata.getInputParameter()
 									.equalsIgnoreCase(getScriptlinedata.getInputParameter())
-							&& setScriptlinedata.getLineNumber() == getScriptlinedata.getLineNumber()) {
+							&& setScriptlinedata.getLineNumber().equals(getScriptlinedata.getLineNumber())) {
 						// setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
 						addInputvalues(getScriptlinedata, setScriptlinedata, copyTestrunvo, testSetLineRecords);
 					} else {
@@ -243,13 +254,14 @@ public class CopyTestRunService {
 //		setTestrundata.setScriptsdata(listsScriptdata);
 		System.out.println("before saveTestrun");
 		if (!mapOfTestRunDependencyOldToNewId.isEmpty()) {
-			for (TestSetLine testSetLine : testSetObj.getTestRunScriptDatalist()) {
+			for (TestSetLine testSetLine : newTestSetObj.getTestRunScriptDatalist()) {
 				if (testSetLine.getDependency_tr() != null) {
 					testSetLine.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(testSetLine.getDependency_tr()));
 				}
 			}
 		}
-		int newtestrun = copyTestrunDao.saveTestrun(testSetObj);
+		newTestSetObj.setTestRunId(copyTestrunDao.getIds());
+		int newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
 		System.out.println("newtestrun 1:" + newtestrun);
 		return newtestrun;
 	}
