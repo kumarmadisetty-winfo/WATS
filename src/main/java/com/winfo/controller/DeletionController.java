@@ -9,22 +9,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.services.DeletionOfScriptService;
-import com.winfo.vo.DeleteScriptDto;
+import com.winfo.services.DeletionService;
+import com.winfo.vo.DeleteEvidenceReportDto;
 import com.winfo.vo.ResponseDto;
 
 @RestController
-public class DeletionOfScriptController {
+public class DeletionController {
 
 	@Autowired
-	DeletionOfScriptService deletionOfScriptService;
+	DeletionService deletionOfScriptService;
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteScriptFromTestRun")
-	public ResponseDto deleteScriptFromTestRun(@Valid @RequestBody DeleteScriptDto testScriptDto,
+	@RequestMapping(value = "/deleteEvidenceReportData")
+	public ResponseDto deleteScriptFromTestRun(@Valid @RequestBody DeleteEvidenceReportDto testScriptDto,
 			BindingResult bindingResult) throws Exception {
 
 		return deletionOfScriptService.deleteScriptFromTestRun(testScriptDto);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/deleteTestRunEvidenceReportData")
+	public ResponseDto deleteAllScriptFromTestRun(@Valid @RequestBody DeleteEvidenceReportDto testScriptDto,
+			BindingResult bindingResult) throws Exception {
+
+		return deletionOfScriptService.deleteAllScriptFromTestRun(testScriptDto);
 	}
 
 }

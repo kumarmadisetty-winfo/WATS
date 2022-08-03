@@ -2,10 +2,11 @@ package com.winfo.vo;
 
 import java.util.List;
 
-public class DeleteScriptDto {
+public class DeleteEvidenceReportDto {
 
-	private String testSetId = "false";
+	private String testSetId;
 	private List<String> testSetLineId;
+	private boolean flag;
 
 	public String getTestSetId() {
 		return testSetId;
@@ -23,6 +24,12 @@ public class DeleteScriptDto {
 		this.testSetLineId = testSetLineId;
 	}
 
-	
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
 
 }
