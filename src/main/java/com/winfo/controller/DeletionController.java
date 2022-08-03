@@ -20,7 +20,7 @@ public class DeletionController {
 	DeletionService deletionOfScriptService;
 
 	@ResponseBody
-	@RequestMapping(value = "/deleteEvidenceReportData")
+	@RequestMapping(value = "/deleteScriptEvidenceReportData")
 	public ResponseDto deleteScriptFromTestRun(@Valid @RequestBody DeleteEvidenceReportDto testScriptDto,
 			BindingResult bindingResult) throws Exception {
 
