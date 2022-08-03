@@ -69,7 +69,7 @@ public class DeletionService {
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to connect with object store");
+			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -101,7 +101,7 @@ public class DeletionService {
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to connect with object store");
+			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
