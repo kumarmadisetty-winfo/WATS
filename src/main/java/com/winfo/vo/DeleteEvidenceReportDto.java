@@ -6,7 +6,7 @@ public class DeleteEvidenceReportDto {
 
 	private String testSetId;
 	private List<String> testSetLineId;
-	private boolean flag;
+	private boolean isTestRunDelete;
 
 	public String getTestSetId() {
 		return testSetId;
@@ -24,12 +24,12 @@ public class DeleteEvidenceReportDto {
 		this.testSetLineId = testSetLineId;
 	}
 
-	public boolean isFlag() {
-		return flag;
+	public boolean isTestRunDelete() {
+		return isTestRunDelete;
 	}
 
-	public void setFlag(boolean flag) {
-		this.flag = flag;
+	public void setTestRunDelete(boolean isTestRunDelete) {
+		this.isTestRunDelete = isTestRunDelete;
 	}
 
 }

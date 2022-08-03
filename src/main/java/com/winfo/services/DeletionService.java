@@ -76,11 +76,12 @@ public class DeletionService {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 			List<TestSetLine> listOfTestSetLine = dataBaseEntry.getAllTestSetLineRecord(testSetId);
 			TestSetLine testSetLine = listOfTestSetLine.get(0);
-			deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.isFlag());
-			deletePdf(testSetLine, customerDetails, provider, testScriptDto.isFlag());
+			deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
+			deletePdf(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
 			if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 				String access = healthCheck.getSharePointAccess(fetchConfigVO);
-				deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine, testScriptDto.isFlag());
+				deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine,
+						testScriptDto.isTestRunDelete());
 			}
 		} catch (Exception e) {
 			if (e instanceof WatsEBSCustomException) {
@@ -107,12 +108,12 @@ public class DeletionService {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 			for (String testSetLineId : testScriptDto.getTestSetLineId()) {
 				TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(testSetId, testSetLineId);
-				deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.isFlag());
-				deletePdf(testSetLine, customerDetails, provider, testScriptDto.isFlag());
+				deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
+				deletePdf(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					String access = healthCheck.getSharePointAccess(fetchConfigVO);
 					deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine,
-							testScriptDto.isFlag());
+							testScriptDto.isTestRunDelete());
 				}
 			}
 		} catch (Exception e) {
@@ -126,13 +127,13 @@ public class DeletionService {
 	}
 
 	private ResponseDto deleteScreenShot(TestSetLine testSetLine, CustomerProjectDto customerDetails,
-			AuthenticationDetailsProvider provider, boolean flag) throws Exception {
+			AuthenticationDetailsProvider provider, boolean isTestRunDelete) throws Exception {
 		List<String> objNames = null;
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 			String objectStoreScreenShotPath;
 
-			if (flag) {
+			if (isTestRunDelete) {
 				objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
 						+ FORWARD_SLASH + testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH;
 			} else {
@@ -155,11 +156,11 @@ public class DeletionService {
 
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
-					if (objectStoreScreenShotPath.equalsIgnoreCase(objectName) && flag) {
+					if (objectStoreScreenShotPath.equalsIgnoreCase(objectName) && isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						break;
-					} else if(!flag){
+					} else if (!isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 					}
@@ -176,13 +177,13 @@ public class DeletionService {
 	}
 
 	private ResponseDto deletePdf(TestSetLine testSetLine, CustomerProjectDto customerDetails,
-			AuthenticationDetailsProvider provider, boolean flag) throws Exception {
+			AuthenticationDetailsProvider provider, boolean isTestRunDelete) throws Exception {
 		List<String> objNames = null;
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 			String objectStorePdfPath;
 
-			if (flag) {
+			if (isTestRunDelete) {
 				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH
 						+ testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH;
 			} else {
@@ -204,11 +205,11 @@ public class DeletionService {
 				ListIterator<String> listIt = objNames.listIterator();
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
-					if (objectStorePdfPath.equalsIgnoreCase(objectName) && flag) {
+					if (objectStorePdfPath.equalsIgnoreCase(objectName) && isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						break;
-					} else if(!flag){
+					} else if (!isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 					}
@@ -225,7 +226,7 @@ public class DeletionService {
 	}
 
 	public void deletePdfFromSharePoint(FetchConfigVO fetchConfigVO, String accessToken,
-			CustomerProjectDto customerDetails, TestSetLine testSetLine, boolean flag) {
+			CustomerProjectDto customerDetails, TestSetLine testSetLine, boolean isTestRunDelete) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -295,13 +296,13 @@ public class DeletionService {
 					: null;
 
 			List<Map<String, Object>> listOfMaps = (List<Map<String, Object>>) listOfItemDetailsMap.get("value");
-			if (flag) {
+			if (isTestRunDelete) {
 				ResponseEntity<Object> deletionOfPdf = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
 								+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
 								+ customerDetails.getProjectName() + "/" + testSetLine.getTestRun().getTestRunName(),
 						HttpMethod.DELETE, deleteSessionRequest, Object.class);
-			} else if(!flag){
+			} else if (!isTestRunDelete) {
 				for (Map<String, Object> listOfName : listOfMaps) {
 					String pdfName = listOfName.get("name").toString();
 					String pdfNameToFind = testSetLine.getSeqNum() + "_" + testSetLine.getScriptNumber();
