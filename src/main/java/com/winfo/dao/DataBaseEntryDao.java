@@ -111,7 +111,7 @@ public class DataBaseEntryDao {
 	public List<Integer> getListOfLineIdByTestSetId(int testSetId) {
 		Session session = em.unwrap(Session.class);
 		List<Integer> testSetLineIDs = session
-				.createQuery("select testsetlineid from ScriptsData where Testrundata.testsetid = " + testSetId)
+				.createQuery("select testRunScriptId from TestSetLine where testRun.testRunId = " + testSetId)
 				.getResultList();
 		return testSetLineIDs;
 	}
