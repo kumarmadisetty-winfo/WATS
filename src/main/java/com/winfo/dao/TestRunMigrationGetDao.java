@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
-import com.winfo.model.ScriptsData;
-import com.winfo.model.ScritplinesData;
-import com.winfo.model.Testrundata;
+import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
+import com.winfo.model.TestSetScriptParam;
 
 @Repository
 public class TestRunMigrationGetDao {
@@ -37,26 +37,26 @@ public class TestRunMigrationGetDao {
 	}
 
 	@Transactional
-	public int insertTestRun(Testrundata testrundata) {
+	public int insertTestRun(TestSet testrundata) {
 		Session session = entityManager.unwrap(Session.class);
 		session.merge(testrundata);
-		return testrundata.getTestsetid();
+		return testrundata.getTestRunId();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public int insertScriptLine(ScriptsData scriptsData) {
+	public int insertScriptLine(TestSetLine scriptsData) {
 		Session session = entityManager.unwrap(Session.class);
 		session.merge(scriptsData);
 		session.close();
-		return scriptsData.getTestsetlineid();
+		return scriptsData.getTestRunScriptId();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public int insertScriptParam(ScritplinesData scritplinesData) {
+	public int insertScriptParam(TestSetScriptParam scritplinesData) {
 		Session session = entityManager.unwrap(Session.class);
 		session.merge(scritplinesData);
 		session.close();
-		return scritplinesData.getTestscriptperamid();
+		return scritplinesData.getTestRunScriptParamId();
 	}
 
 //	public void addTestRunData(Testrundata testrundata) {

@@ -1,17 +1,18 @@
 package com.winfo.vo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.winfo.model.Testrundata;
+import com.winfo.model.TestSet;
 
 public class TestRunMigrationDto {
 
 	@JsonProperty("projectName")
 	private String projectName;
-	
+
 	@JsonProperty("watsPackage")
 	private String watsPackage;
 
@@ -49,7 +50,7 @@ public class TestRunMigrationDto {
 	private String passPath;
 
 	@JsonProperty("effectiveTo")
-	private String effectiveTo;
+	private Date effectiveTo;
 
 	@JsonProperty("testSetName")
 	private String testSetName;
@@ -76,7 +77,7 @@ public class TestRunMigrationDto {
 	private String failPath;
 
 	@JsonProperty("effectiveFrom")
-	private String effectiveFrom;
+	private Date effectiveFrom;
 
 	@JsonProperty("configurationId")
 	private int configurationId;
@@ -96,23 +97,23 @@ public class TestRunMigrationDto {
 	public TestRunMigrationDto() {
 	}
 
-	public TestRunMigrationDto(Testrundata testRunData) {
+	public TestRunMigrationDto(TestSet testRunData) {
 
-		this.configurationId = testRunData.getConfigurationid();
-		this.createdBy = testRunData.getCreatedby();
-		this.projectId = testRunData.getProjectid();
-		this.testSetName = testRunData.getTestsetname();
-		this.testSetDesc = testRunData.getTest_set_desc();
-		this.testSetComments = testRunData.getTest_set_comments();
+		this.configurationId = testRunData.getConfigurationId();
+		this.createdBy = testRunData.getCreatedBy();
+		this.projectId = testRunData.getProjectId();
+		this.testSetName = testRunData.getTestRunName();
+		this.testSetDesc = testRunData.getTestRunDesc();
+		this.testSetComments = testRunData.getTestRunComments();
 		this.enabled = testRunData.getEnabled();
 		this.description = testRunData.getDescription();
-		this.effectiveFrom = testRunData.getEffective_from();
-		this.effectiveTo = testRunData.getEffective_to();
-		this.tsCompleteFlag = testRunData.getTscompleteflag();
-		this.passPath = testRunData.getPasspath();
-		this.failPath = testRunData.getFailpath();
-		this.execeptionPath = testRunData.getExceptionpath();
-		this.trMode = testRunData.getTrmode();
+		this.effectiveFrom = testRunData.getEffectiveFrom();
+		this.effectiveTo = testRunData.getEffectiveTo();
+		this.tsCompleteFlag = testRunData.getTsCompleteFlag();
+		this.passPath = testRunData.getPassPath();
+		this.failPath = testRunData.getFailPath();
+		this.execeptionPath = testRunData.getExceptionPath();
+		this.trMode = testRunData.getTestRunMode();
 		this.lastUpdatedBy = null;
 		this.creationDate = null;
 		this.updateDate = null;
@@ -182,14 +183,6 @@ public class TestRunMigrationDto {
 		this.passPath = passPath;
 	}
 
-	public String getEffectiveTo() {
-		return effectiveTo;
-	}
-
-	public void setEffectiveTo(String effectiveTo) {
-		this.effectiveTo = effectiveTo;
-	}
-
 	public String getExeceptionPath() {
 		return execeptionPath;
 	}
@@ -246,11 +239,19 @@ public class TestRunMigrationDto {
 		this.failPath = failPath;
 	}
 
-	public String getEffectiveFrom() {
+	public Date getEffectiveTo() {
+		return effectiveTo;
+	}
+
+	public void setEffectiveTo(Date effectiveTo) {
+		this.effectiveTo = effectiveTo;
+	}
+
+	public Date getEffectiveFrom() {
 		return effectiveFrom;
 	}
 
-	public void setEffectiveFrom(String effectiveFrom) {
+	public void setEffectiveFrom(Date effectiveFrom) {
 		this.effectiveFrom = effectiveFrom;
 	}
 

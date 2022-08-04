@@ -1,6 +1,8 @@
 package com.winfo.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -93,9 +95,8 @@ public class TestSet {
 	private String pdfGenerationEnabled;
 	
 	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
-
-//	private List<TestSetLine> testRunScriptDatalist = new ArrayList<TestSetLine>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
+	private List<TestSetLine> testRunScriptDatalist = new ArrayList<>();
 	
 
 	public String getPdfGenerationEnabled() {
@@ -106,18 +107,18 @@ public class TestSet {
 		this.pdfGenerationEnabled = pdfGenerationEnabled;
 	}
 	
-//	public List<TestSetLine> getTestRunScriptDatalist() {
-//		return testRunScriptDatalist;
-//	}
-//
-//	public void setTestRunScriptDatalist(List<TestSetLine> testRunScriptDatalist) {
-//		this.testRunScriptDatalist = testRunScriptDatalist;
-//	}
+	public List<TestSetLine> getTestRunScriptDatalist() {
+		return testRunScriptDatalist;
+	}
 
-//	public void addTestRunScriptData(TestSetLine testRunScript) {
-//		testRunScriptDatalist.add(testRunScript);
-//		testRunScript.setTestRun(this);
-//	}
+	public void setTestRunScriptDatalist(List<TestSetLine> testRunScriptDatalist) {
+		this.testRunScriptDatalist = testRunScriptDatalist;
+	}
+
+	public void addTestRunScriptData(TestSetLine testRunScript) {
+		testRunScriptDatalist.add(testRunScript);
+		testRunScript.setTestRun(this);
+	}
 
 	public Integer getTestRunId() {
 		return testRunId;

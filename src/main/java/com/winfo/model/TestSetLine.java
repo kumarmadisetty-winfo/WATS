@@ -1,6 +1,8 @@
 package com.winfo.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -96,13 +99,19 @@ public class TestSetLine {
 	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
 	private TestSet testRun;
 
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
-//	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
-
-//	public void addTestScriptParam(TestSetScriptParam scriptParam) {
-//		testRunScriptParam.add(scriptParam);
-//		scriptParam.setTestRunScripts(this);
-//	}
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
+	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
+	
+	public List<TestSetScriptParam> getTestRunScriptParam() {
+		return testRunScriptParam;
+	}
+	public void setTestRunScriptParam(List<TestSetScriptParam> testRunScriptParam) {
+		this.testRunScriptParam = testRunScriptParam;
+	}
+	public void addTestScriptParam(TestSetScriptParam scriptParam) {
+		testRunScriptParam.add(scriptParam);
+		scriptParam.setTestRunScripts(this);
+	}
 
 	public Integer getTestRunScriptId() {
 		return testRunScriptId;

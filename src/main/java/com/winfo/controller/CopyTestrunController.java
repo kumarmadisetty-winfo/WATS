@@ -2,44 +2,41 @@ package com.winfo.controller;
 
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.services.CopyTestRunService;
-import com.winfo.services.CopyTestRunService2;
 import com.winfo.vo.CopyTestrunjson;
 import com.winfo.vo.CopytestrunVo;
-import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.TestScriptDto;
-
 
 @RestController
 public class CopyTestrunController {
+	Logger log = Logger.getLogger("Logger");
+
 	@Autowired
-	CopyTestRunService2 service;
-//	@PostMapping("/copyTestrun")
-	@RequestMapping(value = "copyTestrun", method = RequestMethod.POST,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+	CopyTestRunService service;
+
+	@RequestMapping(value = "copyTestrun", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
-		BindingResult bindingResult) throws InterruptedException {
-		System.out.println("copyTestrunvo.getCreation_date()"+copyTestrunvo.getCreation_date());
+			BindingResult bindingResult) throws InterruptedException {
+		log.info("copyTestrunvo.getCreation_date()" + copyTestrunvo.getCreationDate());
 		int newtestrun = 0;
-		if(copyTestrunvo.getRequesttype().equalsIgnoreCase("copyTestRun")) {
-			newtestrun= service.copyTestrun(copyTestrunvo);
-		}else if (copyTestrunvo.getRequesttype().equalsIgnoreCase("reRun")) {
-			newtestrun= service.reRun(copyTestrunvo);
+		if (copyTestrunvo.getRequestType().equalsIgnoreCase("copyTestRun")) {
+			newtestrun = service.copyTestrun(copyTestrunvo);
+		} else if (copyTestrunvo.getRequestType().equalsIgnoreCase("reRun")) {
+			newtestrun = service.reRun(copyTestrunvo);
 		}
-		CopyTestrunjson jsondata=new CopyTestrunjson();
-		System.out.println("newtestrun"+newtestrun);
-		jsondata.setNew_test_run_id(newtestrun);
+		CopyTestrunjson jsondata = new CopyTestrunjson();
+		log.info("newtestrun" + newtestrun);
+		jsondata.setNewTestRunId(newtestrun);
 		jsondata.setStatusMessage("SUCCESS");
-		System.out.println(jsondata.toString());
+		log.info(jsondata.toString());
 		return jsondata;
 	}
 }

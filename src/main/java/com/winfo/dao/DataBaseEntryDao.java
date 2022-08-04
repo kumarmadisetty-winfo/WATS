@@ -41,11 +41,9 @@ import com.winfo.model.LookUpCode;
 import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
-import com.winfo.model.ScriptsData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.model.Testrundata;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -78,14 +76,14 @@ public class DataBaseEntryDao {
 	private static final String STATUS = "status";
 	private static final String IN_QUEUE = "In-Queue";
 
-	public Testrundata getTestSetObjByTestSetId(Integer testSetId) {
+	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
 		Session session = em.unwrap(Session.class);
-		return session.find(Testrundata.class, testSetId);
+		return session.find(TestSet.class, testSetId);
 	}
 
-	public ScriptsData getScriptDataByLineID(int lineId) {
+	public TestSetLine getScriptDataByLineID(int lineId) {
 		Session session = em.unwrap(Session.class);
-		return session.find(ScriptsData.class, lineId);
+		return session.find(TestSetLine.class, lineId);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,7 +111,7 @@ public class DataBaseEntryDao {
 	public List<Integer> getListOfLineIdByTestSetId(int testSetId) {
 		Session session = em.unwrap(Session.class);
 		List<Integer> testSetLineIDs = session
-				.createQuery("select testsetlineid from ScriptsData where Testrundata.testsetid = " + testSetId)
+				.createQuery("select testRunScriptId from TestSetLine where testRun.testRunId = " + testSetId)
 				.getResultList();
 		return testSetLineIDs;
 	}
@@ -141,7 +139,8 @@ public class DataBaseEntryDao {
 	public List<Object[]> getProjectNameById(int projectId) {
 		Session session = em.unwrap(Session.class);
 		List<Object[]> projectNameAndWatsPackage = (List<Object[]>) session
-				.createNativeQuery("select project_name, wats_package from win_ta_projects where project_id =" + projectId)
+				.createNativeQuery(
+						"select project_name, wats_package from win_ta_projects where project_id =" + projectId)
 				.getResultList();
 		return projectNameAndWatsPackage;
 	}

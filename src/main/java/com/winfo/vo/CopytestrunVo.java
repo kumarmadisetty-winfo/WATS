@@ -6,50 +6,48 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CopytestrunVo {
-private int  testScriptNo;
-	private int project ;
-	private int configuration ;
+	private int testScriptNo;
+	private int project;
+	private int configuration;
 	private String newtestrunname;
-	private String created_by;
-	private String increment_value;
+	private String createdBy;
+	private String incrementValue;
 
 	@JsonFormat(pattern = "MM/dd/yyyy")
-	private Date creation_date;
-	 @JsonProperty("request_type")
-	 private String requesttype;
-	
+	private Date creationDate;
+	@JsonProperty("requestType")
+	private String requestType;
 
-	public String getRequesttype() {
-		return requesttype;
+	public String getRequestType() {
+		return requestType;
 	}
 
-	public void setRequesttype(String requesttype) {
-		this.requesttype = requesttype;
-	}
-	 public String getIncrement_value() {
-		return increment_value;
+	public void setRequesttype(String requestType) {
+		this.requestType = requestType;
 	}
 
-	public void setIncrement_value(String increment_value) {
-		this.increment_value = increment_value;
+	public String getIncrementValue() {
+		return incrementValue;
 	}
 
-	public String getCreated_by() {
-		return created_by;
+	public void setIncrementValue(String incrementValue) {
+		this.incrementValue = incrementValue;
 	}
 
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-
-
-	public Date getCreation_date() {
-		return creation_date;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public void setCreation_date(Date creation_date) {
-		this.creation_date = creation_date;
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreation_date(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public int getProject() {

@@ -17,7 +17,6 @@ import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 import com.winfo.vo.WatsPluginMetaDataVO;
 
-
 @Service
 public class WatsPluginService {
 
@@ -26,47 +25,45 @@ public class WatsPluginService {
 
 	@Transactional
 	public DomGenericResponseBean pluginData(WatsPluginMasterVO mastervo) {
-		String module=mastervo.getModule();
-		String processArea=mastervo.getProcess_area();
-		List<String> scriptNumbers=dao.getScriptNumber(processArea,module);
-		
-		String newmodule = mastervo.getModule_srt();
+		String module = mastervo.getModule();
+		String processArea = mastervo.getProcessArea();
+		List<String> scriptNumbers = dao.getScriptNumber(processArea, module);
 
-		String newScriptNumber=null;
+		String newmodule = mastervo.getModuleSrt();
+
+		String newScriptNumber = null;
 		ArrayList<Integer> slist = new ArrayList<Integer>();
-		if(scriptNumbers!=null) {
-			for(String snumber:scriptNumbers) {
+		if (scriptNumbers != null) {
+			for (String snumber : scriptNumbers) {
 				Integer i = Integer.parseInt(snumber.replaceAll("[\\D]", ""));
-				
+
 				slist.add(i);
 			}
-			 int max = Collections.max(slist);
-			int snum=max+1;
-			 newScriptNumber=processArea+"."+newmodule+"."+snum;
+			int max = Collections.max(slist);
+			int snum = max + 1;
+			newScriptNumber = processArea + "." + newmodule + "." + snum;
 			System.out.println(newScriptNumber);
 
+		} else {
+			newScriptNumber = processArea + "." + newmodule + "." + "1";
 		}
-		else {
-			 newScriptNumber=processArea+"."+newmodule+"."+"1";
-		}
-		
-		
+
 		ScriptMaster master = new ScriptMaster();
 		master.setModule(mastervo.getModule());
-		master.setScenario_name(mastervo.getScenario_name());
-		master.setScenario_description(mastervo.getScenario_description());
-		master.setProduct_version(mastervo.getProduct_version());
+		master.setScenario_name(mastervo.getScenarioName());
+		master.setScenario_description(mastervo.getScenarioDescription());
+		master.setProduct_version(mastervo.getProductVersion());
 		master.setPriority(mastervo.getPriority());
-		master.setProcess_area(mastervo.getProcess_area());
+		master.setProcess_area(mastervo.getProcessArea());
 		master.setRole(mastervo.getRole());
 		master.setScript_number(newScriptNumber);
-		master.setSub_process_area(mastervo.getSub_process_area());
-		master.setStandard_custom(mastervo.getStandard_custom());
-		master.setTest_script_status(mastervo.getTest_script_status());
-		master.setCreated_by(mastervo.getCreated_by());
-		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
+		master.setSub_process_area(mastervo.getSubProcessArea());
+		master.setStandard_custom(mastervo.getStandardCustom());
+		master.setTest_script_status(mastervo.getTestScriptStatus());
+		master.setCreated_by(mastervo.getCreatedBy());
+		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreationDate()));
 		master.setPluginFlag("true");
-		for(WatsPluginMetaDataVO metadatavo:mastervo.getMetaDataList()) {
+		for (WatsPluginMetaDataVO metadatavo : mastervo.getMetaDataList()) {
 			ScriptMetaData metadata = new ScriptMetaData();
 			metadata.setAction(metadatavo.getAction());
 			metadata.setLine_number(metadatavo.getLine_number());
@@ -77,65 +74,62 @@ public class WatsPluginService {
 			metadata.setValidation_name("NA");
 			metadata.setUnique_mandatory("NA");
 			metadata.setDatatypes("NA");
-			metadata.setCreated_by(mastervo.getCreated_by());
-			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreation_date()));
+			metadata.setCreated_by(mastervo.getCreatedBy());
+			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreationDate()));
 			metadata.setMetadata_inputvalue(metadatavo.getInput_value());
 			master.addMetadata(metadata);
-			
+
 		}
-        String scriptnumber=master.getScript_number();
-		return dao.pluginData(master,scriptnumber);
+		String scriptnumber = master.getScript_number();
+		return dao.pluginData(master, scriptnumber);
 	}
-	
+
 	@Transactional
 	public DomGenericResponseBean watslogin(WatsLoginVO loginvo) {
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		String username = loginvo.getUsername();
 		String password = loginvo.getPassword();
-		// TODO Auto-generated method stub
 		String userId = dao.getUserIdValidation(username);
-		if(userId!=null) {
-		String userIdEnd = dao.verifyEndDate(username);
-		String userIdPwdEx = dao.verifyPasswordExpire(username);
-		String userIdActive= dao.verifyUserActive(username);
-		String passwordEncript=dao.getEncriptPassword(username);
-         
-		if(userIdEnd!=null&&userIdPwdEx!=null&&userIdActive!=null) {
-			if(password.equalsIgnoreCase(passwordEncript)) {
-				response.setStatus(200);
-				response.setStatusMessage("Login successfully");
+		if (userId != null) {
+			String userIdEnd = dao.verifyEndDate(username);
+			String userIdPwdEx = dao.verifyPasswordExpire(username);
+			String userIdActive = dao.verifyUserActive(username);
+			String passwordEncript = dao.getEncriptPassword(username);
+
+			if (userIdEnd != null && userIdPwdEx != null && userIdActive != null) {
+				if (password.equalsIgnoreCase(passwordEncript)) {
+					response.setStatus(200);
+					response.setStatusMessage("Login successfully");
+				} else {
+					response.setStatus(404);
+					response.setStatusMessage("Password is incorrect");
+				}
 			}
-			else {
+			if (userIdEnd == null) {
 				response.setStatus(404);
-				response.setStatusMessage("Password is incorrect");
+				response.setStatusMessage("User account expired");
 			}
-		}
-		if(userIdEnd==null) {
-			response.setStatus(404);
-			response.setStatusMessage("User account expired");
-		}
-		if(userIdPwdEx==null) {
-			response.setStatus(404);
-			response.setStatusMessage("User password expired.Please concat your administrator!");
-		}
-		if(userIdActive==null) {
-			response.setStatus(404);
-			response.setStatusMessage("UserId is in-active!");
-		}
-		}else {
+			if (userIdPwdEx == null) {
+				response.setStatus(404);
+				response.setStatusMessage("User password expired.Please concat your administrator!");
+			}
+			if (userIdActive == null) {
+				response.setStatus(404);
+				response.setStatusMessage("UserId is in-active!");
+			}
+		} else {
 			response.setStatus(404);
 			response.setStatusMessage("User name does not exists");
 		}
 		return response;
 	}
+
 	@Transactional
 	public List<String> getTestrunData() {
-		// TODO Auto-generated method stub
 		return dao.getTestrunData();
 	}
 
 	public List<String> getTestrunDataPVerson(String productverson) {
-		// TODO Auto-generated method stub
 		return dao.getTestrunDataPVerson(productverson);
 	}
 

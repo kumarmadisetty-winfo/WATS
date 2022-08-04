@@ -17,9 +17,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
-import com.winfo.model.ScriptsData;
+import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.model.Testrundata;
 import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -71,14 +71,14 @@ public class TestRunMigrationService {
 
 			List<ScriptMasterDto> listOfMasterVO = new ArrayList<>();
 
-			Testrundata testRunData = dataBaseEntryDao.getTestSetObjByTestSetId(testRunId);
+			TestSet testRunData = dataBaseEntryDao.getTestSetObjByTestSetId(testRunId);
 
 			TestRunMigrationDto testRunMigrateDto = new TestRunMigrationDto(testRunData);
 			Map<String, LookUpVO> lookUpDataMap = new HashMap<>();
 
-			String configurationName = dataBaseEntryDao.getConfiNameByConfigId(testRunData.getConfigurationid());
+			String configurationName = dataBaseEntryDao.getConfiNameByConfigId(testRunData.getConfigurationId());
 
-			List<Object[]> projectNameAndWatsPackage = dataBaseEntryDao.getProjectNameById(testRunData.getProjectid());
+			List<Object[]> projectNameAndWatsPackage = dataBaseEntryDao.getProjectNameById(testRunData.getProjectId());
 
 			testRunMigrateDto.setCustomer(testRunDetails.getCustomerName());
 			testRunMigrateDto.setProjectName(projectNameAndWatsPackage.get(0)[0].toString());
@@ -95,14 +95,14 @@ public class TestRunMigrationService {
 			Map<String, LookUpCodeVO> lookUpCodeDataTypes = new HashMap<>();
 
 			for (int testSetLineID : testSetLineIDs) {
-				ScriptsData scriptsData = dataBaseEntryDao.getScriptDataByLineID(testSetLineID);
-				System.out.println("scriptsData " + scriptsData.getTestsetlineid());
+				TestSetLine scriptsData = dataBaseEntryDao.getScriptDataByLineID(testSetLineID);
+				System.out.println("scriptsData " + scriptsData.getTestRunScriptId());
 				TestSetLineDto testSetLineDto = new TestSetLineDto(scriptsData);
 
 				List<WatsTestSetParamVO> ScriptParamMetaData = new ArrayList<>();
 
 				List<TestSetScriptParam> listOfTestSetScriptParam = dataBaseEntryDao
-						.getScriptParamList(scriptsData.getTestsetlineid());
+						.getScriptParamList(scriptsData.getTestRunScriptId());
 
 				for (TestSetScriptParam testSetScriptParam : listOfTestSetScriptParam) {
 					WatsTestSetParamVO watsTestSetParamVO = new WatsTestSetParamVO(testSetScriptParam,
@@ -115,13 +115,13 @@ public class TestRunMigrationService {
 				testSetLinesAndParaData.add(testSetLineDto);
 
 				List<ScriptMaster> listOfScriptMaster = dataBaseEntryDao
-						.getScriptMasterListByScriptId(scriptsData.getScriptid());
+						.getScriptMasterListByScriptId(scriptsData.getScriptId());
 
 				for (ScriptMaster scriptMaster : listOfScriptMaster) {
 					ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMaster);
 
 					List<ScriptMetaData> listOfMetaData = dataBaseEntryDao
-							.getScriptMetaDataList(scriptsData.getScriptid());
+							.getScriptMetaDataList(scriptsData.getScriptId());
 
 					List<ScriptMetaDataDto> metaDataList = new ArrayList<>();
 					Map<String, LookUpCodeVO> validationMap = new HashMap<>();

@@ -4,208 +4,307 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winfo.dao.CopyTestRunDao;
-import com.winfo.model.ScriptsData;
-import com.winfo.model.ScritplinesData;
-import com.winfo.model.Testrundata;
+import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
+import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.vo.CopytestrunVo;
 
 @Service
 public class CopyTestRunService {
+	Logger log = Logger.getLogger("Logger");
+
 	@Autowired
 	CopyTestRunDao copyTestrunDao;
+
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
-		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		int testrunid=copyTestrunDao.getIds();
-         System.out.println("testrunid"+testrunid);
-		Testrundata setTestrundata=new Testrundata();
-		setTestrundata.setTestsetid(testrunid);
-		setTestrundata.setTest_set_desc(getTestrun.getTest_set_desc());
-		setTestrundata.setTest_set_comments(getTestrun.getTest_set_comments());
-		setTestrundata.setEnabled("Y");
-		setTestrundata.setDescription(getTestrun.getDescription());
-		setTestrundata.setEffective_from(getTestrun.getEffective_from());
-		setTestrundata.setEffective_to(getTestrun.getEffective_to());
-		setTestrundata.setTestsetname(copyTestrunvo.getNewtestrunname());
-		setTestrundata.setConfigurationid(copyTestrunvo.getConfiguration());
-		setTestrundata.setProjectid(copyTestrunvo.getProject());
-		setTestrundata.setCreatedby(copyTestrunvo.getCreated_by());
-		setTestrundata.setLastupdatedby(null);
-		setTestrundata.setCreationdate(copyTestrunvo.getCreation_date());
-		setTestrundata.setUpdatedate(null);
-		setTestrundata.setTscompleteflag("Active");
-		setTestrundata.setPasspath(getTestrun.getPasspath());
-		setTestrundata.setFailpath(getTestrun.getFailpath());
-		setTestrundata.setExceptionpath(getTestrun.getExceptionpath());
-		setTestrundata.setTrmode("ACTIVE");
-		setTestrundata.setLastexecuteby(null);
-		
-//		copyTestrunDao.saveTestrun(setTestrundata);
-		 List<ScriptsData> listsScriptdata=new ArrayList<>();
-		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
-			int sectiptid=copyTestrunDao.getscrtiptIds();
-			 System.out.println("sectiptid"+sectiptid);
-			ScriptsData setScriptdata=new ScriptsData();
-			setScriptdata.setTestsetlineid(sectiptid);
-			setScriptdata.setScriptid(getScriptdata.getScriptid());
-			setScriptdata.setCreatedby(copyTestrunvo.getCreated_by());
-			setScriptdata.setCreationdate(copyTestrunvo.getCreation_date());
-			setScriptdata.setEnabled("Y");
-			setScriptdata.setScriptnumber(getScriptdata.getScriptnumber());
-			setScriptdata.setSeqnum(getScriptdata.getSeqnum());
-			setScriptdata.setStatus("New");
-			setScriptdata.setLastupdatedby(null);
-			setScriptdata.setScriptUpadated("N");
-			setScriptdata.setUpdateddate(null);
-			setScriptdata.setTestsstlinescriptpath(getScriptdata.getTestsstlinescriptpath());
-			setScriptdata.setExecutedby(null);
-			setScriptdata.setExecutionstarttime(null);
-			setScriptdata.setExecutionendtime(null);
-			setTestrundata.addScriptsdata(setScriptdata);
-			for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
-				ScritplinesData setScriptlinedata=new ScritplinesData();
-				int sectiptlineid=copyTestrunDao.getscrtiptlineIds();
-				 System.out.println("sectiptlineid"+sectiptlineid);
-				
-				setScriptlinedata.setTestscriptperamid(sectiptlineid);
-				System.out.println(getScriptlinedata.getInput_parameter());
-				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,setScriptdata);
-			
-				setScriptlinedata.setInput_parameter(getScriptlinedata.getInput_parameter());
-				setScriptlinedata.setScript_id(getScriptlinedata.getScript_id());
-				setScriptlinedata.setScript_number(getScriptlinedata.getScript_number());
-				setScriptlinedata.setLine_number(getScriptlinedata.getLine_number());
-				setScriptlinedata.setAction(getScriptlinedata.getAction());
-				setScriptlinedata.setTest_run_param_desc(getScriptlinedata.getTest_run_param_desc());
-				setScriptlinedata.setTest_run_param_name(getScriptlinedata.getTest_run_param_name());
-				setScriptlinedata.setMetadata_id(getScriptlinedata.getMetadata_id());
-				setScriptlinedata.setHint(getScriptlinedata.getHint());
-				setScriptlinedata.setField_type(getScriptlinedata.getField_type());
-				setScriptlinedata.setXpathlocation(getScriptlinedata.getXpathlocation());
-				setScriptlinedata.setXpathlocation1(getScriptlinedata.getXpathlocation1());
-				setScriptlinedata.setCreatedby(copyTestrunvo.getCreated_by());
-				setScriptlinedata.setCreationdate(copyTestrunvo.getCreation_date());
-				setScriptlinedata.setUpdateddate(null);
-				setScriptlinedata.setLastupdatedby(null);
-				setScriptlinedata.setLineexecutionstatues("New");
-				setScriptlinedata.setLineerrormessage(null);
-				setScriptlinedata.setDatatypes(getScriptlinedata.getDatatypes());
-				setScriptlinedata.setUniquemandatory(getScriptlinedata.getUniquemandatory());
-				
-				setScriptdata.addScriptlines(setScriptlinedata);
-				}
-			}
-		
-//		setTestrundata.setScriptsdata(listsScriptdata);
-		System.out.println("before saveTestrun");
+		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		TestSet newTestSetObj = new TestSet();
 
-		int newtestrun= copyTestrunDao.saveTestrun(setTestrundata);
-		System.out.println("newtestrun 1:"+newtestrun);
-	return newtestrun;
-	}
-	private void addInputvalues(ScritplinesData getScriptlinedata, ScritplinesData setScriptlinedata,CopytestrunVo copyTestrunvo, ScriptsData setScriptdata) throws InterruptedException {
-		String getInputvalues=getScriptlinedata.getInput_value();
-		String[] actios= {"clearandtype" ,"textarea", "selectAValue", "clickCheckbox","selectByText","clickButton Dropdown", "clickLinkAction","Table Dropdown Values",
-				"Table SendKeys", "enterIntoTable" ,"SendKeys", "Login into Application", "Dropdown Values","typeAtPosition" ,"clickAndTypeAtPosition",
-				"clickRadiobutton","clickCheckbox" ,"multipleSendKeys","multiplelinestableSendKeys","DatePicker","copynumber","copytext","paste"}; 
-		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
-		if("y".equalsIgnoreCase(copyTestrunvo.getIncrement_value())&&(getScriptlinedata.getUniquemandatory()!=null&&getScriptlinedata.getUniquemandatory()!="NA")&&(getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Unique")||getScriptlinedata.getUniquemandatory().equalsIgnoreCase("Both"))) {
-			if((getScriptlinedata.getDatatypes()!=null&&getScriptlinedata.getDatatypes()!="NA")&&getScriptlinedata.getDatatypes().equalsIgnoreCase("Alpha-Numeric")) {
-				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-				Date dateobj = new Date();
-				String covertDateobj=dateformate.format(dateobj);
-				Thread.sleep(1);
-				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
-				int fistOff=Integer.parseInt(covertDateobj.substring(0, 8));
-				int secondHalf=Integer.parseInt(covertDateobj.substring(8, 15));
-				String hexaDecimal=Integer.toString(fistOff , 36)+Integer.toString(secondHalf , 36);
-				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
-					hexaDecimal=getInputvalues;
-					if(actionsList.contains(getScriptlinedata.getAction())){
-						setScriptdata.setScriptUpadated("Y");
-					}
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					hexaDecimal=getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname());
-				}
-				else if(getInputvalues.length()>5) {
-				hexaDecimal=getInputvalues.substring(0, 5)+hexaDecimal;
-				}else {
-					hexaDecimal=getInputvalues+hexaDecimal;
-				}
-				setScriptlinedata.setInput_value(hexaDecimal);
-			}
-			else {
-				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-				Date dateobj = new Date();
-				String covertDateobj=dateformate.format(dateobj);
-				Thread.sleep(1);
-				covertDateobj=covertDateobj.replaceAll("[^0-9]", "");
-				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
-					setScriptlinedata.setInput_value(getInputvalues);
-					if(actionsList.contains(getScriptlinedata.getAction())){
-						setScriptdata.setScriptUpadated("Y");
-					}
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
-				}else {
-				setScriptlinedata.setInput_value(covertDateobj);
-				}
-			}
-			}else if("Mandatory".equalsIgnoreCase(getScriptlinedata.getUniquemandatory())){
-				if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
-					setScriptlinedata.setInput_value(null);
-					if(actionsList.contains(getScriptlinedata.getAction())){
-						setScriptdata.setScriptUpadated("Y");
-					}
+		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
+		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
+		newTestSetObj.setEnabled("Y");
+		newTestSetObj.setDescription(testSetObj.getDescription());
+		newTestSetObj.setEffectiveFrom(testSetObj.getEffectiveFrom());
+		newTestSetObj.setEffectiveTo(testSetObj.getEffectiveTo());
+		newTestSetObj.setTestRunName(copyTestrunvo.getNewtestrunname());
+		newTestSetObj.setConfigurationId(copyTestrunvo.getConfiguration());
+		newTestSetObj.setProjectId(copyTestrunvo.getProject());
+		newTestSetObj.setCreatedBy(copyTestrunvo.getCreatedBy());
+		newTestSetObj.setLastUpdatedBy(null);
+		newTestSetObj.setCreationDate(copyTestrunvo.getCreationDate());
+		newTestSetObj.setUpdateDate(null);
+		newTestSetObj.setTsCompleteFlag("Active");
+		newTestSetObj.setPassPath(testSetObj.getPassPath());
+		newTestSetObj.setFailPath(testSetObj.getFailPath());
+		newTestSetObj.setExceptionPath(testSetObj.getExceptionPath());
+		newTestSetObj.setTestRunMode("ACTIVE");
+		newTestSetObj.setLastExecutBy(null);
 
-				}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-					setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
-				}
-				else {
-				setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
-				}
-			}else {
-					if(getInputvalues==null||"copynumber".equalsIgnoreCase(getScriptlinedata.getAction())) {
-						setScriptlinedata.setInput_value(null);
+		String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
+		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<Integer, Integer>();
+		for (TestSetLine testSetLineObj : testSetObj.getTestRunScriptDatalist()) {// getScriptdata
 
-					}else if("paste".equalsIgnoreCase(getScriptlinedata.getAction())&&"copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
-						setScriptlinedata.setInput_value(getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
-					}
-					else {
-					setScriptlinedata.setInput_value(getScriptlinedata.getInput_value());
-					}
+			ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(testSetLineObj.getScriptNumber(),
+					productVersion);
+			TestSetLine testSetLineRecords = new TestSetLine();
+			if (scriptMaster != null) {
+				int id = copyTestrunDao.getscrtiptIds();
+				mapOfTestRunDependencyOldToNewId.put(testSetLineObj.getTestRunScriptId(), id);
+				testSetLineRecords.setTestRunScriptId(id);
+				testSetLineRecords.setScriptId(scriptMaster.getScript_id());
+				testSetLineRecords.setCreatedBy(copyTestrunvo.getCreatedBy());
+				testSetLineRecords.setCreationDate(copyTestrunvo.getCreationDate());
+				testSetLineRecords.setEnabled("Y");
+				testSetLineRecords.setScriptNumber(scriptMaster.getScript_number());
+				testSetLineRecords.setSeqNum(testSetLineObj.getSeqNum());
+				testSetLineRecords.setStatus("New");
+				testSetLineRecords.setLastUpdatedBy(null);
+				testSetLineRecords.setScriptUpadated("N");
+				testSetLineRecords.setUpdateDate(null);
+				testSetLineRecords.setTestRunScriptPath(testSetLineObj.getTestRunScriptPath());
+				testSetLineRecords.setExecutedBy(null);
+				testSetLineRecords.setExecutionStartTime(null);
+				testSetLineRecords.setExecutionEndTime(null);
+				testSetLineRecords.setDependency_tr(testSetLineObj.getDependency_tr());
+				newTestSetObj.addTestRunScriptData(testSetLineRecords);
+			} else {
+
+				continue;
+			}
+			Integer newScriptParamSeq = 0;
+			Integer oldScriptParamSeq = 0;
+			List<ScriptMetaData> metadataList = scriptMaster.getScriptMetaDatalist();
+			List<TestSetScriptParam> scriptLineList = testSetLineObj.getTestRunScriptParam();
+			Comparator<TestSetScriptParam> scriptLineComparator = (TestSetScriptParam s1,
+					TestSetScriptParam s2) -> s1.getLineNumber() - s2.getLineNumber();
+			Comparator<ScriptMetaData> metaDataComparator = (ScriptMetaData s1,
+					ScriptMetaData s2) -> s1.getLine_number() - s2.getLine_number();
+			Collections.sort(scriptLineList, scriptLineComparator);
+			Collections.sort(metadataList, metaDataComparator);
+			ScriptMetaData metadata = null;
+			Integer check = null;
+			TestSetScriptParam getScriptlinedata = null;
+			TestSetScriptParam setScriptlinedata = null;
+			while (newScriptParamSeq < metadataList.size() && oldScriptParamSeq < scriptLineList.size()) {
+				metadata = metadataList.get(newScriptParamSeq);
+
+				getScriptlinedata = scriptLineList.get(oldScriptParamSeq);
+
+				if (!(newScriptParamSeq.equals(check))) {
+					setScriptlinedata = new TestSetScriptParam();
+					setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+					setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
+					setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
+					setScriptlinedata.setLineNumber(metadata.getLine_number());
+					setScriptlinedata.setAction(metadata.getAction());
+					setScriptlinedata.setTestRunParamDesc(metadata.getStep_desc());
+					setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+					setScriptlinedata.setHint(metadata.getHint());
+					setScriptlinedata.setFieldType(metadata.getField_type());
+					setScriptlinedata.setXpathLocation(metadata.getXpath_location());
+					setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+					setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
+					setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
+					setScriptlinedata.setUpdateDate(null);
+					setScriptlinedata.setLastUpdatedBy(null);
+					setScriptlinedata.setLineExecutionStatus("New");
+					setScriptlinedata.setLineErrorMessage(null);
+					setScriptlinedata.setDataTypes(metadata.getDatatypes());
+					setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+					check = newScriptParamSeq.intValue();
 				}
-		
-	}
-	@Transactional
-	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
-		Testrundata getTestrun=copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		System.out.println("getTestrun infromation");
-		for(ScriptsData getScriptdata:getTestrun.getScriptsdata()) {
-			String status=getScriptdata.getStatus();
-			if(status.equalsIgnoreCase("fail")) {
-//				getTestrun.addScriptsdata(getScriptdata);
-				for(ScritplinesData getScriptlinedata:getScriptdata.getScriptslinedata()) {
-					ScritplinesData setScriptlinedata=new ScritplinesData();
-				addInputvalues(getScriptlinedata,setScriptlinedata, copyTestrunvo,getScriptdata);
-				getScriptlinedata.setInput_value(setScriptlinedata.getInput_value());
-//				getScriptdata.addScriptlines(getScriptlinedata);
+				if (setScriptlinedata.getInputParameter() != null && getScriptlinedata.getInputParameter() != null) {
+					if (setScriptlinedata.getAction().equalsIgnoreCase(getScriptlinedata.getAction())
+							&& setScriptlinedata.getInputParameter()
+									.equalsIgnoreCase(getScriptlinedata.getInputParameter())
+							&& setScriptlinedata.getLineNumber().equals(getScriptlinedata.getLineNumber())) {
+						addInputvalues(getScriptlinedata, setScriptlinedata, copyTestrunvo, testSetLineRecords);
+					} else {
+						setScriptlinedata.setInputValue(null);
+					}
+				} else {
+					setScriptlinedata.setInputValue(null);
+				}
+				if (setScriptlinedata.getLineNumber() >= getScriptlinedata.getLineNumber()) {
+					oldScriptParamSeq++;
+
+				}
+				if (getScriptlinedata.getLineNumber() >= setScriptlinedata.getLineNumber()) {
+					newScriptParamSeq++;
+
+				}
+
+				testSetLineRecords.addTestScriptParam(setScriptlinedata);
+
+			}
+			newScriptParamSeq++;
+			while (newScriptParamSeq < metadataList.size()) {
+				metadata = metadataList.get(newScriptParamSeq);
+				setScriptlinedata = new TestSetScriptParam();
+				setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+				setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
+				setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
+				setScriptlinedata.setLineNumber(metadata.getLine_number());
+				setScriptlinedata.setAction(metadata.getAction());
+
+				setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+				setScriptlinedata.setHint(metadata.getHint());
+				setScriptlinedata.setFieldType(metadata.getField_type());
+				setScriptlinedata.setXpathLocation(metadata.getXpath_location());
+				setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+				setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
+				setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
+				setScriptlinedata.setUpdateDate(null);
+				setScriptlinedata.setLastUpdatedBy(null);
+				setScriptlinedata.setLineExecutionStatus("New");
+				setScriptlinedata.setLineErrorMessage(null);
+				setScriptlinedata.setDataTypes(metadata.getDatatypes());
+				setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+
+				setScriptlinedata.setInputValue(null);
+
+				testSetLineRecords.addTestScriptParam(setScriptlinedata);
+
+				newScriptParamSeq++;
+
+			}
+
+		}
+		log.info("before saveTestrun");
+		if (!mapOfTestRunDependencyOldToNewId.isEmpty()) {
+			for (TestSetLine testSetLine : newTestSetObj.getTestRunScriptDatalist()) {
+				if (testSetLine.getDependency_tr() != null) {
+					testSetLine.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(testSetLine.getDependency_tr()));
 				}
 			}
 		}
-		System.out.println("before update");
-		int newtestrun= copyTestrunDao.update(getTestrun);
-		System.out.println("newtestrun 2:"+newtestrun);
+		newTestSetObj.setTestRunId(copyTestrunDao.getIds());
+		int newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
+		log.info("newtestrun 1:" + newtestrun);
+		return newtestrun;
+	}
+
+	private void addInputvalues(TestSetScriptParam getScriptlinedata, TestSetScriptParam setScriptlinedata,
+			CopytestrunVo copyTestrunvo, TestSetLine setScriptdata) throws InterruptedException {
+		String getInputvalues = getScriptlinedata.getInputValue();
+		String[] actios = { "clearandtype", "textarea", "selectAValue", "clickCheckbox", "selectByText",
+				"clickButton Dropdown", "clickLinkAction", "Table Dropdown Values", "Table SendKeys", "enterIntoTable",
+				"SendKeys", "Login into Application", "Dropdown Values", "typeAtPosition", "clickAndTypeAtPosition",
+				"clickRadiobutton", "clickCheckbox", "multipleSendKeys", "multiplelinestableSendKeys", "DatePicker",
+				"copynumber", "copytext", "paste" };
+		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
+		if ("y".equalsIgnoreCase(copyTestrunvo.getIncrementValue())
+				&& (setScriptlinedata.getUniqueMandatory() != null && setScriptlinedata.getUniqueMandatory() != "NA")
+				&& (setScriptlinedata.getUniqueMandatory().equalsIgnoreCase("Unique")
+						|| setScriptlinedata.getUniqueMandatory().equalsIgnoreCase("Both"))) {
+			if ((setScriptlinedata.getDataTypes() != null && setScriptlinedata.getDataTypes() != "NA")
+					&& setScriptlinedata.getDataTypes().equalsIgnoreCase("Alpha-Numeric")) {
+				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+				Date dateobj = new Date();
+				String covertDateobj = dateformate.format(dateobj);
+				Thread.sleep(1);
+				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
+				int fistOff = Integer.parseInt(covertDateobj.substring(0, 8));
+				int secondHalf = Integer.parseInt(covertDateobj.substring(8, 15));
+				String hexaDecimal = Integer.toString(fistOff, 36) + Integer.toString(secondHalf, 36);
+				if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
+					hexaDecimal = getInputvalues;
+					if (actionsList.contains(setScriptlinedata.getAction())) {
+						setScriptdata.setScriptUpadated("Y");
+					}
+				} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
+					hexaDecimal = getInputvalues.replace(getInputvalues.split(">")[0],
+							copyTestrunvo.getNewtestrunname());
+				} else if (getInputvalues.length() > 5) {
+					hexaDecimal = getInputvalues.substring(0, 5) + hexaDecimal;
+				} else {
+					hexaDecimal = getInputvalues + hexaDecimal;
+				}
+				setScriptlinedata.setInputValue(hexaDecimal);
+			} else {
+				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+				Date dateobj = new Date();
+				String covertDateobj = dateformate.format(dateobj);
+				Thread.sleep(1);
+				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
+				if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
+					setScriptlinedata.setInputValue(getInputvalues);
+					if (actionsList.contains(setScriptlinedata.getAction())) {
+						setScriptdata.setScriptUpadated("Y");
+					}
+				} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
+					setScriptlinedata.setInputValue(
+							getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+				} else {
+					setScriptlinedata.setInputValue(covertDateobj);
+				}
+			}
+		} else if ("Mandatory".equalsIgnoreCase(setScriptlinedata.getUniqueMandatory())) {
+			if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
+				setScriptlinedata.setInputValue(null);
+				if (actionsList.contains(setScriptlinedata.getAction())) {
+					setScriptdata.setScriptUpadated("Y");
+				}
+
+			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
+				setScriptlinedata.setInputValue(
+						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+			} else {
+				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
+			}
+		} else {
+			if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
+				setScriptlinedata.setInputValue(null);
+
+			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
+				setScriptlinedata.setInputValue(
+						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+			} else {
+				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
+			}
+		}
+
+	}
+
+	@Transactional
+	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
+		TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		log.info("getTestrun infromation");
+		for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
+			String status = getScriptdata.getStatus();
+			if (status.equalsIgnoreCase("fail")) {
+				for (TestSetScriptParam getScriptlinedata : getScriptdata.getTestRunScriptParam()) {
+					TestSetScriptParam setScriptlinedata = new TestSetScriptParam();
+					addInputvalues(getScriptlinedata, setScriptlinedata, copyTestrunvo, getScriptdata);
+					getScriptlinedata.setInputValue(setScriptlinedata.getInputValue());
+				}
+			}
+		}
+		log.info("before update");
+		int newtestrun = copyTestrunDao.updateTestSetRecord(getTestrun);
+		log.info("newtestrun 2:" + newtestrun);
 		return newtestrun;
 	}
 
