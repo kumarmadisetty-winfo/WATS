@@ -27,14 +27,14 @@ public class CopyTestrunController {
 			BindingResult bindingResult) throws InterruptedException {
 		log.info("copyTestrunvo.getCreation_date()" + copyTestrunvo.getCreationDate());
 		int newtestrun = 0;
-		if (copyTestrunvo.getRequesttype().equalsIgnoreCase("copyTestRun")) {
+		if (copyTestrunvo.getRequestType().equalsIgnoreCase("copyTestRun")) {
 			newtestrun = service.copyTestrun(copyTestrunvo);
-		} else if (copyTestrunvo.getRequesttype().equalsIgnoreCase("reRun")) {
+		} else if (copyTestrunvo.getRequestType().equalsIgnoreCase("reRun")) {
 			newtestrun = service.reRun(copyTestrunvo);
 		}
 		CopyTestrunjson jsondata = new CopyTestrunjson();
 		log.info("newtestrun" + newtestrun);
-		jsondata.setNew_test_run_id(newtestrun);
+		jsondata.setNewTestRunId(newtestrun);
 		jsondata.setStatusMessage("SUCCESS");
 		log.info(jsondata.toString());
 		return jsondata;

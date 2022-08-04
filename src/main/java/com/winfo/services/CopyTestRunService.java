@@ -231,7 +231,7 @@ public class CopyTestRunService {
 						setScriptdata.setScriptUpadated("Y");
 					}
 				} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
-						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
 					hexaDecimal = getInputvalues.replace(getInputvalues.split(">")[0],
 							copyTestrunvo.getNewtestrunname());
 				} else if (getInputvalues.length() > 5) {
@@ -252,7 +252,7 @@ public class CopyTestRunService {
 						setScriptdata.setScriptUpadated("Y");
 					}
 				} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
-						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
 					setScriptlinedata.setInputValue(
 							getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				} else {
@@ -267,7 +267,7 @@ public class CopyTestRunService {
 				}
 
 			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
-					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
 				setScriptlinedata.setInputValue(
 						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 			} else {
@@ -278,7 +278,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setInputValue(null);
 
 			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
-					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequesttype())) {
+					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
 				setScriptlinedata.setInputValue(
 						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 			} else {
@@ -303,7 +303,7 @@ public class CopyTestRunService {
 			}
 		}
 		log.info("before update");
-		int newtestrun = copyTestrunDao.update(getTestrun);
+		int newtestrun = copyTestrunDao.updateTestSetRecord(getTestrun);
 		log.info("newtestrun 2:" + newtestrun);
 		return newtestrun;
 	}

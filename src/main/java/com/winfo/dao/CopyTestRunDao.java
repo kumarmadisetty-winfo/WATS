@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,8 @@ import com.winfo.model.TestSet;
 
 @Repository
 public class CopyTestRunDao {
+	Logger log = Logger.getLogger("Logger");
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -83,9 +86,9 @@ public class CopyTestRunDao {
 		}
 	}
 
-	public int update(TestSet testSetObj) {
+	public int updateTestSetRecord(TestSet testSetObj) {
 		entityManager.merge(testSetObj);
-		System.out.println("getTestrun.getTestsetid() 2:" + testSetObj.getTestRunId());
+		log.info("getTestrun.getTestsetid() 2:" + testSetObj.getTestRunId());
 		return testSetObj.getTestRunId();
 
 	}
@@ -105,9 +108,9 @@ public class CopyTestRunDao {
 		return null;
 	}
 
-	public Object[] getScriptMasterInfo1(String scriptNumber, Integer project_id) {
+	public Object[] getScriptMasterInfoByProjectId(String scriptNumber, Integer projectId) {
 		Session session = entityManager.unwrap(Session.class);
-		String product_version = getProductVersion(project_id);
+		String product_version = getProductVersion(projectId);
 		String sql = "Select * from win_ta_script_master where script_number='" + scriptNumber
 				+ "' and product_version='" + product_version + "'";
 		Query query = session.createSQLQuery(sql);
@@ -122,16 +125,12 @@ public class CopyTestRunDao {
 
 	}
 
-	public ScriptMaster getScriptMasterInfo(String scriptNumber, String product_version) {
+	public ScriptMaster getScriptMasterInfo(String scriptNumber, String productVersion) {
 		Session session = entityManager.unwrap(Session.class);
-		// String product_version=getProductVersion(project_id);
 		String sql = "from ScriptMaster where script_number='" + scriptNumber + "' and product_version='"
-				+ product_version + "'";
-		// Query query = session.createSQLQuery(sql);
-		// List<Object[]> rows = query.getResultList();
+				+ productVersion + "'";
 		Query query = entityManager.createQuery(sql);
 		List<ScriptMaster> rows = query.getResultList();
-		// ScriptMaster master=new ScriptMaster();
 		if (rows != null) {
 			if (rows.size() > 0) {
 				return rows.get(0);
@@ -141,7 +140,7 @@ public class CopyTestRunDao {
 
 	}
 
-	public List<Object[]> getScriptMetadataInfo1(int script_id) {
+	public List<Object[]> getScriptMetadataInfoByScriptId(int script_id) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "Select * from win_ta_script_metadata where script_id =" + script_id;
 		Query query = session.createSQLQuery(sql);

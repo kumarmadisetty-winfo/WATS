@@ -15,15 +15,15 @@ public class CopytestrunVo {
 
 	@JsonFormat(pattern = "MM/dd/yyyy")
 	private Date creationDate;
-	@JsonProperty("request_type")
-	private String requesttype;
+	@JsonProperty("requestType")
+	private String requestType;
 
-	public String getRequesttype() {
-		return requesttype;
+	public String getRequestType() {
+		return requestType;
 	}
 
-	public void setRequesttype(String requesttype) {
-		this.requesttype = requesttype;
+	public void setRequesttype(String requestType) {
+		this.requestType = requestType;
 	}
 
 	public String getIncrementValue() {
