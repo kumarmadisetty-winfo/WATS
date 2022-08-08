@@ -185,8 +185,10 @@ public class SendMailServiceImpl {
 			message.setHeader("Content-Type", "text/html; charset=UTF-8");
 			message.setFrom(new InternetAddress(userName));
 			message.setSentDate(new Date());
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailParamDto.getReceiver()));
-			message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(emailParamDto.getCcPerson()));
+			message.setRecipients(Message.RecipientType.TO,
+					emailParamDto.getReceiver() != null ? InternetAddress.parse(emailParamDto.getReceiver()) : null);
+			message.addRecipients(Message.RecipientType.CC,
+					emailParamDto.getCcPerson() != null ? InternetAddress.parse(emailParamDto.getCcPerson()) : null);
 
 			message.setSubject(subject);
 
