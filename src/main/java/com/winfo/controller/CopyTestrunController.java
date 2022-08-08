@@ -25,6 +25,7 @@ public class CopyTestrunController {
 	@RequestMapping(value = "copyTestrun", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException {
+		log.info("Test Run Name**" + copyTestrunvo.getNewtestrunname());
 		log.info("copyTestrunvo.getCreation_date()" + copyTestrunvo.getCreationDate());
 		int newtestrun = 0;
 		if (copyTestrunvo.getRequestType().equalsIgnoreCase("copyTestRun")) {

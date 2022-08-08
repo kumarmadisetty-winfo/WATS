@@ -36,6 +36,8 @@ public class JobController {
 	@RequestMapping(value = "/executeTestScript")
 	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto, BindingResult bindingResult)
 			throws Exception {
+
+		logger.info("TestRunId ***" + testScriptDto.getTestScriptNo());
 		ResponseDto status = null;
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
 			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
