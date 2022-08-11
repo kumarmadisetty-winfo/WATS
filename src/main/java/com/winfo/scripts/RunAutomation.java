@@ -23,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
@@ -1284,7 +1283,7 @@ public class RunAutomation {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
+						seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
 
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -1337,7 +1336,7 @@ public class RunAutomation {
 					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
 							test_set_id);
 
-					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
+					seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
 					if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,

@@ -3,6 +3,7 @@ package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,6 +12,7 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -57,6 +60,18 @@ import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.block.LineBorder;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -92,6 +107,8 @@ import com.aspose.cells.LookAtType;
 import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -102,9 +119,13 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
@@ -119,10 +140,10 @@ import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
-@Service("HS2")
+@Service("SERVICENOW")
 //@Service("WATS")
 @RefreshScope
-public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
+public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -2011,10 +2032,12 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //	public void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 //			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 //		try {
-//			String folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//			String Date = DateUtils.getSysdate();
+//			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 //					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//			String file = (folder + pdffileName);
-//			System.out.println(file);
+////			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
+//			String FILE = (Folder + pdffileName);
+//			System.out.println(FILE);
 //			List<String> fileNameList = null;
 //			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 //				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
@@ -2031,11 +2054,14 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
 //			// new change add ExecutedBy field
 //			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
-//			File theDir = new File(folder);
+//			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
+//			File theDir = new File(Folder);
 //			if (!theDir.exists()) {
 //				System.out.println("creating directory: " + theDir.getName());
+//				boolean result = false;
 //				try {
 //					theDir.mkdirs();
+//					result = true;
 //				} catch (SecurityException se) {
 //					// handle it
 //					System.out.println(se.getMessage());
@@ -2045,6 +2071,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //			}
 //			int passcount = fetchConfigVO.getPasscount();
 //			int failcount = fetchConfigVO.getFailcount();
+////			Date Starttime = fetchConfigVO.getStarttime();
 //			Date Tendtime = fetchConfigVO.getEndtime();
 //			Date TStarttime = fetchConfigVO.getStarttime1();
 //			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
@@ -2067,7 +2094,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //			Font bfBold = FontFactory.getFont("Arial", 23, BaseColor.WHITE);
 //			DefaultPieDataset dataSet = new DefaultPieDataset();
 //			PdfWriter writer = null;
-//			writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+//			writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
 //			Rectangle one = new Rectangle(1360, 800);
 //			document.setPageSize(one);
 //			document.open();
@@ -2077,10 +2104,13 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //
 //			img1.scalePercent(65, 68);
 //			img1.setAlignment(Image.ALIGN_RIGHT);
+////		start to create testrun level reports	
 //			if ((passcount != 0 || failcount != 0) & ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
 //					|| "Failed_Report.pdf".equalsIgnoreCase(pdffileName)
 //					|| "Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {
-//				String testRun = test_Run_Name;
+////	     Start testrun to add details like start and end time,testrun name
+//				String TestRun = TestRun = test_Run_Name;
+//				;
 //				String StartTime = null;
 //				String EndTime = Tendtime1;
 //				String ExecutionTime = null;
@@ -2135,7 +2165,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //				table1.setWidths(new int[] { 1, 1 });
 //				table1.setWidthPercentage(100f);
 //				insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
-//				insertCell(table1, testRun, Element.ALIGN_LEFT, 1, bf12);
+//				insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
 //
 //				try {
 //					if (ExecutedBy != null) {
@@ -2151,7 +2181,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //				insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
 //				insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
 //				insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
-//				document.add(table1);		 
+//				document.add(table1);
+////	   End testrun to add details like start and end time,testrun name 	
+//
+////					Start Testrun to add Table and piechart 		 
 //				if (passcount == 0) {
 //
 //					dataSet.setValue("Fail", failcount);
@@ -2171,6 +2204,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					document.newPage();
 //					document.add(img1);
 //					Paragraph executionSummery = new Paragraph(start, bfBold12);
+////					executionSummery.setAlignment(Element.ALIGN_CENTER);
 //					document.add(executionSummery);
 //					document.add(Chunk.NEWLINE);
 //					DecimalFormat df1 = new DecimalFormat("0");
@@ -2197,10 +2231,12 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //				} else if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 //					document.add(Chunk.NEWLINE);
 //					Paragraph executionSummery = new Paragraph(start, bfBold12);
+////					executionSummery.setAlignment(Element.ALIGN_CENTER);
 //					document.add(executionSummery);
 //					document.add(Chunk.NEWLINE);
 //					DecimalFormat df1 = new DecimalFormat("0");
-//					DecimalFormat df2 = new DecimalFormat("0"); 	 
+//					DecimalFormat df2 = new DecimalFormat("0");
+////					Start Testrun to add Table   	 
 //					PdfPTable table = new PdfPTable(3);
 //					table.setWidths(new int[] { 1, 1, 1 });
 //					table.setWidthPercentage(100f);
@@ -2221,10 +2257,12 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //				} else {
 //					document.add(Chunk.NEWLINE);
 //					Paragraph executionSummery = new Paragraph(start, bfBold12);
+////					executionSummery.setAlignment(Element.ALIGN_CENTER);
 //					document.add(executionSummery);
 //					document.add(Chunk.NEWLINE);
 //					DecimalFormat df1 = new DecimalFormat("0");
-//					DecimalFormat df2 = new DecimalFormat("0");	 
+//					DecimalFormat df2 = new DecimalFormat("0");
+////							Start Testrun to add Table   	 
 //					PdfPTable table = new PdfPTable(3);
 //					table.setWidths(new int[] { 1, 1, 1 });
 //					table.setWidthPercentage(100f);
@@ -2242,7 +2280,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					document.setMargins(20, 20, 20, 20);
 //					document.add(table);
 //				}
-//
+////			End Testrun to add Table
+////			Start Testrun to add piechart 
 //				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 //					Chunk ch = new Chunk(pichart, bfBold);
 //					ch.setTextRise(-18);
@@ -2297,7 +2336,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					graphics2d.dispose();
 //					contentByte.addTemplate(template, 400, 100);
 //				}
-// 		
+////			 End Testrun to add piechart 
+//// End Testrun to add Table and piechart 
+////					 		Start to add page heading,all testrun names and states and page numbers	 		
 //				int k = 0, l = 0;
 //				String sno1 = "";
 //				Map<Integer, Map<String, String>> toc = new TreeMap<>();
@@ -2310,12 +2351,15 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //
 //					if (!sndo.equalsIgnoreCase(sno1)) {
 //						Map<String, String> toc1 = new TreeMap<>();
+////					 				l=0;
 //						for (String image1 : fileNameList) {
 //							String Status = image1.split("_")[6];
 //							String status = Status.split("\\.")[0];
 //
+////					 					l++;
 //							if (image1.startsWith(sndo + "_") && image1.contains("Failed")) {
 //
+////					 						toc2.put(sndo,String.valueOf(l-2));	
 //								toc2.put(sndo, "Failed" + l);
 //								l++;
 //							}
@@ -2344,6 +2388,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //				p2.add(target2);
 //				document.add(p2);
 //				document.add(Chunk.NEWLINE);
+////				End to add page heading 
+//
+////			 Start to add all testrun names and states and page numbers	
 //				Chunk dottedLine = new Chunk(new DottedLineSeparator());
 //				for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
 //					Map<String, String> str1 = entry.getValue();
@@ -2377,6 +2424,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //						}
 //					}
 //				}
+////			 End to add all testrun names and states and page numbers
+////			 End to add page heading,add all testrun names and states and page numbers	
+//
+////	Start to add script details, screenshoots and pagenumbers and wats icon	
 //				int i = 0, j = 0;
 //				for (String image : fileNameList) {
 //					i++;
@@ -2390,6 +2441,18 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					String ScriptName = image.split("_")[2];
 //					String testRunName = image.split("_")[4];
 //
+//					// String stepDescription =
+//					// descriptionList.get(sno).get(Reason).getTest_run_param_desc();
+//					// String inputParam =
+//					// fetchMetadataListVO.get(metadataCounter).getInput_parameter();
+//					// String inputParam =
+//					// descriptionList.get(sno).get(Reason).getInput_parameter();
+//					// String inputValue =
+//					// fetchMetadataListVO.get(metadataCounter).getInput_value();
+//					// String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
+//					// metadataCounter++;
+//
+////				String scrtipt=;
 //					if (!sno.equalsIgnoreCase(sno1)) {
 //						document.setPageSize(img);
 //						document.newPage();
@@ -2426,9 +2489,16 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					if (sno != null) {
 //						sno1 = sno;
 //					}
+////	End to add script details 
+//
+////	Start to add  screenshoots and pagenumbers and wats icon		 		
+////				String TestRun = image.split("_")[4];
 //					String Status = image.split("_")[6];
 //					String status = Status.split("\\.")[0];
 //					String Scenario = image.split("_")[2];
+//
+////				String TR = "Test Run Name:" + " " + TestRun;
+////				String SN = "Script Number:" + " " + ScriptNumber;
 //
 //					String Scenarios = "Test Case Name :" + "" + Scenario;
 //					Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
@@ -2486,12 +2556,20 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					}
 //
 //					String stepDescription = descriptionList.get(sno).get(Reason).getTestRunParamDesc();
+//					// String inputParam =
+//					// fetchMetadataListVO.get(metadataCounter).getInput_parameter();
 //					String inputParam = descriptionList.get(sno).get(Reason).getInputParameter();
+//					// String inputValue =
+//					// fetchMetadataListVO.get(metadataCounter).getInput_value();
 //					String inputValue = descriptionList.get(sno).get(Reason).getInputValue();
+//					// metadataCounter++;
 //
 //					Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
+//					// Chunk statusChunk2 = new Chunk(status,fnt);
 //					Phrase statusPhrase = new Phrase();
 //					statusPhrase.add(statusChunk);
+//					// statusPhrase.add(statusChunk2);
+//
 //					Paragraph pr1 = new Paragraph();
 //					pr1.add(statusPhrase);
 //
@@ -2499,6 +2577,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //						Anchor target1 = new Anchor(status);
 //
 //						target1.setName(String.valueOf(status + j));
+//						// Chunk chunk = new Chunk(target1);
+//						// statusPhrase.add(target1);
 //						j++;
 //						pr1.add(target1);
 //						document.add(pr1);
@@ -2514,6 +2594,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //							Phrase phraseDesc = new Phrase();
 //							phraseDesc.add(stepDeschunk);
 //							phraseDesc.add(stepDeschunk2);
+//
+//							// Paragraph stepDesc =new Paragraph("Step Description: ",
+//							// FontFactory.getFont("Arial", 12, Font.BOLD));
+//							// stepDesc.add(new Chunk(stepDescription, fnt));
 //							Paragraph stepDesc = new Paragraph();
 //							stepDesc.add(phraseDesc);
 //							document.add(stepDesc);
@@ -2526,6 +2610,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //							Phrase phraseinputParam = new Phrase();
 //							phraseinputParam.add(inputparamchunk);
 //							phraseinputParam.add(inputparamchunk2);
+//
+//							// Paragraph stepDesc =new Paragraph("Step Description: ",
+//							// FontFactory.getFont("Arial", 12, Font.BOLD));
+//							// stepDesc.add(new Chunk(stepDescription, fnt));
 //							Paragraph paraInputParam = new Paragraph();
 //							paraInputParam.add(phraseinputParam);
 //							document.add(paraInputParam);
@@ -2536,6 +2624,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //								Phrase phraseinputVal = new Phrase();
 //								phraseinputVal.add(inputvalchunk);
 //								phraseinputVal.add(inputvalchunk2);
+//
+//								// Paragraph stepDesc =new Paragraph("Step Description: ",
+//								// FontFactory.getFont("Arial", 12, Font.BOLD));
+//								// stepDesc.add(new Chunk(stepDescription, fnt));
 //								Paragraph paraInputVal = new Paragraph();
 //								paraInputVal.add(phraseinputVal);
 //								document.add(paraInputVal);
@@ -2559,6 +2651,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //							Phrase phraseDesc = new Phrase();
 //							phraseDesc.add(stepDeschunk);
 //							phraseDesc.add(stepDeschunk2);
+//
+//							// Paragraph stepDesc =new Paragraph("Step Description: ",
+//							// FontFactory.getFont("Arial", 12, Font.BOLD));
+//							// stepDesc.add(new Chunk(stepDescription, fnt));
 //							Paragraph stepDesc = new Paragraph();
 //							stepDesc.add(phraseDesc);
 //							document.add(stepDesc);
@@ -2571,6 +2667,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //							Phrase phraseinputParam = new Phrase();
 //							phraseinputParam.add(inputparamchunk);
 //							phraseinputParam.add(inputparamchunk2);
+//
+//							// Paragraph stepDesc =new Paragraph("Step Description: ",
+//							// FontFactory.getFont("Arial", 12, Font.BOLD));
+//							// stepDesc.add(new Chunk(stepDescription, fnt));
 //							Paragraph paraInputParam = new Paragraph();
 //							paraInputParam.add(phraseinputParam);
 //							document.add(paraInputParam);
@@ -2581,6 +2681,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //								Phrase phraseinputVal = new Phrase();
 //								phraseinputVal.add(inputvalchunk);
 //								phraseinputVal.add(inputvalchunk2);
+//
+//								// Paragraph stepDesc =new Paragraph("Step Description: ",
+//								// FontFactory.getFont("Arial", 12, Font.BOLD));
+//								// stepDesc.add(new Chunk(stepDescription, fnt));
 //								Paragraph paraInputVal = new Paragraph();
 //								paraInputVal.add(phraseinputVal);
 //								document.add(paraInputVal);
@@ -2590,10 +2694,13 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //						Anchor target1 = new Anchor(status);
 //
 //						target1.setName(String.valueOf(status));
+//						// statusPhrase.add(target1);
+//						// j++;
 //						pr1.add(target1);
 //						document.add(pr1);
 //						img.setAlignment(Image.ALIGN_CENTER);
 //						img.isScaleToFitHeight();
+//						// new change-change page size
 //						img.scalePercent(51, 51);
 //						document.add(img);
 //					}
@@ -2608,6 +2715,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //					p.add(" page ");
 //					p.add(target);
 //					p.add(" of " + fileNameList.size());
+////				img.setAlignment(Image.ALIGN_CENTER);
+////				img.isScaleToFitHeight();
+////				img.scalePercent(60, 71);
+////				document.add(img);
 //					document.add(p);
 //					System.out.println("This Image " + "" + image + "" + "was added to the report");
 ////	End to add  screenshots and pagenumbers and wats icon		 		
@@ -2685,6 +2796,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 ////	Start to add screenshoots and pagenumbers and wats icon		 		
 //					int i = 0;
 //					for (String image : fileNameList) {
+////				 Image img = Image.getInstance(
+////				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
+////				 "\\" + image);
 //						i++;
 //						Image img = Image.getInstance(
 //								fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
@@ -2720,7 +2834,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //						stepPhrase.add(stepChunk2);
 //
 //						String stepDescription = map.get(steps).getTestRunParamDesc();
+//						// String inputParam =
+//						// fetchMetadataListVO.get(metaDataCounter).getInput_parameter();
 //						String inputParam = map.get(steps).getInputParameter();
+//						// String inputValue =
+//						// fetchMetadataListVO.get(metaDataCounter).getInput_value();
 //						String inputValue = map.get(steps).getInputValue();
 //
 //						img1.scalePercent(65, 65);
@@ -2738,6 +2856,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //							Phrase phraseDesc = new Phrase();
 //							phraseDesc.add(stepDeschunk);
 //							phraseDesc.add(stepDeschunk2);
+//
+//							// Paragraph stepDesc =new Paragraph("Step Description: ",
+//							// FontFactory.getFont("Arial", 12, Font.BOLD));
+//							// stepDesc.add(new Chunk(stepDescription, fnt));
 //							Paragraph stepDesc = new Paragraph();
 //							stepDesc.add(phraseDesc);
 //							document.add(stepDesc);
@@ -2750,6 +2872,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //							Phrase phraseinputParam = new Phrase();
 //							phraseinputParam.add(inputparamchunk);
 //							phraseinputParam.add(inputparamchunk2);
+//
+//							// Paragraph stepDesc =new Paragraph("Step Description: ",
+//							// FontFactory.getFont("Arial", 12, Font.BOLD));
+//							// stepDesc.add(new Chunk(stepDescription, fnt));
 //							Paragraph paraInputParam = new Paragraph();
 //							paraInputParam.add(phraseinputParam);
 //							document.add(paraInputParam);
@@ -2760,6 +2886,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //								Phrase phraseinputVal = new Phrase();
 //								phraseinputVal.add(inputvalchunk);
 //								phraseinputVal.add(inputvalchunk2);
+//
+//								// Paragraph stepDesc =new Paragraph("Step Description: ",
+//								// FontFactory.getFont("Arial", 12, Font.BOLD));
+//								// stepDesc.add(new Chunk(stepDescription, fnt));
 //								Paragraph paraInputVal = new Paragraph();
 //								paraInputVal.add(phraseinputVal);
 //								document.add(paraInputVal);
@@ -2772,6 +2902,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 //						p.setAlignment(Element.ALIGN_RIGHT);
 //						img.setAlignment(Image.ALIGN_CENTER);
 //						img.isScaleToFitHeight();
+//						// new change-change page size
 //						img.scalePercent(51, 51);
 //						document.add(img);
 //						document.add(p);
@@ -4160,7 +4291,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6017,31 +6147,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		try {
-			if (param1.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("//td[contains(@id,'contentContainer')]/following::*[text()='" + param1 + "']")));
-				WebElement waittext = driver.findElement(
-						By.xpath("//td[contains(@id,'contentContainer')]/following::*[text()='" + param1 + "']"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(6000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
-				String xpath = "//td[contains(@id,'contentContainer')]/following::*[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				return;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Republish clickButton" + scripNumber);
-			System.out.println(e);
-		}
 		try {
 			if (param1.equalsIgnoreCase("Primary Mailing") && param2.equalsIgnoreCase("Edit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9033,33 +9138,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		try {
-			if (param1.equalsIgnoreCase("AR Reconciliation")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//*[text()='" + param1 + "']/following::span[@class='AppsXLargeFontSize text-red'][1]")));
-				WebElement waittext = driver.findElement(By.xpath(
-						"//*[text()='" + param1 + "']/following::span[@class='AppsXLargeFontSize text-red'][1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
-				String xpath = "//*[text()='param1']/following::span[@class='AppsXLargeFontSize text-red'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-
-				return;
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during Approve clickLink" + scripNumber);
-		}
 		try {
 			try {
 
@@ -13340,39 +13418,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if ((param1.equalsIgnoreCase("Create Job Requisition") && param2.equalsIgnoreCase("Recruiter"))) {
-				Thread.sleep(6000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				WebElement waittill = driver
-						.findElement(By.xpath("(//h1[text()='" + param1 + "']/following::label[text()='" + param2
-								+ "']/preceding-sibling::input[not(@type='hidden')])[1]"));
-				Thread.sleep(1000);
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittill).build().perform();
-				Thread.sleep(6000);
-				// values.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
-				waittill.sendKeys(keysToSend);
-				Thread.sleep(1000);
-				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
-				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-				String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-
-				return;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
-		}
-		try {
 			if ((param1.equalsIgnoreCase("Manage Financial Project Plan")
 					&& param2.equalsIgnoreCase("Planned Finish Date"))) {
 				WebElement waittill = driver
@@ -14913,72 +14958,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 
-		try {
-			if (param2.equalsIgnoreCase("Request Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				Thread.sleep(15000);
-				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath("//*[text()='* Request Name']/following::img[1]")));
-				WebElement waittext = driver.findElement(By.xpath("//*[text()='* Request Name']/following::img[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(5000);
-				WebElement select = driver.findElement(By.xpath(
-						"//*[text()='* Request Name']/following::img[1]/following::span[text()='" + keysToSend + "']"));
-				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				Thread.sleep(5000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-
-				String xpath = "//*[text()='* Request Name']/following::img[1]" + ";"
-						+ "//*[text()='* Request Name']/following::img[1]/following::span[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
-				return;
-			}
-
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
-		}
-		try {
-			if (param2.equalsIgnoreCase("Ledger")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				Thread.sleep(15000);
-				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath("//*[text()='* Ledger']/following::img[1]")));
-				WebElement waittext = driver.findElement(By.xpath("//*[text()='* Ledger']/following::img[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(5000);
-				WebElement select = driver.findElement(By.xpath(
-						"//*[text()='* Ledger']/following::img[1]/following::span[text()='" + keysToSend + "']"));
-				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				Thread.sleep(5000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
-
-				String xpath = "//*[text()='* Ledger']/following::img[1]" + ";"
-						+ "//*[text()='* Ledger']/following::img[1]/following::span[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
-				return;
-			}
-
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
-		}
 		try {
 			if (param1.equalsIgnoreCase("Add Enrollment") && (param2.equalsIgnoreCase("Select Plan"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18574,37 +18553,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		String value = null;
 
-		try {
-
-			if (inputParam1.equalsIgnoreCase("Difference (USD)") && inputParam2.equalsIgnoreCase("Bills Receivable")) {
-				Thread.sleep(5000);
-				WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1
-						+ "']/following::*[text()='" + inputParam2 + "']/following::a[3]"));
-				Actions actions = new Actions(driver);
-
-				actions.moveToElement(webElement).build().perform();
-				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
-//			value = copyValuesWithSpc(stringToSearch);
-// value = copyValuesWithSpc(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
-				String xpath = "//*[text()='inputParam1']/following::td[text()='inputParam2']/following::td[contains(@style,'bold')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
-				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
-				log.info("Sucessfully Clicked copynumber" + scripNumber);
-
-				return value;
-
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
-		}
 		try {
 			if (inputParam1.equalsIgnoreCase("copy number") && inputParam2.equalsIgnoreCase("excel")) {
 				Thread.sleep(5000);

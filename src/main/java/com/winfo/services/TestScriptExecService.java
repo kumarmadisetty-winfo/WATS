@@ -532,7 +532,7 @@ public class TestScriptExecService {
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 
 				/* Create a request and dependent object(s). */
-
+				
 				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
 						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
 						.putObjectBody(is).build();

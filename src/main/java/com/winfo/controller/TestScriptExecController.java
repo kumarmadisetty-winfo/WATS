@@ -4,8 +4,6 @@ import java.sql.SQLException;
 
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
@@ -25,8 +23,6 @@ import com.winfo.vo.UpdateScriptStepStatus;
 @Controller
 public class TestScriptExecController {
 
-	public final Logger logger = LogManager.getLogger(TestScriptExecController.class);
-
 	@Autowired
 	TestScriptExecService testScriptExecService;
 
@@ -44,26 +40,23 @@ public class TestScriptExecController {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStartScriptStatus")
-	public void updateStartScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult)
+	public void updateStartScriptStatus(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult)
 			throws ClassNotFoundException, SQLException {
-		logger.info("TestRunId **" + msgQueueDto.getTestSetId());
-		testScriptExecService.updateStartStatus(msgQueueDto);
+		testScriptExecService.updateStartStatus(args);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateEndScriptStatus")
 	public void updateEndScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult)
 			throws Exception {
-		logger.info("TestRunId **" + msgQueueDto.getTestSetId());
 		testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/generateScriptPdf")
-	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto msgQueueDto,
-			BindingResult bindingResult) throws Exception {
-		logger.info("TestSetId**" + msgQueueDto.getTestSetId());
-		return testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
+	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult)
+			throws Exception {
+		return testScriptExecService.generateTestScriptLineIdReports(args);
 	}
 
 	@KafkaListener(topics = "#{'${kafka.topic.name.wats.not.reachable}'.split(',')}", groupId = "wats-group")
@@ -102,8 +95,13 @@ public class TestScriptExecController {
 	@ResponseBody
 	@RequestMapping(value = "/generateTestRunPdfs/{testSetId}")
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
-		logger.info("TestSetId**" + testSetId);
 		return testScriptExecService.generateTestRunPdf(testSetId);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/test")
+	public void test() {
+		testScriptExecService.uploadObjectToObjectStore("/objstore/tst/Screenshot/WATSTST/Images/Capture_1_new png file.png","Screenshot/WATSTST/Capture.png");
 	}
 
 }
