@@ -3,7 +3,6 @@ package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
 import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,25 +11,20 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -61,27 +55,10 @@ import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.block.LineBorder;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.title.LegendTitle;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.VerticalAlignment;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
-//import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -103,28 +80,16 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.itextpdf.awt.DefaultFontMapper;
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
-import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
+import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
-import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -137,7 +102,7 @@ import com.winfo.utils.StringUtils;
 @Service("DH")
 //@Service("WATS")
 @RefreshScope
-public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
+public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -168,9 +133,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public String Main_Window = "";
 	public WebElement fromElement;
 	public WebElement toElement;
-	
-	private static final DecimalFormat df = new DecimalFormat("00");
 
+	private static final DecimalFormat df = new DecimalFormat("00");
 
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
@@ -458,7 +422,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				// if("password".equalsIgnoreCase(param1))
-				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -1222,7 +1186,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":"
+					+ df.format(TdiffSeconds);
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
@@ -1412,7 +1377,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);;
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":"
+					+ df.format(TdiffSeconds);
+			;
 
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
@@ -1629,8 +1596,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			long TdiffSeconds = Tdiff / 1000 % 60;
 			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
 			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
-			
+			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":"
+					+ df.format(TdiffSeconds);
+
 			g.drawString("TEST SCRIPT DETAILS", 450, 50);
 			g.drawString("Test Run Name : " + TName, 50, 125);
 			g.drawString("Script Number : " + ScriptNumber, 50, 200);
@@ -2020,979 +1988,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		return fileNameList;
 	}
 
-	public void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			Date Starttime, Date endtime) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-		try {
-			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
-			String FILE = (Folder + pdffileName);
-			System.out.println(FILE);
-			List<String> fileNameList = null;
-			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getDetailPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else {
-				fileNameList = getFileNameListNew(fetchMetadataListVO, fetchConfigVO);
-			}
-			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
-			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
-			// new change add ExecutedBy field
-			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
-			File theDir = new File(Folder);
-			if (!theDir.exists()) {
-				System.out.println("creating directory: " + theDir.getName());
-				boolean result = false;
-				try {
-					theDir.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-			int passcount = fetchConfigVO.getPasscount();
-			int failcount = fetchConfigVO.getFailcount();
-//			Date Starttime = fetchConfigVO.getStarttime();
-			Date Tendtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
-
-			String TStarttime1 = dateFormat.format(TStarttime);
-			String Tendtime1 = dateFormat.format(Tendtime);
-			long Tdiff = Tendtime.getTime() - TStarttime.getTime();
-
-			Document document = new Document();
-			String start = "Execution Summary";
-			String pichart = "Pie-Chart";
-			String Report = "Execution Report";
-			Font bfBold12 = FontFactory.getFont("Arial", 23);
-			Font fnt = FontFactory.getFont("Arial", 12);
-			Font bf12 = FontFactory.getFont("Arial", 23);
-			Font bf15 = FontFactory.getFont("Arial", 23, Font.UNDERLINE);
-			Font bf16 = FontFactory.getFont("Arial", 12, Font.UNDERLINE, new BaseColor(66, 245, 236));
-			Font bf13 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.GREEN);
-			Font bf14 = FontFactory.getFont("Arial", 23, Font.UNDERLINE, BaseColor.RED);
-			Font bfBold = FontFactory.getFont("Arial", 23, BaseColor.WHITE);
-			DefaultPieDataset dataSet = new DefaultPieDataset();
-			PdfWriter writer = null;
-			writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
-			Rectangle one = new Rectangle(1360, 800);
-			document.setPageSize(one);
-			document.open();
-			System.out.println("before enter Images/wats_icon.png1");
-			Image img1 = Image.getInstance(watslogo);
-			System.out.println("after enter Images/wats_icon.png1");
-
-			img1.scalePercent(65, 68);
-			img1.setAlignment(Image.ALIGN_RIGHT);
-//		start to create testrun level reports	
-			if ((passcount != 0 || failcount != 0) & ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
-					|| "Failed_Report.pdf".equalsIgnoreCase(pdffileName)
-					|| "Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {
-//	     Start testrun to add details like start and end time,testrun name
-				String TestRun = TestRun = test_Run_Name;
-				;
-				String StartTime = null;
-				String EndTime = Tendtime1;
-				String ExecutionTime = null;
-				Date date = new Date();
-				Timestamp startTimestamp = new Timestamp(TStarttime.getTime());
-				Timestamp endTimestamp = new Timestamp(Tendtime.getTime());
-
-				Map<String, Map<String, TestSetScriptParam>> descriptionList = databaseentry
-						.getTestRunMap(fetchMetadataListVO.get(0).getTest_set_id());
-
-				Map<Date, Long> timeslist = limitScriptExecutionService
-						.getStarttimeandExecutiontime(fetchMetadataListVO.get(0).getTest_set_id());
-				
-				if (timeslist.size() == 0) {
-					StartTime = TStarttime1;
-					long TdiffSeconds = Tdiff / 1000 % 60;
-					long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-					long TdiffHours = Tdiff / (60 * 60 * 1000);
-					ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
-					if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-						limitScriptExecutionService.updateTestrunTimes(startTimestamp, endTimestamp, Tdiff,
-								fetchMetadataListVO.get(0).getTest_set_id());
-					}
-				} else {
-					for (Entry<Date, Long> entryMap : timeslist.entrySet()) {
-						StartTime = dateFormat.format(entryMap.getKey());
-						long totalTime = Tdiff + entryMap.getValue();
-						long TdiffSeconds = totalTime / 1000 % 60;
-						long TdiffMinutes = totalTime / (60 * 1000) % 60;
-						long TdiffHours = totalTime / (60 * 60 * 1000);
-						ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":" + df.format(TdiffSeconds);
-						System.out.println("jxvbj");
-						if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-
-							limitScriptExecutionService.updateTestrunTimes1(endTimestamp, totalTime,
-									fetchMetadataListVO.get(0).getTest_set_id());
-						}
-					}
-				}
-				String TR = "Test Run Name";
-				String SN = "Executed By";
-				String SN1 = "Start Time";
-				String S1 = "End Time";
-				String Scenarios1 = "Execution Time";
-
-				document.add(img1);
-				document.add(new Paragraph(Report, bfBold12));
-				document.add(Chunk.NEWLINE);
-				PdfPTable table1 = new PdfPTable(2);
-				table1.setWidths(new int[] { 1, 1 });
-				table1.setWidthPercentage(100f);
-				insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
-
-				try {
-					if (ExecutedBy != null) {
-						insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
-						insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
-					}
-				} catch (Exception e) {
-					System.out.println("Executed By is not present");
-				}
-				insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, S1, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
-				insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
-				document.add(table1);
-//	   End testrun to add details like start and end time,testrun name 	
-
-//					Start Testrun to add Table and piechart 		 
-				if (passcount == 0) {
-
-					dataSet.setValue("Fail", failcount);
-				} else if (failcount == 0) {
-					dataSet.setValue("Pass", passcount);
-				} else {
-					dataSet.setValue("Pass", passcount);
-					dataSet.setValue("Fail", failcount);
-				}
-				double pass = Math.round((passcount * 100.0) / (passcount + failcount));
-				double fail = Math.round((failcount * 100.0) / (passcount + failcount));
-				Rectangle one1 = new Rectangle(1360, 1000);
-				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-
-					document.setPageSize(one1);
-
-					document.newPage();
-					document.add(img1);
-					Paragraph executionSummery = new Paragraph(start, bfBold12);
-//					executionSummery.setAlignment(Element.ALIGN_CENTER);
-					document.add(executionSummery);
-					document.add(Chunk.NEWLINE);
-					DecimalFormat df1 = new DecimalFormat("0");
-					DecimalFormat df2 = new DecimalFormat("0");
-//			Start Testrun to add Table   	 
-					PdfPTable table = new PdfPTable(3);
-					table.setWidths(new int[] { 1, 1, 1 });
-					table.setWidthPercentage(100f);
-					insertCell(table, "Status", Element.ALIGN_CENTER, 1, bfBold12);
-					insertCell(table, "Total", Element.ALIGN_CENTER, 1, bfBold12);
-					insertCell(table, "Percentage", Element.ALIGN_CENTER, 1, bfBold12);
-					PdfPCell[] cells1 = table.getRow(0).getCells();
-					for (int k = 0; k < cells1.length; k++) {
-						cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
-					}
-					insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df1.format(passcount), Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df2.format(pass) + "%", Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df1.format(failcount), Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df2.format(fail) + "%", Element.ALIGN_CENTER, 1, bf12);
-					document.setMargins(20, 20, 20, 20);
-					document.add(table);
-				} else if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-					document.add(Chunk.NEWLINE);
-					Paragraph executionSummery = new Paragraph(start, bfBold12);
-//					executionSummery.setAlignment(Element.ALIGN_CENTER);
-					document.add(executionSummery);
-					document.add(Chunk.NEWLINE);
-					DecimalFormat df1 = new DecimalFormat("0");
-					DecimalFormat df2 = new DecimalFormat("0");
-//					Start Testrun to add Table   	 
-					PdfPTable table = new PdfPTable(3);
-					table.setWidths(new int[] { 1, 1, 1 });
-					table.setWidthPercentage(100f);
-					insertCell(table, "Status", Element.ALIGN_CENTER, 1, bfBold12);
-					insertCell(table, "Total", Element.ALIGN_CENTER, 1, bfBold12);
-					insertCell(table, "Percentage", Element.ALIGN_CENTER, 1, bfBold12);
-					PdfPCell[] cells1 = table.getRow(0).getCells();
-					for (int k = 0; k < cells1.length; k++) {
-						cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
-					}
-
-					insertCell(table, "Passed", Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df1.format(passcount), Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df2.format(pass) + "%", Element.ALIGN_CENTER, 1, bf12);
-					document.setMargins(20, 20, 20, 20);
-					document.add(table);
-
-				} else {
-					document.add(Chunk.NEWLINE);
-					Paragraph executionSummery = new Paragraph(start, bfBold12);
-//					executionSummery.setAlignment(Element.ALIGN_CENTER);
-					document.add(executionSummery);
-					document.add(Chunk.NEWLINE);
-					DecimalFormat df1 = new DecimalFormat("0");
-					DecimalFormat df2 = new DecimalFormat("0");
-//							Start Testrun to add Table   	 
-					PdfPTable table = new PdfPTable(3);
-					table.setWidths(new int[] { 1, 1, 1 });
-					table.setWidthPercentage(100f);
-					insertCell(table, "Status", Element.ALIGN_CENTER, 1, bfBold12);
-					insertCell(table, "Total", Element.ALIGN_CENTER, 1, bfBold12);
-					insertCell(table, "Percentage", Element.ALIGN_CENTER, 1, bfBold12);
-					PdfPCell[] cells1 = table.getRow(0).getCells();
-					for (int k = 0; k < cells1.length; k++) {
-						cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
-					}
-
-					insertCell(table, "Failed", Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df1.format(failcount), Element.ALIGN_CENTER, 1, bf12);
-					insertCell(table, df2.format(fail) + "%", Element.ALIGN_CENTER, 1, bf12);
-					document.setMargins(20, 20, 20, 20);
-					document.add(table);
-				}
-//			End Testrun to add Table
-//			Start Testrun to add piechart 
-				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-					Chunk ch = new Chunk(pichart, bfBold);
-					ch.setTextRise(-18);
-					ch.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
-
-					Paragraph p1 = new Paragraph(ch);
-					p1.setSpacingBefore(50);
-					document.add(p1);
-
-					JFreeChart chart = ChartFactory.createPieChart(" ", dataSet, true, true, false);
-					Color c1 = new Color(102, 255, 102);
-					Color c = new Color(253, 32, 32);
-
-					LegendTitle legend = chart.getLegend();
-					PiePlot piePlot = (PiePlot) chart.getPlot();
-					piePlot.setSectionPaint("Pass", c1);
-					piePlot.setSectionPaint("Fail", c);
-					piePlot.setBackgroundPaint(Color.WHITE);
-					piePlot.setOutlinePaint(null);
-					piePlot.setLabelBackgroundPaint(null);
-					piePlot.setLabelOutlinePaint(null);
-					piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
-					piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
-					piePlot.setLabelShadowPaint(null);
-					piePlot.setShadowXOffset(0.0D);
-					piePlot.setShadowYOffset(0.0D);
-					piePlot.setLabelGenerator(null);
-					piePlot.setBackgroundAlpha(0.4f);
-					piePlot.setExplodePercent("Pass", 0.05);
-					piePlot.setSimpleLabels(true);
-					piePlot.setSectionOutlinesVisible(false);
-					java.awt.Font f2 = new java.awt.Font("", java.awt.Font.PLAIN, 22);
-					piePlot.setLabelFont(f2);
-
-					PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}", new DecimalFormat("0"),
-							new DecimalFormat("0%"));
-					piePlot.setLabelGenerator(gen);
-					legend.setPosition(RectangleEdge.RIGHT);
-					legend.setVerticalAlignment(VerticalAlignment.CENTER);
-					piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-					legend.setFrame(BlockBorder.NONE);
-					legend.setFrame(
-							new LineBorder(Color.white, new BasicStroke(20f), new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
-
-					java.awt.Font pass1 = new java.awt.Font("", Font.NORMAL, 22);
-					legend.setItemFont(pass1);
-					PdfContentByte contentByte = writer.getDirectContent();
-					PdfTemplate template = contentByte.createTemplate(1000, 900);
-					Graphics2D graphics2d = template.createGraphics(700, 400, new DefaultFontMapper());
-					Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600, 400);
-					chart.draw(graphics2d, rectangle2d);
-					graphics2d.dispose();
-					contentByte.addTemplate(template, 400, 100);
-				}
-//			 End Testrun to add piechart 
-// End Testrun to add Table and piechart 
-//					 		Start to add page heading,all testrun names and states and page numbers	 		
-				int k = 0, l = 0;
-				String sno1 = "";
-				Map<Integer, Map<String, String>> toc = new TreeMap<>();
-
-				Map<String, String> toc2 = new TreeMap<>();
-				for (String image : fileNameList) {
-					k++;
-					String sndo = image.split("_")[0];
-					String name = image.split("_")[3];
-
-					if (!sndo.equalsIgnoreCase(sno1)) {
-						Map<String, String> toc1 = new TreeMap<>();
-//					 				l=0;
-						for (String image1 : fileNameList) {
-							String Status = image1.split("_")[6];
-							String status = Status.split("\\.")[0];
-
-//					 					l++;
-							if (image1.startsWith(sndo + "_") && image1.contains("Failed")) {
-
-//					 						toc2.put(sndo,String.valueOf(l-2));	
-								toc2.put(sndo, "Failed" + l);
-								l++;
-							}
-						}
-
-						String str = String.valueOf(toc2.get(sndo));
-						toc1.put(sndo + "_" + name, str);
-						toc.put(k, toc1);
-
-					}
-					if (sndo != null) {
-						sno1 = sndo;
-					}
-				}
-				sno1 = "";
-				document.newPage();
-				document.add(img1);
-//				Start to add page heading 
-				Anchor target2 = new Anchor(String.valueOf("Page Numbers"), bfBold);
-				target2.setName(String.valueOf("details"));
-				Chunk ch1 = new Chunk(String.format("Script Numbers"), bfBold);
-				ch1.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
-				Paragraph p2 = new Paragraph();
-				p2.add(ch1);
-				p2.add(new Chunk(new VerticalPositionMark()));
-				p2.add(target2);
-				document.add(p2);
-				document.add(Chunk.NEWLINE);
-//				End to add page heading 
-
-//			 Start to add all testrun names and states and page numbers	
-				Chunk dottedLine = new Chunk(new DottedLineSeparator());
-				for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
-					Map<String, String> str1 = entry.getValue();
-					for (Entry<String, String> entry1 : str1.entrySet()) {
-						Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
-						click.setReference("#" + String.valueOf(entry1.getKey()));
-						Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
-						click1.setReference("#" + String.valueOf(entry1.getValue()));
-						Paragraph pr = new Paragraph();
-						int value = entry.getKey();
-						Anchor ca1 = new Anchor(String.valueOf(entry1.getKey()), bf15);
-						ca1.setReference("#" + String.valueOf(entry1.getKey()));
-						String compare = entry1.getValue();
-						if (!compare.equals("null")) {
-							pr.add(ca1);
-
-							pr.add(click1);
-							pr.add(dottedLine);
-							pr.add(click);
-							document.add(Chunk.NEWLINE);
-							document.add(pr);
-						} else {
-							Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
-							click2.setReference("#" + String.valueOf(entry1.getKey()));
-							pr.add(ca1);
-							pr.add(click2);
-							pr.add(dottedLine);
-							pr.add(click);
-							document.add(Chunk.NEWLINE);
-							document.add(pr);
-						}
-					}
-				}
-//			 End to add all testrun names and states and page numbers
-//			 End to add page heading,add all testrun names and states and page numbers	
-
-//	Start to add script details, screenshoots and pagenumbers and wats icon	
-				int i = 0, j = 0;
-				for (String image : fileNameList) {
-					i++;
-					Image img = Image.getInstance(
-							fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
-//	Start to add script details 
-					String sno = image.split("_")[0];
-					String SNO = "Script Number";
-					String ScriptNumber = image.split("_")[3];
-					String SNM = "Test Case Name";
-					String ScriptName = image.split("_")[2];
-					String testRunName = image.split("_")[4];
-
-					// String stepDescription =
-					// descriptionList.get(sno).get(Reason).getTest_run_param_desc();
-					// String inputParam =
-					// fetchMetadataListVO.get(metadataCounter).getInput_parameter();
-					// String inputParam =
-					// descriptionList.get(sno).get(Reason).getInput_parameter();
-					// String inputValue =
-					// fetchMetadataListVO.get(metadataCounter).getInput_value();
-					// String inputValue = descriptionList.get(sno).get(Reason).getInput_value();
-					// metadataCounter++;
-
-//				String scrtipt=;
-					if (!sno.equalsIgnoreCase(sno1)) {
-						document.setPageSize(img);
-						document.newPage();
-						document.add(img1);
-						Anchor target3 = new Anchor("Script Details", bf12);
-						target3.setName(sno + "_" + ScriptNumber);
-						Paragraph pa = new Paragraph();
-						pa.add(target3);
-//						pa.setAlignment(Element.ALIGN_CENTER);
-						document.add(pa);
-						document.add(Chunk.NEWLINE);
-						PdfPTable table2 = new PdfPTable(2);
-						table2.setWidths(new int[] { 1, 1 });
-						table2.setWidthPercentage(100f);
-						insertCell(table2, SNO, Element.ALIGN_LEFT, 1, bf12);
-						insertCell(table2, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
-						insertCell(table2, SNM, Element.ALIGN_LEFT, 1, bf12);
-						insertCell(table2, ScriptName, Element.ALIGN_LEFT, 1, bf12);
-
-						for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
-							String str = entry1.getValue();
-							if (!str.equals("null")) {
-								insertCell(table2, "Status", Element.ALIGN_LEFT, 1, bf12);
-								insertCell(table2, "Failed", Element.ALIGN_LEFT, 1, bf12);
-							} else {
-								insertCell(table2, "Status", Element.ALIGN_LEFT, 1, bf12);
-								insertCell(table2, "Passed", Element.ALIGN_LEFT, 1, bf12);
-							}
-						}
-
-						document.add(table2);
-
-					}
-					if (sno != null) {
-						sno1 = sno;
-					}
-//	End to add script details 
-
-//	Start to add  screenshoots and pagenumbers and wats icon		 		
-//				String TestRun = image.split("_")[4];
-					String Status = image.split("_")[6];
-					String status = Status.split("\\.")[0];
-					String Scenario = image.split("_")[2];
-
-//				String TR = "Test Run Name:" + " " + TestRun;
-//				String SN = "Script Number:" + " " + ScriptNumber;
-
-					String Scenarios = "Test Case Name :" + "" + Scenario;
-					Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-					Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
-					Phrase scenarioPhrase = new Phrase();
-					scenarioPhrase.add(scenarioChunk);
-					scenarioPhrase.add(scenarioChunk2);
-
-					String sndo = image.split("_")[0];
-					img1.scalePercent(65, 68);
-
-					img1.setAlignment(Image.ALIGN_RIGHT);
-					// new change-failed pdf to set pagesize
-					if (image.startsWith(sndo + "_") && image.contains("Failed")) {
-//					Rectangle one2 = new Rectangle(1360,1000);
-						document.setPageSize(one1);
-						document.newPage();
-					} else {
-
-						document.setPageSize(img);
-						document.newPage();
-					}
-					document.add(img1);
-					document.add(new Paragraph(scenarioPhrase));
-					String Reason = image.split("_")[5];
-					String step = "Step No :" + "" + Reason;
-					Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-					Chunk stepChunk2 = new Chunk(Reason, fnt);
-					Phrase stepPhrase = new Phrase();
-					stepPhrase.add(stepChunk);
-					stepPhrase.add(stepChunk2);
-
-					String Message = "Failed at Line Number:" + "" + Reason;
-					// new change-database to get error message
-					Chunk messageChunk = new Chunk("Failed at Line Number: ",
-							FontFactory.getFont("Arial", 12, Font.BOLD));
-					Chunk messageChunk2 = new Chunk(Reason, fnt);
-					Phrase messagePhrase = new Phrase();
-					messagePhrase.add(messageChunk);
-					messagePhrase.add(messageChunk2);
-
-					String error = databaseentry.getErrorMessage(sndo, ScriptNumber, testRunName, fetchConfigVO);
-					String errorMessage = "Failed Message:" + "" + error;
-					Chunk errorMessageChunk = new Chunk("Failed Message: ",
-							FontFactory.getFont("Arial", 12, Font.BOLD));
-
-					Phrase errorMessagePhrase = new Phrase();
-					errorMessagePhrase.add(errorMessageChunk);
-
-					try {
-						Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(), fnt);
-						errorMessagePhrase.add(errorMessageChunk2);
-					} catch (Exception e) {
-						System.out.println("error message is not there");
-					}
-
-					
-					String stepDescription = descriptionList.get(sno).get(Reason).getTestRunParamDesc();
-					//String inputParam = fetchMetadataListVO.get(metadataCounter).getInput_parameter();
-					String inputParam = descriptionList.get(sno).get(Reason).getInputParameter();
-					//String inputValue = fetchMetadataListVO.get(metadataCounter).getInput_value();
-					String inputValue = descriptionList.get(sno).get(Reason).getInputValue();
-					//metadataCounter++;
-		
-
-					Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-					// Chunk statusChunk2 = new Chunk(status,fnt);
-					Phrase statusPhrase = new Phrase();
-					statusPhrase.add(statusChunk);
-					// statusPhrase.add(statusChunk2);
-
-					Paragraph pr1 = new Paragraph();
-					pr1.add(statusPhrase);
-
-					if (image.startsWith(sndo + "_") && image.contains("Failed")) {
-						Anchor target1 = new Anchor(status);
-
-						target1.setName(String.valueOf(status + j));
-						// Chunk chunk = new Chunk(target1);
-						// statusPhrase.add(target1);
-						j++;
-						pr1.add(target1);
-						document.add(pr1);
-						document.add(new Paragraph(messagePhrase));
-						if (error != null) {
-							document.add(new Paragraph(errorMessagePhrase));
-						}
-						if (stepDescription != null) {
-
-							Chunk stepDeschunk = new Chunk("Step Description: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
-							Phrase phraseDesc = new Phrase();
-							phraseDesc.add(stepDeschunk);
-							phraseDesc.add(stepDeschunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph stepDesc = new Paragraph();
-							stepDesc.add(phraseDesc);
-							document.add(stepDesc);
-						}
-
-						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Parameter: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
-							Phrase phraseinputParam = new Phrase();
-							phraseinputParam.add(inputparamchunk);
-							phraseinputParam.add(inputparamchunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph paraInputParam = new Paragraph();
-							paraInputParam.add(phraseinputParam);
-							document.add(paraInputParam);
-							if (inputValue != null) {
-								Chunk inputvalchunk = new Chunk("Input Value: ",
-										FontFactory.getFont("Arial", 12, Font.BOLD));
-								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
-								Phrase phraseinputVal = new Phrase();
-								phraseinputVal.add(inputvalchunk);
-								phraseinputVal.add(inputvalchunk2);
-
-								// Paragraph stepDesc =new Paragraph("Step Description: ",
-								// FontFactory.getFont("Arial", 12, Font.BOLD));
-								// stepDesc.add(new Chunk(stepDescription, fnt));
-								Paragraph paraInputVal = new Paragraph();
-								paraInputVal.add(phraseinputVal);
-								document.add(paraInputVal);
-							}
-						}
-
-						document.add(Chunk.NEWLINE);
-						img.setAlignment(Image.ALIGN_CENTER);
-						img.isScaleToFitHeight();
-						// new change-change page size
-						img.scalePercent(60, 60);
-						document.add(img);
-
-					} else {
-						document.add(new Paragraph(stepPhrase));
-						if (stepDescription != null) {
-
-							Chunk stepDeschunk = new Chunk("Step Description: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
-							Phrase phraseDesc = new Phrase();
-							phraseDesc.add(stepDeschunk);
-							phraseDesc.add(stepDeschunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph stepDesc = new Paragraph();
-							stepDesc.add(phraseDesc);
-							document.add(stepDesc);
-						}
-
-						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Parameter: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
-							Phrase phraseinputParam = new Phrase();
-							phraseinputParam.add(inputparamchunk);
-							phraseinputParam.add(inputparamchunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph paraInputParam = new Paragraph();
-							paraInputParam.add(phraseinputParam);
-							document.add(paraInputParam);
-							if (inputValue != null) {
-								Chunk inputvalchunk = new Chunk("Input Value: ",
-										FontFactory.getFont("Arial", 12, Font.BOLD));
-								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
-								Phrase phraseinputVal = new Phrase();
-								phraseinputVal.add(inputvalchunk);
-								phraseinputVal.add(inputvalchunk2);
-
-								// Paragraph stepDesc =new Paragraph("Step Description: ",
-								// FontFactory.getFont("Arial", 12, Font.BOLD));
-								// stepDesc.add(new Chunk(stepDescription, fnt));
-								Paragraph paraInputVal = new Paragraph();
-								paraInputVal.add(phraseinputVal);
-								document.add(paraInputVal);
-							}
-						}
-
-						Anchor target1 = new Anchor(status);
-
-						target1.setName(String.valueOf(status));
-						// statusPhrase.add(target1);
-						// j++;
-						pr1.add(target1);
-						document.add(pr1);
-						img.setAlignment(Image.ALIGN_CENTER);
-						img.isScaleToFitHeight();
-						// new change-change page size
-						img.scalePercent(51, 51);
-						document.add(img);
-					}
-
-					Anchor target = new Anchor(String.valueOf(i));
-					target.setName(String.valueOf(i));
-					Anchor target1 = new Anchor(String.valueOf("Back to Index"), bf16);
-					target1.setReference("#" + String.valueOf("details"));
-					Paragraph p = new Paragraph();
-					p.add(target1);
-					p.add(new Chunk(new VerticalPositionMark()));
-					p.add(" page ");
-					p.add(target);
-					p.add(" of " + fileNameList.size());
-//				img.setAlignment(Image.ALIGN_CENTER);
-//				img.isScaleToFitHeight();
-//				img.scalePercent(60, 71);
-//				document.add(img);
-					document.add(p);
-					System.out.println("This Image " + "" + image + "" + "was added to the report");
-//	End to add  screenshots and pagenumbers and wats icon		 		
-//	End to add script details, screenshoots and pagenumbers and wats icon		 		
-//  End to create testrun level reports	
-				}
-			} else {
-//  Start to create Script level passed reports		
-//  Start to add Script level details		
-				if (!("Passed_Report.pdf".equalsIgnoreCase(pdffileName)
-						|| "Failed_Report.pdf".equalsIgnoreCase(pdffileName)
-						|| "Detailed_Report.pdf".equalsIgnoreCase(pdffileName))) {
-					String Starttime1 = dateFormat.format(Starttime);
-					String endtime1 = dateFormat.format(endtime);
-					long diff = endtime.getTime() - Starttime.getTime();
-					long diffSeconds = diff / 1000 % 60;
-					long diffMinutes = diff / (60 * 1000) % 60;
-					long diffHours = diff / (60 * 60 * 1000);
-					String TestRun = test_Run_Name;
-					String ScriptNumber = Script_Number;
-					String ScriptNumber1 = Scenario_Name;
-					String Scenario1 = fetchConfigVO.getStatus1();
-//					String ExecutedBy=fetchConfigVO.getApplication_user_name();
-					String StartTime = Starttime1;
-					String EndTime = endtime1;
-					String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
-
-					Map<String, TestSetScriptParam> map = databaseentry
-							.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
-
-					String TR = "Test Run Name";
-					String SN = "Script Number";
-					String SN1 = "Test Case Name";
-					String Scenarios1 = "Status ";
-					String EB = "Executed By";
-					String ST = "Start Time";
-					String ET = "End Time";
-					String EX = "Execution Time";
-					document.add(img1);
-
-					document.add(new Paragraph(Report, bfBold12));
-					document.add(Chunk.NEWLINE);
-					PdfPTable table1 = new PdfPTable(2);
-					table1.setWidths(new int[] { 1, 1 });
-					table1.setWidthPercentage(100f);
-
-					insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
-
-					try {
-						if (ExecutedBy != null) {
-							insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
-							insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
-						}
-					} catch (Exception e) {
-						System.out.println("Executed By is not present");
-					}
-					insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, EX, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
-					document.add(table1);
-					document.newPage();
-//  End to add Script level details
-
-//	Start to add screenshoots and pagenumbers and wats icon		 		
-					int i = 0;
-					for (String image : fileNameList) {
-//				 Image img = Image.getInstance(
-//				 fetchConfigVO.getScreenshot_path() + customer_Name + "\\" + test_Run_Name +
-//				 "\\" + image);
-						i++;
-						Image img = Image.getInstance(
-								fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
-
-						String Status = image.split("_")[6];
-						String status = Status.split("\\.")[0];
-						String Scenario = image.split("_")[2];
-						String steps = image.split("_")[5];
-
-						document.setPageSize(img);
-						document.newPage();
-
-						String S = "Status:" + " " + status;
-						Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk statusChunk2 = new Chunk(status, fnt);
-						Phrase statusPhrase = new Phrase();
-						statusPhrase.add(statusChunk);
-						statusPhrase.add(statusChunk2);
-
-						String Scenarios = "Test Case Name :" + "" + Scenario;
-						Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
-						Phrase scenarioPhrase = new Phrase();
-						scenarioPhrase.add(scenarioChunk);
-						scenarioPhrase.add(scenarioChunk2);
-
-						String step = "Step No :" + "" + steps;
-						Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk stepChunk2 = new Chunk(steps, fnt);
-						Phrase stepPhrase = new Phrase();
-						stepPhrase.add(stepChunk);
-						stepPhrase.add(stepChunk2);
-						
-			
-					
-						
-						
-						String stepDescription = map.get(steps).getTestRunParamDesc(); 
-						//String inputParam = fetchMetadataListVO.get(metaDataCounter).getInput_parameter();
-						String inputParam = map.get(steps).getInputParameter();
-						//String inputValue = fetchMetadataListVO.get(metaDataCounter).getInput_value();
-						String inputValue = map.get(steps).getInputValue();
-						
-						
-						
-
-						img1.scalePercent(65, 65);
-						img1.setAlignment(Image.ALIGN_RIGHT);
-						document.add(img1);
-						document.add(new Paragraph(statusPhrase));
-						document.add(new Paragraph(scenarioPhrase));
-						document.add(new Paragraph(stepPhrase));
-
-						if (stepDescription != null) {
-
-							Chunk stepDeschunk = new Chunk("Step Description: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
-							Phrase phraseDesc = new Phrase();
-							phraseDesc.add(stepDeschunk);
-							phraseDesc.add(stepDeschunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph stepDesc = new Paragraph();
-							stepDesc.add(phraseDesc);
-							document.add(stepDesc);
-						}
-
-						if (inputParam != null) {
-							Chunk inputparamchunk = new Chunk("Input Parameter: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
-							Phrase phraseinputParam = new Phrase();
-							phraseinputParam.add(inputparamchunk);
-							phraseinputParam.add(inputparamchunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph paraInputParam = new Paragraph();
-							paraInputParam.add(phraseinputParam);
-							document.add(paraInputParam);
-							if (inputValue != null) {
-								Chunk inputvalchunk = new Chunk("Input Value: ",
-										FontFactory.getFont("Arial", 12, Font.BOLD));
-								Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
-								Phrase phraseinputVal = new Phrase();
-								phraseinputVal.add(inputvalchunk);
-								phraseinputVal.add(inputvalchunk2);
-
-								// Paragraph stepDesc =new Paragraph("Step Description: ",
-								// FontFactory.getFont("Arial", 12, Font.BOLD));
-								// stepDesc.add(new Chunk(stepDescription, fnt));
-								Paragraph paraInputVal = new Paragraph();
-								paraInputVal.add(phraseinputVal);
-								document.add(paraInputVal);
-							}
-						}
-
-						document.add(Chunk.NEWLINE);
-
-						Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
-						p.setAlignment(Element.ALIGN_RIGHT);
-						img.setAlignment(Image.ALIGN_CENTER);
-						img.isScaleToFitHeight();
-						// new change-change page size
-						img.scalePercent(51, 51);
-						document.add(img);
-						document.add(p);
-						System.out.println("This Image " + "" + image + "" + "was added to the report");
-//		End to add screenshoots and pagenumbers and wats icon
-//  End to create Script level passed reports		
-
-					}
-				}
-			}
-			document.close();
-//			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
-
-		} catch (Exception e) {
-			System.out.println("Not able to Create pdf" + e);
-		}
-	}
-
-	public void insertCell(PdfPTable table, String text, int align, int colspan, Font font) {
-
-		// create a new cell with the specified Text and Font
-		PdfPCell cell = new PdfPCell(new Paragraph(text.trim(), font));
-		cell.setBorder(PdfPCell.NO_BORDER);
-		// set the cell alignment
-
-		cell.setUseVariableBorders(true);
-		if (text.equalsIgnoreCase("Status")) {
-			cell.setBorderWidthLeft(0.3f);
-			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
-			cell.setBorderWidthTop(0.3f);
-			cell.setBorderColorTop(new BaseColor(230, 225, 225));
-			cell.setBorderWidthRight(0.3f);
-			cell.setBorderColorRight(new BaseColor(230, 225, 225));
-			cell.setBorderWidthBottom(0.3f);
-			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		} else if (text.equalsIgnoreCase("Total")) {
-			cell.setBorderWidthTop(0.3f);
-			cell.setBorderColorTop(new BaseColor(230, 225, 225));
-			cell.setBorderWidthRight(0.3f);
-			cell.setBorderColorRight(new BaseColor(230, 225, 225));
-			cell.setBorderWidthBottom(0.3f);
-			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		} else if (text.equalsIgnoreCase("Percentage")) {
-			cell.setBorderWidthTop(0.3f);
-			cell.setBorderColorTop(new BaseColor(230, 225, 225));
-			cell.setBorderWidthRight(0.3f);
-			cell.setBorderColorRight(new BaseColor(230, 225, 225));
-			cell.setBorderWidthBottom(0.3f);
-			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		} else if (text.equalsIgnoreCase("Passed") || text.equalsIgnoreCase("Failed")) {
-			cell.setBorderWidthLeft(0.3f);
-			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
-			cell.setBorderWidthRight(0.3f);
-			cell.setBorderColorRight(new BaseColor(230, 225, 225));
-			cell.setBorderWidthBottom(0.3f);
-			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		} else if (text.contains("%")) {
-			cell.setBorderWidthRight(0.3f);
-			cell.setBorderColorRight(new BaseColor(230, 225, 225));
-			cell.setBorderWidthBottom(0.3f);
-			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		}
-//	  	else if() {
-//	  	 cell.setBorderWidthRight(0.3f);
-//	  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
-//	  		cell.setBorderWidthBottom(0.3f);
-//	  		cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-//	  	}
-		else {
-			cell.setBorderWidthLeft(0.3f);
-			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
-			cell.setBorderWidthTop(0.3f);
-			cell.setBorderColorTop(new BaseColor(230, 225, 225));
-			cell.setBorderWidthRight(0.3f);
-			cell.setBorderColorRight(new BaseColor(230, 225, 225));
-			cell.setBorderWidthBottom(0.3f);
-			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		}
-
-		cell.setHorizontalAlignment(align);
-
-		cell.setColspan(colspan);
-		// in case there is no text and you wan to create an empty row
-		if (text.trim().equalsIgnoreCase("")) {
-			cell.setMinimumHeight(20f);
-		}
-		if (text.length() > 103) {
-			cell.setFixedHeight(80f);
-		} else if (text.length() > 53) {
-			cell.setFixedHeight(60f);
-		} else {
-			cell.setFixedHeight(40f);
-		}
-		// add the call to the table
-		table.addCell(cell);
-
-	}
-
 	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
@@ -3283,358 +2278,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, Date Starttime, Date endtime)
-			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-		try {
-			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-//			String Folder = "C:\\Users\\UdayPratapSingh\\OneDrive - Winfo Solutions\\Desktop\\New folder (5)\\";
-			String FILE = (Folder + pdffileName);
-			System.out.println(FILE);
-			List<String> fileNameList = null;
-			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-//				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-//				fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			}
-			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getDetailPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else {
-				fileNameList = getFailFileNameListNew(fetchMetadataListVO, fetchConfigVO);
-			}
-			Map<String, TestSetScriptParam> map = databaseentry
-					.getTestScriptMap(fetchMetadataListVO.get(0).getTest_set_line_id());
-
-			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
-			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
-			// new change add ExecutedBy field
-			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
-			File theDir = new File(Folder);
-			if (!theDir.exists()) {
-				System.out.println("creating directory: " + theDir.getName());
-				boolean result = false;
-				try {
-					theDir.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-			Font bf12 = FontFactory.getFont("Arial", 23);
-			System.out.println("before enter Images/wats_icon.png");
-			Image img1 = Image.getInstance(watslogo);
-			System.out.println("after enter Images/wats_icon.png");
-
-			img1.scalePercent(65, 68);
-			img1.setAlignment(Image.ALIGN_RIGHT);
-
-			Font bfBold12 = FontFactory.getFont("Arial", 23);
-			String Report = "Execution Report";
-			Font fnt = FontFactory.getFont("Arial", 12);
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
-			String Starttime1 = dateFormat.format(Starttime);
-			String endtime1 = dateFormat.format(endtime);
-			long diff = endtime.getTime() - Starttime.getTime();
-			long diffSeconds = diff / 1000 % 60;
-			long diffMinutes = diff / (60 * 1000) % 60;
-			long diffHours = diff / (60 * 60 * 1000);
-			Document document = new Document();
-			PdfWriter.getInstance(document, new FileOutputStream(FILE));
-			Rectangle one = new Rectangle(1360, 800);
-			document.setPageSize(one);
-			document.open();
-			String TestRun = test_Run_Name;
-			String ScriptNumber = Script_Number;
-			String error = fetchConfigVO.getErrormessage();
-			String ScriptNumber1 = Scenario_Name;
-			String Scenario1 = fetchConfigVO.getStatus1();
-//			String ExecutedBy=fetchConfigVO.getApplication_user_name();
-			String StartTime = Starttime1;
-			String EndTime = endtime1;
-			String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
-
-			String TR = "Test Run Name";
-			String SN = "Script Number";
-			String SN1 = "Test Case Name";
-			String Scenarios1 = "Status ";
-			String showErrorMessage = "	ErrorMessage ";
-			String EB = "Executed By";
-			String ST = "Start Time";
-			String ET = "End Time";
-			String EX = "Execution Time";
-
-			document.add(img1);
-
-			document.add(new Paragraph(Report, bfBold12));
-			document.add(Chunk.NEWLINE);
-			PdfPTable table1 = new PdfPTable(2);
-			table1.setWidths(new int[] { 1, 1 });
-			table1.setWidthPercentage(100f);
-
-			insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, showErrorMessage, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, error, Element.ALIGN_LEFT, 1, bf12);
-			try {
-				if (ExecutedBy != null) {
-					insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
-					insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
-				}
-			} catch (Exception e) {
-				System.out.println("Executed By is not present");
-			}
-			insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, EX, Element.ALIGN_LEFT, 1, bf12);
-			insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
-			document.add(table1);
-			document.newPage();
-//End to add Script level details
-//				Start to add screenshoots and pagenumbers and wats icon		 		
-			int i = 0;
-			for (String image : fileNameList) {
-				i++;
-				Image img = Image.getInstance(
-						fetchConfigVO.getScreenshot_path() + customer_Name + "/" + test_Run_Name + "/" + image);
-
-//						String ScriptNumber = image.split("_")[3];
-//						String TestRun = image.split("_")[4];
-				String Status = image.split("_")[6];
-				String status = Status.split("\\.")[0];
-				String Scenario = image.split("_")[2];
-
-				if (status.equalsIgnoreCase("Failed")) {// Rectangle one2 = new Rectangle(1360,1000);
-					document.setPageSize(one);
-					document.newPage();
-				} else {
-
-					document.setPageSize(img);
-					document.newPage();
-				}
-
-				document.add(img1);
-				String Reason = image.split("_")[5];
-				// String TR = "Test Run Name:" + " " + TestRun;
-//						String SN = "Script Number:" + " " + ScriptNumber;
-				String status2 = "Status: ";
-
-				Chunk statusChunk = new Chunk("Status: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-				Chunk statusChunk2 = new Chunk(status, fnt);
-				Phrase statusPhrase = new Phrase();
-				statusPhrase.add(statusChunk);
-				statusPhrase.add(statusChunk2);
-
-				String step = "Step No :" + "" + Reason;
-				Chunk stepChunk = new Chunk("Step No: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-				Chunk stepChunk2 = new Chunk(Reason, fnt);
-				Phrase stepPhrase = new Phrase();
-				stepPhrase.add(stepChunk);
-				stepPhrase.add(stepChunk2);
-
-				String Scenarios = "Test Case Name :" + "" + Scenario;
-				Chunk scenarioChunk = new Chunk("Test Case Name: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-				Chunk scenarioChunk2 = new Chunk(Scenario, fnt);
-				Phrase scenarioPhrase = new Phrase();
-				scenarioPhrase.add(scenarioChunk);
-				scenarioPhrase.add(scenarioChunk2);
-
-				String Message = "Failed at Line Number:" + "" + Reason;
-				Chunk messageChunk = new Chunk("Failed at Line Number: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-				Chunk messageChunk2 = new Chunk(Reason, fnt);
-				Phrase messagePhrase = new Phrase();
-				messagePhrase.add(messageChunk);
-				messagePhrase.add(messageChunk2);
-
-				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
-				Chunk errorMessageChunk = new Chunk("Failed Message: ", FontFactory.getFont("Arial", 12, Font.BOLD));
-//				Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(),fnt);
-				Phrase errorMessagePhrase = new Phrase();
-				errorMessagePhrase.add(errorMessageChunk);
-//				errorMessagePhrase.add(errorMessageChunk2);
-				try {
-					Chunk errorMessageChunk2 = new Chunk(fetchConfigVO.getErrormessage(), fnt);
-					errorMessagePhrase.add(errorMessageChunk2);
-
-					}
-					catch(Exception e) {
-						System.out.println("error message is not there");
-					}
-				
-				
-				String stepDescription = map.get(Reason).getTestRunParamDesc();				
-				String inputParam = map.get(Reason).getInputParameter();			
-				String inputValue = map.get(Reason).getInputValue();
-
-				// String message = "Failed at
-				// :"+fetchMetadataListVO.get(0).getInput_parameter();
-//						document.add(new Paragraph(TR, fnt));
-//						document.add(new Paragraph(SN, fnt));
-
-				document.add(new Paragraph(statusPhrase));
-				document.add(new Paragraph(scenarioPhrase));
-
-				// new change-failed pdf to add pagesize
-				if (status.equalsIgnoreCase("Failed")) {
-					document.add(new Paragraph(messagePhrase));
-					if (fetchConfigVO.getErrormessage() != null) {
-						document.add(new Paragraph(errorMessagePhrase));
-					}
-					// if(stepDescription!=null) {
-					// document.add(new Paragraph("Step Description: "+stepDescription, fnt));
-					// }
-
-//					if(inputParam!=null) {
-					// document.add(new Paragraph("Input Parameter: "+inputParam, fnt));
-					// if(inputValue!=null) {
-					// document.add(new Paragraph("Input Value: "+inputValue, fnt));
-					// }
-					// }
-
-					if (stepDescription != null) {
-
-						Chunk stepDeschunk = new Chunk("Step Description: ",
-								FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
-						Phrase phraseDesc = new Phrase();
-						phraseDesc.add(stepDeschunk);
-						phraseDesc.add(stepDeschunk2);
-
-						// Paragraph stepDesc =new Paragraph("Step Description: ",
-						// FontFactory.getFont("Arial", 12, Font.BOLD));
-						// stepDesc.add(new Chunk(stepDescription, fnt));
-						Paragraph stepDesc = new Paragraph();
-						stepDesc.add(phraseDesc);
-						document.add(stepDesc);
-					}
-
-					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Parameter: ",
-								FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
-						Phrase phraseinputParam = new Phrase();
-						phraseinputParam.add(inputparamchunk);
-						phraseinputParam.add(inputparamchunk2);
-
-						// Paragraph stepDesc =new Paragraph("Step Description: ",
-						// FontFactory.getFont("Arial", 12, Font.BOLD));
-						// stepDesc.add(new Chunk(stepDescription, fnt));
-						Paragraph paraInputParam = new Paragraph();
-						paraInputParam.add(phraseinputParam);
-						document.add(paraInputParam);
-						if (inputValue != null) {
-							Chunk inputvalchunk = new Chunk("Input Value: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
-							Phrase phraseinputVal = new Phrase();
-							phraseinputVal.add(inputvalchunk);
-							phraseinputVal.add(inputvalchunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph paraInputVal = new Paragraph();
-							paraInputVal.add(phraseinputVal);
-							document.add(paraInputVal);
-						}
-					}
-
-					document.add(Chunk.NEWLINE);
-					img.setAlignment(Image.ALIGN_CENTER);
-					img.isScaleToFitHeight();
-					// new change-change page size
-					img.scalePercent(60, 58);
-					document.add(img);
-				} else {
-					document.add(new Paragraph(stepPhrase));
-					if (stepDescription != null) {
-
-						Chunk stepDeschunk = new Chunk("Step Description: ",
-								FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk stepDeschunk2 = new Chunk(stepDescription, fnt);
-						Phrase phraseDesc = new Phrase();
-						phraseDesc.add(stepDeschunk);
-						phraseDesc.add(stepDeschunk2);
-
-						// Paragraph stepDesc =new Paragraph("Step Description: ",
-						// FontFactory.getFont("Arial", 12, Font.BOLD));
-						// stepDesc.add(new Chunk(stepDescription, fnt));
-						Paragraph stepDesc = new Paragraph();
-						stepDesc.add(phraseDesc);
-						document.add(stepDesc);
-					}
-
-					if (inputParam != null) {
-						Chunk inputparamchunk = new Chunk("Input Parameter: ",
-								FontFactory.getFont("Arial", 12, Font.BOLD));
-						Chunk inputparamchunk2 = new Chunk(inputParam, fnt);
-						Phrase phraseinputParam = new Phrase();
-						phraseinputParam.add(inputparamchunk);
-						phraseinputParam.add(inputparamchunk2);
-
-						// Paragraph stepDesc =new Paragraph("Step Description: ",
-						// FontFactory.getFont("Arial", 12, Font.BOLD));
-						// stepDesc.add(new Chunk(stepDescription, fnt));
-						Paragraph paraInputParam = new Paragraph();
-						paraInputParam.add(phraseinputParam);
-						document.add(paraInputParam);
-						if (inputValue != null) {
-							Chunk inputvalchunk = new Chunk("Input Value: ",
-									FontFactory.getFont("Arial", 12, Font.BOLD));
-							Chunk inputvalchunk2 = new Chunk(inputValue, fnt);
-							Phrase phraseinputVal = new Phrase();
-							phraseinputVal.add(inputvalchunk);
-							phraseinputVal.add(inputvalchunk2);
-
-							// Paragraph stepDesc =new Paragraph("Step Description: ",
-							// FontFactory.getFont("Arial", 12, Font.BOLD));
-							// stepDesc.add(new Chunk(stepDescription, fnt));
-							Paragraph paraInputVal = new Paragraph();
-							paraInputVal.add(phraseinputVal);
-							document.add(paraInputVal);
-						}
-					}
-
-					document.add(Chunk.NEWLINE);
-					img.setAlignment(Image.ALIGN_CENTER);
-					img.isScaleToFitHeight();
-					// new change-change page size
-					img.scalePercent(51, 51);
-					document.add(img);
-				}
-
-				Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
-				p.setAlignment(Element.ALIGN_RIGHT);
-
-				document.add(p);
-				System.out.println("This Image " + "" + image + "" + "was added to the report");
-//				End to add screenshoots and pagenumbers and wats icon
-				// End to create Script level passed reports
-
-			}
-			document.close();
-			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
-		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf");
-			e.printStackTrace();
-		}
-	}
-
 	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		try {
 			String accessToken = getAccessTokenPdf(fetchConfigVO);
@@ -3642,11 +2285,9 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
 			System.out.println(imageDir);
-	
-			
-			
+
 			RestTemplate restTemplate = new RestTemplate();
-			
+
 			// Outer header
 			HttpHeaders uploadSessionHeader = new HttpHeaders();
 			// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
@@ -3654,48 +2295,58 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(fetchConfigVO.getSharepoint_drive_id());
 			System.out.println(fetchConfigVO.getSharepoint_item_id());
 			HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
-			
-			
-			//SITE-ID
-			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+fetchConfigVO.getSharePoint_URL()+":/sites/"+fetchConfigVO.getSite_Name(),
-					HttpMethod.GET, uploadSessionRequest, Object.class);
-			
-			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody() : null;
-			String siteId = siteDetailsMap != null ? StringUtils.convertToString(siteDetailsMap.get("id").toString().split(",")[1]) : null;
-			
-			
-			//DRIVE-ID
-			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"+siteId+"/drives",
-					HttpMethod.GET, uploadSessionRequest, Object.class);
-			
-			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) driveDetailsResponse.getBody() : null;
-			
-			List<Map<String,String>> list = (List<Map<String,String>>) driveDetailsMap.get("value");
-			
+
+			// SITE-ID
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"
+					+ fetchConfigVO.getSharePoint_URL() + ":/sites/" + fetchConfigVO.getSite_Name(), HttpMethod.GET,
+					uploadSessionRequest, Object.class);
+
+			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody()
+					: null;
+			String siteId = siteDetailsMap != null
+					? StringUtils.convertToString(siteDetailsMap.get("id").toString().split(",")[1])
+					: null;
+
+			// DRIVE-ID
+			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange(
+					"https://graph.microsoft.com/v1.0/sites/" + siteId + "/drives", HttpMethod.GET,
+					uploadSessionRequest, Object.class);
+
+			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) driveDetailsResponse.getBody()
+					: null;
+
+			List<Map<String, String>> list = (List<Map<String, String>>) driveDetailsMap.get("value");
+
 			String driveId = null;
-			for(Map<String,String> map : list) {
+			for (Map<String, String> map : list) {
 				if (fetchConfigVO.getSharePoint_Library_Name() != null) {
 					if (fetchConfigVO.getSharePoint_Library_Name().equalsIgnoreCase(map.get("name"))) {
 						driveId = map.get("id");
 						break;
 					}
-				}
-				else {
+				} else {
 					if ("Documents".equalsIgnoreCase(map.get("name"))) {
 						driveId = map.get("id");
 						break;
 					}
 				}
 			}
-			
+
 //			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
-			
-			//SITE-ID
-			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/"+fetchConfigVO.getDirectory_Name(),
-					HttpMethod.GET, uploadSessionRequest, Object.class);
-			
-			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null ? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody() : null;
-			
+
+			// SITE-ID
+			ResponseEntity<Object> itemDetailsResponse = restTemplate
+					.exchange(
+							"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
+									+ fetchConfigVO.getDirectory_Name(),
+							HttpMethod.GET, uploadSessionRequest, Object.class);
+
+			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody()
+					: null;
+
 			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
@@ -3715,23 +2366,18 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
 				bodyMap.add("user-file", data);
 
-				
-
-
-				
 				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
-						+ driveId + "/items/" + itemId
-						+ ":/" + fetchMetadataListVO.get(0).getCustomer_name() + "/" + fetchMetadataListVO.get(0).getProject_name() + "/"
+						+ driveId + "/items/" + itemId + ":/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ fetchMetadataListVO.get(0).getProject_name() + "/"
 						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
-				
+
 //				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
 //						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
 //						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 //						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 //						HttpMethod.POST, uploadSessionRequest, Object.class);
-				
-				
+
 				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
@@ -3756,7 +2402,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 	}
-
 
 	public String getAccessTokenPdf(FetchConfigVO fetchConfigVO) {
 		String acessToken = null;
@@ -4897,17 +3542,17 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-					"//*[text()='" +param1+ "']/preceding::a[@title='" +param2+ "']")));
-			WebElement waittext = driver.findElement(By
-					.xpath("//*[text()='" +param1+ "']/preceding::a[@title='" +param2+ "']"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("//*[text()='" + param1 + "']/preceding::a[@title='" + param2 + "']")));
+			WebElement waittext = driver
+					.findElement(By.xpath("//*[text()='" + param1 + "']/preceding::a[@title='" + param2 + "']"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(4000);
 			try {
-				WebElement Expand = driver.findElement(By.xpath(
-						"//*[text()='" +param1+ "']/preceding::a[@title='" +param2+ "']"));
+				WebElement Expand = driver
+						.findElement(By.xpath("//*[text()='" + param1 + "']/preceding::a[@title='" + param2 + "']"));
 				Expand.click();
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
@@ -5488,7 +4133,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "(//*[contains(text(),'param1')]/following::img[@class='promptComboBoxButtonMoz'])[1]";
 				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber=fetchMetadataVO.getLine_number();
+				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5511,7 +4156,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "(//*[text()='param1']/following::img[@class='promptComboBoxButtonMoz'])[1]";
 				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber=fetchMetadataVO.getLine_number();
+				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -6114,34 +4759,32 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if (param1.equalsIgnoreCase("Manage")||(param1.equalsIgnoreCase("Award"))) {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittext = driver.findElement(By.xpath(("//div[contains(@class,'PopupMenu')]//*[text()='" +param1+ "']")));// screenshot(driver,
-			// "",
-			// fetchMetadataVO,
-			// fetchConfigVO);
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			waittext.click();
-			Thread.sleep(15000);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
-			String xpath = "//a[@accessKey='m']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
-			service.saveXpathParams(scriptID, lineNumber, xpath);
+			if (param1.equalsIgnoreCase("Manage") || (param1.equalsIgnoreCase("Award"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver
+						.findElement(By.xpath(("//div[contains(@class,'PopupMenu')]//*[text()='" + param1 + "']")));// screenshot(driver,
+				// "",
+				// fetchMetadataVO,
+				// fetchConfigVO);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(15000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				String xpath = "//a[@accessKey='m']";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-
-
-
-			return;
+				return;
 			}
-			} catch (Exception e) {
+		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
-			}
+		}
 		try {
 			if ("yes".equalsIgnoreCase(fetchMetadataVO.getConditional_popup())) {
 				enter(driver, fetchMetadataVO, fetchConfigVO);
@@ -8625,12 +7268,15 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if (param1.equalsIgnoreCase("Manage Agreements")&&(param2.equalsIgnoreCase("Headers: Search Results")) ){
+			if (param1.equalsIgnoreCase("Manage Agreements") && (param2.equalsIgnoreCase("Headers: Search Results"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='" +param1+ "']/following::table[@summary='" +param2+ "']//a[contains(@title,'Blanket Purchase Agreement') or contains(@title,'Contract Purchase Agreement')])[1]")));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())='"
+						+ param1 + "']/following::table[@summary='" + param2
+						+ "']//a[contains(@title,'Blanket Purchase Agreement') or contains(@title,'Contract Purchase Agreement')])[1]")));
 				Thread.sleep(4000);
-				WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='" +param1+ "']/following::table[@summary='" +param2+ "']//a[contains(@title,'Blanket Purchase Agreement') or contains(@title,'Contract Purchase Agreement')])[1]"));
+				WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='" + param1
+						+ "']/following::table[@summary='" + param2
+						+ "']//a[contains(@title,'Blanket Purchase Agreement') or contains(@title,'Contract Purchase Agreement')])[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
@@ -8650,28 +7296,28 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 		try {
-			if (param1.equalsIgnoreCase("Manage Agreements")||param2.equalsIgnoreCase("Search Results")) {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions
-			.presenceOfElementLocated(By.xpath("(//table[@summary='" +param1+ "']//table[1]//a)[1]")));
-			Thread.sleep(4000);
-			WebElement waittext = driver
-			.findElement(By.xpath("(//table[@summary='" +param1+ "']//table[1]//a)[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			String xpath = "(//table[@summary='param1']//table[1]//a)[1]";
-			//service.saveXpathParams(param1, param2, scripNumber, xpath);
-			return;
+			if (param1.equalsIgnoreCase("Manage Agreements") || param2.equalsIgnoreCase("Search Results")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions
+						.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//table[1]//a)[1]")));
+				Thread.sleep(4000);
+				WebElement waittext = driver
+						.findElement(By.xpath("(//table[@summary='" + param1 + "']//table[1]//a)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+				String xpath = "(//table[@summary='param1']//table[1]//a)[1]";
+				// service.saveXpathParams(param1, param2, scripNumber, xpath);
+				return;
 			}
-			} catch (Exception e) {
+		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
-			}
+		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts") || param1.equalsIgnoreCase("Manage Customers")) {
 				Thread.sleep(3000);
@@ -10235,7 +8881,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 	public void clickRadiobutton(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		
+
 		// DH 32
 		try {
 			if (param1.equalsIgnoreCase("Select Learning Item")) {
@@ -10326,8 +8972,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[text()='" +param1+ "']/following::*[text()='" + keysToSend + "']/following::label"))));
-			WebElement waittext = driver.findElement(By.xpath(("//*[text()='" +param1+ "']/following::*[text()='" + keysToSend + "']/following::label")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+					("//*[text()='" + param1 + "']/following::*[text()='" + keysToSend + "']/following::label"))));
+			WebElement waittext = driver.findElement(By.xpath(
+					("//*[text()='" + param1 + "']/following::*[text()='" + keysToSend + "']/following::label")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
@@ -10375,27 +9023,33 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Compare and Award")) {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())='" +param1+ "']/following::*[normalize-space(text())='" +keysToSend+ "']/following::div[1]"))));
-			//wait.until(
-				//	ExpectedConditions
-						//	.textToBePresentInElementLocated(
-						//			By.xpath("//*[normalize-space(text())='" +param1+ "']/following::*[normalize-space(text())='" +keysToSend+ "']/following::div[1]"),
-						//			keysToSend));
-			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" +param1+ "']/following::*[normalize-space(text())='" +keysToSend+ "']/following::div[1]"));
-			Thread.sleep(1000);
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
-			String params = param1;
-			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
-			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
-		}} catch (Exception e) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(
+						ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())='" + param1
+								+ "']/following::*[normalize-space(text())='" + keysToSend + "']/following::div[1]"))));
+				// wait.until(
+				// ExpectedConditions
+				// .textToBePresentInElementLocated(
+				// By.xpath("//*[normalize-space(text())='" +param1+
+				// "']/following::*[normalize-space(text())='" +keysToSend+
+				// "']/following::div[1]"),
+				// keysToSend));
+				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
+						+ "']/following::*[normalize-space(text())='" + keysToSend + "']/following::div[1]"));
+				Thread.sleep(1000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(3000);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				String params = param1;
+				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::label[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
@@ -11215,11 +9869,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::textarea[1]")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+					"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::textarea[1]")));
 			Thread.sleep(1000);
 //			wait.until(
 //			ExspectedConditions.textToBePresentInElementLocated(By.xpath("(//*[contains(text(),'" + param1+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::textarea)[1]"), param2));
-			WebElement waittill = driver.findElement(By.xpath("//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::textarea[1]"));
+			WebElement waittill = driver.findElement(By.xpath(
+					"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::textarea[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -11239,11 +9895,13 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			Thread.sleep(5000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "'])[2]/following::input[1]")));
-		//	wait.until(ExpectedConditions.textToBePresentInElementLocated(
-				//	By.xpath(""),
-				//	param2));
-			WebElement waittill = driver.findElement(By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "'])[2]/following::input[1]"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()='" + param1
+					+ "']/following::label[text()='" + param2 + "'])[2]/following::input[1]")));
+			// wait.until(ExpectedConditions.textToBePresentInElementLocated(
+			// By.xpath(""),
+			// param2));
+			WebElement waittill = driver.findElement(By.xpath("(//h1[text()='" + param1 + "']/following::label[text()='"
+					+ param2 + "'])[2]/following::input[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -11260,7 +9918,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			//throw e;
+			// throw e;
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -11293,17 +9951,19 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			if (param1.equalsIgnoreCase("Create Interview") && param2.equalsIgnoreCase("Interviewers")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "']/following::input)[1]")));
-				WebElement waittill = driver.findElement(By.xpath("(//h1[text()='" +param1+ "']/following::label[text()='" +param2+ "']/following::input)[1]"));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()='" + param1
+						+ "']/following::label[text()='" + param2 + "']/following::input)[1]")));
+				WebElement waittill = driver.findElement(By.xpath("(//h1[text()='" + param1
+						+ "']/following::label[text()='" + param2 + "']/following::input)[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+				// fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 
-				WebElement selectvalue = driver
-				.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
+				WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
@@ -11312,22 +9972,23 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-
 				return keysToSend;
-				}
-				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Delegate to sendValue" + scripNumber);
-				System.out.println(e);
-				}
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Delegate to sendValue" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 
-			if (param1.equalsIgnoreCase("Create Surrogate Response")
-					|| (param2.equalsIgnoreCase("Supplier Contact"))) {
+			if (param1.equalsIgnoreCase("Create Surrogate Response") || (param2.equalsIgnoreCase("Supplier Contact"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(
-						ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='AFDetectExpansion']/following::div[text()='" +param1+ "']/following::label[text()='" +param2+ "'][2]/following::input[1]")));
-				WebElement waittill = driver.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::div[text()='" +param1+ "']/following::label[text()='" +param2+ "'][2]/following::input[1]"));
+				wait.until(ExpectedConditions
+						.presenceOfElementLocated(By.xpath("//div[@class='AFDetectExpansion']/following::div[text()='"
+								+ param1 + "']/following::label[text()='" + param2 + "'][2]/following::input[1]")));
+				WebElement waittill = driver
+						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::div[text()='" + param1
+								+ "']/following::label[text()='" + param2 + "'][2]/following::input[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
@@ -13635,9 +12296,10 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Characteristic")||param2.equalsIgnoreCase("Result"))) {
-				WebElement waittill = driver
-						.findElement(By.xpath("(//*[contains(text(),'" +param1+ "')]/following::label[text()='" +param2+ "']/preceding::input[1][not(@value)])[1]"));
+			if ((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Characteristic")
+					|| param2.equalsIgnoreCase("Result"))) {
+				WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" + param1
+						+ "')]/following::label[text()='" + param2 + "']/preceding::input[1][not(@value)])[1]"));
 				Thread.sleep(1000);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
@@ -13657,9 +12319,11 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 		try {
-			if((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Expiry Date")||param2.equalsIgnoreCase("Receiving Time")||param2.equalsIgnoreCase("Received on Condition "))) {
-				WebElement waittill = driver
-						.findElement(By.xpath("//*[contains(text(),'" +param1+ "')]/following::*[text()='" +param2+ "']/following::input[not(@value)][2]"));
+			if ((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Expiry Date")
+					|| param2.equalsIgnoreCase("Receiving Time")
+					|| param2.equalsIgnoreCase("Received on Condition "))) {
+				WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" + param1
+						+ "')]/following::*[text()='" + param2 + "']/following::input[not(@value)][2]"));
 				Thread.sleep(1000);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
@@ -13679,25 +12343,26 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 			System.out.println(e);
 		}
 		try {
-			if((param1.equalsIgnoreCase("Acceptable Values") && param2.equalsIgnoreCase("Acceptable Value"))) {
-			WebElement waittill = driver.findElement(By.xpath("(//*[text()='" +param1+ "']/following::label[text()='" +param2+ "']/preceding-sibling::input[not(@title)])[1]"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(waittill).build().perform();
-			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
-			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@title)])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
-			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
+			if ((param1.equalsIgnoreCase("Acceptable Values") && param2.equalsIgnoreCase("Acceptable Value"))) {
+				WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1
+						+ "']/following::label[text()='" + param2 + "']/preceding-sibling::input[not(@title)])[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@title)])[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScript_number();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
-			}
+		}
 		try {
 			if ((param1.equalsIgnoreCase("Manage Financial Project Plan")
 					&& param2.equalsIgnoreCase("Planned Finish Date"))) {
@@ -14730,7 +13395,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 			Thread.sleep(6000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			WebElement waittill = driver.findElement(By.xpath("//*[text()='" +param1+ "']/following::label[contains(text(),'" +param2+ "')]/preceding::input[1]"));
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1
+					+ "']/following::label[contains(text(),'" + param2 + "')]/preceding::input[1]"));
 			Thread.sleep(1000);
 			// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
 			// param2));
@@ -15235,33 +13901,34 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-            if (param1.equalsIgnoreCase("Interviewer Responses")) {
-                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-                wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]")));
-                WebElement waittext = driver
-                .findElement(By.xpath("(//*[text()='" +param1+ "']/following::*[text()='" +param2+ "']/following::a)[1]"));
-                Actions actions = new Actions(driver);
-                actions.moveToElement(waittext).build().perform();
-                //clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-                waittext.click();
-                Thread.sleep(3000);
+			if (param1.equalsIgnoreCase("Interviewer Responses")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"(//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a)[1]")));
+				WebElement waittext = driver.findElement(By
+						.xpath("(//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
 
-                                    WebElement select = driver
-                                    .findElement(By.xpath("//*[@class='AFDetectExpansion']/following::li[contains(text(), '" +keysToSend+ "')]"));
-                                    clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-                                    String scripNumber = fetchMetadataVO.getScript_number(); String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-									String scriptID = fetchMetadataVO.getScript_id();
-									String lineNumber = fetchMetadataVO.getLine_number();
-									service.saveXpathParams(scriptID, lineNumber, xpath);
-                                    log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-                                    return;
-                                    }}
-                             catch (Exception e) {
-                                    String scripNumber = fetchMetadataVO.getScript_number();
-                                    log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-                                    System.out.println(e);
-                                    }
+				WebElement select = driver.findElement(By.xpath(
+						"//*[@class='AFDetectExpansion']/following::li[contains(text(), '" + keysToSend + "')]"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			if (param1.equalsIgnoreCase("Add Enrollment") && (param2.equalsIgnoreCase("Select Plan"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15470,103 +14137,89 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
-				}
-				} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
-				log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-				System.out.println(e);
-				}
-
-		
-		
-		
-		
-		
-		
-		//DH 32
-		try {
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
-		WebElement waittext = driver.findElement(By.xpath(
-		"//*[contains(@id,'popup-container')]//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		waittext.click();
-		Thread.sleep(4000);
-		WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "'][1]"));
-		actions.moveToElement(selectvalue).build().perform();
-		selectvalue.click();
-		Thread.sleep(500);
-		String scripNumber = fetchMetadataVO.getScript_number();
-		String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]"+";"+"//*[text()='keysToSend'][1]";
-		String scriptID = fetchMetadataVO.getScript_id();
-		String lineNumber = fetchMetadataVO.getLine_number();
-		service.saveXpathParams(scriptID, lineNumber, xpath);
-		log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-		return;
+			}
 		} catch (Exception e) {
-		String scripNumber = fetchMetadataVO.getScript_number();
-		log.error("Failed during Event Type dropdownValues" + scripNumber);
-		System.out.println(e);
-		}		
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
+
+		// DH 32
 		try {
-			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
-			By.xpath("//*[text()='" + param1 + "']/following::a[@title='" + param2 + "']")));
-
-
-
-			WebElement waittext = driver
-			.findElement(By.xpath("//*[text()='" + param1 + "']/following::a[@title='" + param2 + "']"));
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("//*[contains(@id,'popup-container')]//*[text()='" + param1
+							+ "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]")));
+			WebElement waittext = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='"
+					+ param1 + "']/following::*[text()='" + param2 + "']/following::input[not (@type='hidden')][1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(2000);
-
-
-
-			WebElement search = driver.findElement(By.xpath("//table[contains(@id,'dropdownPopup')]//*[text()='Search...']"));
-			clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
-			Thread.sleep(5000);
-
-			WebElement values = driver.findElement(By.xpath(
-			"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
-			+ param2 + "']/following::input[1]"));
-			typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-			enter(driver, fetchMetadataVO, fetchConfigVO);
-
-
-
-			WebElement select = driver
-			.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
-			+ keysToSend + "')][1]"));
-			clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-
-
-
-			WebElement searchok = driver
-			.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
-			+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
-			clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number(); 
-			String xpath = "//*[text()='param1']/following::a[@title=' param2']"
-					+";"
-					+"//table[contains(@id,'dropdownPopup')]//*[text()='Search...']"
-					+";"
-					+"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
-					+";"
-					+"//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
-					+";"
-					+"//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
+			waittext.click();
+			Thread.sleep(4000);
+			WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "'][1]"));
+			actions.moveToElement(selectvalue).build().perform();
+			selectvalue.click();
+			Thread.sleep(500);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]"
+					+ ";" + "//*[text()='keysToSend'][1]";
 			String scriptID = fetchMetadataVO.getScript_id();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Event Type dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath("//*[text()='" + param1 + "']/following::a[@title='" + param2 + "']")));
+
+				WebElement waittext = driver
+						.findElement(By.xpath("//*[text()='" + param1 + "']/following::a[@title='" + param2 + "']"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(2000);
+
+				WebElement search = driver
+						.findElement(By.xpath("//table[contains(@id,'dropdownPopup')]//*[text()='Search...']"));
+				clickValidateXpath(driver, fetchMetadataVO, search, fetchConfigVO);
+				Thread.sleep(5000);
+
+				WebElement values = driver.findElement(By.xpath(
+						"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
+								+ param2 + "']/following::input[1]"));
+				typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO);
+
+				WebElement select = driver
+						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
+								+ keysToSend + "')][1]"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+
+				WebElement searchok = driver
+						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
+								+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
+				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(5000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//*[text()='param1']/following::a[@title=' param2']" + ";"
+						+ "//table[contains(@id,'dropdownPopup')]//*[text()='Search...']" + ";"
+						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
+						+ ";" + "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
+						+ ";"
+						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
 
 			}
 		} catch (Exception e) {
@@ -16862,7 +15515,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 
 					WebElement values = driver.findElement(By.xpath("(//span[text()='Name']/following::input)[1]"));
 
-					//typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
+					// typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO,
+					// fetchMetadataVO);
 
 					values.sendKeys(keysToSend);
 					enter(driver, fetchMetadataVO, fetchConfigVO);
@@ -18418,297 +17072,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public String screenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-
-			FetchConfigVO fetchConfigVO) {
-
-		String image_dest = null;
-
-		try {
-
-			TakesScreenshot ts = (TakesScreenshot) driver;
-
-			File source = ts.getScreenshotAs(OutputType.FILE);
-
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-
-					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-
-					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-
-					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-
-					+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
-
-			System.out.println(image_dest);
-
-			File destination = new File(image_dest);
-
-			if (!destination.exists()) {
-
-				System.out.println("creating directory: " + destination.getName());
-
-				boolean result = false;
-
-				try {
-
-					destination.mkdirs();
-
-					result = true;
-
-				} catch (SecurityException se) {
-
-					// handle it
-
-					System.out.println(se.getMessage());
-
-				}
-
-			} else {
-
-				System.out.println("Folder exist");
-
-			}
-
-			// FileUtils.copyFile(source, destination);
-
-//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-
-			Files.copy(source.toPath(),
-
-					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
-
-					StandardCopyOption.REPLACE_EXISTING);
-
-			log.info("Successfully Screenshot is taken");
-
-			return image_dest;
-
-		} catch (Exception e) {
-
-			log.error("Failed During Taking screenshot");
-
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-
-			return e.getMessage();
-
-		}
-
-	}
-
-	public String loginScreenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-
-			FetchConfigVO fetchConfigVO) {
-
-		String image_dest = null;
-
-		try {
-
-			TakesScreenshot ts = (TakesScreenshot) driver;
-
-			File source = ts.getScreenshotAs(OutputType.FILE);
-
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-
-					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-
-					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-
-					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-
-					+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
-
-			System.out.println(image_dest);
-
-			File destination = new File(image_dest);
-
-			if (!destination.exists()) {
-
-				System.out.println("creating directory: " + destination.getName());
-
-				boolean result = false;
-
-				try {
-
-					destination.mkdirs();
-
-					result = true;
-
-				} catch (SecurityException se) {
-
-					// handle it
-
-					System.out.println(se.getMessage());
-
-				}
-
-			} else {
-
-				System.out.println("Folder exist");
-
-			}
-
-			// FileUtils.copyFile(source, destination);
-
-//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-
-			Files.copy(source.toPath(),
-
-					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
-
-					StandardCopyOption.REPLACE_EXISTING);
-
-			log.info("Successfully Screenshot is taken");
-
-			return image_dest;
-
-		} catch (Exception e) {
-
-			log.error("Failed During Taking screenshot");
-
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-
-			return e.getMessage();
-
-		}
-
-	}
-
-	public String screenshotFail(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
-		String image_dest = null;
-		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
-			String currenttime = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime());
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-					+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
-			File destination = new File(image_dest);
-
-			if (!destination.exists()) {
-
-				System.out.println("creating directory: " + destination.getName());
-
-				boolean result = false;
-
-				try {
-
-					destination.mkdirs();
-
-					result = true;
-
-				} catch (SecurityException se) {
-
-					// handle it
-
-					System.out.println(se.getMessage());
-
-				}
-
-			} else {
-
-				System.out.println("Folder exist");
-
-			}
-
-			// FileUtils.copyFile(source, destination);
-
-//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-
-			Files.copy(source.toPath(),
-
-					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
-
-					StandardCopyOption.REPLACE_EXISTING);
-
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.info("Successfully Failed Screenshot is Taken " + scripNumber);
-			return image_dest;
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
-			log.error("Failed during screenshotFail Action. " + scripNumber);
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
-		}
-	}
-
-	public String screenshotException(WebDriver driver, String screenshotName,
-
-			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String line_number, String param) {
-
-		String image_dest = null;
-
-		try {
-
-			TakesScreenshot ts = (TakesScreenshot) driver;
-
-			File source = ts.getScreenshotAs(OutputType.FILE);
-
-			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + line_number + "_"
-
-					+ fetchMetadataListVO.get(0).getScenario_name() + "_"
-
-					+ fetchMetadataListVO.get(0).getScript_number() + "_"
-
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "_" + fetchMetadataListVO.get(0).getScript_id()
-
-					+ "_" + param + "_Failed").concat(".jpg");
-
-			File destination = new File(image_dest);
-
-			if (!destination.exists()) {
-
-				System.out.println("creating directory: " + destination.getName());
-
-				boolean result = false;
-
-				try {
-
-					destination.mkdirs();
-
-					result = true;
-
-				} catch (SecurityException se) {
-
-					// handle it
-
-					System.out.println(se.getMessage());
-
-				}
-
-			} else {
-
-				System.out.println("Folder exist");
-
-			}
-
-			// FileUtils.copyFile(source, destination);
-
-			Files.copy(FileSystems.getDefault().getPath(source.getPath()),
-					FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES,
-					StandardCopyOption.REPLACE_EXISTING);
-
-			log.info("Successfully Failed Screenshot is Taken ");
-
-			return image_dest;
-
-		} catch (Exception e) {
-
-			log.error("Failed during screenshotFail Action. ");
-
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-
-			return e.getMessage();
-
-		}
-
-	}
-
 	public void deleteAllCookies(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().deleteAllCookies();
@@ -19144,7 +17507,8 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 		try {
 
 			if (inputParam1.equalsIgnoreCase("Confirmation") && (inputParam2.equalsIgnoreCase("document")
-					|| inputParam2.equalsIgnoreCase("Requisition") || inputParam2.equalsIgnoreCase("initiative")||inputParam2.equalsIgnoreCase("Negotiation"))) {
+					|| inputParam2.equalsIgnoreCase("Requisition") || inputParam2.equalsIgnoreCase("initiative")
+					|| inputParam2.equalsIgnoreCase("Negotiation"))) {
 
 				Thread.sleep(5000);
 
@@ -20169,7 +18533,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				jse.executeScript("document.getElementById('idcs-signin-basic-signin-form-password|input').value = '"
 						+ keysToSend + "';");
 				// if("password".equalsIgnoreCase(param1))
-				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -21306,7 +19670,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
 				// if("password".equalsIgnoreCase(param1))
-				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -21674,7 +20038,7 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -21687,6 +20051,6 @@ public class DHSeleniumKeyWords implements SeleniumKeyWordsInterface {
 	public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

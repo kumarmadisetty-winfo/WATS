@@ -40,6 +40,9 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -76,7 +79,6 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
-import com.winfo.scripts.EBSSeleniumKeyWords;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
@@ -106,7 +108,6 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String PASS = "Pass";
 	private static final String FAIL = "Fail";
 	private static final String IN_COMPLETE = "In Complete";
-	private static final String PDF_EXTENSION = ".pdf";
 	private static final String EXECUTION_REPORT = "Execution Report";
 	private static final String TEST_RUN_NAME = "Test Run Name";
 	private static final String EXECUTED_BY = "Executed By";
@@ -125,10 +126,66 @@ public abstract class AbstractSeleniumKeywords {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
-	@Autowired
-	EBSSeleniumKeyWords eBSSeleniumKeyWords;
+	public String screenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) {
+		String imageName = null;
+		String folderName = null;
+		try {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			String fileExtension = source.getName();
 
-	public String uploadObjectToObjectStore(String screenShotFileName, String folderName, String fileName) {
+			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
+
+			folderName = "Screenshot" + "/" + fetchMetadataVO.getCustomer_name() + "/"
+					+ fetchMetadataVO.getTest_run_name();
+			imageName = (fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number() + "_"
+					+ fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_"
+					+ fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getLine_number() + "_Passed")
+					.concat(fileExtension);
+
+			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+
+			logger.info("Successfully Screenshot is taken " + imageName);
+			return folderName + "/" + imageName;
+
+		} catch (Exception e) {
+			logger.error("Failed During Taking screenshot");
+			logger.info("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+		}
+	}
+
+	public String screenshotFail(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) {
+		String imageName = null;
+		String folderName = null;
+		try {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+
+			String fileExtension = source.getName();
+
+			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
+			folderName = "Screenshot" + "/" + fetchMetadataVO.getCustomer_name() + "/"
+					+ fetchMetadataVO.getTest_run_name();
+			imageName = (fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number() + "_"
+					+ fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_"
+					+ fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getLine_number() + "_Failed")
+					.concat(fileExtension);
+			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+			String scripNumber = fetchMetadataVO.getScript_number();
+			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
+			return folderName + "/" + imageName;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			logger.error("Failed during screenshotFail Action. " + scripNumber);
+			System.out.println("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+		}
+	}
+
+	public String uploadObjectToObjectStore(String localFilePath, String folderName, String fileName) {
 
 		PutObjectResponse response = null;
 		try {
@@ -141,7 +198,7 @@ public abstract class AbstractSeleniumKeywords {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
 					.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = screenShotFileName;
+			final String FILE_NAME = localFilePath;
 			File file = new File(FILE_NAME);
 			long fileSize = FileUtils.sizeOf(file);
 			InputStream is = new FileInputStream(file);
@@ -271,9 +328,6 @@ public abstract class AbstractSeleniumKeywords {
 		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 				+ File.separator + fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
 
-		/* FOR MP4 FUNCTIONALITY */
-		String videoRec = "no";
-
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		List<String> targetPassedPdf = new ArrayList<>();
 		Map<String, String> seqNumMap = new HashMap<>();
@@ -307,7 +361,6 @@ public abstract class AbstractSeleniumKeywords {
 
 		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 				+ File.separator + fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
-		String videoRec = "no";
 		Map<String, String> seqNumMap = new HashMap<>();
 		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
 			seqNumMap.put(obj[0].toString(), obj[1].toString());
@@ -391,7 +444,6 @@ public abstract class AbstractSeleniumKeywords {
 
 		String folder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 				+ File.separator + fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
-		String videoRec = "no";
 		List<File> fileList = new ArrayList<>();
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO);
 		for (String newFile : fileSeqList) {
@@ -436,8 +488,6 @@ public abstract class AbstractSeleniumKeywords {
 	public void createPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			Date Starttime, Date endtime) {
 		try {
-			downloadScreenshotsFromObjectStore(fetchConfigVO.getWINDOWS_PDF_LOCATION(),
-					fetchMetadataListVO.get(0).getCustomer_name(), pdffileName, pdffileName);
 			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
 					+ File.separator + fetchMetadataListVO.get(0).getTest_run_name() + File.separator);
 			String file = (folder + pdffileName);
@@ -498,7 +548,7 @@ public abstract class AbstractSeleniumKeywords {
 				table1.setWidths(new int[] { 1, 1 });
 				table1.setWidthPercentage(100f);
 				for (String text : testArr) {
-					eBSSeleniumKeyWords.insertCell(table1, text, Element.ALIGN_LEFT, 1, font23);
+					insertCell(table1, text, Element.ALIGN_LEFT, 1, font23);
 				}
 				document.add(table1);
 
@@ -538,13 +588,13 @@ public abstract class AbstractSeleniumKeywords {
 			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, List<String> fileNameList)
 			throws IOException, com.itextpdf.text.DocumentException {
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss aa");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
 		Font fnt12 = FontFactory.getFont(ARIAL, 12);
 		String report = EXECUTION_REPORT;
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
-		long diff = DateUtils.findTimeDifference(startTime.toString(), endTime.toString());
+		long diff = DateUtils.findTimeDifference(starttime1.toString(), endtime1.toString());
 		String scriptNumber2 = fetchMetadataListVO.get(0).getScenario_name();
 		String scenario1 = fetchConfigVO.getStatus1();
 		String executionTime = DateUtils.convertMiliSecToDayFormat(diff);
@@ -572,14 +622,14 @@ public abstract class AbstractSeleniumKeywords {
 		String[] strArr1 = { tr, testRunName1, sn, scriptNumber, sn1, scriptNumber2, scenarios1, scenario1 };
 		String[] strArr2 = { eb, executedBy, st, starttime1, et, endtime1, ex, executionTime };
 		for (String str : strArr1) {
-			eBSSeleniumKeyWords.insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
 		}
 		if (errorMsgs != null) {
-			eBSSeleniumKeyWords.insertCell(table1, errorMsg, Element.ALIGN_LEFT, 1, font23);
-			eBSSeleniumKeyWords.insertCell(table1, errorMsgs, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, errorMsg, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, errorMsgs, Element.ALIGN_LEFT, 1, font23);
 		}
 		for (String str : strArr2) {
-			eBSSeleniumKeyWords.insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
 		}
 
 		document.add(table1);
@@ -665,7 +715,7 @@ public abstract class AbstractSeleniumKeywords {
 		table.setWidths(new int[] { 1, 1, 1 });
 		table.setWidthPercentage(100f);
 		for (String consts : CONST) {
-			eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
 		}
 		PdfPCell[] cells1 = table.getRow(0).getCells();
 		for (int k = 0; k < cells1.length; k++) {
@@ -673,7 +723,7 @@ public abstract class AbstractSeleniumKeywords {
 		}
 		String[] strArr = { "Status", df1.format(passCount), df2.format(pass) + "%" };
 		for (String str : strArr) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		document.setMargins(20, 20, 20, 20);
 		document.add(table);
@@ -695,7 +745,7 @@ public abstract class AbstractSeleniumKeywords {
 		table.setWidths(new int[] { 1, 1, 1 });
 		table.setWidthPercentage(100f);
 		for (String str : CONST) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		PdfPCell[] cells1 = table.getRow(0).getCells();
 		for (int k = 0; k < cells1.length; k++) {
@@ -703,7 +753,7 @@ public abstract class AbstractSeleniumKeywords {
 		}
 		String[] strArr = { FAILED, df1.format(failcount), df2.format(fail) + "%" };
 		for (String str : strArr) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		document.setMargins(20, 20, 20, 20);
 		document.add(table);
@@ -749,7 +799,7 @@ public abstract class AbstractSeleniumKeywords {
 		table.setWidths(new int[] { 1, 1, 1 });
 		table.setWidthPercentage(100f);
 		for (String consts : CONST) {
-			eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
 		}
 		PdfPCell[] cells1 = table.getRow(0).getCells();
 		for (int k = 0; k < cells1.length; k++) {
@@ -759,7 +809,7 @@ public abstract class AbstractSeleniumKeywords {
 				df2.format(fail) + "%" };
 
 		for (String str : strArr) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		document.setMargins(20, 20, 20, 20);
 		document.add(table);
@@ -955,17 +1005,17 @@ public abstract class AbstractSeleniumKeywords {
 					table2.setWidthPercentage(100f);
 					String[] strArr = { sNo, scriptNumber1, snm, scriptName };
 					for (String str : strArr) {
-						eBSSeleniumKeyWords.insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
+						insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
 					}
 
 					for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
 						String str = entry1.getValue();
 						if (!str.equals("null")) {
-							eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
-							eBSSeleniumKeyWords.insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
 						} else {
-							eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
-							eBSSeleniumKeyWords.insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
 						}
 					}
 
@@ -1070,6 +1120,86 @@ public abstract class AbstractSeleniumKeywords {
 			}
 
 		}
+
+	}
+
+	public void insertCell(PdfPTable table, String text, int align, int colspan, Font font) {
+
+		// create a new cell with the specified Text and Font
+		PdfPCell cell = new PdfPCell(new Paragraph(text.trim(), font));
+		cell.setBorder(PdfPCell.NO_BORDER);
+		// set the cell alignment
+
+		cell.setUseVariableBorders(true);
+		if (text.equalsIgnoreCase("Status")) {
+			cell.setBorderWidthLeft(0.3f);
+			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.equalsIgnoreCase("Total")) {
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.equalsIgnoreCase("Percentage")) {
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.equalsIgnoreCase("Passed") || text.equalsIgnoreCase("Failed")) {
+			cell.setBorderWidthLeft(0.3f);
+			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.contains("%")) {
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		}
+//	  	else if() {
+//	  	 cell.setBorderWidthRight(0.3f);
+//	  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
+//	  		cell.setBorderWidthBottom(0.3f);
+//	  		cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+//	  	}
+		else {
+			cell.setBorderWidthLeft(0.3f);
+			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		}
+
+		cell.setHorizontalAlignment(align);
+
+		cell.setColspan(colspan);
+		// in case there is no text and you wan to create an empty row
+		if (text.trim().equalsIgnoreCase("")) {
+			cell.setMinimumHeight(20f);
+		}
+		if (text.length() > 103) {
+			cell.setFixedHeight(80f);
+		} else if (text.length() > 53) {
+			cell.setFixedHeight(60f);
+		} else {
+			cell.setFixedHeight(40f);
+		}
+		// add the call to the table
+		table.addCell(cell);
 
 	}
 
