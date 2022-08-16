@@ -290,6 +290,10 @@ public class RunAutomation {
 										failcount = failcount + 1;
 										System.out.println("Came here to check fail condition");
 										dataService.updateTestCaseStatus(post, args, fetchConfigVO);
+										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
+										// enddate);
+										int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(fd.getTest_set_line_id(),
+												fd.getTest_set_id());
 										errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
 												fd.getTest_script_param_id(), null, null, null, null);
 
