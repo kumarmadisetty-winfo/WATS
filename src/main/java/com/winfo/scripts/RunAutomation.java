@@ -29,6 +29,7 @@ import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -60,6 +61,9 @@ public class RunAutomation {
 
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
+	
+	@Autowired
+	AbstractSeleniumKeywords abstractSeleniumKey;
 
 	@Autowired
 	TestCaseDataService dataService;
@@ -312,11 +316,11 @@ public class RunAutomation {
 
 				}
 
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				abstractSeleniumKey
 						.createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				abstractSeleniumKey
 						.createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				abstractSeleniumKey
 						.createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
 
@@ -1244,7 +1248,7 @@ public class RunAutomation {
 								script_id1, script_Number, "pass", startdate, enddate);
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
 
-						seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createPdf(fetchMetadataListVO,
+						abstractSeleniumKey.createPdf(fetchMetadataListVO,
 								fetchConfigVO, seq_num + "_" + script_Number + ".pdf", startdate,
 								fetchConfigVO.getEndtime());
 
@@ -1258,7 +1262,7 @@ public class RunAutomation {
 					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
 							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
-					seleniumFactory.getInstanceObjFromAbstractClass(instanceName).downloadScreenshotsFromObjectStore(
+					abstractSeleniumKey.downloadScreenshotsFromObjectStore(
 							screenShotFolder, fetchMetadataListVO.get(0).getCustomer_name(),
 							fetchMetadataListVO.get(0).getTest_run_name(), null);
 					System.out.println("Successfully Executed the" + "" + actionName);
@@ -1302,7 +1306,7 @@ public class RunAutomation {
 							test_set_id);
 
 					fetchConfigVO.setStatus1("Fail");
-					seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createPdf(fetchMetadataListVO,
+					abstractSeleniumKey.createPdf(fetchMetadataListVO,
 							fetchConfigVO, seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf",
 							startdate, enddate);
 					if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {

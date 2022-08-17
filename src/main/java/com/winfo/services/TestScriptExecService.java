@@ -102,7 +102,6 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
-import com.winfo.scripts.EBSSeleniumKeyWords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -211,9 +210,6 @@ public class TestScriptExecService {
 
 	@Autowired
 	PyJabActionRepo actionRepo;
-
-	@Autowired
-	EBSSeleniumKeyWords eBSSeleniumKeyWords;
 
 	@Autowired
 	Environment environment;
@@ -532,7 +528,7 @@ public class TestScriptExecService {
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 
 				/* Create a request and dependent object(s). */
-				
+
 				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
 						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
 						.putObjectBody(is).build();
@@ -1067,7 +1063,7 @@ public class TestScriptExecService {
 				table1.setWidths(new int[] { 1, 1 });
 				table1.setWidthPercentage(100f);
 				for (String text : testArr) {
-					eBSSeleniumKeyWords.insertCell(table1, text, Element.ALIGN_LEFT, 1, font23);
+					insertCell(table1, text, Element.ALIGN_LEFT, 1, font23);
 				}
 				document.add(table1);
 
@@ -1141,14 +1137,14 @@ public class TestScriptExecService {
 		String[] strArr1 = { tr, testRunName1, sn, scriptNumber, sn1, scriptNumber2, scenarios1, scenario1 };
 		String[] strArr2 = { eb, executedBy, st, starttime1, et, endtime1, ex, executionTime };
 		for (String str : strArr1) {
-			eBSSeleniumKeyWords.insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
 		}
 		if (errorMsgs != null) {
-			eBSSeleniumKeyWords.insertCell(table1, errorMsg, Element.ALIGN_LEFT, 1, font23);
-			eBSSeleniumKeyWords.insertCell(table1, errorMsgs, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, errorMsg, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, errorMsgs, Element.ALIGN_LEFT, 1, font23);
 		}
 		for (String str : strArr2) {
-			eBSSeleniumKeyWords.insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
 		}
 
 		document.add(table1);
@@ -1353,17 +1349,17 @@ public class TestScriptExecService {
 					table2.setWidthPercentage(100f);
 					String[] strArr = { sNo, scriptNumber1, snm, scriptName };
 					for (String str : strArr) {
-						eBSSeleniumKeyWords.insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
+						insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
 					}
 
 					for (Entry<String, String> entry1 : toc.get(i).entrySet()) {
 						String str = entry1.getValue();
 						if (!str.equals("null")) {
-							eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
-							eBSSeleniumKeyWords.insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, FAILED, Element.ALIGN_LEFT, 1, font23);
 						} else {
-							eBSSeleniumKeyWords.insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
-							eBSSeleniumKeyWords.insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, CONST[0], Element.ALIGN_LEFT, 1, font23);
+							insertCell(table2, PASSED, Element.ALIGN_LEFT, 1, font23);
 						}
 					}
 
@@ -1486,7 +1482,7 @@ public class TestScriptExecService {
 		table.setWidths(new int[] { 1, 1, 1 });
 		table.setWidthPercentage(100f);
 		for (String str : CONST) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		PdfPCell[] cells1 = table.getRow(0).getCells();
 		for (int k = 0; k < cells1.length; k++) {
@@ -1494,7 +1490,7 @@ public class TestScriptExecService {
 		}
 		String[] strArr = { FAILED, df1.format(failcount), df2.format(fail) + "%" };
 		for (String str : strArr) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		document.setMargins(20, 20, 20, 20);
 		document.add(table);
@@ -1515,7 +1511,7 @@ public class TestScriptExecService {
 		table.setWidths(new int[] { 1, 1, 1 });
 		table.setWidthPercentage(100f);
 		for (String consts : CONST) {
-			eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
 		}
 		PdfPCell[] cells1 = table.getRow(0).getCells();
 		for (int k = 0; k < cells1.length; k++) {
@@ -1523,7 +1519,7 @@ public class TestScriptExecService {
 		}
 		String[] strArr = { "Status", df1.format(passCount), df2.format(pass) + "%" };
 		for (String str : strArr) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		document.setMargins(20, 20, 20, 20);
 		document.add(table);
@@ -1570,7 +1566,7 @@ public class TestScriptExecService {
 		table.setWidths(new int[] { 1, 1, 1 });
 		table.setWidthPercentage(100f);
 		for (String consts : CONST) {
-			eBSSeleniumKeyWords.insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, consts, Element.ALIGN_CENTER, 1, font23);
 		}
 		PdfPCell[] cells1 = table.getRow(0).getCells();
 		for (int k = 0; k < cells1.length; k++) {
@@ -1580,7 +1576,7 @@ public class TestScriptExecService {
 				df2.format(fail) + "%" };
 
 		for (String str : strArr) {
-			eBSSeleniumKeyWords.insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
+			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
 		document.setMargins(20, 20, 20, 20);
 		document.add(table);
@@ -1727,206 +1723,85 @@ public class TestScriptExecService {
 			return new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
 	}
+	
+	public void insertCell(PdfPTable table, String text, int align, int colspan, Font font) {
 
-	public void createFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, Date Starttime, Date endtime)
-			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-		try {
-			String Date = DateUtils.getSysdate();
-			String Folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + fetchMetadataListVO.get(0).getCustomer_name()
-					+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
-			String FILE = (Folder + pdffileName);
-			List<String> fileNameList = null;
-			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-//				fileNameList = getPassedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-//				fileNameList = getFailedPdfNew(fetchMetadataListVO, fetchConfigVO);
-			}
-			if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = eBSSeleniumKeyWords.getDetailPdfNew(fetchMetadataListVO, fetchConfigVO);
-			} else {
-				fileNameList = eBSSeleniumKeyWords.getFailFileNameListNew(fetchMetadataListVO, fetchConfigVO);
-			}
+		// create a new cell with the specified Text and Font
+		PdfPCell cell = new PdfPCell(new Paragraph(text.trim(), font));
+		cell.setBorder(PdfPCell.NO_BORDER);
+		// set the cell alignment
 
-			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
-			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
-			// new change add ExecutedBy field
-			String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
-			File theDir = new File(Folder);
-			if (!theDir.exists()) {
-				System.out.println("creating directory: " + theDir.getName());
-				boolean result = false;
-				try {
-					theDir.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-			Font bf12 = FontFactory.getFont("Arial", 23);
-			System.out.println("before enter Images/wats_icon.png");
-			Image img1 = Image.getInstance(watslogo);
-			System.out.println("after enter Images/wats_icon.png");
-			img1.scalePercent(65, 68);
-			img1.setAlignment(Image.ALIGN_RIGHT);
-			Font bfBold12 = FontFactory.getFont("Arial", 23);
-			String Report = EXECUTION_REPORT;
-			Font fnt = FontFactory.getFont("Arial", 12);
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:aa");
-			String Starttime1 = dateFormat.format(Starttime);
-			String endtime1 = dateFormat.format(endtime);
-			long diff = endtime.getTime() - Starttime.getTime();
-			long diffSeconds = diff / 1000 % 60;
-			long diffMinutes = diff / (60 * 1000) % 60;
-			long diffHours = diff / (60 * 60 * 1000);
-			Document document = new Document();
-			PdfWriter.getInstance(document, new FileOutputStream(FILE));
-			Rectangle one = new Rectangle(1360, 800);
-			document.setPageSize(one);
-			document.open();
-			String TestRun = test_Run_Name;
-			String ScriptNumber = Script_Number;
-			String error = fetchConfigVO.getErrormessage();
-			String ScriptNumber1 = Scenario_Name;
-			String Scenario1 = fetchConfigVO.getStatus1();
-//			String ExecutedBy=fetchConfigVO.getApplication_user_name();
-			String StartTime = Starttime1;
-			String EndTime = endtime1;
-			String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
-
-			String TR = "Test Run Name";
-			String SN = "Script Number";
-			String SN1 = "Test Case Name";
-			String Scenarios1 = "Status ";
-			String showErrorMessage = "	ErrorMessage ";
-			String EB = "Executed By";
-			String ST = "Start Time";
-			String ET = "End Time";
-			String EX = "Execution Time";
-
-			document.add(img1);
-
-			document.add(new Paragraph(Report, bfBold12));
-			document.add(Chunk.NEWLINE);
-			PdfPTable table1 = new PdfPTable(2);
-			table1.setWidths(new int[] { 1, 1 });
-			table1.setWidthPercentage(100f);
-
-			eBSSeleniumKeyWords.insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, showErrorMessage, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, error, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, StartTime, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, ET, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, EndTime, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, EX, Element.ALIGN_LEFT, 1, bf12);
-			eBSSeleniumKeyWords.insertCell(table1, ExecutionTime, Element.ALIGN_LEFT, 1, bf12);
-			document.add(table1);
-			document.newPage();
-//End to add Script level details
-//				Start to add screenshoots and pagenumbers and wats icon		 		
-			int i = 0;
-			for (String image : fileNameList) {
-				i++;
-				Image img = Image.getInstance(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customer_Name + "/"
-						+ test_Run_Name + "/" + image);
-
-//						String ScriptNumber = image.split("_")[3];
-//						String TestRun = image.split("_")[4];
-				String Status = image.split("_")[6];
-				String status = Status.split("\\.")[0];
-				String Scenario = image.split("_")[2];
-
-				if (status.equalsIgnoreCase("Failed")) {// Rectangle one2 = new Rectangle(1360,1000);
-					document.setPageSize(one);
-					document.newPage();
-				} else {
-
-					document.setPageSize(img);
-					document.newPage();
-				}
-
-				document.add(img1);
-				String Reason = image.split("_")[5];
-				// String TR = "Test Run Name:" + " " + TestRun;
-//						String SN = "Script Number:" + " " + ScriptNumber;
-				String S = "Status:" + " " + status;
-				String step = "Step No :" + "" + Reason;
-				String Scenarios = "Test Case Name :" + "" + Scenario;
-				String Message = "Failed at Line Number:" + "" + Reason;
-				String errorMessage = "Failed Message:" + "" + fetchConfigVO.getErrormessage();
-				// String message = "Failed at
-				// :"+fetchMetadataListVO.get(0).getInput_parameter();
-//						document.add(new Paragraph(TR, fnt));
-//						document.add(new Paragraph(SN, fnt));
-				document.add(new Paragraph(S, fnt));
-				document.add(new Paragraph(Scenarios, fnt));
-//new change-failed pdf to add pagesize
-				if (status.equalsIgnoreCase("Failed")) {
-					document.add(new Paragraph(Message, fnt));
-					if (fetchConfigVO.getErrormessage() != null) {
-						document.add(new Paragraph(errorMessage, fnt));
-					}
-					document.add(Chunk.NEWLINE);
-					img.setAlignment(Image.ALIGN_CENTER);
-					img.isScaleToFitHeight();
-					// new change-change page size
-					img.scalePercent(60, 58);
-					document.add(img);
-				} else {
-					document.add(new Paragraph(step, fnt));
-					document.add(Chunk.NEWLINE);
-					img.setAlignment(Image.ALIGN_CENTER);
-					img.isScaleToFitHeight();
-					// new change-change page size
-					img.scalePercent(60, 62);
-					document.add(img);
-				}
-
-				Paragraph p = new Paragraph(String.format("page %s of %s", i, fileNameList.size()));
-				p.setAlignment(Element.ALIGN_RIGHT);
-
-				document.add(p);
-				System.out.println("This Image " + "" + image + "" + "was added to the report");
-//				End to add screenshoots and pagenumbers and wats icon
-				// End to create Script level passed reports
-
-			}
-			document.close();
-//			compress(fetchMetadataListVO, fetchConfigVO, pdffileName);
-			try {
-				System.out.println(" %%%%%%%%% ");
-				String destinationFilePath = (fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/") + pdffileName;
-
-				String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION()
-						+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "\\") + pdffileName;
-
-				uploadObjectToObjectStore(sourceFilePath, destinationFilePath);
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-
-		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf");
-			e.printStackTrace();
+		cell.setUseVariableBorders(true);
+		if (text.equalsIgnoreCase("Status")) {
+			cell.setBorderWidthLeft(0.3f);
+			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.equalsIgnoreCase("Total")) {
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.equalsIgnoreCase("Percentage")) {
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.equalsIgnoreCase("Passed") || text.equalsIgnoreCase("Failed")) {
+			cell.setBorderWidthLeft(0.3f);
+			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		} else if (text.contains("%")) {
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
 		}
+//	  	else if() {
+//	  	 cell.setBorderWidthRight(0.3f);
+//	  	cell.setBorderColorRight(new BaseColor(230, 225, 225));
+//	  		cell.setBorderWidthBottom(0.3f);
+//	  		cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+//	  	}
+		else {
+			cell.setBorderWidthLeft(0.3f);
+			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
+			cell.setBorderWidthTop(0.3f);
+			cell.setBorderColorTop(new BaseColor(230, 225, 225));
+			cell.setBorderWidthRight(0.3f);
+			cell.setBorderColorRight(new BaseColor(230, 225, 225));
+			cell.setBorderWidthBottom(0.3f);
+			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
+		}
+
+		cell.setHorizontalAlignment(align);
+
+		cell.setColspan(colspan);
+		// in case there is no text and you wan to create an empty row
+		if (text.trim().equalsIgnoreCase("")) {
+			cell.setMinimumHeight(20f);
+		}
+		if (text.length() > 103) {
+			cell.setFixedHeight(80f);
+		} else if (text.length() > 53) {
+			cell.setFixedHeight(60f);
+		} else {
+			cell.setFixedHeight(40f);
+		}
+		// add the call to the table
+		table.addCell(cell);
+
 	}
 
 	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")

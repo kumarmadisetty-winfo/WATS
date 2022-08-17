@@ -15,18 +15,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -54,10 +50,7 @@ import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
-//import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -76,21 +69,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.ScriptXpathService;
-import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
 @Service("VERISURE")
@@ -1881,74 +1865,6 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			}
 		}
 		return fileNameList;
-	}
-
-	public void createLowPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
-			throws IOException, DocumentException, com.itextpdf.text.DocumentException {
-		try {
-			String Date = DateUtils.getSysdate();
-			String Folder = ("C:\\Kaushik\\PDF\\");
-			String FILE = (Folder + pdffileName);
-			System.out.println(FILE);
-			List<String> fileNameList = null;
-			if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getLowPassedPdf(fetchMetadataListVO);
-			} else if ("Failed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getLowFailedPdf(fetchMetadataListVO);
-			} else if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
-				fileNameList = getLowDetailPdf(fetchMetadataListVO);
-			} else {
-				fileNameList = getLowFileNameList(fetchMetadataListVO);
-			}
-			String Script_Number = fetchMetadataListVO.get(0).getScript_number();
-			String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-			String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-			String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
-			File theDir = new File(Folder);
-			if (!theDir.exists()) {
-				System.out.println("creating directory: " + theDir.getName());
-				boolean result = false;
-				try {
-					theDir.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-			Document document = new Document();
-			PdfWriter.getInstance(document, new FileOutputStream(FILE));
-			document.open();
-			for (String image : fileNameList) {
-				Image img = Image.getInstance("C:\\Kaushik\\" + image);
-				String ScriptNumber = image.split("_")[2];
-				String TestRun = image.split("_")[3];
-				String Status = image.split("_")[6];
-				String status = Status.split("\\.")[0];
-				String Scenario = image.split("_")[1];
-				document.setPageSize(img);
-				document.newPage();
-				Font fnt = FontFactory.getFont("Arial", 12);
-				String TR = "Test Run Name:" + " " + TestRun;
-				String SN = "Script Number:" + " " + ScriptNumber;
-				String S = "Status:" + " " + status;
-				String Scenarios = "Test Case Name :" + "" + Scenario;
-				document.add(new Paragraph(TR, fnt));
-				document.add(new Paragraph(SN, fnt));
-				document.add(new Paragraph(S, fnt));
-				document.add(new Paragraph(Scenarios, fnt));
-				document.add(Chunk.NEWLINE);
-				img.setAlignment(Image.ALIGN_CENTER);
-				img.isScaleToFitHeight();
-				img.scalePercent(60, 60);
-				document.add(img);
-			}
-			document.close();
-		} catch (Exception e) {
-			System.out.println("Not able to upload the pdf");
-		}
 	}
 
 	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
