@@ -445,4 +445,8 @@ public class DataBaseEntry {
 		dao.updateTestSetLineStatusForSanity(testSetId);
 	}
 
+	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
+		return dao.getAllTestSetLineRecord(testSetId);
+	}
+
 }

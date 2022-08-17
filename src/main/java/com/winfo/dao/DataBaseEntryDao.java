@@ -1468,4 +1468,15 @@ public class DataBaseEntryDao {
 		}
 	}
 
+
+	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
+		Root<TestSetLine> from = cq.from(TestSetLine.class);
+		Predicate condition = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
+		cq.where(condition);
+		Query query = em.createQuery(cq.select(from));
+		return query.getResultList();
+	}
+
 }
