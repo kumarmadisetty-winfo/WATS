@@ -17226,6 +17226,12 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		try {
+			String text = driver.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[text()='Error']")).getText();
+			return text;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		return null;
 	}
 
