@@ -1304,6 +1304,13 @@ public class RunAutomation {
 							test_set_id);
 
 					fetchConfigVO.setStatus1("Fail");
+					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
+							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
+					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+					.downloadScreenshotsFromObjectStore(screenShotFolder,
+							fetchMetadataListVO.get(0).getCustomer_name(),
+							fetchMetadataListVO.get(0).getTest_run_name(), null);
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 							fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
