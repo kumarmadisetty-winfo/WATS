@@ -98,10 +98,4 @@ public class TestScriptExecController {
 		return testScriptExecService.generateTestRunPdf(testSetId);
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/test")
-	public void test() {
-		testScriptExecService.uploadObjectToObjectStore("/objstore/tst/Screenshot/WATSTST/Images/Capture_1_new png file.png","Screenshot/WATSTST/Capture.png");
-	}
-
 }
