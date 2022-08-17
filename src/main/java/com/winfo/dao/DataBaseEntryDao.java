@@ -70,6 +70,7 @@ public class DataBaseEntryDao {
 	private static final String[] SPECIAL_CHAR = { "_", ".", "'" };
 	private static final String PASSED = "Passed";
 	private static final String JPG = "jpg";
+	private static final String PNG = "png";
 	private static final String PASS = "Pass";
 	private static final String FAIL = "Fail";
 	private static final String NEW = "New";
@@ -310,9 +311,12 @@ public class DataBaseEntryDao {
 					+ fetchMetadataVO.getScript_number() + SPECIAL_CHAR[0] + fetchMetadataVO.getTest_run_name()
 					+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getLine_number() + SPECIAL_CHAR[0] + PASSED).concat(SPECIAL_CHAR[1] + JPG);
+					+ fetchMetadataVO.getLine_number() + SPECIAL_CHAR[0] + PASSED);
 
-			File file = new File(folder);
+			String JpgFile = folder.concat(SPECIAL_CHAR[1] + JPG);
+			String pngFile = folder.concat(SPECIAL_CHAR[1] + PNG);
+
+			File file = new File(JpgFile).exists() ? new File(JpgFile) : new File(pngFile);
 			byte[] screenshotArray = new byte[(int) file.length()];
 			try (FileInputStream fileInputStream = new FileInputStream(file);) {
 				fileInputStream.read(screenshotArray);

@@ -1,9 +1,9 @@
 package com.winfo.scripts;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,13 +23,13 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -49,9 +49,6 @@ import com.winfo.vo.Status;
 public class RunAutomation {
 	public final Logger log = LogManager.getLogger(RunAutomation.class);
 
-	private static final String TEST_RUN_LEVEL_DEPENDENCY = "TestRunDependency";
-	private static final String SCRIPT_LEVEL_DEPENDENCY = "ScriptDependency";
-
 	@Autowired
 	SeleniumKeywordsFactory seleniumFactory;
 	@Autowired
@@ -64,6 +61,9 @@ public class RunAutomation {
 
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
+	
+	@Autowired
+	AbstractSeleniumKeywords abstractSeleniumKey;
 
 	@Autowired
 	TestCaseDataService dataService;
@@ -80,13 +80,11 @@ public class RunAutomation {
 	@Autowired
 	ScriptXpathService xpathService;
 
-
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
 		FetchMetadataVO fetchMetadataVO = new FetchMetadataVO();
 		List<FetchMetadataVO> fetchMetadataListVO = new ArrayList<FetchMetadataVO>();
 		fetchMetadataListVO.add(fetchMetadataVO);
-		FetchConfigVO fetchConfigVO = new FetchConfigVO();
 
 //		seleniumFactory.getInstanceObj("UDG").createFailedPdf(fetchMetadataListVO, fetchConfigVO, "14_OTC.AR.224.pdf");
 //
@@ -103,6 +101,7 @@ public class RunAutomation {
 	}
 
 	long increment = 0;
+
 //	@Async
 	public ResponseDto run(String args) throws MalformedURLException {
 		ResponseDto executeTestrunVo;
@@ -165,7 +164,6 @@ public class RunAutomation {
 			SortedMap<Integer, List<FetchMetadataVO>> metaDataMap = dataService.prepareTestcasedata(fetchMetadataListVO,
 					dependentScriptMap);
 			Map<Integer, Status> scriptStatus = new HashMap<>();
-
 
 			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedConditionException(fetchConfigVO,
 					fetchMetadataListVO, metaDataMap, args);
@@ -295,8 +293,6 @@ public class RunAutomation {
 										post.setP_test_set_line_path(scripturl);
 										failcount = failcount + 1;
 										System.out.println("Came here to check fail condition");
-										// Date enddate = new Date();
-										// fetchConfigVO.setEndtime(enddate);
 										dataService.updateTestCaseStatus(post, args, fetchConfigVO);
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -320,12 +316,12 @@ public class RunAutomation {
 
 				}
 
-				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-						fetchConfigVO, "Passed_Report.pdf", null, null);
-				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-						fetchConfigVO, "Failed_Report.pdf", null, null);
-				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).createPdf(fetchMetadataListVO,
-						fetchConfigVO, "Detailed_Report.pdf", null, null);
+				abstractSeleniumKey
+						.createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
+				abstractSeleniumKey
+						.createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
+				abstractSeleniumKey
+						.createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -375,12 +371,10 @@ public class RunAutomation {
 		log.info("Pass Url - {}", passurl);
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
-		boolean isDriverError = true;
 		List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
 
 		try {
 			driver = driverConfiguration.getWebDriver(fetchConfigVO);
-			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 		} catch (Exception e) {
 			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScript_number());
@@ -427,9 +421,7 @@ public class RunAutomation {
 		String script_id = null;
 		String script_id1 = null;
 		String script_Number = null;
-		String line_number = null;
 		String seq_num = null;
-		String step_description = null;
 		String test_script_param_id = null;
 
 		// String start_time=null;
@@ -453,30 +445,25 @@ public class RunAutomation {
 
 			String userName = null;
 			String globalValueForSteps = null;
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
 			seleniumFactory.getInstanceObj(instanceName).DelatedScreenshoots(fetchMetadataListVO, fetchConfigVO);
 
-			List<String> excellSteps = new ArrayList<String>();
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScript_id();
 			String checkValidScript = xpathService.checkValidScript(scriptID);
 			log.info("Valid script check.......::" + checkValidScript);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
-				String url = fetchConfigVO.getApplication_url();
 				actionName = fetchMetadataVO.getAction();
 				test_set_id = fetchMetadataVO.getTest_set_id();
 				test_set_line_id = fetchMetadataVO.getTest_set_line_id();
 				script_id1 = fetchMetadataVO.getScript_id();
 				script_Number = fetchMetadataVO.getScript_number();
-				line_number = fetchMetadataVO.getLine_number();
 				seq_num = fetchMetadataVO.getSeq_num();
 				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
 				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
-				step_description = fetchMetadataVO.getStep_description();
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id = fetchMetadataVO.getTest_script_param_id();
 				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
@@ -504,7 +491,6 @@ public class RunAutomation {
 					value2 = getValue != null ? getValue.split(">").length > 1 ? getValue.split(">")[1] : "" : "";
 
 				}
-				Date Starttime = new Date();
 				try {
 
 					switch (actionName) {
@@ -903,8 +889,6 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO);
 							message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-							String message1 = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-
 							if (message != null && !message.startsWith("Example")
 									&& !message.startsWith("Offer Comments") && !message.startsWith("Context Value")
 									&& !message.startsWith("Select Book") && !message.startsWith("Enter a date between")
@@ -1214,36 +1198,10 @@ public class RunAutomation {
 
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
-						// screenshotException(driver, "Test Action Name Not Exists_",
-						// fetchMetadataListVO, fetchConfigVO);
 						break;
 
 					}
 
-//					Date endtime = new Date();
-//					long diff = endtime.getTime() - Starttime.getTime();
-//					long diffSeconds = diff / 1000 % 60;
-//					long diffMinutes = diff / (60 * 1000) % 60;
-//					long diffHours = diff / (60 * 60 * 1000);
-//					String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
-//					System.out.println("ExecutionTime "+ExecutionTime);
-
-//					if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.008")) {
-//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath, true))) {
-//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
-//						}
-//					}
-//					else if(fetchMetadataVO.getScript_number().equalsIgnoreCase("PTP.AP.6848")) {
-//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath1, true))) {
-//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
-//						}
-//					}
-//					else {
-//						try (PrintWriter writer = new PrintWriter(new FileWriter(logsPath2, true))) {
-//							writer.printf(fetchMetadataVO.getScript_number()+","+fetchMetadataVO.getLine_number() +","+ExecutionTime + "\r\n");
-//						}
-//					}
-					// MetaData Webservice
 					i++;
 					if (fetchMetadataListVO.size() == i) {
 						FetchScriptVO post = new FetchScriptVO();
@@ -1255,8 +1213,6 @@ public class RunAutomation {
 						post.setP_fail_path(failurl);
 						post.setP_exception_path(detailurl);
 						post.setP_test_set_line_path(scripturl);
-						// passcount = passcount+1;
-						// XpathPerformance code added
 						long endTime = System.currentTimeMillis();
 						System.out.println("endTime:::::::::::::" + endTime);
 
@@ -1265,6 +1221,7 @@ public class RunAutomation {
 
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
+						fetchConfigVO.setStatus1("Pass");
 						try {
 							// dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
@@ -1286,26 +1243,33 @@ public class RunAutomation {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						seleniumFactory.getInstanceObj(instanceName).createPdf(fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + ".pdf", startdate, enddate);
+
+						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+								script_id1, script_Number, "pass", startdate, enddate);
+						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
+
+						abstractSeleniumKey.createPdf(fetchMetadataListVO,
+								fetchConfigVO, seq_num + "_" + script_Number + ".pdf", startdate,
+								fetchConfigVO.getEndtime());
 
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 						}
-
-						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-								script_id1, script_Number, "pass", startdate, enddate);
-						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
-//						uploadPDF(fetchMetadataListVO, fetchConfigVO);
-
 					}
-
+					fetchConfigVO.setStatus1("Pass");
+					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
+							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
+					abstractSeleniumKey.downloadScreenshotsFromObjectStore(
+							screenShotFolder, fetchMetadataListVO.get(0).getCustomer_name(),
+							fetchMetadataListVO.get(0).getTest_run_name(), null);
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
 								"Pass");
+						fetchMetadataVO.setStatus("Pass");
 						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 					} catch (Exception e) {
 						System.out.println("e");
@@ -1336,23 +1300,24 @@ public class RunAutomation {
 					fetchConfigVO.setEndtime(enddate);
 					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
+							script_Number, "Fail", startdate, enddate);
 					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
 							test_set_id);
 
-					seleniumFactory.getInstanceObj(instanceName).createFailedPdf(fetchMetadataListVO, fetchConfigVO,
-							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
+					fetchConfigVO.setStatus1("Fail");
+					abstractSeleniumKey.createPdf(fetchMetadataListVO,
+							fetchConfigVO, seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf",
+							startdate, enddate);
 					if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 								fetchConfigVO);
 					}
-					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
-							script_Number, "Fail", startdate, enddate);
 					throw e;
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-//			screenshotException(driver, "Test Action Name Not Exists_", fetchMetadataListVO, fetchConfigVO);
 			throw e;
 		}
 	}
