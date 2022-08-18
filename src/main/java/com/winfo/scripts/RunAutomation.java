@@ -29,7 +29,6 @@ import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.exception.WatsEBSCustomException;
-import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -295,6 +294,7 @@ public class RunAutomation {
 										// enddate);
 										int failedScriptRunCount = limitScriptExecutionService
 												.getFailedScriptRunCount(fd.getTest_set_line_id(), fd.getTest_set_id());
+
 										errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
 												fd.getTest_script_param_id(), null, null, null, null);
 
@@ -369,6 +369,7 @@ public class RunAutomation {
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
+
 		try {
 			driver = driverConfiguration.getWebDriver(fetchConfigVO);
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
@@ -1307,9 +1308,9 @@ public class RunAutomation {
 							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
 							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-					.downloadScreenshotsFromObjectStore(screenShotFolder,
-							fetchMetadataListVO.get(0).getCustomer_name(),
-							fetchMetadataListVO.get(0).getTest_run_name(), null);
+							.downloadScreenshotsFromObjectStore(screenShotFolder,
+									fetchMetadataListVO.get(0).getCustomer_name(),
+									fetchMetadataListVO.get(0).getTest_run_name(), null);
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 							fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);

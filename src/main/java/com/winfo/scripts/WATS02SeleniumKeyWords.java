@@ -103,6 +103,7 @@ import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
+import com.winfo.vo.ApiValidationVO;
 
 @Service("WATS02")
 //@Service("WATS")
@@ -16797,5 +16798,32 @@ public class WATS02SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		// TODO Auto-generated method stub
 
 	}
+
+@Override
+public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+		ApiValidationVO api) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+		String pdffileName, ApiValidationVO api, boolean validationFlag)
+		throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+	// TODO Auto-generated method stub
+	return false;
+}
 
 }

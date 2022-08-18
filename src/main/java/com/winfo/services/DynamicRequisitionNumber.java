@@ -26,6 +26,12 @@ public class DynamicRequisitionNumber {
 	}
 	
 	@Transactional
+	public String getCopynumber(String testrun_name, String seq, String line_number) {
+		return dao.getCopynumber(testrun_name,seq,line_number);
+		
+	}
+	
+	@Transactional
 	public String getCopynumberInputParameter(String testrun_name, String seq, String line_number, String testParamId, String testSetId) {
 		return dao.getCopynumberInputParameter(testrun_name,seq,line_number,testParamId,testSetId);
 		

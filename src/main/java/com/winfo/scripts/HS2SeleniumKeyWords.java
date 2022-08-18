@@ -79,6 +79,7 @@ import com.aspose.cells.LookAtType;
 import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
+import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
@@ -89,6 +90,7 @@ import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.StringUtils;
+import com.winfo.vo.ApiValidationVO;
 
 @Service("HS2")
 @RefreshScope
@@ -1701,6 +1703,25 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			FetchConfigVO fetchConfigVO) {
 
 		try {
+			if (inputParam1.equals("Schedule New Process") && inputParam2.equals("Name")) {
+				Thread.sleep(4000);
+				WebElement waittill = driver.findElement(By.xpath("//div[text()='" + inputParam1
+						+ "']/following::label[text()='" + inputParam2 + "']/following::input[1]"));
+				clearMethod(driver, waittill);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Successfully Accounting Period Cleared" + scripNumber);
+				String xpath = "//div[text()='inputParam1']/following::label[text()='inputParam2']/following::input[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During Accounting Period Clear" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 			if (inputParam1.equalsIgnoreCase("Lines")) {
 				WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + inputParam1
 						+ "\"]/following::label[normalize-space(text())='" + inputParam2
@@ -1851,6 +1872,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2307,6 +2329,36 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Driver's Licenses")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver.findElement(By.xpath(
+						"//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"][1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(4000);
+				try {
+					WebElement Expand = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
+							+ "\"]/following::*[@title=\"" + param2 + "\"][1]"));
+					Expand.click();
+				} catch (Exception e) {
+
+				}
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+				String xpath = "(//h2[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed During ClickExpand or Collapse" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			if (param1.equalsIgnoreCase("Process Monitor")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3714,8 +3766,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 						By.xpath("//td[contains(@id,'contentContainer')]/following::*[text()='" + param1 + "']")));
 				WebElement waittext = driver.findElement(
 						By.xpath("//td[contains(@id,'contentContainer')]/following::*[text()='" + param1 + "']"));
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("//td[contains(@id,'contentContainer')]/following::*[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -6732,8 +6782,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 						"//*[text()='" + param1 + "']/following::span[@class='AppsXLargeFontSize text-red'][1]")));
 				WebElement waittext = driver.findElement(By.xpath(
 						"//*[text()='" + param1 + "']/following::span[@class='AppsXLargeFontSize text-red'][1]"));
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//*[text()='" + param1 + "']/following::span[@class='AppsXLargeFontSize text-red'][1]")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
@@ -9568,7 +9616,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='"
-								+ param2 + "']/following::input)[1]")));
+								+ param2 + "']/following::input[@type='text'])[1]")));
 				Thread.sleep(5000);
 				wait.until(
 						ExpectedConditions
@@ -9576,15 +9624,16 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 										By.xpath("//*[normalize-space(text())=\"" + param1
 												+ "\"]/following::label[normalize-space(text())='" + param2 + "']"),
 										param2));
-				WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
-						+ "\"]/following::label[normalize-space(text())='" + param2 + "']/following::input[1]"));
+				WebElement waittill = driver.findElement(By.xpath(
+						"//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='"
+								+ param2 + "']/following::input[@type='text'])[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Sucessfully Clicked Unapply Accounting Date sendValue" + scripNumber);
-				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[1]";
+				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[@type='text'])[1]";
 				String scriptID = fetchMetadataVO.getScript_id();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -12649,6 +12698,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 						+ "//div[contains(text(),'param2')]/following::input[1]" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[text()='param2']/following::span[starts-with(text(),'keysToSend')][1]"
 						+ ";" + "(//div[contains(text(),'param2')]/following::input[1]/following::*[text()='OK'])[1]";
+
 				String scriptID = fetchMetadataVO.getScript_id();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -12660,7 +12710,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
-
 		try {
 			if (param2.equalsIgnoreCase("Request Name")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12668,12 +12717,14 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()='* Request Name']/following::img[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='* Request Name']/following::img[1]"));
+
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 				WebElement select = driver.findElement(By.xpath(
 						"//*[text()='* Request Name']/following::img[1]/following::span[text()='" + keysToSend + "']"));
+
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				Thread.sleep(5000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -16328,7 +16379,69 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			FetchConfigVO fetchConfigVO) {
 
 		String value = null;
+		try {
 
+			if (inputParam1.equalsIgnoreCase("Asset Number")) {
+				Thread.sleep(5000);
+				WebElement webElement = driver.findElement(
+						By.xpath("//*[text()='" + inputParam1 + "']/following::table[@summary='Search Results']//a"));
+				Actions actions = new Actions(driver);
+
+				actions.moveToElement(webElement).build().perform();
+				String stringToSearch = webElement.getText();
+				System.out.println(stringToSearch);
+//			value = copyValuesWithSpc(stringToSearch);
+// value = copyValuesWithSpc(webElement);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//*[text()='+inputParam1']/following::table[@summary='Search Results']//a";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+				log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+				return value;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+		}
+
+		try {
+
+			if (inputParam1.equalsIgnoreCase("Difference (USD)") && inputParam2.equalsIgnoreCase("Bills Receivable")) {
+				Thread.sleep(5000);
+				WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1
+						+ "']/following::*[text()='" + inputParam2 + "']/following::a[3]"));
+				Actions actions = new Actions(driver);
+
+				actions.moveToElement(webElement).build().perform();
+				String stringToSearch = webElement.getText();
+				System.out.println(stringToSearch);
+//			value = copyValuesWithSpc(stringToSearch);
+// value = copyValuesWithSpc(webElement);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				String xpath = "//*[text()='inputParam1']/following::*[text()='inputParam2']/following::a[3]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				String testParamId = fetchMetadataVO.getTest_script_param_id();
+				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+				log.info("Sucessfully Clicked copynumber" + scripNumber);
+
+				return value;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during copynumber" + scripNumber);
+			System.out.println(inputParam2);
+		}
 		try {
 			if (inputParam1.equalsIgnoreCase("Difference (USD)") && inputParam2.equalsIgnoreCase("Bills Receivable")) {
 				Thread.sleep(5000);
@@ -19255,5 +19368,33 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

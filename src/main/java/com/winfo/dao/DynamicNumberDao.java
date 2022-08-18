@@ -50,6 +50,28 @@ public class DynamicNumberDao {
 		}
 	}
 	
+	public String getCopynumber(String testrun_name, String seq, String line_number) {
+
+		Session session = entityManager.unwrap(Session.class);
+		String sql="select input_value from win_ta_test_set_script_param where line_number=:line_number and test_set_line_id=(select test_set_line_id from win_ta_test_set_lines where test_set_id=(select test_set_id from win_ta_test_set where test_set_name=:testrun_name) and seq_num=:seq)";
+		//String sql="select xpath_location from  win_ta_script_metadata where input_parameter=:params and script_number=:scripNumber";
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setParameter("testrun_name", testrun_name);
+		//query.setParameter("script_num", script_num);
+		query.setParameter("seq", seq);
+		query.setParameter("line_number", line_number);
+		List results = query.list();
+		if(results.size()>0) {
+			System.out.println("getCopyNumber::::::"+(String) results.get(0));
+			String copynumberValue=(String) results.get(0);
+			//saveCopyNumber(copynumberValue,testParamId,testSetId);
+			return copynumberValue;
+		}
+		else {
+			return null;
+		}
+	}
+	
 	public void  getTestSetParamIdWithCopyAction(String key,String value, String testSetLineId, String testSetId) {
 		Session session = entityManager.unwrap(Session.class);
 		

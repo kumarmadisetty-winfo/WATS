@@ -78,6 +78,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
@@ -87,6 +88,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
+import com.winfo.vo.ApiValidationVO;
 
 @Service("LUMENTUM")
 //@Service("WATS")
@@ -16517,6 +16519,34 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
