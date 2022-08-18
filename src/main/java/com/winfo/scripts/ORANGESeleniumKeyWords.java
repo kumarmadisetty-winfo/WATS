@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -73,6 +75,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.aspose.cells.Cell;
 import com.aspose.cells.Cells;
@@ -81,6 +86,11 @@ import com.aspose.cells.LookAtType;
 import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
+import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
@@ -91,6 +101,9 @@ import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.StringUtils;
+import com.winfo.vo.ApiValidationVO;
+
+import reactor.core.publisher.Mono;
 
 @Service("ORANGE")
 //@Service("WATS")
@@ -6475,6 +6488,33 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Output")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath("(//th[contains(text(),'" + param1 + "')]/following::td//span)[1]")));
+				WebElement waittext = driver
+						.findElement(By.xpath("(//th[contains(text(),'" + param1 + "')]/following::td//span)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				waittext.click();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+				Thread.sleep(5000);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Home clickLink" + scripNumber);
+				String xpath = "(//th[contains(text(),'param1')]/following::td//span)[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during Home clickLink" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			try {
 
@@ -18369,6 +18409,141 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ApiValidationVO apiValidationData = objectMapper.readValue(fetchMetadataVO.getInput_value(),
+				ApiValidationVO.class);
+
+		String token = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+
+			// Converting object to string
+//			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Converting Request body object into map
+			Gson gson = new Gson();
+			Map<String, String> attributes = gson.fromJson(gson.toJson(apiValidationData.getRequestBody()), Map.class);
+
+			// Setting Map value to MultiValueMap
+			MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+			for (Entry<String, String> map : attributes.entrySet()) {
+				bodyValues.set(map.getKey(), map.getValue());
+			}
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+
+			// Creating WebClient
+			WebClient client = WebClient.create();
+			Map<String, String> response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+					.headers(headersHttp -> headersHttp.addAll(headers))
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(BodyInserters.fromFormData(bodyValues))
+					.retrieve().bodyToMono(Map.class).block();
+
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(response);
+			apiValidationData.setResponse(json);
+
+			String value = ow.writeValueAsString(apiValidationData);
+			String testParamId = fetchMetadataVO.getTest_script_param_id();
+			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+
+			// Getting the token from the response
+			token = response.get("access_token");
+//			String key = "Access Token";
+			String key = fetchMetadataVO.getTest_run_name() + ">" + fetchMetadataVO.getSeq_num() + ">"
+					+ fetchMetadataVO.getLine_number();
+			accessTokenStorage.put(key, token);
+		} catch (Exception ex) {
+			throw ex;
+		}
+//		return token;
+	}
+
+	@Override
+	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ApiValidationVO apiValidationData = objectMapper.readValue(fetchMetadataVO.getInput_value(),
+				ApiValidationVO.class);
+
+		try {
+
+			WebClient client = WebClient.create();
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+
+			if (apiValidationData.getAccessToken() != null) {
+				String[] str = apiValidationData.getAccessToken().split(">");
+				System.out.println(str);
+				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
+				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
+				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
+				headers.set("Authorization", "Bearer " + map.get(str[4]));
+			}
+			// Converting object to string
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String strInput = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+			ClientResponse response;
+
+			if (apiValidationData.getRequestBody() != null) {
+				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
+						.body(BodyInserters.fromObject(strInput)).exchange().block();
+			} else {
+				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
+						.exchange().block();
+			}
+
+			Mono<String> bodyToMono = response.bodyToMono(String.class);
+			bodyToMono.subscribe((body) -> {
+				api.setResponse(body);
+			}, (ex) -> {
+			});
+			api.setResponseCode(response.statusCode().value());
+//			return response.statusCode();
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+
+	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+		String[] values = fetchMetadataVO.getInput_value().split("/");
+		for (String str : values) {
+			if (api.getResponseCode().toString().contains(str)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, DocumentException, com.lowagie.text.DocumentException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

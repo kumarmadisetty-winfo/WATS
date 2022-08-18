@@ -1,12 +1,16 @@
 package com.winfo.interface1;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Service;
 
+import com.itextpdf.text.DocumentException;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
+import com.winfo.vo.ApiValidationVO;
 
 @Service
 public interface SeleniumKeyWordsInterface {
@@ -282,4 +286,17 @@ public interface SeleniumKeyWordsInterface {
 
 	public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception;
+
+	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception;
+
+	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception;
+
+	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, DocumentException, com.lowagie.text.DocumentException;
+
+	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api);
+
 }

@@ -16,13 +16,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -57,6 +60,9 @@ import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+//import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -78,6 +84,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
@@ -87,6 +94,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
+import com.winfo.vo.ApiValidationVO;
 
 @Service("CAMDEN")
 //@Service("WATS")
@@ -389,6 +397,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -11563,7 +11572,6 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-
 		try {
 			if ((param1.equalsIgnoreCase("Create Job Requisition") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
@@ -15913,6 +15921,297 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		}
 	}
 
+	public String screenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
+
+			FetchConfigVO fetchConfigVO) {
+
+		String image_dest = null;
+
+		try {
+
+			TakesScreenshot ts = (TakesScreenshot) driver;
+
+			File source = ts.getScreenshotAs(OutputType.FILE);
+
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+
+					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
+
+			System.out.println(image_dest);
+
+			File destination = new File(image_dest);
+
+			if (!destination.exists()) {
+
+				System.out.println("creating directory: " + destination.getName());
+
+				boolean result = false;
+
+				try {
+
+					destination.mkdirs();
+
+					result = true;
+
+				} catch (SecurityException se) {
+
+					// handle it
+
+					System.out.println(se.getMessage());
+
+				}
+
+			} else {
+
+				System.out.println("Folder exist");
+
+			}
+
+			// FileUtils.copyFile(source, destination);
+
+//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+
+			Files.copy(source.toPath(),
+
+					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
+
+					StandardCopyOption.REPLACE_EXISTING);
+
+			log.info("Successfully Screenshot is taken");
+
+			return image_dest;
+
+		} catch (Exception e) {
+
+			log.error("Failed During Taking screenshot");
+
+			System.out.println("Exception while taking Screenshot" + e.getMessage());
+
+			return e.getMessage();
+
+		}
+
+	}
+
+	public String loginScreenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
+
+			FetchConfigVO fetchConfigVO) {
+
+		String image_dest = null;
+
+		try {
+
+			TakesScreenshot ts = (TakesScreenshot) driver;
+
+			File source = ts.getScreenshotAs(OutputType.FILE);
+
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+
+					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+
+					+ fetchMetadataVO.getLine_number() + "_Passed").concat(".jpg");
+
+			System.out.println(image_dest);
+
+			File destination = new File(image_dest);
+
+			if (!destination.exists()) {
+
+				System.out.println("creating directory: " + destination.getName());
+
+				boolean result = false;
+
+				try {
+
+					destination.mkdirs();
+
+					result = true;
+
+				} catch (SecurityException se) {
+
+					// handle it
+
+					System.out.println(se.getMessage());
+
+				}
+
+			} else {
+
+				System.out.println("Folder exist");
+
+			}
+
+			// FileUtils.copyFile(source, destination);
+
+//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+
+			Files.copy(source.toPath(),
+
+					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
+
+					StandardCopyOption.REPLACE_EXISTING);
+
+			log.info("Successfully Screenshot is taken");
+
+			return image_dest;
+
+		} catch (Exception e) {
+
+			log.error("Failed During Taking screenshot");
+
+			System.out.println("Exception while taking Screenshot" + e.getMessage());
+
+			return e.getMessage();
+
+		}
+
+	}
+
+	public String screenshotFail(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
+			FetchConfigVO fetchConfigVO) {
+		String image_dest = null;
+		try {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			String currenttime = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime());
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+					+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+					+ fetchMetadataVO.getLine_number() + "_Failed").concat(".jpg");
+			File destination = new File(image_dest);
+
+			if (!destination.exists()) {
+
+				System.out.println("creating directory: " + destination.getName());
+
+				boolean result = false;
+
+				try {
+
+					destination.mkdirs();
+
+					result = true;
+
+				} catch (SecurityException se) {
+
+					// handle it
+
+					System.out.println(se.getMessage());
+
+				}
+
+			} else {
+
+				System.out.println("Folder exist");
+
+			}
+
+			// FileUtils.copyFile(source, destination);
+
+//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
+
+			Files.copy(source.toPath(),
+
+					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
+
+					StandardCopyOption.REPLACE_EXISTING);
+
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.info("Successfully Failed Screenshot is Taken " + scripNumber);
+			return image_dest;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during screenshotFail Action. " + scripNumber);
+			System.out.println("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+		}
+	}
+
+	public String screenshotException(WebDriver driver, String screenshotName,
+
+			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String line_number, String param) {
+
+		String image_dest = null;
+
+		try {
+
+			TakesScreenshot ts = (TakesScreenshot) driver;
+
+			File source = ts.getScreenshotAs(OutputType.FILE);
+
+			image_dest = (fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + line_number + "_"
+
+					+ fetchMetadataListVO.get(0).getScenario_name() + "_"
+
+					+ fetchMetadataListVO.get(0).getScript_number() + "_"
+
+					+ fetchMetadataListVO.get(0).getTest_run_name() + "_" + fetchMetadataListVO.get(0).getScript_id()
+
+					+ "_" + param + "_Failed").concat(".jpg");
+
+			File destination = new File(image_dest);
+
+			if (!destination.exists()) {
+
+				System.out.println("creating directory: " + destination.getName());
+
+				boolean result = false;
+
+				try {
+
+					destination.mkdirs();
+
+					result = true;
+
+				} catch (SecurityException se) {
+
+					// handle it
+
+					System.out.println(se.getMessage());
+
+				}
+
+			} else {
+
+				System.out.println("Folder exist");
+
+			}
+
+			// FileUtils.copyFile(source, destination);
+
+			Files.copy(FileSystems.getDefault().getPath(source.getPath()),
+					FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES,
+					StandardCopyOption.REPLACE_EXISTING);
+
+			log.info("Successfully Failed Screenshot is Taken ");
+
+			return image_dest;
+
+		} catch (Exception e) {
+
+			log.error("Failed during screenshotFail Action. ");
+
+			System.out.println("Exception while taking Screenshot" + e.getMessage());
+
+			return e.getMessage();
+
+		}
+
+	}
+
 	public void deleteAllCookies(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().deleteAllCookies();
@@ -17437,6 +17736,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 						+ keysToSend + "';");
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -18496,6 +18796,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				// fetchMetadataVO);
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				loginScreenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -18856,5 +19157,33 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

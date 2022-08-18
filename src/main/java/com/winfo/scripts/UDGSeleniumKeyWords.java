@@ -15,18 +15,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -61,9 +57,6 @@ import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
-//import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -85,13 +78,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
@@ -101,8 +87,8 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
-import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
+import com.winfo.vo.ApiValidationVO;
 
 @Service("UDG")
 //@Service("WATS")
@@ -10849,7 +10835,66 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Budget Lines") && param2.equalsIgnoreCase("Total")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				// WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 +
+				// "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
 
+				WebElement waittill = driver.findElement(By.xpath("//table[@summary='" + param1
+						+ "']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+
+				Thread.sleep(1000);
+				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+				// param2));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			if (param1.equalsIgnoreCase("Budget Lines") && param2.equalsIgnoreCase("Revenue")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				// WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 +
+				// "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
+
+				WebElement waittill = driver.findElement(By.xpath("//table[@summary='" + param1
+						+ "']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRevIN')][1]"));
+
+				Thread.sleep(1000);
+				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+				// param2));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRevIN')][1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
 		// UDG
 		try {
 			if (param1.equalsIgnoreCase("Budget Lines") && param2.equalsIgnoreCase("Total")) {
@@ -10911,7 +10956,7 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
-		//UDG
+		// UDG
 		try {
 			if (param1.equalsIgnoreCase("Edit Budget") && param2.equalsIgnoreCase("Raw Cost (USD)")) {
 				WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" + param1
@@ -16617,6 +16662,33 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	}
 
+	@Override
+	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
