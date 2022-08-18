@@ -4,8 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 public class ErrorMessagesHandler {
 	@Autowired
@@ -15,13 +13,14 @@ public class ErrorMessagesHandler {
 			String test_script_param_id, String message, String param1, String param2, String password) {
 		try {
 			fetchMetadataVO.setStatus("Fail");
+
 			param1 = StringUtils.isBlank(param1) ? "" : "=> Not able to enter the value in " + param1;
 			param2 = StringUtils.isBlank(param2) ? "" : " and " + param2;
 
 			String errorMessage = "Failed during " + actionName + " action";
 
 			errorMessage = errorMessage + param1 + param2;
-			
+
 			if (actionName.equalsIgnoreCase("clickButton") && message != null) {
 				// String errorMessage="Took more than 10 seconds to load the page";
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
@@ -29,6 +28,7 @@ public class ErrorMessagesHandler {
 			} else if (actionName.equalsIgnoreCase("SendKeys")) {
 				errorMessage = "Failed at Enter Value - Text Field => Not able to enter the value in " + param1
 						+ " and " + param2;
+
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
@@ -38,6 +38,13 @@ public class ErrorMessagesHandler {
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
+			} else if (actionName.equalsIgnoreCase("Table SendKeys")) {
+				errorMessage = "Failed at Table SendKeys => Not able to enter the value in " + param1 + " and "
+						+ param2;
+				fetchConfigVO.setErrormessage(errorMessage);
+				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
+						errorMessage);
+
 			} else if (actionName.equalsIgnoreCase("Table SendKeys")) {
 				errorMessage = "Failed at Table SendKeys => Not able to enter the value in " + param1 + " and "
 						+ param2;
@@ -286,7 +293,6 @@ public class ErrorMessagesHandler {
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
-
 			}else if (actionName.equalsIgnoreCase("compareValue")) {
 				errorMessage = "Failed : Expected value is not matching with the Actual value";
 				fetchConfigVO.setErrormessage(errorMessage);

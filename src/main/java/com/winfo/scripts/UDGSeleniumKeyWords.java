@@ -10849,7 +10849,69 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+
 		// UDG
+		try {
+			if (param1.equalsIgnoreCase("Budget Lines") && param2.equalsIgnoreCase("Total")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				// WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 +
+				// "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
+
+				WebElement waittill = driver.findElement(By.xpath("//table[@summary='" + param1
+						+ "']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]"));
+
+				Thread.sleep(1000);
+				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+				// param2));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			if (param1.equalsIgnoreCase("Budget Lines") && param2.equalsIgnoreCase("Revenue")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				// WebElement waittill = driver.findElement(By.xpath("(//*[text()='" + param1 +
+				// "'])[1]/following::label[text()='" + param2 + "']/preceding::input[1]"));
+
+				WebElement waittill = driver.findElement(By.xpath("//table[@summary='" + param1
+						+ "']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRevIN')][1]"));
+
+				Thread.sleep(1000);
+				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())='"+param1+"']/following::label[text()='"+param2+"']"),
+				// param2));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRevIN')][1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
+		//UDG
 		try {
 			if (param1.equalsIgnoreCase("Edit Budget") && param2.equalsIgnoreCase("Raw Cost (USD)")) {
 				WebElement waittill = driver.findElement(By.xpath("//*[contains(text(),'" + param1
@@ -16554,6 +16616,7 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String value) throws Exception {
 
 	}
+
 
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,

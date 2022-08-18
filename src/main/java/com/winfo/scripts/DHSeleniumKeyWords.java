@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,14 +79,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
@@ -96,7 +87,6 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
-import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 
 @Service("DH")
@@ -12228,6 +12218,39 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
+			if ((param1.equalsIgnoreCase("Create Job Requisition") && param2.equalsIgnoreCase("Recruiter"))) {
+				Thread.sleep(6000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittill = driver
+						.findElement(By.xpath("(//h1[text()='" + param1 + "']/following::label[text()='" + param2
+								+ "']/preceding-sibling::input[not(@type='hidden')])[1]"));
+				Thread.sleep(1000);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				Thread.sleep(6000);
+				// values.sendKeys(keysToSend);
+				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+				// fetchMetadataVO);
+				waittill.sendKeys(keysToSend);
+				Thread.sleep(1000);
+				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScript_number();
+				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
+				String scriptID = fetchMetadataVO.getScript_id();
+				String lineNumber = fetchMetadataVO.getLine_number();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScript_number();
+			log.error("Failed during  tableSendKeys" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 			if ((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Characteristic")
 					|| param2.equalsIgnoreCase("Result"))) {
 				WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),'" + param1
@@ -15451,13 +15474,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					// fetchMetadataVO);
 
 					values.sendKeys(keysToSend);
+					Thread.sleep(1000);
 					enter(driver, fetchMetadataVO, fetchConfigVO);
 
 					Thread.sleep(10000);
 //					DH 27
 					WebElement select = driver.findElement(By
 
-							.xpath("//*[text()='Name']/following:*[normalize-space(text())='" + keysToSend + "']"));
+							.xpath("//*[text()='Name']/following::*[normalize-space(text())='" + keysToSend + "']"));
 
 //								clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO); 
 
@@ -19969,7 +19993,12 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

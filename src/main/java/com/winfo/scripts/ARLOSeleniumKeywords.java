@@ -6615,7 +6615,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
