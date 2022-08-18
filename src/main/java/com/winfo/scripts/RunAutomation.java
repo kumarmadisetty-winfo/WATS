@@ -347,29 +347,28 @@ public class RunAutomation {
 			Entry<Integer, List<FetchMetadataVO>> metaData, Map<Integer, Status> scriptStatus) throws Exception {
 		List<String> failList = new ArrayList<>();
 		WebDriver driver = null;
+		List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
+		String testSetId = fetchMetadataListsVO.get(0).getTest_set_id();
+		String testSetLineId = fetchMetadataListsVO.get(0).getTest_set_line_id();
 
-		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
-		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
-
-		String scriptId = fetchMetadataListVO.get(0).getScript_id();
-		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getProject_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name()
+		String scriptId = fetchMetadataListsVO.get(0).getScript_id();
+		String passurl = fetchConfigVO.getImg_url() + fetchMetadataListsVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListsVO.get(0).getProject_name() + "/" + fetchMetadataListsVO.get(0).getTest_run_name()
 				+ "/" + "Passed_Report.pdf";
-		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getProject_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name()
+		String failurl = fetchConfigVO.getImg_url() + fetchMetadataListsVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListsVO.get(0).getProject_name() + "/" + fetchMetadataListsVO.get(0).getTest_run_name()
 				+ "/" + "Failed_Report.pdf";
-		String detailurl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getProject_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name()
+		String detailurl = fetchConfigVO.getImg_url() + fetchMetadataListsVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListsVO.get(0).getProject_name() + "/" + fetchMetadataListsVO.get(0).getTest_run_name()
 				+ "/" + "Detailed_Report.pdf";
-		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getProject_name() + "/" + fetchMetadataListVO.get(0).getTest_run_name()
-				+ "/" + fetchMetadataListVO.get(0).getSeq_num() + "_" + fetchMetadataListVO.get(0).getScript_number()
+		String scripturl = fetchConfigVO.getImg_url() + fetchMetadataListsVO.get(0).getCustomer_name() + "/"
+				+ fetchMetadataListsVO.get(0).getProject_name() + "/" + fetchMetadataListsVO.get(0).getTest_run_name()
+				+ "/" + fetchMetadataListsVO.get(0).getSeq_num() + "_" + fetchMetadataListsVO.get(0).getScript_number()
 				+ ".pdf";
 		log.info("Pass Url - {}", passurl);
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
-		List<FetchMetadataVO> fetchMetadataListsVO = metaData.getValue();
-
+		boolean isDriverError = true;
 		try {
 			driver = driverConfiguration.getWebDriver(fetchConfigVO);
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
