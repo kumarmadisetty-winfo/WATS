@@ -66,9 +66,6 @@ public class CopyTestRunService {
 					productVersion);
 			TestSetLine testSetLineRecords = new TestSetLine();
 			if (scriptMaster != null) {
-				int id = copyTestrunDao.getscrtiptIds();
-				mapOfTestRunDependencyOldToNewId.put(testSetLineObj.getTestRunScriptId(), id);
-				testSetLineRecords.setTestRunScriptId(id);
 				testSetLineRecords.setScriptId(scriptMaster.getScript_id());
 				testSetLineRecords.setCreatedBy(copyTestrunvo.getCreatedBy());
 				testSetLineRecords.setCreationDate(copyTestrunvo.getCreationDate());
@@ -196,7 +193,6 @@ public class CopyTestRunService {
 				}
 			}
 		}
-		newTestSetObj.setTestRunId(copyTestrunDao.getIds());
 		int newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
 		log.info("newtestrun 1:" + newtestrun);
 		return newtestrun;
