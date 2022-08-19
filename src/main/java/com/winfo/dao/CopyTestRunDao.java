@@ -29,7 +29,7 @@ public class CopyTestRunDao {
 	}
 
 	public int saveTestrun(TestSet testSetObj) {
-		entityManager.merge(testSetObj);
+		entityManager.persist(testSetObj);
 		System.out.println("setTestrundata.getTestsetid() 1:" + testSetObj.getTestRunId());
 		return testSetObj.getTestRunId();
 	}
