@@ -60,19 +60,19 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
-import com.assertthat.selenium_shutterbug.utils.web.ScrollStrategy;
 import com.itextpdf.text.DocumentException;
+import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
-import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
+import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service("ARLO")
-public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
+public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -89,66 +89,67 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	@Autowired
 	ScriptXpathService service;
 
-	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
+			String value, CustomerProjectDto customerDetails) throws Exception {
 		String param5 = "Password";
 		String param6 = "Sign In";
-		navigateUrl(driver, fetchConfigVO, fetchMetadataVO);
-		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
-		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
-		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
+		navigateUrl(driver, fetchConfigVO, fetchMetadataVO, customerDetails);
+		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String param1, String param2, int count) throws Exception {
+	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
+			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
 		String param3 = "Navigator";
-		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
-		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 	}
 
-	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String param1, String param2, int count) throws Exception {
+	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
+			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
 		String param3 = "Tasks";
-		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
-		clickTaskLink(driver, param1, fetchMetadataVO, fetchConfigVO);
+		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickTaskLink(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 	}
 
-	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3) throws Exception {
+	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
 		String param4 = "UIScmil1u";
 		String param5 = "Sign Out";
 		String param6 = "Confirm";
-		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO);
-		clickLink(driver, param5, param3, fetchMetadataVO, fetchConfigVO);
-		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
+		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickLink(driver, param5, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.navigate().to(fetchConfigVO.getApplication_url());
 			driver.manage().window().maximize();
-			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
-			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
-			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
+			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			logger.info("Navigated to given Url");
 		} catch (Exception e) {
 			logger.error("Failed During Navigation");
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
-	public void mediumWait(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void mediumWait(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			int time = StringUtils.convertStringToInteger(inputData, 4);
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -174,15 +175,15 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void uploadImage(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public void uploadImage(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			String sharepoint = fetchConfigVO.getSharepoint_resp();
 			System.out.println(sharepoint);
 			String accessToken = getAccessToken();
 			List imageUrlList = new ArrayList();
 			File imageDir = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
-					+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name());
+					+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName());
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
 				System.out.println(imageFileName);
@@ -207,7 +208,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				RestTemplate restTemplate = new RestTemplate();
 				ResponseEntity<byte[]> response = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/me/drive/root:/Screenshot/"
-								+ fetchMetadataListVO.get(0).getCustomer_name() + "/" + imageFileName + ":/content",
+								+ customerDetails.getCustomerName() + "/" + imageFileName + ":/content",
 						HttpMethod.PUT, requestEntity, byte[].class);
 
 				System.out.println("response status: " + response.getStatusCode());
@@ -256,12 +257,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return acessToken;
 	}
 
-	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
+	public List<String> getFileNameList(List<ScriptDetailsDto> fetchMetadataListVO,
+			CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(
-				System.getProperty("user.dir") + "/" + "Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
+				+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -269,40 +269,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String Number = fetchMetadataListVO.get(0).getLine_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(
-				System.getProperty("user.dir") + "\\" + "Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String Number = fetchMetadataListVO.get(0).getLine_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
+		String Number = fetchMetadataListVO.get(0).getLineNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -322,11 +290,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return fileNameList;
 	}
 
-	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getPassedPdf(List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(
-				System.getProperty("user.dir") + "\\" + "Screenshot\\" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
+				+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -334,7 +301,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String STATUS = fetchMetadataListVO.get(0).getStatus();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -354,12 +321,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return fileNameList;
 	}
 
-	public List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails) {
 
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(
-				System.getProperty("user.dir") + "/" + "Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(System.getProperty("user.dir") + "/" + "Screenshot/" + customerDetails.getCustomerName()
+				+ "/" + customerDetails.getTestSetName() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -367,7 +333,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -386,11 +352,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return fileNameList;
 	}
 
-	public List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getDetailPdf(List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(
-				System.getProperty("user.dir") + "/" + "Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(System.getProperty("user.dir") + "/" + "Screenshot/" + customerDetails.getCustomerName()
+				+ "/" + customerDetails.getTestSetName() + "/");
 		File[] listOfFiles = folder.listFiles();
 		Arrays.sort(listOfFiles, new Comparator<File>() {
 			public int compare(File f1, File f2) {
@@ -398,7 +363,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -418,12 +383,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
-			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name) {
-		String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\" + name);
+			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name,
+			CustomerProjectDto customerDetails) {
+		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "\\"
+				+ customerDetails.getTestSetName() + "\\" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "\\"
+				+ customerDetails.getTestSetName() + "\\");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
 			System.out.println("creating directory: " + theDir.getName());
@@ -473,10 +439,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
-				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName() + "\\"
+				+ customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -496,14 +463,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return fileNameList;
 	}
 
-	public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
-			throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
-				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
+			CustomerProjectDto customerDetails) throws IOException {
+		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName() + "\\"
+				+ customerDetails.getTestSetName() + "\\");
 		List<String> fileNameList = null;
-		String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-		String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO);
+		String customer_Name = customerDetails.getCustomerName();
+		String test_Run_Name = customerDetails.getTestSetName();
+		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO, customerDetails);
 
 		for (String image : fileNameList) {
 
@@ -549,12 +516,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	}
 
-	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			String accessToken = getAccessTokenPdf();
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "\\"
+					+ customerDetails.getTestSetName() + "\\");
 			System.out.println(imageDir);
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
@@ -582,9 +550,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
 				ResponseEntity<Object> response = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/drives/b!KcGTxB8fRUOsVkFTx3_XQI27VIClhktAidGIE0ZEKfowr1GL3k-zRrQ5i52Xg3Jv/items/01NZEJ6GV6Y2GOVW7725BZO354PWSELRRZ:/ArloSelenium/"
-								+ fetchMetadataListVO.get(0).getCustomer_name() + "\\"
-								+ fetchMetadataListVO.get(0).getTest_run_name() + "\\" + imageFileName
-								+ ":/createUploadSession",
+								+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName() + "\\"
+								+ imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
 				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
@@ -640,7 +607,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return acessToken;
 	}
 
-	public void openFile(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			WebElement copy = driver.findElement(By.xpath("(//*[text()='Succeeded'])[1]/preceding::span[text()][1]"));
 			String number = copy.getText();
@@ -649,12 +617,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			// System.out.println(num);
 			driver.get(fetchConfigVO.getDownlod_file_path() + "/" + number + ".log");
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			driver.navigate().back();
 			Thread.sleep(8000);
 			String xpath = "(//*[text()='Succeeded'])[1]/preceding::span[text()][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -679,12 +647,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		return chosenFile;
 	}
 
-	public void openPdf(WebDriver driver, String path, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void openPdf(WebDriver driver, String path, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			File path1 = getLastModified(path, fetchConfigVO);
 			driver.get("" + path1);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			driver.navigate().back();
 			Thread.sleep(8000);
 		} catch (Exception e) {
@@ -692,10 +661,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void navigateToBackPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			Thread.sleep(5000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			driver.navigate().back();
 			Thread.sleep(8000);
 		} catch (Exception e) {
@@ -703,7 +673,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void copy(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void copy(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Robot r = new Robot();
 			r.keyPress(KeyEvent.VK_CONTROL);
@@ -712,33 +683,34 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			r.keyRelease(KeyEvent.VK_CONTROL);
 
 		} catch (Exception e) {
-			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void paste(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String globalValueForSteps) throws Exception {
+	public void paste(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String globalValueForSteps, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			Actions action = new Actions(driver);
 			action.keyDown(Keys.CONTROL).sendKeys("v").build().perform();
 		} catch (Exception e) {
-			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clear(WebDriver driver, String inputParam, String inputParam2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void clear(WebDriver driver, String inputParam, String inputParam2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[contains(text(),'" + inputParam + "')]/preceding-sibling::input)[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[contains(text(),'inputParam')]/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
@@ -751,10 +723,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					By.xpath("(//label[normalize-space(text())='" + inputParam + "']/following::input)[1]"));
 			clearMethod(driver, waittill);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[normalize-space(text())='inputParam']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -765,10 +737,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					.findElement(By.xpath("(//*[normalize-space(text())='" + inputParam + "']/following::input)[1]"));
 			clearMethod(driver, waittill);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='inputParam']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -777,10 +749,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam + "')]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(@placeholder,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -790,20 +762,22 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittill = driver
 					.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "']/following::textarea[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='inputParam']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println(e);
 			throw e;
 		}
 	}
 
-	public void windowclose(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void windowclose(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			String mainWindow = driver.getWindowHandle();
 			// It returns no. of windows opened by WebDriver and will return Set of Strings
@@ -827,25 +801,27 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			}
 		} catch (Exception e) {
 			logger.error("Failed During WindowClose Acion.");
-			screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void switchToActiveElement(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchToActiveElement(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.switchTo().activeElement();
 			logger.info("Switched to Element Successfully");
 		} catch (Exception e) {
 			logger.error("Failed During switchToActiveElement Action.");
-			screenshotFail(driver, "Failed during switchToActiveElement Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during switchToActiveElement Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println(e.getMessage());
 			throw e;
 		}
 	}
 
-	public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		if (param1.equalsIgnoreCase("Setup and Maintenance")) {
 			try {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -860,10 +836,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 						By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='"
 								+ param1 + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} catch (Exception e) {
@@ -880,10 +856,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					By.xpath("//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='" + param1
 							+ "']/following::a[normalize-space(text())='" + param2 + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='Navigator']/following::*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -897,10 +873,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					By.xpath(("//a[normalize-space(text())='" + param1 + "']")), param1));
 			WebElement waittext = driver.findElement(By.xpath(("//a[normalize-space(text())='" + param1 + "']")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -913,10 +889,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittext = driver
 					.findElement(By.xpath(("//div[contains(@style,'display: block')]//div[text()='" + param1 + "']")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[contains(@style,'display: block')]//div[text()='param1 ']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -930,10 +906,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					By.xpath(("//div[normalize-space(text())='" + param1 + "']")), param1));
 			WebElement waittext = driver.findElement(By.xpath(("//div[normalize-space(text())='" + param1 + "']")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[normalize-space(text())='param1 ']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -945,22 +921,22 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					.presenceOfElementLocated(By.xpath("(//div[contains(@id,'" + param1 + "')])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,'" + param1 + "')])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//div[contains(@id,'param1')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickSignInSignOut(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
@@ -968,20 +944,20 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittext = driver.findElement(By.xpath(("//button[normalize-space(text())='" + param1 + "']")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//button[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickTaskLink(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickTaskLink(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(2000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -992,20 +968,21 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittext = driver.findElement(By.xpath(("//a[normalize-space(text())='" + param1 + "'][1]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//a[normalize-space(text())='param1'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickButtonDropdown(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Approvals") && param2.equalsIgnoreCase("Actions")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1016,12 +993,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1041,12 +1018,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Thread.sleep(3000);
 				waittext.click();
 //		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1062,12 +1039,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='" + param1
 						+ "']/following::a[normalize-space(text())='" + param2 + "'])[2]"));
 				waittext.click();
-				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1088,7 +1065,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				WebElement name = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
 				name.sendKeys(keysToSend);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				WebElement text = driver.findElement(
 						By.xpath("//*[normalize-space(text())='Search']/following::a[normalize-space(text())='"
 								+ keysToSend + "']"));
@@ -1096,13 +1073,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				WebElement button = driver.findElement(
 						By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='o'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[contains(text(),'param1')]/following::a[1]" + ";" + "//li[text()='Search...']"
 						+ ";" + "//*[text()='Search']/following::*[text()='Name']/following::input[1]" + ";"
 						+ "//*[normalize-space(text())='Search']/following::a[normalize-space(text())='keysToSend']"
 						+ ";" + "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='o'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1121,12 +1098,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1143,11 +1120,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement values = driver.findElement(By.xpath("(//td[normalize-space(text())='" + keysToSend + "'])[2]"));
 			clickValidateXpath(driver, fetchMetadataVO, values, fetchConfigVO);
 //		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]"
 					+ ";" + "(//td[normalize-space(text())='keysToSend'])[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1160,12 +1137,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1179,23 +1156,24 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					.findElement(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 //		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[contains(text(),'param1')]/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickButtonDropdownText(WebDriver driver, String param1, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
@@ -1205,12 +1183,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Thread.sleep(5000);
 			WebElement waittext = driver.findElement(By.xpath("//li[normalize-space(text())='" + keysToSend + "']"));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//li[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1225,12 +1203,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//div[contains(@class,'PopupMenuContent')]//td[text()='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1244,24 +1222,24 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//td[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
@@ -1272,11 +1250,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h2[normalize-space(text())=' param1']/following::*[@title=' param2 '])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1293,11 +1271,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())=' param1 ']/following::*[normalize-space(text())=' param2 ']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1316,11 +1294,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())=' param1 ']/following::*[@title=' param2 '])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1339,23 +1317,25 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(8000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1 ']/preceding::*[@title=' param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			throw e;
 		}
 	}
 
 	public void selectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Manager")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1367,10 +1347,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[contains(text(),'param1')]/following::*[text()='keysToSend'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1393,13 +1373,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1421,13 +1401,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::div[contains(@class,'PopupMenuPopup')]//span[contains(text(),'keysToSend')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1445,13 +1425,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[contains(text(),'param1')]/following::a[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1468,10 +1448,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(text(),'param1')]/following::*[text()='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1486,13 +1466,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1 ']/following::label[normalize-space(text())='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1507,25 +1487,27 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[@title='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			throw e;
 		}
 	}
 
 	public String clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -1539,13 +1521,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
 			highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@id,'param2')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -1563,13 +1545,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
 			highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -1587,25 +1569,25 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
 			highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[@value='keysToSend']/following::img[normalize-space(@title)='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param2.equalsIgnoreCase("Back")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1616,13 +1598,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/preceding::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1638,13 +1620,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//a[@title='Done']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1657,13 +1639,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				WebElement add = driver.findElement(By.xpath(
 						"//div[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 				highlightElement(driver, fetchMetadataVO, add, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='param1']/following::img[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1676,12 +1658,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				WebElement add = driver.findElement(
 						By.xpath("//div[normalize-space(text())='" + param1 + "']/following::div[@role='button'][1]"));
 				highlightElement(driver, fetchMetadataVO, add, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 				String xpath = "//div[normalize-space(text())='param1']/following::div[@role='button'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -1702,14 +1684,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement add = driver.findElement(
 					By.xpath("//h1[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]" + ";"
 					+ "//h1[normalize-space(text())='param1']/following::img[@title='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1725,13 +1707,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(4000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::img[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1746,13 +1728,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1771,14 +1753,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement add = driver.findElement(
 					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1 ']/following::div[@role='button'])[1]" + ";"
 					+ "//*[normalize-space(text())='param1']/following::img[@title='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1793,13 +1775,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::img[contains(@id,'param2')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1814,13 +1796,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1834,14 +1816,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(3000);
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//img[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1854,13 +1836,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//img[contains(@id,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1873,13 +1855,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -1894,13 +1876,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::img[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
@@ -1915,25 +1897,25 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(@aria-label,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during click Image Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during click Image Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1941,17 +1923,17 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()='ne']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ne']"), "ne"));
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='ne']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='ne']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Done")) {
@@ -1960,17 +1942,17 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()='o']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='o']"), "o"));
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='o']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Submit")) {
@@ -1985,14 +1967,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Submit")) {
@@ -2006,14 +1988,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='m']")));
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Edit Employment: Review") && param2.equalsIgnoreCase("Submit")) {
@@ -2028,14 +2010,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[text()='Edit Employment: Review']/following::*[@title='Submit']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Next")) {
@@ -2044,18 +2026,18 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='x']"), "x"));
 				Thread.sleep(10000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='x']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(20000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='x']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Next")) {
@@ -2069,14 +2051,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Yes")) {
@@ -2091,14 +2073,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='Y']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2110,14 +2092,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='Y']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("OK")) {
@@ -2131,14 +2113,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//button[@_afrpdo='ok' and @accesskey='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Save and Close")) {
@@ -2150,13 +2132,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Continue")) {
@@ -2165,17 +2147,17 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='u']"), "u"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='u']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='u']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Continue")) {
@@ -2187,13 +2169,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//button[text()='Contin']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
@@ -2204,13 +2186,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//button[text()='Cl']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Cancel")) {
@@ -2221,13 +2203,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='C']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Cancel")) {
@@ -2240,13 +2222,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='C']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2256,17 +2238,17 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ave']"), "ave"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='ave']")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='ave']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2284,14 +2266,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				actions.doubleClick(waittext).build().perform();
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and not(@_afrpdo)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2311,14 +2293,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2338,14 +2320,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2362,14 +2344,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2387,14 +2369,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2411,13 +2393,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[contains(@id,'actBtn')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2436,14 +2418,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//span[normalize-space(text())='param1 ']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2461,10 +2443,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Thread.sleep(5000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//td[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2479,14 +2461,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//button[normalize-space(text())='param1'and not(@style='display:none')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2502,14 +2484,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='Warning']/following::*[contains(text(),'Do you want to continue?') and not(text()=\"Your changes aren't saved. If you leave this page, then your changes will be lost. Do you want to continue?\")]/following::*[text()='Yes']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2525,13 +2507,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and not(@_afrpdo)])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2546,14 +2528,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2568,13 +2550,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
@@ -2590,14 +2572,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[contains(text(),'param1')]/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2612,26 +2594,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[contains(text(),'param1')]/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickTableLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
@@ -2641,14 +2623,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2664,26 +2646,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::table[@summary='Main Task List']//a)[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void tableRowSelect(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void tableRowSelect(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
@@ -2693,26 +2675,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//td)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void actionApprove(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			Thread.sleep(2000);
@@ -2726,23 +2708,24 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement approve = driver.findElement(By.xpath(("//td[normalize-space(text())=\"" + param2 + "\"][1]")));
 			highlightElement(driver, fetchMetadataVO, approve, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, approve, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String xpath = "//a[normalize-space(text())='param1'][1]" + ";"
 					+ "//td[normalize-space(text())='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click Approve Button.");
-			screenshotFail(driver, "Failed during Click Approve Button.", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Click Approve Button.", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Performance Goals")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2754,11 +2737,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='Performance Goals']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2777,11 +2760,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='Performance Goals']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2802,13 +2785,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[normalize-space(text())=' param1 ']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -2833,13 +2816,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 
@@ -2857,13 +2840,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::a[@title='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2887,11 +2870,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			// js.executeScript("document.body.style.zoom='100%'");
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='param1'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2905,10 +2888,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//a[contains(@id,' param1 ')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2921,13 +2904,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[@title=' param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2940,13 +2923,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[@title=' param1 ']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2959,13 +2942,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[contains(@title,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2978,13 +2961,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(@title,' param1 ')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -2999,13 +2982,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//div[contains(text(),' param1 ')])[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3018,13 +3001,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[@role=' param1 ']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3039,25 +3022,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickRadiobutton(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			Thread.sleep(3000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3075,14 +3059,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 							+ param2 + "']/following::label[normalize-space(text())='" + keysToSend + "'])[1]"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::label[normalize-space(text())=' keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3095,26 +3079,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittext = driver.findElement(By.xpath(("(//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + keysToSend + "'])[1]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())=' param1']/following::label[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if ((param1.equalsIgnoreCase("Create Performance Documents"))
 					|| (param1.equalsIgnoreCase("Employee Final Feedback"))
@@ -3130,11 +3114,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[@id][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -3155,11 +3139,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[normalize-space(text())='Participant']/preceding::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -3184,11 +3168,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -3212,11 +3196,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -3241,11 +3225,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -3269,13 +3253,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3294,13 +3278,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::span[text()='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3322,13 +3306,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3349,13 +3333,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3378,11 +3362,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3397,25 +3381,25 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittext = driver.findElement(By.xpath("//label[normalize-space(text())='" + keysToSend + "']"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickNotificationLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickNotificationLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3427,23 +3411,24 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			// actions.moveToElement(waittext).build().perform();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			waittext.click();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[@placeholder='param1']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickLinkAction(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 
 		try {
 			if (param1.equalsIgnoreCase("Goals") && param2.equalsIgnoreCase("Edit")) {
@@ -3463,13 +3448,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -3494,13 +3479,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3515,13 +3500,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3539,13 +3524,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='keysToSend']/following::td[normalize-space(text())='param1']/following::table[1]//div)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -3562,25 +3547,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())='" + param1
@@ -3598,10 +3584,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -3615,12 +3601,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//body[@dir='ltr']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -3635,12 +3621,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//body[contains(@class,'contents_ltr')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -3659,22 +3645,23 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Search")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3687,12 +3674,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 								param2));
 				WebElement waittill = driver.findElement(By.xpath(("//div[@role='" + param1
 						+ "' and not(@style)]//label[normalize-space(text())='" + param2 + "']/following::input[1]")));
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[@role='param1' and not(@style)]//label[normalize-space(text())='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			} else {
@@ -3715,11 +3702,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[@type='text'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
@@ -3739,11 +3726,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *']/following::input[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
@@ -3762,11 +3749,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::td[normalize-space(text())='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
@@ -3787,11 +3774,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[not(@type='hidden')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
@@ -3812,11 +3799,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
@@ -3835,10 +3822,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[contains(text(),'param1')]/following::label[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
@@ -3859,11 +3846,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
@@ -3899,8 +3886,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				}
 				Thread.sleep(500);
 				String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input[not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
@@ -3924,10 +3911,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -3939,11 +3926,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'" + param1 + "')]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + param1 + "')]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
 			String xpath = "//*[contains(@placeholder,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -3966,10 +3953,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -3992,10 +3979,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
@@ -4013,25 +4000,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			if (keysToSend.equalsIgnoreCase("Annual Performance Evaluation 2019")
 					|| (keysToSend.equalsIgnoreCase("Varshitha (Varshitha) Reddy Karna"))) {
 				Thread.sleep(2000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			}
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void dropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (param2.equalsIgnoreCase("Plan") || param2.equalsIgnoreCase("Option")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4043,8 +4031,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//div[@class='AFPopupMenuPopup']//li[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4066,8 +4054,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			String xpath = "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4090,8 +4078,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::span[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4118,8 +4106,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::[@type='checkbox']/parent::label[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4137,8 +4125,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//div[@class='AFPopupMenuPopup']//li[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4156,8 +4144,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//div[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4175,8 +4163,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//div[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4194,8 +4182,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//div[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4217,10 +4205,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::*[@type='checkbox']/following::*[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4239,8 +4227,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4258,8 +4246,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4278,8 +4266,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4299,8 +4287,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//h3[normalize-space(text())='param1']/following::label[normalize-space(text())='param2'][1]/following::div[contains(@style,'position')]//li[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4320,8 +4308,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(500);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::*[@type='checkbox']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4340,8 +4328,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4369,7 +4357,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			String xpath = "//a[contains(text(),'Search')]" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::input[1]";
 			if (keysToSend != null) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(
 						By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='" + param2
@@ -4384,8 +4372,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			button.click();
 			xpath = xpath + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='K'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4398,7 +4386,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement searchResult = driver.findElement(By.xpath(
 					"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-			enter(driver, fetchMetadataVO, fetchConfigVO);
+			enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
 			WebElement text = driver.findElement(By.xpath("//span[normalize-space(text())='" + keysToSend + "']"));
 			text.click();
@@ -4409,8 +4397,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
 					+ ";" + "//span[normalize-space(text())='keysToSend']"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[normalize-space(text())='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4422,8 +4410,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 							+ param2 + "']/following::*[normalize-space(text())='OK'][1]"));
 			button.click();
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4441,8 +4429,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4465,19 +4453,20 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String xpath = "//h1[contains(text(),'param1')]/following::label[normalize-space(text())='keysToSend']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Element Details")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4489,18 +4478,18 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']/following::*[text()='value1']/following::input[@placeholder='m/d/yy'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 		try {
 
@@ -4513,18 +4502,18 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[text()='param1']/following::*[text()='value1']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4536,23 +4525,24 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[text()='param1']/following::*[text()='value1']/following::input[contains(@id,'NewBdgtPctLst')])[param2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			WebElement waittill = driver
@@ -4568,11 +4558,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[text()='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::input[not(@type='hidden')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4584,11 +4574,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4600,11 +4590,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4616,11 +4606,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4633,11 +4623,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::table[@summary='param2']//*[normalize-space(text())='param3']/following::input[contains(@id,'NewBdgtPctLst')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4649,11 +4639,11 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//label[normalize-space(text())='param2']/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4665,23 +4655,24 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void tableDropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
@@ -4693,8 +4684,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					"//table[@summary='" + param1 + "']/following::li[normalize-space(text())='" + keysToSend + "']"));
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//table[@summary='param1']/following::li[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4714,20 +4705,21 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					+ "']/following::li[normalize-space(text())='" + keysToSend + "']"));
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//*[normalize-space(text())='param1']/following::li[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (param2.equalsIgnoreCase("Type")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4738,13 +4730,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4760,13 +4752,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -4781,24 +4773,25 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//table[@summary='param1']//input/following-sibling::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
 		try {
 			if (!param3.isEmpty()) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4815,12 +4808,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[@title='param3']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4840,12 +4833,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[@role='combobox']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4865,12 +4858,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				// clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='Hire Date Start Range']/following::input[@role='combobox'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4888,12 +4881,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::td[normalize-space(text())='param2']/following::a[3])";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4912,12 +4905,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='Hire Date End Range']/following::input[@role='combobox'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4935,12 +4928,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4967,12 +4960,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				waittext.click();
 //			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(10000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -4990,12 +4983,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *'][1]/following::a[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5013,12 +5006,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *'][1]/following::a[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5037,12 +5030,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *'][1]/following::a[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5072,9 +5065,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					Thread.sleep(6000);
 					WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'popup-container')]"));
 					if (popup1.isDisplayed()) {
-						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO,
+								customerDetails);
 						actions.release();
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					}
 					xpath = xpath + ";" + "//div[contains(@id,'popup-container')]";
 				} catch (Exception e) {
@@ -5088,13 +5082,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					}
 
 				}
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				actions.release();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5115,12 +5109,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			waittext.click();
 			// clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(10000);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5136,12 +5130,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5171,19 +5165,19 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Thread.sleep(4000);
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'popup-container')]"));
 				if (popup1.isDisplayed()) {
-					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				}
 				xpath = xpath + ";" + "//div[contains(@id,'popup-container')]";
 			} catch (Exception e) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5202,12 +5196,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				// clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(1000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5228,12 +5222,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[ not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5251,12 +5245,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5272,12 +5266,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::input[@placeholder='Select a value']"));
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[@placeholder='Select a value']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5305,19 +5299,19 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Thread.sleep(4000);
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'popup-container')]"));
 				if (popup1.isDisplayed()) {
-					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				}
 				xpath = xpath + ";" + "//div[contains(@id,'popup-container')]";
 			} catch (Exception e) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5335,12 +5329,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[contains(text(),'param1')]/following::*[normalize-space(text())='param2']/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5356,23 +5350,23 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					.findElement(By.xpath("(//label[contains(text(),'" + param1 + "')]/following::a)[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[contains(text(),'param1')]/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	private void clickDropdownXpath(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void clickDropdownXpath(WebDriver driver, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			// WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5386,7 +5380,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	private void clickTableDropdown(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void clickTableDropdown(WebDriver driver, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			waittext.click();
@@ -5395,7 +5389,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void highlightElement(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	public void highlightElement(WebDriver driver, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -5405,7 +5399,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	private void clickValidateXpath(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void clickValidateXpath(WebDriver driver, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			// WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5419,8 +5413,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void clickFilter(WebDriver driver, String xpath1, String xpath2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws InterruptedException {
+	public void clickFilter(WebDriver driver, String xpath1, String xpath2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws InterruptedException {
 		try {
 			WebElement waittill = driver.findElement(By.xpath(xpath1));
 			WebElement waittill1 = driver.findElement(By.xpath(xpath2));
@@ -5444,31 +5438,32 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			waittill.click();
 		} catch (Exception e) {
 			logger.error("Falied During ClickExpand Action.");
-			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath1);
 			throw e;
 		}
 	}
 
 	public String password(WebDriver driver, String inputParam, String keysToSend, FetchConfigVO fetchConfigVO,
-			FetchMetadataVO fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam + "')]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			String xpath = "//*[contains(@placeholder,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println(e);
 			throw e;
 		}
 	}
 
 	public void typeIntoValidxpath(WebDriver driver, String keysToSend, WebElement waittill,
-			FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
 			waittill.clear();
@@ -5487,18 +5482,18 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		logger.info("clear and typed the given Data");
 	}
 
-	public void scrollUsingElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void scrollUsingElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			if (inputParam.equalsIgnoreCase("Work Email")) {
 				Thread.sleep(3000);
 				WebElement waittill = driver.findElement(By.xpath("(//b[text()='" + inputParam + "'])[1]"));
-				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 				logger.info("ScrollUsingElement Successfully Done!");
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//b[text()='inputParam'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -5510,13 +5505,13 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement waittill = driver
 					.findElement(By.xpath("//span[normalize-space(text())='" + inputParam + "'][1]"));
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//span[normalize-space(text())='inputParam'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5524,12 +5519,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5537,12 +5532,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5550,12 +5545,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h2[normalize-space(text())='inputParam'])";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5564,12 +5559,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			WebElement waittill = driver
 					.findElement(By.xpath("(//h3[normalize-space(text())='" + inputParam + "'])[2]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h3[normalize-space(text())='inputParam'])[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5577,12 +5572,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//td[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5590,12 +5585,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[contains(text(),'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5603,12 +5598,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary=' inputParam']//td//a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5617,12 +5612,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[normalize-space(text())=\"" + inputParam + "\"]/following::input)[1]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[normalize-space(text())='inputParam']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5630,12 +5625,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[contains(@id,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5643,12 +5638,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//li[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5657,12 +5652,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			WebElement waittill = driver
 					.findElement(By.xpath("//label[normalize-space(text())=\"" + inputParam + "\"]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5671,12 +5666,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			WebElement waittill = driver
 					.findElement(By.xpath("//button[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//button[normalize-space(text())=' inputParam ']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5684,12 +5679,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//img[@title='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5697,12 +5692,12 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5710,17 +5705,18 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			logger.info("ScrollUsingElement Successfully Done!");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[@title=' inputParam '])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			logger.error("Failed During scrollUsingElement");
-			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println(inputParam);
 			e.printStackTrace();
 			throw e;
@@ -5728,48 +5724,49 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
-			FetchMetadataVO fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		fetchConfigVO.getMedium_wait();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 	}
 
-	public void tab(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Actions action = new Actions(driver);
 			action.sendKeys(Keys.TAB).build().perform();
 			logger.info("Successfully Clicked the tab.");
 		} catch (Exception e) {
 			logger.error("Failed During clicking the tab");
-			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Failed to do TAB Action");
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void mousehover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void mousehover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			Actions actions = new Actions(driver);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]")));
-			scrollUsingElement(driver, param1, fetchMetadataVO, fetchConfigVO);
+			scrollUsingElement(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(6000);
 			WebElement waittext = driver
 					.findElement(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]"));
 			actions.moveToElement(waittext).build().perform();
-			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//tr[1]/following::a)[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5782,20 +5779,21 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(5000);
 			System.out.print("Successfully executed Mousehover");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@role='presentation']/following::a[normalize-space(text())='param1'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void enter(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void enter(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
 			Actions actionObject = new Actions(driver);
@@ -5803,116 +5801,27 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Thread.sleep(3000);
 		} catch (Exception e) {
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public String screenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
-		String image_dest = null;
-		try {
-			Shutterbug.shootPage(driver, ScrollStrategy.BOTH_DIRECTIONS, 500, true)
-					.withName(fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number() + "_"
-							+ fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_"
-							+ fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getLine_number() + "_Passed")
-					.save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
-							+ fetchMetadataVO.getTest_run_name() + "\\");
-			logger.info("Successfully Screenshot is taken");
-			return image_dest;
-		} catch (Exception e) {
-			logger.error("Failed During Taking screenshot");
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
-		}
-	}
-
-	public String screenshotFail(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
-		String image_dest = null;
-		try {
-			Shutterbug.shootPage(driver, ScrollStrategy.BOTH_DIRECTIONS, 500, true)
-					.withName(fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number() + "_"
-							+ fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_"
-							+ fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getLine_number() + "_Failed")
-					.save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
-							+ fetchMetadataVO.getTest_run_name() + "\\");
-			logger.info("Successfully Screenshot is taken");
-			return image_dest;
-		} catch (Exception e) {
-			logger.error("Failed During Taking screenshot");
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
-		}
-	}
-
-	/*
-	 * public String screenshot(WebDriver driver, String screenshotName,
-	 * FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) { String
-	 * image_dest = null; try { TakesScreenshot ts = (TakesScreenshot) driver; File
-	 * source = ts.getScreenshotAs(OutputType.FILE); image_dest =
-	 * (fetchConfigVO.getScreenshot_path()+"\\" + fetchMetadataVO.getCustomer_name()
-	 * + "\\" + fetchMetadataVO.getTest_run_name()+ "
-	 * \\" + fetchMetadataVO.getLine_number()+ "_" +
-	 * fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number()
-	 * + "_" + fetchMetadataVO.getTest_run_name() + "_" +
-	 * fetchMetadataVO.getScript_id() + "_" + fetchMetadataVO.getLine_number() +
-	 * "_Passed").concat(".png"); System.out.println(image_dest); File destination =
-	 * new File(image_dest); FileUtils.copyFile(source, destination);
-	 * logger.info("Successfully Screenshot is taken"); return image_dest; } catch
-	 * (Exception e) { logger.error("Failed During Taking screenshot");
-	 * System.out.println("Exception while taking Screenshot" + e.getMessage());
-	 * return e.getMessage(); } } public String screenshotFail(WebDriver driver,
-	 * String screenshotName, FetchMetadataVO fetchMetadataVO, FetchConfigVO
-	 * fetchConfigVO) { String image_dest = null; try { TakesScreenshot ts =
-	 * (TakesScreenshot) driver; File source = ts.getScreenshotAs(OutputType.FILE);
-	 * String currenttime = new
-	 * SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime
-	 * ()); image_dest =(fetchConfigVO.getScreenshot_path()+"\\" +
-	 * fetchMetadataVO.getCustomer_name() +
-	 * "\\" + fetchMetadataVO.getTest_run_name()+ "
-	 * \\" + fetchMetadataVO.getLine_number()+ "
-	 * _" + fetchMetadataVO.getScenario_name() + "
-	 * _" + fetchMetadataVO.getScript_number() + "_" +
-	 * fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getScript_id() +
-	 * "_" + fetchMetadataVO.getInput_parameter() + "_Failed").concat(".png"); File
-	 * destination = new File(image_dest); FileUtils.copyFile(source, destination);
-	 * logger.info("Successfully Failed Screenshot is Taken "); return image_dest; }
-	 * catch (Exception e) { logger.error("Failed during screenshotFail Action. ");
-	 * System.out.println("Exception while taking Screenshot" + e.getMessage());
-	 * return e.getMessage(); } } public String screenshotException(WebDriver
-	 * driver, String screenshotName, List<FetchMetadataVO> fetchMetadataListVO,
-	 * FetchConfigVO fetchConfigVO) { String image_dest = null; try {
-	 * TakesScreenshot ts = (TakesScreenshot) driver; File source =
-	 * ts.getScreenshotAs(OutputType.FILE); image_dest
-	 * =(fetchConfigVO.getScreenshot_path()+"\\" +
-	 * fetchMetadataListVO.get(0).getCustomer_name() +
-	 * "\\" + fetchMetadataListVO.get(0).getTest_run_name()+ "
-	 * \\" + fetchMetadataListVO.get(0).getLine_number()+ "
-	 * _" + fetchMetadataListVO.get(0).getScenario_name() + "
-	 * _" + fetchMetadataListVO.get(0).getScript_number() + "_" +
-	 * fetchMetadataListVO.get(0).getTest_run_name() + "_" +
-	 * fetchMetadataListVO.get(0).getScript_id() + "_" + "NoSuchElementException" +
-	 * "_Failed").concat(".png"); File destination = new File(image_dest);
-	 * FileUtils.copyFile(source, destination);
-	 * logger.info("Successfully Failed Screenshot is Taken "); return image_dest; }
-	 * catch (Exception e) { logger.error("Failed during screenshotFail Action. ");
-	 * System.out.println("Exception while taking Screenshot" + e.getMessage());
-	 * return e.getMessage(); } }
-	 */
-	public void deleteAllCookies(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void deleteAllCookies(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.manage().deleteAllCookies();
 			logger.info("Successfully Deleted All The Cookies.");
 		} catch (Exception e) {
 			logger.error("Failed To Delete All The Cookies.");
-			screenshotFail(driver, "Failed during deleteAllCookies Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during deleteAllCookies Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println("cookies not deleted");
 			throw e;
 		}
 	}
 
-	public void selectCheckBox(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO) {
+	public void selectCheckBox(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			WebElement element = driver.findElement(By.xpath(xpath));
 			if (element.isSelected()) {
@@ -5922,7 +5831,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			logger.info("selected Checkbox Successfully");
 		} catch (Exception e) {
 			logger.error("Failed While Selecting Checkbox.");
-			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null);
+			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null, customerDetails);
 			e.printStackTrace();
 			System.out.println(xpath);
 			throw e;
@@ -5930,15 +5839,15 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	public void selectByText(WebDriver driver, String inputParam, String param2, String inputData,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement waittext = driver
 					.findElement(By.xpath(("//*[contains(text(),'" + inputParam + "')]/following::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(text(),'inputParam')]/following::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -5947,31 +5856,32 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		try {
 			WebElement waittext = driver
 					.findElement(By.xpath(("//*[contains(text(),'" + inputParam + "')]/preceding-sibling::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(text(),'inputParam')]/preceding-sibling::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(inputParam);
-			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			throw e;
 		}
 	}
 
-	private void selectMethod(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO, WebElement waittext,
-			FetchConfigVO fetchConfigVO) {
+	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
 		logger.info("selectedBYText Successfully");
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 		return;
 	}
 
-	public void selectByValue(WebDriver driver, String xpath, String inputData, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			Select selectBox = new Select(webElement);
@@ -5979,7 +5889,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			logger.info("selectedBYValue Successfully");
 		} catch (Exception e) {
 			logger.error("Failed During selectByValue Action.");
-			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println(xpath);
 			e.printStackTrace();
 			throw e;
@@ -5996,17 +5907,16 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public String copynumber(WebDriver driver, String inputParam, String inputParam2, FetchMetadataVO fetchMetadataVO,
-
-			FetchConfigVO fetchConfigVO) {
+	public String copynumber(WebDriver driver, String inputParam, String inputParam2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath("(//div[contains(text(),'" + inputParam + "')])[1]"));
 			if (webElement.isDisplayed() == true) {
 				copyMethod(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//div[contains(text(),'inputParam')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return inputParam;
 			}
@@ -6017,16 +5927,16 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			WebElement webElement = driver.findElement(By.xpath("//img[@title='In Balance ']/following::td[1]"));
 			if (webElement.isDisplayed() == true) {
 				copyMethod(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//img[@title='In Balance ']/following::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return inputParam;
 			}
 		} catch (Exception e) {
 			logger.error("Failed During copynumber Action");
-			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(inputParam);
 			throw e;
 		}
@@ -6043,7 +5953,8 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		logger.info("Successfully Copied the Number");
 	}
 
-	public String copyy(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public String copyy(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
@@ -6054,15 +5965,15 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			logger.info("Successfully Copied");
 		} catch (Exception e) {
 			logger.error("Failed During copyy Action.");
-			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			throw e;
 		}
 		return xpath;
 	}
 
-	public String copytext(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public String copytext(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
 			ArrayList<String> texts = new ArrayList<String>();
@@ -6078,7 +5989,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			logger.info("Successfully Copied");
 		} catch (Exception e) {
 			logger.error("Failed During copytext Action.");
-			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			throw e;
 		}
@@ -6086,13 +5997,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	}
 
-	public void maximize(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void maximize(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.manage().window().maximize();
 			logger.info("Successfully Maximized");
 		} catch (Exception e) {
 			logger.error("Failed During Maximize Action.");
-			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("can not maximize");
 			e.printStackTrace();
 			throw e;
@@ -6100,13 +6012,15 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void switchWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.switchTo().window(Main_Window);
 			logger.info("Successfully Switched to Another Window");
 		} catch (Exception e) {
 			logger.error("Failed During Switching to Window");
-			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println("can not switch to window");
 			e.printStackTrace();
 
@@ -6114,20 +6028,22 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void switchDefaultContent(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchDefaultContent(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.switchTo().defaultContent();
 			logger.info("Successfully Switched to Default Content");
 		} catch (Exception e) {
 			logger.error("Failed During switching to Default Action.");
-			screenshotFail(driver, "Failed during switchDefaultContent Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during switchDefaultContent Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println("can not switch");
 			throw e;
 		}
 	}
 
-	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement dragElement = driver.findElement(By.xpath(xpath));
 			fromElement = dragElement;
@@ -6139,15 +6055,15 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			logger.info("Successfully Drag and drop the values");
 		} catch (Exception e) {
 			logger.error("Failed During dragAnddrop Action.");
-			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void windowhandle(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
+	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
 		try {
 			String mainWindow = driver.getWindowHandle();
 			Set<String> set = driver.getWindowHandles();
@@ -6159,7 +6075,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
 				}
@@ -6167,25 +6083,26 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			logger.info("Successfully Handeled the window");
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
-			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO,
+					customerDetails);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void switchToFrame(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws InterruptedException {
+	public void switchToFrame(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws InterruptedException {
 		Thread.sleep(5000);
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,'" + param1 + "')]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//iframe[contains(@id,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -6200,10 +6117,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				driver.switchTo().frame(waittext);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//iframe[@class='cke_wysiwyg_frame cke_reset'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -6220,10 +6137,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				driver.switchTo().frame(waittext);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//iframe[@class='cke_wysiwyg_frame cke_reset'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -6240,10 +6157,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				driver.switchTo().frame(waittext);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//iframe[@class='cke_wysiwyg_frame cke_reset'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -6258,10 +6175,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				driver.switchTo().frame(waittext);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//iframe[@class='cke_wysiwyg_frame cke_reset'])[3]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -6276,10 +6193,10 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				driver.switchTo().frame(waittext);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//iframe[@class='cke_wysiwyg_frame cke_reset'])[4]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -6291,21 +6208,21 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//iframe[contains(@title,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			logger.error("Failed During switchToFrame Action");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void uploadFileAutoIT(String filelocation, FetchMetadataVO fetchMetadataVO) throws Exception {
+	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO) throws Exception {
 		try {
 			// String autoitscriptpath = System.getProperty("user.dir") + "\\" +
 			// "File_upload_selenium_webdriver.au3";
@@ -6323,13 +6240,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void refreshPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
 		try {
 			driver.navigate().refresh();
 			logger.info("Successfully refreshed the Page");
 		} catch (Exception e) {
 			logger.error("Failed During refreshPage Action");
-			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("can not refresh the page");
 			e.printStackTrace();
 			throw e;
@@ -6337,23 +6255,23 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 		}
 	}
 
-	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+	public void DelatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws IOException {
+		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
+				+ customerDetails.getTestSetName() + "/");
 		if (folder.exists()) {
 			File[] listOfFiles = folder.listFiles();
 
 //		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
 //				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-//				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-//				+ fetchMetadataVO.getLine_number();
+//				+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//				+ fetchMetadataVO.getScriptNumber() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//				+ fetchMetadataVO.getLineNumber();
 			for (File file : Arrays.asList(listOfFiles)) {
 
 				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
-				String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
+				String seqnum1 = fetchMetadataListVO.get(0).getSeqNum();
 				if (seqNum.equalsIgnoreCase(seqnum1)) {
 					Path imagesPath = Paths.get(file.getPath());
 					Files.delete(imagesPath);
@@ -6363,124 +6281,18 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	@Override
-	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
-			String input_value, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public String getErrorMessages(WebDriver driver) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void moveToElement(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+	public void moveToElement(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
-
-	@Override
-	public void switchToParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void datePicker(WebDriver driver, String param1, String param2, String input_value,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void switchParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void oicMouseHover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
-			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public String closeExcel() throws Exception {
 		// TODO Auto-generated method stub
@@ -6488,7 +6300,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	@Override
-	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+	public String typeIntoCell(WebDriver driver, String param1, String value1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -6501,7 +6313,7 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	@Override
-	public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String menuItemOfExcel(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -6509,113 +6321,14 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	@Override
 	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
-			FetchMetadataVO fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
-			String param3, String keysToSend, String value) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void InformaticaClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void InformaticaclickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void InformaticaClickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
-
-	}
-
-	@Override
-	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
@@ -6633,38 +6346,256 @@ public class ARLOSeleniumKeywords implements SeleniumKeyWordsInterface {
 	}
 
 	@Override
-	public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
+			throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
+			String input_value, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void switchToParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void datePicker(WebDriver driver, String param1, String param2, String input_value,
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api) throws Exception {
+	public void switchParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, ApiValidationVO api, boolean validationFlag)
-			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
+			throws Exception {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
+
+	@Override
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicNavigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicMouseHover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
+			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
+			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
+			String param3, String keysToSend, String value, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void InformaticaClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void InformaticaclickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void InformaticaClickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String input_value,
+			String password, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

@@ -85,11 +85,11 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
-import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service("DH")
 //@Service("WATS")
@@ -128,7 +128,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	private static final DecimalFormat df = new DecimalFormat("00");
 
-	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		String param5 = "password";
@@ -139,9 +139,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 //		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
@@ -150,7 +150,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 
@@ -177,14 +177,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		String param3 = "Navigator";
 		String xpath = navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
@@ -192,9 +192,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		String xpath2 = menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
 				count);
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpaths = xpath + ";" + xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpaths);
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
@@ -202,7 +202,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public synchronized void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public synchronized void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		String param3 = "Tasks";
 //		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
@@ -210,14 +210,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		String xpath = task(driver, param3, fetchMetadataVO, fetchConfigVO);
 		String xpath1 = taskMenu(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2, count);
 		String xpaths = xpath + ";" + xpath1;
-		String scripNumber = fetchMetadataVO.getScript_number();
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpaths);
 
 	}
 
-	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3) throws Exception {
 
 		String param4 = "UIScmil1u";
@@ -227,7 +227,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String param1) throws Exception {
 
 		try {
@@ -250,7 +250,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Thread.sleep(4000);
 					xpath = xpath + ";" + "//div[contains(@id,'popup-container')]//a[text()='Sign Out']";
 				}
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Logout is done " + scripNumber);
 			} catch (Exception e) {
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -260,16 +260,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				signout.click();
 				Thread.sleep(4000);
 				xpath = xpath + ";" + "//div[contains(@id,'popup-container')]//a[text()='Sign Out']";
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Successfully Logout is done " + scripNumber);
 			}
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -277,7 +277,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void datePicker(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 
 		String[] fullDate = keysToSend.split(">");
 		String date = fullDate[0];
@@ -290,7 +290,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void selectDate(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public void selectDate(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(4000);
@@ -306,7 +306,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String xpath = "//td[@data-afr-adfday='cm' and text()='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
@@ -318,14 +318,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void selectMonth(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public void selectMonth(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//*[text()='Create Time Card']/following::select[1]"));
 			selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String xpath = "//*[text()='Create Time Card']/following::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
@@ -337,7 +337,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void selectYear(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public void selectYear(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebElement wait = driver.findElement(By.xpath("//*[text()='Select Year']/preceding-sibling::input[1]"));
@@ -365,7 +365,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				System.out.println("The given year is matched with the Oracle year");
 			}
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
@@ -377,7 +377,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void openSettings(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void openSettings(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
 		String param4 = "UIScmil1u";
 		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO);
@@ -386,24 +386,24 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			driver.navigate().to(fetchConfigVO.getApplication_url());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
-	public String loginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+	public String loginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		String xpath = null;
 		try {
@@ -423,7 +423,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 					throw new IOException("Failed during login page");
 				}
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//input[@type='param1']";
 				return xpath;
@@ -431,7 +431,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		} catch (Exception e) {
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
 			System.out.println(e);
 		}
@@ -448,15 +448,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// if("password".equalsIgnoreCase(param1))
 			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			xpath = "//*[contains(@placeholder,'param1')]";
 			log.info("Successfully entered data " + scripNumber);
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed During Login page");
@@ -464,7 +464,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return xpath;
 	}
 
-	public String navigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String navigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(4000);
@@ -476,15 +476,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully navigator is done " + scripNumber);
 			String xpath = "//a[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
@@ -492,7 +492,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public String menuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String menuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Expenses")) {
@@ -508,16 +508,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully MenuNavigation is done " + scripNumber);
 				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='param1'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return xpath;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during MenuNavigation " + scripNumber);
 			// TODO: handle exception
 		}
@@ -553,20 +553,20 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully menunavigation is clicked " + scripNumber);
 			String xpath1 = "//*[contains(@id,'popup-container')]//*[@title='param1']//div[2]/a/*[name()='svg'][1]";
 			String xpath2 = "//*[contains(@id,'popup-container')]//a[text()='Show More']";
 			String xpath3 = "//*[contains(@id,'popup-container')]//a[text()='Show Less']";
 			String xpath = xpath1 + ";" + xpath2 + ";" + xpath3;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully menunavigation is clicked " + scripNumber);
 			return xpath;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Menunavigation " + scripNumber);
 
 			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
@@ -575,7 +575,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public String menuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public String menuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		String xpath = null;
 		try {
@@ -588,10 +588,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
@@ -610,11 +610,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//div[@style='visibility: visible;']//span[normalize-space(text())='param1']";
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return xpath;
@@ -640,7 +640,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return xpath;
 	}
 
-	public String task(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public String task(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(7000);
@@ -652,17 +652,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully task is open " + scripNumber);
 			String xpath = "//img[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully task is open " + scripNumber);
 			return xpath;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed During Task " + scripNumber);
 			screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed to Open Task Menu");
@@ -670,7 +670,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public String taskMenu(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO, String type1,
+	public String taskMenu(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String type1,
 			String type2, String param1, String param2, int count) throws Exception {
 		String xpath = null;
 		try {
@@ -687,10 +687,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully open Task " + scripNumber);
 			xpath = "//div[contains(@class,'AFVertical')]//a[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully open Task " + scripNumber);
@@ -717,17 +717,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return xpath;
 	}
 
-	public void mediumWait(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO,
+	public void mediumWait(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			int time = StringUtils.convertStringToInteger(inputData, 4);
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully waited for 4 seconds " + scripNumber);
 		} catch (InterruptedException e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During meduim wait" + scripNumber);
 			e.printStackTrace();
 			// Restore interrupted state...
@@ -763,1007 +763,8 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-		System.out.println("entered to getFailFileNameListNew");
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
-		File[] listOfFiles = folder.listFiles();
-		String video_rec = "no";
-		// String video_rec="yes";
-//		List<File> fileList = Arrays.asList(listOfFiles);
-		List<File> allFileList = Arrays.asList(listOfFiles);
-		List<File> fileList = new ArrayList<>();
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		// String seqNumber = "1";
-		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_")) {
-				fileList.add(file);
-			}
-		}
-		System.out.println("before Collections.sort completed");
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-		System.out.println("after Collections.sort completed");
-		List<String> fileNameList = new ArrayList<String>();
-		ArrayList<String> linksall = new ArrayList<String>();
-		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new ClassPathResource(whiteimage).getFile();
-		// File file = new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new ClassPathResource(watsvediologo).getFile();
-		// File file1=new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-		BufferedImage image = null;
-		image = ImageIO.read(file);
-		BufferedImage logo = null;
-		logo = ImageIO.read(file1);
-		Graphics g = image.getGraphics();
-		g.setColor(Color.black);
-		java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-		g.setFont(font);
-		String details = fileList.get(0).getName();
-		// String details= seqList.get(0).getName();
-		String ScriptNumber = details.split("_")[3];
-		String TestRun = details.split("_")[4];
-		String Status = details.split("_")[6];
-		String status = Status.split("\\.")[0];
-		String Scenario = details.split("_")[2];
-		String imagename = TestRun + ScriptNumber;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
-		String no = details.split("_")[0];
-		Date Starttime = fetchConfigVO.getStarttime();
-		Date endtime = fetchConfigVO.getEndtime();
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String Starttime1 = dateFormat.format(Starttime);
-//Changed the executed by variable
-		String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-		String endtime1 = dateFormat.format(endtime);
-		long diff = endtime.getTime() - Starttime.getTime();
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
-		g.drawString("TEST SCRIPT DETAILS", 450, 50);
-		g.drawString("Test Run Name : " + TName, 50, 100);
-		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Test Case Name :" + Scenario, 50, 200);
-		g.drawString("Status : " + status, 50, 250);
-		g.drawString("Executed By :" + ExeBy, 50, 300);
-		g.drawString("Start Time :" + Starttime1, 50, 350);
-		g.drawString("End Time :" + endtime1, 50, 400);
-		g.drawString("Execution Time : " + ExecutionTime, 50, 450);
-		g.drawImage(logo, 1012, 15, null);
-		g.dispose();
-		System.out.println("before ImageIO.write");
-		File folder1 = new File(
-				fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
-			boolean result = false;
-			try {
-				folder1.mkdirs();
-				result = true;
-			} catch (SecurityException se) {
-				// handle it
-				System.out.println(se.getMessage());
-			}
-		} else {
-			System.out.println("Folder exist");
-		}
-		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
-		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\first.jpg"));
-
-		BufferedImage image1 = null;
-		image1 = ImageIO.read(file);
-		Graphics g1 = image1.getGraphics();
-		g1.setColor(Color.red);
-		java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-		g1.setFont(font1);
-		g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-		g1.drawImage(logo, 1012, 15, null);
-		g1.dispose();
-
-		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-		String imgpath2 = folder1 + "/";
-		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\last.jpg"));
-		// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-		File f11 = new File(imgpath2);
-		File[] f22 = f11.listFiles();
-		System.out.println("before Failed.jpg");
-		if (fileList.get(0).getName().endsWith("Failed.jpg")) {
-			for (File f33 : f22) {
-				if (f33.getAbsolutePath().contains("first")) {
-					linksall.add(f33.getAbsolutePath());
-					linksall.set(0, f33.getAbsolutePath());
-				}
-				if (f33.getAbsolutePath().contains("last")) {
-					linksall.add(f33.getAbsolutePath());
-					linksall.add(f33.getAbsolutePath());
-					linksall.set(1, f33.getAbsolutePath());
-
-				}
-			}
-			fetchConfigVO.setStatus1("Fail");
-			fileNameList.add(fileList.get(0).getName());
-			links1.add(fileList.get(0).getAbsolutePath());
-			links1.add(linksall.get(1));
-			System.out.println("added links1 list");
-			for (int i = 1; i < fileList.size(); i++) {
-
-				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-					links1.add(fileList.get(i).getAbsolutePath());
-					fileNameList.add(fileList.get(i).getName());
-
-				} else {
-
-				}
-
-			}
-
-			links1.add(linksall.get(0));
-			Collections.reverse(links1);
-			Collections.reverse(fileNameList);
-			System.out.println("Collections.reverse");
-		}
-
-		// targetFileList.addAll(seqList);
-
-		/*
-		 * for (String fileName : fileNameList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		if (video_rec.equalsIgnoreCase("Y")) {
-			String name = no + "_" + ScriptNumber + ".mp4";
-			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
-		}
-		return fileNameList;
-	}
-
-	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-
-		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
-		String video_rec = "no";
-//		List<File> fileList = Arrays.asList(listOfFiles);
-		List<File> allFileList = Arrays.asList(listOfFiles);
-		List<File> fileList = new ArrayList<>();
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		// String seqNumber = "1";
-		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_")) {
-				fileList.add(file);
-			}
-		}
-
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-
-		List<String> fileNameList = new ArrayList<String>();
-		ArrayList<String> linksall = new ArrayList<String>();
-		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new ClassPathResource(whiteimage).getFile();
-		// File file = new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new ClassPathResource(watsvediologo).getFile();
-		// File file1=new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-		BufferedImage image = null;
-		image = ImageIO.read(file);
-		BufferedImage logo = null;
-		logo = ImageIO.read(file1);
-		Graphics g = image.getGraphics();
-		g.setColor(Color.black);
-		java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-		g.setFont(font);
-		String details = fileList.get(0).getName();
-		// String details= seqList.get(0).getName();
-		String ScriptNumber = details.split("_")[3];
-		String TestRun = details.split("_")[4];
-		String Status = details.split("_")[6];
-		String status = Status.split("\\.")[0];
-		String Scenario = details.split("_")[2];
-		String imagename = TestRun + ScriptNumber;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
-		String no = details.split("_")[0];
-		Date Starttime = fetchConfigVO.getStarttime();
-		Date endtime = fetchConfigVO.getEndtime();
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String Starttime1 = dateFormat.format(Starttime);
-//Changed the executed by variable
-		String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-		String endtime1 = dateFormat.format(endtime);
-		long diff = endtime.getTime() - Starttime.getTime();
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = df.format(diffHours) + ":" + df.format(diffMinutes) + ":" + df.format(diffSeconds);
-		g.drawString("TEST SCRIPT DETAILS", 450, 50);
-		g.drawString("Test Run Name : " + TName, 50, 100);
-		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Test Case Name :" + Scenario, 50, 200);
-		g.drawString("Status : " + status, 50, 250);
-		g.drawString("Executed By :" + ExeBy, 50, 300);
-		g.drawString("Start Time :" + Starttime1, 50, 350);
-		g.drawString("End Time :" + endtime1, 50, 400);
-		g.drawString("Execution Time : " + ExecutionTime, 50, 450);
-		g.drawImage(logo, 1012, 15, null);
-		g.dispose();
-		File folder1 = new File(
-				fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
-			boolean result = false;
-			try {
-				folder1.mkdirs();
-				result = true;
-			} catch (SecurityException se) {
-				// handle it
-				System.out.println(se.getMessage());
-			}
-		} else {
-			System.out.println("Folder exist");
-		}
-
-		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
-		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\first.jpg"));
-
-		BufferedImage image1 = null;
-		image1 = ImageIO.read(file);
-		Graphics g1 = image1.getGraphics();
-		g1.setColor(Color.red);
-		java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-		g1.setFont(font1);
-		g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-		g1.drawImage(logo, 1150, 15, null);
-		g1.dispose();
-		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\last.jpg"));
-		String imgpath2 = folder1 + "/";
-		// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-		File f11 = new File(imgpath2);
-		File[] f22 = f11.listFiles();
-
-		if (!fileList.get(0).getName().endsWith("Failed.jpg")) {
-			for (File f33 : f22) {
-				if (f33.getAbsolutePath().contains("first")) {
-					linksall.add(f33.getAbsolutePath());
-				}
-			}
-			fetchConfigVO.setStatus1("Pass");
-			fileNameList.add(fileList.get(0).getName());
-			links1.add(fileList.get(0).getAbsolutePath());
-			for (int i = 1; i < fileList.size(); i++) {
-
-				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-					links1.add(fileList.get(i).getAbsolutePath());
-
-					fileNameList.add(fileList.get(i).getName());
-
-				} else {
-
-				}
-
-			}
-
-			links1.add(linksall.get(0));
-			Collections.reverse(links1);
-			Collections.reverse(fileNameList);
-
-		}
-
-		// targetFileList.addAll(seqList);
-
-		/*
-		 * for (String fileName : fileNameList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		if (video_rec.equalsIgnoreCase("Y")) {
-			String name = no + "_" + ScriptNumber + ".mp4";
-			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
-		}
-		return fileNameList;
-
-	}
-
-	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec = "no";
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int passcount = 0;
-		int failcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		String firstimagelink = null;
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-			ArrayList<String> linksall = new ArrayList<String>();
-
-			File file = new ClassPathResource(whiteimage).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
-			Graphics g = image.getGraphics();
-			g.setColor(Color.black);
-			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g.setFont(font);
-
-			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			String TName = fetchMetadataListVO.get(0).getTest_run_name();
-			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
-//Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":"
-					+ df.format(TdiffSeconds);
-			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case Name :" + Scenario, 50, 275);
-			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
-			g.drawImage(logo, 1012, 15, null);
-////		 g.drawString("Start Time :"+TStarttime1, 50, 425);
-////		 g.drawString("End Time :"+endtime1, 50, 500);
-////		 g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-			g.dispose();
-
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
-			Graphics g2 = image2.getGraphics();
-			g2.setColor(Color.black);
-			g2.setFont(font);
-			g2.drawString("TEST RUN SUMMARY", 450, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
-			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
-			g2.drawImage(logo, 1012, 15, null);
-			g2.dispose();
-			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			String imgpath3 = folder1 + "/first.jpg";
-			String imgpath2 = folder1 + "/";
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
-
-			File f11 = new File(imgpath2);
-			File[] f22 = f11.listFiles();
-			File f44 = new File(imgpath3);
-			firstimagelink = f44.getAbsolutePath();
-
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-					}
-				}
-				links1.add(seqList.get(0).getAbsolutePath());
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-						seqFileNameList.add(seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links.addAll(links1);
-				targetFileList.addAll(seqFileNameList);
-
-			}
-
-////                    targetFileList.addAll(seqList);
-
-		}
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Passed_Video.mp4");
-		}
-		System.out.println(targetFileList.size());
-		return targetFileList;
-	}
-
-	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec = "no";
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int failcount = 0;
-		int passcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		String firstimagelink = null;
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-			ArrayList<String> linksall = new ArrayList<String>();
-
-			File file = new ClassPathResource(whiteimage).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
-			Graphics g = image.getGraphics();
-			g.setColor(Color.black);
-			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g.setFont(font);
-			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			String TName = fetchMetadataListVO.get(0).getTest_run_name();
-			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
-//Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":"
-					+ df.format(TdiffSeconds);
-			;
-
-			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case Name :" + Scenario, 50, 275);
-			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
-			g.drawImage(logo, 1150, 15, null);
-////	    g.drawString("Start Time :"+TStarttime1, 50, 425);
-////	    g.drawString("End Time :"+endtime1, 50, 500);
-////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-			g.dispose();
-			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
-
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
-			Graphics g1 = image1.getGraphics();
-			g1.setColor(Color.red);
-			java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g1.setFont(font1);
-			g1.drawImage(logo, 1012, 14, null);
-			g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-			g1.dispose();
-			ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-			// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\last.jpg"));
-
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
-			Graphics g2 = image2.getGraphics();
-			g2.setColor(Color.black);
-			g2.setFont(font);
-			g2.drawString("TEST RUN SUMMARY", 50, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
-			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
-			g2.drawImage(logo, 1012, 15, null);
-			g2.dispose();
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			String imgpath3 = folder1 + "/first.jpg";
-			String imgpath2 = folder1 + "/";
-
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			File f11 = new File(imgpath2);
-			File[] f22 = f11.listFiles();
-			File f44 = new File(imgpath3);
-			firstimagelink = f44.getAbsolutePath();
-
-			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-				failcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(0, f33.getAbsolutePath());
-					}
-					if (f33.getAbsolutePath().contains("last")) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(1, f33.getAbsolutePath());
-
-					}
-				}
-//                                   System.out.println("SEQ : "+seqEntry.getKey());
-				links1.add(seqList.get(0).getAbsolutePath());
-				links1.add(linksall.get(1));
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-						seqFileNameList.add(seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links.addAll(links1);
-				targetFileList.addAll(seqFileNameList);
-
-			}
-
-//                    targetFileList.addAll(seqList);
-
-		}
-//
-//		/*
-//		 * for (String fileName : targetFileList) {
-//		 * 
-//		 * System.out.println("Target File : " + fileName);
-//		 * 
-//		 * }
-//		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Failed_Video.mp4");
-		}
-		return targetFileList;
-
-	}
-
-	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
-		String video_rec = "no";
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int failcount = 0;
-		int passcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> finalLinks = new ArrayList<String>();
-		List<String> targetSuccessFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		ArrayList<String> links2 = new ArrayList<String>();
-		List<String> targetFailedFileList = new ArrayList<>();
-		String firstimagelink = null;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-
-			ArrayList<String> linksall = new ArrayList<String>();
-
-			File file = new ClassPathResource(whiteimage).getFile();
-			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
-			Graphics g = image.getGraphics();
-			g.setColor(Color.black);
-			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g.setFont(font);
-
-			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			// String TName = fetchMetadataListVO.get(0).getTest_run_name();
-			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
-//Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = df.format(TdiffHours) + ":" + df.format(TdiffMinutes) + ":"
-					+ df.format(TdiffSeconds);
-
-			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case Name :" + Scenario, 50, 275);
-			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
-			g.drawImage(logo, 1012, 15, null);
-			// g.drawString("Start Time :"+TStarttime1, 50, 425);
-			// g.drawString("End Time :"+endtime1, 50, 500);
-			// g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-			g.dispose();
-			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
-
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
-			Graphics g1 = image1.getGraphics();
-			g1.setColor(Color.red);
-			java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g1.setFont(font1);
-			g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-			g1.drawImage(logo, 1012, 14, null);
-			g1.dispose();
-
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
-			Graphics g2 = image2.getGraphics();
-			g2.setColor(Color.black);
-			g2.setFont(font);
-			g2.drawString("TEST RUN SUMMARY", 450, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
-			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
-			g2.drawImage(logo, 1012, 15, null);
-			g2.dispose();
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			String imgpath2 = folder1 + "/";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			String imgpath3 = folder1 + "/first.jpg";
-			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			File f11 = new File(imgpath2);
-			File[] f22 = f11.listFiles();
-			File f44 = new File(imgpath3);
-			firstimagelink = f44.getAbsolutePath();
-
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-					}
-				}
-				links1.add(seqList.get(0).getAbsolutePath());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-//			             	                      System.out.println("FIRST S STEP: "+seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-//			                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links.addAll(links1);
-				targetSuccessFileList.addAll(seqFileNameList);
-
-			} else {
-				failcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(0, f33.getAbsolutePath());
-					}
-					if (f33.getAbsolutePath().contains("last")) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(1, f33.getAbsolutePath());
-
-					}
-				}
-//			                                   System.out.println("SEQ : "+seqEntry.getKey());
-				links1.add(seqList.get(0).getAbsolutePath());
-				links1.add(linksall.get(1));
-//			                                   System.out.println("SEQ : "+seqEntry.getKey());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-//			                                   System.out.println("FIRST F STEP: "+seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-//			                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links2.addAll(links1);
-				targetFailedFileList.addAll(seqFileNameList);
-
-			}
-
-//			                    targetFileList.addAll(seqList);
-
-		}
-
-		finalLinks.addAll(links);
-		finalLinks.addAll(links2);
-		targetFileList.addAll(targetSuccessFileList);
-
-		targetFileList.addAll(targetFailedFileList);
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("Y")) {
-
-			convertJPGtoMovie(firstimagelink, finalLinks, fetchMetadataListVO, fetchConfigVO, TName + ".mp4");
-		}
-		return targetFileList;
-	}
-
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
-			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name) {
+			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name) {
 		String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
@@ -1818,7 +819,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getFailFileNameList(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
@@ -1830,7 +831,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		});
 		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String Number = fetchMetadataListVO.get(0).getLine_number();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -1852,7 +853,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getFileNameList(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
@@ -1864,7 +865,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		});
 		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String Number = fetchMetadataListVO.get(0).getLine_number();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -1886,7 +887,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getPassedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
@@ -1898,7 +899,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		});
 		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String STATUS = fetchMetadataListVO.get(0).getStatus();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -1919,7 +920,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
@@ -1931,7 +932,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -1950,7 +951,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getDetailPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
@@ -1961,7 +962,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -1980,7 +981,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
 				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
@@ -2003,7 +1004,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
+	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
 			throws IOException {
 		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
 				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
@@ -2082,7 +1083,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return resizedImage;
 	}
 
-	public List<String> getLowFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getLowFileNameList(List<ScriptDetailsDto> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File("C:\\Kaushik\\");
 		File[] listOfFiles = folder.listFiles();
@@ -2092,7 +1093,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String Number = fetchMetadataListVO.get(0).getLine_number();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -2113,7 +1114,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getLowPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getLowPassedPdf(List<ScriptDetailsDto> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File("C:\\Kaushik\\");
 		File[] listOfFiles = folder.listFiles();
@@ -2123,7 +1124,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String STATUS = fetchMetadataListVO.get(0).getStatus();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -2143,7 +1144,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getLowFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getLowFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO) {
 
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File("C:\\Kaushik\\");
@@ -2154,7 +1155,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -2173,7 +1174,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public List<String> getLowDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
+	public List<String> getLowDetailPdf(List<ScriptDetailsDto> fetchMetadataListVO) {
 		List<String> fileNameList = new ArrayList<String>();
 		File folder = new File("C:\\Kaushik\\");
 		File[] listOfFiles = folder.listFiles();
@@ -2183,7 +1184,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
+		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				System.out.println("File " + listOfFiles[i].getName());
@@ -2202,7 +1203,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return fileNameList;
 	}
 
-	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
 		try {
 			String accessToken = getAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
@@ -2356,18 +1357,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return acessToken;
 	}
 
-	public void copy(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void copy(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Robot r = new Robot();
 			r.keyPress(KeyEvent.VK_CONTROL);
 			r.keyPress(KeyEvent.VK_C);
 			r.keyRelease(KeyEvent.VK_C);
 			r.keyRelease(KeyEvent.VK_CONTROL);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Copy is done " + scripNumber);
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Copy " + scripNumber);
 			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO);
 			e.printStackTrace();
@@ -2375,7 +1376,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}// input[@placeholder='Enter search terms']
 
-	public void paste(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void paste(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String globalValueForSteps)
 
 			throws Exception {
@@ -2420,9 +1421,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//span[text()='inputParam']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -2471,11 +1472,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
 				String xpath = "//*[@title='inputParam']/following::input[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -2483,7 +1484,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Paste Method");
 			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -2519,11 +1520,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
 				String xpath = "//h1[text()='inputParam']/following::input[@placeholder='Search']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -2531,7 +1532,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Paste Method");
 			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -2584,9 +1585,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			 */
 
 			Thread.sleep(3000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[text()='inputParam']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -2629,10 +1630,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
 			Thread.sleep(3000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully paste is done " + scripNumber);
 			String xpath = "//input[@placeholder='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -2641,7 +1642,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Paste Method");
 			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -2650,7 +1651,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void clear(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
+	public void clear(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 
 		try {
@@ -2660,9 +1661,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "']/preceding-sibling::input)[1]"));
 				clearMethod(driver, waittill);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='inputParam1']/following::label[normalize-space(text())='inputParam2']/preceding-sibling::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -2676,16 +1677,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement waittill = driver.findElement(
 						By.xpath("//label[normalize-space(text())='" + inputParam2 + "']/preceding-sibling::input[1]"));
 				clearMethod(driver, waittill);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Accounting Period Cleared" + scripNumber);
 				String xpath = "//label[normalize-space(text())='inputParam2']/preceding-sibling::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Accounting Period Clear" + scripNumber);
 			System.out.println(e);
 		}
@@ -2693,15 +1694,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[contains(text(),'" + inputParam1 + "')]/preceding-sibling::input)[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "(//label[contains(text(),'inputParam1')]/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			System.out.println(e);
 		}
@@ -2710,30 +1711,30 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver
 					.findElement(By.xpath("(//*[normalize-space(text())='" + inputParam1 + "']/following::input)[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='inputParam1']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam1 + "')]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "//*[contains(@placeholder,'inputParam1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			System.out.println(e);
 		}
@@ -2741,15 +1742,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver
 					.findElement(By.xpath("//*[normalize-space(text())='" + inputParam1 + "']/following::textarea[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "//*[normalize-space(text())='inputParam1']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(e);
@@ -2757,7 +1758,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void windowclose(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void windowclose(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			String mainWindow = driver.getWindowHandle();
 			// It returns no. of windows opened by WebDriver and will return Set of Strings
@@ -2776,25 +1777,25 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Successfully Windowclosed" + scripNumber);
 				}
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During WindowClose Acion." + scripNumber);
 			screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	public void switchToActiveElement(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchToActiveElement(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.switchTo().activeElement();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Switched to Element Successfully" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During switchToActiveElement Action." + scripNumber);
 			screenshotFail(driver, "Failed during switchToActiveElement Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(e.getMessage());
@@ -2802,7 +1803,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
@@ -2818,17 +1819,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(80000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String params = param1;
 				String xpath = "(//div[normalize-space(text())='param1'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2841,16 +1842,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String params = param1;
 			String xpath = "//div[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2865,16 +1866,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//a[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2888,16 +1889,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//div[contains(@style,'display: block')]//div[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
@@ -2913,15 +1914,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2934,16 +1935,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String params = param1;
 			String xpath = "(//div[contains(@id,'param1')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			System.out.println(e);
 			log.error("failed during ClickMenu " + scripNumber);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
@@ -2951,7 +1952,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void clickSignInSignOut(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2961,15 +1962,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					.findElement(By.xpath(("//button[normalize-space(normalize-space(text())='" + param1 + "')]")));
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully clicked SingnInSignOut" + scripNumber);
 			String xpath = "//button[normalize-space(normalize-space(text())='param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			System.out.println(e);
 			log.error("Failed during SingnInSignOut " + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
@@ -2977,7 +1978,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}// *[text()='Action Required']/following::a[1]
 
-	public void clickNotificationLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickNotificationLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 
 		// placeholder changed from 'Enter Search Terms to Search' in Fusion Instance
@@ -2994,17 +1995,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Clicked NotificationLink" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::input[@placeholder='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -3020,16 +2021,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked NotificationLink" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -3044,16 +2045,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked NotificationLink" + scripNumber);
 			String params = param1;
 			String xpath = "//*[@placeholder='param1']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			System.out.println(e);
 			log.error("Failed during NotificationLink" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
@@ -3062,7 +2063,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void clickButtonDropdown(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -3074,16 +2075,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//a[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickButtonDropdown " + scripNumber);
 			System.out.println(e);
 		}
@@ -3098,16 +2099,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[contains(text(),'param1')]/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			System.out.println(e);
 
@@ -3126,15 +2127,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			System.out.println(e);
 		}
@@ -3150,16 +2151,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			System.out.println(e);
 		}
@@ -3172,16 +2173,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -3189,7 +2190,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void clickButtonDropdownText(WebDriver driver, String param1, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
@@ -3201,15 +2202,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(5000);
 			WebElement waittext = driver.findElement(By.xpath("//li[normalize-space(text())='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			String xpath = "//li[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			System.out.println(e);
 		}
@@ -3222,15 +2223,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			String xpath = "//div[contains(@class,'PopupMenuContent')]//td[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			System.out.println(e);
 		}
@@ -3242,23 +2243,23 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			String xpath = "//td[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Process Monitor")) {
@@ -3277,26 +2278,26 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					WebElement Expand = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + param1
 							+ "']/following::*[@title='" + param2 + "'])[1]"));
 					Expand.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Expanded or Collapsed" + scripNumber);
 
 				} catch (Exception e) {
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed During ClickExpand or Collapse" + scripNumber);
 				}
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Process Monitor ClickExpand or Collapse" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Process Monitor ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3319,16 +2320,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			} catch (Exception e) {
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//h2[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3348,25 +2349,25 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement Expand = driver.findElement(By.xpath(
 						"(//h1[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3382,16 +2383,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//span[contains(text(),'param1')])[1]/preceding::a[3][@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3410,22 +2411,22 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement Expand = driver.findElement(By.xpath(
 						"(//*[normalize-space(text())='" + param1 + "']/following::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 				xpath = xpath + ";" + "(//*[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3444,23 +2445,23 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement Expand = driver.findElement(By.xpath(
 						"(//*[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 				xpath = xpath + ";" + "(//*[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3478,23 +2479,23 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement Expand = driver
 						.findElement(By.xpath("//*[text()='" + param1 + "']/preceding::a[@title='" + param2 + "']"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3516,24 +2517,24 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						"//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + param2
 								+ "']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 				xpath = xpath + ";"
 						+ "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]";
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
@@ -3542,7 +2543,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void selectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 
 			if (param1.equalsIgnoreCase("Locations")) {
@@ -3556,17 +2557,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3583,10 +2584,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'keysToSend')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -3594,7 +2595,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 		}
@@ -3613,16 +2614,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::a[text()='keysToSend' and not(@style)]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3640,16 +2641,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend']//following::span[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3667,16 +2668,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::img[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3693,16 +2694,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param2')]/following::*[normalize-space(text())='keysToSend'][1]/following::img/following::a[contains(@id,'RecentlyCompletedPpr')])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3721,18 +2722,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='keysToSend']/following::img[contains(@title,'param2')][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -3749,18 +2750,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[contains(text(),'keysToSend')]/following::*[@title='param2'][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -3777,15 +2778,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::span[normalize-space(text())='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3800,15 +2801,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3823,15 +2824,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3846,16 +2847,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -3865,7 +2866,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	/*
 	 * public void oicClickMenu(WebDriver driver, String param1, String param2,
-	 * FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws
+	 * ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws
 	 * Exception {
 	 * 
 	 * try { if(param1.equalsIgnoreCase("Monitoring") &&
@@ -3876,13 +2877,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	 * actions.moveToElement(waittext).build().perform(); screenshot(driver, "",
 	 * fetchMetadataVO, fetchConfigVO); //clickValidateXpath(driver,
 	 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(15000); String
-	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * scripNumber = fetchMetadataVO.getScriptNumber();
 	 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 	 * String xpath = "(//span[text()='param2'])[2]"; String
-	 * scriptID=fetchMetadataVO.getScript_id();String
+	 * scriptID=fetchMetadataVO.getScriptId();String
 	 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 	 * scriptID,metadataID,xpath); return; } } catch (Exception e) { String
-	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * scripNumber = fetchMetadataVO.getScriptNumber();
 	 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
 	 * }try { //Thread.sleep(3000); Thread.sleep(7000); WebDriverWait wait = new
 	 * WebDriverWait(driver, fetchConfigVO.getWait_time()); WebElement waittext =
@@ -3891,20 +2892,20 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	 * actions.moveToElement(waittext).build().perform(); screenshot(driver, "",
 	 * fetchMetadataVO, fetchConfigVO); //clickValidateXpath(driver,
 	 * fetchMetadataVO, waittext, fetchConfigVO); Thread.sleep(15000); String
-	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * scripNumber = fetchMetadataVO.getScriptNumber();
 	 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 	 * String xpath = "//span[text()='param1']"; String
-	 * scriptID=fetchMetadataVO.getScript_id();String
+	 * scriptID=fetchMetadataVO.getScriptId();String
 	 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 	 * scriptID,metadataID,xpath); return; } catch (Exception e) { String
-	 * scripNumber = fetchMetadataVO.getScript_number();
+	 * scripNumber = fetchMetadataVO.getScriptNumber();
 	 * log.error("Failed during clickButton" + scripNumber); screenshotFail(driver,
 	 * "Failed during click Button Method", fetchMetadataVO, fetchConfigVO); throw
 	 * e; } }
 	 * 
 	 */
 
-	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 
 		try {
@@ -3918,16 +2919,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				JavascriptExecutor js = (JavascriptExecutor) driver;
 				js.executeScript("arguments[0].click();", waittext);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//span[text()='param2'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -3941,15 +2942,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", waittext);
 			Thread.sleep(15000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath = "//span[text()='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -3957,7 +2958,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public String clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -3973,15 +2974,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@id,'param2')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			System.out.println(e);
 		}
@@ -3999,15 +3000,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			System.out.println(e);
 		}
@@ -4023,23 +3024,23 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[@value='keysToSend']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// prod
 		try {
@@ -4056,7 +3057,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "(//*[contains(text(),'param1')]/following::img[@class='promptComboBoxButtonMoz'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -4079,7 +3080,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "(//*[text()='param1']/following::img[@class='promptComboBoxButtonMoz'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -4103,7 +3104,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				String xpath = "//*[text()='param1']/following::div[@role='button'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -4127,7 +3128,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String xpath = "//h1[normalize-space(text())='param1']/preceding::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -4159,13 +3160,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 
 				String xpath = "(//a[contains(@id,'param1')])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -4175,7 +3176,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickImag" + scripNumber);
 
@@ -4200,19 +3201,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						"//h1[normalize-space(text())='" + param1 + "']/following::span[text()='" + param2 + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String xpath1 = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
 				String xpath2 = "//h1[normalize-space(text())='param1']/following::span[text()='param2']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4225,17 +3226,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[contains(@title,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4252,16 +3253,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver clickImage" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Provider or Receiver clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4277,16 +3278,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::img[@title='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4302,16 +3303,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Report clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param2')/following::input[1]]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4326,17 +3327,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4351,16 +3352,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Customer clickImage" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::a[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4374,16 +3375,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Add to Selected clickImage" + scripNumber);
 				String xpath = "//a[@title='param1']//img[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Selected clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4398,16 +3399,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Go to Member Selection clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::input[@title='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Go to Member Selection clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4423,14 +3424,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
 		 * fetchMetadataVO, waittext, fetchConfigVO); screenshot(driver, "",
 		 * fetchMetadataVO, fetchConfigVO); String scripNumber =
-		 * fetchMetadataVO.getScript_number();
+		 * fetchMetadataVO.getScriptNumber();
 		 * log.info("Sucessfully Clicked Provider or Receiver clickImage" +
 		 * scripNumber); String xpath =
 		 * "//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
-		 * String scriptID=fetchMetadataVO.getScript_id();String
+		 * String scriptID=fetchMetadataVO.getScriptId();String
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath); return; } } catch (Exception e) { String
-		 * scripNumber = fetchMetadataVO.getScript_number();
+		 * scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during Provider or Receiver clickImag" + scripNumber);
 		 * System.out.println(e); }
 		 */
@@ -4445,17 +3446,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[contains(@id,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4470,17 +3471,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//a[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4493,16 +3494,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//h1[normalize-space(text())='" + param1 + "']/preceding::a[1]"));
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Back clickImage" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/preceding::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Back clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4521,17 +3522,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					By.xpath("//h1[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath1 = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
 			String xpath2 = "//h1[normalize-space(text())='param1']/following::img[@title='param2']";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4545,15 +3546,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::img[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4568,15 +3569,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(8000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4594,17 +3595,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath1 = "(//*[normalize-space(text())='param1']/following::div[@role='button'])[1]";
 			String xpath2 = "//*[normalize-space(text())='param1']/following::img[@title='param2']";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4620,15 +3621,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[contains(@id,'param2')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4643,15 +3644,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::img[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4665,22 +3666,22 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[contains(@aria-label,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			screenshotFail(driver, "Failed during click Image Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Manage") || (param1.equalsIgnoreCase("Award"))) {
@@ -4695,17 +3696,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//a[@accessKey='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4719,7 +3720,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Primary Mailing") && param2.equalsIgnoreCase("Edit")) {
@@ -4733,16 +3734,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::*[text()='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4760,16 +3761,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//div[@class='masterMenu DropDownSearch' and @style='display: block;']/span[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4787,16 +3788,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//button[text()='Sen']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4816,16 +3817,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//table[contains(@id,'warningPopup')]//*[text()='param1']/following::*[text()='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4843,17 +3844,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//span[text()='enerate Schedules']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4876,10 +3877,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				// Thread.sleep(15000);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and @type='button'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -4887,7 +3888,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4907,10 +3908,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//h2[text()='param1']/following::*[text()='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -4918,7 +3919,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4941,13 +3942,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Create Baseline clickButton" + scripNumber);
 
 				String xpath = "//*[text()='aseline']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -4957,7 +3958,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4983,13 +3984,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Search clickButton" + scripNumber);
 
 				String xpath = "//*[text()='Sea']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -4999,7 +4000,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -5021,17 +4022,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//a[@accessKey='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5050,10 +4051,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//div[contains(@id,'popup-container')]//td[text()='param1']//preceding-sibling::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5061,7 +4062,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5081,10 +4082,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//div[contains(@class,'PopupMenuContent')])[2]//td[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5092,7 +4093,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5120,14 +4121,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(1000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Done Button" + scripNumber);
 
 				String xpath = "//div[contains(@id,'popup-container')]//*[text()='param1']/following::button[text()='param2'])[1]";
 
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5137,7 +4138,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clicking Done Button" + scripNumber);
 
@@ -5162,13 +4163,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 
 				String xpath = "//button[text()='ave and Close']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5178,7 +4179,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -5205,13 +4206,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='K'])[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5221,7 +4222,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -5245,13 +4246,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='O'])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5261,7 +4262,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -5288,13 +4289,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='K'])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5304,7 +4305,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -5329,13 +4330,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			Thread.sleep(15000);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 			String xpath = "//div[contains(@class,'PopupMenu')]//*[text()='param1']";
 
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5343,7 +4344,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -5362,17 +4363,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//span[text()='i'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 		}
 
@@ -5387,10 +4388,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//input[@value='Apply']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5398,7 +4399,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5414,11 +4415,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[text()='param1']/following::*[text()='K']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5426,7 +4427,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5441,11 +4442,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']/following::*[text()='S']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5453,7 +4454,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5468,10 +4469,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "(//span[text()='S'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5479,7 +4480,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5500,17 +4501,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//div[text()='param1']/following::button[text()='param2'][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5526,16 +4527,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='o']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath); return;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5551,11 +4552,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::td[text()='param2'][2]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5563,7 +4564,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5583,17 +4584,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(4000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='Create Address']/following::*[text()='K'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
 
@@ -5608,10 +4609,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='Submit or text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5619,7 +4620,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5635,17 +4636,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 		}
 		try {
@@ -5661,17 +4662,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "(//span[text()='o'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
 			System.out.println(e);
 		}
@@ -5686,17 +4687,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
 			System.out.println(e);
 		}
@@ -5714,16 +4715,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Members clickButton" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='Notifications']/following::button[text()='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5737,10 +4738,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -5748,7 +4749,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5765,17 +4766,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='Create Time Card']/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5795,16 +4796,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(4000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Edit Line clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::span[normalize-space(text())='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit Line clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5819,16 +4820,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Members clickButton" + scripNumber);
 				String xpath = "//button[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5844,16 +4845,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Contacts clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::button[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Contacts clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5873,16 +4874,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//div[contains(@id,'RejectPopup::content')]//span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5902,17 +4903,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(4000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param1']/following::*[not (@aria-disabled) and text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
 		try {
@@ -5928,17 +4929,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//[contains(text(),'param1')]/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
 		try {
@@ -5955,17 +4956,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Select clickButton" + scripNumber);
 				String xpath = "(//input[contains(@value,'param1') and (@type)]/following::button[contains(text(),'param2')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Select clickButton" + scripNumber);
 		}
 		try {
@@ -5980,16 +4981,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[contains(@id,'tAccountPopup::content')]//*[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Done clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6007,16 +5008,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//input[@value='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6032,11 +5033,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[text()='ne']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6054,10 +5055,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approval and Notification History or Done clickButton" + scripNumber);
 				String xpath = "//div[contains(text(),'param1')]/following::span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6074,10 +5075,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6092,10 +5093,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//span[text()='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6113,10 +5114,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6129,10 +5130,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Distributions clickButton" + scripNumber);
 				String xpath = "//span[text()='istributions']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6152,10 +5153,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Holds or Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::button[text()='Save and Close']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6173,10 +5174,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6191,10 +5192,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Next clickButton" + scripNumber);
 				String xpath = "//span[text()='x']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6211,10 +5212,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Next clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6236,10 +5237,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Yes clickButton" + scripNumber);
 				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::span[text()='Y']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6256,10 +5257,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 				String xpath = "//button[@_afrpdo='ok' and @accesskey='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6287,13 +5288,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(4000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "//button[@accesskey='d']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -6308,10 +5309,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6325,10 +5326,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Continue clickButton" + scripNumber);
 				String xpath = "//span[text()='u']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6342,10 +5343,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Continue clickButton" + scripNumber);
 				String xpath = "//button[text()='Contin']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6357,10 +5358,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close clickButton" + scripNumber);
 				String xpath = "//button[text()='Cl']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6375,10 +5376,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Adjustment clickButton" + scripNumber);
 				String xpath = "(//span[text()='param1'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6390,10 +5391,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Cancel clickButton" + scripNumber);
 				String xpath = "//span[text()='C']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6407,10 +5408,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save clickButton" + scripNumber);
 				String xpath = "//span[text()='ave']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6425,10 +5426,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//span[text()='l']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6447,10 +5448,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(2000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='l']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6467,16 +5468,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Accept clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='p']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
 			System.out.println(e);
 
@@ -6495,17 +5496,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during OK clickButton" + scripNumber);
 		}
 		try {
@@ -6520,10 +5521,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked add Application clickButton" + scripNumber);
 					String xpath = "//span[text()='A']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				} catch (Exception e) {
@@ -6536,18 +5537,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during add Application clickButton" + scripNumber);
 					String xpath = "//a[text()='Application']/following::div[@role='button'][2]" + ";"
 							+ "//span[text()='A']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during add Application clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6566,10 +5567,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 					Thread.sleep(4000);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Unapply Application clickButton" + scripNumber);
 					String xpath = "//button[text()='param1']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				} catch (Exception e) {
@@ -6582,18 +5583,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Unapply Application clickButton" + scripNumber);
 					String xpath = "//a[text()='Application']/following::div[@role='button'][2]" + ";"
 							+ "//button[text()='param1']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Application clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6610,17 +5611,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Submit clickButton" + scripNumber);
 		}
 		try {
@@ -6636,16 +5637,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6665,16 +5666,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
 				String xpath = "(//td[normalize-space(text())='param1'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Columns or Show All clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6690,16 +5691,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Add to Document Builder clickButton" + scripNumber);
 				String xpath = "//button[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Document Builder clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6716,10 +5717,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Freeze clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_FREEZE')]//td[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6735,10 +5736,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Unfreeze clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_UNFREEZE')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6754,10 +5755,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_CLOSE')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6773,10 +5774,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reopen clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_REOPEN')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -6792,16 +5793,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Edit clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_EDIT')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6818,16 +5819,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Edit clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'commandMenuItem')]//td[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6843,16 +5844,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reverse clickButton" + scripNumber);
 				String xpath = "//div[@class='AFPopupMenuPopup']//td[(normalize-space(text())='param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reverse clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6867,16 +5868,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(60000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
 				String xpath = "//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6892,16 +5893,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//button[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6917,16 +5918,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']/following::*[text()='K'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6944,16 +5945,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//span[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6970,16 +5971,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//td[(normalize-space(text())='param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6997,16 +5998,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//button[text()='param1'and not(@style='display:none')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -7023,16 +6024,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//div[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -7049,16 +6050,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'PopupMenu')]/following::*[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 		}
 		try {
@@ -7070,15 +6071,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and not(@_afrpdo)])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -7091,15 +6092,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -7112,15 +6113,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -7137,15 +6138,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 		}
 //		   try {
@@ -7172,15 +6173,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
@@ -7189,7 +6190,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickTableLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Manage Agreements") && (param2.equalsIgnoreCase("Headers: Search Results"))) {
@@ -7205,17 +6206,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a[contains(@title,'Blanket Purchase Agreement') or contains(@title,'Contract Purchase Agreement')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7231,14 +6232,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//table[1]//a)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7255,10 +6256,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]/parent::span";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -7280,18 +6281,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::table[@summary='param2']//span[@title]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7310,17 +6311,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7335,17 +6336,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//a)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7362,17 +6363,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//a[not (contains(@title,'Required information'))])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7388,17 +6389,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approved clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//*[normalize-space(text())='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approved clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7415,16 +6416,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Orders clickTableLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a[contains(@title,'Purchase Order')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Orders clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7440,17 +6441,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Receipts clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param2']//td)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Receipts clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7482,13 +6483,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(2000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Journals in Requiring Attention clickTableLink" + scripNumber);
 
 				String xpath = "//h2[text()='param1']//following::table[@summary='param2']//a[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -7498,7 +6499,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Journals in Requiring Attention clickTableLink" + scripNumber);
 			System.out.println(e);
@@ -7515,16 +6516,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//td[2]//span)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7541,18 +6542,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickTableLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//table[@summary='param1']//a[not (@title)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7567,16 +6568,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 			String xpath = "//h1[normalize-space(text())='param1']/following::img[@title='param2']/following-sibling::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -7584,7 +6585,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void tableRowSelect(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void tableRowSelect(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 
@@ -7602,17 +6603,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 				String xpath = "(//div[@class='AFDetectExpansion']/following::span[normalize-space(text())='param1']/following::table//span[text()])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7629,16 +6630,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(10000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked SecondLine tableRowSelect" + scripNumber);
 				String xpath = "(//table[@summary='param2']//tr[2]//td)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during SecondLine tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7654,16 +6655,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Here1 came tableRowSelect" + scripNumber);
 			String xpath = "(//table[@summary='param1']//td)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Here1 came tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7677,16 +6678,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(4000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param1'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7700,15 +6701,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::tr[1]/td[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7721,17 +6722,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::tr[1]/td[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -7746,22 +6747,22 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[contains(@summary,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 			throw e;
 		}
 	}
 
-	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			try {
@@ -7788,13 +6789,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 					Thread.sleep(5000);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 
 					String xpath = "//*[normalize-space(text())='param1']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -7806,7 +6807,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				System.out.println(e);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.error("Failed during Approve clickLink" + scripNumber);
 
@@ -7835,13 +6836,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					log.info("Sucessfully Clicked Scanned clickLink" + scripNumber);
 
 					String xpath = "//span[text()='param2']/following::span[text() > '0'][1]";
 
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					return;
@@ -7850,7 +6851,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			} catch (Exception e) {
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.error("Failed during Scanned clickLink" + scripNumber);
 
@@ -7872,11 +6873,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					// actions.moveToElement(Keys.PAGE_DOWN).build().perform();
 					waittext.click();
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 					String xpath = "//*[contains(text(),'param1')]/following::*[text()='param2'][1]";
 					// service.saveXpathParams(param1, param2, scripNumber, xpath);
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -7884,7 +6885,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					return;
 				}
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during Export clickLink" + scripNumber);
 				System.out.println(e);
 			}
@@ -7897,17 +6898,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(6000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String xpath = "//input[@value='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7922,17 +6923,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Home clickLink" + scripNumber);
 				String xpath = "(//a[contains(@id,'UIShome')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Home clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7949,17 +6950,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Financials Details or Invoices clickLink" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[text()='param1')[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financials Details or Invoices  clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7975,10 +6976,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -7986,7 +6987,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approve clickLink" + scripNumber);
 		}
 		try {
@@ -8006,17 +7007,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
 				String xpath = "//label[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8033,17 +7034,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8059,10 +7060,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// actions.moveToElement(Keys.PAGE_DOWN).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -8070,7 +7071,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8087,10 +7088,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					waittext.click();
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Project clickLink" + scripNumber);
 					String xpath = "//a[normalize-space(text())='param1']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -8106,11 +7107,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					waittext.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Project clickLink" + scripNumber);
 					String xpath = "//span[text()='Allocate']/following::div[@role='button'][2]" + ";"
 							+ "//a[normalize-space(text())='param1']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
@@ -8119,7 +7120,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 		}
 		try {
@@ -8140,17 +7141,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(30000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Financial Reporting Center clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financial Reporting Center clickLink" + scripNumber);
 		}
 		try {
@@ -8171,17 +7172,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(30000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Receivables clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receivables clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8198,16 +7199,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
 				String xpath = "//h2[text()='param1']/following::a[text()='Actions']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8224,16 +7225,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
 				String xpath = "//table[@summary='param1']//span[text()='Approved']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8249,17 +7250,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Details" + scripNumber);
 
 				String xpath = "(//*[contains(text(),'param1')]/following::*[text()='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Details" + scripNumber);
 			System.out.println(e);
 		}
@@ -8282,17 +7283,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8314,17 +7315,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Journal clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Journal clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8346,17 +7347,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Receipt Details clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receipt Details clickLink" + scripNumber);
 		}
 		try {
@@ -8371,17 +7372,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked View clickLink" + scripNumber);
 				String xpath = "//a[text()='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during View clickLink" + scripNumber);
 		}
 		try {
@@ -8398,11 +7399,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Invoice Actions clickLink" + scripNumber);
 				String xpath = "//div[text()='Warning']/following::button[text()='Continue']" + ";"
 						+ "//a[normalize-space(text())='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -8422,17 +7423,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					waittext.click();
 					Thread.sleep(2000);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked clickLink" + scripNumber);
 					String params = param1;
 					String xpath = "//a[text()='param1'][1]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					return;
 				}
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during clickLink" + scripNumber);
 				System.out.println(e);
 			}
@@ -8450,22 +7451,22 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					waittext.click();
 					Thread.sleep(2000);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked clickLink" + scripNumber);
 					String params = param1;
 					String xpath = "//a[contains(text()='param1')][1]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					return;
 				}
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during clickLink" + scripNumber);
 				System.out.println(e);
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Invoice Actions clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8483,17 +7484,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[normalize-space(text())='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8510,17 +7511,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reports and Analytics clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8538,17 +7539,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Attachment or Invoice Summary clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Attachment or Invoice Summary clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8564,15 +7565,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			waittext.click();
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::span)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8587,17 +7588,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[contains(text(),'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8612,18 +7613,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//a[contains(@id,'param1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8637,17 +7638,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//div[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8661,18 +7662,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 
 				String params = param1;
 				String xpath = "//a[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8687,17 +7688,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//*[contains(@title,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8713,17 +7714,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//div[contains(text(),'param1')])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8737,17 +7738,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[@role='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8761,16 +7762,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -8787,16 +7788,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "//h1[contains(text(),'param1')]/following::*[text()='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -8804,7 +7805,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void clickRadiobutton(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 
 		// DH 32
 		try {
@@ -8823,10 +7824,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::input[@type='radio']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -8834,7 +7835,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 		}
@@ -8858,16 +7859,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[text()='param2']/following::label[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			System.out.println(e);
 		}
@@ -8881,16 +7882,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			System.out.println(e);
 		}
@@ -8904,16 +7905,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "//*[text()='param1']/following::*[text()='keysToSend']/following::label";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			System.out.println(e);
 		}
@@ -8926,24 +7927,24 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend']/preceding-sibling::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Compare and Award")) {
@@ -8964,17 +7965,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8993,18 +7994,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[text()='param1']/following::span[text()='keysToSend'])[1]/preceding::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9024,18 +8025,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9055,18 +8056,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9086,18 +8087,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[text()='param1']/following::span[text()='keysToSend'])[2]/preceding::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9115,17 +8116,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[normalize-space(text())='param1']/following::input[@type='checkbox'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
@@ -9144,17 +8145,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[normalize-space(text())='param1']/following::input[@type='checkbox'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
@@ -9175,18 +8176,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[text()='param1']/following::span[text()='keysToSend']/following::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9210,18 +8211,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Item Description clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[contains(@id,'Label')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Item Description clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9243,18 +8244,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9275,17 +8276,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Scenario clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Scenario clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9306,17 +8307,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9332,16 +8333,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Name clickCheckbox" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Name clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9361,17 +8362,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Match Invoice Lines clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='Match Invoice Lines']/following::*[normalize-space(text())='Match']/following::label[contains(@id,'Label')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Match Invoice Lines clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9388,16 +8389,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9418,16 +8419,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9447,16 +8448,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9476,16 +8477,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -9502,16 +8503,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
@@ -9531,16 +8532,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "(//*[contains(text(),'param1')]/following::input[@type='checkbox'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
@@ -9549,7 +8550,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void clickLinkAction(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9571,15 +8572,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -9595,16 +8596,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -9622,16 +8623,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='keysToSend']/following::td[normalize-space(text())='param1']/following::table[1]//div)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -9648,15 +8649,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -9673,16 +8674,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -9690,7 +8691,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
 			if (param1.equalsIgnoreCase("Compose")) {
@@ -9727,7 +8728,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
 				String xpath = "//body[@dir='ltr']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
@@ -9753,15 +8754,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			System.out.println(e);
 		}
@@ -9779,15 +8780,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::textarea)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			System.out.println(e);
 		}
@@ -9804,15 +8805,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//*[text()='param1']/following::*[text()='param2']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			System.out.println(e);
 		}
@@ -9830,16 +8831,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//h1[text()='param1']/following::label[text()='param2'])[2]/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -9854,16 +8855,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//body[@dir='ltr']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -9871,7 +8872,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Create Interview") && param2.equalsIgnoreCase("Interviewers")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9889,17 +8890,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
 				String xpath = "(//h1[text()='param1']/following::label[text()='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9920,16 +8921,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//div[@class='AFDetectExpansion']/following::div[text()='param1']/following::label[text()='param2'][2]/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9950,16 +8951,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[@placeholder='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9976,7 +8977,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -9984,7 +8985,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 			// return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 			// throw e;
@@ -10003,16 +9004,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//h2[text()='param1']/following::label[text()='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10031,16 +9032,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::*[text()='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10057,16 +9058,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10083,16 +9084,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[@aria-live='off'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10120,13 +9121,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(1000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
 
 				String xpath = "//*[text()='param1']/following::*[@placeholder='dd-mmm-yyyy'][1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10136,7 +9137,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Invoice Dates sendValue" + scripNumber);
 
@@ -10157,16 +9158,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[text()='param1']//following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10184,16 +9185,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10214,18 +9215,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
 				String xpath = "(//h2[text()='param1']//following::label[text()='param2']//following::input)[1]" + ";"
 						+ "//*[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10247,16 +9248,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::label[text()='Phone']/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10274,15 +9275,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10300,17 +9301,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10330,17 +9331,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10354,19 +9355,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Password sendValue" + scripNumber);
 				String xpath = "//input[@type='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-//                                       String scriptID=fetchMetadataVO.getScript_id();String lineNumber=fetchMetadataVO.getLine_number();service.saveXpathParams(scriptID, lineNumber, xpath);
+//                                       String scriptID=fetchMetadataVO.getScriptId();String lineNumber=fetchMetadataVO.getLine_number();service.saveXpathParams(scriptID, lineNumber, xpath);
 //                String lineNumber=fetchMetadataVO.getLine_number();
 //                service.saveXpathParams(scriptID,metadataID);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Password sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10394,13 +9395,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(1000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
 
 				String xpath = "//*[text()='param1']//following::*[contains(text(),'param2')]/preceding::input[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10410,7 +9411,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Invoice Dates  sendValue" + scripNumber);
 
@@ -10433,13 +9434,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(500);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = " //label[@title='param1']/following::input[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10449,7 +9450,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
@@ -10469,17 +9470,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
 				String xpath = "//h1[text()='param1']//following::label[text()='param2']//following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10500,13 +9501,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(500);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = " //label[@title='param1']/following::input[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10516,7 +9517,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
@@ -10536,17 +9537,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())=' param1 ']/following::input[@placeholder=' param2 '][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10561,17 +9562,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Report sendValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param2')]/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10589,10 +9590,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[contains(text(),'param2')]/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
@@ -10600,7 +9601,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10617,11 +9618,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10630,7 +9631,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10646,16 +9647,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Phone or Mobile sendValue" + scripNumber);
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[3]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Phone or Mobile sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10671,17 +9672,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Line or Name sendValue" + scripNumber);
 				String xpath = "(//div[normalize-space(text())=' param1 ']/following::label[normalize-space(text())=' param2 ']/following::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Line or Name  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10700,10 +9701,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card or Person Name sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::span[text()='param2']//input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
@@ -10711,7 +9712,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card or Person Name sendValue" + scripNumber);
 			System.out.println(e);
 
@@ -10731,16 +9732,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(3000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(10000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Query By Example sendValue" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::*[@title='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Query By Example  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10764,16 +9765,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Unapply Accounting Date sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Accounting Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10786,10 +9787,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[contains(@id,'PeriodName::content')]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10804,11 +9805,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					Thread.sleep(2000);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
 					String xpath = "//img[@title='Query By Example']" + ";"
 							+ "//*[contains(@id,'PeriodName::content')]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
@@ -10816,7 +9817,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10836,17 +9837,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Accounting Periods sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::*[@title='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Accounting Periods sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10862,17 +9863,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::input[@placeholder='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10888,19 +9889,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = "(//*[contains(text(),'param2')]/following::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10918,17 +9919,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Daily Rates  sendValue" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[not (@type='hidden')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Daily Rates sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -10944,10 +9945,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10955,7 +9956,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 		}
 		// DH 15
@@ -10973,10 +9974,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/following::input[contains(@id,'qry') and not (@role)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -10984,7 +9985,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11012,14 +10013,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(500);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/following::input[contains(@id,'Ed')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -11030,7 +10031,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			// return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 			// throw e;
@@ -11050,10 +10051,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input[@type='text'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
@@ -11061,7 +10062,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11083,15 +10084,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//h2[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11113,16 +10114,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 		}
 		try {
@@ -11138,16 +10139,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// waittill.sendKeys(keysToSend);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "//*[contains(@placeholder,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11166,10 +10167,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::input[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -11177,7 +10178,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(5000);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11198,16 +10199,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11228,15 +10229,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(8000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11252,16 +10253,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -11280,16 +10281,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::img[@title='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -11308,16 +10309,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -11337,15 +10338,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[text()='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 			throw e;
@@ -11354,7 +10355,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void dropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 
 			if (param2.equalsIgnoreCase("Postal Code") || param2.equalsIgnoreCase("Legal Entity")) {
@@ -11378,7 +10379,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				String xpath = "//div[contains(@id,'dropdownPopup::popup-container')]//a[contains(text(),'Search')][1]"
 						+ ";"
 						+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				if (keysToSend != null) {
@@ -11400,12 +10401,12 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 									+ "']/following::*[text()='OK'][1]"));
 
 					button.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Postal Code Legal Entity dropdownTexts" + scripNumber);
 					String xpath1 = "(//div[@class='AFDetectExpansion']/following::span[normalize-space(text())='param2']/following::table//span[text()])[1]"
 							+ ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
-					String scriptID1 = fetchMetadataVO.getScript_id();
+					String scriptID1 = fetchMetadataVO.getScriptId();
 					String metadataID1 = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID1, metadataID1, xpath1);
 				}
@@ -11415,7 +10416,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Postal Code Legal Entity  dropdownTexts" + scripNumber);
 
 			System.out.println(e);
@@ -11435,15 +10436,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			String xpath = "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -11464,15 +10465,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			String xpath = "(//div[contains(@id,'dropdownPopup::dropDownContent')]//*[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -11494,7 +10495,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			String xpath1 = "//div[contains(@id,'dropdownPopup::dropDownContent')]/following::a[contains(text(),'Search')][1]";
 			String xpath2 = "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			String xpath = xpath1 + ";" + xpath2;
 			if (keysToSend != null) {
@@ -11504,14 +10505,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					WebElement text = driver.findElement(By.xpath(
 							"//div[@class='AFDetectExpansion']/following::span[text()='Name']/following::span[normalize-space(text())='"
 									+ keysToSend + "']"));
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 					text.click();
 					xpath = xpath + ";"
 							+ "//div[@class='AFDetectExpansion']/following::span[text()='Name']/following::span[normalize-space(text())='keysToSend']";
 
 				} catch (Exception e) {
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during dropdownTexts" + scripNumber);
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
@@ -11524,7 +10525,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='K'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 				xpath = xpath + ";"
 						+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[not (@aria-disabled) and text()='K'][1]";
@@ -11533,7 +10534,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during dropdownTexts" + scripNumber);
 				xpath = xpath + ";"
 						+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[not (@aria-disabled) and text()='OK'][1]";
@@ -11541,7 +10542,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -11560,18 +10561,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement button = driver.findElement(
 					By.xpath("//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			String xpath1 = "//div[contains(@id,'PopupId::content')]/following::*[normalize-space(text())='Search']/following::*[text()='Name']/following::input[@type='text'][1]";
 			String xpath2 = "(//span[contains(text(),'keysToSend')])[1]";
 			String xpath3 = "//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]";
 			String xpath = xpath1 + ";" + xpath2 + ";" + xpath3;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -11591,14 +10592,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			String xpath = "//h1[contains(text(),'param1')]/following::label[normalize-space(text())='keysToSend']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -11614,14 +10615,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			search.click();
 			String xpath = "//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]";
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			try {
 				WebElement searchResult = driver.findElement(
 						By.xpath("//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='"
 								+ param2 + "']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
 				xpath = xpath + ";"
 						+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='param2']/following::input[1]";
@@ -11629,7 +10630,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement searchResult = driver.findElement(By.xpath(
 						"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during dropdownTexts" + scripNumber1);
 				xpath = xpath + ";"
 						+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='Name']/following::input[1]";
@@ -11642,7 +10643,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							"//div[@class='AFDetectExpansion']/following::span[text()='Name']/following::span[text()='"
 									+ keysToSend + "']"));
 					text.click();
-					String scripNumber1 = fetchMetadataVO.getScript_number();
+					String scripNumber1 = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
 					xpath = xpath + ";"
 							+ "//div[@class='AFDetectExpansion']/following::span[text()='Name']/following::span[text()='keysToSend']";
@@ -11650,7 +10651,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 					text.click();
-					String scripNumber1 = fetchMetadataVO.getScript_number();
+					String scripNumber1 = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during dropdownTexts" + scripNumber1);
 					xpath = xpath + ";" + "(//span[contains(text(),'keysToSend')])[1]";
 				}
@@ -11659,7 +10660,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement button = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='K'][1]"));
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
 				button.click();
 				xpath = xpath + ";"
@@ -11669,18 +10670,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='OK'][1]"));
 				button.click();
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during dropdownTexts" + scripNumber1);
 				xpath = xpath + ";"
 						+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[not (@aria-disabled) and text()='OK'][1]";
 			}
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -11688,7 +10689,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
-			String keysToSend, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			String keysToSend, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 
 			if (param1.equalsIgnoreCase("Time Entry")) {
@@ -11705,9 +10706,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -11717,7 +10718,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry multiplelinestableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -11737,11 +10738,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//td[contains(text(),'Saturday')])[1]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[8]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -11764,9 +10765,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String xpath = "(//td[contains(text(),'Saturday')])[1]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[9]";
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11785,11 +10786,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//td[contains(text(),'Saturday')])[1]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[10]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11808,10 +10809,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//td[contains(text(),'Saturday')])[1]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[11]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11830,10 +10831,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//td[contains(text(),'Saturday')])[1]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[12]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11851,9 +10852,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[13]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11871,9 +10872,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[14]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11903,11 +10904,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//td[contains(text(),'Sat')])[3]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[8]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
@@ -11929,10 +10930,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//td[contains(text(),'Sat')])[3]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[9]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
@@ -11951,11 +10952,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//td[contains(text(),'Sat')])[3]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[10]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11972,12 +10973,12 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(waittill).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String xpath = "(//td[contains(text(),'Sat')])[3]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[11]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -11996,11 +10997,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//td[contains(text(),'Sat')])[3]" + ";"
 						+ "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[12]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -12018,10 +11019,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[13]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -12037,11 +11038,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(waittill).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[14]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -12068,10 +11069,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[6]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -12090,10 +11091,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[7]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -12114,10 +11115,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Wed multiplelinestableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[8]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -12136,9 +11137,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[9]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Thu multiplelinestableSendKeys" + scripNumber);
@@ -12158,9 +11159,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[10]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Fri multiplelinestableSendKeys" + scripNumber);
@@ -12179,9 +11180,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[13]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Sat multiplelinestableSendKeys" + scripNumber);
@@ -12200,16 +11201,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[14]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Sunday multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  multiplelinestableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -12218,7 +11219,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if ((param1.equalsIgnoreCase("Create Job Requisition") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
@@ -12240,17 +11241,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12272,17 +11273,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12296,16 +11297,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding::input[1][not(@value)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12320,16 +11321,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[text()='param2']/following::input[not(@value)][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12341,16 +11342,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@title)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12364,16 +11365,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='param2']/following::a[@title='Select Date'][2]/preceding-sibling::input";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12387,16 +11388,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='param2']/following::a[@title='Select Date'][1]/preceding-sibling::input";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12410,16 +11411,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12441,17 +11442,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRCIN')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12472,17 +11473,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "//table[@summary='param1']//label[text()='Total']/preceding-sibling::input[contains(@id,'tRevIN')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12500,17 +11501,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1'])[1]/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12526,16 +11527,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(1000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::input[contains(@id,'internalResponder')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12550,16 +11551,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(1000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//span[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12574,16 +11575,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(1000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::input[contains(@id,'param2')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12597,16 +11598,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //        waittill.sendKeys(keysToSend);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12621,18 +11622,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// waittill.sendKeys(keysToSend);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::*[text()='param2']//preceding::input[contains(@id,'Filter')])[3]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12650,11 +11651,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 				String xpath = "//h1[text()='param1']/following::input[contains(@id,'trxNumberList')]/following::a[@title='Search']/preceding-sibling::input[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12662,7 +11663,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -12683,10 +11684,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12694,7 +11695,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -12715,10 +11716,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or FProject Number tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::span[1]/input";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12726,7 +11727,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or FProject Number tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -12747,10 +11748,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or Task Number tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::div[text()='Autocompletes on TAB']/preceding::input[1])[4]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12758,7 +11759,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Task Number tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -12778,10 +11779,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Time Entry tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12789,7 +11790,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -12807,10 +11808,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Mon tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12829,10 +11830,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Tue tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12852,10 +11853,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Wed tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[3]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12875,10 +11876,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Thu tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[4]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12898,10 +11899,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Fri tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[5]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12920,10 +11921,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Sat tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[6]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12942,17 +11943,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Sunday tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[7]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -12969,10 +11970,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Quantity tableSendKeys" + scripNumber);
 					String xpath = "(//text()='param1']/preceding-sibling::input[ not (@value)])[1]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -12984,17 +11985,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Quantity tableSendKeys" + scripNumber);
 					String xpath = "//label[text()='param1']/preceding-sibling::input[1]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13009,16 +12010,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Price tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[contains(@name,'AmountAsPrice')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Price  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13032,17 +12033,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Expenditure Item Date tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Expenditure Item Date tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13056,16 +12057,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13081,18 +12082,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::th[@_d_index='param2'][1]//input[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13105,17 +12106,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Application Reference tableSendKeys" + scripNumber);
 				String xpath = "(//h1[text()='param1']/following::*[text()='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Application Reference tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13137,13 +12138,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 
 				String xpath = "(//span[text()='param1']/preceding::input[@type='text'])[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -13153,7 +12154,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during tableSendKeys" + scripNumber);
 
@@ -13171,17 +12172,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::*[text()='param2']/preceding-sibling::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13198,16 +12199,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(6000);
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13218,16 +12219,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::*[text()='param2']/preceding-sibling::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13238,16 +12239,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::span[text()='param2']/preceding::input[contains(@id,'descColumn::content')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13261,16 +12262,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[text()='param1']/following::span[text()='param2']/preceding::input[contains(@id,'journalBatch::content')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13282,16 +12283,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13302,16 +12303,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13322,16 +12323,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::textarea)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13343,16 +12344,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[text()='param1']/following::table[@summary='param2']//*[text()='param3']/following::input[contains(@id,'NewBdgtPctLst')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13370,16 +12371,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(6000);
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::label[text()='param2']/preceding::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13396,16 +12397,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(6000);
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::label[text()='param2']/preceding::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -13419,16 +12420,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//table[@summary='param1']//label[text()='param2']/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -13436,7 +12437,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void tableDropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -13445,15 +12446,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver.findElement(
 					By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -13466,16 +12467,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver.findElement(
 					By.xpath("//table[@summary='" + param1 + "']/following::li[text()='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			String xpath = "//table[@summary='param1']/following::li[text()='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -13487,16 +12488,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver
 					.findElement(By.xpath("//*[text()='" + param1 + "']/following::li[text()='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			String xpath = "//*[text()='param1']/following::li[text()='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -13510,16 +12511,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			String xpath = "//*[text()='param1']/following::td[text()='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -13554,23 +12555,23 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement button = driver.findElement(By.xpath(
 						"//*[text()='Search']/following::*[text()='" + param2 + "']/following::*[text()='K'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 				xpath = xpath + ";" + "//*[text()='Search']/following::*[text()='param2']/following::*[text()='K'][1]";
 			} catch (Exception e) {
 				WebElement button = driver.findElement(By.xpath(
 						"//*[text()='Search']/following::*[text()='" + param2 + "']/following::*[text()='OK'][1]"));
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				button.click();
 				xpath = xpath + ";" + "//*[text()='Search']/following::*[text()='param2']/following::*[text()='OK'][1]";
 			}
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -13583,7 +12584,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 				xpath = "//*[text()='Search']/following::*[text()='Name']/following::input[1]";
 			} catch (Exception e) {
@@ -13592,7 +12593,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				xpath = "//*[text()='Search']/following::*[text()='Value']/following::input[1]";
 			}
@@ -13605,24 +12606,24 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement button = driver.findElement(
 						By.xpath("//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 				xpath = xpath + ";" + "//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]";
 			} catch (Exception e) {
 				WebElement button = driver.findElement(
 						By.xpath("//*[text()='Search']/following::*[text()='Value']/following::*[text()='OK'][1]"));
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				button.click();
 				xpath = xpath + ";" + "//*[text()='Search']/following::*[text()='Value']/following::*[text()='OK'][1]";
 			}
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -13630,24 +12631,24 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 							+ "']/following::*[text()='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			String xpath = "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 			throw e;
 		}
 	}
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// HS2
 		try {
 
@@ -13666,16 +12667,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13696,18 +12697,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				WebElement select = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "(//h1[text()='param1']/following::label[text()='param2']/ancestor::span//input)[1]";
 				String xpath2 = "//*[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13727,7 +12728,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(3000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -13746,10 +12747,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//a[contains(@id,'projectRole')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
@@ -13757,7 +12758,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
 		try {
@@ -13771,17 +12772,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//*[text()='param1']/following::a[contains(@id,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
 		try {
@@ -13798,10 +12799,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(3000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Billing tableDropdownValues" + scripNumber);
@@ -13809,7 +12810,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Billing tableDropdownValues" + scripNumber);
 		}
 		try {
@@ -13824,16 +12825,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(3000);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableDropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13848,16 +12849,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//table[@summary='param1']//input/following-sibling::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13872,17 +12873,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[text()='param1']/following::input[contains(@id,'param2')][1]/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -13890,7 +12891,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Interviewer Responses")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13907,16 +12908,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement select = driver.findElement(By.xpath(
 						"//*[@class='AFDetectExpansion']/following::li[contains(text(), '" + keysToSend + "')]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13935,17 +12936,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 								+ keysToSend + "'])[1]"));
 				// select.click();
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[text()='param1']/following::*[text()='param2']/following::a)[1]" + ";"
 						+ "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='keysToSend'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13984,20 +12985,20 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[text()='param1']/following::label[text()='param2'][1]/following::a[@title='Name']"
 						+ ";" + "//table[contains(@id,'dropdownPopup')]//*[text()='Search...']" + ";"
 						+ "//div[contains(text(),'param2')]/following::input[1]" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14018,17 +13019,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 								+ keysToSend + "'])[1]"));
 				// select.click();
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h2[text()='param1']/following::label[text()='param2']/following::a)[1]" + ";"
 						+ "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='keysToSend'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14070,7 +13071,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -14089,16 +13090,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 								+ keysToSend + "'])[1]"));
 				// select.click();
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']//following::label[text()='param2']//following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14119,18 +13120,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				WebElement select = driver.findElement(By.xpath("//li[contains(text(), '" + keysToSend + "')]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "(//*[text()='param1']/following::*[text()='param2']/following::a)[1]";
 				String xpath2 = "//li[contains(text(), 'keysToSend')]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14151,16 +13152,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(selectvalue).build().perform();
 			selectvalue.click();
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]"
 					+ ";" + "//*[text()='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14199,14 +13200,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']/following::a[@title=' param2']" + ";"
 						+ "//table[contains(@id,'dropdownPopup')]//*[text()='Search...']" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
 						+ ";" + "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
@@ -14214,7 +13215,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14234,18 +13235,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//div[@class='listbox']//div[text()='" + keysToSend + "']"));
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "//*[text()='param2']//following::a[1]";
 				String xpath2 = "//div[@class='listbox']//div[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14265,18 +13266,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						By.xpath("//div[contains(@id,'FROM_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "//*[text()='param2']//following::a[1]";
 				String xpath2 = "//div[contains(@id,'FROM_PERIOD_DT')]//div[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14296,18 +13297,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//div[contains(@id,'TO_PERIOD_DT')]//div[text()='" + keysToSend + "']"));
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "//*[text()='param2']//following::a[1]";
 				String xpath2 = "//div[contains(@id,'TO_PERIOD_DT')]//div[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14326,18 +13327,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//div[contains(@id,'P_ACCOUNTS')]//div[text()='" + keysToSend + "']"));
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "//*[text()='param2']//following::a[1]";
 				String xpath2 = "//div[contains(@id,'P_ACCOUNTS')]//div[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14357,18 +13358,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						By.xpath("//div[contains(@id,'SUB_LEDGER_APPL')]//div[text()='" + keysToSend + "']"));
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "//*[text()='" + param2 + "']//following::a[1]";
 				String xpath2 = "//div[contains(@id,'SUB_LEDGER_APPL')]//div[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14393,18 +13394,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath1 = "//div[text()='param1']/following::*[text()='param2']/following::a[1]";
 				String xpath2 = "//li[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14421,15 +13422,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			Thread.sleep(4000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14469,21 +13470,21 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']/following::*[@title='param2']" + ";"
 						+ "//table[contains(@id,'dropdownPopup')]//*[text()='Search...']" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 						+ ";" + "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14505,17 +13506,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				text.click();
 				Thread.sleep(4000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[text()='param2']/following::a[contains(@id,'eventType')]"
 						+ ";" + "//div[contains(@id,'popup-container')]//td[text()='keysToSend'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14551,18 +13552,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Value.click();
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::label[text()='param2']/following::input)[1]"
 						+ ";" + "//div[contains(@id,'popup-container')]//label[text()='All']/input[1]" + ";"
 						+ "//div[contains(@id,'popup-container')]//label[text()='keysToSend']/input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14597,21 +13598,21 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']/following::*[@title='param2']" + ";"
 						+ "//a[contains(text(),'Search')]" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 						+ ";" + "//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'keysToSend')][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14653,7 +13654,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		 * 
 		 * Thread.sleep(1000);
 		 * 
-		 * String scripNumber = fetchMetadataVO.getScript_number();
+		 * String scripNumber = fetchMetadataVO.getScriptNumber();
 		 * 
 		 * String xpath =
 		 * "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
@@ -14663,12 +13664,12 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		 * "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
 		 * + ";" +
 		 * "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']"
-		 * ; String scriptID=fetchMetadataVO.getScript_id();String
+		 * ; String scriptID=fetchMetadataVO.getScriptId();String
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath);
 		 * log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" +
 		 * scripNumber); return; } } catch (Exception e) { String scripNumber =
-		 * fetchMetadataVO.getScript_number();
+		 * fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during Schedule New Process or Name dropdownValues" +
 		 * scripNumber); System.out.println(e); }
 		 */
@@ -14709,7 +13710,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "']/following::a[1]/following::button[text()='OK']"));
 				ok.click();
 				Thread.sleep(6000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
 						+ ";" + "//a[contains(text(),'Search')]" + ";"
@@ -14719,14 +13720,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend')][1]/following::button[text()='OK'][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14740,7 +13741,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "']/following::label[text()='" + param2 + "']/following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]";
 
@@ -14775,17 +13776,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
 
 				} catch (Exception e) {
-					// String scripNumber = fetchMetadataVO.getScript_number();
+					// String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
 					System.out.println(e);
 				}
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -14812,11 +13813,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "']/following::label[normalize-space(text())='" + keysToSend + "']"));
 				text.click();
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
@@ -14849,14 +13850,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.findElement(By.xpath("//h1[text()='Search']/following::button[text()='OK'][1]"));
 				clickok.click();
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[contains(text(),'param1')]/following::a[@title='param2'][1]" + ";"
 						+ "//a[text()='Search...']" + ";"
 						+ "//div[text()='Search and Select: Bill-to Account']/following::label[text()='Account Number']/following::input[1]"
 						+ ";" + "//h1[text()='Search']/following::button[text()='OK'][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -14894,14 +13895,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement button = driver.findElement(By.xpath(
 						"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "(//a[text()='Search...'])[3]" + ";"
 						+ "//h2[normalize-space(text())='Search']/following::label[text()='Name']/following::input[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -14938,7 +13939,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement button = driver.findElement(By.xpath(
 						"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";"
@@ -14947,14 +13948,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Bank Account or Country dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Bank Account or Country dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -14988,7 +13989,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ "//div[normalize-space(text())='Search and Select: Tax Country']/following::label[text()='Name']/following::input[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -15025,7 +14026,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement button = driver.findElement(By.xpath(
 						"//button[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::button[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[@title='Search: Country']"
 						+ ";"
@@ -15035,14 +14036,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//button[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::button[text()='OK'][1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Address or Country dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Address or Country  dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -15070,10 +14071,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(30000);
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[text()='param1']/following::a[@role='button'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Assets dropdownValues" + scripNumber);
@@ -15082,7 +14083,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Assets dropdownValues" + scripNumber);
 			System.out.println(e);
 
@@ -15101,17 +14102,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Request dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Request dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -15132,18 +14133,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement dropdown = driver.findElement(By.xpath("//span[text()='" + keysToSend + "']"));
 				actions.moveToElement(dropdown).build().perform();
 				dropdown.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
 						+ "//span[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -15178,13 +14179,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Procurement BU or Business Unit dropdownValues" + scripNumber);
@@ -15207,13 +14208,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "(//div[@class='listbox']//span[contains(text(),'Search')])[1]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Name']/following::div[text()='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Requisition BU dropdownValues" + scripNumber);
@@ -15225,7 +14226,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 						xpath = xpath + ";"
 								+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						return;
@@ -15245,13 +14246,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 								.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK'][3]"));
 						clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						xpath = xpath + ";" + "(//div[@class='listbox']//span[contains(text(),'Search')])[3]" + ";"
 								+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
 								+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
 								+ "//span[text()='Name']/following::button[text()='OK'][3]";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully  Supplier Name Clicked dropdownValues" + scripNumber);
@@ -15261,7 +14262,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				}
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -15293,13 +14294,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Period Name dropdownValues" + scripNumber);
@@ -15321,13 +14322,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							"//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
 							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[1]"
 							+ ";" + "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
@@ -15336,7 +14337,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -15373,13 +14374,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.moveToElement(searchok).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'LEGAL_ENTITY')][1]//span/span[contains(text(),'Search')]"
 							+ ";" + "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
@@ -15402,14 +14403,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.moveToElement(searchok).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'CUSTOMER_NAME')][1]//span/span[contains(text(),'Search')]"
 							+ ";"
 							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[@type='text'][1]"
 							+ ";" + "//*[text()='Value']/following::div[contains(text(),'keysToSend')]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
@@ -15419,7 +14420,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -15534,7 +14535,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" + ";"
 							+ "//span[text()='Name']/following::select[1]" + ";"
@@ -15542,7 +14543,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							+ "//*[text()='Name']/following:*[normalize-space(text())='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -15587,14 +14588,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//*[text()='Name']/following::*[normalize-space(text())='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -15648,14 +14649,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='floatingWindowDiv']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//*[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 							+ "//td[@title='Move']" + ";" + "//span[text()='Name']/following::a[text()='OK']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -15669,7 +14670,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  dropdownValues" + scripNumber);
 
@@ -15706,14 +14707,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(10000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 						+ "(//a[contains(@id,'legal')or 'LE'][1]//span/span[contains(text(),'Search')])[2]" + ";"
 						+ "(//span[text()='Name']/following::input[@type='text'])" + ";"
 						+ "//b[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 						+ "//div[text()='Search']/following::button[text()='OK']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
@@ -15721,7 +14722,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -15753,13 +14754,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'PROCUREMENT')][1]//span/span[contains(text(),'Search')]"
 							+ ";" + "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Report dropdownValues" + scripNumber);
@@ -15780,13 +14781,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
@@ -15807,13 +14808,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
@@ -15834,13 +14835,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
@@ -15860,13 +14861,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][3]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'STATUS')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][1]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][3]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Status dropdownValues" + scripNumber);
@@ -15886,13 +14887,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Req. Business Unit dropdownValues" + scripNumber);
@@ -15913,13 +14914,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "(//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')])[1]"
 							+ ";" + "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
@@ -15940,13 +14941,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "(//a[contains(@id,'CUSTOMER')][1]//span/span[contains(text(),'Search')])[1]"
 							+ ";" + "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
@@ -15956,11 +14957,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						WebElement select = driver.findElement(By.xpath("//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='" + keysToSend + "'][1]"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						xpath = xpath + ";"
 								+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked Business Unit dropdownValues" + scripNumber);
@@ -15982,13 +14983,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						Thread.sleep(10000);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						Thread.sleep(3000);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						xpath = xpath + ";" + "//a[contains(@id,'BU')][1]//span/span[contains(text(),'Search')]" + ";"
 								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 								+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 								+ "//div[text()='Search']/following::button[text()='OK']";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
@@ -15999,11 +15000,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						WebElement select = driver.findElement(By.xpath("//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='" + keysToSend + "'][1]"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						xpath = xpath + ";"
 								+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked Supplier Name dropdownValues" + scripNumber);
@@ -16026,13 +15027,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						Thread.sleep(10000);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						Thread.sleep(3000);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						xpath = xpath + ";" + "//a[contains(@id,'SUPPLIER')][1]//span/span[contains(text(),'Search')]"
 								+ ";" + "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 								+ "//*[normalize-space(text())='Value']/following::div[normalize-space(text())='keysToSend']"
 								+ ";" + "//div[text()='Search']/following::button[text()='OK']";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
@@ -16041,7 +15042,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				}
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16083,19 +15084,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 									+ "']/following::*[text()='OK'][1]"));
 					button.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					xpath = xpath + ";" + "//div[@class='AFDetectExpansion']" + ";"
 							+ "//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]" + ";"
 							+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 							+ ";" + "(//span[contains(text(),'keysToSend')])[1]" + ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Basic Options or Ledger dropdownValues" + scripNumber);
 				} catch (Exception e) {
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Basic Options or Ledger dropdownValues" + scripNumber);
 
 					for (int i = 0; i <= 2; i++) {
@@ -16132,19 +15133,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 							.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 									+ "']/following::*[text()='OK'][1]"));
 					button.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					xpath = xpath + ";" + "//div[@class='AFDetectExpansion']" + ";"
 							+ "//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]" + ";"
 							+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 							+ ";" + "//span[text()='param2']/following::span[contains(text(),'keysToSend')][1]" + ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
 
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 				} catch (Exception e) {
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during  dropdownValues" + scripNumber);
 
 					for (int i = 0; i <= 2; i++) {
@@ -16182,7 +15183,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 									+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 									+ ";" + "(//span[contains(text(),'keysToSend')])[1]" + ";"
 									+ "//*[text()='Search']/following::*[text()='param2']/following::*[text()='OK'][1]";
-							String scriptID = fetchMetadataVO.getScript_id();
+							String scriptID = fetchMetadataVO.getScriptId();
 							String lineNumber = fetchMetadataVO.getLine_number();
 							service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -16193,7 +15194,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16213,15 +15214,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				actions.release();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				xpath = xpath + ";" + "//div[contains(@id,'suggestions-popup')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception ex) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
 
 				try {
@@ -16232,7 +15233,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						// String xpath="//div[@class='AFDetectExpansion']";
 						xpath = xpath + ";" + "//div[@class='AFDetectExpansion']";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					} catch (Exception ex1) {
@@ -16246,7 +15247,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						actions.release();
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 						xpath = xpath + ";" + "//div[contains(@id,'suggestions-popup')]";
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					}
@@ -16256,7 +15257,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					actions.release();
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 					xpath = xpath + ";" + "//div[@class='AFDetectExpansion']";
-					String scriptID = fetchMetadataVO.getScript_id();
+					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLine_number();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
@@ -16264,7 +15265,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			return;
 		} catch (Exception exe) {
 			System.out.println(exe);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 		}
 		try {
@@ -16284,15 +15285,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				actions.release();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				xpath = xpath + ";" + "//div[contains(@id,'dropdownPopup::content')]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
 				for (int i = 0; i <= 2; i++) {
 					try {
@@ -16302,7 +15303,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 						actions.release();
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					}
@@ -16316,15 +15317,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 				actions.release();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				xpath = xpath + ";" + "//div[contains(@id,'dropdownPopup::content')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
 				for (int i = 0; i <= 2; i++) {
 					try {
@@ -16333,7 +15334,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					} finally {
 						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-						String scriptID = fetchMetadataVO.getScript_id();
+						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLine_number();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					}
@@ -16342,7 +15343,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16357,16 +15358,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16380,16 +15381,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16402,17 +15403,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		}
 		try {
@@ -16448,17 +15449,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					.findElement(By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='"
 							+ param2 + "']/following::*[text()='K'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			xpath = xpath + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[text()='K'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16477,18 +15478,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement button = driver.findElement(By.xpath(
 					"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
 					+ ";" + "//span[normalize-space(text())='keysToSend']" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16497,16 +15498,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					.findElement(By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='"
 							+ param2 + "']/following::*[normalize-space(text())='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
@@ -16527,15 +15528,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='keysToSend']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -16551,38 +15552,38 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//a[contains(@id,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	private void clickValidateXpath(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void clickValidateXpath(WebDriver driver, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickValidateXpath" + scripNumber);
 			// waittext.click();
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickValidateXpath" + scripNumber);
 			e.printStackTrace();
 		}
 	}
 
-	public void clickFilter(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickFilter(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// Dh changes 6
 		try {
@@ -16593,13 +15594,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittill.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String xpath = "(//*[contains(text(),'param1')]/following::*[text()='Account Class']//preceding::input[contains(@id,'Filter')])[3]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
@@ -16613,13 +15614,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			waittill.click();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String xpath = "(//img[@title='param1']/following::*[text()='param2']/preceding::input[@type='text'])[3]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
@@ -16636,12 +15637,12 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(2000);
 			String xpath = "(//img[@title='param1'])[1]" + ";"
 					+ "(//img[@title='param1']/following::*[text()='param2']/preceding::input[@type='text'])[3]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("//img[@title='" + param1 + "'][1]");
@@ -16659,12 +15660,12 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// waittill1.click();
 			// Thread.sleep(2000);
 			String xpath = "(//img[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("//img[@title='" + param1 + "'][1]");
@@ -16673,19 +15674,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public String password(WebDriver driver, String inputParam, String keysToSend, FetchConfigVO fetchConfigVO,
-			FetchMetadataVO fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO) {
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam + "')]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked password" + scripNumber);
 			String xpath = "//*[contains(@placeholder,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  password" + scripNumber);
 			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(e);
@@ -16694,18 +15695,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void typeIntoValidxpath(WebDriver driver, String keysToSend, WebElement waittill,
-			FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			waittill.clear();
 			waittill.click();
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
 			log.info("clear and typed the given Data");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked typeIntoValidxpath" + scripNumber);
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  typeIntoValidxpath" + scripNumber);
 			e.printStackTrace();
 		}
@@ -16719,20 +15720,20 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		log.info("clear and typed the given Data");
 	}
 
-	public void moveToElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void moveToElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "'][1]"));
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittill).build().perform();
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		log.info("Sucessfully Clicked moveToElement" + scripNumber);
 		String xpath = "//*[normalize-space(text())='inputParam'][1]";
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public void scrollUsingElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void scrollUsingElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			Thread.sleep(2000);
@@ -16741,15 +15742,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//span[normalize-space(text())='inputParam'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
@@ -16757,45 +15758,45 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Field during scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h2[normalize-space(text())='inputParam'])";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -16803,9 +15804,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver
 					.findElement(By.xpath("(//h3[normalize-space(text())='" + inputParam + "'])[2]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h3[normalize-space(text())='inputParam'])[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
@@ -16816,9 +15817,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//td[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
@@ -16829,30 +15830,30 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[contains(text(),'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='inputParam']//td//a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -16860,9 +15861,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[normalize-space(text())=\"" + inputParam + "\"]/following::input)[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[normalize-space(text())='inputParam']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
@@ -16873,30 +15874,30 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[contains(@id,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//li[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -16904,15 +15905,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver
 					.findElement(By.xpath("//label[normalize-space(text())=\"" + inputParam + "\"]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -16920,45 +15921,45 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittill = driver
 					.findElement(By.xpath("//button[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//button[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//img[@title='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[@title='inputParam'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(inputParam);
@@ -16968,7 +15969,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
-			FetchMetadataVO fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO) {
 		fetchConfigVO.getMedium_wait();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
@@ -16976,20 +15977,20 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		WebElement element = waittill;
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		log.info("Sucessfully Clicked scrollMethod" + scripNumber);
 	}
 
-	public void tab(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(4000);
 			Actions action = new Actions(driver);
 			action.sendKeys(Keys.TAB).build().perform();
 			Thread.sleep(8000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tab" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tab" + scripNumber);
 			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed to do TAB Action");
@@ -16998,7 +15999,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void mousehover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void mousehover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -17012,15 +16013,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//tr[1]/following::a)[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
 			System.out.println(e);
 		}
@@ -17031,15 +16032,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(5000);
 			System.out.print("Successfully executed Mousehover");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@role='presentation']/following::a[normalize-space(text())='param1'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO);
@@ -17047,16 +16048,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void enter(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void enter(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(2000);
 			Actions actionObject = new Actions(driver);
 			actionObject.sendKeys(Keys.ENTER).build().perform();
 			Thread.sleep(8000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked enter" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  enter" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
@@ -17064,7 +16065,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void deleteAllCookies(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void deleteAllCookies(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().deleteAllCookies();
 			log.info("Successfully Deleted All The Cookies.");
@@ -17076,17 +16077,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void selectCheckBox(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO) {
+	public void selectCheckBox(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			WebElement element = driver.findElement(By.xpath(xpath));
 			if (element.isSelected()) {
 			} else {
 				element.click();
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectCheckBox" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectCheckBox" + scripNumber);
 			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null);
 			e.printStackTrace();
@@ -17096,7 +16097,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void selectByText(WebDriver driver, String param1, String param2, String inputData,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			if (param1.equalsIgnoreCase("Address Purposes")) {
 				Thread.sleep(2000);
@@ -17104,17 +16105,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
 								+ param2 + "']/following::select[not (@title)]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked selectByText" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17125,17 +16126,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select[@title='']"));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::select[@title='']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Holds selectByText" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Holds selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17146,9 +16147,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						("//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select[1]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Batch Status selectByText" + scripNumber);
@@ -17156,7 +16157,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Batch Status selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17167,17 +16168,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						("(//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select)[2]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Release selectByText" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Release selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17186,16 +16187,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17204,16 +16205,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/preceding::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17222,16 +16223,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17240,16 +16241,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17258,17 +16259,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::select[1]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[contains(text(),'param1')]/following::select[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked selectCheckBox" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -17276,45 +16277,45 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement waittext = driver
 					.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/preceding-sibling::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/preceding-sibling::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(param2);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	private void selectMethod(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittext).build().perform();
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		log.info("Sucessfully Clicked selectMethod" + scripNumber);
 		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 		return;
 	}
 
-	public void selectByValue(WebDriver driver, String xpath, String inputData, FetchMetadataVO fetchMetadataVO,
+	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			Select selectBox = new Select(webElement);
 			selectBox.selectByValue(inputData);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectByValue" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByValue" + scripNumber);
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -17374,7 +16375,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
+	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
 
 			FetchConfigVO fetchConfigVO) {
 
@@ -17398,9 +16399,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//label[text()='inputParam1']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17413,7 +16414,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 
@@ -17435,9 +16436,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//label[text()='inputParam1']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17450,7 +16451,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 
@@ -17473,9 +16474,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				System.out.println(stringToSearch);
 				value = copyunderscore(stringToSearch);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),'inputParam1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17487,7 +16488,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -17516,9 +16517,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17531,7 +16532,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 		}
@@ -17547,9 +16548,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				System.out.println(stringToSearch);
 				value = copyValuesWithSpc(stringToSearch);
 				// value = copyValuesWithSpc(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//label[text()='inputParam1']/following::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17561,7 +16562,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 		}
@@ -17581,9 +16582,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				System.out.println(stringToSearch);
 				value = copyNumbers(stringToSearch);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17595,7 +16596,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -17617,9 +16618,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(webElement).build().perform();
 				value = copyNegative(webElement);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17631,7 +16632,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -17653,9 +16654,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(webElement).build().perform();
 
 				value = copyInt(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17668,7 +16669,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -17697,9 +16698,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(webElement).build().perform();
 
 				value = copyInt(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17712,7 +16713,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 
@@ -17731,9 +16732,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (webElement.isDisplayed() == true) {
 
 				value = copyInt(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//div[contains(@title,'inputParam1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17746,7 +16747,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			System.out.println(inputParam1);
@@ -17765,9 +16766,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (webElement.isDisplayed() == true) {
 
 				value = copyMethod(webElement, value);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//div[contains(text(),'inputParam1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17780,7 +16781,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			System.out.println(inputParam1);
@@ -17800,9 +16801,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (webElement.isDisplayed() == true) {
 
 				value = copyMethod(webElement, value);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//label[text()='inputParam1']/following::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17815,7 +16816,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			System.out.println(inputParam1);
@@ -17832,9 +16833,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (webElement.isDisplayed() == true) {
 
 				value = copyMethod(webElement, value);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//img[@title='In Balance ']/following::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				String testParamId = fetchMetadataVO.getTest_script_param_id();
@@ -17848,7 +16849,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO);
@@ -17990,7 +16991,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public String copyy(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public String copyy(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
@@ -17998,10 +16999,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked copyy" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copyy" + scripNumber);
 			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -18010,7 +17011,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return xpath;
 	}
 
-	public String copytext(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO,
+	public String copytext(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
@@ -18024,10 +17025,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked copytext" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copytext" + scripNumber);
 			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -18037,13 +17038,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void maximize(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void maximize(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().window().maximize();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked maximize" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during maximize" + scripNumber);
 			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not maximize");
@@ -18053,13 +17054,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void switchWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.switchTo().window(Main_Window);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchWindow" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchWindow" + scripNumber);
 			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not switch to window");
@@ -18069,7 +17070,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void switchDefaultContent(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchDefaultContent(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -18081,10 +17082,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 				Thread.sleep(4000);
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchDefaultContent" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchDefaultContent" + scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
@@ -18093,7 +17094,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void switchParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -18130,7 +17131,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void switchToParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchToParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -18149,10 +17150,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				driver.switchTo().window(childWindow);
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
@@ -18161,7 +17162,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, FetchMetadataVO fetchMetadataVO,
+	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			WebElement dragElement = driver.findElement(By.xpath(xpath));
@@ -18171,10 +17172,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions action = new Actions(driver);
 			// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
 			action.dragAndDrop(fromElement, toElement).build().perform();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Drag and drop the values" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During dragAnddrop Action." + scripNumber);
 			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -18183,7 +17184,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void windowhandle(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(20000);
@@ -18202,10 +17203,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					driver.switchTo().window(childWindow);
 				}
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Handeled the window" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to Handle the window" + scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
@@ -18214,7 +17215,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void switchToFrame(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(5000);
@@ -18223,9 +17224,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='inputParam']/following::iframe[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -18238,9 +17239,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//iframe[contains(@id,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
@@ -18253,9 +17254,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//iframe[@title='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
@@ -18270,9 +17271,9 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='inputParam']/following::iframe[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
@@ -18284,7 +17285,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void uploadFileAutoIT(String filelocation, FetchMetadataVO fetchMetadataVO) throws Exception {
+	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -18300,13 +17301,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void refreshPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.navigate().refresh();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked refreshPage" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during refreshPage" + scripNumber);
 			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not refresh the page");
@@ -18316,7 +17317,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
+	public void DelatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
 		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
@@ -18326,7 +17327,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
 //				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
 //				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//				+ fetchMetadataVO.getScriptNumber() + "_" + fetchMetadataVO.getTest_run_name() + "_"
 //				+ fetchMetadataVO.getLine_number();
 			for (File file : Arrays.asList(listOfFiles)) {
 
@@ -18364,26 +17365,26 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	@Override
-	public void navigateToBackPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void openPdf(WebDriver driver, String input_value, FetchMetadataVO fetchMetadataVO,
+	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void openFile(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void actionApprove(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
@@ -18391,7 +17392,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	@Override
 	public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Requisition Lines")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18405,7 +17406,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String xpath = "//*[text()='param1']/following::*[text()='value1']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -18446,7 +17447,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3) throws Exception {
 
 		try {
@@ -18460,13 +17461,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			WebElement signout = driver.findElement(By.xpath("//*[text()='Sign Out']"));
 			signout.click();
 			String xpath = "//*[contains(@class,'opaas-user__icon')]" + ";" + "//*[text()='Sign Out']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, "Failed during logout", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -18474,7 +17475,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		String param4 = "User name or email";
@@ -18486,14 +17487,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		String param4 = "User name or email";
@@ -18505,14 +17506,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		String xpath = null;
 		try {
@@ -18535,7 +17536,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					throw new IOException("Failed during login page");
 				}
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//*[contains(@placeholder,'param1')]";
 				return xpath;
@@ -18543,7 +17544,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		} catch (Exception e) {
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
 			System.out.println(e);
 		}
@@ -18560,15 +17561,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// if("password".equalsIgnoreCase(param1))
 			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			xpath = "//*[contains(@placeholder,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully entered User Name " + scripNumber);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed During Login page");
@@ -18576,7 +17577,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return xpath;
 	}
 
-	public synchronized void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public synchronized void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		String param3 = "Show / Hide Navigation menu";
 
@@ -18584,14 +17585,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		String xpath1 = oicMenuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
 		String xpath2 = oicMenuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
 				count);
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpaths = xpath + ">" + xpath1 + ">" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String oicNavigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(4000);
@@ -18606,15 +17607,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully navigator is done " + scripNumber);
 			String xpath = "//*[@title='param1']//*[contains(@class,'oj-start')]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
@@ -18622,7 +17623,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String oicMenuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(5000);
@@ -18637,17 +17638,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully menunavigation is clicked " + scripNumber);
 			String xpath = "(//div[@class='navlist-container']//span[text()='param1'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully menunavigation is clicked " + scripNumber);
 			return xpath;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Menunavigation " + scripNumber);
 
 			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
@@ -18657,7 +17658,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	/*
-	 * public String oicClickMenu(WebDriver driver, String param1, FetchMetadataVO
+	 * public String oicClickMenu(WebDriver driver, String param1, ScriptDetailsDto
 	 * fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception { try {
 	 * Thread.sleep(5000); WebDriverWait wait = new WebDriverWait(driver,
 	 * fetchConfigVO.getWait_time());
@@ -18671,21 +17672,21 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	 * actions.moveToElement(waittext).build().perform();
 	 * actions.moveToElement(waittext).click().build().perform(); screenshot(driver,
 	 * "", fetchMetadataVO, fetchConfigVO); String scripNumber =
-	 * fetchMetadataVO.getScript_number();
+	 * fetchMetadataVO.getScriptNumber();
 	 * log.info("Successfully menunavigation is clicked " + scripNumber); String
 	 * xpath = "(//div[@class='navlist-container']//span[text()='"+ param1
 	 * +"'])[1]"; log.info("Successfully menunavigation is clicked " + scripNumber);
 	 * return xpath;
 	 * 
 	 * } catch (Exception e) { String scripNumber =
-	 * fetchMetadataVO.getScript_number(); log.error("Failed during Menunavigation "
+	 * fetchMetadataVO.getScriptNumber(); log.error("Failed during Menunavigation "
 	 * + scripNumber);
 	 * 
 	 * screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO,
 	 * fetchConfigVO); System.out.println("Not able to navitage to the :" + "" +
 	 * param1); throw e; } }
 	 */
-	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
+	public String oicMenuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
 			throws Exception {
 		String xpath = null;
@@ -18702,11 +17703,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully menuNavigationButton is done " + scripNumber);
 			xpath = "(//div[@class='navlist-container']//span[text()='param2'])[2]";
 			log.info("Successfully menuNavigationButton is done " + scripNumber);
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return xpath;
@@ -18721,7 +17722,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Oracle ERP OPERA Trigger Synchronization") && param2.equalsIgnoreCase("Run")) {
@@ -18736,18 +17737,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "(//*[text()='Oracle ERP OPERA Trigger Synchronization'])[1]/following::*[text()='Scheduled Orchestration'][1]";
 				String xpath2 = "(//*[text()='Oracle ERP OPERA Trigger Synchronization'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18765,20 +17766,20 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 
 				String xpath1 = "(//*[text()='Oracle OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']";
 				String xpath2 = "(//*[text()='Oracle OPERA ERP Trigger Invoice Upload'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18797,18 +17798,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//*[text()='Oracle OPERA ERP Initiate Refresh Receivables'])[1]/following::*[text()='App Driven Orchestration']"
 						+ ";"
 						+ "(//*[text()='Oracle OPERA ERP Initiate Refresh Receivables'])[1]/following::*[text()='App Driven Orchestration']/following::*[@title='Run'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18826,18 +17827,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "(//*[text()='OPERA ERP Initiate Process Receivables'])[1]/following::*[text()='Scheduled Orchestration']";
 				String xpath2 = "(//*[text()='OPERA ERP Initiate Process Receivables'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18853,16 +17854,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']/following::*[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18877,16 +17878,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='param2']/following::*[@class='vb-icon vb-icon-plug']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18906,18 +17907,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "//*[text()='Scheduled Orchestration']";
 				String xpath2 = "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18930,14 +17931,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		 * driver.findElement(By.
 		 * xpath("(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[@title='Run'][1]"
 		 * )); run.click(); screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScript_number();
+		 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 		 * String xpath =
 		 * "(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[@title='Run'][1]"
-		 * ; String scriptID=fetchMetadataVO.getScript_id();String
+		 * ; String scriptID=fetchMetadataVO.getScriptId();String
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
-		 * scripNumber = fetchMetadataVO.getScript_number();
+		 * scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
 		 * }
 		 */
@@ -18955,18 +17956,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[text()='Scheduled Orchestration'][1]";
 				String xpath2 = "(//*[text()='DH SCM Supplier Site Inactivation'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -18981,14 +17982,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		 * driver.findElement(By.
 		 * xpath("(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[@title='Run'][1]"
 		 * )); run.click(); screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScript_number();
+		 * Thread.sleep(5000); String scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 		 * String xpath =
 		 * "(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[@title='Run'][1]"
-		 * ; String scriptID=fetchMetadataVO.getScript_id();String
+		 * ; String scriptID=fetchMetadataVO.getScriptId();String
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
-		 * scripNumber = fetchMetadataVO.getScript_number();
+		 * scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
 		 * }
 		 */
@@ -19006,18 +18007,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[text()='Scheduled Orchestration']";
 				String xpath2 = "(//*[text()='DH Food Ingredients Stock Depletion Integration'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19036,18 +18037,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "//*[contains(text(),'Integration imports the Purchase requisitions')]/following::*[text()='App Driven Orchestration']";
 				String xpath2 = "//*[contains(text(),'Integration imports the Purchase requisitions')]/following::*[text()='App Driven Orchestration']/following::*[@title='Run']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19062,16 +18063,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19084,16 +18085,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//a[text()='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19107,16 +18108,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[contains(@class,'navigationlist-previous-icon')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19130,16 +18131,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[contains(@class,'cross-icon')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19154,15 +18155,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(15000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath = "//*[text()='param1+']/following::*[text()='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19174,15 +18175,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(15000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath = "//*[@title='param1'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -19194,15 +18195,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(15000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath = "//*[@class='opaas-toolbar__search-icon'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -19211,7 +18212,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	/*
 	 * public String oicSendValue(WebDriver driver, String param1, String param2,
-	 * String keysToSend, FetchMetadataVO fetchMetadataVO, FetchConfigVO
+	 * String keysToSend, ScriptDetailsDto fetchMetadataVO, FetchConfigVO
 	 * fetchConfigVO) throws Exception {
 	 * 
 	 * try {
@@ -19224,22 +18225,22 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	 * actions.moveToElement(waittill).build().perform(); typeIntoValidxpath(driver,
 	 * keysToSend, waittill, fetchConfigVO, fetchMetadataVO); screenshot(driver, "",
 	 * fetchMetadataVO, fetchConfigVO); Thread.sleep(1000); String scripNumber =
-	 * fetchMetadataVO.getScript_number();
+	 * fetchMetadataVO.getScriptNumber();
 	 * log.info("Sucessfully Clicked Close Date sendValue" + scripNumber); String
 	 * xpath = "//input[@placeholder='param1']"; String
-	 * scriptID=fetchMetadataVO.getScript_id();String
+	 * scriptID=fetchMetadataVO.getScriptId();String
 	 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 	 * scriptID,metadataID,xpath); return keysToSend;
 	 * 
 	 * } catch (Exception e) { System.out.println(e); String scripNumber =
-	 * fetchMetadataVO.getScript_number(); log.error("Failed during sendValue" +
+	 * fetchMetadataVO.getScriptNumber(); log.error("Failed during sendValue" +
 	 * scripNumber); screenshotFail(driver, "Failed during sendValue",
 	 * fetchMetadataVO, fetchConfigVO); throw e; } }
 	 * 
 	 */
 
 	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param2.equals("")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -19251,17 +18252,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//input[@placeholder='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
 		}
@@ -19277,17 +18278,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//input[@placeholder='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
 		}
@@ -19316,19 +18317,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				 */
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath1 = "//*[text()='param1']/following::*[text()='param2']/following::a[1]";
 				String xpath2 = "//span[text()='keysToSend']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
 		}
@@ -19345,18 +18346,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			actions.click(selectValue).perform();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 			String xpath1 = "//*[text()='param1']/following::*[text()='param2']/following::a[1]";
 			String xpath2 = "//span[text()='keysToSend']";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
 		}
@@ -19371,16 +18372,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[text()='param2']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, "Failed during sendValue", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -19389,7 +18390,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	public void oicMouseHover(WebDriver driver, String param1, String param2,
 
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 
 		try {
 			if (param1.equalsIgnoreCase("text")) {
@@ -19404,16 +18405,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittext).build().perform();
 				clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[contains(text(), 'param1')]/following::*[text()='Add Item']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked mousehover" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during mousehover" + scripNumber);
 			System.out.println(e);
 		}
@@ -19430,7 +18431,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			actions.moveToElement(waittill).perform();
 			String xpath = "//*[text()='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -19438,7 +18439,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			System.out.println(e);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Mouse movement" + scripNumber);
 
@@ -19450,7 +18451,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			driver.navigate().to(fetchConfigVO.getOIC_APPLICATION_URL());
 			driver.manage().window().maximize();
@@ -19466,23 +18467,23 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			String xpath1 = "//iframe[@title='TrustArc Cookie Consent Manager']";
 			String xpath2 = "//a[text()='Accept all']";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
-	public void navigateOICJobUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateOICJobUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			driver.navigate().to(fetchConfigVO.getOIC_JOB_SCHEDULER());
 			driver.manage().window().maximize();
@@ -19498,16 +18499,16 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			String xpath1 = "//iframe[@title='TrustArc Cookie Consent Manager']";
 			String xpath2 = "//a[text()='Accept all']";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
@@ -19516,7 +18517,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	@Override
 	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		String s = "    Login To Excel    " + username + "    " + password;
 		return s;
@@ -19532,7 +18533,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	@Override
-	public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String menuItemOfExcel(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		String s = "    Select Menu Item Of Excel    " + param1;
@@ -19548,7 +18549,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	@Override
 	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
-			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		List<String> openExcelSteps = new ArrayList<String>();
 		String s = "*** Settings ***";
@@ -19591,7 +18592,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	@Override
-	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+	public String typeIntoCell(WebDriver driver, String param1, String value1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
 		// TODO Auto-generated method stub
 		String s = "";
@@ -19604,7 +18605,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
-			FetchMetadataVO fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
+			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
 			String param3, String keysToSend, String value) throws Exception {
 		String param4 = "username";
 		String param5 = "password";
@@ -19615,14 +18616,14 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLine_number();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			driver.navigate().to(fetchConfigVO.getINFORMATICA_APPLICATION_URL());
 			driver.manage().window().maximize();
@@ -19632,10 +18633,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
@@ -19643,7 +18644,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		String xpath = null;
 		try {
 			if (param1.equalsIgnoreCase("Password")) {
@@ -19673,10 +18674,10 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				 * IOException("Failed during login page"); }
 				 */
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//*[@id='param1']/input";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return xpath;
@@ -19684,7 +18685,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		} catch (Exception e) {
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
 			System.out.println(e);
 		}
@@ -19703,15 +18704,15 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// if("password".equalsIgnoreCase(param1))
 			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			xpath = "//*[@id='param1']/input";
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully entered User Name " + scripNumber);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed During Login page");
@@ -19719,7 +18720,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		return xpath;
 	}
 
-	public void InformaticaClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 
 		try {
@@ -19736,19 +18737,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "(//*[text()='param1'])[1]";
 				String xpath2 = "(//*[text()='param1'])[1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -19768,19 +18769,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "(//*[text()='param1'])[1]";
 				String xpath2 = "(//*[text()='param1'])[1]";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -19800,19 +18801,19 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				run.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath1 = "//span[text()='param1']";
 				String xpath2 = "//span[text()='param1']";
 				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -19831,18 +18832,18 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			run.click();
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath1 = "//*[text()='param1']";
 			String xpath2 = "//*[text()='param1']";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -19850,7 +18851,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Find")) {
 				Thread.sleep(1000);
@@ -19865,17 +18866,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// fetchMetadataVO);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//input[@placeholder='param1'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 			return null;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 			throw e;
@@ -19883,7 +18884,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void InformaticaclickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaclickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 
@@ -19909,13 +18910,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				Thread.sleep(5000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 
 				String xpath = "//*[normalize-space(text())='param1']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
@@ -19927,7 +18928,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			System.out.println(e);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Approve clickLink" + scripNumber);
 
@@ -19936,7 +18937,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("All Projects")) {
 				Thread.sleep(4000);
@@ -19951,17 +18952,17 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittext.click();
 				Thread.sleep(2000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "(//*[text()='param1'])[1]/following::*[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -19969,7 +18970,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void InformaticaClickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaClickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Refresh")) {
@@ -19985,7 +18986,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				String xpath = "//button[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
+				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLine_number();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
@@ -19997,7 +18998,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
 
 		try {
@@ -20012,13 +19013,13 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			String xpath1 = "//button[@title='User']";
 			String xpath2 = "(//*[text()='Log Out'])[3]";
 			String xpath = xpath1 + ";" + xpath2;
-			String scriptID = fetchMetadataVO.getScript_id();
+			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLine_number();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, "Failed during logout", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -20027,7 +19028,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	@Override
-	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
@@ -20045,28 +19046,28 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	@Override
-	public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
 			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
 			ApiValidationVO api) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, ApiValidationVO api, boolean validationFlag)
 			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
 		// TODO Auto-generated method stub
@@ -20074,7 +19075,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	}
 
 	@Override
-	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
 		// TODO Auto-generated method stub
 		return false;
 	}

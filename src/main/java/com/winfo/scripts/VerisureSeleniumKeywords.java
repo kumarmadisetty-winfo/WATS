@@ -74,7 +74,6 @@ import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
-import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;

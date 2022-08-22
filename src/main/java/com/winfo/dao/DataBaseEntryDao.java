@@ -810,8 +810,9 @@ public class DataBaseEntryDao {
 				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
 				+ ", wtsmdata.Line_ERROR_MESSAGE\r\n,  wtsmdata.test_run_param_desc\r\n"
 				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION\r\n"
-				+ "      from\r\n" + "      execute_status ex_st,\r\n" + "      win_ta_test_set        wtts,\r\n"
-				+ "    win_ta_script_master ma,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
+				+ " ,wttsl.dependency_tr\r\n" + "      from\r\n" + "      execute_status ex_st,\r\n"
+				+ "      win_ta_test_set        wtts,\r\n" + "    win_ta_script_master ma,\r\n"
+				+ "           win_ta_test_set_lines  wttsl,\r\n"
 				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
 				+ "           win_ta_customers       wtc\r\n" + "     WHERE 1=1\r\n"
 				+ "     AND wtts.TEST_SET_ID = EX_ST.TEST_RUN_ID(+)\r\n" + "    and ma.script_id = wttsl.script_id\r\n"
@@ -886,6 +887,9 @@ public class DataBaseEntryDao {
 
 				scriptDetailsDto.setTargetApplicationName(
 						NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+
+				scriptDetailsDto.setDependencyScriptNumber(
+						NULL_STRING.equals(String.valueOf(obj[20])) ? null : Integer.valueOf((String) obj[20]));
 
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}
@@ -1061,8 +1065,7 @@ public class DataBaseEntryDao {
 
 	}
 
-	public void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId, String status) {
+	public void updateInProgressScriptLineStatus(String testScriptParamId, String status) {
 		try {
 			TestSetScriptParam scriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));
 			/*
@@ -1467,7 +1470,6 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
 		}
 	}
-
 
 	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();

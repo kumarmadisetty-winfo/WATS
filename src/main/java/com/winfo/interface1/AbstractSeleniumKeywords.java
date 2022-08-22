@@ -13,9 +13,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +87,8 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -126,8 +131,8 @@ public abstract class AbstractSeleniumKeywords {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
-	public String screenshot(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public String screenshot(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
 		try {
@@ -137,11 +142,11 @@ public abstract class AbstractSeleniumKeywords {
 
 			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
 
-			folderName = "Screenshot" + "/" + fetchMetadataVO.getCustomer_name() + "/"
-					+ fetchMetadataVO.getTest_run_name();
-			imageName = (fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number() + "_"
-					+ fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_"
-					+ fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getLine_number() + "_Passed")
+			folderName = "Screenshot" + "/" + customerDetails.getCustomerName() + "/"
+					+ customerDetails.getTestSetName();
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
 					.concat(fileExtension);
 
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
@@ -156,8 +161,8 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
-	public String screenshotFail(WebDriver driver, String screenshotName, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public String screenshotFail(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
 		try {
@@ -167,18 +172,18 @@ public abstract class AbstractSeleniumKeywords {
 			String fileExtension = source.getName();
 
 			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-			folderName = "Screenshot" + "/" + fetchMetadataVO.getCustomer_name() + "/"
-					+ fetchMetadataVO.getTest_run_name();
-			imageName = (fetchMetadataVO.getSeq_num() + "_" + fetchMetadataVO.getLine_number() + "_"
-					+ fetchMetadataVO.getScenario_name() + "_" + fetchMetadataVO.getScript_number() + "_"
-					+ fetchMetadataVO.getTest_run_name() + "_" + fetchMetadataVO.getLine_number() + "_Failed")
+			folderName = "Screenshot" + "/" + customerDetails.getCustomerName() + "/"
+					+ customerDetails.getTestSetName();
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed")
 					.concat(fileExtension);
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
 			return folderName + "/" + imageName;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during screenshotFail Action. " + scripNumber);
 			System.out.println("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
@@ -1201,6 +1206,31 @@ public abstract class AbstractSeleniumKeywords {
 		// add the call to the table
 		table.addCell(cell);
 
+	}
+	
+	public void delatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws IOException {
+		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
+				+ customerDetails.getTestSetName() + "/");
+		if (folder.exists()) {
+			File[] listOfFiles = folder.listFiles();
+
+//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
+//				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+//				+ fetchMetadataVO.getLine_number();
+			for (File file : Arrays.asList(listOfFiles)) {
+
+				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
+
+				String seqnum1 = fetchMetadataListVO.get(0).getSeqNum();
+				if (seqNum.equalsIgnoreCase(seqnum1)) {
+					Path imagesPath = Paths.get(file.getPath());
+					Files.delete(imagesPath);
+				}
+			}
+		}
 	}
 
 }

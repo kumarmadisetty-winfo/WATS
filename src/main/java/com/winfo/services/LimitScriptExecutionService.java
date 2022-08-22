@@ -28,6 +28,7 @@ import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 @RefreshScope
@@ -50,7 +51,7 @@ public class LimitScriptExecutionService {
 	private String fromMail;
 
 	public Map<Integer, Boolean> getLimitedConditionException(FetchConfigVO fetchConfigVO,
-			List<FetchMetadataVO> fetchMetadataListVO, SortedMap<Integer, List<FetchMetadataVO>> metaDataMap,
+			List<ScriptDetailsDto> testSetLinesDtls, SortedMap<Integer, List<ScriptDetailsDto>> metaDataMap,
 			String args) {
 		boolean flag = false;
 		int remaingScriptsCount = 0;
@@ -63,12 +64,12 @@ public class LimitScriptExecutionService {
 			int percentageCount = Math.round((threshold * (80.0f / 100.0f)));
 			scriptsPassCount = scriptsPassCount + metaDataMap.size() + inprogressandInqueueCount;
 			if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
-				sendAlertmail(fetchMetadataListVO.get(0).getExecuted_by(),
-						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
+				sendAlertmail(testSetLinesDtls.get(0).getExecutedBy(),
+						fromMail, args);
 			} else if (threshold < scriptsPassCount) {
 				remaingScriptsCount = threshold - (scriptsPassCount + inprogressandInqueueCount);
-				sendExceptionmail(fetchMetadataListVO.get(0).getExecuted_by(),
-						fetchMetadataListVO.get(0).getSmtp_from_mail(), args);
+				sendExceptionmail(testSetLinesDtls.get(0).getExecutedBy(),
+						fromMail, args);
 				flag = true;
 
 			}
