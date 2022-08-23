@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
@@ -443,6 +444,22 @@ public class DataBaseEntry {
 
 	public void updateTestSetLineStatusForSanity(String testSetId) {
 		dao.updateTestSetLineStatusForSanity(testSetId);
+	}
+
+	public int getApiValidationIdActionId() {
+		return dao.getApiValidationIdActionId();
+	}
+
+	public List<Object> getApiValidationDataFromLookupsCode(int apiValidationId, List<Integer> list) {
+		return dao.getApiValidationDataFromLookupsCode(apiValidationId,list);
+	}
+
+	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
+		return dao.checkIfValidationExists(apiValidationId,lookUpCode);
+	}
+
+	public void insertApiValidation(LookUpCode lookUpCodes) {
+		dao.insertApiValidation(lookUpCodes);
 	}
 
 }

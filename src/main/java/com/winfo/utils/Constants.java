@@ -76,7 +76,7 @@ public class Constants {
 			return this.label;
 		}
 	}
-
+	public static final String CONFLICT = "CONFLICT";
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
