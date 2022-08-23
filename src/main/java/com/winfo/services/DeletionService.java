@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
@@ -29,6 +31,8 @@ import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.Customer;
+import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
@@ -64,7 +68,10 @@ public class DeletionService {
 
 	public ResponseDto deleteAllScriptFromTestRun(DeleteEvidenceReportDto testScriptDto) throws Exception {
 		String testSetId = testScriptDto.getTestSetId();
-		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
+		Customer customer = dataBaseEntry.getCustomer(testSetId);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		CustomerProjectDto customerDetails = mapper.convertValue(customer, CustomerProjectDto.class);
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
@@ -74,14 +81,13 @@ public class DeletionService {
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
-			List<TestSetLine> listOfTestSetLine = dataBaseEntry.getAllTestSetLineRecord(testSetId);
-			TestSetLine testSetLine = listOfTestSetLine.get(0);
-			deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
-			deletePdf(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
+			TestSet testSet = dataBaseEntry.getTestRunDetails(testSetId);
+			deleteScreenShot(null, customerDetails, provider, testScriptDto.getIsTestRunDelete(), testSet);
+			deletePdf(null, customerDetails, provider, testScriptDto.getIsTestRunDelete(), testSet);
 			if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 				String access = healthCheck.getSharePointAccess(fetchConfigVO);
-				deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine,
-						testScriptDto.isTestRunDelete());
+				deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, null, testScriptDto.getIsTestRunDelete(),
+						testSet);
 			}
 		} catch (Exception e) {
 			if (e instanceof WatsEBSCustomException) {
@@ -108,12 +114,12 @@ public class DeletionService {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 			for (String testSetLineId : testScriptDto.getTestSetLineId()) {
 				TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(testSetId, testSetLineId);
-				deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
-				deletePdf(testSetLine, customerDetails, provider, testScriptDto.isTestRunDelete());
+				deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.getIsTestRunDelete(), null);
+				deletePdf(testSetLine, customerDetails, provider, testScriptDto.getIsTestRunDelete(), null);
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					String access = healthCheck.getSharePointAccess(fetchConfigVO);
 					deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine,
-							testScriptDto.isTestRunDelete());
+							testScriptDto.getIsTestRunDelete(), null);
 				}
 			}
 		} catch (Exception e) {
@@ -127,7 +133,7 @@ public class DeletionService {
 	}
 
 	private ResponseDto deleteScreenShot(TestSetLine testSetLine, CustomerProjectDto customerDetails,
-			AuthenticationDetailsProvider provider, boolean isTestRunDelete) throws Exception {
+			AuthenticationDetailsProvider provider, boolean isTestRunDelete, TestSet testSet) throws Exception {
 		List<String> objNames = null;
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
@@ -135,7 +141,7 @@ public class DeletionService {
 
 			if (isTestRunDelete) {
 				objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
-						+ FORWARD_SLASH + testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH;
+						+ FORWARD_SLASH + testSet.getTestRunName() + FORWARD_SLASH;
 			} else {
 				objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
 						+ FORWARD_SLASH + testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH
@@ -177,15 +183,15 @@ public class DeletionService {
 	}
 
 	private ResponseDto deletePdf(TestSetLine testSetLine, CustomerProjectDto customerDetails,
-			AuthenticationDetailsProvider provider, boolean isTestRunDelete) throws Exception {
+			AuthenticationDetailsProvider provider, boolean isTestRunDelete, TestSet testSet) throws Exception {
 		List<String> objNames = null;
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 			String objectStorePdfPath;
 
 			if (isTestRunDelete) {
-				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH
-						+ testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH;
+				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH + testSet.getTestRunName()
+						+ FORWARD_SLASH;
 			} else {
 				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH
 						+ testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH + testSetLine.getSeqNum();
@@ -226,7 +232,7 @@ public class DeletionService {
 	}
 
 	public void deletePdfFromSharePoint(FetchConfigVO fetchConfigVO, String accessToken,
-			CustomerProjectDto customerDetails, TestSetLine testSetLine, boolean isTestRunDelete) {
+			CustomerProjectDto customerDetails, TestSetLine testSetLine, boolean isTestRunDelete, TestSet testSet) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -273,12 +279,15 @@ public class DeletionService {
 				}
 			}
 
+			String testRunName = isTestRunDelete ? testSet.getTestRunName() : testSetLine.getTestRun().getTestRunName();
+
 			// SITE-ID
-			ResponseEntity<Object> itemDetailsResponse = restTemplate.exchange(
-					"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/" + fetchConfigVO.getDirectory_Name()
-							+ "/" + customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
-							+ testSetLine.getTestRun().getTestRunName(),
-					HttpMethod.GET, deleteSessionRequest, Object.class);
+			ResponseEntity<Object> itemDetailsResponse = restTemplate
+					.exchange(
+							"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
+									+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
+									+ customerDetails.getProjectName() + "/" + testRunName,
+							HttpMethod.GET, deleteSessionRequest, Object.class);
 
 			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null
 					? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody()
@@ -300,7 +309,7 @@ public class DeletionService {
 				ResponseEntity<Object> deletionOfPdf = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
 								+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
-								+ customerDetails.getProjectName() + "/" + testSetLine.getTestRun().getTestRunName(),
+								+ customerDetails.getProjectName() + "/" + testSet.getTestRunName(),
 						HttpMethod.DELETE, deleteSessionRequest, Object.class);
 			} else if (!isTestRunDelete) {
 				for (Map<String, Object> listOfName : listOfMaps) {
