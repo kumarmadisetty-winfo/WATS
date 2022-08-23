@@ -41,8 +41,8 @@ public class JobController {
 		ResponseDto status = null;
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
 			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
-//			status = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
-			status = runAutomation.run(testScriptDto.getTestScriptNo());
+			status = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
+			runAutomation.run(testScriptDto.getTestScriptNo());
 
 		}
 		logger.info("End of Test Script Run # : " + testScriptDto.getTestScriptNo());

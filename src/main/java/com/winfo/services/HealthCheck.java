@@ -78,11 +78,8 @@ public class HealthCheck {
 			storageAccessChecks(testSetId);
 		} catch (Exception e) {
 			dataBaseEntry.updateTestSetLineStatusForSanity(testSetId);
-			if (e instanceof WatsEBSCustomException) {
-				throw e;
-			} else {
-				return new ResponseDto(500, Constants.ERROR, e.getMessage());
-			}
+			dataBaseEntry.updateEnableFlagForSanity(testSetId);
+			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 		return new ResponseDto(200, Constants.SUCCESS, "Yes, I am up");
 	}

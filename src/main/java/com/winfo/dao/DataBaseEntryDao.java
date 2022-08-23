@@ -1459,7 +1459,7 @@ public class DataBaseEntryDao {
 
 	public void updateTestSetLineStatusForSanity(String testSetId) {
 		String updateQry = "UPDATE win_ta_test_set_lines SET status = 'Fail' where test_set_id = " + testSetId
-				+ " and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS')";
+				+ " and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS','NEW','FAIL')";
 		try {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
@@ -1477,6 +1477,16 @@ public class DataBaseEntryDao {
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from));
 		return query.getResultList();
+	}
+	
+	public void updateEnableFlagForSanity(String testSetId) {
+		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I' WHERE TEST_RUN_ID = :P_TEST_SET_ID";
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).setParameter("P_TEST_SET_ID", testSetId).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status for status flag.", e);
+		}
 	}
 
 }
