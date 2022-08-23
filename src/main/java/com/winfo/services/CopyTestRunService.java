@@ -80,7 +80,7 @@ public class CopyTestRunService {
 				testSetLineRecords.setExecutedBy(null);
 				testSetLineRecords.setExecutionStartTime(null);
 				testSetLineRecords.setExecutionEndTime(null);
-				testSetLineRecords.setDependency_tr(testSetLineObj.getDependency_tr());
+//				testSetLineRecords.setDependency_tr(testSetLineObj.getDependency_tr());
 				newTestSetObj.addTestRunScriptData(testSetLineRecords);
 			} else {
 
