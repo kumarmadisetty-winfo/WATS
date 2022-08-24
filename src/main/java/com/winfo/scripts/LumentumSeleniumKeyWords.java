@@ -88,6 +88,8 @@ import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
+import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service("LUMENTUM")
 //@Service("WATS")
@@ -124,21 +126,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	public WebElement fromElement;
 	public WebElement toElement;
 
-	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
+			String value, CustomerProjectDto customerDetails) throws Exception {
 		String param5 = "password";
 		String param6 = "Sign In";
-		navigateUrl(driver, fetchConfigVO, fetchMetadataVO);
-		String xpath1 = loginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-		String xpath2 = loginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
+		navigateUrl(driver, fetchConfigVO, fetchMetadataVO, customerDetails);
+		String xpath1 = loginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath2 = loginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO, customerDetails);
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
-		String lineNumber = fetchMetadataVO.getLine_number();
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 //		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
 //		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
@@ -146,51 +148,51 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count) throws Exception {
+	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
 		String param3 = "Navigator";
-		String xpath = navigator(driver, param3, fetchMetadataVO, fetchConfigVO);
-		String xpath1 = menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO);
+		String xpath = navigator(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath1 = menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		String xpath2 = menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
-				count);
-		String scripNumber = fetchMetadataVO.getScript_number();
+				count, customerDetails);
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpaths = xpath + ">" + xpath1 + ">" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
-		String lineNumber = fetchMetadataVO.getLine_number();
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 //		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public synchronized void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count) throws Exception {
+	public synchronized void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
 		String param3 = "Tasks";
 //		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
 //		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
-		String xpath = task(driver, param3, fetchMetadataVO, fetchConfigVO);
-		String xpath1 = taskMenu(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2, count);
+		String xpath = task(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath1 = taskMenu(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2, count, customerDetails);
 		String xpaths = xpath + ";" + xpath1;
-		String scripNumber = fetchMetadataVO.getScript_number();
-		String scriptID = fetchMetadataVO.getScript_id();
-		String lineNumber = fetchMetadataVO.getLine_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 
 	}
 
-	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3) throws Exception {
+	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
 
 		String param4 = "UIScmil1u";
 		String param5 = "Sign Out";
 		String param6 = " Confirm";
-		logoutDropdown(driver, fetchConfigVO, fetchMetadataVO, param1);
-		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
+		logoutDropdown(driver, fetchConfigVO, fetchMetadataVO, param1, customerDetails);
+		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
 	}
 
-	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String param1) throws Exception {
+	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String param1, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 			Thread.sleep(4000);
@@ -209,7 +211,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					signout.click();
 					Thread.sleep(4000);
 				}
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Logout is done " + scripNumber);
 			} catch (Exception e) {
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -218,35 +220,35 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//div[contains(@id,'popup-container')]//a[text()='Sign Out']"));
 				signout.click();
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Successfully Logout is done " + scripNumber);
 			}
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO,customerDetails);
 			throw e;
 		}
 	}
 
 	public void datePicker(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		String[] fullDate = keysToSend.split(">");
 		String date = fullDate[0];
 		String month = fullDate[1];
 		String year = fullDate[2];
 
-		selectYear(driver, year, fetchMetadataVO, fetchConfigVO);
-		selectMonth(driver, month, fetchMetadataVO, fetchConfigVO);
-		selectDate(driver, date, fetchMetadataVO, fetchConfigVO);
+		selectYear(driver, year, fetchMetadataVO, fetchConfigVO, customerDetails);
+		selectMonth(driver, month, fetchMetadataVO, fetchConfigVO, customerDetails);
+		selectDate(driver, date, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 	}
 
-	public void selectDate(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void selectDate(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -259,33 +261,33 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
 			log.error("Failed During Navigation");
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the Url");
 			throw e;
 		}
 	}
 
-	public void selectMonth(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void selectMonth(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//*[text()='Create Time Card']/following::select[1]"));
 			selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
 			log.error("Failed During Navigation");
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
 
-	public void selectYear(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void selectYear(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebElement wait = driver.findElement(By.xpath("//*[text()='Select Year']/preceding-sibling::input[1]"));
 			String yearValue = wait.getAttribute("title");
@@ -308,18 +310,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			} else {
 				System.out.println("The given year is matched with the Oracle year");
 			}
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
 			log.error("Failed During Navigation");
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
 
-	public void openSettings(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
+	public void openSettings(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
 		String param4 = "UIScmil1u";
 		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO);
 		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
@@ -327,25 +329,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.navigate().to(fetchConfigVO.getApplication_url());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
-			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO,customerDetails);
 			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
-	public String loginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public String loginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		String xpath = null;
 		try {
 			if (param1.equalsIgnoreCase("password")) {
@@ -355,25 +357,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
 				// if("password".equalsIgnoreCase(param1))
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 				String title2 = driver.getTitle();
 				if (title1.equalsIgnoreCase(title2)) {
-					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO, customerDetails);
 					throw new IOException("Failed during login page");
 				}
-				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//input[@type='param1']";
 				return xpath;
 			}
 		} catch (Exception e) {
-			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO,customerDetails);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
 			System.out.println(e);
 		}
@@ -388,23 +390,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
 			// if("password".equalsIgnoreCase(param1))
-			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			xpath = "//*[contains(@placeholder,'param1')]";
 			log.info("Successfully entered data " + scripNumber);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
-			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO,customerDetails);
 			System.out.println("Failed During Login page");
 		}
 		return xpath;
 	}
 
-	public String navigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public String navigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -414,22 +416,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully navigator is done " + scripNumber);
 			String xpath = "//a[@title='param1']";
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO,customerDetails);
 			System.out.println("Not able to navitage to the Url");
 			throw e;
 		}
 	}
 
-	public String menuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public String menuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Expenses")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -443,15 +445,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(3000);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully MenuNavigation is done " + scripNumber);
 				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='param1'])[2]";
 
 				return xpath;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during MenuNavigation " + scripNumber);
 			// TODO: handle exception
 		}
@@ -486,8 +488,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(15000);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully menunavigation is clicked " + scripNumber);
 			String xpath = "//*[contains(@id,'popup-container')]//a[text()='Show More']" + ">"
 					+ "//*[contains(@id,'popup-container')]//a[text()='Show Less']";
@@ -495,17 +497,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			return xpath;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Menunavigation " + scripNumber);
 
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
 
-	public String menuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String type1, String type2, String param1, String param2, int count) throws Exception {
+	public String menuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
 		String xpath = null;
 		try {
 			Thread.sleep(5000);
@@ -516,8 +518,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param2']";
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
@@ -535,8 +537,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']";
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
@@ -546,15 +548,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (count == 0) {
 				count = 1;
 				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count,customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
 				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count,customerDetails);
 			} else {
 				System.out.println("Count value exceeds the limit");
 				log.error("Failed During Navigation");
-				screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO);
+				screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO,customerDetails);
 				System.out.println("Not able to navitage to the :" + "" + param1);
 				throw e;
 			}
@@ -563,7 +565,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return xpath;
 	}
 
-	public String task(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public String task(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
 			Thread.sleep(7000);
@@ -574,24 +576,24 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully task is open " + scripNumber);
 			String xpath = "//img[@title='param1']";
 			log.info("Successfully task is open " + scripNumber);
 			return xpath;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed During Task " + scripNumber);
-			screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO,customerDetails);
 			System.out.println("Failed to Open Task Menu");
 			throw e;
 		}
 	}
 
-	public String taskMenu(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO, String type1,
-			String type2, String param1, String param2, int count) throws Exception {
+	public String taskMenu(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
 		String xpath = null;
 		try {
 			Thread.sleep(2000);
@@ -606,8 +608,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully open Task " + scripNumber);
 			xpath = "//div[contains(@class,'AFVertical')]//a[normalize-space(text())='param1']";
 
@@ -618,15 +620,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (count == 0) {
 				count = 1;
 				System.out.println(" The Count Value is : " + count);
-				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
+				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count,customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
 				System.out.println(" The Count Value is : " + count);
-				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count);
+				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count,customerDetails);
 			} else {
 				System.out.println("Count value exceeds the limit");
 				log.error("Failed to Open Task Menu");
-				screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO);
+				screenshotFail(driver, "Failed to Open Task Menu", fetchMetadataVO, fetchConfigVO,customerDetails);
 				System.out.println("Failed to Open Task Menu");
 				throw e;
 
@@ -635,17 +637,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return xpath;
 	}
 
-	public void mediumWait(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void mediumWait(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			int time = StringUtils.convertStringToInteger(inputData, 4);
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully waited for 4 seconds " + scripNumber);
 		} catch (InterruptedException e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During meduim wait" + scripNumber);
 			e.printStackTrace();
 			// Restore interrupted state...
@@ -681,1008 +683,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public List<String> getFailFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-		System.out.println("entered to getFailFileNameListNew");
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
-		File[] listOfFiles = folder.listFiles();
-		String video_rec = "no";
-		// String video_rec="yes";
-//		List<File> fileList = Arrays.asList(listOfFiles);
-		List<File> allFileList = Arrays.asList(listOfFiles);
-		List<File> fileList = new ArrayList<>();
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		// String seqNumber = "1";
-		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_")) {
-				fileList.add(file);
-			}
-		}
-		System.out.println("before Collections.sort completed");
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-		System.out.println("after Collections.sort completed");
-		List<String> fileNameList = new ArrayList<String>();
-		ArrayList<String> linksall = new ArrayList<String>();
-		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new ClassPathResource(whiteimage).getFile();
-		// File file = new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new ClassPathResource(watsvediologo).getFile();
-		// File file1=new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-		BufferedImage image = null;
-		image = ImageIO.read(file);
-		BufferedImage logo = null;
-		logo = ImageIO.read(file1);
-		Graphics g = image.getGraphics();
-		g.setColor(Color.black);
-		java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-		g.setFont(font);
-		String details = fileList.get(0).getName();
-		// String details= seqList.get(0).getName();
-		String ScriptNumber = details.split("_")[3];
-		String TestRun = details.split("_")[4];
-		String Status = details.split("_")[6];
-		String status = Status.split("\\.")[0];
-		String Scenario = details.split("_")[2];
-		String imagename = TestRun + ScriptNumber;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
-		String no = details.split("_")[0];
-		Date Starttime = fetchConfigVO.getStarttime();
-		Date endtime = fetchConfigVO.getEndtime();
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String Starttime1 = dateFormat.format(Starttime);
-//Changed the executed by variable
-		String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-		String endtime1 = dateFormat.format(endtime);
-		long diff = endtime.getTime() - Starttime.getTime();
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
-		g.drawString("TEST SCRIPT DETAILS", 450, 50);
-		g.drawString("Test Run Name : " + TName, 50, 100);
-		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Test Case Name :" + Scenario, 50, 200);
-		g.drawString("Status : " + status, 50, 250);
-		g.drawString("Executed By :" + ExeBy, 50, 300);
-		g.drawString("Start Time :" + Starttime1, 50, 350);
-		g.drawString("End Time :" + endtime1, 50, 400);
-		g.drawString("Execution Time : " + ExecutionTime, 50, 450);
-		g.drawImage(logo, 1012, 15, null);
-		g.dispose();
-		System.out.println("before ImageIO.write");
-		File folder1 = new File(
-				fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
-			boolean result = false;
-			try {
-				folder1.mkdirs();
-				result = true;
-			} catch (SecurityException se) {
-				// handle it
-				System.out.println(se.getMessage());
-			}
-		} else {
-			System.out.println("Folder exist");
-		}
-		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
-		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\first.jpg"));
-
-		BufferedImage image1 = null;
-		image1 = ImageIO.read(file);
-		Graphics g1 = image1.getGraphics();
-		g1.setColor(Color.red);
-		java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-		g1.setFont(font1);
-		g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-		g1.drawImage(logo, 1012, 15, null);
-		g1.dispose();
-
-		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-		String imgpath2 = folder1 + "/";
-		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\last.jpg"));
-		// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-		File f11 = new File(imgpath2);
-		File[] f22 = f11.listFiles();
-		System.out.println("before Failed.jpg");
-		if (fileList.get(0).getName().endsWith("Failed.jpg")) {
-			for (File f33 : f22) {
-				if (f33.getAbsolutePath().contains("first")) {
-					linksall.add(f33.getAbsolutePath());
-					linksall.set(0, f33.getAbsolutePath());
-				}
-				if (f33.getAbsolutePath().contains("last")) {
-					linksall.add(f33.getAbsolutePath());
-					linksall.add(f33.getAbsolutePath());
-					linksall.set(1, f33.getAbsolutePath());
-
-				}
-			}
-			fetchConfigVO.setStatus1("Fail");
-			fileNameList.add(fileList.get(0).getName());
-			links1.add(fileList.get(0).getAbsolutePath());
-			links1.add(linksall.get(1));
-			System.out.println("added links1 list");
-			for (int i = 1; i < fileList.size(); i++) {
-
-				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-					links1.add(fileList.get(i).getAbsolutePath());
-					fileNameList.add(fileList.get(i).getName());
-
-				} else {
-
-				}
-
-			}
-
-			links1.add(linksall.get(0));
-			Collections.reverse(links1);
-			Collections.reverse(fileNameList);
-			System.out.println("Collections.reverse");
-		}
-
-		// targetFileList.addAll(seqList);
-
-		/*
-		 * for (String fileName : fileNameList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		if (video_rec.equalsIgnoreCase("Y")) {
-			String name = no + "_" + ScriptNumber + ".mp4";
-			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
-		}
-		return fileNameList;
-	}
-
-	public List<String> getFileNameListNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder = new File("C:\\\\Users\\\\Winfo Solutions\\\\Desktop\\\\test");
-
-		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
-		String video_rec = "no";
-//		List<File> fileList = Arrays.asList(listOfFiles);
-		List<File> allFileList = Arrays.asList(listOfFiles);
-		List<File> fileList = new ArrayList<>();
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		// String seqNumber = "1";
-		for (File file : allFileList) {
-			if (file.getName().startsWith(seqNumber + "_")) {
-				fileList.add(file);
-			}
-		}
-
-		Collections.sort(fileList, new Comparator<File>() {
-
-			public int compare(File f1, File f2) {
-
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-			}
-
-		});
-
-		List<String> fileNameList = new ArrayList<String>();
-		ArrayList<String> linksall = new ArrayList<String>();
-		ArrayList<String> links1 = new ArrayList<String>();
-		File file = new ClassPathResource(whiteimage).getFile();
-		// File file = new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\white.jpg");
-		File file1 = new ClassPathResource(watsvediologo).getFile();
-		// File file1=new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-		BufferedImage image = null;
-		image = ImageIO.read(file);
-		BufferedImage logo = null;
-		logo = ImageIO.read(file1);
-		Graphics g = image.getGraphics();
-		g.setColor(Color.black);
-		java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-		g.setFont(font);
-		String details = fileList.get(0).getName();
-		// String details= seqList.get(0).getName();
-		String ScriptNumber = details.split("_")[3];
-		String TestRun = details.split("_")[4];
-		String Status = details.split("_")[6];
-		String status = Status.split("\\.")[0];
-		String Scenario = details.split("_")[2];
-		String imagename = TestRun + ScriptNumber;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
-		String no = details.split("_")[0];
-		Date Starttime = fetchConfigVO.getStarttime();
-		Date endtime = fetchConfigVO.getEndtime();
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String Starttime1 = dateFormat.format(Starttime);
-//Changed the executed by variable
-		String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-		String endtime1 = dateFormat.format(endtime);
-		long diff = endtime.getTime() - Starttime.getTime();
-		long diffSeconds = diff / 1000 % 60;
-		long diffMinutes = diff / (60 * 1000) % 60;
-		long diffHours = diff / (60 * 60 * 1000);
-		String ExecutionTime = diffHours + ":" + diffMinutes + ":" + diffSeconds;
-		g.drawString("TEST SCRIPT DETAILS", 450, 50);
-		g.drawString("Test Run Name : " + TName, 50, 100);
-		g.drawString("Script Number : " + ScriptNumber, 50, 150);
-		g.drawString("Test Case Name :" + Scenario, 50, 200);
-		g.drawString("Status : " + status, 50, 250);
-		g.drawString("Executed By :" + ExeBy, 50, 300);
-		g.drawString("Start Time :" + Starttime1, 50, 350);
-		g.drawString("End Time :" + endtime1, 50, 400);
-		g.drawString("Execution Time : " + ExecutionTime, 50, 450);
-		g.drawImage(logo, 1012, 15, null);
-		g.dispose();
-		File folder1 = new File(
-				fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-		if (!folder1.exists()) {
-			System.out.println("creating directory: " + folder1.getName());
-			boolean result = false;
-			try {
-				folder1.mkdirs();
-				result = true;
-			} catch (SecurityException se) {
-				// handle it
-				System.out.println(se.getMessage());
-			}
-		} else {
-			System.out.println("Folder exist");
-		}
-
-		ImageIO.write(image, "jpg", new File(folder1 + "/first.jpg"));
-		// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\first.jpg"));
-
-		BufferedImage image1 = null;
-		image1 = ImageIO.read(file);
-		Graphics g1 = image1.getGraphics();
-		g1.setColor(Color.red);
-		java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-		g1.setFont(font1);
-		g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-		g1.drawImage(logo, 1150, 15, null);
-		g1.dispose();
-		ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-		// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-		// Solutions\\Desktop\\Add_On\\last.jpg"));
-		String imgpath2 = folder1 + "/";
-		// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-		File f11 = new File(imgpath2);
-		File[] f22 = f11.listFiles();
-
-		if (!fileList.get(0).getName().endsWith("Failed.jpg")) {
-			for (File f33 : f22) {
-				if (f33.getAbsolutePath().contains("first")) {
-					linksall.add(f33.getAbsolutePath());
-				}
-			}
-			fetchConfigVO.setStatus1("Pass");
-			fileNameList.add(fileList.get(0).getName());
-			links1.add(fileList.get(0).getAbsolutePath());
-			for (int i = 1; i < fileList.size(); i++) {
-
-				if (!fileList.get(i).getName().endsWith("Failed.jpg")) {
-					links1.add(fileList.get(i).getAbsolutePath());
-
-					fileNameList.add(fileList.get(i).getName());
-
-				} else {
-
-				}
-
-			}
-
-			links1.add(linksall.get(0));
-			Collections.reverse(links1);
-			Collections.reverse(fileNameList);
-
-		}
-
-		// targetFileList.addAll(seqList);
-
-		/*
-		 * for (String fileName : fileNameList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		if (video_rec.equalsIgnoreCase("Y")) {
-			String name = no + "_" + ScriptNumber + ".mp4";
-			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
-		}
-		return fileNameList;
-
-	}
-
-	public List<String> getPassedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec = "no";
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int passcount = 0;
-		int failcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		String firstimagelink = null;
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-			ArrayList<String> linksall = new ArrayList<String>();
-
-			File file = new ClassPathResource(whiteimage).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
-			Graphics g = image.getGraphics();
-			g.setColor(Color.black);
-			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g.setFont(font);
-
-			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			String TName = fetchMetadataListVO.get(0).getTest_run_name();
-			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
-//Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
-			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case Name :" + Scenario, 50, 275);
-			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
-			g.drawImage(logo, 1012, 15, null);
-////		 g.drawString("Start Time :"+TStarttime1, 50, 425);
-////		 g.drawString("End Time :"+endtime1, 50, 500);
-////		 g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-			g.dispose();
-
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
-			Graphics g2 = image2.getGraphics();
-			g2.setColor(Color.black);
-			g2.setFont(font);
-			g2.drawString("TEST RUN SUMMARY", 450, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
-			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
-			g2.drawImage(logo, 1012, 15, null);
-			g2.dispose();
-			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			String imgpath3 = folder1 + "/first.jpg";
-			String imgpath2 = folder1 + "/";
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// String imgpath3 ="C\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
-
-			File f11 = new File(imgpath2);
-			File[] f22 = f11.listFiles();
-			File f44 = new File(imgpath3);
-			firstimagelink = f44.getAbsolutePath();
-
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-					}
-				}
-				links1.add(seqList.get(0).getAbsolutePath());
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-						seqFileNameList.add(seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links.addAll(links1);
-				targetFileList.addAll(seqFileNameList);
-
-			}
-
-////                    targetFileList.addAll(seqList);
-
-		}
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Passed_Video.mp4");
-		}
-		System.out.println(targetFileList.size());
-		return targetFileList;
-	}
-
-	public List<String> getFailedPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-		// String video_rec=fetchConfigVO.getVideo_rec();
-		String video_rec = "no";
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int failcount = 0;
-		int passcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		String firstimagelink = null;
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-			ArrayList<String> linksall = new ArrayList<String>();
-
-			File file = new ClassPathResource(whiteimage).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
-			Graphics g = image.getGraphics();
-			g.setColor(Color.black);
-			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g.setFont(font);
-			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			String TName = fetchMetadataListVO.get(0).getTest_run_name();
-			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
-//Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
-
-			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case Name :" + Scenario, 50, 275);
-			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
-			g.drawImage(logo, 1150, 15, null);
-////	    g.drawString("Start Time :"+TStarttime1, 50, 425);
-////	    g.drawString("End Time :"+endtime1, 50, 500);
-////	    g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-			g.dispose();
-			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
-
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
-			Graphics g1 = image1.getGraphics();
-			g1.setColor(Color.red);
-			java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g1.setFont(font1);
-			g1.drawImage(logo, 1012, 14, null);
-			g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-			g1.dispose();
-			ImageIO.write(image1, "jpg", new File(folder1 + "/last.jpg"));
-			// ImageIO.write(image1, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\last.jpg"));
-
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
-			Graphics g2 = image2.getGraphics();
-			g2.setColor(Color.black);
-			g2.setFont(font);
-			g2.drawString("TEST RUN SUMMARY", 50, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
-			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
-			g2.drawImage(logo, 1012, 15, null);
-			g2.dispose();
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			String imgpath3 = folder1 + "/first.jpg";
-			String imgpath2 = folder1 + "/";
-
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			File f11 = new File(imgpath2);
-			File[] f22 = f11.listFiles();
-			File f44 = new File(imgpath3);
-			firstimagelink = f44.getAbsolutePath();
-
-			if (seqList.get(0).getName().endsWith("Failed.jpg")) {
-				failcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(0, f33.getAbsolutePath());
-					}
-					if (f33.getAbsolutePath().contains("last")) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(1, f33.getAbsolutePath());
-
-					}
-				}
-//                                   System.out.println("SEQ : "+seqEntry.getKey());
-				links1.add(seqList.get(0).getAbsolutePath());
-				links1.add(linksall.get(1));
-				seqFileNameList.add(seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-						seqFileNameList.add(seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links.addAll(links1);
-				targetFileList.addAll(seqFileNameList);
-
-			}
-
-//                    targetFileList.addAll(seqList);
-
-		}
-//
-//		/*
-//		 * for (String fileName : targetFileList) {
-//		 * 
-//		 * System.out.println("Target File : " + fileName);
-//		 * 
-//		 * }
-//		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("yes")) {
-			convertJPGtoMovie(firstimagelink, links, fetchMetadataListVO, fetchConfigVO, "Failed_Video.mp4");
-		}
-		return targetFileList;
-
-	}
-
-	public List<String> getDetailPdfNew(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
-			throws IOException {
-
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// File folder=new File("C:\\Users\\Winfo Solutions\\Desktop\\test");
-		File[] listOfFiles = folder.listFiles();
-//		String video_rec=fetchConfigVO.getEnable_video();
-		String video_rec = "no";
-		Map<Integer, List<File>> filesMap = new TreeMap<>();
-		int failcount = 0;
-		int passcount = 0;
-		for (File file : Arrays.asList(listOfFiles)) {
-
-			Integer seqNum = Integer.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-			if (!filesMap.containsKey(seqNum)) {
-
-				filesMap.put(seqNum, new ArrayList<File>());
-
-			}
-
-			filesMap.get(seqNum).add(file);
-
-		}
-
-		List<String> targetFileList = new ArrayList<>();
-		ArrayList<String> finalLinks = new ArrayList<String>();
-		List<String> targetSuccessFileList = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<String>();
-		ArrayList<String> links2 = new ArrayList<String>();
-		List<String> targetFailedFileList = new ArrayList<>();
-		String firstimagelink = null;
-		String TName = fetchMetadataListVO.get(0).getTest_run_name();
-		for (Entry<Integer, List<File>> seqEntry : filesMap.entrySet()) {
-
-			List<File> seqList = seqEntry.getValue();
-
-			Collections.sort(seqList, new Comparator<File>() {
-
-				public int compare(File f1, File f2) {
-
-					return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified()) * -1;
-
-				}
-
-			});
-
-			List<String> seqFileNameList = new ArrayList<String>();
-			ArrayList<String> links1 = new ArrayList<String>();
-
-			ArrayList<String> linksall = new ArrayList<String>();
-
-			File file = new ClassPathResource(whiteimage).getFile();
-			File file1 = new ClassPathResource(watsvediologo).getFile();
-			// File file = new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\white.jpg");
-			// File file1=new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\WATS_LOGO.JPG");
-			BufferedImage image = null;
-			image = ImageIO.read(file);
-			BufferedImage logo = null;
-			logo = ImageIO.read(file1);
-			Graphics g = image.getGraphics();
-			g.setColor(Color.black);
-			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g.setFont(font);
-
-			String details = seqList.get(0).getName();
-			String ScriptNumber = details.split("_")[3];
-			String TestRun = details.split("_")[4];
-			String Status = details.split("_")[6];
-			String status = Status.split("\\.")[0];
-			String Scenario = details.split("_")[2];
-			String imagename = TestRun + ScriptNumber;
-			// String TName = fetchMetadataListVO.get(0).getTest_run_name();
-			Date endtime = fetchConfigVO.getEndtime();
-			Date TStarttime = fetchConfigVO.getStarttime1();
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			String TStarttime1 = dateFormat.format(TStarttime);
-//Changed the executed by variable
-			String ExeBy = fetchMetadataListVO.get(0).getExecuted_by();
-			String endtime1 = dateFormat.format(endtime);
-			long Tdiff = endtime.getTime() - TStarttime.getTime();
-			long TdiffSeconds = Tdiff / 1000 % 60;
-			long TdiffMinutes = Tdiff / (60 * 1000) % 60;
-			long TdiffHours = Tdiff / (60 * 60 * 1000);
-			String ExecutionTime = TdiffHours + ":" + TdiffMinutes + ":" + TdiffSeconds;
-			g.drawString("TEST SCRIPT DETAILS", 450, 50);
-			g.drawString("Test Run Name : " + TName, 50, 125);
-			g.drawString("Script Number : " + ScriptNumber, 50, 200);
-			g.drawString("Test Case Name :" + Scenario, 50, 275);
-			g.drawString("Status : " + status, 50, 350);
-			g.drawString("Executed By :" + ExeBy, 50, 425);
-			g.drawImage(logo, 1012, 15, null);
-			// g.drawString("Start Time :"+TStarttime1, 50, 425);
-			// g.drawString("End Time :"+endtime1, 50, 500);
-			// g.drawString("Execution Time : "+ExecutionTime, 50, 575);
-			g.dispose();
-			File folder1 = new File(
-					fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/Images");
-			if (!folder1.exists()) {
-				System.out.println("creating directory: " + folder1.getName());
-				boolean result = false;
-				try {
-					folder1.mkdirs();
-					result = true;
-				} catch (SecurityException se) {
-					// handle it
-					System.out.println(se.getMessage());
-				}
-			} else {
-				System.out.println("Folder exist");
-			}
-
-			ImageIO.write(image, "jpg", new File(folder1 + "/" + imagename + ".jpg"));
-			// ImageIO.write(image, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\"+imagename+".jpg"));
-
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
-			Graphics g1 = image1.getGraphics();
-			g1.setColor(Color.red);
-			java.awt.Font font1 = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
-			g1.setFont(font1);
-			g1.drawString("FAILED IN THE NEXT STEP!!", 400, 300);
-			g1.drawImage(logo, 1012, 14, null);
-			g1.dispose();
-
-			BufferedImage image2 = null;
-			image2 = ImageIO.read(file);
-			Graphics g2 = image2.getGraphics();
-			g2.setColor(Color.black);
-			g2.setFont(font);
-			g2.drawString("TEST RUN SUMMARY", 450, 50);
-			g2.drawString("Test Run Name : " + TName, 50, 125);
-			g2.drawString("Executed By :" + ExeBy, 50, 200);
-			g2.drawString("Start Time :" + TStarttime1, 50, 275);
-			g2.drawString("End Time :" + endtime1, 50, 350);
-			g2.drawString("Execution Time : " + ExecutionTime, 50, 425);
-			g2.drawImage(logo, 1012, 15, null);
-			g2.dispose();
-			ImageIO.write(image2, "jpg", new File(folder1 + "/first.jpg"));
-			// ImageIO.write(image2, "jpg", new File("C:\\Users\\Winfo
-			// Solutions\\Desktop\\Add_On\\first.jpg"));
-			String imgpath2 = folder1 + "/";
-			// String imgpath2 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\";
-			String imgpath3 = folder1 + "/first.jpg";
-			// String imgpath3 ="C:\\Users\\Winfo Solutions\\Desktop\\Add_On\\first.jpg";
-			File f11 = new File(imgpath2);
-			File[] f22 = f11.listFiles();
-			File f44 = new File(imgpath3);
-			firstimagelink = f44.getAbsolutePath();
-
-			if (!seqList.get(0).getName().endsWith("Failed.jpg")) {
-				passcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-					}
-				}
-				links1.add(seqList.get(0).getAbsolutePath());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-//			             	                      System.out.println("FIRST S STEP: "+seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-//			                                                                 System.out.println("S STEP: "+seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links.addAll(links1);
-				targetSuccessFileList.addAll(seqFileNameList);
-
-			} else {
-				failcount++;
-				for (File f33 : f22) {
-					if (f33.getAbsolutePath().contains(imagename)) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(0, f33.getAbsolutePath());
-					}
-					if (f33.getAbsolutePath().contains("last")) {
-						linksall.add(f33.getAbsolutePath());
-						linksall.add(f33.getAbsolutePath());
-						linksall.set(1, f33.getAbsolutePath());
-
-					}
-				}
-//			                                   System.out.println("SEQ : "+seqEntry.getKey());
-				links1.add(seqList.get(0).getAbsolutePath());
-				links1.add(linksall.get(1));
-//			                                   System.out.println("SEQ : "+seqEntry.getKey());
-
-				seqFileNameList.add(seqList.get(0).getName());
-
-//			                                   System.out.println("FIRST F STEP: "+seqList.get(0).getName());
-
-				for (int i = 1; i < seqList.size(); i++) {
-
-					if (!seqList.get(i).getName().endsWith("Failed.jpg")) {
-						links1.add(seqList.get(i).getAbsolutePath());
-
-						seqFileNameList.add(seqList.get(i).getName());
-
-//			                                                                 System.out.println("F STEP: "+seqList.get(i).getName());
-
-					} else {
-
-					}
-
-				}
-
-				links1.add(linksall.get(0));
-				Collections.reverse(links1);
-				Collections.reverse(seqFileNameList);
-				links2.addAll(links1);
-				targetFailedFileList.addAll(seqFileNameList);
-
-			}
-
-//			                    targetFileList.addAll(seqList);
-
-		}
-
-		finalLinks.addAll(links);
-		finalLinks.addAll(links2);
-		targetFileList.addAll(targetSuccessFileList);
-
-		targetFileList.addAll(targetFailedFileList);
-
-		/*
-		 * for (String fileName : targetFileList) {
-		 * 
-		 * System.out.println("Target File : " + fileName);
-		 * 
-		 * }
-		 */
-		fetchConfigVO.setPasscount(passcount);
-		fetchConfigVO.setFailcount(failcount);
-		if (video_rec.equalsIgnoreCase("Y")) {
-
-			convertJPGtoMovie(firstimagelink, finalLinks, fetchMetadataListVO, fetchConfigVO, TName + ".mp4");
-		}
-		return targetFileList;
-	}
-
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
-			List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name) {
-		String vidPath = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + name);
+			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name, CustomerProjectDto customerDetails) {
+		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+				+ customerDetails.getTestSetName() + "/" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+				+ customerDetails.getTestSetName() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
 			System.out.println("creating directory: " + theDir.getName());
@@ -1732,172 +739,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public List<String> getFailFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String Number = fetchMetadataListVO.get(0).getLine_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[3];
-				String seq = _arr[0];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber)
-						&& seqNumber.equalsIgnoreCase(seq)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getFileNameList(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String Number = fetchMetadataListVO.get(0).getLine_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[3];
-				String seq = _arr[0];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber)
-						&& "Passed".equalsIgnoreCase(status) && seqNumber.equalsIgnoreCase(seq)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getPassedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String seqNumber = fetchMetadataListVO.get(0).getSeq_num();
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String STATUS = fetchMetadataListVO.get(0).getStatus();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[3];
-				String seq = _arr[0];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[3];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && ("Failed".equalsIgnoreCase(status))) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getDetailPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[3];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getImages(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
-				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName()
+				+ "\\" + customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
@@ -1917,14 +762,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return fileNameList;
 	}
 
-	public void compress(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName)
+	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName, CustomerProjectDto customerDetails)
 			throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + fetchMetadataListVO.get(0).getCustomer_name()
-				+ "\\" + fetchMetadataListVO.get(0).getTest_run_name() + "\\");
+		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName()
+				+ "\\" + customerDetails.getTestSetName() + "\\");
 		List<String> fileNameList = null;
-		String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-		String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO);
+		String customer_Name = customerDetails.getCustomerName();
+		String test_Run_Name = customerDetails.getTestSetName();
+		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO, customerDetails);
 
 		for (String image : fileNameList) {
 
@@ -1947,25 +792,6 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			// writes the file with given compression level
 			// from your JPEGImageWriteParam instance
 			writer.write(null, new IIOImage(convertedImg, null, null), jpegParams);
-
-//		BufferedImage originalImage = ImageIO.read(new File(Folder+image));
-//		int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-
-//		BufferedImage resizeImageGif = resizeImage(originalImage, type);
-//		ImageIO.write(resizeImageGif, "jpg", new File("C:\\Kaushik"+"\\"+image));
-
-			/*
-			 * BufferedImage resizeImagePng = resizeImage(originalImage, type);
-			 * ImageIO.write(resizeImagePng, "png", new File("c:\\image\\mkyong_png.jpg"));
-			 * 
-			 * BufferedImage resizeImageHintJpg = resizeImageWithHint(originalImage, type);
-			 * ImageIO.write(resizeImageHintJpg, "jpg", new
-			 * File("c:\\image\\mkyong_hint_jpg.jpg"));
-			 * 
-			 * BufferedImage resizeImageHintPng = resizeImageWithHint(originalImage, type);
-			 * ImageIO.write(resizeImageHintPng, "png", new
-			 * File("c:\\image\\mkyong_hint_png.jpg"));
-			 */
 		}
 
 	}
@@ -1996,132 +822,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return resizedImage;
 	}
 
-	public List<String> getLowFileNameList(List<FetchMetadataVO> fetchMetadataListVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String Number = fetchMetadataListVO.get(0).getLine_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber)
-						&& "Passed".equalsIgnoreCase(status)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getLowPassedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		String STATUS = fetchMetadataListVO.get(0).getStatus();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getLowFailedPdf(List<FetchMetadataVO> fetchMetadataListVO) {
-
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt) && ("Failed".equalsIgnoreCase(status))) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getLowDetailPdf(List<FetchMetadataVO> fetchMetadataListVO) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File("C:\\Kaushik\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScript_number();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("jpg".equalsIgnoreCase(fileExt)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public void uploadPDF(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO) {
+	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			String accessToken = getAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+					+ customerDetails.getTestSetName() + "/");
 			System.out.println(imageDir);
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
@@ -2154,16 +860,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
 				// + fetchConfigVO.getSharepoint_drive_id() + "/items/" +
 				// fetchConfigVO.getSharepoint_item_id()
-				// + ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				// + fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName +
+				// + ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomerName() + "/"
+				// + fetchMetadataListVO.get(0).getTestSetName() + "/" + imageFileName +
 				// ":/createUploadSession",
 				// HttpMethod.POST, uploadSessionRequest, Object.class);
 
 				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
 				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"
 						+ fetchConfigVO.getSHAREPOINT_SITE_ID() + "/drive/items/"
-						+ fetchConfigVO.getSharepoint_item_id() + ":/" + fetchMetadataListVO.get(0).getCustomer_name()
-						+ "/" + fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName
+						+ fetchConfigVO.getSharepoint_item_id() + ":/" +  customerDetails.getCustomerName()
+						+ "/" +  customerDetails.getTestSetName() + "/" + imageFileName
 						+ ":/createUploadSession", HttpMethod.POST, uploadSessionRequest, Object.class);
 
 				System.out.println(response);
@@ -2220,27 +926,27 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return acessToken;
 	}
 
-	public void copy(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void copy(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Robot r = new Robot();
 			r.keyPress(KeyEvent.VK_CONTROL);
 			r.keyPress(KeyEvent.VK_C);
 			r.keyRelease(KeyEvent.VK_C);
 			r.keyRelease(KeyEvent.VK_CONTROL);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Copy is done " + scripNumber);
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Copy " + scripNumber);
-			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Copy Method", fetchMetadataVO, fetchConfigVO,customerDetails);
 			e.printStackTrace();
 			throw e;
 		}
 	}// input[@placeholder='Enter search terms']
 
-	public void paste(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String globalValueForSteps)
+	public void paste(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String globalValueForSteps, CustomerProjectDto customerDetails)
 
 			throws Exception {
 
@@ -2256,10 +962,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittill = driver
 						.findElement(By.xpath("//*[@title='" + inputParam + "']/following::input[1]"));
 
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				String copynumberValue;
-				String inputValue = fetchMetadataVO.getInput_value();
+				String inputValue = fetchMetadataVO.getInputValue();
 
 				String[] arrOfStr = inputValue.split(">", 5);
 				if (arrOfStr.length < 2) {
@@ -2281,21 +987,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
 				String xpath = "//*[@title='inputParam']/following::input[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				// service.saveXpathParams(inputParam,"",scripNumber,xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Paste Method");
-			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
@@ -2304,10 +1010,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittill = driver.findElement(
 						By.xpath("//h1[text()='" + inputParam + "']/following::input[@placeholder='Search']"));
 				// to get Dynamic copynumber
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				String copynumberValue;
-				String inputValue = fetchMetadataVO.getInput_value();
+				String inputValue = fetchMetadataVO.getInputValue();
 
 				String[] arrOfStr = inputValue.split(">", 5);
 				if (arrOfStr.length < 2) {
@@ -2330,21 +1036,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
 				String xpath = "//input[@placeholder='inputParam']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				// service.saveXpathParams(inputParam,"",scripNumber,xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Paste Method");
-			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 		try {
@@ -2354,10 +1060,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					.findElement(By.xpath("//label[text()='" + inputParam + "']/following::input[1]"));
 
 			// to get Dynamic copynumber
-			String testParamId = fetchMetadataVO.getTest_script_param_id();
-			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
 			String copynumberValue;
-			String inputValue = fetchMetadataVO.getInput_value();
+			String inputValue = fetchMetadataVO.getInputValue();
 
 			String[] arrOfStr = inputValue.split(">", 5);
 			if (arrOfStr.length < 2) {
@@ -2395,10 +1101,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			 */
 
 			Thread.sleep(3000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[text()='inputParam']/following::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 //				service.saveXpathParams(inputParam,"",scripNumber,xpath);
@@ -2416,10 +1122,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver.findElement(By.xpath("//input[@placeholder='" + inputParam + "']"));
 
 			// to get Dynamic copynumber
-			String testParamId = fetchMetadataVO.getTest_script_param_id();
-			String testSetId = fetchMetadataVO.getTest_set_line_id();
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
 			String copynumberValue;
-			String inputValue = fetchMetadataVO.getInput_value();
+			String inputValue = fetchMetadataVO.getInputValue();
 
 			String[] arrOfStr = inputValue.split(">", 5);
 			if (arrOfStr.length < 2) {
@@ -2440,11 +1146,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
 			Thread.sleep(3000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully paste is done " + scripNumber);
 			String xpath = "//input[@placeholder='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 //		service.saveXpathParams(inputParam,"",scripNumber,xpath);
@@ -2452,17 +1158,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Paste Method");
-			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during paste Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 
 		}
 
 	}
 
-	public void clear(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+	public void clear(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 
 		try {
 			if (inputParam1.equalsIgnoreCase("Lines")) {
@@ -2471,10 +1177,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/preceding-sibling::input)[1]"));
 				clearMethod(driver, waittill);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='inputParam1']/following::label[normalize-space(text())='inputParam2']/preceding-sibling::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -2487,16 +1193,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittill = driver.findElement(
 						By.xpath("//label[normalize-space(text())='" + inputParam2 + "']/preceding-sibling::input[1]"));
 				clearMethod(driver, waittill);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Accounting Period Cleared" + scripNumber);
 				String xpath = "//label[normalize-space(text())='inputParam2']/preceding-sibling::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Accounting Period Clear" + scripNumber);
 			System.out.println(e);
 		}
@@ -2504,11 +1210,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[contains(text(),'" + inputParam1 + "')]/preceding-sibling::input)[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			System.out.println(e);
 		}
@@ -2517,30 +1223,30 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver
 					.findElement(By.xpath("(//*[normalize-space(text())='" + inputParam1 + "']/following::input)[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='inputParam1']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam1 + "')]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "//*[contains(@placeholder,'inputParam1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			System.out.println(e);
 		}
@@ -2548,23 +1254,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver
 					.findElement(By.xpath("//*[normalize-space(text())='" + inputParam1 + "']/following::textarea[1]"));
 			clearMethod(driver, waittill);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Cleared" + scripNumber);
 			String xpath = "//*[normalize-space(text())='inputParam1']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
-			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(e);
 			throw e;
 		}
 	}
 
-	public void windowclose(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void windowclose(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			String mainWindow = driver.getWindowHandle();
 			// It returns no. of windows opened by WebDriver and will return Set of Strings
@@ -2583,34 +1289,34 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Successfully Windowclosed" + scripNumber);
 				}
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During WindowClose Acion." + scripNumber);
-			screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void switchToActiveElement(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchToActiveElement(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.switchTo().activeElement();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Switched to Element Successfully" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During switchToActiveElement Action." + scripNumber);
-			screenshotFail(driver, "Failed during switchToActiveElement Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during switchToActiveElement Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(e.getMessage());
 			throw e;
 		}
 	}
 
-	public void clickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2624,18 +1330,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(80000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String params = param1;
 				String xpath = "(//div[normalize-space(text())='param1'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2647,17 +1353,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String params = param1;
 			String xpath = "//div[@title='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2671,17 +1377,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//a[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2694,17 +1400,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//div[contains(@style,'display: block')]//div[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
@@ -2719,16 +1425,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
 			System.out.println(e);
 		}
@@ -2740,48 +1446,48 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String params = param1;
 			String xpath = "(//div[contains(@id,'param1')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			System.out.println(e);
 			log.error("failed during ClickMenu " + scripNumber);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickSignInSignOut(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//button[normalize-space(normalize-space(text())='" + param1 + "')]"))));
 			WebElement waittext = driver
 					.findElement(By.xpath(("//button[normalize-space(normalize-space(text())='" + param1 + "')]")));
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully clicked SingnInSignOut" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			System.out.println(e);
 			log.error("Failed during SingnInSignOut " + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}// *[text()='Action Required']/following::a[1]
 
-	public void clickNotificationLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickNotificationLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// placeholder changed from 'Enter Search Terms to Search' in Fusion Instance
 		try {
@@ -2796,18 +1502,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Clicked NotificationLink" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -2822,17 +1528,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked NotificationLink" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -2846,26 +1552,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked NotificationLink" + scripNumber);
 			String params = param1;
 			String xpath = "//*[@placeholder='param1']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			System.out.println(e);
 			log.error("Failed during NotificationLink" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickButtonDropdown(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -2875,18 +1581,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//a[@title='" + param1 + "']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickButtonDropdown " + scripNumber);
 			System.out.println(e);
 		}
@@ -2899,18 +1605,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver
 						.findElement(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]"));
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[contains(text(),'" + param1 + "')]/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			System.out.println(e);
 
@@ -2927,17 +1633,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='" + param1 + "']/following::a[@title='" + param2 + "'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			System.out.println(e);
 		}
@@ -2951,18 +1657,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			System.out.println(e);
 		}
@@ -2973,26 +1679,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())='" + param1
 					+ "']/following::a[normalize-space(text())='" + param2 + "'])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickButtonDropdownText(WebDriver driver, String param1, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
@@ -3004,11 +1710,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(5000);
 			WebElement waittext = driver.findElement(By.xpath("//li[normalize-space(text())='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			System.out.println(e);
 		}
@@ -3021,11 +1727,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			System.out.println(e);
 		}
@@ -3037,20 +1743,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Process Monitor")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3068,26 +1774,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement Expand = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + param1
 							+ "']/following::*[@title='" + param2 + "'])[1]"));
 					Expand.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Expanded or Collapsed" + scripNumber);
 
 				} catch (Exception e) {
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed During ClickExpand or Collapse" + scripNumber);
 				}
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Process Monitor ClickExpand or Collapse" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Process Monitor ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3110,16 +1816,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			} catch (Exception e) {
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//h2[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3139,25 +1845,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement Expand = driver.findElement(By.xpath(
 						"(//h1[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3172,17 +1878,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//span[contains(text(),'param1')])[1]/preceding::a[3][@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3200,18 +1906,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement Expand = driver.findElement(By.xpath(
 						"(//*[normalize-space(text())='" + param1 + "']/following::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3229,23 +1935,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement Expand = driver.findElement(By.xpath(
 						"(//*[normalize-space(text())='" + param1 + "']/preceding::*[@title='" + param2 + "'])[1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/preceding::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
 		}
@@ -3266,32 +1972,32 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='" + param2
 								+ "']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]"));
 				Expand.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed During ClickExpand or Collapse" + scripNumber);
 
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void selectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 46
 		try {
@@ -3305,8 +2011,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'param2')][1]";
 
@@ -3314,9 +2020,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 
 		// DH 39
@@ -3331,17 +2037,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::a[text()='keysToSend' and not(@style)]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3358,17 +2064,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend']//following::span[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3385,17 +2091,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::img[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3411,17 +2117,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::img[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3440,8 +2146,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -3449,9 +2155,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 		// DH 21
@@ -3466,8 +2172,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -3475,9 +2181,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 		try {
@@ -3490,16 +2196,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(2000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3513,16 +2219,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -3536,19 +2242,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[normalize-space(text())='keysToSend']/following::*[normalize-space(text())='param1']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 
 		}
@@ -3556,7 +2262,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public String clickTableImage(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -3569,18 +2275,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@id,'param2')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			System.out.println(e);
 		}
@@ -3595,18 +2301,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			System.out.println(e);
 		}
@@ -3619,27 +2325,27 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[@value='keysToSend']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 43
 		try {
@@ -3652,7 +2358,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				// highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				return;
@@ -3672,7 +2378,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				// highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				return;
@@ -3704,14 +2410,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 
 				String xpath = "(//a[contains(@id,'param1')])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -3720,7 +2426,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickImag" + scripNumber);
 
@@ -3744,15 +2450,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement add = driver.findElement(By.xpath(
 						"//h1[normalize-space(text())='" + param1 + "']/following::span[text()='" + param2 + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3765,18 +2471,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[contains(@title,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3792,17 +2498,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver clickImage" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Provider or Receiver clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3818,16 +2524,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::img[@title='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3842,17 +2548,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Report clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param2')/following::input[1]]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3866,18 +2572,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3891,17 +2597,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Customer clickImage" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::a[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3914,17 +2620,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Add to Selected clickImage" + scripNumber);
 				String xpath = "//a[@title='param1']//img[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Selected clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3938,17 +2644,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Go to Member Selection clickImage" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::input[@title='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Go to Member Selection clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -3964,14 +2670,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		 * actions.moveToElement(waittext).build().perform(); clickValidateXpath(driver,
 		 * fetchMetadataVO, waittext, fetchConfigVO); screenshot(driver, "",
 		 * fetchMetadataVO, fetchConfigVO); String scripNumber =
-		 * fetchMetadataVO.getScript_number();
+		 * fetchMetadataVO.getScriptNumber();
 		 * log.info("Sucessfully Clicked Provider or Receiver clickImage" +
 		 * scripNumber); String xpath =
 		 * "//*[normalize-space(text())='param1']/following::img[@title='param2'][2]";
-		 * String scriptID=fetchMetadataVO.getScript_id();String
+		 * String scriptID=fetchMetadataVO.getScriptId();String
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath); return; } } catch (Exception e) { String
-		 * scripNumber = fetchMetadataVO.getScript_number();
+		 * scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during Provider or Receiver clickImag" + scripNumber);
 		 * System.out.println(e); }
 		 */
@@ -3985,18 +2691,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//img[contains(@id,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4010,18 +2716,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickImage" + scripNumber);
 				String params = param1;
 				String xpath = "//a[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4033,17 +2739,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver
 						.findElement(By.xpath("//h1[normalize-space(text())='" + param1 + "']/preceding::a[1]"));
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Back clickImage" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/preceding::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Back clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4061,16 +2767,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement add = driver.findElement(
 					By.xpath("//h1[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::div[@role='button'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4083,16 +2789,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::img[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4106,16 +2812,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			Thread.sleep(8000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[@title='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4132,16 +2838,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement add = driver.findElement(
 					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::div[@role='button'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4156,16 +2862,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			waittext.click();
 //			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::img[contains(@id,'param2')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4180,15 +2886,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::img[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
 			System.out.println(e);
 		}
@@ -4201,26 +2907,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			waittext.click();
 			actions.moveToElement(waittext).build().perform();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickImage" + scripNumber);
 			String xpath = "//*[contains(@aria-label,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			screenshotFail(driver, "Failed during click Image Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during click Image Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
-			if ("yes".equalsIgnoreCase(fetchMetadataVO.getConditional_popup())) {
+			if ("yes".equalsIgnoreCase(fetchMetadataVO.getConditionalPopup())) {
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				log.info("alertText clicked ");
 			}
@@ -4229,8 +2935,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void clickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// Dh 39
 		try {
@@ -4245,18 +2951,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//span[text()='enerate Schedules']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4279,18 +2985,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				waittext.click();
 				// Thread.sleep(15000);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and @type='button'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4310,18 +3016,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//h2[text()='param1']/following::*[text()='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4344,14 +3050,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Create Baseline clickButton" + scripNumber);
 
 				String xpath = "//*[text()='aseline']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -4360,7 +3066,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4386,14 +3092,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Search clickButton" + scripNumber);
 
 				String xpath = "//*[text()='Sea']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -4402,7 +3108,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4424,17 +3130,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//a[@accessKey='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4453,18 +3159,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//div[contains(@id,'popup-container')]//td[text()='param1']//preceding-sibling::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4484,18 +3190,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//div[contains(@class,'PopupMenuContent')])[2]//td[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4513,7 +3219,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//div[contains(@id,'popup-container')]//*[text()='" + param1
 								+ "']/following::button[text()='" + param2 + "'])[1]"));
 
-				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				Actions actions = new Actions(driver);
 
@@ -4523,7 +3229,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(1000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Done Button" + scripNumber);
 
@@ -4537,7 +3243,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clicking Done Button" + scripNumber);
 
@@ -4562,14 +3268,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 
 				String xpath = "//button[text()='ave and Close']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -4578,7 +3284,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4605,14 +3311,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='K'])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -4621,7 +3327,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4645,14 +3351,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='O'])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -4661,7 +3367,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4688,14 +3394,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(15000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "(//div[contains(@id,'popup-container')]//button[@accesskey='K'])[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -4704,7 +3410,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4729,21 +3435,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 			Thread.sleep(15000);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 			String xpath = "//div[contains(@class,'PopupMenu')]//*[text()='param1']";
 
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during clickButton" + scripNumber);
 
@@ -4757,22 +3463,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (param1.equalsIgnoreCase("Finish")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='i'][1]")));
-				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//span[text()='i'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 		}
 
@@ -4781,24 +3487,24 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath("//input[@value='Apply']"));
-//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//input[@value='Apply']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4809,12 +3515,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver
 						.findElement(By.xpath("//div[text()='" + param1 + "']/following::*[text()='K']"));
-				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -4823,7 +3529,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4838,7 +3544,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -4847,7 +3553,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4858,23 +3564,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					|| param1.equalsIgnoreCase("Manage Rate Schedules") || param2.equalsIgnoreCase("Save and Close")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath(("(//span[text()='S'])[2]")));
-//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "(//span[text()='S'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4894,15 +3600,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//div[normalize-space(text())='param1']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4913,18 +3619,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[text()='" + param1 + "']/following::span[text()='o']")));
-				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath); return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -4935,12 +3641,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[contains(text(),'" + param1 + "')]/following::td[text()='" + param2 + "'][2]"));
-				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -4949,7 +3655,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -4963,23 +3669,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//*[normalize-space(text())='Create Address']/following::*[text()='K'][1]"))));
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='Create Address']/following::*[text()='K'][1]")));
-//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(4000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='Create Address']/following::*[text()='K'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
 
@@ -4994,18 +3700,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='Submit or text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5016,22 +3722,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					&& !param1.equalsIgnoreCase("Manage Distributions") && !param1.equalsIgnoreCase("Manage Holds")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='S']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 		}
 		try {
@@ -5042,22 +3748,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//span[text()='o'])[2]"))));
 
 				WebElement waittext = driver.findElement(By.xpath(("(//span[text()='o'])[2]")));
-//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "(//span[text()='o'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
 			System.out.println(e);
 		}
@@ -5068,21 +3774,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(5000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()='o']"))));
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='o']")));
-//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//                screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
 			System.out.println(e);
 		}
@@ -5095,21 +3801,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(
 						By.xpath(("//h1[normalize-space(text())='Notifications']/following::button[text()='" + param2
 								+ "'][1]")));
-				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Members clickButton" + scripNumber);
 				String xpath = "//button[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5118,23 +3824,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				WebElement waittext = driver
 						.findElement(By.xpath(("//div[contains(@class,'Overflow')]//div[@role='button']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'Overflow')]//div[@role='button']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5146,22 +3852,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//*[text()='Create Time Card']/following::span[text()='K']"))));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[text()='Create Time Card']/following::span[text()='K']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
 				String xpath = "//*[text()='Create Time Card']/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
 			System.out.println(e);
@@ -5175,22 +3881,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						("//*[contains(text(),'" + param1 + "')]/following::span[normalize-space(text())='K']"))));
 				WebElement waittext = driver.findElement(By.xpath(
 						("//*[contains(text(),'" + param1 + "')]/following::span[normalize-space(text())='K']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(4000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Edit Line clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::span[normalize-space(text())='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit Line clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5200,21 +3906,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[@title='" + param2 + "']"))));
 				WebElement waittext = driver.findElement(By.xpath(("//button[@title='" + param2 + "']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Members clickButton" + scripNumber);
 				String xpath = "//button[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5225,21 +3931,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"//*[normalize-space(text())='" + param1 + "']/following::button[@title='" + param2 + "']")));
 				WebElement waittext = driver.findElement(By.xpath(
 						"//*[normalize-space(text())='" + param1 + "']/following::button[@title='" + param2 + "']"));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Contacts clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='" + param1 + "']/following::button[@title='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Contacts clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5254,21 +3960,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// "ne"));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//div[contains(@id,'RejectPopup::content')]//span[text()='K']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//div[contains(@id,'RejectPopup::content')]//span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5282,23 +3988,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='"
 								+ param1 + "']/following::*[not (@aria-disabled) and text()='OK'][1]")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(4000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param1']/following::*[not (@aria-disabled) and text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
 		try {
@@ -5309,22 +4015,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//[contains(text(),'" + param1 + "')]/following::span[text()='K']"))));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//[contains(text(),'" + param1 + "')]/following::span[text()='K']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Ok clickButton" + scripNumber);
 				String xpath = "//[contains(text(),'param1')]/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
 		try {
@@ -5336,22 +4042,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "') and (@type)]/following::button[contains(text(),'" + param2 + "')])[1]"))));
 				WebElement waittext = driver.findElement(By.xpath(("(//input[contains(@value,'" + param1
 						+ "') and (@type)]/following::button[contains(text(),'" + param2 + "')])[1]")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Select clickButton" + scripNumber);
 				String xpath = "(//input[contains(@value,'param1') and (@type)]/following::button[contains(text(),'param2')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Select clickButton" + scripNumber);
 		}
 		try {
@@ -5362,20 +4068,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//*[contains(@id,'tAccountPopup::content')]//*[text()='o']"))));
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(@id,'tAccountPopup::content')]//*[text()='o']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[contains(@id,'tAccountPopup::content')]//*[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Done clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5388,21 +4094,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// "l"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath("//input[@value='" + param1 + "']"));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//input[@value='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5414,16 +4120,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[text()='ne']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='ne']"), "ne"));
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()='ne']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[text()='ne']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Approval and Notification History")
@@ -5438,13 +4144,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//div[contains(text(),'" + param1 + "')]/following::span[text()='o']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approval and Notification History or Done clickButton" + scripNumber);
 				String xpath = "//div[contains(text(),'param1')]/following::span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Done")) {
@@ -5458,13 +4164,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::span[text()='o']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Done clickButton" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::span[text()='o']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Submit")) {
@@ -5473,16 +4179,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='m']"), "m"));
 				Thread.sleep(20000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='m']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//span[text()='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Submit")) {
@@ -5494,32 +4200,32 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='m']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='m']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Distributions")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='istributions']")));
 				WebElement waittext = driver.findElement(By.xpath("//span[text()='istributions']"));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Distributions clickButton" + scripNumber);
 				String xpath = "//span[text()='istributions']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if ((param1.equalsIgnoreCase("Manage Distributions") || param1.equalsIgnoreCase("Manage Holds"))
@@ -5533,16 +4239,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(
 						("//*[normalize-space(text())='" + param1 + "']/following::button[text()='Save and Close']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Holds or Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::button[text()='Save and Close']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Save and Close")) {
@@ -5554,16 +4260,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='S']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Next")) {
@@ -5572,16 +4278,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='x']"), "x"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='x']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Next clickButton" + scripNumber);
 				String xpath = "//span[text()='x']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Next")) {
@@ -5592,16 +4298,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ param1 + "']/following::*[normalize-space(text())='" + param2 + "']"), "x"));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
 						+ "']/following::*[normalize-space(text())='" + param2 + "']"));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Next clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Yes")) {
@@ -5619,14 +4325,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 								+ "']/following::span[text()='Y']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Yes clickButton" + scripNumber);
 				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::span[text()='Y']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("OK")) {
@@ -5639,14 +4345,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath("//button[@_afrpdo='ok' and @accesskey='K']"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 				String xpath = "//button[@_afrpdo='ok' and @accesskey='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} // Here adding code for Advanced Button AP.452
@@ -5667,20 +4373,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				actions.moveToElement(waittext).build().perform();
 
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO); 
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails); 
 
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
 				Thread.sleep(4000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 
 				String xpath = "//button[@accesskey='d']";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -5692,13 +4398,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='S']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "//span[text()='S']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Continue")) {
@@ -5707,15 +4413,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='u']"), "u"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='u']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Continue clickButton" + scripNumber);
 				String xpath = "//span[text()='u']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Continue")) {
@@ -5726,13 +4432,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()='Contin']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Continue clickButton" + scripNumber);
 				String xpath = "//button[text()='Contin']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
@@ -5743,11 +4449,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close clickButton" + scripNumber);
 				String xpath = "//button[text()='Cl']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Adjustment")) {
@@ -5760,12 +4466,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Adjustment clickButton" + scripNumber);
 				String xpath = "(//span[text()='param1'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Cancel")) {
@@ -5776,11 +4482,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Cancel clickButton" + scripNumber);
 				String xpath = "//span[text()='C']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Save")) {
@@ -5789,15 +4495,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ave']"), "ave"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='ave']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save clickButton" + scripNumber);
 				String xpath = "//span[text()='ave']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Apply")) {
@@ -5807,15 +4513,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='l']"), "l"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='l']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//span[text()='l']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Apply")) {
@@ -5828,16 +4534,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='l']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(2000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Apply clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='l']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Accept")) {
@@ -5849,20 +4555,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='p']")));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Accept clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='p']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
 			System.out.println(e);
 
@@ -5878,20 +4584,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()='K']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked OK clickButton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::span[text()='K']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during OK clickButton" + scripNumber);
 		}
 		try {
@@ -5902,15 +4608,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='A']"), "A"));
 					Thread.sleep(4000);
 					WebElement waittext = driver.findElement(By.xpath(("//span[text()='A']")));
-//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked add Application clickButton" + scripNumber);
 					String xpath = "//span[text()='A']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				} catch (Exception e) {
 					WebElement expand = driver
@@ -5918,22 +4624,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					expand.click();
 					Thread.sleep(2000);
 					WebElement waittext = driver.findElement(By.xpath(("//span[text()='A']")));
-//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during add Application clickButton" + scripNumber);
 					String xpath = "//a[text()='Application']/following::div[@role='button'][2]" + ">"
 							+ "//span[text()='A']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during add Application clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5947,16 +4653,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							.textToBePresentInElementLocated(By.xpath("//button[text()='" + param1 + "']"), "param1"));
 					Thread.sleep(4000);
 					WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
-//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 					Thread.sleep(4000);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Unapply Application clickButton" + scripNumber);
 					String xpath = "//button[text()='param1']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				} catch (Exception e) {
 					WebElement expand = driver
@@ -5964,21 +4670,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					expand.click();
 					Thread.sleep(2000);
 					WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
-//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Unapply Application clickButton" + scripNumber);
 					String xpath = "//a[text()='Application']/following::div[@role='button'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Application clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -5992,16 +4698,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::span[normalize-space(text())='" + param2 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Submit clickButton" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Submit clickButton" + scripNumber);
 		}
 		try {
@@ -6016,18 +4722,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6042,21 +4748,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(4000);
 				WebElement waittext = driver
 						.findElement(By.xpath("(//td[normalize-space(text())='" + param1 + "'])[2]"));
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
 				String xpath = "(//td[normalize-space(text())='param1'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Columns or Show All clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6069,19 +4775,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Add to Document Builder clickButton" + scripNumber);
 				String xpath = "//button[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Document Builder clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6095,14 +4801,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath(("//tr[contains(@id,'HEADER_FREEZE')]//td[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Freeze clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_FREEZE')]//td[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Unfreeze")) {
@@ -6114,14 +4820,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						("//tr[contains(@id,'HEADER_UNFREEZE')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Unfreeze clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_UNFREEZE')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
@@ -6133,14 +4839,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//tr[contains(@id,'HEADER_CLOSE')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_CLOSE')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Reopen")) {
@@ -6152,14 +4858,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.xpath(("//tr[contains(@id,'HEADER_REOPEN')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reopen clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_REOPEN')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Edit")) {
@@ -6171,19 +4877,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//tr[contains(@id,'HEADER_EDIT')]//td[normalize-space(text())='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Edit clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'HEADER_EDIT')]//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6197,19 +4903,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath(("//tr[contains(@id,'commandMenuItem')]//td[text()='" + param1 + "']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Edit clickButton" + scripNumber);
 				String xpath = "//tr[contains(@id,'commandMenuItem')]//td[text()='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6224,17 +4930,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reverse clickButton" + scripNumber);
 				String xpath = "//div[@class='AFPopupMenuPopup']//td[(normalize-space(text())='param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reverse clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6248,17 +4954,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(60000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
 				String xpath = "//td[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6273,17 +4979,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//button[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6298,17 +5004,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//*[text()='" + param1 + "']/following::*[text()='K'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6325,17 +5031,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//span[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6351,17 +5057,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//td[(normalize-space(text())='param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6377,18 +5083,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//button[text()='param1'and not(@style='display:none')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6404,17 +5110,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(5000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickButton" + scripNumber);
 				String xpath = "//div[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6430,17 +5136,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//div[contains(@class,'PopupMenu')]/following::*[text()='" + param1 + "']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 		}
 		try {
@@ -6451,16 +5157,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "']/following::*[normalize-space(text())='" + param2 + "' and not(@_afrpdo)])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
-//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2' and not(@_afrpdo)])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6472,16 +5178,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "\"]/following::*[normalize-space(text())='" + param2 + "'])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6493,16 +5199,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					"(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title='" + param2 + "'])[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[@title='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
@@ -6518,16 +5224,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 		}
 //		   try {
@@ -6552,27 +5258,27 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickButton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
 	}
 
-	public void clickTableLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickTableLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts") || param1.equalsIgnoreCase("Manage Customers")) {
 				Thread.sleep(3000);
@@ -6586,11 +5292,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]/parent::span";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -6611,14 +5317,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//td[2]//span)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6638,17 +5344,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6663,17 +5369,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//a)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6690,17 +5396,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='\" +param1+ \"']//a[not (contains(@title,'Required information'))])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6716,17 +5422,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approved clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//*[normalize-space(text())='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approved clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6743,16 +5449,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Orders clickTableLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param2']//a[contains(@title,'Purchase Order')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Orders clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6768,17 +5474,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Receipts clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param2']//td)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Receipts clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6810,14 +5516,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(2000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Journals in Requiring Attention clickTableLink" + scripNumber);
 
 				String xpath = "//h2[text()='param1']//following::table[@summary='param2']//a[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -6826,7 +5532,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Journals in Requiring Attention clickTableLink" + scripNumber);
 			System.out.println(e);
@@ -6843,16 +5549,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 				String xpath = "(//table[@summary='param1']//td[2]//span)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6869,18 +5575,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickTableLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//table[@summary='param1']//a[not (@title)])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -6895,25 +5601,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickTableLink" + scripNumber);
 			String xpath = "//h1[normalize-space(text())='param1']/following::img[@title='param2']/following-sibling::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
 	}
 
-	public void tableRowSelect(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void tableRowSelect(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 
@@ -6931,17 +5637,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 				String xpath = "(//div[@class='AFDetectExpansion']/following::span[normalize-space(text())='param1']/following::table//span[text()])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -6958,12 +5664,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				waittext.click();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(10000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked SecondLine tableRowSelect" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during SecondLine tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -6979,16 +5685,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Here1 came tableRowSelect" + scripNumber);
 			String xpath = "(//table[@summary='param1']//td)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Here1 came tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7002,16 +5708,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(4000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//h1[normalize-space(text())='param1']/following::table[@summary='param1'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7025,15 +5731,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::tr[1]/td[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 		}
@@ -7046,19 +5752,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::tr[1]/td[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 		// New Code for NTA.SO.4
@@ -7071,23 +5777,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableRowSelect" + scripNumber);
 			String xpath = "//*[contains(@summary,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			System.out.println(e);
 			throw e;
 		}
 	}
 
-	public void clickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			// DH 9
 			try {
@@ -7108,20 +5814,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					waittext.click();
 
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 					refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 
 					Thread.sleep(5000);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 
 					String xpath = "//a[contains(@id,'param1')]";
 
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 					return;
@@ -7132,7 +5838,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				System.out.println(e);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.error("Failed during Approve clickLink" + scripNumber);
 
@@ -7160,16 +5866,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					Thread.sleep(6000);
 
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					log.info("Sucessfully Clicked Scanned clickLink" + scripNumber);
 
 					String xpath = "//span[text()='param2']/following::span[text() > '0'][1]";
 
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					return;
 
@@ -7177,7 +5883,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 			} catch (Exception e) {
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.error("Failed during Scanned clickLink" + scripNumber);
 
@@ -7198,8 +5904,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					actions.moveToElement(waittext).build().perform();
 					// actions.moveToElement(Keys.PAGE_DOWN).build().perform();
 					waittext.click();
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 					String xpath = "//a[normalize-space(text())='param1']";
 					// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -7208,7 +5914,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					return;
 				}
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during Export clickLink" + scripNumber);
 				System.out.println(e);
 			}
@@ -7220,18 +5926,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				Thread.sleep(6000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String xpath = "//input[@value='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7243,20 +5949,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Home clickLink" + scripNumber);
 				String xpath = "(//a[contains(@id,'UIShome')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Home clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7270,20 +5976,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Financials Details or Invoices clickLink" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::*[text()='param1')[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financials Details or Invoices  clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7296,21 +6002,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approve clickLink" + scripNumber);
 		}
 		try {
@@ -7328,19 +6034,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 				js.executeScript("window.scrollBy(0,1000)");
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
 				String xpath = "//label[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7354,20 +6060,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7382,19 +6088,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				// actions.moveToElement(Keys.PAGE_DOWN).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				Thread.sleep(5000);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7409,13 +6115,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					waittext.click();
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Project clickLink" + scripNumber);
 					String xpath = "//a[normalize-space(text())='param1']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 					Thread.sleep(5000);
@@ -7426,11 +6132,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Thread.sleep(2000);
 					WebElement waittext = driver
 							.findElement(By.xpath(("//a[normalize-space(text())='" + param1 + "']")));
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittext).build().perform();
 					waittext.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Project clickLink" + scripNumber);
 				}
 				return;
@@ -7438,7 +6144,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 		}
 		try {
@@ -7457,19 +6163,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// JavascriptExecutor jse = (JavascriptExecutor)driver;
 				// jse.executeScript("window.scrollBy(0,1000)");
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(30000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Financial Reporting Center clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param2'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financial Reporting Center clickLink" + scripNumber);
 		}
 		try {
@@ -7488,19 +6194,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// JavascriptExecutor jse = (JavascriptExecutor)driver;
 				// jse.executeScript("window.scrollBy(0,1000)");
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(30000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Receivables clickLink" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receivables clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7515,18 +6221,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
 				String xpath = "//table[@summary='param1']//span[text()='Approved']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7541,18 +6247,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
 				String xpath = "//table[@summary='param1']//span[text()='Approved']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7566,19 +6272,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Details" + scripNumber);
 
 				String xpath = "(//*[contains(text(),'param1')]/following::*[text()='param2'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Details" + scripNumber);
 			System.out.println(e);
 		}
@@ -7600,18 +6306,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7632,18 +6338,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Journal clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Journal clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7664,14 +6370,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Receipt Details clickLink" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receipt Details clickLink" + scripNumber);
 		}
 		try {
@@ -7685,18 +6391,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(5000);
 				waittext.click();
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked View clickLink" + scripNumber);
 				String xpath = "//a[text()='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during View clickLink" + scripNumber);
 		}
 		try {
@@ -7712,8 +6418,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Invoice Actions clickLink" + scripNumber);
 				String xpath = "//div[text()='Warning']/following::button[text()='Continue']" + ";"
 						+ "//a[normalize-space(text())='param1'][1]";
@@ -7732,23 +6438,23 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Thread.sleep(5000);
 					waittext.click();
 					Thread.sleep(2000);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked clickLink" + scripNumber);
 					String params = param1;
 					String xpath = "//a[text()='param1'][1]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					return;
 				}
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during clickLink" + scripNumber);
 				System.out.println(e);
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Invoice Actions clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7765,18 +6471,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(5000);
 				waittext.click();
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[normalize-space(text())='param1'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7792,18 +6498,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reports and Analytics clickLink" + scripNumber);
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7820,18 +6526,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Attachment or Invoice Summary clickLink" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Attachment or Invoice Summary clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7846,16 +6552,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::span)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7869,18 +6575,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[contains(text(),'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7894,19 +6600,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//a[contains(@id,'param1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7919,18 +6625,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//div[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7943,19 +6649,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 
 				String params = param1;
 				String xpath = "//a[@title='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7969,18 +6675,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//*[contains(@title,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -7995,18 +6701,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "(//div[contains(text(),'param1')])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8019,18 +6725,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickLink" + scripNumber);
 				String params = param1;
 				String xpath = "//a[@role='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
@@ -8043,19 +6749,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 
@@ -8069,26 +6775,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickLink" + scripNumber);
 			String xpath = "//h1[contains(text(),'param1')]/following::*[text()='param2'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
 	}
 
 	public void clickRadiobutton(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 32
 		try {
@@ -8104,20 +6810,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::input[@type='radio']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8137,17 +6843,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[text()='param2']/following::label[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			System.out.println(e);
 		}
@@ -8160,17 +6866,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			System.out.println(e);
 		}
@@ -8183,26 +6889,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend']/preceding-sibling::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickCheckbox(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 31
 		try {
@@ -8218,19 +6924,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[text()='param1']/following::span[text()='keysToSend'])[1]/preceding::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8249,19 +6955,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[text()='param1']/following::span[text()='keysToSend'])[2]/preceding::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8278,21 +6984,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[normalize-space(text())='param1']/following::input[@type='checkbox'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 
 		// po.511
@@ -8307,21 +7013,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "(//*[normalize-space(text())='param1']/following::input[@type='checkbox'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 
 		// DH 23
@@ -8338,19 +7044,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[text()='param1']/following::span[text()='keysToSend']/following::label[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8373,19 +7079,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Item Description clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[contains(@id,'Label')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Item Description clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8406,19 +7112,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8438,18 +7144,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				// tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Scenario clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Scenario clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8469,18 +7175,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				// tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8495,13 +7201,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				// tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Name clickCheckbox" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Name clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8520,18 +7226,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tab(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(500);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Match Invoice Lines clickCheckbox" + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::label[contains(@id,'Label')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Match Invoice Lines clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8547,17 +7253,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[text()='param1']/following::span[text()='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8577,17 +7283,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::label[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8606,17 +7312,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8635,17 +7341,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
 		}
@@ -8661,20 +7367,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())='keysToSend']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 
@@ -8691,26 +7397,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickCheckbox" + scripNumber);
 			String params = param1;
 			String xpath = "(//*[contains(text(),'param1')]/following::input[@type='checkbox'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void clickLinkAction(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8731,16 +7437,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -8755,17 +7461,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::a[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -8782,17 +7488,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='keysToSend']/following::td[normalize-space(text())='param1']/following::table[1]//div)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -8808,16 +7514,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			System.out.println(e);
 		}
@@ -8833,25 +7539,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/following::img[contains(@title,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 			if (param1.equalsIgnoreCase("Create Note")) {
@@ -8864,7 +7570,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				waittill.sendKeys(keysToSend);
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				return keysToSend;
 			}
@@ -8889,15 +7595,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::textarea[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			System.out.println(e);
 		}
@@ -8918,15 +7624,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::textarea)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			System.out.println(e);
 		}
@@ -8938,26 +7644,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked textarea" + scripNumber);
 			String xpath = "//body[@dir='ltr']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 39 OTC.AR.236
 		try {
@@ -8970,19 +7676,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::label[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -8998,17 +7704,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9025,19 +7731,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[text()='param1']/following::span[text()='param2']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9055,19 +7761,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9079,21 +7785,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittill = driver.findElement(By.xpath("//input[@type='" + param1 + "']"));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Password sendValue" + scripNumber);
 				String xpath = "//input[@type='param1']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-//                                       String scriptID=fetchMetadataVO.getScript_id();String lineNumber = fetchMetadataVO.getLine_number();service.saveXpathParams(scriptID, lineNumber, xpath);
-//                String lineNumber = fetchMetadataVO.getLine_number();
+//                                       String scriptID=fetchMetadataVO.getScriptId();String lineNumber = fetchMetadataVO.getLineNumber();service.saveXpathParams(scriptID, lineNumber, xpath);
+//                String lineNumber = fetchMetadataVO.getLineNumber();
 //                service.saveXpathParams(scriptID,metadataID);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Password sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9117,19 +7823,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				Thread.sleep(1000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
 
 				String xpath = "//*[text()='" + param1 + "']//following::*[contains(text(),'" + param2
 						+ "')]/preceding::input[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
@@ -9138,7 +7844,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Invoice Dates  sendValue" + scripNumber);
 
@@ -9161,14 +7867,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(500);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = " //label[@title='param1']/following::input[1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
@@ -9177,7 +7883,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
@@ -9195,19 +7901,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
 				String xpath = "//h1[text()='param1']//following::label[text()='param2']//following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9228,14 +7934,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Thread.sleep(500);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = " //label[@title='param1']/following::input[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
@@ -9244,7 +7950,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
@@ -9262,19 +7968,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())=' param1 ']/following::input[@placeholder=' param2 '][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9289,17 +7995,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Report sendValue" + scripNumber);
 				String xpath = "//*[contains(text(),'param2')]/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9317,19 +8023,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'" + param1 + "')]/following::label[contains(text(),'" + param2
 						+ "')]/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9346,18 +8052,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "//*[text()='Create Bank Account']/following::label[text()='" + param2 + "'][2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9373,16 +8079,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Phone or Mobile sendValue" + scripNumber);
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[3]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Phone or Mobile sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9398,17 +8104,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Line or Name sendValue" + scripNumber);
 				String xpath = "(//div[normalize-space(text())=' param1 ']/following::label[normalize-space(text())=' param2 ']/following::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Line or Name  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9426,19 +8132,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Time Card or Person Name sendValue" + scripNumber);
 				String xpath = "//div[text()='param1']/following::span[text()='param2']//input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card or Person Name sendValue" + scripNumber);
 			System.out.println(e);
 
@@ -9458,16 +8164,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(3000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(10000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Query By Example sendValue" + scripNumber);
 				String xpath = "(//h1[normalize-space(text())='param1']/following::*[@title='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Query By Example  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9490,16 +8196,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Unapply Accounting Date sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Accounting Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9512,11 +8218,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[contains(@id,'PeriodName::content')]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 					Thread.sleep(2000);
@@ -9530,14 +8236,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					Thread.sleep(2000);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
 				}
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9557,17 +8263,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Accounting Periods sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::*[@title='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Accounting Periods sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9581,19 +8287,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
 				String xpath = "//*[normalize-space(text())=' param1 ']/following::input[@placeholder=' param2 '][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9609,19 +8315,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
 				String xpath = "(//*[contains(text(),'param2')]/following::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9637,19 +8343,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Daily Rates  sendValue" + scripNumber);
 				String xpath = "//a[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[not (@type='hidden')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Daily Rates sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9663,20 +8369,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 		}
 
@@ -9695,18 +8401,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 				String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input[@type='text'])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9725,14 +8431,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9751,7 +8457,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -9760,7 +8466,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 			// return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 			// throw e;
@@ -9784,15 +8490,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//h2[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9814,16 +8520,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 		}
 		try {
@@ -9836,18 +8542,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked sendValue" + scripNumber);
 				String xpath = "//*[contains(@placeholder,'param1')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9866,18 +8572,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::input[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(5000);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9898,16 +8604,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//label[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9928,15 +8634,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(8000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9952,16 +8658,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
@@ -9980,25 +8686,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			String xpath = "(//*[normalize-space(text())='param1']/following::img[@title='param2']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
 	}
 
 	public void dropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 
 			if (param2.equalsIgnoreCase("Postal Code") || param2.equalsIgnoreCase("Legal Entity")) {
@@ -10038,7 +8744,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 									+ "']/following::*[text()='OK'][1]"));
 
 					button.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Postal Code Legal Entity dropdownTexts" + scripNumber);
 
 				}
@@ -10048,7 +8754,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Postal Code Legal Entity  dropdownTexts" + scripNumber);
 
 			System.out.println(e);
@@ -10068,11 +8774,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -10093,11 +8799,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -10124,11 +8830,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement text = driver.findElement(By.xpath(
 							"//div[@class='AFDetectExpansion']/following::span[text()='Name']/following::span[normalize-space(text())='"
 									+ keysToSend + "']"));
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 					text.click();
 				} catch (Exception e) {
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during dropdownTexts" + scripNumber);
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
@@ -10140,20 +8846,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='K'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			} catch (Exception e) {
 				WebElement button = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during dropdownTexts" + scripNumber);
 			}
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -10172,11 +8878,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement button = driver.findElement(
 					By.xpath("//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -10196,10 +8902,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -10214,20 +8920,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(search).build().perform();
 			search.click();
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownTexts" + scripNumber);
 			try {
 				WebElement searchResult = driver.findElement(
 						By.xpath("//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='"
 								+ param2 + "']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
 			} catch (Exception e) {
 				WebElement searchResult = driver.findElement(By.xpath(
 						"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during dropdownTexts" + scripNumber1);
 			}
 			if (keysToSend != null) {
@@ -10238,13 +8944,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							"//div[@class='AFDetectExpansion']/following::span[text()='Name']/following::span[text()='"
 									+ keysToSend + "']"));
 					text.click();
-					String scripNumber1 = fetchMetadataVO.getScript_number();
+					String scripNumber1 = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
 				} catch (Exception e) {
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 					text.click();
-					String scripNumber1 = fetchMetadataVO.getScript_number();
+					String scripNumber1 = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during dropdownTexts" + scripNumber1);
 				}
 			}
@@ -10252,7 +8958,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement button = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='K'][1]"));
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
 				button.click();
 			} catch (Exception e) {
@@ -10260,22 +8966,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 								+ "']/following::*[not (@aria-disabled) and text()='OK'][1]"));
 				button.click();
-				String scripNumber1 = fetchMetadataVO.getScript_number();
+				String scripNumber1 = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during dropdownTexts" + scripNumber1);
 			}
 
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
-			String keysToSend, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			String keysToSend, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 
 			if (param1.equalsIgnoreCase("Time Entry")) {
@@ -10291,13 +8997,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[text()=\"" + param1
 
 						+ "\"]/following::label[text()='" + param2 + "']/preceding-sibling::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				log.info("Sucessfully Clicked Time Entry multiplelinestableSendKeys" + scripNumber);
@@ -10306,7 +9012,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry multiplelinestableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -10326,16 +9032,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[8]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10355,12 +9061,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10376,15 +9082,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10400,14 +9106,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10423,14 +9129,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[12]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10445,14 +9151,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10467,14 +9173,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10500,14 +9206,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[8]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
 
@@ -10527,13 +9233,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
 
@@ -10551,15 +9257,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10573,16 +9279,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(waittill).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[11]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10598,15 +9304,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[12]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10621,15 +9327,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10642,16 +9348,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(waittill).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10675,15 +9381,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[6]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10699,15 +9405,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[7]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
@@ -10724,8 +9430,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Wed multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
@@ -10742,13 +9448,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[9]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Thu multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -10766,13 +9472,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[10]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Fri multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -10789,13 +9495,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[13]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Sat multiplelinestableSendKeys" + scripNumber);
 				return;
@@ -10812,19 +9518,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[contains(text(),\"" + param1
 
 						+ "\")]/following::label[text()='" + param2 + "']/preceding-sibling::input[1])[14]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Sunday multiplelinestableSendKeys" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  multiplelinestableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -10833,7 +9539,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 40
 		try {
@@ -10843,18 +9549,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -10875,18 +9581,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1'])[1]/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -10903,18 +9609,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1'])[1]/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -10929,17 +9635,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// waittill.sendKeys(keysToSend);
 				Thread.sleep(1000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::input[contains(@id,'internalResponder')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -10953,17 +9659,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 //        waittill.sendKeys(keysToSend);
 				Thread.sleep(1000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//span[text()='" + param2 + "']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -10978,17 +9684,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 //        waittill.sendKeys(keysToSend);
 				Thread.sleep(1000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//span[text()='" + param2 + "']/following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11001,18 +9707,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 //        waittill.sendKeys(keysToSend);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='" + param1 + "']/following::label[text()='" + param2
 						+ "']/preceding-sibling::input[not(@type='hidden')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11027,8 +9733,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				// waittill.sendKeys(keysToSend);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='" + param1 + "']/following::label[text()='" + param2
 						+ "']/preceding-sibling::input[not(@type='hidden')]";
@@ -11036,7 +9742,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11053,8 +9759,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
@@ -11063,7 +9769,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -11083,19 +9789,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Associated Projects or Funded Amount tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -11115,19 +9821,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or FProject Number tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::span[1]/input";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or FProject Number tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -11147,19 +9853,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Associated Projects or Task Number tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::div[text()='Autocompletes on TAB']/preceding::input[1])[4]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Task Number tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -11178,19 +9884,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Time Entry tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11207,12 +9913,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Mon tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11229,12 +9935,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Tue tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11252,12 +9958,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Wed tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[3]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11275,12 +9981,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Thu tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[4]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11298,12 +10004,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Fri tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[5]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11320,12 +10026,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Sat tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[6]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11342,18 +10048,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Sunday tableSendKeys" + scripNumber);
 				String xpath = "(//*[contains(text(),'param1')]/following::label[text()='param2']/preceding-sibling::input[1])[7]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 
@@ -11369,12 +10075,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Quantity tableSendKeys" + scripNumber);
 					String xpath = "(//text()='param1']/preceding-sibling::input[ not (@value)])[1]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				} catch (Exception e) {
@@ -11384,15 +10090,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Quantity tableSendKeys" + scripNumber);
 
 				}
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11406,17 +10112,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Price tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input[contains(@name,'AmountAsPrice')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Price  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11429,18 +10135,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Expenditure Item Date tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Expenditure Item Date tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11453,17 +10159,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11479,15 +10185,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(4000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
 				String xpath = "//*[contains(text(),'param1')]/following::th[@_d_index='param2'][1]//input[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11500,18 +10206,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Application Reference tableSendKeys" + scripNumber);
 				String xpath = "(//h1[text()='param1']/following::*[text()='param2']/following::input)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Application Reference tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11531,16 +10237,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 
 				String xpath = "(//span[text()='param1']/preceding::input[@type='text'])[2]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -11549,7 +10255,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during tableSendKeys" + scripNumber);
 
@@ -11566,18 +10272,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
 				String xpath = "(//*[text()='param1']/following::*[text()='param2']/preceding-sibling::input)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11593,17 +10299,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(6000);
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//h1[text()='param1']/following::label[text()='param2']/preceding-sibling::input[not(@type='hidden')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11613,17 +10319,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::*[text()='param2']/preceding-sibling::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11633,17 +10339,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='Assets']/following::span[text()='Description']/preceding::input[contains(@id,'descColumn::content')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11656,17 +10362,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[text()='param1']/following::span[text()='param2']/preceding::input[contains(@id,'journalBatch::content')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11676,18 +10382,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//h1[text()='param1']/following::label[text()='param2']/preceding::input[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11697,17 +10403,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11717,17 +10423,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//*[text()='param1']/following::label[text()='param2']/preceding-sibling::textarea)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11738,17 +10444,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "//*[text()='param1']/following::table[@summary='param2']//*[text()='param3']/following::input[contains(@id,'NewBdgtPctLst')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			System.out.println(e);
 		}
@@ -11761,25 +10467,25 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
 			String xpath = "(//table[@summary='param1']//label[text()='param2']/preceding-sibling::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void tableDropdownTexts(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -11788,11 +10494,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(
 					By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -11805,12 +10511,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(
 					By.xpath("//table[@summary='" + param1 + "']/following::li[text()='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -11822,12 +10528,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver
 					.findElement(By.xpath("//*[text()='" + param1 + "']/following::li[text()='" + keysToSend + "']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -11841,12 +10547,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -11877,18 +10583,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement button = driver.findElement(By.xpath(
 						"//*[text()='Search']/following::*[text()='" + param2 + "']/following::*[text()='K'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			} catch (Exception e) {
 				WebElement button = driver.findElement(By.xpath(
 						"//*[text()='Search']/following::*[text()='" + param2 + "']/following::*[text()='OK'][1]"));
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				button.click();
 			}
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 			System.out.println(e);
 		}
@@ -11900,7 +10606,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			} catch (Exception e) {
 				WebElement searchResult = driver
@@ -11908,7 +10614,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 			}
 
@@ -11919,12 +10625,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement button = driver.findElement(
 						By.xpath("//*[text()='Search']/following::*[text()='Name']/following::*[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			} catch (Exception e) {
 				WebElement button = driver.findElement(
 						By.xpath("//*[text()='Search']/following::*[text()='Value']/following::*[text()='OK'][1]"));
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
 				button.click();
 			}
@@ -11932,7 +10638,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
@@ -11940,20 +10646,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 							+ "']/following::*[text()='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 			throw e;
 		}
 	}
 
 	public void tableDropdownValues(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// dh 8
 		try {
@@ -11967,9 +10673,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				// clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				return;
 			}
 		} catch (Exception e) {
@@ -11984,20 +10690,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//a[contains(@id,'projectRole')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
 		try {
@@ -12009,19 +10715,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//*[text()='param1']/following::a[contains(@id,'param2')])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
 		try {
@@ -12035,21 +10741,21 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				Thread.sleep(2000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[text()='param1']/following::label[text()='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Billing tableDropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Billing tableDropdownValues" + scripNumber);
 		}
 		try {
@@ -12061,19 +10767,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(3000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[text()='param1']/following::label[text()='param2']/preceding::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableDropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12086,18 +10792,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//table[@summary='param1']//input/following-sibling::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12110,27 +10816,27 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[text()='param1']/following::input[contains(@id,'param2')][1]/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// DH 32
 		try {
@@ -12144,15 +10850,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			waittext.click();
 			Thread.sleep(4000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[contains(@id,'popup-container')]//*[text()='param1']/following::*[text()='param2']/following::input[not (@type='hidden')][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12174,17 +10880,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				text.click();
 				Thread.sleep(4000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[text()='param2']/following::a[contains(@id,'eventType')]"
 						+ ";" + "//div[contains(@id,'popup-container')]//td[text()='" + keysToSend + "'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12220,7 +10926,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				Value.click();
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
 						+ ";" + "//a[contains(text(),'Search')]" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
@@ -12228,14 +10934,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12277,7 +10983,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		 * 
 		 * Thread.sleep(1000);
 		 * 
-		 * String scripNumber = fetchMetadataVO.getScript_number();
+		 * String scripNumber = fetchMetadataVO.getScriptNumber();
 		 * 
 		 * String xpath =
 		 * "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
@@ -12287,12 +10993,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		 * "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
 		 * + ";" +
 		 * "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']"
-		 * ; String scriptID=fetchMetadataVO.getScript_id();String
+		 * ; String scriptID=fetchMetadataVO.getScriptId();String
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath);
 		 * log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" +
 		 * scripNumber); return; } } catch (Exception e) { String scripNumber =
-		 * fetchMetadataVO.getScript_number();
+		 * fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during Schedule New Process or Name dropdownValues" +
 		 * scripNumber); System.out.println(e); }
 		 */
@@ -12325,22 +11031,22 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
 								+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']/following::*[@title='param2']" + ";"
 						+ "//a[contains(text(),'Search')]" + ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())=' param2 ']/following::input[1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12374,14 +11080,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[contains(text(),'"
 								+ keysToSend + "')][1]/following::button[text()='OK'][1]"));
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement ok = driver.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='"
 						+ param1 + "']/following::*[normalize-space(text())='" + param2
 						+ "']/following::a[1]/following::button[text()='OK']"));
 				ok.click();
 				Thread.sleep(6000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//div[@class='AFDetectExpansion']/following::*[text()='param1']/following::*[normalize-space(text())='param2 ']/following::a[1]"
 						+ ";" + "//a[contains(text(),'Search')]" + ";"
@@ -12390,14 +11096,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "//div[@class='AFDetectExpansion']/following::span[contains(text(),'keysToSend ')][1]/following::button[text()='OK'][1]"
 						+ ";"
 						+ "//div[@class='AFDetectExpansion']/following::*[text()=' param1 ']/following::*[normalize-space(text())='param2']/following::a[1]/following::button[text()='OK']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12410,15 +11116,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::label[text()='" + param2 + "']/following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "//a[contains(text(),'Search')][1]" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				try {
 					actions.click(waittext).build().perform();
@@ -12446,14 +11152,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					log.info("Sucessfully Clicked Invoice Header or Business Unit dropdownValues" + scripNumber);
 
 				} catch (Exception e) {
-					// String scripNumber = fetchMetadataVO.getScript_number();
+					// String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
 					System.out.println(e);
 				}
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -12477,13 +11183,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::label[normalize-space(text())='" + keysToSend + "']"));
 				text.click();
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "//label[text()='All']" + ";"
 						+ "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
 				return;
@@ -12515,14 +11221,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//h1[text()='Search']/following::button[text()='OK'][1]"));
 				clickok.click();
 				Thread.sleep(2000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "//label[text()='All']" + ";"
 						+ "//label[text()='param2']/following::label[normalize-space(text())='keysToSend']";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				log.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
@@ -12559,15 +11265,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement button = driver.findElement(By.xpath(
 						"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";" + "(//a[text()='Search...'])[3]" + ";"
 						+ "//h2[normalize-space(text())='Search']/following::label[text()='Name']/following::input[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
@@ -12603,7 +11309,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement button = driver.findElement(By.xpath(
 						"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
 						+ ";"
@@ -12612,14 +11318,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Bank Account or Country dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Bank Account or Country dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -12682,7 +11388,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement button = driver.findElement(By.xpath(
 						"//button[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::button[text()='OK'][1]"));
 				button.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[@title='Search: Country']"
 						+ ";"
@@ -12692,14 +11398,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
 						+ "//button[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::button[text()='OK'][1]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Address or Country dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Address or Country  dropdownValues" + scripNumber);
 			System.out.println(ex);
 		}
@@ -12723,15 +11429,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				waittext.click();
 
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(30000);
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[text()='param1']/following::a[@role='button'][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Assets dropdownValues" + scripNumber);
 				return;
@@ -12739,7 +11445,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Assets dropdownValues" + scripNumber);
 			System.out.println(e);
 
@@ -12757,19 +11463,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::a)[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Create Request dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Request dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12791,18 +11497,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement dropdown = driver.findElement(By.xpath("//span[text()='" + keysToSend + "']"));
 				actions.moveToElement(dropdown).build().perform();
 				dropdown.click();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
 						+ "//span[text()='keysToSend']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12836,15 +11542,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Procurement BU or Business Unit dropdownValues" + scripNumber);
 					return;
@@ -12865,16 +11571,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "(//div[@class='listbox']//span[contains(text(),'Search')])[1]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Name']/following::div[text()='" + keysToSend + "']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Requisition BU dropdownValues" + scripNumber);
 					return;
@@ -12899,16 +11605,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						WebElement searchok = driver
 								.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK'][3]"));
 						clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "(//div[@class='listbox']//span[contains(text(),'Search')])[3]" + ";"
 								+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
 								+ "//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"
 								+ ";" + "//span[text()='Name']/following::button[text()='OK'][3]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully  Supplier Name Clicked dropdownValues" + scripNumber);
 
@@ -12917,7 +11623,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				}
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -12947,16 +11653,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//span[text()='Name']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//div[@class='listbox']//span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input)[1]" + ";"
 							+ "//*[text()='Name']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//span[text()='Name']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Period Name dropdownValues" + scripNumber);
 					return;
@@ -12976,13 +11682,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver.findElement(By.xpath(
 							"//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//div[@class='listbox']//span[contains(text(),'Search')]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
@@ -12990,7 +11696,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13025,16 +11731,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					actions.moveToElement(searchok).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'LEGAL_ENTITY')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
@@ -13055,16 +11761,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					actions.moveToElement(searchok).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'CUSTOMER_NAME')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[@type='text'][1]"
 							+ ";" + "//*[text()='Value']/following::div[contains(text(),'" + keysToSend + "')]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
 					return;
@@ -13073,7 +11779,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13184,9 +11890,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					// searchok.click();
 
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
 
@@ -13198,8 +11904,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
@@ -13241,9 +11947,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
 
@@ -13255,8 +11961,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 					log.info("Sucessfully Clicked Request Name dropdownValues" + scripNumber);
@@ -13307,9 +12013,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					// searchok.click();
 
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "(//span[contains(text(),'param2')]/following::img)[1]" + ";"
 
@@ -13321,8 +12027,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 							+ "//span[text()='Name']/following::a[text()='OK']";
 
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
@@ -13335,7 +12041,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  dropdownValues" + scripNumber);
 
@@ -13370,24 +12076,24 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 				clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 				Thread.sleep(10000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 						+ "(//a[contains(@id,'legal')or 'LE'][1]//span/span[contains(text(),'Search')])[2]" + ";"
 						+ "(//span[text()='Name']/following::input[@type='text'])" + ";"
 						+ "//b[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 						+ "//div[text()='Search']/following::button[text()='OK']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13417,16 +12123,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'PROCUREMENT')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Report dropdownValues" + scripNumber);
 					return;
@@ -13445,16 +12151,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 					return;
@@ -13473,16 +12179,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 					return;
@@ -13501,16 +12207,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'REQ')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
 					return;
@@ -13528,16 +12234,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][3]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'STATUS')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[3]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][1]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][3]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Status dropdownValues" + scripNumber);
 					return;
@@ -13555,16 +12261,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Req. Business Unit dropdownValues" + scripNumber);
 					return;
@@ -13583,16 +12289,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "(//a[contains(@id,'paramsp')][1]//span/span[contains(text(),'Search')])[1]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK']";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
 					return;
@@ -13611,16 +12317,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchok = driver
 							.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-					String scripNumber = fetchMetadataVO.getScript_number();
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 							+ "(//a[contains(@id,'CUSTOMER')][1]//span/span[contains(text(),'Search')])[1]" + ";"
 							+ "(//span[text()='Name']/following::input[@type='text'])[2]" + ";"
 							+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend'][2]" + ";"
 							+ "//div[text()='Search']/following::button[text()='OK'][2]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
 					return;
@@ -13629,13 +12335,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						WebElement select = driver.findElement(By.xpath("//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='" + keysToSend + "'][1]"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='keysToSend'][1]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked Business Unit dropdownValues" + scripNumber);
 						return;
@@ -13654,17 +12360,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 								.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 						clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 						Thread.sleep(10000);
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						Thread.sleep(3000);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "//a[contains(@id,'BU')][1]//span/span[contains(text(),'Search')]" + ";"
 								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 								+ "//*[text()='Value']/following::div[normalize-space(text())='keysToSend']" + ";"
 								+ "//div[text()='Search']/following::button[text()='OK']";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 						return;
@@ -13674,12 +12380,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						WebElement select = driver.findElement(By.xpath("//span[text()='" + param2
 								+ "']/following::div[normalize-space(text())='" + keysToSend + "'][1]"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "//span[text()='param2']/following::div[normalize-space(text())='keysToSend'][1]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked Supplier Name dropdownValues" + scripNumber);
 						return;
@@ -13699,17 +12405,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 								.findElement(By.xpath("//div[text()='Search']/following::button[text()='OK']"));
 						clickValidateXpath(driver, fetchMetadataVO, searchok, fetchConfigVO);
 						Thread.sleep(10000);
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						Thread.sleep(3000);
-						String scripNumber = fetchMetadataVO.getScript_number();
+						String scripNumber = fetchMetadataVO.getScriptNumber();
 
 						String xpath = "//*[normalize-space(text())='param2']/following::input[1]" + ";"
 								+ "//a[contains(@id,'SUPPLIER')][1]//span/span[contains(text(),'Search')]" + ";"
 								+ "(//span[text()='Name']/following::input[@type='text'])[1]" + ";"
 								+ "//*[normalize-space(text())='Value']/following::div[normalize-space(text())='keysToSend']"
 								+ ";" + "//div[text()='Search']/following::button[text()='OK']";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 						log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 						return;
@@ -13717,7 +12423,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				}
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13753,12 +12459,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 					text.click();
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement button = driver
 							.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 									+ "']/following::*[text()='OK'][1]"));
 					button.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 
 					String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[contains(@title,'param2')]"
 							+ ";" + "//div[@class='AFDetectExpansion']" + ";"
@@ -13766,12 +12472,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 							+ ";" + "(//span[contains(text(),'keysToSend')])[1]" + ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked Basic Options or Ledger dropdownValues" + scripNumber);
 				} catch (Exception e) {
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Basic Options or Ledger dropdownValues" + scripNumber);
 
 					for (int i = 0; i <= 2; i++) {
@@ -13803,24 +12509,24 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement text = driver.findElement(By.xpath("//span[text()='" + param2
 							+ "']/following::span[contains(text(),'" + keysToSend + "')][1]"));
 					text.click();
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement button = driver
 							.findElement(By.xpath("//*[text()='Search']/following::*[normalize-space(text())='" + param2
 									+ "']/following::*[text()='OK'][1]"));
 					button.click();
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[contains(@title,'param2')]"
 							+ ";" + "//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]" + ";"
 							+ "//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='param2']/following::input[1]"
 							+ ";" + "//span[text()='param2']/following::span[contains(text(),'keysToSend')][1]" + ";"
 							+ "//*[text()='Search']/following::*[normalize-space(text())='param2']/following::*[text()='OK'][1]";
 
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 					log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 				} catch (Exception e) {
-					String scripNumber = fetchMetadataVO.getScript_number();
+					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during  dropdownValues" + scripNumber);
 
 					for (int i = 0; i <= 2; i++) {
@@ -13847,7 +12553,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							WebElement text = driver
 									.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 							text.click();
-							screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+							screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 							WebElement button = driver.findElement(By.xpath("//*[text()='Search']/following::*[text()='"
 									+ param2 + "']/following::*[text()='OK'][1]"));
 							button.click();
@@ -13855,8 +12561,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							String xpath = "//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]"
 									+ ";" + "(//span[contains(text(),'keysToSend')])[1]" + ";"
 									+ "//*[text()='Search']/following::*[text()='param2']/following::*[text()='OK'][1]";
-							String scriptID = fetchMetadataVO.getScript_id();
-							String lineNumber = fetchMetadataVO.getLine_number();
+							String scriptID = fetchMetadataVO.getScriptId();
+							String lineNumber = fetchMetadataVO.getLineNumber();
 							service.saveXpathParams(scriptID, lineNumber, xpath);
 
 						}
@@ -13866,7 +12572,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -13882,30 +12588,30 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.click(waittext).build().perform();
 				Thread.sleep(10000);
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'suggestions-popup')]"));
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				actions.release();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception ex) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
 
 				try {
 					try {
 						WebElement popup1 = driver.findElement(By.xpath("//div[@class='AFDetectExpansion']"));
-						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 						actions.release();
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						// String xpath="//div[@class='AFDetectExpansion']";
 						String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					} catch (Exception ex1) {
 						for (int i = 0; i <= 2; i++) {
@@ -13914,29 +12620,29 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						}
 						Thread.sleep(3000);
 						WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'suggestions-popup')]"));
-						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 						actions.release();
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					}
 				} catch (Exception ex2) {
 					WebElement popup1 = driver.findElement(By.xpath("//div[@class='AFDetectExpansion']"));
-					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 					actions.release();
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-					String scriptID = fetchMetadataVO.getScript_id();
-					String lineNumber = fetchMetadataVO.getLine_number();
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 				}
 			}
 			return;
 		} catch (Exception exe) {
 			System.out.println(exe);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 		}
 		try {
@@ -13952,30 +12658,30 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(6000);
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'dropdownPopup::content')]"));
 
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				actions.release();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
 				for (int i = 0; i <= 2; i++) {
 					try {
 						actions.click(waittext).build().perform();
 						break;
 					} finally {
-						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 						actions.release();
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					}
 				}
@@ -13985,18 +12691,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.click(waittext).build().perform();
 				Thread.sleep(6000);
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'dropdownPopup::content')][1]"));
-				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				actions.release();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//div[contains(@id,'dropdownPopup::content')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
 				for (int i = 0; i <= 2; i++) {
 					try {
@@ -14004,10 +12710,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						break;
 					} finally {
 						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-						screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						String xpath = "//div[contains(@id,'dropdownPopup::content')][1]";
-						String scriptID = fetchMetadataVO.getScript_id();
-						String lineNumber = fetchMetadataVO.getLine_number();
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
 					}
 				}
@@ -14015,7 +12721,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14029,17 +12735,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14052,17 +12758,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ param1 + "']/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//div[contains(@id,'popup-container')]//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14074,18 +12780,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "']/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		}
 		try {
@@ -14117,19 +12823,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					.findElement(By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='"
 							+ param2 + "']/following::*[text()='K'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//a[contains(text(),'Search')]" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::input[1]"
 					+ ";" + "(//span[normalize-space(text())='keysToSend'])[1]" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[text()='K'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14148,18 +12854,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement button = driver.findElement(By.xpath(
 					"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"
 					+ ";" + "//span[normalize-space(text())='keysToSend']" + ";"
 					+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14168,16 +12874,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					.findElement(By.xpath("//*[normalize-space(text())='Search']/following::*[normalize-space(text())='"
 							+ param2 + "']/following::*[normalize-space(text())='OK'][1]"));
 			button.click();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='param2']/following::*[normalize-space(text())='OK'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
@@ -14198,15 +12904,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "(//h1[contains(text(),'param1')]/following::label[normalize-space(text())='keysToSend']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
@@ -14222,39 +12928,39 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(500);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//a[contains(@id,'param1')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	private void clickValidateXpath(WebDriver driver, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void clickValidateXpath(WebDriver driver, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked clickValidateXpath" + scripNumber);
 			// waittext.click();
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickValidateXpath" + scripNumber);
 			e.printStackTrace();
 		}
 	}
 
-	public void clickFilter(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+	public void clickFilter(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// Dh changes 6
 		try {
 			if (param1.equalsIgnoreCase("Review Distributions")) {
@@ -14262,12 +12968,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "')]/following::*[text()='Account Class']//preceding::input[contains(@id,'Filter')])[3]"));
 
 				waittill.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
@@ -14279,12 +12985,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ param2 + "']/preceding::input[@type='text'])[3]"));
 
 			waittill.click();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
@@ -14301,7 +13007,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(2000);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("//img[@title='" + param1 + "'][1]");
@@ -14320,7 +13026,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			// Thread.sleep(2000);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("//img[@title='" + param1 + "'][1]");
@@ -14329,15 +13035,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public String password(WebDriver driver, String inputParam, String keysToSend, FetchConfigVO fetchConfigVO,
-			FetchMetadataVO fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam + "')]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked password" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  password" + scripNumber);
 			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(e);
@@ -14346,18 +13052,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void typeIntoValidxpath(WebDriver driver, String keysToSend, WebElement waittill,
-			FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			waittill.clear();
 			waittill.click();
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
 			log.info("clear and typed the given Data");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked typeIntoValidxpath" + scripNumber);
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  typeIntoValidxpath" + scripNumber);
 			e.printStackTrace();
 		}
@@ -14371,16 +13077,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		log.info("clear and typed the given Data");
 	}
 
-	public void moveToElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void moveToElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "'][1]"));
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittill).build().perform();
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		log.info("Sucessfully Clicked moveToElement" + scripNumber);
 	}
 
-	public void scrollUsingElement(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void scrollUsingElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			Thread.sleep(2000);
@@ -14389,15 +13095,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//span[normalize-space(text())='inputParam'][1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
@@ -14405,45 +13111,45 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Field during scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h2[normalize-space(text())='inputParam'])";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -14451,10 +13157,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver
 					.findElement(By.xpath("(//h3[normalize-space(text())='" + inputParam + "'])[2]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h3[normalize-space(text())='inputParam'])[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
@@ -14464,10 +13170,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//td[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
@@ -14477,30 +13183,30 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[contains(text(),'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='inputParam']//td//a)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -14508,10 +13214,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[normalize-space(text())=\"" + inputParam + "\"]/following::input)[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[normalize-space(text())='inputParam']/following::input)[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
@@ -14521,30 +13227,30 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[contains(@id,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//li[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -14552,15 +13258,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver
 					.findElement(By.xpath("//label[normalize-space(text())=\"" + inputParam + "\"]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
@@ -14568,45 +13274,45 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittill = driver
 					.findElement(By.xpath("//button[normalize-space(text())='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//button[normalize-space(text())='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//img[@title='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[@title='inputParam'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(inputParam);
@@ -14616,28 +13322,28 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
-			FetchMetadataVO fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO) {
 		fetchConfigVO.getMedium_wait();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-		String scripNumber = fetchMetadataVO.getScript_number();
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		log.info("Sucessfully Clicked scrollMethod" + scripNumber);
 	}
 
-	public void tab(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(4000);
 			Actions action = new Actions(driver);
 			action.sendKeys(Keys.TAB).build().perform();
 			Thread.sleep(8000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked tab" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tab" + scripNumber);
 			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed to do TAB Action");
@@ -14646,7 +13352,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void mousehover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void mousehover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14659,16 +13365,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					.findElement(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]"));
 			actions.moveToElement(waittext).build().perform();
 			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
 			System.out.println(e);
 		}
@@ -14679,15 +13385,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(5000);
 			System.out.print("Successfully executed Mousehover");
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@role='presentation']/following::a[normalize-space(text())='" + param1 + "'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO);
@@ -14695,16 +13401,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void enter(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void enter(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
+			throws Exception {
 		try {
 			Thread.sleep(2000);
 			Actions actionObject = new Actions(driver);
 			actionObject.sendKeys(Keys.ENTER).build().perform();
 			Thread.sleep(8000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked enter" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  enter" + scripNumber);
 			System.out.println(e);
 			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
@@ -14712,7 +13419,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void deleteAllCookies(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void deleteAllCookies(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().deleteAllCookies();
 			log.info("Successfully Deleted All The Cookies.");
@@ -14724,17 +13431,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void selectCheckBox(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO) {
+	public void selectCheckBox(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO) {
 		try {
 			WebElement element = driver.findElement(By.xpath(xpath));
 			if (element.isSelected()) {
 			} else {
 				element.click();
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectCheckBox" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectCheckBox" + scripNumber);
 			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null);
 			e.printStackTrace();
@@ -14744,7 +13451,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void selectByText(WebDriver driver, String param1, String param2, String inputData,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			if (param1.equalsIgnoreCase("Address Purposes")) {
 				Thread.sleep(2000);
@@ -14752,17 +13459,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
 								+ param2 + "']/following::select[not (@title)]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked selectByText" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14773,17 +13480,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select[@title='']"));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::select[@title='']";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Holds selectByText" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Holds selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14794,17 +13501,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						("//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select[1]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Batch Status selectByText" + scripNumber);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Batch Status selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14815,17 +13522,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						("(//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select)[2]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select)[2]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked Release selectByText" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Release selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14834,16 +13541,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14852,16 +13559,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/preceding::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14870,16 +13577,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14888,16 +13595,16 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14906,17 +13613,17 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::select[1]")));
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[contains(text(),'param1')]/following::select[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked selectCheckBox" + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			System.out.println(param2);
 		}
@@ -14924,45 +13631,45 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver
 					.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/preceding-sibling::select[1]")));
 			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/preceding-sibling::select[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
 			System.out.println(param2);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
 		}
 	}
 
-	private void selectMethod(WebDriver driver, String inputData, FetchMetadataVO fetchMetadataVO, WebElement waittext,
+	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittext).build().perform();
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		log.info("Sucessfully Clicked selectMethod" + scripNumber);
-		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+		screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 		return;
 	}
 
-	public void selectByValue(WebDriver driver, String xpath, String inputData, FetchMetadataVO fetchMetadataVO,
+	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			Select selectBox = new Select(webElement);
 			selectBox.selectByValue(inputData);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectByValue" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByValue" + scripNumber);
 			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -14981,7 +13688,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
+	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
 
 			FetchConfigVO fetchConfigVO) {
 
@@ -15007,13 +13714,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
@@ -15022,7 +13729,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 
@@ -15043,13 +13750,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				System.out.println(stringToSearch);
 				value = copyNumbers(stringToSearch);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')][1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
 				return value;
@@ -15057,7 +13764,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -15079,13 +13786,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(webElement).build().perform();
 				value = copyNegative(webElement);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
 				return value;
@@ -15093,7 +13800,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -15115,13 +13822,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(webElement).build().perform();
 
 				value = copyInt(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='inputParam1']/following::*[normalize-space(text())='inputParam2']/following::span[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
@@ -15130,7 +13837,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  copynumber" + scripNumber);
 
 			System.out.println(inputParam2);
@@ -15159,13 +13866,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(webElement).build().perform();
 
 				value = copyInt(webElement);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[normalize-space(text())='inputParam1']/following::*[contains(text(),'inputParam2')]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked  copynumber" + scripNumber);
 
@@ -15174,7 +13881,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 			System.out.println(inputParam2);
 
@@ -15194,13 +13901,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				value = copyInt(webElement);
 				value.trim();
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//div[contains(@title,'inputParam1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
@@ -15209,7 +13916,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			System.out.println(inputParam1);
@@ -15228,13 +13935,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (webElement.isDisplayed() == true) {
 
 				value = copyMethod(webElement, value);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//div[contains(text(),'inputParam1')])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
@@ -15243,7 +13950,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			System.out.println(inputParam1);
@@ -15263,13 +13970,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (webElement.isDisplayed() == true) {
 
 				value = copyMethod(webElement, value);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//label[text()='inputParam1']/following::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
@@ -15278,7 +13985,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			System.out.println(inputParam1);
@@ -15295,13 +14002,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (webElement.isDisplayed() == true) {
 
 				value = copyMethod(webElement, value);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//img[@title='In Balance ']/following::td[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				String testParamId = fetchMetadataVO.getTest_script_param_id();
-				String testSetId = fetchMetadataVO.getTest_set_line_id();
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 				log.info("Sucessfully Clicked copynumber" + scripNumber);
 
@@ -15311,7 +14018,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 		} catch (Exception e) {
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
 			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO);
@@ -15469,7 +14176,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public String copyy(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public String copyy(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
@@ -15477,10 +14184,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked copyy" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copyy" + scripNumber);
 			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -15489,7 +14196,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return xpath;
 	}
 
-	public String copytext(WebDriver driver, String xpath, FetchMetadataVO fetchMetadataVO,
+	public String copytext(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
@@ -15503,10 +14210,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked copytext" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copytext" + scripNumber);
 			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -15516,13 +14223,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public void maximize(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void maximize(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.manage().window().maximize();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked maximize" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during maximize" + scripNumber);
 			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not maximize");
@@ -15532,13 +14239,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.switchTo().window(Main_Window);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchWindow" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchWindow" + scripNumber);
 			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not switch to window");
@@ -15548,7 +14255,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchDefaultContent(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchDefaultContent(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -15560,10 +14267,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 				Thread.sleep(4000);
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchDefaultContent" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchDefaultContent" + scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
@@ -15572,7 +14279,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -15609,7 +14316,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchToParentWindow(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchToParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -15628,10 +14335,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				driver.switchTo().window(childWindow);
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
@@ -15640,7 +14347,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, FetchMetadataVO fetchMetadataVO,
+	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			WebElement dragElement = driver.findElement(By.xpath(xpath));
@@ -15650,10 +14357,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions action = new Actions(driver);
 			// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
 			action.dragAndDrop(fromElement, toElement).build().perform();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Drag and drop the values" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During dragAnddrop Action." + scripNumber);
 			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println(xpath);
@@ -15662,7 +14369,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void windowhandle(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
 			throws Exception {
 		try {
 			Thread.sleep(20000);
@@ -15676,15 +14383,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
 				}
 			}
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Handeled the window" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to Handle the window" + scripNumber);
 			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("failed while hadling window");
@@ -15693,7 +14400,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchToFrame(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			Thread.sleep(5000);
@@ -15702,10 +14409,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='inputParam']/following::iframe[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 
 			return;
@@ -15717,10 +14424,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//iframe[contains(@id,'inputParam')]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -15732,10 +14439,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//iframe[@title='inputParam']";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -15748,10 +14455,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			driver.switchTo().frame(waittext);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='inputParam']/following::iframe[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
@@ -15762,7 +14469,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void uploadFileAutoIT(String filelocation, FetchMetadataVO fetchMetadataVO) throws Exception {
+	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -15778,13 +14485,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void refreshPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		try {
 			driver.navigate().refresh();
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked refreshPage" + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during refreshPage" + scripNumber);
 			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("can not refresh the page");
@@ -15794,18 +14501,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void DelatedScreenshoots(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
+	public void DelatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
 			throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomerName() + "/"
+				+ fetchMetadataListVO.get(0).getTestSetName() + "/");
 		if (folder.exists()) {
 			File[] listOfFiles = folder.listFiles();
 
-//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-//				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
+//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomerName() + "/"
+//				+ fetchMetadataVO.getTestSetName() + "/" + fetchMetadataVO.getSeq_num() + "_"
 //				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-//				+ fetchMetadataVO.getLine_number();
+//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTestSetName() + "_"
+//				+ fetchMetadataVO.getLineNumber();
 			for (File file : Arrays.asList(listOfFiles)) {
 
 				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
@@ -15836,26 +14543,26 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public void navigateToBackPage(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void openPdf(WebDriver driver, String input_value, FetchMetadataVO fetchMetadataVO,
+	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void openFile(WebDriver driver, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void actionApprove(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
@@ -15863,7 +14570,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	@Override
 	public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Requisition Lines")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15875,7 +14582,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				return;
 			}
 		} catch (Exception e) {
@@ -15912,7 +14619,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	@Override
 	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		String s = "    Login To Excel    " + username + "    " + password;
 		return s;
@@ -15928,7 +14635,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public String menuItemOfExcel(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String menuItemOfExcel(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		String s = "    Select Menu Item Of Excel    " + param1;
@@ -15944,7 +14651,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	@Override
 	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
-			String sheetName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		List<String> openExcelSteps = new ArrayList<String>();
 		String s = "*** Settings ***";
@@ -15973,11 +14680,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		s = "    [Setup]    Set Automation Speed    slow";
 		openExcelSteps.add(s);
 		s = "    [TearDown]    Capture And Upload Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"
-				+ fetchMetadataVO.getTest_run_name() + "    " + fetchMetadataVO.getSeq_num();
+				+ fetchMetadataVO.getTestSetName() + "    " + fetchMetadataVO.getSeq_num();
 		openExcelSteps.add(s);
 
 		s = "    OperatingSystem.Create Directory    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"
-				+ fetchMetadataVO.getTest_run_name();
+				+ fetchMetadataVO.getTestSetName();
 		openExcelSteps.add(s);
 
 		s = "    Open Excel File With Sheet    " + fileName + "    " + sheetName;
@@ -15987,7 +14694,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public String typeIntoCell(WebDriver driver, String param1, String value1, FetchMetadataVO fetchMetadataVO,
+	public String typeIntoCell(WebDriver driver, String param1, String value1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
 		// TODO Auto-generated method stub
 		String s = "";
@@ -16000,49 +14707,49 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO, String type1,
+	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, FetchMetadataVO fetchMetadataVO,
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String param1, String param2, int count) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String oicNavigator(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String oicNavigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String oicMenuNavigation(WebDriver driver, String param1, FetchMetadataVO fetchMetadataVO,
+	public String oicMenuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
+	public String oicMenuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -16050,7 +14757,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public void oicClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
@@ -16058,27 +14765,27 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	@Override
 	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void oicMouseHover(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void oicMouseHover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO)
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO)
 			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		// TODO Auto-generated method stub
@@ -16086,7 +14793,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 		// TODO Auto-generated method stub
@@ -16094,7 +14801,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
-			FetchMetadataVO fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
+			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
 			String param3, String keysToSend, String value) throws Exception {
 		String param4 = "User name or email";
 		String param5 = "password";
@@ -16105,14 +14812,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
-		String scripNumber = fetchMetadataVO.getScript_number();
+		String scripNumber = fetchMetadataVO.getScriptNumber();
 		String xpath = xpath1 + ";" + xpath2;
-		String scriptID = fetchMetadataVO.getScript_id();
-		String lineNumber = fetchMetadataVO.getLine_number();
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
 	}
 
-	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO) {
+	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO,
+			ScriptDetailsDto fetchMetadataVO) {
 		try {
 			driver.navigate().to(fetchConfigVO.getINFORMATICA_APPLICATION_URL());
 			driver.manage().window().maximize();
@@ -16122,10 +14830,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(10000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Not able to navitage to the Url");
@@ -16133,7 +14841,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
 		String xpath = null;
 		try {
 			if (param1.equalsIgnoreCase("Password")) {
@@ -16152,7 +14860,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
 				// if("password".equalsIgnoreCase(param1))
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
@@ -16162,8 +14870,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				 * "Failed During Login page", fetchMetadataVO, fetchConfigVO); throw new
 				 * IOException("Failed during login page"); }
 				 */
-				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Succesfully password is entered " + scripNumber);
 				xpath = "//*[contains(@placeholder,'param1')]";
 				return xpath;
@@ -16171,7 +14879,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
 			System.out.println(e);
 		}
@@ -16188,14 +14896,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			// JavascriptExecutor jse = (JavascriptExecutor) driver;
 			// jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
 			// if("password".equalsIgnoreCase(param1))
-			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(1000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			xpath = "//*[contains(@placeholder,'param1')]";
 			log.info("Successfully entered User Name " + scripNumber);
 			return xpath;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
 			System.out.println("Failed During Login page");
@@ -16203,7 +14911,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return xpath;
 	}
 
-	public void InformaticaClickButton(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 
 		try {
@@ -16218,19 +14926,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(5000);
 				WebElement run = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]"));
 				run.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -16248,19 +14956,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(5000);
 				WebElement run = driver.findElement(By.xpath("(//*[text()='" + param1 + "'])[1]"));
 				run.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -16278,19 +14986,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Thread.sleep(5000);
 				WebElement run = driver.findElement(By.xpath("//span[text()='" + param1 + "']"));
 				run.click();
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 				String xpath = "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			// throw e;
@@ -16307,18 +15015,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(5000);
 			WebElement run = driver.findElement(By.xpath("//*[text()='" + param1 + "']"));
 			run.click();
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
 			String xpath = "(//*[text()='Scheduled Orchestration']/following::*[@title='Run'])[1]";
-			String scriptID = fetchMetadataVO.getScript_id();
-			String lineNumber = fetchMetadataVO.getLine_number();
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -16326,7 +15034,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Find")) {
 				Thread.sleep(1000);
@@ -16339,19 +15047,19 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				waittill.sendKeys(keysToSend);
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[text()='param1']//following::input[1]";
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			}
 			return null;
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 			throw e;
@@ -16359,7 +15067,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public void InformaticaclickLink(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaclickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 
@@ -16379,20 +15087,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				waittext.click();
 
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 
 				Thread.sleep(5000);
 
-				String scripNumber = fetchMetadataVO.getScript_number();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
 
 				String xpath = "//a[contains(@id,'param1')]";
 
-				String scriptID = fetchMetadataVO.getScript_id();
-				String lineNumber = fetchMetadataVO.getLine_number();
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
 				return;
@@ -16403,7 +15111,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 			System.out.println(e);
 
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Approve clickLink" + scripNumber);
 
@@ -16412,7 +15120,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("All Projects")) {
 				Thread.sleep(4000);
@@ -16426,8 +15134,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(2000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				String scripNumber = fetchMetadataVO.getScript_number();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'keysToSend')][1]";
 
@@ -16435,7 +15143,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -16443,7 +15151,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public void InformaticaClickImage(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaClickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Refresh")) {
@@ -16454,7 +15162,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				// waittext.click();
 				// highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(45000);
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
@@ -16467,7 +15175,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
 
 		try {
@@ -16476,13 +15184,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("//button[@title='User']"));
 			waittext.click();
 			Thread.sleep(4000);
-			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			WebElement signout = driver.findElement(By.xpath("(//*[text()='Log Out'])[3]"));
 			signout.click();
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			String scripNumber = fetchMetadataVO.getScript_number();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, "Failed during logout", fetchMetadataVO, fetchConfigVO);
 			throw e;
@@ -16491,12 +15199,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value) throws Exception {
 	}
 
-	public void waitTillLoad(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
+	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
 			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
@@ -16514,28 +15222,28 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public void compareValue(WebDriver driver, String input_parameter, FetchMetadataVO fetchMetadataVO,
+	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void apiAccessToken(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
 			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void apiValidationResponse(FetchMetadataVO fetchMetadataVO, Map<String, String> accessTokenStorage,
+	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
 			ApiValidationVO api) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, ApiValidationVO api, boolean validationFlag)
 			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
 		// TODO Auto-generated method stub
@@ -16543,7 +15251,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	@Override
-	public boolean validation(FetchMetadataVO fetchMetadataVO, ApiValidationVO api) {
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
 		// TODO Auto-generated method stub
 		return false;
 	}

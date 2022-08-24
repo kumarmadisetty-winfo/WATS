@@ -15665,7 +15665,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	@Override
 	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
+			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
