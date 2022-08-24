@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.Customer;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants;
@@ -171,6 +173,10 @@ public class DataBaseEntry {
 
 	public String getPackage(String args) {
 		return dao.getPackage(args);
+	}
+	
+	public Customer getCustomer(String args) {
+		return dao.getCustomer(args);
 	}
 
 	public String getTestSetMode(Long testSetId) {
@@ -451,6 +457,10 @@ public class DataBaseEntry {
 	
 	public void updateEnableFlagForSanity(String testSetId) {
 		dao.updateEnableFlagForSanity(testSetId);
+	}
+
+	public TestSet getTestRunDetails(String testSetId) {
+		return dao.getTestRunDetails(testSetId);
 	}
 
 }
