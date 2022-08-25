@@ -259,7 +259,7 @@ public abstract class AbstractSeleniumKeywords {
 							.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 
 					String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
-					File file = new File(screenshotPath + File.separator + imageName);
+					File file = new File(screenshotPath + FORWARD_SLASH + imageName);
 					if (!file.exists()) {
 						try (final InputStream stream = getResponse.getInputStream();
 								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
@@ -272,7 +272,8 @@ public abstract class AbstractSeleniumKeywords {
 								outputStream.write(buf, 0, bytesRead);
 							}
 						} catch (IOException e1) {
-							e1.printStackTrace();
+							throw new WatsEBSCustomException(500,
+									"Exception occured while read or write screenshot from Object Storage", e1);
 						}
 					}
 				}
