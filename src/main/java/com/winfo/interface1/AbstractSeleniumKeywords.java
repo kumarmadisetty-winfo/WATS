@@ -9,8 +9,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -263,8 +265,10 @@ public abstract class AbstractSeleniumKeywords {
 						try (final InputStream stream = getResponse.getInputStream();
 								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
 								) {
+
+								final OutputStream outputStream = Files.newOutputStream(file.toPath(), StandardOpenOption.TRUNCATE_EXISTING);
+
 							// use fileStream
-							Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 							throw new WatsEBSCustomException(500,
