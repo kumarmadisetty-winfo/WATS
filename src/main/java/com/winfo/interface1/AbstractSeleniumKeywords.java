@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -265,7 +264,7 @@ public abstract class AbstractSeleniumKeywords {
 								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
 								) {
 							// use fileStream
-							Files.copy(stream, Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+							Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 							throw new WatsEBSCustomException(500,
