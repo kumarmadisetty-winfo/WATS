@@ -41,7 +41,7 @@ import com.winfo.vo.DeleteEvidenceReportDto;
 import com.winfo.vo.ResponseDto;
 
 @Service
-public class DeletionService {
+public class DeletionService{
 
 	public final Logger logger = LogManager.getLogger(DeletionService.class);
 
@@ -62,6 +62,9 @@ public class DeletionService {
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
+	
+//	@Autowired
+//	AbstractSeleniumKeywords abstractSeleniumKeywords;
 
 	private static final String SCREENSHOT = "Screenshot";
 	public static final String FORWARD_SLASH = "/";
@@ -99,7 +102,7 @@ public class DeletionService {
 		return new ResponseDto(200, Constants.SUCCESS, "Screenshot & Pdf deleted successfully");
 	}
 
-	public ResponseDto deleteScriptFromTestRun(DeleteEvidenceReportDto testScriptDto) throws Exception {
+	public ResponseDto deleteScriptFromTestRun(DeleteEvidenceReportDto testScriptDto) throws Exception {		
 		String testSetId = testScriptDto.getTestSetId();
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		ConfigFileReader.ConfigFile configFile = null;
@@ -162,10 +165,9 @@ public class DeletionService {
 
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
-					if (objectStoreScreenShotPath.equalsIgnoreCase(objectName) && isTestRunDelete) {
+					if (isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
-						break;
 					} else if (!isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
@@ -211,10 +213,9 @@ public class DeletionService {
 				ListIterator<String> listIt = objNames.listIterator();
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
-					if (objectStorePdfPath.equalsIgnoreCase(objectName) && isTestRunDelete) {
+					if (isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
-						break;
 					} else if (!isTestRunDelete) {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
