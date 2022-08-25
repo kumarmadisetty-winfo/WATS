@@ -260,6 +260,7 @@ public abstract class AbstractSeleniumKeywords {
 
 					String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 					File file = new File(screenshotPath + FORWARD_SLASH + imageName);
+					logger.info(file.exists() + "FileExist or not ******" + file.getCanonicalPath());
 					if (!file.exists()) {
 						try (final InputStream stream = getResponse.getInputStream();
 								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
