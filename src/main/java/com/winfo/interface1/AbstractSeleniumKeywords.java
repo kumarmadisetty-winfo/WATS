@@ -1,5 +1,7 @@
 package com.winfo.interface1;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -12,7 +14,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -263,14 +264,16 @@ public abstract class AbstractSeleniumKeywords {
 					logger.info(file.exists() + "FileExist or not ******" + file.getCanonicalPath());
 					if (!file.exists()) {
 						try (final InputStream stream = getResponse.getInputStream();
-								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
-								) {
+								 final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
-								final OutputStream outputStream = Files.newOutputStream(file.toPath(), StandardOpenOption.TRUNCATE_EXISTING);
-
+								//final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
 							// use fileStream
+							byte[] buf = new byte[8192];
+							int bytesRead;
+							while ((bytesRead = stream.read(buf)) > 0) {
+								outputStream.write(buf, 0, bytesRead);
+							}
 						} catch (IOException e1) {
-							e1.printStackTrace();
 							throw new WatsEBSCustomException(500,
 									"Exception occured while read or write screenshot from Object Storage", e1);
 						}
