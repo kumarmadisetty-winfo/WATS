@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -260,11 +261,12 @@ public abstract class AbstractSeleniumKeywords {
 
 					String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 					File file = new File(screenshotPath + File.separator + imageName);
+					logger.info(file.exists() + "FileExist or not ******" + file.getCanonicalPath());
 					if (!file.exists()) {
 						try (final InputStream stream = getResponse.getInputStream();
-								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
+								 final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
-								final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
+								//final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
 							// use fileStream
 							byte[] buf = new byte[8192];
 							int bytesRead;
