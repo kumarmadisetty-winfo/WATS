@@ -6353,7 +6353,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	@Override
-	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
 			throws Exception {
 		// TODO Auto-generated method stub
 

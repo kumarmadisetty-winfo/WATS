@@ -283,7 +283,7 @@ public interface SeleniumKeyWordsInterface {
 	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails) throws Exception;
 
-	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
 			throws Exception;
 
 	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,

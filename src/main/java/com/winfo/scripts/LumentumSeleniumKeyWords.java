@@ -275,7 +275,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//*[text()='Create Time Card']/following::select[1]"));
-			selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO);
+			selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			return;
 		} catch (Exception e) {
@@ -323,8 +323,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	public void openSettings(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
 		String param4 = "UIScmil1u";
-		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO);
-		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 		// clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
@@ -333,8 +333,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			driver.navigate().to(fetchConfigVO.getApplication_url());
 			driver.manage().window().maximize();
-			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
-			refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
@@ -359,7 +359,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String title2 = driver.getTitle();
 				if (title1.equalsIgnoreCase(title2)) {
@@ -2924,10 +2924,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if ("yes".equalsIgnoreCase(fetchMetadataVO.getConditionalPopup())) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				log.info("alertText clicked ");
 			}
 		} catch (Exception e) {
@@ -5471,8 +5471,8 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Manage Receipts clickTableLink" + scripNumber);
@@ -5510,9 +5510,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				Thread.sleep(2000);
 
@@ -5816,7 +5816,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-					refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+					refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 					Thread.sleep(5000);
 
@@ -5950,7 +5950,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
-				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Home clickLink" + scripNumber);
@@ -5977,7 +5977,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
-				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Financials Details or Invoices clickLink" + scripNumber);
@@ -6003,7 +6003,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
-				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Approve clickLink" + scripNumber);
@@ -6061,7 +6061,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
-				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Export clickLink" + scripNumber);
@@ -6841,7 +6841,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							+ param2 + "']/following::label[normalize-space(text())='" + keysToSend + "'])[1]"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -6864,7 +6864,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath(("(//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + keysToSend + "'])[1]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -6922,7 +6922,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::span[text()='" + keysToSend + "'])[1]/preceding::label[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -6953,7 +6953,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::span[text()='" + keysToSend + "'])[2]/preceding::label[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -6982,7 +6982,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"(//*[normalize-space(text())='" + param1 + "']/following::input[@type='checkbox'])[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7011,7 +7011,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"(//*[normalize-space(text())='" + param1 + "']/following::input[@type='checkbox'])[2]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7042,7 +7042,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::span[text()='" + keysToSend + "']/following::label[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7077,7 +7077,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 								+ keysToSend + "']/preceding::label[contains(@id,'Label')][1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7110,7 +7110,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::*[normalize-space(text())='" + keysToSend + "']"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7142,7 +7142,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::span[normalize-space(text())='" + keysToSend + "']/preceding::input[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				// tab(driver, fetchMetadataVO, fetchConfigVO);
+				// tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7173,7 +7173,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						+ "']/following::label[normalize-space(text())='" + keysToSend + "']/preceding::input[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				// tab(driver, fetchMetadataVO, fetchConfigVO);
+				// tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7199,7 +7199,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						.findElement(By.xpath("//a[normalize-space(text())='" + param1 + "']/following::input[1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				// tab(driver, fetchMetadataVO, fetchConfigVO);
+				// tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7224,7 +7224,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"//*[normalize-space(text())='Match Invoice Lines']/following::*[normalize-space(text())='Match']/following::label[contains(@id,'Label')][1]"));
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				tab(driver, fetchMetadataVO, fetchConfigVO);
+				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(500);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7251,7 +7251,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "']/following::span[normalize-space(text())='" + keysToSend + "']/preceding::label[1]"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7281,7 +7281,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "']/following::span[normalize-space(text())='" + keysToSend + "']/preceding::label[1]"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7310,7 +7310,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					+ "']/following::label[normalize-space(text())='" + keysToSend + "']"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7365,7 +7365,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("//label[normalize-space(text())='" + keysToSend + "']"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -7395,7 +7395,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					By.xpath("(//*[contains(text(),'" + param1 + "')]/following::input[@type='checkbox'])[1]"));
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			tab(driver, fetchMetadataVO, fetchConfigVO);
+			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -8162,7 +8162,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(3000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(10000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Lines or Query By Example sendValue" + scripNumber);
@@ -8727,7 +8727,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 				if (keysToSend != null) {
 
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 					Thread.sleep(5000);
 
@@ -8824,7 +8824,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							+ param2 + "']/following::input[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			if (keysToSend != null) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				try {
 					WebElement text = driver.findElement(By.xpath(
@@ -8870,7 +8870,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement searchResult = driver.findElement(By.xpath(
 					"//div[contains(@id,'PopupId::content')]/following::*[normalize-space(text())='Search']/following::*[text()='Name']/following::input[@type='text'][1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-			enter(driver, fetchMetadataVO, fetchConfigVO);
+			enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
 			WebElement text = driver.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 			text.click();
@@ -8937,7 +8937,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				log.error("Failed during dropdownTexts" + scripNumber1);
 			}
 			if (keysToSend != null) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				try {
 					WebElement text = driver.findElement(By.xpath(
@@ -10459,9 +10459,9 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			System.out.println(e);
 		}
 		try {
-			// tab(driver, fetchMetadataVO, fetchConfigVO);
+			// tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			// Thread.sleep(1000);
-			// enter(driver, fetchMetadataVO, fetchConfigVO);
+			// enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + param1 + "']//label[text()='"
 					+ param2 + "']/preceding-sibling::input)[1]"));
 			Actions actions = new Actions(driver);
@@ -10574,7 +10574,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							+ param2 + "']/following::input[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			if (keysToSend != null) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
 				text.click();
@@ -10604,7 +10604,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement searchResult = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
@@ -10612,7 +10612,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement searchResult = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[text()='Value']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  tableDropdownTexts" + scripNumber);
@@ -11022,7 +11022,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
 								+ param2 + "']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				WebElement select = driver
 						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
 								+ keysToSend + "')][1]"));
@@ -11071,7 +11071,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						"//div[@class='AFDetectExpansion']/following::*[text()='Search']/following::*[normalize-space(text())='"
 								+ param2 + "']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				WebElement select = driver
 						.findElement(By.xpath("//div[@class='AFDetectExpansion']/following::span[starts-with(text(),'"
 								+ keysToSend + "')][1]"));
@@ -11139,7 +11139,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement searchResult = driver.findElement(By.xpath(
 							"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"));
 					typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					Thread.sleep(5000);
 					WebElement text = driver.findElement(By.xpath(
 							"//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
@@ -11215,7 +11215,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement Value = driver.findElement(By.xpath(
 						"//div[text()='Search and Select: Bill-to Account']/following::label[text()='Account Number']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, Value, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				WebElement clickok = driver
 						.findElement(By.xpath("//h1[text()='Search']/following::button[text()='OK'][1]"));
@@ -11256,7 +11256,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement Name = driver.findElement(By.xpath(
 						"//h2[normalize-space(text())='Search']/following::label[text()='Name']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, Name, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(By
 						.xpath("//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
@@ -11300,7 +11300,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement searchResult = driver.findElement(By.xpath(
 						"(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(By
 						.xpath("//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
@@ -11345,7 +11345,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement Name = driver.findElement(By.xpath(
 						"//div[normalize-space(text())='Search and Select: Tax Country']/following::label[text()='Name']/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, Name, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(By
 						.xpath("//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
@@ -11379,7 +11379,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement searchResult = driver.findElement(By.xpath(
 						"(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver.findElement(By
 						.xpath("//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
@@ -11535,7 +11535,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Thread.sleep(1000);
 					WebElement values = driver.findElement(By.xpath("(//span[text()='Name']/following::input)[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -11564,7 +11564,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[2]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver
 							.findElement(By.xpath("//*[text()='Name']/following::div[text()='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -11598,7 +11598,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						WebElement values = driver
 								.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[3]"));
 						typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-						enter(driver, fetchMetadataVO, fetchConfigVO);
+						enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 						WebElement select = driver.findElement(By.xpath(
 								"//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -11646,7 +11646,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					Thread.sleep(1000);
 					WebElement values = driver.findElement(By.xpath("(//span[text()='Name']/following::input)[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -11674,7 +11674,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver.findElement(By.xpath(
 							"//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					Thread.sleep(6000);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Name']/following::div[normalize-space(text())='" + keysToSend + "']"));
@@ -11723,7 +11723,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -11752,7 +11752,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver.findElement(By.xpath(
 							"//div[@class='masterDialog modalDialog']/following::span[text()='Name']/following::input[@type='text'][1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(
 							By.xpath("//*[text()='Value']/following::div[contains(text(),'" + keysToSend + "')]"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -11868,7 +11868,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
 
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 					Thread.sleep(10000);
 					// DH 27
@@ -11929,7 +11929,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
 
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 					Thread.sleep(6000);
 //               DH 27
@@ -11987,7 +11987,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
 
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 					WebElement select = driver.findElement(By
 
@@ -12068,7 +12068,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement values = driver
 						.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])"));
 				typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				WebElement select = driver.findElement(
 						By.xpath("//b[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "']"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12116,7 +12116,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12144,7 +12144,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[2]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By.xpath(
 							"//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12172,7 +12172,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[2]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By.xpath(
 							"//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12200,7 +12200,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[2]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By.xpath(
 							"//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12227,7 +12227,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[3]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By.xpath(
 							"//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "'][1]"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12254,7 +12254,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12282,7 +12282,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[1]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By
 							.xpath("//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "']"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12310,7 +12310,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 					WebElement values = driver
 							.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[2]"));
 					typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					WebElement select = driver.findElement(By.xpath(
 							"//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "'][2]"));
 					clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12352,7 +12352,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						WebElement values = driver
 								.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[1]"));
 						typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-						enter(driver, fetchMetadataVO, fetchConfigVO);
+						enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 						WebElement select = driver.findElement(By.xpath(
 								"//*[text()='Value']/following::div[normalize-space(text())='" + keysToSend + "']"));
 						clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
@@ -12396,7 +12396,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						WebElement values = driver
 								.findElement(By.xpath("(//span[text()='Name']/following::input[@type='text'])[1]"));
 						typeIntoValidxpath(driver, keysToSend, values, fetchConfigVO, fetchMetadataVO);
-						enter(driver, fetchMetadataVO, fetchConfigVO);
+						enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 						WebElement select = driver.findElement(
 								By.xpath("//*[normalize-space(text())='Value']/following::div[normalize-space(text())='"
 										+ keysToSend + "']"));
@@ -12454,7 +12454,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='"
 									+ param2 + "']/following::input[1]"));
 					typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					Thread.sleep(5000);
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
@@ -12504,7 +12504,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							By.xpath("//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[text()='"
 									+ param2 + "']/following::input[1]"));
 					typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-					enter(driver, fetchMetadataVO, fetchConfigVO);
+					enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 					Thread.sleep(5000);
 					WebElement text = driver.findElement(By.xpath("//span[text()='" + param2
 							+ "']/following::span[contains(text(),'" + keysToSend + "')][1]"));
@@ -12548,7 +12548,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 									"//div[contains(@id,'PopupId::content')]//*[text()='Search']/following::*[normalize-space(text())='"
 											+ param2 + "']/following::input[1]"));
 							typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-							enter(driver, fetchMetadataVO, fetchConfigVO);
+							enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 							Thread.sleep(5000);
 							WebElement text = driver
 									.findElement(By.xpath("(//span[contains(text(),'" + keysToSend + "')])[1]"));
@@ -12709,7 +12709,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 						actions.click(waittext).build().perform();
 						break;
 					} finally {
-						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 						screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 						String xpath = "//div[contains(@id,'dropdownPopup::content')][1]";
 						String scriptID = fetchMetadataVO.getScriptId();
@@ -12734,7 +12734,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -12757,7 +12757,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,'popup-container')]//*[text()='"
 					+ param1 + "']/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -12779,7 +12779,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())='" + param1
 					+ "']/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -12813,7 +12813,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 							+ param2 + "']/following::input[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			if (keysToSend != null) {
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				WebElement text = driver
 						.findElement(By.xpath("(//span[normalize-space(text())='" + keysToSend + "'])[1]"));
@@ -12846,7 +12846,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			WebElement searchResult = driver.findElement(By.xpath(
 					"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::input[1]"));
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
-			enter(driver, fetchMetadataVO, fetchConfigVO);
+			enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
 			WebElement text = driver.findElement(By.xpath("//span[normalize-space(text())='" + keysToSend + "']"));
 			text.click();
@@ -12926,7 +12926,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO);
+			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -12939,7 +12939,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			System.out.println(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
@@ -12975,7 +12975,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickFilter" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
 					+ "']/preceding::input[@type='text'])[3]");
 		}
@@ -12992,7 +12992,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
 					+ "']/preceding::input[@type='text'])[3]");
 		}
@@ -13009,7 +13009,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("//img[@title='" + param1 + "'][1]");
 			// throw e;
 		}
@@ -13028,7 +13028,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpand Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("//img[@title='" + param1 + "'][1]");
 			throw e;
 		}
@@ -13045,7 +13045,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  password" + scripNumber);
-			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clearAndType Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(e);
 			throw e;
 		}
@@ -13087,13 +13087,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void scrollUsingElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			Thread.sleep(2000);
 			WebElement waittill = driver
 					.findElement(By.xpath("//span[normalize-space(text())='" + inputParam + "'][1]"));
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//span[normalize-space(text())='inputParam'][1]";
@@ -13110,7 +13110,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13125,7 +13125,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13140,7 +13140,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h2[normalize-space(text())='inputParam'])";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13156,7 +13156,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver
 					.findElement(By.xpath("(//h3[normalize-space(text())='" + inputParam + "'])[2]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h3[normalize-space(text())='inputParam'])[2]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13169,7 +13169,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//td[normalize-space(text())='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13182,7 +13182,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//div[contains(text(),'inputParam')]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13197,7 +13197,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='inputParam']//td//a)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13213,7 +13213,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver.findElement(
 					By.xpath("(//label[normalize-space(text())=\"" + inputParam + "\"]/following::input)[1]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[normalize-space(text())='inputParam']/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13226,7 +13226,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[contains(@id,'inputParam')]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13241,7 +13241,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//li[normalize-space(text())='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13257,7 +13257,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver
 					.findElement(By.xpath("//label[normalize-space(text())=\"" + inputParam + "\"]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13273,7 +13273,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittill = driver
 					.findElement(By.xpath("//button[normalize-space(text())='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//button[normalize-space(text())='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13288,7 +13288,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//img[@title='inputParam']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13303,7 +13303,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
-			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO);
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[@title='inputParam'])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -13314,7 +13314,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during scrollUsingElement Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(inputParam);
 			e.printStackTrace();
 			throw e;
@@ -13322,7 +13322,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
-			ScriptDetailsDto fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		fetchConfigVO.getMedium_wait();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
@@ -13334,7 +13334,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		log.info("Sucessfully Clicked scrollMethod" + scripNumber);
 	}
 
-	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
 			Actions action = new Actions(driver);
@@ -13345,7 +13345,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tab" + scripNumber);
-			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Failed to do TAB Action");
 			e.printStackTrace();
 			throw e;
@@ -13353,18 +13353,18 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void mousehover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			Actions actions = new Actions(driver);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]")));
-			scrollUsingElement(driver, param1, fetchMetadataVO, fetchConfigVO);
+			scrollUsingElement(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(6000);
 			WebElement waittext = driver
 					.findElement(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]"));
 			actions.moveToElement(waittext).build().perform();
-			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO);
+			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
 			screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]";
@@ -13396,12 +13396,12 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void enter(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void enter(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
 			Thread.sleep(2000);
@@ -13414,24 +13414,24 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  enter" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
-	public void deleteAllCookies(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void deleteAllCookies(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.manage().deleteAllCookies();
 			log.info("Successfully Deleted All The Cookies.");
 		} catch (Exception e) {
 			log.error("Failed To Delete All The Cookies.");
-			screenshotFail(driver, "Failed during deleteAllCookies Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during deleteAllCookies Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("cookies not deleted");
 			throw e;
 		}
 	}
 
-	public void selectCheckBox(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO) {
+	public void selectCheckBox(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement element = driver.findElement(By.xpath(xpath));
 			if (element.isSelected()) {
@@ -13443,7 +13443,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectCheckBox" + scripNumber);
-			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null);
+			screenshotFail(driver, "Failed during selectCheckBox Method", fetchMetadataVO, null, customerDetails);
 			e.printStackTrace();
 			System.out.println(xpath);
 			throw e;
@@ -13451,14 +13451,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void selectByText(WebDriver driver, String param1, String param2, String inputData,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			if (param1.equalsIgnoreCase("Address Purposes")) {
 				Thread.sleep(2000);
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
 								+ param2 + "']/following::select[not (@title)]")));
-				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
@@ -13479,7 +13479,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select[@title='']"));
-				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::select[@title='']";
@@ -13500,7 +13500,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath(
 						("//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select[1]")));
-				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -13521,7 +13521,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath(
 						("(//*[normalize-space(text())='" + param1 + "']/following::label[normalize-space(text())='"
 								+ param2 + "']/preceding-sibling::select)[2]")));
-				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::select)[2]";
@@ -13540,7 +13540,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(2000);
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 
@@ -13558,7 +13558,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(2000);
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/preceding::select[1]";
@@ -13576,7 +13576,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(2000);
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())='" + param1
 					+ "']/following::label[normalize-space(text())='" + param2 + "']/preceding::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::select[1]";
@@ -13594,7 +13594,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			Thread.sleep(2000);
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),'" + param1
 					+ "')]/following::label[normalize-space(text())='" + param2 + "']/following::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/following::label[normalize-space(text())='param2']/following::select[1]";
@@ -13612,7 +13612,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			if (param2 == "") {
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/following::select[1]")));
-				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//*[contains(text(),'param1')]/following::select[1]";
@@ -13630,7 +13630,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		try {
 			WebElement waittext = driver
 					.findElement(By.xpath(("//*[contains(text(),'" + param1 + "')]/preceding-sibling::select[1]")));
-			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO);
+			selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//*[contains(text(),'param1')]/preceding-sibling::select[1]";
@@ -13643,13 +13643,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			System.out.println(param2);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
-			FetchConfigVO fetchConfigVO) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittext).build().perform();
 		Select selectBox = new Select(waittext);
@@ -13661,7 +13661,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			Select selectBox = new Select(webElement);
@@ -13671,7 +13671,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByValue" + scripNumber);
-			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during selectByValue Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			e.printStackTrace();
 			throw e;
@@ -13689,8 +13689,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public String copynumber(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
-
-			FetchConfigVO fetchConfigVO) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 
 		String value = null;
 		// DH 38
@@ -14021,7 +14020,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
-			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during CopyNumber Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 			System.out.println(inputParam1);
 
@@ -14176,7 +14175,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public String copyy(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public String copyy(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
@@ -14189,7 +14188,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copyy" + scripNumber);
-			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during copyy Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			throw e;
 		}
@@ -14197,7 +14196,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public String copytext(WebDriver driver, String xpath, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			java.util.List<WebElement> webElement = driver.findElements(By.xpath(xpath));
 			ArrayList<String> texts = new ArrayList<String>();
@@ -14215,7 +14214,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copytext" + scripNumber);
-			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during copytext Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			throw e;
 		}
@@ -14223,7 +14222,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	}
 
-	public void maximize(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void maximize(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.manage().window().maximize();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -14231,7 +14230,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during maximize" + scripNumber);
-			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during maximize Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("can not maximize");
 			e.printStackTrace();
 			throw e;
@@ -14239,7 +14238,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void switchWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.switchTo().window(Main_Window);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -14247,7 +14246,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchWindow" + scripNumber);
-			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during switchWindow Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("can not switch to window");
 			e.printStackTrace();
 
@@ -14255,7 +14254,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchDefaultContent(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchDefaultContent(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -14272,14 +14271,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchDefaultContent" + scripNumber);
-			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void switchParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -14309,14 +14308,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			}
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
-			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void switchToParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void switchToParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
 			Thread.sleep(8000);
@@ -14340,7 +14339,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
-			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
@@ -14348,7 +14347,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement dragElement = driver.findElement(By.xpath(xpath));
 			fromElement = dragElement;
@@ -14362,14 +14361,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During dragAnddrop Action." + scripNumber);
-			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during dragAnddrop Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println(xpath);
 			e.printStackTrace();
 			throw e;
 		}
 	}
 
-	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO)
+	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
 			Thread.sleep(20000);
@@ -14393,7 +14392,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to Handle the window" + scripNumber);
-			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during windowhandle Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
@@ -14401,7 +14400,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver
@@ -14464,7 +14463,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			System.out.println(e);
 			log.error("Failed During switchToFrame Action");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
@@ -14485,7 +14484,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.navigate().refresh();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -14493,7 +14492,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during refreshPage" + scripNumber);
-			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("can not refresh the page");
 			e.printStackTrace();
 			throw e;
@@ -14501,10 +14500,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void DelatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO)
+	public void DelatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + fetchMetadataListVO.get(0).getCustomerName() + "/"
-				+ fetchMetadataListVO.get(0).getTestSetName() + "/");
+		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
+				+ customerDetails.getTestSetName() + "/");
 		if (folder.exists()) {
 			File[] listOfFiles = folder.listFiles();
 
@@ -14517,7 +14516,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
 
-				String seqnum1 = fetchMetadataListVO.get(0).getSeq_num();
+				String seqnum1 = fetchMetadataListVO.get(0).getSeqNum();
 				if (seqNum.equalsIgnoreCase(seqnum1)) {
 					Path imagesPath = Paths.get(file.getPath());
 					Files.delete(imagesPath);
@@ -14541,36 +14540,10 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 		return null;
 	}
-
-	@Override
-	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Requisition Lines")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14588,7 +14561,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			System.out.println(e);
 			log.error("Failed during Click action.");
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
 	}
 
@@ -14651,7 +14624,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	@Override
 	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
-			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
 		List<String> openExcelSteps = new ArrayList<String>();
 		String s = "*** Settings ***";
@@ -14680,11 +14653,11 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		s = "    [Setup]    Set Automation Speed    slow";
 		openExcelSteps.add(s);
 		s = "    [TearDown]    Capture And Upload Screenshot    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"
-				+ fetchMetadataVO.getTestSetName() + "    " + fetchMetadataVO.getSeq_num();
+				+ customerDetails.getTestSetName() + "    " + fetchMetadataVO.getSeqNum();
 		openExcelSteps.add(s);
 
 		s = "    OperatingSystem.Create Directory    C:\\\\EBS-Automation\\\\WATS_Files\\\\screenshot\\\\excel\\\\WATS\\\\"
-				+ fetchMetadataVO.getTestSetName();
+				+ customerDetails.getTestSetName();
 		openExcelSteps.add(s);
 
 		s = "    Open Excel File With Sheet    " + fileName + "    " + sheetName;
@@ -14706,109 +14679,15 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		return s;
 	}
 
-	@Override
-	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String oicNavigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String oicMenuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String oicMenuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void oicMouseHover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO)
-			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
 			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
-			String param3, String keysToSend, String value) throws Exception {
+			String param3, String keysToSend, String value, CustomerProjectDto customerDetails) throws Exception {
 		String param4 = "User name or email";
 		String param5 = "password";
 		// String param6 = "Sign In";
-		navigateInformaticaUrl(driver, fetchConfigVO, fetchMetadataVO);
-		String xpath1 = InformaticaLoginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
-		String xpath2 = this.InformaticaLoginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
+		navigateInformaticaUrl(driver, fetchConfigVO, fetchMetadataVO, customerDetails);
+		String xpath1 = InformaticaLoginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath2 = this.InformaticaLoginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO, customerDetails);
 		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
@@ -14820,7 +14699,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO,
-			ScriptDetailsDto fetchMetadataVO) {
+			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.navigate().to(fetchConfigVO.getINFORMATICA_APPLICATION_URL());
 			driver.manage().window().maximize();
@@ -14828,20 +14707,20 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 			// deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO);
 			// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
-			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO);
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(10000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
 	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		String xpath = null;
 		try {
 			if (param1.equalsIgnoreCase("Password")) {
@@ -14862,7 +14741,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
-				enter(driver, fetchMetadataVO, fetchConfigVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String title2 = driver.getTitle();
 				/*
@@ -14877,7 +14756,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 				return xpath;
 			}
 		} catch (Exception e) {
-			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO, customerDetails);
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
@@ -14905,14 +14784,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
-			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Failed During Login page");
 		}
 		return xpath;
 	}
 
 	public void InformaticaClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 
@@ -14940,7 +14819,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 
@@ -14970,7 +14849,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 
@@ -15000,7 +14879,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			// throw e;
 		}
 
@@ -15028,13 +14907,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during click Button Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 	}
 
 	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Find")) {
 				Thread.sleep(1000);
@@ -15068,7 +14947,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void InformaticaclickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 
 			if (param1.equalsIgnoreCase("")) {
@@ -15089,7 +14968,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 
-				refreshPage(driver, fetchMetadataVO, fetchConfigVO);
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 				Thread.sleep(5000);
 
@@ -15120,7 +14999,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("All Projects")) {
 				Thread.sleep(4000);
@@ -15145,14 +15024,14 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			System.out.println(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during clickExpandorcollapse", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
 	}
 
 	public void InformaticaClickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Refresh")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15176,7 +15055,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	}
 
 	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3) throws Exception {
+			String type1, String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15192,7 +15071,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 			System.out.println(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
-			screenshotFail(driver, "Failed during logout", fetchMetadataVO, fetchConfigVO);
+			screenshotFail(driver, "Failed during logout", fetchMetadataVO, fetchConfigVO, customerDetails);
 			throw e;
 		}
 
@@ -15201,7 +15080,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	@Override
 	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
-			String value) throws Exception {
+			String value, CustomerProjectDto customerDetails) throws Exception {
 	}
 
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
@@ -15223,13 +15102,13 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 
 	@Override
 	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, String globalValueForSteps2) throws Exception {
+			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
 			throws Exception {
 		// TODO Auto-generated method stub
 
@@ -15254,6 +15133,131 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicNavigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String oicMenuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void oicMouseHover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

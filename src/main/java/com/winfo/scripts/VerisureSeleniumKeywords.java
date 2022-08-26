@@ -1,4 +1,4 @@
-package com.winfo.scripts;
+/*package com.winfo.scripts;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
@@ -86,11 +86,11 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	@Autowired
 	ScriptXpathService service;
 	// public static log log = LogManager.getlog(SeleniumKeyWords.class);
-	/*
+	
 	 * private Integer ElementWait = Integer
 	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
 	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
-	 */
+	 
 	Logger log = Logger.getLogger("Logger");
 
 	public String Main_Window = "";
@@ -730,13 +730,13 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 		// targetFileList.addAll(seqList);
 
-		/*
+		
 		 * for (String fileName : fileNameList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 		if (video_rec.equalsIgnoreCase("Y")) {
 			String name = no + "_" + ScriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
@@ -877,13 +877,13 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 		// targetFileList.addAll(seqList);
 
-		/*
+		
 		 * for (String fileName : fileNameList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 		if (video_rec.equalsIgnoreCase("Y")) {
 			String name = no + "_" + ScriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
@@ -1049,13 +1049,13 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 		}
 
-		/*
+		
 		 * for (String fileName : targetFileList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
@@ -1250,8 +1250,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 		// *
 		// * System.out.println("Target File : " + fileName);
 		// *
-		// * }
-		// */
+		// 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
 		if (video_rec.equalsIgnoreCase("yes")) {
@@ -1488,13 +1487,13 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 		targetFileList.addAll(targetFailedFileList);
 
-		/*
+		
 		 * for (String fileName : targetFileList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
 		if (video_rec.equalsIgnoreCase("Y")) {
@@ -2000,7 +1999,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 			jse.executeScript("arguments[0].value='" + value + "';", waittill);
 
-			/*
+			
 			 * 
 			 * Actions action = new Actions(driver);
 			 * 
@@ -2010,7 +2009,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			 * 
 			 * action.sendKeys(value).build().perform();
 			 * 
-			 */
+			 
 
 			Thread.sleep(3000);
 			String xpath = "//label[text()='inputParam']/following::input[1]";
@@ -3223,7 +3222,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			log.error("Failed during Go to Member Selection clickImag" + scripNumber);
 			System.out.println(e);
 		}
-		/*
+		
 		 * try { if (param1.equalsIgnoreCase("Provider") ||
 		 * param1.equalsIgnoreCase("Receiver")) { Thread.sleep(4000); WebDriverWait wait
 		 * = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3247,7 +3246,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 		 * scripNumber = fetchMetadataVO.getScript_number();
 		 * log.error("Failed during Provider or Receiver clickImag"+scripNumber);
 		 * System.out.println(e); }
-		 */
+		 
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -12389,3 +12388,4 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	}
 
 }
+*/

@@ -1,4 +1,4 @@
-package com.winfo.scripts;
+/*package com.winfo.scripts;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
@@ -109,6 +109,8 @@ import com.winfo.vo.ApiValidationVO;
 //@Service("WATS")
 @RefreshScope
 public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
+	
+	
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -129,11 +131,11 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	private String whiteimage;
 
 //	public static log log = LogManager.getlog(SeleniumKeyWords.class);
-	/*
+	
 	 * private Integer ElementWait = Integer
 	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
 	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
-	 */
+	 
 	Logger log = Logger.getLogger("Logger");
 
 	public String Main_Window = "";
@@ -542,11 +544,11 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
 			wait.until(ExpectedConditions.elementToBeClickable(
 					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
-			/*
+			
 			 * WebElement waittext = driver
 			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" +
 			 * param1 + "']"));
-			 */
+			 
 
 			// ------------------------(New Change)-----------------------
 
@@ -934,13 +936,13 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 		// targetFileList.addAll(seqList);
 
-		/*
+		
 		 * for (String fileName : fileNameList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 		if (video_rec.equalsIgnoreCase("Y")) {
 			String name = no + "_" + ScriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
@@ -1096,13 +1098,13 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 		// targetFileList.addAll(seqList);
 
-		/*
+		
 		 * for (String fileName : fileNameList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 		if (video_rec.equalsIgnoreCase("Y")) {
 			String name = no + "_" + ScriptNumber + ".mp4";
 			convertJPGtoMovie(null, links1, fetchMetadataListVO, fetchConfigVO, name);
@@ -1285,13 +1287,13 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 		}
 
-		/*
+		
 		 * for (String fileName : targetFileList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
@@ -1504,8 +1506,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 //		 * 
 //		 * System.out.println("Target File : " + fileName);
 //		 * 
-//		 * }
-//		 */
+//		 * }		 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
 		if (video_rec.equalsIgnoreCase("yes")) {
@@ -1760,13 +1761,13 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 		targetFileList.addAll(targetFailedFileList);
 
-		/*
+		
 		 * for (String fileName : targetFileList) {
 		 * 
 		 * System.out.println("Target File : " + fileName);
 		 * 
 		 * }
-		 */
+		 
 		fetchConfigVO.setPasscount(passcount);
 		fetchConfigVO.setFailcount(failcount);
 		if (video_rec.equalsIgnoreCase("Y")) {
@@ -2134,7 +2135,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 //		BufferedImage resizeImageGif = resizeImage(originalImage, type);
 //		ImageIO.write(resizeImageGif, "jpg", new File("C:\\Kaushik"+"\\"+image));
 
-			/*
+			
 			 * BufferedImage resizeImagePng = resizeImage(originalImage, type);
 			 * ImageIO.write(resizeImagePng, "png", new File("c:\\image\\mkyong_png.jpg"));
 			 * 
@@ -2145,7 +2146,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			 * BufferedImage resizeImageHintPng = resizeImageWithHint(originalImage, type);
 			 * ImageIO.write(resizeImageHintPng, "png", new
 			 * File("c:\\image\\mkyong_hint_png.jpg"));
-			 */
+			 
 		}
 
 	}
@@ -2713,7 +2714,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
 
-			/*
+			
 			 * 
 			 * Actions action = new Actions(driver);
 			 * 
@@ -2723,7 +2724,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			 * 
 			 * action.sendKeys(value).build().perform();
 			 * 
-			 */
+			 
 
 			Thread.sleep(3000);
 			String scripNumber = fetchMetadataVO.getScript_number();
@@ -3971,7 +3972,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	}
 
-	/*
+	
 	 * public void oicClickMenu(WebDriver driver, String param1, String param2,
 	 * FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws
 	 * Exception {
@@ -4010,7 +4011,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	 * "Failed during click Button Method", fetchMetadataVO, fetchConfigVO); throw
 	 * e; } }
 	 * 
-	 */
+	 
 
 	public void oicClickMenu(WebDriver driver, String param1, String param2, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
@@ -4519,7 +4520,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			log.error("Failed during Go to Member Selection clickImag" + scripNumber);
 			System.out.println(e);
 		}
-		/*
+		
 		 * try { if (param1.equalsIgnoreCase("Provider") ||
 		 * param1.equalsIgnoreCase("Receiver")) { Thread.sleep(4000); WebDriverWait wait
 		 * = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4541,7 +4542,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		 * scripNumber = fetchMetadataVO.getScript_number();
 		 * log.error("Failed during Provider or Receiver clickImag" + scripNumber);
 		 * System.out.println(e); }
-		 */
+		 
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -14336,7 +14337,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			System.out.println(e);
 		}
 
-		/*
+		
 		 * //dh 12 try { if (param1.equalsIgnoreCase("Search") &&
 		 * param2.equalsIgnoreCase("Order Type")) {
 		 * 
@@ -14391,7 +14392,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		 * fetchMetadataVO.getScript_number();
 		 * log.error("Failed during Schedule New Process or Name dropdownValues" +
 		 * scripNumber); System.out.println(e); }
-		 */
+		 
 
 		try {
 			if (param1.equalsIgnoreCase("Schedule New Process") && param2.equalsIgnoreCase("Name")) {
@@ -17087,7 +17088,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
 
-			/* Download Window Open */
+			 Download Window Open 
 			Thread.sleep(10000);
 			String fileName = (String) jse.executeScript(
 					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
@@ -17707,7 +17708,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	}
 
-	/*
+	
 	 * private String copyInt(WebElement webElement) {
 	 * 
 	 * String num = null;
@@ -17736,7 +17737,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	 * 
 	 * }
 	 * 
-	 */
+	 
 
 	private String copyInt(WebElement webElement) {
 
@@ -18535,7 +18536,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		}
 	}
 
-	/*
+	
 	 * public String oicClickMenu(WebDriver driver, String param1, FetchMetadataVO
 	 * fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception { try {
 	 * Thread.sleep(5000); WebDriverWait wait = new WebDriverWait(driver,
@@ -18563,7 +18564,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	 * screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO,
 	 * fetchConfigVO); System.out.println("Not able to navitage to the :" + "" +
 	 * param1); throw e; } }
-	 */
+	 
 	public String oicMenuNavigationButton(WebDriver driver, FetchMetadataVO fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count)
 			throws Exception {
@@ -18854,7 +18855,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
-		/*
+		
 		 * try { if(param1.equalsIgnoreCase("DH SCM Supplier Site Inactivation") &&
 		 * param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
 		 * Actions(driver); WebElement we = driver.findElement(By.
@@ -18873,7 +18874,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		 * scripNumber = fetchMetadataVO.getScript_number();
 		 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
 		 * }
-		 */
+		 
 		// testing
 		try {
 			if (param1.equalsIgnoreCase("DH SCM Supplier Site Inactivation") && param2.equalsIgnoreCase("Run")) {
@@ -18904,7 +18905,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			System.out.println(e);
 		}
 
-		/*
+		
 		 * try {
 		 * if(param1.equalsIgnoreCase("DH Food Ingredients Stock Depletion Integration")
 		 * && param2.equalsIgnoreCase("Run")) { Thread.sleep(3000); Actions action = new
@@ -18924,7 +18925,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		 * scripNumber = fetchMetadataVO.getScript_number();
 		 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
 		 * }
-		 */
+		 
 		try {
 			if (param1.equalsIgnoreCase("DH Food Ingredients Stock Depletion Integration")
 					&& param2.equalsIgnoreCase("Run")) {
@@ -19142,7 +19143,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		}
 	}
 
-	/*
+	
 	 * public String oicSendValue(WebDriver driver, String param1, String param2,
 	 * String keysToSend, FetchMetadataVO fetchMetadataVO, FetchConfigVO
 	 * fetchConfigVO) throws Exception {
@@ -19169,7 +19170,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	 * scripNumber); screenshotFail(driver, "Failed during sendValue",
 	 * fetchMetadataVO, fetchConfigVO); throw e; } }
 	 * 
-	 */
+	 
 
 	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
@@ -19242,11 +19243,11 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				actions.click(selectValue).perform();
 				// clickValidateXpath(driver, fetchMetadataVO, selectValue, fetchConfigVO);
 				// selectValue.click();
-				/*
+				
 				 * JavascriptExecutor jse = (JavascriptExecutor) driver;
 				 * jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
 				 * tab(driver, fetchMetadataVO, fetchConfigVO);
-				 */
+				 
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScript_number();
@@ -19601,11 +19602,11 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				enter(driver, fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 				String title2 = driver.getTitle();
-				/*
+				
 				 * if(title1.equalsIgnoreCase(title2)) { screenshotFail(driver,
 				 * "Failed During Login page", fetchMetadataVO, fetchConfigVO); throw new
 				 * IOException("Failed during login page"); }
-				 */
+				 
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScript_number();
 				log.info("Succesfully password is entered " + scripNumber);
@@ -20074,3 +20075,4 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		return null;
 	}
 }
+*/

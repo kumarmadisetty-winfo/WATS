@@ -12985,7 +12985,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	}
 
 	@Override
-	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage)
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
 			throws Exception {
 		// TODO Auto-generated method stub
 
