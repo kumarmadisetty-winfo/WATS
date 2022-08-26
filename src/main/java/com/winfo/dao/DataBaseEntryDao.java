@@ -36,6 +36,7 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
+import com.winfo.model.Customer;
 import com.winfo.model.LookUp;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.Project;
@@ -471,7 +472,14 @@ public class DataBaseEntryDao {
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return project.getWatsPackage();
 	}
-
+	
+	public Customer getCustomer(String args) {
+		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(args));
+		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
+		Customer customer = em.unwrap(Session.class).find(Customer.class, project.getCustomerId());
+		return customer;
+	}
+	
 	public String getTestSetMode(Long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> query = cb.createQuery(String.class);
@@ -1462,7 +1470,7 @@ public class DataBaseEntryDao {
 
 	public void updateTestSetLineStatusForSanity(String testSetId) {
 		String updateQry = "UPDATE win_ta_test_set_lines SET status = 'Fail' where test_set_id = " + testSetId
-				+ " and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS')";
+				+ " and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS','NEW','FAIL')";
 		try {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
@@ -1479,6 +1487,21 @@ public class DataBaseEntryDao {
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from));
 		return query.getResultList();
+	}
+	
+	public void updateEnableFlagForSanity(String testSetId) {
+		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I' WHERE TEST_RUN_ID = :P_TEST_SET_ID";
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).setParameter("P_TEST_SET_ID", testSetId).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status for status flag.", e);
+		}
+	}
+
+	public TestSet getTestRunDetails(String testSetId) {
+		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(testSetId));
+		return testSet;
 	}
 
 }

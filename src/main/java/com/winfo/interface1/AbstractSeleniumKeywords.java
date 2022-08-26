@@ -1,7 +1,5 @@
 package com.winfo.interface1;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -265,11 +263,12 @@ public abstract class AbstractSeleniumKeywords {
 
 					String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 					File file = new File(screenshotPath + File.separator + imageName);
+					logger.info(file.exists() + "FileExist or not ******" + file.getCanonicalPath());
 					if (!file.exists()) {
 						try (final InputStream stream = getResponse.getInputStream();
-								// final OutputStream outputStream = new FileOutputStream(imagePath + imageName)
+								 final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
-								final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
+								//final OutputStream outputStream = Files.newOutputStream(file.toPath(), CREATE_NEW)) {
 							// use fileStream
 							byte[] buf = new byte[8192];
 							int bytesRead;
