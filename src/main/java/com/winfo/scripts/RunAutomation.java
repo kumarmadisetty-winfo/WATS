@@ -314,12 +314,14 @@ public class RunAutomation {
 
 				}
 				downloadScreenShot(fetchConfigVO, fetchMetadataListVO.get(0),true);
+				List<FetchMetadataVO> fetchMetadataListVOforEvedence = dataBaseEntry.getMetaDataVOList(args, null, true, false);
+
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvedence, fetchConfigVO, "Passed_Report.pdf", null, null);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvedence, fetchConfigVO, "Failed_Report.pdf", null, null);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvedence, fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -1245,6 +1247,7 @@ public class RunAutomation {
 								script_id1, script_Number, "pass", startdate, enddate);
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
 						downloadScreenShot(fetchConfigVO, fetchMetadataVO,false);
+						fetchMetadataVO.setStatus("Pass");
 						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 								fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", startdate,
 								fetchConfigVO.getEndtime());
@@ -1252,7 +1255,6 @@ public class RunAutomation {
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
-
 						}
 					}
 					fetchConfigVO.setStatus1("Pass");
