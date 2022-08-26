@@ -159,12 +159,12 @@ public class RunAutomation {
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
-			
+
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 
-			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId,
-					null, false, true);
-			
+			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId, null, false,
+					true);
+
 			SortedMap<Integer, List<ScriptDetailsDto>> dependentScriptMap = new TreeMap<Integer, List<ScriptDetailsDto>>();
 			SortedMap<Integer, List<ScriptDetailsDto>> metaDataMap = dataService.prepareTestcasedata(testLinesDetails,
 					dependentScriptMap);
@@ -221,7 +221,7 @@ public class RunAutomation {
 								executor.shutdown();
 								log.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
-								executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData, scriptStatus);
+								executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData, scriptStatus, customerDetails);
 							}
 							long i = System.currentTimeMillis() - starttimeIntermediate;
 							increment = increment + i;
@@ -261,37 +261,37 @@ public class RunAutomation {
 									System.out.println("treminattion is succeed");
 								} else {
 									if (run) {
-										executorMethod(testSetId, fetchConfigVO, fetchMetadataListVO, metaData,
-												scriptStatus);
+										executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData,
+												scriptStatus, customerDetails);
 									} else {
 										String passurl = fetchConfigVO.getImg_url()
-												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+												+ customerDetails.getCustomerName() + "/"
+												+ customerDetails.getProjectName() + "/"
+												+ customerDetails.getTestSetName() + "/"
 												+ "Passed_Report.pdf";
 										String failurl = fetchConfigVO.getImg_url()
-												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+												+ customerDetails.getCustomerName() + "/"
+												+ customerDetails.getProjectName() + "/"
+												+ customerDetails.getTestSetName() + "/"
 												+ "Failed_Report.pdf";
 										String detailurl = fetchConfigVO.getImg_url()
-												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
+												+ customerDetails.getCustomerName() + "/"
+												+ customerDetails.getProjectName() + "/"
+												+ customerDetails.getTestSetName() + "/"
 												+ "Detailed_Report.pdf";
 										String scripturl = fetchConfigVO.getImg_url()
-												+ fetchMetadataListVO.get(0).getCustomer_name() + "/"
-												+ fetchMetadataListVO.get(0).getProject_name() + "/"
-												+ fetchMetadataListVO.get(0).getTest_run_name() + "/"
-												+ fetchMetadataListVO.get(0).getSeq_num() + "_"
-												+ fetchMetadataListVO.get(0).getScript_number() + ".pdf";
+												+ customerDetails.getCustomerName() + "/"
+												+ customerDetails.getProjectName() + "/"
+												+ customerDetails.getTestSetName() + "/"
+												+ testLinesDetails.get(0).getSeqNum() + "_"
+												+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
 
-										FetchMetadataVO fd = metaData.getValue().get(0);
+										ScriptDetailsDto fd = metaData.getValue().get(0);
 										FetchScriptVO post = new FetchScriptVO();
-										post.setP_test_set_id(fd.getTest_set_id());
+										post.setP_test_set_id(customerDetails.getTestSetId());
 										post.setP_status("Fail");
-										post.setP_script_id(fd.getScript_id());
-										post.setP_test_set_line_id(fd.getTest_set_line_id());
+										post.setP_script_id(fd.getScriptId());
+										post.setP_test_set_line_id(fd.getTestSetLineId());
 										post.setP_pass_path(passurl);
 										post.setP_fail_path(failurl);
 										post.setP_exception_path(detailurl);
@@ -302,10 +302,10 @@ public class RunAutomation {
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
 										int failedScriptRunCount = limitScriptExecutionService
-												.getFailedScriptRunCount(fd.getTest_set_line_id(), fd.getTest_set_id());
+												.getFailedScriptRunCount(fd.getTestSetLineId(), customerDetails.getTestSetId());
 
 										errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
-												fd.getTest_script_param_id(), null, null, null, null);
+												fd.getTestScriptParamId(), null, null, null, null);
 
 									}
 								}
@@ -353,7 +353,8 @@ public class RunAutomation {
 	}
 
 	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
-			Entry<Integer, List<ScriptDetailsDto>> metaData, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails) throws Exception {
+			Entry<Integer, List<ScriptDetailsDto>> metaData, Map<Integer, Status> scriptStatus,
+			CustomerProjectDto customerDetails) throws Exception {
 		List<String> failList = new ArrayList<>();
 		WebDriver driver = null;
 		List<ScriptDetailsDto> fetchMetadataListsVO = metaData.getValue();
@@ -362,17 +363,15 @@ public class RunAutomation {
 
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
 		String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-				+  customerDetails.getProjectName() + "/" + customerDetails.getTestSetName()
-				+ "/" + "Passed_Report.pdf";
+				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName()
-				+ "/" + "Failed_Report.pdf";
+				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
 		String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName()
-				+ "/" + "Detailed_Report.pdf";
+				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
+				+ "Detailed_Report.pdf";
 		String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName()
-				+ "/" + fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
+				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
+				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
 				+ ".pdf";
 		log.info("Pass Url - {}", passurl);
 		log.info("Fail Url - {}", failurl);
@@ -1266,12 +1265,12 @@ public class RunAutomation {
 					}
 					fetchConfigVO.setStatus1("Pass");
 					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
-							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
+							+ customerDetails.getCustomerName() + File.separator
+							+ customerDetails.getTestSetName() + File.separator;
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 							.downloadScreenshotsFromObjectStore(screenShotFolder,
-									fetchMetadataListVO.get(0).getCustomer_name(),
-									fetchMetadataListVO.get(0).getTest_run_name(), null);
+									customerDetails.getCustomerName(),
+									customerDetails.getTestSetName(), null);
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
@@ -1314,12 +1313,12 @@ public class RunAutomation {
 
 					fetchConfigVO.setStatus1("Fail");
 					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
-							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
+							+ customerDetails.getCustomerName() + File.separator
+							+ customerDetails.getTestSetName() + File.separator;
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 							.downloadScreenshotsFromObjectStore(screenShotFolder,
-									fetchMetadataListVO.get(0).getCustomer_name(),
-									fetchMetadataListVO.get(0).getTest_run_name(), null);
+									customerDetails.getCustomerName(),
+									customerDetails.getTestSetName(), null);
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 							fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);

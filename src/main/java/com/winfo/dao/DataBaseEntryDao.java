@@ -169,7 +169,7 @@ public class DataBaseEntryDao {
 		return query.getResultList();
 	}
 
-	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status) throws ClassNotFoundException, SQLException {
 		try {
 			Query query = em.createQuery(
@@ -297,22 +297,22 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId) throws SQLException {
+	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String testScriptParamId, CustomerProjectDto customerDetails) throws SQLException {
 		try {
-			String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name()
+			String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
 					+ File.separator
 
-					+ fetchMetadataVO.getTest_run_name() + File.separator + fetchMetadataVO.getSeq_num()
+					+ customerDetails.getTestSetName() + File.separator + fetchMetadataVO.getSeqNum()
 					+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getLine_number() + SPECIAL_CHAR[0] + fetchMetadataVO.getScenario_name()
+					+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + fetchMetadataVO.getScenarioName()
 					+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getScript_number() + SPECIAL_CHAR[0] + fetchMetadataVO.getTest_run_name()
+					+ fetchMetadataVO.getScriptNumber() + SPECIAL_CHAR[0] + customerDetails.getTestSetName()
 					+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getLine_number() + SPECIAL_CHAR[0] + PASSED);
+					+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + PASSED);
 
 			String JpgFile = folder.concat(SPECIAL_CHAR[1] + JPG);
 			String pngFile = folder.concat(SPECIAL_CHAR[1] + PNG);
@@ -336,7 +336,7 @@ public class DataBaseEntryDao {
 
 	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
 		// TODO Auto-generated method stub
-		// FetchMetadataVO metadataVO=new FetchMetadataVO();
+		// ScriptDetailsDto metadataVO=new ScriptDetailsDto();
 		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<String, Map<String, TestSetScriptParam>>();
 		String sql = "from TestSetLine where testRun=:testSet";
 		Integer testRunId2 = Integer.parseInt(test_run_id);
@@ -370,7 +370,7 @@ public class DataBaseEntryDao {
 		return em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
 	}
 
-	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<ScriptDetailsDto>> dependentScriptMap,
 			List<Integer> dependentList) {
 		// TODO Auto-generated method stub
 		String sql = "Select script_id,dependency from ScriptMaster where script_id in (:dependentList)";
@@ -384,15 +384,15 @@ public class DataBaseEntryDao {
 			map.put((Integer) obj[0], (Integer) obj[1]);
 		}
 
-		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
+		for (Entry<String, List<ScriptDetailsDto>> element : dependentScriptMap.entrySet()) {
 			element.getValue().get(0)
-					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScript_id())));
+					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getScriptId())));
 
 		}
 
 	}
 
-	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
+	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<ScriptDetailsDto>> dependentScriptMap,
 			List<Integer> dependentList, String test_set_id) {
 		// TODO Auto-generated method stub
 		String sql = "Select test_set_line_id,dependency_tr from win_ta_test_set_lines where test_set_line_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
@@ -407,9 +407,9 @@ public class DataBaseEntryDao {
 			map.put(Integer.parseInt(obj[0].toString()), Integer.parseInt(obj[1].toString()));
 		}
 
-		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
+		for (Entry<String, List<ScriptDetailsDto>> element : dependentScriptMap.entrySet()) {
 			element.getValue().get(0).setDependencyScriptNumber(
-					map.get(Integer.parseInt(element.getValue().get(0).getTest_set_line_id())));
+					map.get(Integer.parseInt(element.getValue().get(0).getTestSetLineId())));
 		}
 
 	}
@@ -1029,7 +1029,7 @@ public class DataBaseEntryDao {
 		return listOfTestRunExecutionVo;
 	}
 
-	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status, String message) {
 		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String updateDateFormatStr = updateDateFormat.format(new Date());
@@ -1044,7 +1044,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status, String value, String message) {
 		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String updateDateFormatStr = updateDateFormat.format(new Date());
@@ -1060,7 +1060,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String status, String errorMessage) {
 
 		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message where TEST_SCRIPT_PARAM_ID='"
