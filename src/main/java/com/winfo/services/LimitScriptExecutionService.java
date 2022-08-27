@@ -28,6 +28,7 @@ import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
+import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service
@@ -89,11 +90,11 @@ public class LimitScriptExecutionService {
 	}
 
 	@Transactional
-	public void insertTestRunScriptData(FetchConfigVO fetchConfigVO, List<FetchMetadataVO> fetchMetadataListVO,
-			String scriptId, String scriptNumber, String status, Date startDate, Date endDate) {
+	public void insertTestRunScriptData(FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO,
+			String scriptId, String scriptNumber, String status, Date startDate, Date endDate, CustomerProjectDto customerDetails) {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
-			String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
+			String testSetId = customerDetails.getTestSetId();
 			executionAudit.setTestsetid(testSetId);
 			executionAudit.setScriptid(scriptId);
 			executionAudit.setScriptnumber(scriptNumber);
@@ -214,31 +215,6 @@ public class LimitScriptExecutionService {
 	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {
 		// TODO Auto-generated method stub
 		return limitScriptExecutionDao.getFailedScriptRunCount(testSetLineId, testSetId);
-	}
-
-	public void renameFailedFile(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, int failedScriptRunCount) {
-		String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
-		// String Folder="C:\\Users\\Winfo Solutions\\Desktop\\new\\";
-//		String Folder = "/objstore/udgsup/UDG SUPPORT/UDG - PPM  (copy)/";
-		File file = new File(Folder + pdffileName);
-		String pdfname = pdffileName.substring(0, pdffileName.indexOf(".pdf"));
-		String renameFolder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-				+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + pdfname + "_RUN1.pdf");
-		File renameFile = new File(renameFolder);
-		boolean flag = file.renameTo(renameFile);
-
-		// if renameTo() return true then if block is
-		// executed
-		if (flag == true) {
-			System.out.println("File Successfully Rename");
-		}
-		// if renameTo() return false then else block is
-		// executed
-		else {
-			System.out.println("Operation Failed");
-		}
 	}
 
 	@Transactional

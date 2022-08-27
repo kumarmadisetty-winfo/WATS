@@ -2170,11 +2170,11 @@ public class XpathPerformance {
 		log.info("Sucessfully Clicked scrollMethod" + scripNumber);
 	}
 
-	public void switchToFrame(WebDriver driver, String inputParam, FetchMetadataVO fetchMetadataVO,
+	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, int count) throws Exception {
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
-		String lineNumber = fetchMetadataVO.getLine_number();
+		String lineNumber = fetchMetadataVO.getLineNumber();
 		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
 
 		if (xpathlocation != null) {
@@ -2190,13 +2190,13 @@ public class XpathPerformance {
 				if (count == 0) {
 					count = 1;
 					System.out.println(" The Count Value is : " + count);
-					switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO, count);
+					switchToFrame(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, count);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
 					System.out.println(" The Count Value is : " + count);
-					switchToFrame(driver, fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO, count);
+					switchToFrame(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, count);
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
@@ -2211,12 +2211,12 @@ public class XpathPerformance {
 		}
 	}
 
-	public void clear(WebDriver driver, String inputParam1, String inputParam2, FetchMetadataVO fetchMetadataVO,
+	public void clear(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, int count) throws Exception {
 
-		String scriptID = fetchMetadataVO.getScript_id();
+		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
-		String lineNumber = fetchMetadataVO.getLine_number();
+		String lineNumber = fetchMetadataVO.getLineNumber();
 		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
 
 		if (xpathlocation != null) {

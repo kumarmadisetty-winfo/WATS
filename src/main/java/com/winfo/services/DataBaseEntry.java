@@ -362,7 +362,7 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public List<ScriptDetailsDto> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
+	public List<FetchMetadataVO> getMetaDataVOList(String testRunId, String testSetLineId, boolean finalPdf,
 			boolean executeApi) {
 		return dao.getMetaDataVOList(testRunId, testSetLineId, finalPdf, executeApi);
 	}
