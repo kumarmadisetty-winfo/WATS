@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
 
 @Repository
 public class CopyTestRunDao {
@@ -92,6 +93,10 @@ public class CopyTestRunDao {
 		return testSetObj.getTestRunId();
 
 	}
+	
+	public void updatelinesRecord(TestSetLine testSetLines) {
+		entityManager.persist(testSetLines);
+	}
 
 	public String getProductVersion(Integer project_id) {
 		Session session = entityManager.unwrap(Session.class);
@@ -163,5 +168,24 @@ public class CopyTestRunDao {
 		return null;
 
 	}
+	
+	public Integer findMaxSeqNumOfTestRun(Integer testSetId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "select max(seq_num) from WIN_TA_TEST_SET_LINES where test_set_id = "+testSetId;
+		Query query = session.createSQLQuery(sql);
+		List<BigDecimal> maxSeqnumList = query.getResultList();
+		if(maxSeqnumList.isEmpty()) {
+			return 1;
+		}
+		return maxSeqnumList.get(0).intValue() + 1;
+	}
+	
+	
+	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
+		log.info("TestSetLineID *** "+testSetLineId);
+		TestSetLine testSetLineObj = entityManager.find(TestSetLine.class, testSetLineId);
+		return testSetLineObj;
+	}
+	
 
 }
