@@ -313,13 +313,15 @@ public class RunAutomation {
 					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
 				}
+				downloadScreenShot(fetchConfigVO, fetchMetadataListVO.get(0),true);
+				List<FetchMetadataVO> fetchMetadataListVOforEvidence = dataBaseEntry.getMetaDataVOList(args, null, true, false);
 
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVO, fetchConfigVO, "Passed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", null, null);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVO, fetchConfigVO, "Failed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Failed_Report.pdf", null, null);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVO, fetchConfigVO, "Detailed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -1197,7 +1199,6 @@ public class RunAutomation {
 					default:
 						System.out.println("Action Name is not matched with" + "" + actionName);
 						break;
-
 					}
 
 					i++;
@@ -1245,7 +1246,8 @@ public class RunAutomation {
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 								script_id1, script_Number, "pass", startdate, enddate);
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
-
+						downloadScreenShot(fetchConfigVO, fetchMetadataVO,false);
+						fetchMetadataVO.setStatus("Pass");
 						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 								fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", startdate,
 								fetchConfigVO.getEndtime());
@@ -1253,23 +1255,15 @@ public class RunAutomation {
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
-
 						}
 					}
 					fetchConfigVO.setStatus1("Pass");
-					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
-							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
-					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-							.downloadScreenshotsFromObjectStore(screenShotFolder,
-									fetchMetadataListVO.get(0).getCustomer_name(),
-									fetchMetadataListVO.get(0).getTest_run_name(), null);
 					System.out.println("Successfully Executed the" + "" + actionName);
 					try {
 						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
 								"Pass");
 						fetchMetadataVO.setStatus("Pass");
-						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+//						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 					} catch (Exception e) {
 						System.out.println("e");
 					}
@@ -1305,13 +1299,7 @@ public class RunAutomation {
 							test_set_id);
 
 					fetchConfigVO.setStatus1("Fail");
-					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
-							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
-					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-							.downloadScreenshotsFromObjectStore(screenShotFolder,
-									fetchMetadataListVO.get(0).getCustomer_name(),
-									fetchMetadataListVO.get(0).getTest_run_name(), null);
+					downloadScreenShot(fetchConfigVO, fetchMetadataVO,false);
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 							fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
@@ -1326,6 +1314,17 @@ public class RunAutomation {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	private void downloadScreenShot(FetchConfigVO fetchConfigVO,FetchMetadataVO fetchMetadataVO,boolean evidenceReport) {
+		String seqNumber = evidenceReport ? null : fetchMetadataVO.getSeq_num();
+		String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+				+ fetchMetadataVO.getCustomer_name() + File.separator
+				+ fetchMetadataVO.getTest_run_name() + File.separator;
+		seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				.downloadScreenshotsFromObjectStore(screenShotFolder,
+						fetchMetadataVO.getCustomer_name(),
+						fetchMetadataVO.getTest_run_name(), seqNumber);
 	}
 
 }
