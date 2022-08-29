@@ -49,6 +49,7 @@ public class LimitScriptExecutionService {
 	@Value("${smpt.from.mail}")
 	private String fromMail;
 
+	@Transactional
 	public Map<Integer, Boolean> getLimitedConditionException(FetchConfigVO fetchConfigVO,
 			List<FetchMetadataVO> fetchMetadataListVO, SortedMap<Integer, List<FetchMetadataVO>> metaDataMap,
 			String args) {

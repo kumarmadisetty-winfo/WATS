@@ -20,9 +20,9 @@ public class Constants {
 
 	public enum AUDIT_TRAIL_STAGES {
 		RR("Received Request"), SGC("Script Generation Completed"), SQ("Script Queued"), CP("Consumer Picked"),
-		SES("Script Execution Started"),SEE("Script Execution Ended"), SSU("Sent for Status Update"), SU("Status Updated"),
-		SUOQ("Status Update Request Put On Queue"),ERG("Evidence Report Generated"),EIP("Error In Producer"),
-		EISU("Error In Status Updation After Script Run"),DSF("Dependant Script Failed");
+		SES("Script Execution Started"), SEE("Script Execution Ended"), SSU("Sent for Status Update"),
+		SU("Status Updated"), SUOQ("Status Update Request Put On Queue"), ERG("Evidence Report Generated"),
+		EIP("Error In Producer"), EISU("Error In Status Updation After Script Run"), DSF("Dependant Script Failed");
 
 		public final String label;
 
@@ -77,6 +77,10 @@ public class Constants {
 		}
 	}
 
+	public static String addQuotes(String string) {
+		return "\"\"\"" + string + "\"\"\"";
+	}
+
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
@@ -88,5 +92,6 @@ public class Constants {
 	public static final String WATS_CENTRAL = "WATS_CENTRAL";
 	public static final String ERR_MSG_FOR_SCRIPT_RUN = "System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team";
 	public static final String ERR_MSG_FOR_DEP_FAILED = "Dependent Script Failed";
-}
+	public static final String SPLIT = "@";
 
+}

@@ -37,7 +37,6 @@ public class JobController {
 	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto, BindingResult bindingResult)
 			throws Exception {
 
-		logger.info("TestRunId ***" + testScriptDto.getTestScriptNo());
 		ResponseDto status = null;
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
 			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
@@ -45,7 +44,6 @@ public class JobController {
 			runAutomation.run(testScriptDto.getTestScriptNo());
 
 		}
-		logger.info("End of Test Script Run # : " + testScriptDto.getTestScriptNo());
 		return status;
 	}
 }
