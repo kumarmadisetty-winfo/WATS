@@ -314,14 +314,14 @@ public class RunAutomation {
 
 				}
 				downloadScreenShot(fetchConfigVO, fetchMetadataListVO.get(0),true);
-				List<FetchMetadataVO> fetchMetadataListVOforEvedence = dataBaseEntry.getMetaDataVOList(args, null, true, false);
+				List<FetchMetadataVO> fetchMetadataListVOforEvidence = dataBaseEntry.getMetaDataVOList(args, null, true, false);
 
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVOforEvedence, fetchConfigVO, "Passed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", null, null);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVOforEvedence, fetchConfigVO, "Failed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Failed_Report.pdf", null, null);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVOforEvedence, fetchConfigVO, "Detailed_Report.pdf", null, null);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", null, null);
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -1316,8 +1316,8 @@ public class RunAutomation {
 		}
 	}
 	
-	private void downloadScreenShot(FetchConfigVO fetchConfigVO,FetchMetadataVO fetchMetadataVO,boolean evedenceReport) {
-		String seqNumber = evedenceReport ? null : fetchMetadataVO.getSeq_num();
+	private void downloadScreenShot(FetchConfigVO fetchConfigVO,FetchMetadataVO fetchMetadataVO,boolean evidenceReport) {
+		String seqNumber = evidenceReport ? null : fetchMetadataVO.getSeq_num();
 		String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 				+ fetchMetadataVO.getCustomer_name() + File.separator
 				+ fetchMetadataVO.getTest_run_name() + File.separator;
