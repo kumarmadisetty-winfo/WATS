@@ -174,7 +174,7 @@ public class DataBaseEntry {
 	public String getPackage(String args) {
 		return dao.getPackage(args);
 	}
-	
+
 	public Customer getCustomer(String args) {
 		return dao.getCustomer(args);
 	}
@@ -241,6 +241,10 @@ public class DataBaseEntry {
 		} else {
 			return UPDATE_STATUS.PASS.getLabel();
 		}
+	}
+
+	public ArrayList<String> getStepsStatusByScriptId(String testSetLineId) {
+		return dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
 	}
 
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
@@ -454,7 +458,7 @@ public class DataBaseEntry {
 	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
 		return dao.getAllTestSetLineRecord(testSetId);
 	}
-	
+
 	public void updateEnableFlagForSanity(String testSetId) {
 		dao.updateEnableFlagForSanity(testSetId);
 	}

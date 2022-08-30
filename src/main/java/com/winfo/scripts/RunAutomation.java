@@ -43,6 +43,7 @@ import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.Status;
 
@@ -432,6 +433,7 @@ public class RunAutomation {
 		String seq_num = null;
 		String test_script_param_id = null;
 		boolean startExcelAction = false;
+		boolean runCreatePdf = false;
 		// String start_time=null;
 		// String end_time=null;
 		List<FetchMetadataVO> excelMetadataListVO = new ArrayList<>();
@@ -506,11 +508,17 @@ public class RunAutomation {
 						excelMetadataListVO.add(fetchMetadataVO);
 						startExcelAction = false;
 						testScriptExecService.runExcelCode(param, excelMetadataListVO, fetchConfigVO, true);
+						List<String> result = dataBaseEntry.getStepsStatusByScriptId(test_set_line_id);
+						if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase) || result
+								.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+							log.info("Excel Actions are In-Proress or failed");
+							runCreatePdf = true;
+						}
 					}
 					if (actionName.toLowerCase().contains("excel")) {
 						startExcelAction = true;
 						excelMetadataListVO.add(fetchMetadataVO);
-					} else {
+					} else if (!runCreatePdf) {
 						switch (actionName) {
 
 						case "Login into Application":
@@ -1234,10 +1242,28 @@ public class RunAutomation {
 							break;
 
 						}
+
+						fetchConfigVO.setStatus1("Pass");
+						String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
+								+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
+								+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
+						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+								.downloadScreenshotsFromObjectStore(screenShotFolder,
+										fetchMetadataListVO.get(0).getCustomer_name(),
+										fetchMetadataListVO.get(0).getTest_run_name(), null);
+						System.out.println("Successfully Executed the" + "" + actionName);
+						try {
+							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
+									test_script_param_id, "Pass");
+							fetchMetadataVO.setStatus("Pass");
+							dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+						} catch (Exception e) {
+							System.out.println("e");
+						}
 					}
 
 					i++;
-					if (fetchMetadataListVO.size() == i) {
+					if (fetchMetadataListVO.size() == i || runCreatePdf) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Pass");
@@ -1291,23 +1317,7 @@ public class RunAutomation {
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 
 						}
-					}
-					fetchConfigVO.setStatus1("Pass");
-					String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-							+ fetchMetadataListVO.get(0).getCustomer_name() + File.separator
-							+ fetchMetadataListVO.get(0).getTest_run_name() + File.separator;
-					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-							.downloadScreenshotsFromObjectStore(screenShotFolder,
-									fetchMetadataListVO.get(0).getCustomer_name(),
-									fetchMetadataListVO.get(0).getTest_run_name(), null);
-					System.out.println("Successfully Executed the" + "" + actionName);
-					try {
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Pass");
-						fetchMetadataVO.setStatus("Pass");
-						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
-					} catch (Exception e) {
-						System.out.println("e");
+						return;
 					}
 
 				} catch (Exception e) {
