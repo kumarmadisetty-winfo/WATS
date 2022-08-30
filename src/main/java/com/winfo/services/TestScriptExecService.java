@@ -185,6 +185,9 @@ public class TestScriptExecService {
 
 	@Value("${kafka.topic.name.test.run}")
 	private String testScriptRunTopicName;
+	
+	@Value("${kafka.topic.name.excel.test.run}")
+	private String excelTestRunTopicName;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -1860,7 +1863,7 @@ public class TestScriptExecService {
 				"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
 						+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
 						+ screenShotFolderPath);
-		this.kafkaTemp.send(testScriptRunTopicName,
+		this.kafkaTemp.send(excelTestRunTopicName,
 				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 

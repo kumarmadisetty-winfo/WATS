@@ -44,7 +44,6 @@ import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
-import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.Status;
 
@@ -513,7 +512,7 @@ public class RunAutomation {
 								.map(Integer::valueOf).collect(Collectors.toList());
 						boolean stepPassed = dataBaseEntry.checkScriptStatusForSteps(stepIdList);
 						if (!stepPassed) {
-							log.info("Excel Actions are In-Proress or failed");
+							log.info("Excel Actions failed");
 							runCreatePdf = true;
 						}
 					}
