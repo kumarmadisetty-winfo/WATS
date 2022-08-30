@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
@@ -507,10 +508,11 @@ public class RunAutomation {
 						// run excel code
 						excelMetadataListVO.add(fetchMetadataVO);
 						startExcelAction = false;
-						testScriptExecService.runExcelCode(param, excelMetadataListVO, fetchConfigVO, true);
-						List<String> result = dataBaseEntry.getStepsStatusByScriptId(test_set_line_id);
-						if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase) || result
-								.stream().anyMatch(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel()::equalsIgnoreCase)) {
+						testScriptExecService.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true);
+						List<Integer> stepIdList = excelMetadataListVO.stream().map(e -> e.getTest_script_param_id())
+								.map(Integer::valueOf).collect(Collectors.toList());
+						boolean stepPassed = dataBaseEntry.checkScriptStatusForSteps(stepIdList);
+						if (!stepPassed) {
 							log.info("Excel Actions are In-Proress or failed");
 							runCreatePdf = true;
 						}

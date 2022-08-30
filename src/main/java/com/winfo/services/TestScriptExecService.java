@@ -1804,75 +1804,65 @@ public class TestScriptExecService {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
 
-	public void runExcelCode(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+	public void runExcelSteps(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			boolean run) {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
-		String errorMessage = null;
 		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
 		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
 		String testScriptParamId = null;
 		String methodCall;
-		String targetApplication = fetchMetadataListVO.get(0).getTargetApplicationName();
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
-//		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
-//				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
-//				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
-		if (run) {
-			try {
-				System.out.println(
-						"Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
+		System.out
+				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
 
-				String screenShotFolderPath = SCREENSHOT + BACK_SLASH + fetchMetadataListVO.get(0).getCustomer_name()
-						+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH;
+		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + fetchMetadataListVO.get(0).getCustomer_name()
+				+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH;
 
-				for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
+		for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 
-					testScriptParamId = fetchMetadataVO.getTest_script_param_id();
+			testScriptParamId = fetchMetadataVO.getTest_script_param_id();
 
-					String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
-							+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-							+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-							+ fetchMetadataVO.getLine_number();
+			String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+					+ fetchMetadataVO.getLine_number();
 
-					methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(),
-							fetchMetadataVO.getAction(), fetchMetadataVO.getInput_value(), screenshotPath,
-							testScriptParamId);
-					methods.add(methodCall);
-				}
-				dto.setActions(methods);
-				dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
-				dto.setOciConfigPath(ociConfigPath);
-				dto.setOciConfigName(ociConfigName);
-				dto.setBuckerName(ociBucketName);
-
-				final Context ctx = new Context();
-				ctx.setVariable("dto", dto);
-				final String scriptContent = this.templateEngine.process("excel-automation-template.txt", ctx);
-				System.out.println(scriptContent);
-//				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
-			} catch (Exception e) {
-				// suppressing error so that other scripts run if there data has no issue
-				run = false;
-				errorMessage = e.getMessage();
-				e.printStackTrace();
-			}
+			methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), fetchMetadataVO.getAction(),
+					fetchMetadataVO.getInput_value(), screenshotPath, testScriptParamId);
+			methods.add(methodCall);
 		}
-		if (!run) {
-			if (errorMessage == null) {
-//				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DSF, errorMessage);
-				dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
-						Constants.ERR_MSG_FOR_DEP_FAILED);
-			} else {
-//				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.EIP, errorMessage);
-				dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
-						Constants.ERR_MSG_FOR_SCRIPT_RUN);
-			}
-			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
-			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
-		}
+		dto.setActions(methods);
+		dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
+		dto.setCopiedValueUrl(copiedValueUrl);
+		dto.setOciConfigPath(ociConfigPath);
+		dto.setOciConfigName(ociConfigName);
+		dto.setBuckerName(ociBucketName);
+		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path());
+
+		final Context ctx = new Context();
+		ctx.setVariable("dto", dto);
+		final String scriptContent = this.templateEngine.process("excel-automation-template.txt", ctx);
+		System.out.println(scriptContent);
+		String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
+		uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC, null);
+
+		logger.info(
+				"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
+						+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
+						+ screenShotFolderPath);
+		this.kafkaTemp.send(testScriptRunTopicName,
+				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 
 	}
 

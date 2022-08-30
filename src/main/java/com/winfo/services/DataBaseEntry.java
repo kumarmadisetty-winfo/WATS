@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 
@@ -243,8 +244,22 @@ public class DataBaseEntry {
 		}
 	}
 
-	public ArrayList<String> getStepsStatusByScriptId(String testSetLineId) {
-		return dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+	public boolean checkScriptStatusForSteps(List<Integer> stepIdList) {
+		
+		List<String> result = dao.getStepsStatusForSteps(stepIdList);
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+			return false;
+		}
+		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.PASS.getLabel()::equalsIgnoreCase)) {
+			return true;
+		}
+		try {
+			Thread.sleep(3000);
+			checkScriptStatusForSteps(stepIdList);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		return false;
 	}
 
 	public CustomerProjectDto getCustomerDetails(String testSetId) {

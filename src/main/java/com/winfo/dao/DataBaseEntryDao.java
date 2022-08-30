@@ -472,14 +472,14 @@ public class DataBaseEntryDao {
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return project.getWatsPackage();
 	}
-	
+
 	public Customer getCustomer(String args) {
 		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(args));
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		Customer customer = em.unwrap(Session.class).find(Customer.class, project.getCustomerId());
 		return customer;
 	}
-	
+
 	public String getTestSetMode(Long testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> query = cb.createQuery(String.class);
@@ -530,6 +530,20 @@ public class DataBaseEntryDao {
 
 		Predicate condition = cb.equal(from.get(TEST_SET_LINE).get(TEST_RUN_SCRIPT_ID), testSetLineId);
 		cq.where(condition);
+		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
+		ArrayList<String> result = (ArrayList<String>) query.getResultList();
+
+		return result;
+	}
+
+	public ArrayList<String> getStepsStatusForSteps(List<Integer> statusList) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
+		Expression<String> inExpression = from.get("testRunScriptParamId");
+		Predicate inPredicate = inExpression.in(statusList);
+		cq.where(inPredicate);
 		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
 		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
@@ -1476,7 +1490,6 @@ public class DataBaseEntryDao {
 		}
 	}
 
-
 	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetLine> cq = cb.createQuery(TestSetLine.class);
@@ -1486,7 +1499,7 @@ public class DataBaseEntryDao {
 		Query query = em.createQuery(cq.select(from));
 		return query.getResultList();
 	}
-	
+
 	public void updateEnableFlagForSanity(String testSetId) {
 		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I' WHERE TEST_RUN_ID = :P_TEST_SET_ID";
 		try {
