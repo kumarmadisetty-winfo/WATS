@@ -482,4 +482,8 @@ public class DataBaseEntry {
 		return dao.getTestRunDetails(testSetId);
 	}
 
+	public boolean checkActionContainsExcel(String script_id) {
+		return dao.checkActionContainsExcel(script_id);
+	}
+
 }
