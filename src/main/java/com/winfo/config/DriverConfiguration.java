@@ -72,7 +72,7 @@ public class DriverConfiguration {
 
 			System.setProperty(BrowserConstants.AWT_HEADLESS.value, "false");
 			FirefoxOptions options = new FirefoxOptions();
-			if (!os.contains("win")) {
+			if (os.contains("win")) {
 				options.setBinary("/Program Files/Mozilla Firefox/firefox.exe");
 			} else {
 				logger.info("linux location");
