@@ -465,6 +465,8 @@ public class RunAutomation {
 			String scriptID = fetchMetadataListVO.get(0).getScript_id();
 			String checkValidScript = xpathService.checkValidScript(scriptID);
 			log.info("Valid script check.......::" + checkValidScript);
+			dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
+			dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 				actionName = fetchMetadataVO.getAction();
@@ -473,12 +475,10 @@ public class RunAutomation {
 				script_id1 = fetchMetadataVO.getScript_id();
 				script_Number = fetchMetadataVO.getScript_number();
 				seq_num = fetchMetadataVO.getSeq_num();
-				dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
-				dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
+
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id = fetchMetadataVO.getTest_script_param_id();
-				dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-						"In-Progress");
+
 				String param1 = null;
 				String param2 = null;
 				String param3 = null;
@@ -503,11 +503,17 @@ public class RunAutomation {
 
 				}
 				try {
-					if (startExcelAction && !actionName.toLowerCase().contains("excel")) {
+					i++;
+					if (startExcelAction
+							&& (!actionName.toLowerCase().contains("excel") || i == fetchMetadataListVO.size())) {
+						log.info("In final step of excel");
 						// run excel code
-						excelMetadataListVO.add(fetchMetadataVO);
+						if (actionName.toLowerCase().contains("excel")) {
+							excelMetadataListVO.add(fetchMetadataVO);
+						}
 						startExcelAction = false;
 						testScriptExecService.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true);
+						log.info("In final step of excel end-- " + excelMetadataListVO.size());
 						List<Integer> stepIdList = excelMetadataListVO.stream().map(e -> e.getTest_script_param_id())
 								.map(Integer::valueOf).collect(Collectors.toList());
 						boolean stepPassed = dataBaseEntry.checkScriptStatusForSteps(stepIdList);
@@ -518,8 +524,11 @@ public class RunAutomation {
 					}
 					if (actionName.toLowerCase().contains("excel")) {
 						startExcelAction = true;
+						log.info("Adding record to excel list");
 						excelMetadataListVO.add(fetchMetadataVO);
 					} else if (!runCreatePdf) {
+						dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO,
+								test_script_param_id, "In-Progress");
 						switch (actionName) {
 
 						case "Login into Application":
@@ -1263,7 +1272,6 @@ public class RunAutomation {
 						}
 					}
 
-					i++;
 					if (fetchMetadataListVO.size() == i || runCreatePdf) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
@@ -1322,6 +1330,7 @@ public class RunAutomation {
 					}
 
 				} catch (Exception e) {
+					e.printStackTrace();
 					if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
 						Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
 						s.setStatus("Fail");
