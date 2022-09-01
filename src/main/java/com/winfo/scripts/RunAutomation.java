@@ -433,7 +433,7 @@ public class RunAutomation {
 		String seq_num = null;
 		String test_script_param_id = null;
 		boolean startExcelAction = false;
-		boolean runCreatePdf = false;
+		boolean isError = false;
 		// String start_time=null;
 		// String end_time=null;
 		List<FetchMetadataVO> excelMetadataListVO = new ArrayList<>();
@@ -519,14 +519,14 @@ public class RunAutomation {
 						boolean stepPassed = dataBaseEntry.checkScriptStatusForSteps(stepIdList);
 						if (!stepPassed) {
 							log.info("Excel Actions failed");
-							runCreatePdf = true;
+							isError = true;
 						}
 					}
 					if (actionName.toLowerCase().contains("excel")) {
 						startExcelAction = true;
 						log.info("Adding record to excel list");
 						excelMetadataListVO.add(fetchMetadataVO);
-					} else if (!runCreatePdf) {
+					} else if (!isError) {
 						dataBaseEntry.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 								test_script_param_id, "In-Progress");
 						switch (actionName) {
@@ -1272,7 +1272,7 @@ public class RunAutomation {
 						}
 					}
 
-					if (fetchMetadataListVO.size() == i || runCreatePdf) {
+					if (fetchMetadataListVO.size() == i && !isError) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Pass");
@@ -1340,7 +1340,9 @@ public class RunAutomation {
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
 					errorMessagesHandler.getError(actionName, fetchMetadataVO, fetchConfigVO, test_script_param_id,
 							message, param1, param2, dataBaseEntry.getPassword(param, userName, fetchConfigVO));
-
+					isError = true;
+				}
+				if (isError) {
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(test_set_id);
 					post.setP_status("Fail");
@@ -1375,8 +1377,9 @@ public class RunAutomation {
 						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
 								fetchConfigVO);
 					}
-					throw e;
+					return;
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
