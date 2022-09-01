@@ -326,16 +326,16 @@ public class RunAutomation {
 						null, true, false);
 
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(testLinesDetails, fetchConfigVO, "Passed_Report.pdf", customerDetails);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", customerDetails);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(testLinesDetails, fetchConfigVO, "Failed_Report.pdf", customerDetails);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Failed_Report.pdf", customerDetails);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(testLinesDetails, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
 
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(testLinesDetails,
+					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVOforEvidence,
 							fetchConfigVO, customerDetails);
 				}
 				executeTestrunVo.setStatusCode(200);
