@@ -381,9 +381,10 @@ public class RunAutomation {
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
-
 		try {
-			driver = driverConfiguration.getWebDriver(fetchConfigVO);
+			boolean actionContainsExcel = dataBaseEntry.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScript_id());
+			String operatingSystem = actionContainsExcel ? "windows" : null;
+			driver = driverConfiguration.getWebDriver(fetchConfigVO,operatingSystem);
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 		} catch (Exception e) {
 			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScript_number());

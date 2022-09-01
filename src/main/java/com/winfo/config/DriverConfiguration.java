@@ -34,10 +34,11 @@ public class DriverConfiguration {
 	private String config_url;
 
 	@SuppressWarnings("deprecation")
-	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException {
+	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO,String operatingSystem) throws MalformedURLException {
 		logger.info("Start of get web driver method");
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
+		os = operatingSystem==null ? os : operatingSystem;
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
 			System.setProperty("java.awt.headless", "false");
