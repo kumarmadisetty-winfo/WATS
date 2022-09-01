@@ -1846,7 +1846,7 @@ public class TestScriptExecService {
 		dto.setOciConfigPath(ociConfigPath);
 		dto.setOciConfigName(ociConfigName);
 		dto.setBuckerName(ociBucketName);
-		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path());
+		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path().replace("\\", "\\\\"));
 
 		final Context ctx = new Context();
 		ctx.setVariable("dto", dto);
