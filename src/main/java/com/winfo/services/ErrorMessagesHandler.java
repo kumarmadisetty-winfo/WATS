@@ -4,12 +4,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.winfo.vo.ScriptDetailsDto;
+
 @Service
 public class ErrorMessagesHandler {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
-	public void getError(String actionName, FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void getError(String actionName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String message, String param1, String param2, String password) {
 		try {
 			fetchMetadataVO.setStatus("Fail");
@@ -34,8 +36,8 @@ public class ErrorMessagesHandler {
 						errorMessage);
 			} else if (actionName.equalsIgnoreCase("textarea")) {
 
-				errorMessage = "Failed at Enter Value - Text Area => Not able to enter the value in " + param1
-						+ " and " + param2;
+				errorMessage = "Failed at Enter Value - Text Area => Not able to enter the value in " + param1 + " and "
+						+ param2;
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
@@ -183,8 +185,7 @@ public class ErrorMessagesHandler {
 						errorMessage);
 
 			} else if (actionName.equalsIgnoreCase("Acceptalert")) {
-				errorMessage = "Failed at Accept Alert =>Not able to select the Accept Alert Text Value from "
-						+ param1;
+				errorMessage = "Failed at Accept Alert =>Not able to select the Accept Alert Text Value from " + param1;
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
@@ -261,8 +262,7 @@ public class ErrorMessagesHandler {
 						errorMessage);
 
 			} else if (actionName.equalsIgnoreCase("clickCheckbox")) {
-				errorMessage = "Failed at Click Checkbox =>Not able to select the Click Checkbox  Value from "
-						+ param1;
+				errorMessage = "Failed at Click Checkbox =>Not able to select the Click Checkbox  Value from " + param1;
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
@@ -298,8 +298,7 @@ public class ErrorMessagesHandler {
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
-			}
-			else {
+			} else {
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
 				// new changes-errorMessage added to else block

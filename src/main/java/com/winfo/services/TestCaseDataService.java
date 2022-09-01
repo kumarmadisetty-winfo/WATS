@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 @RefreshScope
@@ -28,15 +29,16 @@ public class TestCaseDataService {
 	Logger logger = LogManager.getLogger(TestCaseDataService.class);
 
 	@Value("${configvO.config_url1}")
-	private  String config_url;
+	private String config_url;
 
-	//public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
+	// public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
-	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, String dependencyLevelCheck) {
+	public LinkedHashMap<String, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,
+			LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap, String dependencyLevelCheck) {
 
 		LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
 
-		//dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
+		// dependentScriptMap = new LinkedHashMap<String, List<FetchMetadataVO>>();
 
 		if (list != null) {
 
@@ -78,8 +80,8 @@ public class TestCaseDataService {
 	 * return dependentScriptMap;
 	 * 
 	 * }
-	 */ 
- private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+	 */
+	private void prepareTestData(LinkedHashMap<String, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
 			String test_line_id) {
 
 		if (testCaseMap.containsKey(test_line_id)) {
@@ -101,13 +103,13 @@ public class TestCaseDataService {
 		}
 
 	}
- 
-	private void prepareTestData(SortedMap<Integer, List<FetchMetadataVO>> testCaseMap, FetchMetadataVO testcase,
+
+	private void prepareTestData(SortedMap<Integer, List<ScriptDetailsDto>> testCaseMap, ScriptDetailsDto testcase,
 			Integer seq) {
 
 		if (testCaseMap.containsKey(seq)) {
 
-			List<FetchMetadataVO> testcasedata = testCaseMap.get(seq);
+			List<ScriptDetailsDto> testcasedata = testCaseMap.get(seq);
 
 			testcasedata.add(testcase);
 
@@ -115,7 +117,7 @@ public class TestCaseDataService {
 
 		} else {
 
-			List<FetchMetadataVO> testcasedata = new ArrayList<FetchMetadataVO>();
+			List<ScriptDetailsDto> testcasedata = new ArrayList<ScriptDetailsDto>();
 
 			testcasedata.add(testcase);
 
@@ -124,23 +126,23 @@ public class TestCaseDataService {
 		}
 
 	}
- 
-	public SortedMap<Integer, List<FetchMetadataVO>> prepareTestcasedata(List<FetchMetadataVO> list,
-			SortedMap<Integer, List<FetchMetadataVO>> dependentScriptMap) {
 
-		SortedMap<Integer, List<FetchMetadataVO>> testCaseMap = new TreeMap<Integer, List<FetchMetadataVO>>();
+	public SortedMap<Integer, List<ScriptDetailsDto>> prepareTestcasedata(List<ScriptDetailsDto> list,
+			SortedMap<Integer, List<ScriptDetailsDto>> dependentScriptMap) {
+
+		SortedMap<Integer, List<ScriptDetailsDto>> testCaseMap = new TreeMap<Integer, List<ScriptDetailsDto>>();
 
 		if (list != null) {
 
-			for (FetchMetadataVO testcase : list) {
+			for (ScriptDetailsDto testcase : list) {
 
-				String test_line_id = testcase.getTest_set_line_id();
+				String test_line_id = testcase.getTestSetLineId();
 
-				Integer seq = Integer.parseInt(testcase.getSeq_num());
+				Integer seq = Integer.parseInt(testcase.getSeqNum());
 
 				Integer dependency = testcase.getDependencyScriptNumber();
-				if (test_line_id != null && dependency==null) {
-					
+				if (test_line_id != null && dependency == null) {
+
 					prepareTestData(testCaseMap, testcase, seq);
 
 				} else {
@@ -175,7 +177,7 @@ public class TestCaseDataService {
 
 		FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
 
-		//prepareTestcasedata(MetaList.getItems());
+		// prepareTestcasedata(MetaList.getItems());
 
 		return MetaList.getItems();
 
@@ -237,12 +239,11 @@ public class TestCaseDataService {
 
 		try {
 
-			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id="
-					+ request.getP_script_id() + "&p_status=" + request.getP_status() + "&p_test_set_id="
-					+ request.getP_test_set_id() + "&p_test_set_line_id=" + request.getP_test_set_line_id()
-					+ "&p_pass_path=" + request.getP_pass_path() + "&p_fail_path=" + request.getP_fail_path()
-					+ "&p_exception_path=" + request.getP_exception_path() + "&p_test_set_line_path="
-					+ request.getP_test_set_line_path();
+			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id=" + request.getP_script_id()
+					+ "&p_status=" + request.getP_status() + "&p_test_set_id=" + request.getP_test_set_id()
+					+ "&p_test_set_line_id=" + request.getP_test_set_line_id() + "&p_pass_path="
+					+ request.getP_pass_path() + "&p_fail_path=" + request.getP_fail_path() + "&p_exception_path="
+					+ request.getP_exception_path() + "&p_test_set_line_path=" + request.getP_test_set_line_path();
 
 			System.out.println(uri);
 

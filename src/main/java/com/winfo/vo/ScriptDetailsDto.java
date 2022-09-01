@@ -26,10 +26,18 @@ public class ScriptDetailsDto {
 	private String conditionalPopup;
 	private String lineErrorMsg;
 	private String testRunParamDesc;
+	private Integer dependencyScriptNumber;
 
 //added executed_by
 	private String executedBy;
 	private String targetApplicationName;
+	
+	public Integer getDependencyScriptNumber() {
+		return dependencyScriptNumber;
+	}
+	public void setDependencyScriptNumber(Integer dependencyScriptNumber) {
+		this.dependencyScriptNumber = dependencyScriptNumber;
+	}
 	public String getScriptId() {
 		return scriptId;
 	}
