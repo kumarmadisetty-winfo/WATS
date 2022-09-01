@@ -9,11 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.services.CopyTestRunService;
 import com.winfo.vo.CopyTestrunjson;
 import com.winfo.vo.CopytestrunVo;
+import com.winfo.vo.InsertScriptsVO;
+import com.winfo.vo.ResponseDto;
 
 @RestController
 public class CopyTestrunController {
@@ -39,5 +42,13 @@ public class CopyTestrunController {
 		jsondata.setStatusMessage("SUCCESS");
 		log.info(jsondata.toString());
 		return jsondata;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/addScriptsOnTestRun")
+	public ResponseDto addScriptOnTestRun(@RequestBody InsertScriptsVO scriptVO) {
+		log.info("Test Set Id *** "+ scriptVO.getTestSetId());
+		return service.addScriptsOnTestRun(scriptVO);
 	}
 }
