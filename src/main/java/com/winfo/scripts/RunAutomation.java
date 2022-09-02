@@ -324,8 +324,9 @@ public class RunAutomation {
 					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
 				}
-				downloadScreenShot(fetchConfigVO, fetchMetadataListVO.get(0),true);
-				List<FetchMetadataVO> fetchMetadataListVOforEvidence = dataBaseEntry.getMetaDataVOList(args, null, true, false);
+				downloadScreenShot(fetchConfigVO, fetchMetadataListVO.get(0), true);
+				List<FetchMetadataVO> fetchMetadataListVOforEvidence = dataBaseEntry.getMetaDataVOList(args, null, true,
+						false);
 
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", null, null);
@@ -384,30 +385,34 @@ public class RunAutomation {
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
 		try {
-			boolean actionContainsExcel = dataBaseEntry.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScript_id());
-			String operatingSystem = actionContainsExcel ? "windows" : null;
-			driver = driverConfiguration.getWebDriver(fetchConfigVO,operatingSystem);
-		} catch (Exception e) {
-			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScript_number());
-			e.printStackTrace();
-			FetchScriptVO post = new FetchScriptVO();
-			post.setP_test_set_id(testSetId);
-			post.setP_status("Fail");
-			post.setP_script_id(scriptId);
-			post.setP_test_set_line_id(testSetLineId);
-			post.setP_pass_path(passurl);
-			post.setP_fail_path(failurl);
-			post.setP_exception_path(detailurl);
-			post.setP_test_set_line_path(scripturl);
-			dataService.updateTestCaseStatus(post, args, fetchConfigVO);
-			failList.add(scriptId);
+			try {
+				boolean actionContainsExcel = dataBaseEntry
+						.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScript_id());
+				String operatingSystem = actionContainsExcel ? "windows" : null;
+				driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
+			} catch (Exception e) {
+				log.info("Exception occured while running script - {} ",
+						fetchMetadataListsVO.get(0).getScript_number());
+				e.printStackTrace();
+				FetchScriptVO post = new FetchScriptVO();
+				post.setP_test_set_id(testSetId);
+				post.setP_status("Fail");
+				post.setP_script_id(scriptId);
+				post.setP_test_set_line_id(testSetLineId);
+				post.setP_pass_path(passurl);
+				post.setP_fail_path(failurl);
+				post.setP_exception_path(detailurl);
+				post.setP_test_set_line_path(scripturl);
+				dataService.updateTestCaseStatus(post, args, fetchConfigVO);
+				failList.add(scriptId);
+			}
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 		} finally {
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScript_number());
 			if (driver != null) {
 				driver.quit();
 			}
 		}
-		switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 	}
 
 	int passcount = 0;
@@ -1250,10 +1255,11 @@ public class RunAutomation {
 									globalValueForSteps);
 							break;
 
-					default:
-						System.out.println("Action Name is not matched with" + "" + actionName);
-						break;
+						default:
+							System.out.println("Action Name is not matched with" + "" + actionName);
+							break;
 
+						}
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
@@ -1300,7 +1306,7 @@ public class RunAutomation {
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 								script_id1, script_Number, "pass", startdate, enddate);
 						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
-						downloadScreenShot(fetchConfigVO, fetchMetadataVO,false);
+						downloadScreenShot(fetchConfigVO, fetchMetadataVO, false);
 						fetchMetadataVO.setStatus("Pass");
 						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 								fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", startdate,
@@ -1356,7 +1362,7 @@ public class RunAutomation {
 							test_set_id);
 
 					fetchConfigVO.setStatus1("Fail");
-					downloadScreenShot(fetchConfigVO, fetchMetadataVO,false);
+					downloadScreenShot(fetchConfigVO, fetchMetadataVO, false);
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 							fetchMetadataListVO, fetchConfigVO,
 							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
@@ -1373,15 +1379,14 @@ public class RunAutomation {
 			throw e;
 		}
 	}
-	
-	private void downloadScreenShot(FetchConfigVO fetchConfigVO,FetchMetadataVO fetchMetadataVO,boolean evidenceReport) {
+
+	private void downloadScreenShot(FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			boolean evidenceReport) {
 		String seqNumber = evidenceReport ? null : fetchMetadataVO.getSeq_num();
-		String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-				+ fetchMetadataVO.getCustomer_name() + File.separator
-				+ fetchMetadataVO.getTest_run_name() + File.separator;
+		String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + fetchMetadataVO.getCustomer_name()
+				+ File.separator + fetchMetadataVO.getTest_run_name() + File.separator;
 		seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-				.downloadScreenshotsFromObjectStore(screenShotFolder,
-						fetchMetadataVO.getCustomer_name(),
+				.downloadScreenshotsFromObjectStore(screenShotFolder, fetchMetadataVO.getCustomer_name(),
 						fetchMetadataVO.getTest_run_name(), seqNumber);
 	}
 
