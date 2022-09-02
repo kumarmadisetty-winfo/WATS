@@ -692,7 +692,7 @@ public class TestScriptExecService {
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 			} else {
-				fetchConfigVO.setErrormessage("EBS Execution Failed");
+				fetchConfigVO.setErrormessage("Execution Failed");
 				fetchConfigVO.setStatus1(FAIL);
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
