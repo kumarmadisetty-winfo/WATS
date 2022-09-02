@@ -476,6 +476,7 @@ public class RunAutomation {
 			log.info("Valid script check.......::" + checkValidScript);
 			
 			Boolean validationFlag = null;
+			Map<String,String> accessTokenStorage = new HashMap<>();
 			ApiValidationVO api = new ApiValidationVO();
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 
@@ -1261,6 +1262,18 @@ public class RunAutomation {
 									globalValueForSteps);
 							break;
 							
+						case "apiAccessToken":
+							seleniumFactory.getInstanceObj(instanceName).apiAccessToken(fetchMetadataVO,accessTokenStorage);
+							validationFlag = true;
+							break;
+							
+						case "apiValidationResponse":
+							seleniumFactory.getInstanceObj(instanceName).apiValidationResponse(fetchMetadataVO,accessTokenStorage,api);
+							break;
+							
+						case "validation":
+							validationFlag = seleniumFactory.getInstanceObj(instanceName).validation(fetchMetadataVO,api);
+							break;
 
 						default:
 							System.out.println("Action Name is not matched with" + "" + actionName);
