@@ -385,15 +385,16 @@ public class RunAutomation {
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
 		try {
-			try {
-				boolean actionContainsExcel = dataBaseEntry
-						.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScript_id());
-				String operatingSystem = actionContainsExcel ? "windows" : null;
-				driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
-			} catch (Exception e) {
-				log.info("Exception occured while running script - {} ",
-						fetchMetadataListsVO.get(0).getScript_number());
-				e.printStackTrace();
+			boolean actionContainsExcel = dataBaseEntry
+					.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScript_id());
+			String operatingSystem = actionContainsExcel ? "windows" : null;
+			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
+			isDriverError = false;
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
+		} catch (Exception e) {
+			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScript_number());
+			e.printStackTrace();
+			if (isDriverError) {
 				FetchScriptVO post = new FetchScriptVO();
 				post.setP_test_set_id(testSetId);
 				post.setP_status("Fail");
@@ -406,7 +407,6 @@ public class RunAutomation {
 				dataService.updateTestCaseStatus(post, args, fetchConfigVO);
 				failList.add(scriptId);
 			}
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 		} finally {
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScript_number());
 			if (driver != null) {
