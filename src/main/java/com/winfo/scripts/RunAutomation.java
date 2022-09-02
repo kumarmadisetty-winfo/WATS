@@ -1260,6 +1260,16 @@ public class RunAutomation {
 							break;
 
 						}
+						fetchConfigVO.setStatus1("Pass");
+						System.out.println("Successfully Executed the" + "" + actionName);
+						try {
+							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
+									test_script_param_id, "Pass");
+							fetchMetadataVO.setStatus("Pass");
+//							dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+						} catch (Exception e) {
+							System.out.println("e");
+						}
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
@@ -1316,16 +1326,6 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
 						}
-					}
-					fetchConfigVO.setStatus1("Pass");
-					System.out.println("Successfully Executed the" + "" + actionName);
-					try {
-						dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-								"Pass");
-						fetchMetadataVO.setStatus("Pass");
-//						dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
-					} catch (Exception e) {
-						System.out.println("e");
 					}
 
 				} catch (Exception e) {
