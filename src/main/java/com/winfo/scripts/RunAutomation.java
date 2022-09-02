@@ -401,6 +401,11 @@ public class RunAutomation {
 			post.setP_test_set_line_path(scripturl);
 			dataService.updateTestCaseStatus(post, args, fetchConfigVO);
 			failList.add(scriptId);
+		} finally {
+			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScript_number());
+			if (driver != null) {
+				driver.quit();
+			}
 		}
 		switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus);
 	}
