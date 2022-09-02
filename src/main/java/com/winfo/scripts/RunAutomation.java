@@ -473,10 +473,9 @@ public class RunAutomation {
 			String scriptID = fetchMetadataListVO.get(0).getScript_id();
 			String checkValidScript = xpathService.checkValidScript(scriptID);
 			log.info("Valid script check.......::" + checkValidScript);
-			dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
-			dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
 
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
+
 				actionName = fetchMetadataVO.getAction();
 				test_set_id = fetchMetadataVO.getTest_set_id();
 				test_set_line_id = fetchMetadataVO.getTest_set_line_id();
@@ -486,6 +485,10 @@ public class RunAutomation {
 
 				String screenParameter = fetchMetadataVO.getInput_parameter();
 				test_script_param_id = fetchMetadataVO.getTest_script_param_id();
+				if (i == 0) {
+					dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
+					dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
+				}
 
 				String param1 = null;
 				String param2 = null;
