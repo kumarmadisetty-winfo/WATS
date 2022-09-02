@@ -44,6 +44,7 @@ import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.Status;
 
@@ -473,7 +474,10 @@ public class RunAutomation {
 			String scriptID = fetchMetadataListVO.get(0).getScript_id();
 			String checkValidScript = xpathService.checkValidScript(scriptID);
 			log.info("Valid script check.......::" + checkValidScript);
-
+			
+			Boolean validationFlag = null;
+			Map<String,String> accessTokenStorage = new HashMap<>();
+			ApiValidationVO api = new ApiValidationVO();
 			for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
 
 				actionName = fetchMetadataVO.getAction();
@@ -1257,6 +1261,19 @@ public class RunAutomation {
 									fetchMetadataVO.getInput_parameter(), fetchMetadataVO, fetchConfigVO,
 									globalValueForSteps);
 							break;
+							
+						case "apiAccessToken":
+							seleniumFactory.getInstanceObj(instanceName).apiAccessToken(fetchMetadataVO,accessTokenStorage);
+							validationFlag = true;
+							break;
+							
+						case "apiValidationResponse":
+							seleniumFactory.getInstanceObj(instanceName).apiValidationResponse(fetchMetadataVO,accessTokenStorage,api);
+							break;
+							
+						case "validation":
+							validationFlag = seleniumFactory.getInstanceObj(instanceName).validation(fetchMetadataVO,api);
+							break;
 
 						default:
 							System.out.println("Action Name is not matched with" + "" + actionName);
@@ -1269,6 +1286,11 @@ public class RunAutomation {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									test_script_param_id, "Pass");
 							fetchMetadataVO.setStatus("Pass");
+							
+							if(validationFlag!=null && !validationFlag) {
+								dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
+										"Fail","");
+							}
 //							dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 						} catch (Exception e) {
 							System.out.println("e");
@@ -1276,58 +1298,87 @@ public class RunAutomation {
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
-						FetchScriptVO post = new FetchScriptVO();
-						post.setP_test_set_id(test_set_id);
-						post.setP_status("Pass");
-						post.setP_script_id(script_id);
-						post.setP_test_set_line_id(test_set_line_id);
-						post.setP_pass_path(passurl);
-						post.setP_fail_path(failurl);
-						post.setP_exception_path(detailurl);
-						post.setP_test_set_line_path(scripturl);
-						long endTime = System.currentTimeMillis();
-						System.out.println("endTime:::::::::::::" + endTime);
+						String checkPackage = dataBaseEntry.getPackage(test_set_id);
+						if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
+							FetchScriptVO post = new FetchScriptVO();
+							post.setP_test_set_id(test_set_id);
+							post.setP_status("Pass");
+							post.setP_script_id(script_id);
+							post.setP_test_set_line_id(test_set_line_id);
+							post.setP_pass_path(passurl);
+							post.setP_fail_path(failurl);
+							post.setP_exception_path(detailurl);
+							post.setP_test_set_line_path(scripturl);
+							long endTime = System.currentTimeMillis();
+							System.out.println("endTime:::::::::::::" + endTime);
 
-						long gap = startTime - endTime;
-						System.out.println("gap:::::::::::::" + gap);
+							long gap = startTime - endTime;
+							System.out.println("gap:::::::::::::" + gap);
 
-						Date enddate = new Date();
-						fetchConfigVO.setEndtime(enddate);
-						fetchConfigVO.setStatus1("Pass");
-						try {
-							// dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-							if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
-								if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
-									Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
-									if (!"Fail".equalsIgnoreCase(s.getStatus())) {
-										int awaitCounter = s.getInExecutionCount();
-										s.setInExecutionCount(--awaitCounter);
-										if (awaitCounter <= 0) {
-											s.setStatus("Pass");
+							Date enddate = new Date();
+							fetchConfigVO.setEndtime(enddate);
+							fetchConfigVO.setStatus1("Pass");
+							try {
+								// dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+								if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
+									if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScript_id()))) {
+										Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScript_id()));
+										if (!"Fail".equalsIgnoreCase(s.getStatus())) {
+											int awaitCounter = s.getInExecutionCount();
+											s.setInExecutionCount(--awaitCounter);
+											if (awaitCounter <= 0) {
+												s.setStatus("Pass");
+											}
+
 										}
-
 									}
 								}
+
+								dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+								dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+							} catch (Exception e) {
+								e.printStackTrace();
 							}
 
+							limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+									script_id1, script_Number, "pass", startdate, enddate);
+							limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
+							downloadScreenShot(fetchConfigVO, fetchMetadataVO, false);
+							fetchMetadataVO.setStatus("Pass");
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+									fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf",
+									startdate, fetchConfigVO.getEndtime());
+
+							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+										.uploadPDF(fetchMetadataListVO, fetchConfigVO);
+							}
+						}
+						else {
+							Date enddate = new Date();
+							fetchConfigVO.setEndtime(enddate);
+							FetchScriptVO post = new FetchScriptVO();
+							post.setP_test_set_id(test_set_id);
+							if (validationFlag) {
+								post.setP_status("Pass");
+							} else {
+								post.setP_status("Fail");
+							}
+							post.setP_script_id(script_id);
+							post.setP_test_set_line_id(test_set_line_id);
+							post.setP_pass_path(passurl);
+							post.setP_fail_path(failurl);
+							post.setP_exception_path(detailurl);
+							post.setP_test_set_line_path(scripturl);
 							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-
-						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-								script_id1, script_Number, "pass", startdate, enddate);
-						limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
-						downloadScreenShot(fetchConfigVO, fetchMetadataVO, false);
-						fetchMetadataVO.setStatus("Pass");
-						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
-								fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", startdate,
-								fetchConfigVO.getEndtime());
-
-						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
+							if(!validationFlag) {
+								int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
+										test_set_id);
+								seleniumFactory.getInstanceObj(instanceName).createDriverFailedPdf(fetchMetadataListVO, fetchConfigVO,seq_num + "_" + script_Number +"_RUN"+failedScriptRunCount+ ".pdf",api,validationFlag);
+							}else {
+								seleniumFactory.getInstanceObj(instanceName).createDriverFailedPdf(fetchMetadataListVO, fetchConfigVO,seq_num + "_" + script_Number + ".pdf",api,validationFlag);
+							}
 						}
 					}
 
@@ -1345,33 +1396,63 @@ public class RunAutomation {
 					isError = true;
 				}
 				if (isError) {
-					FetchScriptVO post = new FetchScriptVO();
-					post.setP_test_set_id(test_set_id);
-					post.setP_status("Fail");
-					post.setP_script_id(script_id);
-					post.setP_test_set_line_id(test_set_line_id);
-					post.setP_pass_path(passurl);
-					post.setP_fail_path(failurl);
-					post.setP_exception_path(detailurl);
-					post.setP_test_set_line_path(scripturl);
-					failcount = failcount + 1;
-					Date enddate = new Date();
-					fetchConfigVO.setEndtime(enddate);
-					dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-					dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
-					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, script_id1,
-							script_Number, "Fail", startdate, enddate);
-					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
-							test_set_id);
+					String checkPackage = dataBaseEntry.getPackage(test_set_id);
+					if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
+						FetchScriptVO post = new FetchScriptVO();
+						post.setP_test_set_id(test_set_id);
+						post.setP_status("Fail");
+						post.setP_script_id(script_id);
+						post.setP_test_set_line_id(test_set_line_id);
+						post.setP_pass_path(passurl);
+						post.setP_fail_path(failurl);
+						post.setP_exception_path(detailurl);
+						post.setP_test_set_line_path(scripturl);
+						failcount = failcount + 1;
+						Date enddate = new Date();
+						fetchConfigVO.setEndtime(enddate);
+						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
+								script_id1, script_Number, "Fail", startdate, enddate);
+						int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
+								test_set_id);
 
-					fetchConfigVO.setStatus1("Fail");
-					downloadScreenShot(fetchConfigVO, fetchMetadataVO, false);
-					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
-							fetchMetadataListVO, fetchConfigVO,
-							seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate, enddate);
-					if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-						seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVO,
-								fetchConfigVO);
+						fetchConfigVO.setStatus1("Fail");
+						downloadScreenShot(fetchConfigVO, fetchMetadataVO, false);
+						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+								fetchMetadataListVO, fetchConfigVO,
+								seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", startdate,
+								enddate);
+						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+									.uploadPDF(fetchMetadataListVO, fetchConfigVO);
+						}
+					} else {
+						Date enddate = new Date();
+						fetchConfigVO.setEndtime(enddate);
+						FetchScriptVO post = new FetchScriptVO();
+						post.setP_test_set_id(test_set_id);
+						if (validationFlag) {
+							post.setP_status("Pass");
+						} else {
+							post.setP_status("Fail");
+						}
+						post.setP_script_id(script_id);
+						post.setP_test_set_line_id(test_set_line_id);
+						post.setP_pass_path(passurl);
+						post.setP_fail_path(failurl);
+						post.setP_exception_path(detailurl);
+						post.setP_test_set_line_path(scripturl);
+						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
+						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+
+						int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
+								test_set_id);
+						seleniumFactory.getInstanceObj(instanceName).createDriverFailedPdf(fetchMetadataListVO,
+								fetchConfigVO, seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf",
+								api, validationFlag);
+						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
+								"Fail", "");
 					}
 					return;
 				}

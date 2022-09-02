@@ -3,6 +3,8 @@ package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -13,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -39,11 +42,6 @@ import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.commons.lang3.math.NumberUtils;
-
-//import blank.FFmpegFrameRecorder;
-//import blank.IplImage;
-//import blank.OpenCVFrameConverter;
-
 import org.apache.log4j.Logger;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
@@ -66,6 +64,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -86,11 +85,26 @@ import com.aspose.cells.LookAtType;
 import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
+
+//import blank.FFmpegFrameRecorder;
+//import blank.IplImage;
+//import blank.OpenCVFrameConverter;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
@@ -100,6 +114,7 @@ import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.ArithmeticUtils;
+import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 
@@ -18542,7 +18557,159 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public void createDriverFailedPdf(List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, ApiValidationVO api, boolean validationFlag)
 			throws IOException, DocumentException, com.lowagie.text.DocumentException {
-		// TODO Auto-generated method stub
+			try {
+				String Date = DateUtils.getSysdate();
+				String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+				String FILE = (Folder + pdffileName);
+				System.out.println(FILE);
+
+				String Script_Number = fetchMetadataListVO.get(0).getScript_number();
+				String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
+				String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
+				String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
+				
+				// new change add ExecutedBy field
+				String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
+				String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
+				File theDir = new File(Folder);
+				if (!theDir.exists()) {
+					System.out.println("creating directory: " + theDir.getName());
+					boolean result = false;
+					try {
+						theDir.mkdirs();
+						result = true;
+					} catch (SecurityException se) {
+						// handle it
+						System.out.println(se.getMessage());
+					}
+				} else {
+					System.out.println("Folder exist");
+				}
+				Font bf12 = FontFactory.getFont("Arial", 23);
+				System.out.println("before enter Images/wats_icon.png");
+				Image img1 = Image.getInstance(watslogo);
+				System.out.println("after enter Images/wats_icon.png");
+				img1.scalePercent(65, 68);
+				img1.setAlignment(Image.ALIGN_RIGHT);
+				Font bfBold12 = FontFactory.getFont("Arial", 23);
+				String Report = "Execution Report";
+				Font fnt = FontFactory.getFont("Arial", 12);
+
+				Document document = new Document();
+				PdfWriter.getInstance(document, new FileOutputStream(FILE));
+				Rectangle one = new Rectangle(1360, 800);
+				document.setPageSize(one);
+				document.open();
+				String TestRun = test_Run_Name;
+				String ScriptNumber = Script_Number;
+//				String error = "Resources Unavailable";
+				String ScriptNumber1 = Scenario_Name;
+				String Scenario1;
+				if (validationFlag) {
+					Scenario1 = "Pass";
+				} else {
+					Scenario1 = "Fail";
+				}
+
+				String TR = "Test Run Name";
+				String SN = "Script Number";
+				String SN1 = "Scenario Name";
+				String Scenarios1 = "Status ";
+//				String showErrorMessage = "	ErrorMessage ";
+				String EB = "Executed By";
+				String ST = "Start Time";
+				String ET = "End Time";
+				String EX = "Execution Time";
+
+				document.add(img1);
+
+				document.add(new Paragraph(Report, bfBold12));
+				document.add(Chunk.NEWLINE);
+				PdfPTable table1 = new PdfPTable(2);
+				table1.setWidths(new int[] { 1, 1 });
+				table1.setWidthPercentage(100f);
+
+				insertCell(table1, TR, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, TestRun, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, SN, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, ScriptNumber, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, SN1, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, ScriptNumber1, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, Scenarios1, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, Scenario1, Element.ALIGN_LEFT, 1, bf12);
+//				insertCell(table1, showErrorMessage, Element.ALIGN_LEFT, 1, bf12);
+//				insertCell(table1, error, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, EB, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, ExecutedBy, Element.ALIGN_LEFT, 1, bf12);
+				insertCell(table1, ST, Element.ALIGN_LEFT, 1, bf12);
+
+				document.add(table1);
+				document.newPage();
+				
+				File file = new ClassPathResource(whiteimage).getFile();
+				
+				File file1 = new ClassPathResource(watslogo.substring(10)).getFile();
+				BufferedImage logo = null;
+				logo = ImageIO.read(file1);
+				
+				
+				
+				
+				
+				BufferedImage image1 = null;
+				image1 = ImageIO.read(file);
+				Graphics g1 = image1.getGraphics();
+				g1.setColor(Color.red);
+				java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+				g1.setFont(font1);
+				g1.drawString("Response : "+api.getResponseCode(), 500, 360);
+//				Gson gson = new Gson();    
+//				Map<String,String> attributes = gson.fromJson(gson.toJson(api.getResponse()),Map.class);
+				
+//				g1.drawString(json, 195, 370);
+//				g1.drawString("Thank you!!", 500, 420);
+				g1.drawImage(logo, 1100, 100, null);
+				
+				g1.dispose();
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image1, "png", baos);
+				
+				Image driverFail = Image.getInstance(baos.toByteArray());
+				
+					
+					String status = "Failed";
+					String scenario = fetchMetadataListVO.get(0).getScenario_name();
+
+						document.setPageSize(one);
+						document.newPage();
+						
+						
+						driverFail.setAlignment(Image.ALIGN_CENTER);
+						driverFail.isScaleToFitHeight();
+						driverFail.scalePercent(60, 58);
+						document.add(driverFail);
+
+//					Paragraph p = new Paragraph(String.format("page %s of %s", 1,1));
+//					p.setAlignment(Element.ALIGN_RIGHT);
+					document.newPage();
+					Paragraph p = new Paragraph("Response Body :- ");
+					p.setAlignment(Element.ALIGN_LEFT);
+					ObjectMapper mapper = new ObjectMapper();
+					Object json = mapper.readValue(api.getResponse(), Object.class);
+					String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+					Paragraph p1 = new Paragraph(indented);
+					p1.setAlignment(Element.CCITTG3_2D);
+					document.add(p);
+					document.add(p1);
+					System.out.println("This Image 'DRIVER FAILED' was added to the report");
+				document.close();
+			} catch (Exception e) {
+				System.out.println("Not able to upload the pdf");
+				e.printStackTrace();
+			}
+		
 		
 	}
 
