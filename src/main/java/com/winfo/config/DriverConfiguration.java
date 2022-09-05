@@ -85,14 +85,6 @@ public class DriverConfiguration {
 			options.setCapability(BrowserConstants.MARIONETTE.value, true);
 			// driver = new FirefoxDriver(options);
 			driver = new RemoteWebDriver(new URL(configUrl), options);
-		} else if (BrowserConstants.EDGE.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-//			System.setProperty(DriverConstants.MS_EDGE.value, "/Github/EBS-Automation-POC/Driver/msedgedriver.exe");
-			System.setProperty(DriverConstants.MS_EDGE.value, fetchConfigVO.getEdge_driver_path());
-			DesiredCapabilities capability = DesiredCapabilities.edge();
-			capability.setBrowserName("MicrosoftEdge");
-			capability.setPlatform(Platform.LINUX);
-//			driver = new EdgeDriver();
-			driver = new RemoteWebDriver(new URL(configUrl), capability);
 		}
 		if (driver != null) {
 			logger.info("Browser launched...");
