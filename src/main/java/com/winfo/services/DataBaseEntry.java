@@ -245,21 +245,31 @@ public class DataBaseEntry {
 	}
 
 	public boolean checkScriptStatusForSteps(List<Integer> stepIdList) {
-		
+		Boolean status = null;
+
 		List<String> result = dao.getStepsStatusForSteps(stepIdList);
 		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
-			return false;
+			status = false;
 		}
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.PASS.getLabel()::equalsIgnoreCase)) {
-			return true;
+			status = true;
 		}
-		try {
-			Thread.sleep(3000);
-			checkScriptStatusForSteps(stepIdList);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+		while (status == null) {
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			result = dao.getStepsStatusForSteps(stepIdList);
+			if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+				status = false;
+			}
+			if (result.stream().allMatch(SCRIPT_PARAM_STATUS.PASS.getLabel()::equalsIgnoreCase)) {
+				status = true;
+			}
 		}
-		return false;
+
+		return status;
 	}
 
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
