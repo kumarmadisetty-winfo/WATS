@@ -32,7 +32,7 @@ import com.winfo.vo.ResponseDto;
 @Service
 public class CopyTestRunService {
 	Logger log = Logger.getLogger("Logger");
-	
+
 	private static final String NEW = "New";
 
 	@Autowired
@@ -64,12 +64,16 @@ public class CopyTestRunService {
 		newTestSetObj.setLastExecutBy(null);
 
 		String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
-		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<>();
+
+		Map<Integer, TestSetLine> mapOfLinesData = new HashMap<>();
+
 		for (TestSetLine testSetLineObj : testSetObj.getTestRunScriptDatalist()) {// getScriptdata
 
 			ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(testSetLineObj.getScriptNumber(),
 					productVersion);
 			TestSetLine testSetLineRecords = new TestSetLine();
+			mapOfLinesData.put(testSetLineObj.getTestRunScriptId(), testSetLineRecords);
 			if (scriptMaster != null) {
 				testSetLineRecords.setScriptId(scriptMaster.getScript_id());
 				testSetLineRecords.setCreatedBy(copyTestrunvo.getCreatedBy());
@@ -77,6 +81,7 @@ public class CopyTestRunService {
 				testSetLineRecords.setEnabled("Y");
 				testSetLineRecords.setScriptNumber(scriptMaster.getScript_number());
 				testSetLineRecords.setSeqNum(testSetLineObj.getSeqNum());
+				mapOfTestRunDependencyOldToNewId.put(testSetLineObj.getTestRunScriptId(), testSetLineObj.getSeqNum());
 				testSetLineRecords.setStatus(NEW);
 				testSetLineRecords.setLastUpdatedBy(null);
 				testSetLineRecords.setScriptUpadated("N");
@@ -85,7 +90,6 @@ public class CopyTestRunService {
 				testSetLineRecords.setExecutedBy(null);
 				testSetLineRecords.setExecutionStartTime(null);
 				testSetLineRecords.setExecutionEndTime(null);
-//				testSetLineRecords.setDependency_tr(testSetLineObj.getDependency_tr());
 				newTestSetObj.addTestRunScriptData(testSetLineRecords);
 			} else {
 
@@ -191,16 +195,34 @@ public class CopyTestRunService {
 
 		}
 		log.info("before saveTestrun");
-		if (!mapOfTestRunDependencyOldToNewId.isEmpty()) {
-			for (TestSetLine testSetLine : newTestSetObj.getTestRunScriptDatalist()) {
-				if (testSetLine.getDependency_tr() != null) {
-					testSetLine.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(testSetLine.getDependency_tr()));
-				}
+		for (TestSetLine oldTestSetLine : testSetObj.getTestRunScriptDatalist()) {
+			if (oldTestSetLine.getDependency_tr() != null) {
+				mapOfLinesData.get(oldTestSetLine.getTestRunScriptId())
+						.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependency_tr()));
 			}
 		}
-		int newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
-		log.info("newtestrun 1:" + newtestrun);
-		return newtestrun;
+
+		TestSet newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
+
+		Map<Integer, Integer> dependencyLinesIdAndSeqNum = new HashMap<>();
+		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
+			dependencyLinesIdAndSeqNum.put(newTestSetLine.getTestRunScriptId(), newTestSetLine.getSeqNum());
+		}
+
+		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
+			if (newTestSetLine.getDependency_tr() != null) {
+				for(Map.Entry<Integer, Integer> entrySet : dependencyLinesIdAndSeqNum.entrySet()) {
+					if(entrySet.getValue().equals(newTestSetLine.getDependency_tr())) {
+						newTestSetLine.setDependency_tr(entrySet.getKey());
+						break;
+					}
+				}
+				copyTestrunDao.updatelinesRecord(newTestSetLine);
+			}
+		}
+
+		log.info("newtestrun 1:" + newtestrun.getTestRunId());
+		return newtestrun.getTestRunId();
 	}
 
 	private void addInputvalues(TestSetScriptParam getScriptlinedata, TestSetScriptParam setScriptlinedata,
@@ -363,7 +385,7 @@ public class CopyTestRunService {
 			newLineObj.setCreationDate(existLineObj.getCreationDate());
 			newLineObj.setEnabled(existLineObj.getEnabled());
 			newLineObj.setScriptNumber(existLineObj.getScriptNumber());
-			newLineObj.setSeqNum(maxSeqNum);
+			newLineObj.setSeqNum(maxSeqNum + scriptVO.getIncrementalValue());
 			maxSeqNum++;
 			newLineObj.setStatus(NEW);
 			newLineObj.setLastUpdatedBy(null);
