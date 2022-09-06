@@ -363,8 +363,8 @@ public class CopyTestRunService {
 			newLineObj.setCreationDate(existLineObj.getCreationDate());
 			newLineObj.setEnabled(existLineObj.getEnabled());
 			newLineObj.setScriptNumber(existLineObj.getScriptNumber());
+			maxSeqNum+= scriptVO.getIncrementalValue();
 			newLineObj.setSeqNum(maxSeqNum);
-			maxSeqNum++;
 			newLineObj.setStatus(NEW);
 			newLineObj.setLastUpdatedBy(null);
 			newLineObj.setScriptUpadated("N");
