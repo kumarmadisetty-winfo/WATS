@@ -329,14 +329,20 @@ public class RunAutomation {
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", customerDetails);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Failed_Report.pdf", customerDetails);
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+						fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
+
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
-						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
+						.deleteScreenShotFromTempLocation(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION(),
+								customerDetails);
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+						.deletePdfsFromTempLocation(fetchConfigVO.getWINDOWS_PDF_LOCATION(), customerDetails);
 
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadPDF(fetchMetadataListVOforEvidence,
-							fetchConfigVO, customerDetails);
+					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+							.uploadPDF(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				executeTestrunVo.setStatusCode(200);
 				executeTestrunVo.setStatusMessage("SUCCESS");
@@ -458,8 +464,8 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
-			seleniumFactory.getInstanceObjFromAbstractClass(instanceName).delatedScreenshoots(fetchMetadataListVO,
-					fetchConfigVO, customerDetails);
+			seleniumFactory.getInstanceObjFromAbstractClass(instanceName)
+					.deleteOldScreenshotForScriptFrmObjStore(fetchMetadataListVO.get(0), customerDetails);
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
