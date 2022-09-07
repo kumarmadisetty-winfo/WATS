@@ -41,6 +41,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.jfree.util.Log;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -73,9 +74,11 @@ import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
+import com.oracle.bmc.objectstorage.requests.DeleteObjectRequest;
 import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
+import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
@@ -262,7 +265,7 @@ public abstract class AbstractSeleniumKeywords {
 
 					String imageName = objectName.substring(objectName.lastIndexOf("/") + 1, objectName.length());
 					File file = new File(screenshotPath + File.separator + imageName);
-					logger.info("Image Name ****** "+imageName);
+					logger.info("Image Name ****** " + imageName);
 					logger.info(file.exists() + "FileExist or not ******" + file.getPath());
 					if (!file.exists()) {
 						try (final InputStream stream = getResponse.getInputStream();
@@ -1213,29 +1216,77 @@ public abstract class AbstractSeleniumKeywords {
 
 	}
 
-	public void delatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getTestSetName() + "/");
-		if (folder.exists()) {
-			File[] listOfFiles = folder.listFiles();
-
-//		String image=fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "/"
-//				+ fetchMetadataVO.getTest_run_name() + "/" + fetchMetadataVO.getSeq_num() + "_"
-//				+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-//				+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-//				+ fetchMetadataVO.getLine_number();
-			for (File file : Arrays.asList(listOfFiles)) {
-
-				String seqNum = String.valueOf(file.getName().substring(0, file.getName().indexOf('_')));
-
-				String seqnum1 = fetchMetadataListVO.get(0).getSeqNum();
-				if (seqNum.equalsIgnoreCase(seqnum1)) {
-					Path imagesPath = Paths.get(file.getPath());
-					Files.delete(imagesPath);
+	public void deleteScreenShotFromTempLocation(String screenshotFolder, CustomerProjectDto customerDetails) {
+		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+				+ File.separator;
+		try {
+			if (screenshotFolder != null) {
+				File folder = new File(screenshotFolder + path);
+				if (folder.exists()) {
+					FileUtils.deleteDirectory(folder);
 				}
 			}
+		} catch (IOException e) {
+			logger.error(e.getMessage());
 		}
+	}
+
+	public void deletePdfsFromTempLocation(String pdfFolder, CustomerProjectDto customerDetails) {
+		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+				+ File.separator;
+		try {
+			if (pdfFolder != null) {
+				File folder = new File(pdfFolder + path);
+				if (folder.exists()) {
+					FileUtils.deleteDirectory(folder);
+				}
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	public void deleteOldScreenshotForScriptFrmObjStore(ScriptDetailsDto testSetLine, CustomerProjectDto customerDetails) {
+		ConfigFileReader.ConfigFile configFile = null;
+		try {
+			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+		} catch (IOException e) {
+			throw new WatsEBSCustomException(500, "Not able to read object store config");
+		}
+
+		try {
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			List<String> objNames = null;
+			try (ObjectStorage client = new ObjectStorageClient(provider);) {
+
+				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
+						+ FORWARD_SLASH + customerDetails.getTestSetName() + FORWARD_SLASH + testSetLine.getSeqNum();
+				ListObjectsRequest listScreenShotObjectsRequest = ListObjectsRequest.builder()
+						.namespaceName(ociNamespace).bucketName(ociBucketName).prefix(objectStoreScreenShotPath)
+						.delimiter("/").build();
+
+				ListObjectsResponse responseScreenShot = client.listObjects(listScreenShotObjectsRequest);
+
+				objNames = responseScreenShot.getListObjects().getObjects().stream()
+						.map((objSummary) -> objSummary.getName()).collect(Collectors.toList());
+
+				logger.info(objNames.size());
+				if (objNames.size() > 0) {
+					ListIterator<String> listIt = objNames.listIterator();
+
+					while (listIt.hasNext()) {
+						String objectName = listIt.next();
+						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
+								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
+					}
+				} else {
+					logger.info("Screenshot is not present");
+				}
+			}
+		} catch (Exception e1) {
+			Log.error("Not able to connect with object store");
+		}
+		logger.info("Script screenshot deleted successfully!!");
 	}
 
 	public String uploadPDF(String sourceFile, String destinationFilePath) {

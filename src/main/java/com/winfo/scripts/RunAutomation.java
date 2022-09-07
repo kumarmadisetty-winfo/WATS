@@ -477,8 +477,8 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
-			seleniumFactory.getInstanceObjFromAbstractClass(instanceName).delatedScreenshoots(fetchMetadataListVO,
-					fetchConfigVO, customerDetails);
+			seleniumFactory.getInstanceObjFromAbstractClass(instanceName)
+					.deleteOldScreenshotForScriptFrmObjStore(fetchMetadataListVO.get(0), customerDetails);
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
