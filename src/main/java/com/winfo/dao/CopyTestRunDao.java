@@ -29,10 +29,10 @@ public class CopyTestRunDao {
 		return getTestrun;
 	}
 
-	public int saveTestrun(TestSet testSetObj) {
+	public TestSet saveTestrun(TestSet testSetObj) {
 		entityManager.persist(testSetObj);
 		System.out.println("setTestrundata.getTestsetid() 1:" + testSetObj.getTestRunId());
-		return testSetObj.getTestRunId();
+		return testSetObj;
 	}
 
 	public int getIds() {
@@ -93,7 +93,7 @@ public class CopyTestRunDao {
 		return testSetObj.getTestRunId();
 
 	}
-	
+
 	public void updatelinesRecord(TestSetLine testSetLines) {
 		entityManager.persist(testSetLines);
 	}
@@ -168,10 +168,10 @@ public class CopyTestRunDao {
 		return null;
 
 	}
-	
+
 	public Integer findMaxSeqNumOfTestRun(Integer testSetId) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "select max(seq_num) from WIN_TA_TEST_SET_LINES where test_set_id = "+testSetId;
+		String sql = "select max(seq_num) from WIN_TA_TEST_SET_LINES where test_set_id = " + testSetId;
 		Query query = session.createSQLQuery(sql);
 		List<BigDecimal> maxSeqnumList = query.getResultList();
 		if (maxSeqnumList.isEmpty()) {
@@ -179,13 +179,11 @@ public class CopyTestRunDao {
 		}
 		return maxSeqnumList.get(0).intValue();
 	}
-	
-	
+
 	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
-		log.info("TestSetLineID *** "+testSetLineId);
+		log.info("TestSetLineID *** " + testSetLineId);
 		TestSetLine testSetLineObj = entityManager.find(TestSetLine.class, testSetLineId);
 		return testSetLineObj;
 	}
-	
 
 }
