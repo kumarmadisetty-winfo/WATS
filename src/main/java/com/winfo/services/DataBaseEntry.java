@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 
@@ -174,7 +175,7 @@ public class DataBaseEntry {
 	public String getPackage(String args) {
 		return dao.getPackage(args);
 	}
-	
+
 	public Customer getCustomer(String args) {
 		return dao.getCustomer(args);
 	}
@@ -241,6 +242,34 @@ public class DataBaseEntry {
 		} else {
 			return UPDATE_STATUS.PASS.getLabel();
 		}
+	}
+
+	public boolean checkScriptStatusForSteps(List<Integer> stepIdList) {
+		Boolean status = null;
+
+		List<String> result = dao.getStepsStatusForSteps(stepIdList);
+		if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+			status = false;
+		}
+		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.PASS.getLabel()::equalsIgnoreCase)) {
+			status = true;
+		}
+		while (status == null) {
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			result = dao.getStepsStatusForSteps(stepIdList);
+			if (result.stream().anyMatch(SCRIPT_PARAM_STATUS.FAIL.getLabel()::equalsIgnoreCase)) {
+				status = false;
+			}
+			if (result.stream().allMatch(SCRIPT_PARAM_STATUS.PASS.getLabel()::equalsIgnoreCase)) {
+				status = true;
+			}
+		}
+
+		return status;
 	}
 
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
@@ -454,13 +483,17 @@ public class DataBaseEntry {
 	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
 		return dao.getAllTestSetLineRecord(testSetId);
 	}
-	
+
 	public void updateEnableFlagForSanity(String testSetId) {
 		dao.updateEnableFlagForSanity(testSetId);
 	}
 
 	public TestSet getTestRunDetails(String testSetId) {
 		return dao.getTestRunDetails(testSetId);
+	}
+
+	public boolean checkActionContainsExcel(String script_id) {
+		return dao.checkActionContainsExcel(script_id);
 	}
 
 }

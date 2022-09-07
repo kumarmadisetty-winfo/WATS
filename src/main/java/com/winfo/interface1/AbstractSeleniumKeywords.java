@@ -277,6 +277,7 @@ public abstract class AbstractSeleniumKeywords {
 								outputStream.write(buf, 0, bytesRead);
 							}
 						} catch (IOException e1) {
+							e1.printStackTrace();
 							throw new WatsEBSCustomException(500,
 									"Exception occured while read or write screenshot from Object Storage", e1);
 						}
