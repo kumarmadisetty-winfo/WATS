@@ -290,7 +290,7 @@ public interface SeleniumKeyWordsInterface {
 			ApiValidationVO api) throws Exception;
 
 	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			String pdffileName, ApiValidationVO api, boolean validationFlag, CustomerProjectDto customerDetails)
 			throws IOException, DocumentException, com.lowagie.text.DocumentException;
 
 	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api);
