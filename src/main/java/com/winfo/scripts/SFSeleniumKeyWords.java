@@ -150,6 +150,27 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
+	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, FetchMetadataVO fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value) throws Exception {
+		String param5 = "password";
+		String param6 = "Username";
+		navigatesfUrl(driver, fetchConfigVO, fetchMetadataVO);
+		String xpath1 = sfloginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO);
+		String xpath2 = sfloginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO);
+		if (xpath2.equalsIgnoreCase(null)) {
+			throw new IOException("Failed during login page");
+		}
+		String scripNumber = fetchMetadataVO.getScript_number();
+		String xpath = xpath1 + ";" + xpath2;
+		String scriptID = fetchMetadataVO.getScript_id();
+		String lineNumber = fetchMetadataVO.getLine_number();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
+//		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
+//		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
+//		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
+//		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
+	}
 
 	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
