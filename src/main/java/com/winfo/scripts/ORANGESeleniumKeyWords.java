@@ -18137,23 +18137,23 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	@Override
 	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, ApiValidationVO api, boolean validationFlag)
+			String pdffileName, ApiValidationVO api, boolean validationFlag, CustomerProjectDto customerDetails)
 			throws IOException, DocumentException, com.lowagie.text.DocumentException {
 			try {
 				String Date = DateUtils.getSysdate();
-				String Folder = (fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-						+ fetchMetadataListVO.get(0).getTest_run_name() + "/");
+				String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+						+ customerDetails.getTestSetName() + "/");
 				String FILE = (Folder + pdffileName);
 				System.out.println(FILE);
 
-				String Script_Number = fetchMetadataListVO.get(0).getScript_number();
-				String customer_Name = fetchMetadataListVO.get(0).getCustomer_name();
-				String test_Run_Name = fetchMetadataListVO.get(0).getTest_run_name();
-				String Scenario_Name = fetchMetadataListVO.get(0).getScenario_name();
+				String Script_Number = fetchMetadataListVO.get(0).getScriptNumber();
+				String customer_Name = customerDetails.getCustomerName();
+				String test_Run_Name = customerDetails.getTestSetName();
+				String Scenario_Name = fetchMetadataListVO.get(0).getScenarioName();
 				
 				// new change add ExecutedBy field
-				String ExecutedBy = fetchMetadataListVO.get(0).getExecuted_by();
-				String ScriptDescription1 = fetchMetadataListVO.get(0).getScenario_name();
+				String ExecutedBy = fetchMetadataListVO.get(0).getExecutedBy();
+				String ScriptDescription1 = fetchMetadataListVO.get(0).getScenarioName();
 				File theDir = new File(Folder);
 				if (!theDir.exists()) {
 					System.out.println("creating directory: " + theDir.getName());
@@ -18262,7 +18262,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				
 					
 					String status = "Failed";
-					String scenario = fetchMetadataListVO.get(0).getScenario_name();
+					String scenario = fetchMetadataListVO.get(0).getScenarioName();
 
 						document.setPageSize(one);
 						document.newPage();
