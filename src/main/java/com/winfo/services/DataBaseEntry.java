@@ -54,20 +54,20 @@ public class DataBaseEntry {
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
 
-	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
 	}
 
-	public void updateFailedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String error_message)
 			throws ClassNotFoundException, SQLException {
 		dao.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, error_message);
 	}
 
-	public void updateInProgressScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
+	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
+			throws ClassNotFoundException, SQLException {
+		dao.updateInProgressScriptLineStatus(test_script_param_id, status);
 	}
 
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
@@ -104,9 +104,9 @@ public class DataBaseEntry {
 		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
 	}
 
-	public void updateFailedImages(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id) throws SQLException {
-		dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
+	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String test_script_param_id, CustomerProjectDto customerDetails) throws SQLException {
+		dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id, customerDetails);
 	}
 
 	@Transactional
@@ -127,16 +127,16 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public void getDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap) {
+	public void getDependentScriptNumbers(LinkedHashMap<String, List<ScriptDetailsDto>> dependentScriptMap) {
 		List<Integer> dependentList = new ArrayList();
-		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
-			dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()));
+		for (Entry<String, List<ScriptDetailsDto>> element : dependentScriptMap.entrySet()) {
+			dependentList.add(Integer.parseInt(element.getValue().get(0).getScriptId()));
 
 		}
 
 		dao.getDependentScriptNumbers(dependentScriptMap, dependentList);
 		/*
-		 * for(Entry<String,List<FetchMetadataVO>>
+		 * for(Entry<String,List<ScriptDetailsDto>>
 		 * element:dependentScriptMap.entrySet()) {
 		 * //dependentList.add(Integer.parseInt(element.getValue().get(0).getScript_id()
 		 * ));
@@ -151,11 +151,11 @@ public class DataBaseEntry {
 	}
 
 	@Transactional
-	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap,
+	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<ScriptDetailsDto>> dependentScriptMap,
 			String testSetId) {
 		List<Integer> dependentList = new ArrayList();
-		for (Entry<String, List<FetchMetadataVO>> element : dependentScriptMap.entrySet()) {
-			dependentList.add(Integer.parseInt(element.getValue().get(0).getTest_set_line_id()));
+		for (Entry<String, List<ScriptDetailsDto>> element : dependentScriptMap.entrySet()) {
+			dependentList.add(Integer.parseInt(element.getValue().get(0).getTestSetLineId()));
 
 		}
 		dao.getTestRunLevelDependentScriptNumbers(dependentScriptMap, dependentList, testSetId);
@@ -379,12 +379,12 @@ public class DataBaseEntry {
 		return dao.getConfigurationDetails(testSetId);
 	}
 
-	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
 	}
 
-	public void updatePassedScriptLineStatus(FetchMetadataVO fetchMetadataVO, FetchConfigVO fetchConfigVO,
+	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String value, String message)
 			throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);

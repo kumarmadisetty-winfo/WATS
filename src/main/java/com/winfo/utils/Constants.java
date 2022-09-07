@@ -93,5 +93,6 @@ public class Constants {
 	public static final String ERR_MSG_FOR_SCRIPT_RUN = "System could not run the script. Try to re-execute. If it continues to fail, please contact WATS Support Team";
 	public static final String ERR_MSG_FOR_DEP_FAILED = "Dependent Script Failed";
 	public static final String SPLIT = "@";
+	public static final String SCRIPT_UPDATE_MSG = "Successfully Updated scripts in given TestRun!!";
 
 }

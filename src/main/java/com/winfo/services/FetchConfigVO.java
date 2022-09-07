@@ -29,7 +29,7 @@ public class FetchConfigVO {
 
 	private String CHROME_DRIVER_PATH;
 	
-	private String IE_DRIVER_PATH;
+	private String EDGE_DRIVER_PATH;
 	
 	private String FIREFOX_DRIVER_PATH;
 	
@@ -631,11 +631,11 @@ public int getMax_num_scripts() {
 	public void setChrome_driver_path(String chrome_driver_path) {
 		this.CHROME_DRIVER_PATH = chrome_driver_path;
 	}
-	public String getIe_driver_path() {
-		return IE_DRIVER_PATH;
+	public String getEdge_driver_path() {
+		return EDGE_DRIVER_PATH;
 	}
-	public void setIe_driver_path(String ie_driver_path) {
-		this.IE_DRIVER_PATH = ie_driver_path;
+	public void setEdge_driver_path(String edge_driver_path) {
+		this.EDGE_DRIVER_PATH = edge_driver_path;
 	}
 	public String getFirefox_driver_path() {
 		return FIREFOX_DRIVER_PATH;
