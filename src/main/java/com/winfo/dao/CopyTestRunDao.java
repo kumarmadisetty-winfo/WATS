@@ -174,10 +174,10 @@ public class CopyTestRunDao {
 		String sql = "select max(seq_num) from WIN_TA_TEST_SET_LINES where test_set_id = "+testSetId;
 		Query query = session.createSQLQuery(sql);
 		List<BigDecimal> maxSeqnumList = query.getResultList();
-		if(maxSeqnumList.isEmpty()) {
-			return 1;
+		if (maxSeqnumList.isEmpty()) {
+			return 0;
 		}
-		return maxSeqnumList.get(0).intValue() + 1;
+		return maxSeqnumList.get(0).intValue();
 	}
 	
 	
