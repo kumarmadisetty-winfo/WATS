@@ -1,13 +1,10 @@
 package com.winfo.services;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,12 +16,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,13 +42,8 @@ import com.google.gson.Gson;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
-import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
-import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
-import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
-import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
-import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
@@ -68,7 +58,6 @@ import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
-import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.Constants.UPDATE_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.CustomerProjectDto;
@@ -376,7 +365,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Parameter>")) {
 						dbValue = codeLineRepo.findByTestRunScriptIdInputParam(
-								Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
+								Integer.parseInt(fetchMetadataVO.getTestScriptParamId()), key);
 						listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 
 					}
@@ -824,37 +813,37 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
 
-	public void runExcelSteps(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			boolean run) {
+	public void runExcelSteps(String param, List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			boolean run, CustomerProjectDto customerDetails) {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
-		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
-		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
+		String testSetId = customerDetails.getTestSetId();
+		String testSetLineId = fetchMetadataListVO.get(0).getTestSetLineId();
 		String testScriptParamId = null;
 		String methodCall;
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
-				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
+				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
 				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
 		System.out
-				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
+				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTestSetLineId());
 
-		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + fetchMetadataListVO.get(0).getCustomer_name()
-				+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH;
+		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName()
+				+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH;
 
-		for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
+		for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
-			testScriptParamId = fetchMetadataVO.getTest_script_param_id();
+			testScriptParamId = fetchMetadataVO.getTestScriptParamId();
 
-			String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
-					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-					+ fetchMetadataVO.getLine_number();
+			String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber();
 
-			methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), fetchMetadataVO.getAction(),
-					fetchMetadataVO.getInput_value(), screenshotPath, testScriptParamId);
+			methodCall = ebsActions(fetchMetadataVO, customerDetails.getTestSetId(), fetchMetadataVO.getAction(),
+					fetchMetadataVO.getInputValue(), screenshotPath, testScriptParamId, customerDetails);
 			methods.add(methodCall);
 		}
 		dto.setActions(methods);
@@ -869,10 +858,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		ctx.setVariable("dto", dto);
 		final String scriptContent = this.templateEngine.process("excel-automation-template.txt", ctx);
 		System.out.println(scriptContent);
-		String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
-				+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
-				+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
-				+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
+		String scriptPathForPyJabScript = customerDetails.getCustomerName() + FORWARD_SLASH
+				+ customerDetails.getTestSetName() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTestSetLineId() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTestSetLineId() + PY_EXTN;
 		uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC, null);
 
