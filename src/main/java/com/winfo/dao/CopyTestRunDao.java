@@ -175,9 +175,9 @@ public class CopyTestRunDao {
 		Query query = session.createSQLQuery(sql);
 		List<BigDecimal> maxSeqnumList = query.getResultList();
 		if (maxSeqnumList.isEmpty()) {
-			return 1;
+			return 0;
 		}
-		return maxSeqnumList.get(0).intValue() + 1;
+		return maxSeqnumList.get(0).intValue();
 	}
 
 	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
