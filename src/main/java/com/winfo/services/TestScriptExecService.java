@@ -90,7 +90,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	private static final String PNG_EXTENSION = ".png";
 	private static final String JPG_EXTENSION = ".jpg";
 	public static final String FORWARD_SLASH = "/";
-	public static final String SPLIT = "@";
 	private static final String[] CONST = { "Status", "Total", "Percentage" };
 	private static final String PASSED = "Passed";
 	private static final String FAILED = "Failed";
@@ -148,6 +147,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	@Value("${kafka.topic.name.test.run}")
 	private String testScriptRunTopicName;
+	
+	@Value("${kafka.topic.name.excel.test.run}")
+	private String excelTestRunTopicName;
 
 	@Autowired
 	TemplateEngine templateEngine;
@@ -335,13 +337,13 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				result = new ObjectMapper().readValue(paramValue, HashMap.class);
 				for (Map.Entry<String, Object> entry : result.entrySet()) {
 					keyWithIndex = entry.getKey();
-					index = keyWithIndex.split(SPLIT)[0];
-					key = keyWithIndex.split(SPLIT)[1];
+					index = keyWithIndex.split(Constants.SPLIT)[0];
+					key = keyWithIndex.split(Constants.SPLIT)[1];
 					value = (String) entry.getValue();
 
 					if (value.equalsIgnoreCase("<Pick from Config Table>")) {
 						dbValue = codeLineRepo.findByConfigurationId(Integer.parseInt(testrunId), key);
-						listArgs.add(index + SPLIT + addQuotes(dbValue));
+						listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Value>")) {
 						dbValue = inputValue;
@@ -349,18 +351,18 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 							if (dbValue.contains(">")) {
 								String[] arrOfStr = dbValue.split(">", 5);
 								if (arrOfStr.length < 2) {
-									listArgs.add(index + SPLIT + addQuotes(dbValue));
+									listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 								} else {
 									String menu = arrOfStr[0];
 									String subMenu = arrOfStr[1];
 									String menuLink = menu + "    " + subMenu;
-									listArgs.add(index + SPLIT + addQuotes(menuLink));
+									listArgs.add(index + Constants.SPLIT + Constants.addQuotes(menuLink));
 								}
 							} else {
-								listArgs.add(index + SPLIT + addQuotes(dbValue));
+								listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 							}
 						} else {
-							listArgs.add(index + SPLIT + addQuotes(dbValue));
+							listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 						}
 
 					}
@@ -370,19 +372,20 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 								+ customerDetails.getCustomerName() + "\\\\" + customerDetails.getTestSetName();
 
 						dbValue = image_dest;
-						listArgs.add(index + SPLIT + addQuotes(dbValue));
+						listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 					}
 					if (value.equalsIgnoreCase("<Pick from Input Parameter>")) {
 						dbValue = codeLineRepo.findByTestRunScriptIdInputParam(
-								Integer.parseInt(fetchMetadataVO.getTestScriptParamId()), key);
-						listArgs.add(index + SPLIT + addQuotes(dbValue));
+								Integer.parseInt(fetchMetadataVO.getTest_script_param_id()), key);
+						listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
+
 					}
 					if (value.equalsIgnoreCase("<Password>")) {
 						String userName = fetchMetadataVO.getInputValue();
 
 						dbValue = dataBaseEntry.getPassword(customerDetails.getTestSetId(), userName, null);
 						dbValue = dbValue != null ? dbValue : "welcome123";
-						listArgs.add(index + SPLIT + addQuotes(dbValue));
+						listArgs.add(index + Constants.SPLIT + Constants.addQuotes(dbValue));
 					}
 				}
 
@@ -395,11 +398,11 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 		Collections.sort(listArgs);
 		listArgs.stream().map(val -> {
-			int indexVal = val.indexOf(SPLIT);
+			int indexVal = val.indexOf(Constants.SPLIT);
 			val = val.substring(indexVal + 1);
 			return val;
 		}).forEach(methodCall::add);
-		methodCall.add(addQuotes(screenshotPath));
+		methodCall.add(Constants.addQuotes(screenshotPath));
 		methodCall.add(testScriptParamId);
 		return methodCall.toString();
 	}
@@ -423,10 +426,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				}
 			}
 		}
-	}
-
-	private String addQuotes(String string) {
-		return "'" + string + "'";
 	}
 
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
@@ -591,7 +590,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 			} else {
-				fetchConfigVO.setErrormessage("EBS Execution Failed");
+				fetchConfigVO.setErrormessage("Execution Failed");
 				fetchConfigVO.setStatus1(FAIL);
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
@@ -819,9 +818,72 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
+
 	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
+	}
+
+	public void runExcelSteps(String param, List<FetchMetadataVO> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			boolean run) {
+
+		String log4jConfPath = "log4j.properties";
+		PropertyConfigurator.configure(log4jConfPath);
+		String testSetId = fetchMetadataListVO.get(0).getTest_set_id();
+		String testSetLineId = fetchMetadataListVO.get(0).getTest_set_line_id();
+		String testScriptParamId = null;
+		String methodCall;
+		ArrayList<String> methods = new ArrayList<>();
+		PyJabScriptDto dto = new PyJabScriptDto();
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecuted_by())
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
+		System.out
+				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTest_set_line_id());
+
+		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + fetchMetadataListVO.get(0).getCustomer_name()
+				+ BACK_SLASH + fetchMetadataListVO.get(0).getTest_run_name() + BACK_SLASH;
+
+		for (FetchMetadataVO fetchMetadataVO : fetchMetadataListVO) {
+
+			testScriptParamId = fetchMetadataVO.getTest_script_param_id();
+
+			String screenshotPath = screenShotFolderPath + fetchMetadataVO.getSeq_num() + "_"
+					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
+					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
+					+ fetchMetadataVO.getLine_number();
+
+			methodCall = ebsActions(fetchMetadataVO, fetchMetadataVO.getTest_set_id(), fetchMetadataVO.getAction(),
+					fetchMetadataVO.getInput_value(), screenshotPath, testScriptParamId);
+			methods.add(methodCall);
+		}
+		dto.setActions(methods);
+		dto.setScriptStatusUpdateUrl(scriptParamStatusUpdateUrl);
+		dto.setCopiedValueUrl(copiedValueUrl);
+		dto.setOciConfigPath(ociConfigPath);
+		dto.setOciConfigName(ociConfigName);
+		dto.setBuckerName(ociBucketName);
+		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path().replace("\\", "\\\\"));
+
+		final Context ctx = new Context();
+		ctx.setVariable("dto", dto);
+		final String scriptContent = this.templateEngine.process("excel-automation-template.txt", ctx);
+		System.out.println(scriptContent);
+		String scriptPathForPyJabScript = fetchMetadataListVO.get(0).getCustomer_name() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTest_run_name() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTest_set_line_id() + FORWARD_SLASH
+				+ fetchMetadataListVO.get(0).getTest_set_line_id() + PY_EXTN;
+		uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC, null);
+
+		logger.info(
+				"Publishing with details test_set_id, test_set_line_id, scriptPathForPyJabScript, screenShotFolderPath,objectStoreScreenShotPath ---- "
+						+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
+						+ screenShotFolderPath);
+		this.kafkaTemp.send(excelTestRunTopicName,
+				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
+
 	}
 
 }

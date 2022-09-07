@@ -16,6 +16,7 @@ public class PyJabScriptDto {
 	private String buckerName;
 	private String ociNameSpace;
 	private String scriptFileName;
+	private String downloadPath;
 
 	public String getApplicationName() {
 		return applicationName;
@@ -111,6 +112,14 @@ public class PyJabScriptDto {
 
 	public void setScriptFileName(String scriptFileName) {
 		this.scriptFileName = scriptFileName;
+	}
+
+	public String getDownloadPath() {
+		return downloadPath;
+	}
+
+	public void setDownloadPath(String downloadPath) {
+		this.downloadPath = downloadPath;
 	}
 
 }

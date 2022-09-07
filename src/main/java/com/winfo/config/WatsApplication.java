@@ -8,20 +8,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
-@EnableJpaRepositories(basePackages ="com.winfo.dao")
+@EnableJpaRepositories(basePackages = "com.winfo.dao")
 @EntityScan("com.winfo.model")
-@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;com.winfo.exception;")
+@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;com.winfo.exception;com.winfo.utils")
 
-public class WatsApplication extends SpringBootServletInitializer{
-	
-	
-	
+public class WatsApplication extends SpringBootServletInitializer {
+
 	public static void main(String[] args) {
 		SpringApplication.run(WatsApplication.class, args);
-		
+
 	}
 
 }
