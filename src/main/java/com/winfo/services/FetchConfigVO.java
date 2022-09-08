@@ -10,6 +10,7 @@ public class FetchConfigVO {
 	
 	private String OIC_APPLICATION_URL;
 	
+	private String SF_APPLICATION_URL;
 	
 	private String SHAREPOINT_SITE_ID; 
 	
@@ -698,5 +699,12 @@ public int getMax_num_scripts() {
 		INFORMATICA_APPLICATION_URL = iNFORMATICA_APPLICATION_URL;
 	}
 	
+	public String getSF_APPLICATION_URL() {
+		return SF_APPLICATION_URL;
+	}
+
+	public void setSF_APPLICATION_URL(String sF_APPLICATION_URL) {
+		SF_APPLICATION_URL = sF_APPLICATION_URL;
+	}
 	
 }

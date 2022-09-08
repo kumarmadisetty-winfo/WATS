@@ -15542,5 +15542,10 @@ public class WATSSeleniumKeyWords extends AbstractSeleniumKeywords implements Se
 		// TODO Auto-generated method stub
 		
 	}
+	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		
+	}
 
 }
