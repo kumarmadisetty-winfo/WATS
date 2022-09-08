@@ -26,6 +26,8 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -45,6 +47,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -60,6 +63,8 @@ import com.winfo.vo.Status;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
+	
+	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
 
 	private static final String TEST_SET_LINE = "testSetLine";
 	private static final String TEST_RUN_SCRIPT_ID = "testRunScriptId";
@@ -303,8 +308,7 @@ public class DataBaseEntryDao {
 			String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
 					+ File.separator
 
-					+ customerDetails.getTestSetName() + File.separator + fetchMetadataVO.getSeqNum()
-					+ SPECIAL_CHAR[0]
+					+ customerDetails.getTestSetName() + File.separator + fetchMetadataVO.getSeqNum() + SPECIAL_CHAR[0]
 
 					+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + fetchMetadataVO.getScenarioName()
 					+ SPECIAL_CHAR[0]
@@ -408,8 +412,8 @@ public class DataBaseEntryDao {
 		}
 
 		for (Entry<String, List<ScriptDetailsDto>> element : dependentScriptMap.entrySet()) {
-			element.getValue().get(0).setDependencyScriptNumber(
-					map.get(Integer.parseInt(element.getValue().get(0).getTestSetLineId())));
+			element.getValue().get(0)
+					.setDependencyScriptNumber(map.get(Integer.parseInt(element.getValue().get(0).getTestSetLineId())));
 		}
 
 	}
@@ -1118,6 +1122,25 @@ public class DataBaseEntryDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
+		try {
+			Query query = em.createQuery("from TestSetLine where testRun.testRunId=" + testSetId
+					+ " and enabled='" + isEnable + "' AND STATUS IN ('IN-PROGRESS','IN-QUEUE','New')");
+
+			List<TestSetLine> listOfLineDetails = query.getResultList();
+			
+			for(TestSetLine linesObj : listOfLineDetails) {
+				linesObj.setStatus(FAIL);
+				em.merge(linesObj);
+			}
+			
+		} catch (Exception e) {
+			logger.info("cant update script status to - " + FAIL);
+			logger.info(e.getMessage());
+		}
+	}
+
 	public void updateStatusOfScript(String testSetLineId, String status) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
@@ -1525,9 +1548,10 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			count = session.createSQLQuery(updateQry).setParameter("script_id", script_id).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains excel or not.", e);
+			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains excel or not.",
+					e);
 		}
-		boolean flag = Integer.parseInt(count.toString())>0 ? true : false;
+		boolean flag = Integer.parseInt(count.toString()) > 0 ? true : false;
 		return flag;
 	}
 

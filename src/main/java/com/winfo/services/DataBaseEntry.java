@@ -206,6 +206,11 @@ public class DataBaseEntry {
 		return auditTrial;
 	}
 
+	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
+		dao.updateLineStatusUsingSetIdandIsEnable(testSetId, isEnable);
+	}
+	
+	
 	public void updateStatusOfScript(String test_set_line_id, String status) {
 		dao.updateStatusOfScript(test_set_line_id, status);
 	}
