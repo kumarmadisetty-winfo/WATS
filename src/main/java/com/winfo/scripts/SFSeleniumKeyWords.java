@@ -85,6 +85,7 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
+import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.ArithmeticUtils;
@@ -138,6 +139,27 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		String xpath1 = loginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 		String xpath2 = loginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO, customerDetails);
 		if (xpath2 == null) {
+			throw new IOException("Failed during login page");
+		}
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		String xpath = xpath1 + ";" + xpath2;
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
+//		sendValue(driver, param1, param3, keysToSend, fetchMetadataVO, fetchConfigVO);
+//		sendValue(driver, param5, param2, value, fetchMetadataVO, fetchConfigVO);
+//		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
+//		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
+	}
+	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		String param5 = "password";
+		String param6 = "Username";
+		navigatesfUrl(driver, fetchConfigVO, fetchMetadataVO,customerDetails);
+		String xpath1 = sfloginPage(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO,customerDetails);
+		String xpath2 = sfloginPage(driver, param5, value, fetchMetadataVO, fetchConfigVO,customerDetails);
+		if (xpath2.equalsIgnoreCase(null)) {
 			throw new IOException("Failed during login page");
 		}
 		String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -402,6 +424,82 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO, customerDetails);
 			System.out.println("Not able to navitage to the Url");
 		}
+	}
+	public void navigatesfUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
+		try {
+			driver.navigate().to(fetchConfigVO.getSF_APPLICATION_URL());
+			driver.manage().window().maximize();
+			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
+			refreshPage(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
+			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed to logout " + scripNumber);
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("failed to do navigate URl " + scripNumber);
+			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO,customerDetails);
+			System.out.println("Not able to navitage to the Url");
+		}
+	}
+	public String sfloginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO,CustomerProjectDto customerDetails) {
+		String xpath = null;
+		try {
+			if (param1.equalsIgnoreCase("password")) {
+				String title1 = driver.getTitle();
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='" + param1 + "']")));
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
+				// if("password".equalsIgnoreCase(param1))
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
+				Thread.sleep(1000);
+				enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
+				Thread.sleep(5000);
+				String title2 = driver.getTitle();
+				if (title1.equalsIgnoreCase(title2)) {
+					screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO,customerDetails);
+					throw new IOException("Failed during login page");
+				}
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Succesfully password is entered " + scripNumber);
+				xpath = "//input[@type='param1']";
+				return xpath;
+			}
+		} catch (Exception e) {
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO,customerDetails);
+
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed to enter password " + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::input[1]")));
+			WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::input[1]"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			JavascriptExecutor jse = (JavascriptExecutor) driver;
+			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+			// if("password".equalsIgnoreCase(param1))
+			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			Thread.sleep(1000);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			xpath = "//*[text()='param1']/following::input[1]";
+			log.info("Successfully entered data " + scripNumber);
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
+			service.saveXpathParams(scriptID, lineNumber, xpath);
+			return xpath;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Failed during login page " + scripNumber);
+			screenshotFail(driver, "Failed During Login page", fetchMetadataVO, fetchConfigVO,customerDetails);
+			System.out.println("Failed During Login page");
+		}
+		return xpath;
 	}
 
 	public String loginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
@@ -19445,13 +19543,13 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	}
 
-	@Override
-	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			String pdffileName, ApiValidationVO api, boolean validationFlag)
-			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+//			String pdffileName, ApiValidationVO api, boolean validationFlag)
+//			throws IOException, com.itextpdf.text.DocumentException, DocumentException {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	@Override
 	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
@@ -19486,4 +19584,18 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			String pdffileName, ApiValidationVO api, boolean validationFlag, CustomerProjectDto customerDetails)
+			throws IOException, DocumentException, com.lowagie.text.DocumentException {
+		// TODO Auto-generated method stub
+		
+	}
+//	@Override
+//	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+//			String type1, String type2, String type3, String param1, String param2, String param3, String input_value,
+//			String password) throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }
