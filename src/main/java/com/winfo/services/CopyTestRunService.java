@@ -302,8 +302,14 @@ public class CopyTestRunService {
 
 			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
 					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
-				setScriptlinedata.setInputValue(
-						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+				String oldTestRunName=getInputvalues;
+				int index=oldTestRunName.indexOf(">");
+				if(index!=-1)
+				{
+					oldTestRunName=oldTestRunName.substring(0,index);
+					oldTestRunName=oldTestRunName.replace("(","");
+				}
+				setScriptlinedata.setInputValue(getInputvalues.replace(oldTestRunName, copyTestrunvo.getNewtestrunname()));
 			} else {
 				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
 			}
