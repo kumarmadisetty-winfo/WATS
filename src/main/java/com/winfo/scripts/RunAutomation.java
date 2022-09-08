@@ -176,8 +176,6 @@ public class RunAutomation {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 
-			int unit = 1 / 0;
-
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId, null, false,
