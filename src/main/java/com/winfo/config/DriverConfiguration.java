@@ -50,9 +50,11 @@ public class DriverConfiguration {
 			if (os.contains("win")) {
 				logger.info("windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
+				cap.setPlatform(Platform.XP);
 			} else {
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
+				cap.setPlatform(Platform.LINUX);
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.value);
 			options.addArguments(BrowserConstants.NO_SENDBOX.value);
