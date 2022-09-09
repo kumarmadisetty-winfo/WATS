@@ -312,9 +312,9 @@ public class RunAutomation {
 										System.out.println("Came here to check fail condition");
 
 //										dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
-										
+
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
-												fetchConfigVO.getStatus1());
+												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 												fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
 
@@ -419,8 +419,8 @@ public class RunAutomation {
 				post.setP_test_set_line_path(scripturl);
 
 //				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
-				
-				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
+
+				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
 						customerDetails.getTestSetName());
 
@@ -1346,7 +1346,7 @@ public class RunAutomation {
 									}
 								}
 
-								dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+								dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 								dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 										fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
 
@@ -1386,8 +1386,8 @@ public class RunAutomation {
 							post.setP_test_set_line_path(scripturl);
 
 //							dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
-							
-							dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+
+							dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 							dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 									fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
 
@@ -1435,18 +1435,18 @@ public class RunAutomation {
 						failcount = failcount + 1;
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-						
+
 //						dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
-						
-						dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+
+						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 								fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
-						
+
 						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
-						
+
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
 								script_id1, script_Number, "Fail", startdate, enddate, customerDetails);
-						
+
 						int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
 								test_set_id);
 
@@ -1478,10 +1478,10 @@ public class RunAutomation {
 						post.setP_test_set_line_path(scripturl);
 
 //						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-						
+
 						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 								fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
-						
+
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 
 						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
