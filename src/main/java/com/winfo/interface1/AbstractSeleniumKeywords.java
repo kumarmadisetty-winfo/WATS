@@ -604,7 +604,7 @@ public abstract class AbstractSeleniumKeywords {
 		String report = EXECUTION_REPORT;
 		String starttime1 = dateFormat.format(startTime);
 		String endtime1 = dateFormat.format(endTime);
-		long diff = DateUtils.findTimeDifference(startTime.toString(), endTime.toString());
+		long diff = DateUtils.findTimeDifference(starttime1.toString(), endtime1.toString());
 		String scriptNumber2 = fetchMetadataListVO.get(0).getScenarioName();
 		String scenario1 = fetchConfigVO.getStatus1();
 		String executionTime = DateUtils.convertMiliSecToDayFormat(diff);
