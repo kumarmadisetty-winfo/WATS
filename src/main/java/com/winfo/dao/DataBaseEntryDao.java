@@ -1531,4 +1531,17 @@ public class DataBaseEntryDao {
 		return flag;
 	}
 
+	public boolean checkActionContainsSfApplication(String script_Id) {
+		Object count = null;
+		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
+		try {
+			Session session = em.unwrap(Session.class);
+			count = session.createSQLQuery(updateQry).setParameter("script_id", script_Id).getSingleResult();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains Login into SFApplication or not.", e);
+		}
+		boolean flag = Integer.parseInt(count.toString())>0 ? true : false;
+		return flag;
+	}
+
 }

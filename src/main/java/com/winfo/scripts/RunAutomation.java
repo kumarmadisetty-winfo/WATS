@@ -396,6 +396,7 @@ public class RunAutomation {
 		try {
 			boolean actionContainsExcel = dataBaseEntry
 					.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
+			actionContainsExcel = dataBaseEntry.checkActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
