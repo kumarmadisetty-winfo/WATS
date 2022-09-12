@@ -468,13 +468,10 @@ public class CustomerToCentralGetDao {
 	}
 
 	public List<ScriptMasterDto> fecthMetaDataList(ScriptDtlsDto scriptDtls) {
-		String productVersion = scriptDtls.getProductVersion();
 		List<Integer> scriptIds = scriptDtls.getScriptId();
 		List<ScriptMasterDto> scriptMasterList = new ArrayList<>();
 		for (int i = 0; i < scriptIds.size(); i++) {
 			Integer scriptId = scriptIds.get(i);
-			String productVersionDb = dataBaseEntryDao.getProductVersionByScriptId(scriptId);
-			if (productVersion.equals(productVersionDb)) {
 				ScriptMaster scriptMasterDtls = dataBaseEntryDao.findScriptMasterByScriptId(scriptId);
 				List<ScriptMetaData> scriptMetaDataList = dataBaseEntryDao.getScriptMetaDataList(scriptId);
 				ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMasterDtls);
@@ -485,7 +482,6 @@ public class CustomerToCentralGetDao {
 				}
 				scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
 				scriptMasterList.add(scriptMasterDto);
-			}
 		}
 		return scriptMasterList;
 	}
