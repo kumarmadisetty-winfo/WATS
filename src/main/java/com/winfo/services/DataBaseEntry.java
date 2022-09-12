@@ -496,4 +496,9 @@ public class DataBaseEntry {
 		return dao.checkActionContainsExcel(script_id);
 	}
 
+	public boolean checkActionContainsSfApplication(String script_Id) {
+		
+		return dao.checkActionContainsSfApplication(script_Id);
+	}
+
 }
