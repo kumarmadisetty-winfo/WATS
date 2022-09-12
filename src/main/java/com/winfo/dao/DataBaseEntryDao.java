@@ -33,7 +33,9 @@ import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
@@ -1553,6 +1555,54 @@ public class DataBaseEntryDao {
 		}
 		boolean flag = Integer.parseInt(count.toString()) > 0 ? true : false;
 		return flag;
+	}
+	public int getApiValidationIdActionId() {
+		Object requestCount = null;
+		try {
+			Session session = em.unwrap(Session.class);
+
+			String execQry = "select lookup_id from win_ta_lookups where lookup_name = 'API_VALIDATION'";
+			requestCount = session.createSQLQuery(execQry).getSingleResult();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
+					e);
+		}
+		return Integer.parseInt(requestCount.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getApiValidationDataFromLookupsCode(int apiValidationId, List<Integer> list) {
+		List<Object> listOfLookUpCodesData = null;
+		try {
+			Session session = em.unwrap(Session.class);
+			listOfLookUpCodesData = session.createQuery(
+					"from LookUpCode lu where lu.lookUpId in :lookupId and lu.lookUpCodeId in (:listOfLookUpId)")
+					.setParameter("lookupId", apiValidationId).setParameter("listOfLookUpId", list).getResultList();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
+					e);
+		}
+		return listOfLookUpCodesData;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> checkIfValidationExists(int apiValidationId,String lookUpCode) {
+		List<String> listOfLookUpCode = null;
+		try {
+			Session session = em.unwrap(Session.class);
+			String query = "select lookup_code from WATS_PROD.win_ta_lookup_codes where lookup_id = "+apiValidationId+" and lookup_code in ('"+lookUpCode+"')";
+			listOfLookUpCode = session.createSQLQuery(query).getResultList();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
+					e);
+		}
+		return listOfLookUpCode;
+	}
+
+	@Transactional
+	public void insertApiValidation(LookUpCode lookUpCodes) {
+		Session session = em.unwrap(Session.class);
+		session.persist(lookUpCodes);
 	}
 
 }

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
@@ -485,6 +486,7 @@ public class DataBaseEntry {
 		dao.updateTestSetLineStatusForSanity(testSetId);
 	}
 
+
 	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
 		return dao.getAllTestSetLineRecord(testSetId);
 	}
@@ -499,6 +501,21 @@ public class DataBaseEntry {
 
 	public boolean checkActionContainsExcel(String script_id) {
 		return dao.checkActionContainsExcel(script_id);
+	}
+	public int getApiValidationIdActionId() {
+		return dao.getApiValidationIdActionId();
+	}
+
+	public List<Object> getApiValidationDataFromLookupsCode(int apiValidationId, List<Integer> list) {
+		return dao.getApiValidationDataFromLookupsCode(apiValidationId,list);
+	}
+
+	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
+		return dao.checkIfValidationExists(apiValidationId,lookUpCode);
+	}
+
+	public void insertApiValidation(LookUpCode lookUpCodes) {
+		dao.insertApiValidation(lookUpCodes);
 	}
 
 }

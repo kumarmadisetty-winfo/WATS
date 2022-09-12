@@ -77,10 +77,13 @@ public class Constants {
 		}
 	}
 
+
 	public static String addQuotes(String string) {
 		return "\"\"\"" + string + "\"\"\"";
 	}
 
+
+	public static final String CONFLICT = "CONFLICT";
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
