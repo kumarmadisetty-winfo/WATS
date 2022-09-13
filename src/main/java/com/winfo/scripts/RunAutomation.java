@@ -483,7 +483,8 @@ public class RunAutomation {
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
-			String checkValidScript = xpathService.checkValidScript(scriptID);
+			//String checkValidScript = xpathService.checkValidScript(scriptID);
+			String checkValidScript = "NO";
 			log.info("Valid script check.......::" + checkValidScript);
 
 			Boolean validationFlag = null;
