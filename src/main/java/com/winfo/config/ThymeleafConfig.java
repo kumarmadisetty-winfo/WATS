@@ -29,7 +29,7 @@ public class ThymeleafConfig {
 	public final Logger logger = LogManager.getLogger(ThymeleafConfig.class);
 
 	@Autowired
-	Environment env;
+	private Environment env;
 
 	@Bean
 	public SpringTemplateEngine dagTemplateEngine() {
@@ -41,8 +41,11 @@ public class ThymeleafConfig {
 	private ITemplateResolver fileTemplateResolver() {
 		try {
 			FileTemplateResolver templateResolver = new FileTemplateResolver();
-			templateResolver.setPrefix(System.getProperty(Constants.SYS_USER_HOME_PATH)
-					+ env.getProperty("pyjab.template.path").replace("/", File.separator));
+			String pyjabPath = env.getProperty("pyjab.template.path");
+			if (pyjabPath != null) {
+				templateResolver.setPrefix(
+						System.getProperty(Constants.SYS_USER_HOME_PATH) + pyjabPath.replace("/", File.separator));
+			}
 			templateResolver.setSuffix(".txt");
 			templateResolver.setTemplateMode(TemplateMode.TEXT);
 			templateResolver.setCharacterEncoding("UTF8");
