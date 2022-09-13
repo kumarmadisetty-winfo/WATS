@@ -32,6 +32,12 @@ public class DriverConfiguration {
 
 	@Value("${configvO.config_url}")
 	private String configUrl;
+	
+	
+	/*
+	 * Edge Browser is not working due to Incompatilility issue Providing related
+	 * Jira Ticket Number : https://winfosolutions.atlassian.net/browse/WATS-1566
+	 */
 
 	@SuppressWarnings("deprecation")
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO,String operatingSystem) throws MalformedURLException {
@@ -65,6 +71,7 @@ public class DriverConfiguration {
 			options.setExperimentalOption("prefs", prefs);
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
+			
 
 //			 driver = new ChromeDriver(cap);
 			driver = new RemoteWebDriver(new URL(configUrl), cap);
