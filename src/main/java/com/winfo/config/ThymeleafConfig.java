@@ -2,6 +2,10 @@ package com.winfo.config;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +23,11 @@ import com.winfo.utils.Constants;
  *         https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#what-kind-of-templates-can-thymeleaf-process
  */
 
+@Nonnull
 @Configuration
 public class ThymeleafConfig {
+	public final Logger logger = LogManager.getLogger(ThymeleafConfig.class);
+
 	@Autowired
 	Environment env;
 
@@ -32,15 +39,20 @@ public class ThymeleafConfig {
 	}
 
 	private ITemplateResolver fileTemplateResolver() {
-		FileTemplateResolver templateResolver = new FileTemplateResolver();
-		templateResolver.setPrefix(System.getProperty(Constants.SYS_USER_HOME_PATH)
-				+ env.getProperty("pyjab.template.path").replace("/", File.separator));
-		templateResolver.setSuffix(".txt");
-		templateResolver.setTemplateMode(TemplateMode.TEXT);
-		templateResolver.setCharacterEncoding("UTF8");
-		templateResolver.setCheckExistence(true);
-		templateResolver.setCacheable(false);
-		return templateResolver;
+		try {
+			FileTemplateResolver templateResolver = new FileTemplateResolver();
+			templateResolver.setPrefix(System.getProperty(Constants.SYS_USER_HOME_PATH)
+					+ env.getProperty("pyjab.template.path").replace("/", File.separator));
+			templateResolver.setSuffix(".txt");
+			templateResolver.setTemplateMode(TemplateMode.TEXT);
+			templateResolver.setCharacterEncoding("UTF8");
+			templateResolver.setCheckExistence(true);
+			templateResolver.setCacheable(false);
+			return templateResolver;
+		} catch (NullPointerException e) {
+			logger.info(e.getMessage());
+		}
+		return null;
 	}
 
 }
