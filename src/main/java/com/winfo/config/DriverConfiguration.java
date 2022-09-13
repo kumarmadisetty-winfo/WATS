@@ -8,10 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -33,7 +31,6 @@ public class DriverConfiguration {
 	@Value("${configvO.config_url}")
 	private String configUrl;
 
-	@SuppressWarnings("deprecation")
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO,String operatingSystem) throws MalformedURLException {
 		logger.info("Start of get web driver method");
 		WebDriver driver = null;
@@ -42,7 +39,7 @@ public class DriverConfiguration {
 		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
 			System.setProperty(BrowserConstants.AWT_HEADLESS.value, "false");
-			Map<String, Object> prefs = new HashMap<String, Object>();
+			Map<String, Object> prefs = new HashMap<>();
 			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.value, 0);
 			prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.value, fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
@@ -55,8 +52,8 @@ public class DriverConfiguration {
 				options.setBinary("/usr/bin/google-chrome");
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.value);
-			options.addArguments(BrowserConstants.NO_SENDBOX.value);
 //			options.addArguments("--headless");
+			options.addArguments(BrowserConstants.NO_SENDBOX.value);
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.value);
 			options.addArguments(BrowserConstants.TEST_TYPE.value);
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.value);
@@ -66,7 +63,6 @@ public class DriverConfiguration {
 
 //			 driver = new ChromeDriver(cap);
 			driver = new RemoteWebDriver(new URL(configUrl), cap);
-//			http://watsudgs01.winfosolutions.com:4444/wd/hub
 		} else if (BrowserConstants.FIREFOX.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.FIREFOX_DRIVER.value,
 					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");

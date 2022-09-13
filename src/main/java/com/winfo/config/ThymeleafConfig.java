@@ -2,6 +2,10 @@ package com.winfo.config;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +23,13 @@ import com.winfo.utils.Constants;
  *         https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#what-kind-of-templates-can-thymeleaf-process
  */
 
+@Nonnull
 @Configuration
 public class ThymeleafConfig {
+	public final Logger logger = LogManager.getLogger(ThymeleafConfig.class);
+
 	@Autowired
-	Environment env;
+	private Environment env;
 
 	@Bean
 	public SpringTemplateEngine dagTemplateEngine() {
@@ -33,8 +40,11 @@ public class ThymeleafConfig {
 
 	private ITemplateResolver fileTemplateResolver() {
 		FileTemplateResolver templateResolver = new FileTemplateResolver();
-		templateResolver.setPrefix(System.getProperty(Constants.SYS_USER_HOME_PATH)
-				+ env.getProperty("pyjab.template.path").replace("/", File.separator));
+		String pyjabPath = env.getProperty("pyjab.template.path");
+		if (pyjabPath != null) {
+			templateResolver.setPrefix(
+					System.getProperty(Constants.SYS_USER_HOME_PATH) + pyjabPath.replace("/", File.separator));
+		}
 		templateResolver.setSuffix(".txt");
 		templateResolver.setTemplateMode(TemplateMode.TEXT);
 		templateResolver.setCharacterEncoding("UTF8");
