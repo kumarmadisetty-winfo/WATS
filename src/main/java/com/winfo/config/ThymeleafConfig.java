@@ -39,23 +39,18 @@ public class ThymeleafConfig {
 	}
 
 	private ITemplateResolver fileTemplateResolver() {
-		try {
-			FileTemplateResolver templateResolver = new FileTemplateResolver();
-			String pyjabPath = env.getProperty("pyjab.template.path");
-			if (pyjabPath != null) {
-				templateResolver.setPrefix(
-						System.getProperty(Constants.SYS_USER_HOME_PATH) + pyjabPath.replace("/", File.separator));
-			}
-			templateResolver.setSuffix(".txt");
-			templateResolver.setTemplateMode(TemplateMode.TEXT);
-			templateResolver.setCharacterEncoding("UTF8");
-			templateResolver.setCheckExistence(true);
-			templateResolver.setCacheable(false);
-			return templateResolver;
-		} catch (NullPointerException e) {
-			logger.info(e.getMessage());
+		FileTemplateResolver templateResolver = new FileTemplateResolver();
+		String pyjabPath = env.getProperty("pyjab.template.path");
+		if (pyjabPath != null) {
+			templateResolver.setPrefix(
+					System.getProperty(Constants.SYS_USER_HOME_PATH) + pyjabPath.replace("/", File.separator));
 		}
-		return null;
+		templateResolver.setSuffix(".txt");
+		templateResolver.setTemplateMode(TemplateMode.TEXT);
+		templateResolver.setCharacterEncoding("UTF8");
+		templateResolver.setCheckExistence(true);
+		templateResolver.setCacheable(false);
+		return templateResolver;
 	}
 
 }
