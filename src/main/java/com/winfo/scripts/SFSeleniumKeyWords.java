@@ -6784,9 +6784,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				waittext.click();
 				Thread.sleep(6000);
-				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+			//	screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "(//input[@title='Login'])[1]";
@@ -6810,9 +6811,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				waittext.click();
 				Thread.sleep(6000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "(//div[contains(@class,'popupTargetContainer ')])[2]/div/ul/li[1]";
@@ -6838,7 +6840,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(6000);
-				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "//*[text()='Salesforce Help']/following::li[1]";
@@ -9108,10 +9110,12 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					//WebElement select = driver
 					//		.findElement(By.xpath("//table[@data-aura-class='uiVirtualDataGrid--default uiVirtualDataGrid']//a[text()='"+keysToSend+"']"));
 					//clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-					Thread.sleep(10000);
+					//Thread.sleep(10000);
 					//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					tab(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
+					Thread.sleep(10000);
+					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 					String xpath = "//input[@placeholder='Search Setup']";
@@ -9135,10 +9139,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				waittill.sendKeys(keysToSend);
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				// fetchMetadataVO);
-				Thread.sleep(5000);
+				Thread.sleep(8000);
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
-				Thread.sleep(5000);
+				Thread.sleep(8000);
 				
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -9149,9 +9153,9 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// select.click();
 				//clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				WebElement select = driver
-						.findElement(By.xpath("//table[@data-aura-class='uiVirtualDataGrid--default uiVirtualDataGrid']//a[text()='"+keysToSend+"'][1]"));
+						.findElement(By.xpath("(//table[@data-aura-class='uiVirtualDataGrid--default uiVirtualDataGrid']//a[text()='"+keysToSend+"'])[1]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				Thread.sleep(5000);
+				Thread.sleep(8000);
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(10000);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -9253,7 +9257,8 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						
 						.findElement(By.xpath("//div[text()='"+keysToSend+"'][1]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				Thread.sleep(5000);
+				Thread.sleep(10000);
+				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16176,6 +16181,26 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			Thread.sleep(2000);
 			WebElement waittill = driver
+					.findElement(By.xpath("//div[text()='"+inputParam+"']"));
+			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
+			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
+			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='100%';");
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			String xpath = "//div[text()='inputParam']";
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
+			service.saveXpathParams(scriptID, lineNumber, xpath);
+			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			return;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+
+			log.error("Failed during  scrollUsingElement" + scripNumber);
+			System.out.println(inputParam);
+		}
+		try {
+			Thread.sleep(2000);
+			WebElement waittill = driver
 					.findElement(By.xpath("//span[normalize-space(text())='" + inputParam + "'][1]"));
 			// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom='50%';");
 			scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
@@ -17886,7 +17911,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
-					screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+					//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
 				}
