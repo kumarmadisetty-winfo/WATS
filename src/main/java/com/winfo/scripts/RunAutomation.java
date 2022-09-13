@@ -723,6 +723,10 @@ public class RunAutomation {
 
 							}
 
+									case "Dropdown Values":
+							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+									fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+							break;
 						case "Table SendKeys":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
@@ -880,6 +884,22 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1,
 										param2, param3, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
 										customerDetails);
+								break;
+							}
+								case "clickLink":
+							try {
+								if (checkValidScript.equalsIgnoreCase("Yes")) {
+
+									xpathPerformance.clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											count, customerDetails);
+									break;
+								} else {
+
+									throw new Exception("ScriptNotValid");
+								}
+							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2,
+										fetchMetadataVO, fetchConfigVO,customerDetails);
 								break;
 							}
 
