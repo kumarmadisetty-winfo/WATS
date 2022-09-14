@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +25,7 @@ public class CopyTestrunController {
 	@Autowired
 	CopyTestRunService service;
 
-	@RequestMapping(value = "copyTestrun", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "copyTestrun", produces = MediaType.APPLICATION_JSON_VALUE)
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException {
 		log.info("Test Run Name**" + copyTestrunvo.getNewtestrunname());
@@ -43,12 +43,11 @@ public class CopyTestrunController {
 		log.info(jsondata.toString());
 		return jsondata;
 	}
-	
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/addScriptsOnTestRun")
 	public ResponseDto addScriptOnTestRun(@RequestBody InsertScriptsVO scriptVO) {
-		log.info("Test Set Id *** "+ scriptVO.getTestSetId());
+		log.info("Test Set Id *** " + scriptVO.getTestSetId());
 		return service.addScriptsOnTestRun(scriptVO);
 	}
 }

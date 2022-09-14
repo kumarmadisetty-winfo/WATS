@@ -31,17 +31,17 @@ public class DriverConfiguration {
 	@Value("${configvO.config_url}")
 	private String configUrl;
 
-	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO,String operatingSystem) throws MalformedURLException {
+	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
 		logger.info("Start of get web driver method");
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
-		os = operatingSystem==null ? os : operatingSystem;
-		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
-			System.setProperty(BrowserConstants.AWT_HEADLESS.value, "false");
+		os = operatingSystem == null ? os : operatingSystem;
+		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
+			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			Map<String, Object> prefs = new HashMap<>();
-			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.value, 0);
-			prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.value, fetchConfigVO.getDownlod_file_path());
+			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
+			prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
 			if (os.contains("win")) {
@@ -51,24 +51,24 @@ public class DriverConfiguration {
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
 			}
-			options.addArguments(BrowserConstants.START_MAXIMIZED.value);
+			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
 //			options.addArguments("--headless");
-			options.addArguments(BrowserConstants.NO_SENDBOX.value);
-			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.value);
-			options.addArguments(BrowserConstants.TEST_TYPE.value);
-			options.addArguments(BrowserConstants.DISABLE_INFOBARS.value);
+			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
+			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
+			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
+			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
 			options.setExperimentalOption("prefs", prefs);
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 
 //			 driver = new ChromeDriver(cap);
 			driver = new RemoteWebDriver(new URL(configUrl), cap);
-		} else if (BrowserConstants.FIREFOX.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.FIREFOX_DRIVER.value,
+		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
 					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.value, fetchConfigVO.getFirefox_driver_path());
 
-			System.setProperty(BrowserConstants.AWT_HEADLESS.value, "false");
+			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			FirefoxOptions options = new FirefoxOptions();
 			if (os.contains("win")) {
 				options.setBinary("/Program Files/Mozilla Firefox/firefox.exe");
@@ -77,10 +77,10 @@ public class DriverConfiguration {
 				options.setBinary("/usr/bin/firefox");
 			}
 //			options.addArguments("--headless");
-			options.addArguments(BrowserConstants.NO_SENDBOX.value);
-			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.value);
-			options.addArguments(BrowserConstants.DISABLE_INFOBARS.value);
-			options.setCapability(BrowserConstants.MARIONETTE.value, true);
+			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
+			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
+			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
+			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
 			// driver = new FirefoxDriver(options);
 			driver = new RemoteWebDriver(new URL(configUrl), options);
 		}

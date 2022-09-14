@@ -9,10 +9,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.json.JSONArray;
-//import org.json.JSONObject;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,6 +30,8 @@ import com.winfo.vo.ScriptMetaDataDto;
 
 @Repository
 public class CustomerToCentralGetDao {
+
+	private final Logger logger = LogManager.getLogger(CustomerToCentralGetDao.class);
 
 	@Autowired
 	private EntityManager entityManager;
@@ -53,26 +56,27 @@ public class CustomerToCentralGetDao {
 			int dependency = 0;
 			int customerId = 0;
 
-			Integer script_Id = scriptIds.get(i);
-			System.out.println(script_Id);
-			Query query3 = session.createQuery("select product_version from ScriptMaster where script_id=" + script_Id);
-			List<String> result2 = query3.list();
+			Integer scriptId = scriptIds.get(i);
+			logger.info(scriptId);
+			Query<?> query3 = session
+					.createQuery("select product_version from ScriptMaster where script_id=" + scriptId);
+			List<String> result2 = (List<String>) query3.list();
 
-			String product_version_db = result2.get(0);
-			if (productVersion.equals(product_version_db)) {
+			String productVersionDb = result2.get(0);
+			if (productVersion.equals(productVersionDb)) {
 
-				Query query = session.createQuery(
+				Query<?> query = session.createQuery(
 						"select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority,targetApplication from ScriptMaster where script_id="
-								+ script_Id);
-				Query query1 = session.createQuery(
+								+ scriptId);
+				Query<?> query1 = session.createQuery(
 						"select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name   from ScriptMetaData where script_id="
-								+ script_Id);
-				List<Object> result = query.list();
+								+ scriptId);
+				List<Object> result = (List<Object>) query.list();
 				List<FetchData> finalresult = new ArrayList<>();
-				Iterator itr = result.iterator();
-				List<Object> result1 = query1.list();
+				Iterator<?> itr = result.iterator();
+				List<Object> result1 = (List<Object>) query1.list();
 				List<FetchDataMetadata> finalresult1 = new ArrayList<>();
-				Iterator itr1 = result1.iterator();
+				Iterator<?> itr1 = result1.iterator();
 				while (itr.hasNext()) {
 					Object[] obj = (Object[]) itr.next();
 					FetchData fetchData = new FetchData();
@@ -136,18 +140,17 @@ public class CustomerToCentralGetDao {
 						dependency = 0;
 					} else {
 						dependency = 1;
-						Integer script_id_dependency = Integer.parseInt(String.valueOf(obj[12]));
-						if (scriptIds.contains(script_id_dependency)) {
-						} else {
-							scriptIds.add(script_id_dependency);
+						Integer scriptIdDependency = Integer.parseInt(String.valueOf(obj[12]));
+						if (!scriptIds.contains(scriptIdDependency)) {
+							scriptIds.add(scriptIdDependency);
 						}
-						Query querydep = session
-								.createQuery("select script_number from ScriptMaster where script_id=" + script_Id);
-						List<String> dep_sname = (List<String>) querydep.list();
+						Query<?> querydep = session
+								.createQuery("select script_number from ScriptMaster where script_id=" + scriptId);
+						List<String> depSname = (List<String>) querydep.list();
 
-						String dep_script_name = dep_sname.get(0);
+						String depScriptName = depSname.get(0);
 						fetchData.setDependency(Integer.parseInt(String.valueOf(obj[12])));
-						fetchData.setDependent_script_num(dep_script_name);
+						fetchData.setDependent_script_num(depScriptName);
 
 					}
 					if (String.valueOf(obj[13]).equals("null")) {
@@ -369,26 +372,26 @@ public class CustomerToCentralGetDao {
 
 					}
 					jsonMaster.put("end2end_scenario", slist.getEnd2end_scenario());
-					String expected_result = slist.getExpected_result();
-					if (expected_result == null) {
+					String expectedResult = slist.getExpected_result();
+					if (expectedResult == null) {
 						jsonMaster.put("expected_result", null);
 					} else {
 						String str1 = "\"";
 						String str2 = "\\\\";
 						String str3 = str2 + "\"";
-						String replaceQuotes = expected_result.replace(str1, str3);
+						String replaceQuotes = expectedResult.replace(str1, str3);
 						jsonMaster.put("expected_result", replaceQuotes);
 					}
 					jsonMaster.put("selenium_test_script_name", slist.getSelenium_test_script_name());
 					jsonMaster.put("selenium_test_method", slist.getSelenium_test_method());
 					jsonMaster.put("author", slist.getAuthor());
 					jsonMaster.put("created_by", slist.getCreated_by());
-					Date date = (Date) slist.getCreation_date();
+					Date date = slist.getCreation_date();
 					DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 					String strDate = dateFormat.format(date);
 					jsonMaster.put("creation_date", strDate);
 					jsonMaster.put("updated_by", slist.getUpdated_by());
-					Date date1 = (Date) slist.getUpdate_date();
+					Date date1 = slist.getUpdate_date();
 					String strDate1 = dateFormat.format(date1);
 					jsonMaster.put("update_date", strDate1);
 					jsonMaster.put("customatisation_refrence", slist.getCustomisation_refrence());
@@ -415,12 +418,12 @@ public class CustomerToCentralGetDao {
 					jsonMetadata.put("xpath_location", slist1.getXpath_location());
 					jsonMetadata.put("xpath_location1", slist1.getXpath_location1());
 					jsonMetadata.put("created_by", slist1.getCreated_by());
-					Date date = (Date) slist1.getCreation_date();
+					Date date = slist1.getCreation_date();
 					DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 					String strDate = dateFormat.format(date);
 					jsonMetadata.put("creation_date", strDate);
 					jsonMetadata.put("updated_by", slist1.getUpdated_by());
-					Date date1 = (Date) slist1.getUpdate_date();
+					Date date1 = slist1.getUpdate_date();
 					String strDate1 = dateFormat.format(date1);
 					jsonMetadata.put("update_date", strDate1);
 					jsonMetadata.put("step_desc", slist1.getStep_desc());
@@ -462,9 +465,8 @@ public class CustomerToCentralGetDao {
 		String finalJSONString4 = finalJSONString3.replace(str11 + ",", str12 + ",");
 
 		JSONParser parser = new JSONParser();
-		JSONObject finalJSONObject = (JSONObject) parser.parse(finalJSONString4);
 
-		return finalJSONObject;
+		return (JSONObject) parser.parse(finalJSONString4);
 	}
 
 	public List<ScriptMasterDto> fecthMetaDataList(ScriptDtlsDto scriptDtls) {
@@ -472,16 +474,16 @@ public class CustomerToCentralGetDao {
 		List<ScriptMasterDto> scriptMasterList = new ArrayList<>();
 		for (int i = 0; i < scriptIds.size(); i++) {
 			Integer scriptId = scriptIds.get(i);
-				ScriptMaster scriptMasterDtls = dataBaseEntryDao.findScriptMasterByScriptId(scriptId);
-				List<ScriptMetaData> scriptMetaDataList = dataBaseEntryDao.getScriptMetaDataList(scriptId);
-				ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMasterDtls);
-				List<ScriptMetaDataDto> scriptMetaDataListDto = new ArrayList<>();
-				for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
-					ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
-					scriptMetaDataListDto.add(scriptMetaDataDto);
-				}
-				scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
-				scriptMasterList.add(scriptMasterDto);
+			ScriptMaster scriptMasterDtls = dataBaseEntryDao.findScriptMasterByScriptId(scriptId);
+			List<ScriptMetaData> scriptMetaDataList = dataBaseEntryDao.getScriptMetaDataList(scriptId);
+			ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMasterDtls);
+			List<ScriptMetaDataDto> scriptMetaDataListDto = new ArrayList<>();
+			for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
+				ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
+				scriptMetaDataListDto.add(scriptMetaDataDto);
+			}
+			scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
+			scriptMasterList.add(scriptMasterDto);
 		}
 		return scriptMasterList;
 	}

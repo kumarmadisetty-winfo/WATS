@@ -9,14 +9,9 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.json.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.winfo.model.FetchData;
-import com.winfo.model.FetchDataMetadata;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.CopyDataDetails;
@@ -25,12 +20,17 @@ import com.winfo.vo.DomGenericResponseBean;
 @Repository
 public class CopyDataCustomerDao {
 
+	private static final String SCRIPT_DTL_QRY = "select %s from %s where product_version='%s' and standard_custom='%s'";
+	private static final String SCRIPT_MASTER = "ScriptMaster";
+	private static final String CUSTOM = "Custom";
+
 	@Autowired
 	private EntityManager entityManager;
 	@Autowired
 	private CopyDataPostCustomerDao dao;
 
-	public List<DomGenericResponseBean> copyData(CopyDataDetails copyDataDetails) throws ParseException {
+	@SuppressWarnings("unchecked")
+	public List<DomGenericResponseBean> copyData(CopyDataDetails copyDataDetails) {
 
 		String productVersionOld = copyDataDetails.getProduct_version_old();
 		String productVersionNew = copyDataDetails.getProduct_version_new();
@@ -39,82 +39,83 @@ public class CopyDataCustomerDao {
 		int j = 0;
 		int count = 0;
 
-		JSONObject responseDetailsJson = new JSONObject();
-		JSONArray jsonArrayMaster = new JSONArray();
-		JSONObject jsonMaster = new JSONObject();
-		Query query3 = session.createQuery("select script_number from ScriptMaster where product_version='"
-				+ productVersionOld + "' and standard_custom='Custom'");
-		List<String> script_numbers = (List<String>) query3.list();
-		Query query4 = session.createQuery("select script_number from ScriptMaster where product_version='"
-				+ productVersionNew + "' and standard_custom='Custom'");
-		List<String> script_numbers1 = (List<String>) query4.list();
-		Query querysid = session.createQuery("select script_id from ScriptMaster where product_version='"
-				+ productVersionOld + "' and standard_custom='Custom'");
-		List<Integer> script_Ids = (List<Integer>) querysid.list();
-		Query querysid1 = session.createQuery("select script_id from ScriptMaster where product_version='"
-				+ productVersionNew + "' and standard_custom='Custom'");
-		List<Integer> script_id1 = (List<Integer>) querysid1.list();
+		String sqlQry = String.format(SCRIPT_DTL_QRY, "script_number", SCRIPT_MASTER, productVersionOld, CUSTOM);
 
-		for (j = 0; j < script_numbers1.size(); j++) {
-			if (script_numbers.contains(script_numbers1.get(j))) {
-				script_numbers.remove(script_numbers1.get(j));
-				script_Ids.remove(script_id1.get(j));
+		Query<?> query3 = session.createQuery(sqlQry);
+
+		List<String> scriptNumbersOld = (List<String>) query3.list();
+
+		sqlQry = String.format(SCRIPT_DTL_QRY, "script_number", SCRIPT_MASTER, productVersionNew, CUSTOM);
+
+		Query<?> query4 = session.createQuery(sqlQry);
+
+		List<String> scriptNumbersNew = (List<String>) query4.list();
+
+		sqlQry = String.format(SCRIPT_DTL_QRY, "script_id", SCRIPT_MASTER, productVersionOld, CUSTOM);
+
+		Query<?> querySid = session.createQuery(sqlQry);
+
+		List<Integer> scriptIdsOld = (List<Integer>) querySid.list();
+
+		sqlQry = String.format(SCRIPT_DTL_QRY, "script_id", SCRIPT_MASTER, productVersionNew, CUSTOM);
+
+		Query<?> querysid1 = session.createQuery(sqlQry);
+		List<Integer> scriptIdsNew = (List<Integer>) querysid1.list();
+
+		for (j = 0; j < scriptNumbersNew.size(); j++) {
+			if (scriptNumbersOld.contains(scriptNumbersNew.get(j))) {
+				scriptNumbersOld.remove(scriptNumbersNew.get(j));
+				scriptIdsOld.remove(scriptIdsNew.get(j));
 			}
 		}
 
-		List<String> wrong_dependency_scripts = new ArrayList<String>();
-		for (i = 0; i < script_numbers.size(); i++) {
-			Integer script_Id = script_Ids.get(i);
-			String script_num = script_numbers.get(i);
+		List<String> wrongDependencyScripts = new ArrayList<>();
+		for (i = 0; i < scriptNumbersOld.size(); i++) {
+			Integer oldScriptId = scriptIdsOld.get(i);
+			String scriptNum = scriptNumbersOld.get(i);
 
-			Query query = session.createQuery(
+			Query<?> query = session.createQuery(
 					"select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority,pluginFlag,targetApplication from ScriptMaster where script_number='"
-							+ script_num + "' and product_version='" + productVersionOld + "'");
+							+ scriptNum + "' and product_version='" + productVersionOld + "'");
 			List<Object> result = (List<Object>) query.list();
-			Iterator itr6 = result.iterator();
+			Iterator<?> itr6 = result.iterator();
 			Integer scriptId = null;
 			while (itr6.hasNext()) {
 				Object[] obj1 = (Object[]) itr6.next();
 				if (!String.valueOf(obj1[0]).equals("null")) {
 					scriptId = Integer.parseInt(String.valueOf(obj1[0]));
-
-					break;
 				}
 				break;
 			}
 
-			Query query1 = session.createQuery(
+			Query<?> query1 = session.createQuery(
 					"select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name,metadataInputValue from ScriptMetaData where script_id="
 							+ scriptId);
 			List<Object> result1 = (List<Object>) query1.list();
-			Iterator itr1 = result1.iterator();
-			List<FetchData> finalresult = new ArrayList<FetchData>();
-			Iterator itr = result.iterator();
-			Iterator itr5 = result.iterator();
+			Iterator<?> itr1 = result1.iterator();
+			Iterator<?> itr = result.iterator();
+			Iterator<?> itr5 = result.iterator();
 			Integer dep = null;
 			while (itr5.hasNext()) {
 				Object[] obj1 = (Object[]) itr5.next();
 				if (!String.valueOf(obj1[12]).equals("null")) {
 					dep = Integer.parseInt(String.valueOf(obj1[12]));
-					break;
 				}
 				break;
 			}
 
 			if (dep != null) {
 
-				Query querydependency = session
+				Query<?> querydependency = session
 						.createQuery("select product_version,standard_custom from ScriptMaster where script_id=" + dep);
 				List<String> productversionlist = (List<String>) querydependency.list();
 				String productversion = productversionlist.get(0);
 				String standardcustom = productversionlist.get(1);
-				if (!productversion.equals(productVersionOld) || !standardcustom.equals("Custom")) {
-					wrong_dependency_scripts.add(script_num);
+				if (!productversion.equals(productVersionOld) || !standardcustom.equals(CUSTOM)) {
+					wrongDependencyScripts.add(scriptNum);
 					continue;
 				}
 			}
-
-			List<FetchDataMetadata> finalresult1 = new ArrayList<FetchDataMetadata>();
 
 			while (itr.hasNext()) {
 				Object[] obj = (Object[]) itr.next();
@@ -187,18 +188,17 @@ public class CopyDataCustomerDao {
 					master.setDependent_script_num(null);
 				} else {
 
-					Integer script_id_dependency = Integer.parseInt(String.valueOf(obj[12]));
-					if (script_Ids.contains(script_id_dependency)) {
-					} else {
-						script_Ids.add(script_id_dependency);
+					Integer scriptIdDependency = Integer.parseInt(String.valueOf(obj[12]));
+					if (!scriptIdsOld.contains(scriptIdDependency)) {
+						scriptIdsOld.add(scriptIdDependency);
 					}
-					Query querydep = session
-							.createQuery("select script_number from ScriptMaster where script_id=" + script_Id);
-					List<String> dep_sname = (List<String>) querydep.list();
+					Query<?> querydep = session
+							.createQuery("select script_number from ScriptMaster where script_id=" + oldScriptId);
+					List<String> depSname = (List<String>) querydep.list();
 
-					String dep_script_name = dep_sname.get(0);
+					String depScriptName = depSname.get(0);
 					master.setDependency(Integer.parseInt(String.valueOf(obj[12])));
-					master.setDependent_script_num(dep_script_name);
+					master.setDependent_script_num(depScriptName);
 
 				}
 				master.setProduct_version(productVersionNew);
@@ -254,12 +254,6 @@ public class CopyDataCustomerDao {
 					master.setCustomisation_reference(String.valueOf(obj[22]));
 				}
 
-//	           if(String.valueOf(obj[23]).equals("null")) {
-//	        	   master.setAttribute1(null);
-//	           }
-//			   else {
-//				   master.setAttribute1(String.valueOf(obj[23]));
-//			   }
 				if (String.valueOf(obj[24]).equals("null")) {
 					master.setAttribute2(null);
 				} else {
@@ -321,7 +315,6 @@ public class CopyDataCustomerDao {
 
 				while (itr1.hasNext()) {
 					Object[] obj1 = (Object[]) itr1.next();
-					FetchDataMetadata fetchDataMetadata = new FetchDataMetadata();
 					ScriptMetaData metadata = new ScriptMetaData();
 					metadata.setLine_number(Integer.parseInt(String.valueOf(obj1[0])));
 					if (String.valueOf(obj1[1]).equals("null")) {
@@ -412,7 +405,7 @@ public class CopyDataCustomerDao {
 
 		}
 
-		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
+		List<DomGenericResponseBean> bean = new ArrayList<>();
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count != 0) {
 			response.setStatus(200);

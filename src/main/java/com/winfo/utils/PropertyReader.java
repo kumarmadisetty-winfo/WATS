@@ -10,7 +10,7 @@ import com.winfo.vo.ConfigurationVO;
 
 public class PropertyReader {
 
-	private static String fileName =  "/Property/config.properties";
+	private static String fileName = "/Property/config.properties";
 
 	public static ConfigurationVO getConfigurationData() {
 		ConfigurationVO config = null;
@@ -18,11 +18,11 @@ public class PropertyReader {
 			config = new ConfigurationVO();
 			Properties prop = new Properties();
 			prop.load(input);
-			config.setBrowser(prop.getProperty(PropertyConstants.BROWSER.value));
-			config.setExecutionTime(prop.getProperty(PropertyConstants.EXECUTION_TIME.value));
-			config.setProjectName(prop.getProperty(PropertyConstants.PROJECT_NAME.value));
-			config.setUrl(prop.getProperty(PropertyConstants.URL.value));
-			config.setPassword(prop.getProperty(PropertyConstants.PASSWORD.value));
+			config.setBrowser(prop.getProperty(PropertyConstants.BROWSER.getValue()));
+			config.setExecutionTime(prop.getProperty(PropertyConstants.EXECUTION_TIME.getValue()));
+			config.setProjectName(prop.getProperty(PropertyConstants.PROJECT_NAME.getValue()));
+			config.setUrl(prop.getProperty(PropertyConstants.URL.getValue()));
+			config.setPassword(prop.getProperty(PropertyConstants.PASSWORD.getValue()));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

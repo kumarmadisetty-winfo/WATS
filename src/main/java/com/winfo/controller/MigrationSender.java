@@ -44,8 +44,8 @@ public class MigrationSender {
 	public String testRunMigration(@RequestBody TestRunDetails testRunDetails)
 			throws ParseException, JsonProcessingException {
 		logger.info("TestRunId**" + testRunDetails.getListOfTestRun().get(0));
-		return testRunMigrationService.testRunMigration(testRunDetails);
-
+		String result =  testRunMigrationService.testRunMigration(testRunDetails);
+		return result;
 	}
 	
 

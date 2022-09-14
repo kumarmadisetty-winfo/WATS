@@ -17,11 +17,15 @@ public enum BrowserConstants{
 	MARIONETTE("marionette")
 	;
 	
-	public String value;
+	private final String value;
 	
 	BrowserConstants(String value) {
 		this.value = value;
 	}
+	
+	 public String getValue() {
+			return value;
+	    }
 }
 
 
