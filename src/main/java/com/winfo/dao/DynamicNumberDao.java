@@ -106,5 +106,22 @@ public class DynamicNumberDao {
 		}
 	}
 	
+	public List<String> getResponseCode(String test_set_id) {
+
+		Session session = entityManager.unwrap(Session.class);
+		String sql="select input_value from win_ta_test_set_script_param where action = 'apiValidationResponse' and LINE_EXECUTION_STATUS in ('Pass','PASS') and test_set_line_id in (select test_set_line_id from win_ta_test_set_lines where test_set_id = :test_set_id)";
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setParameter("test_set_id", test_set_id);
+		List results = query.list();
+		if(results.size()>0) {
+			System.out.println("getCopyNumber::::::"+(String) results.get(0));
+			String copynumberValue=(String) results.get(0);
+			//saveCopyNumber(copynumberValue,testParamId,testSetId);
+			return results;
+		}
+		else {
+			return null;
+		}
+	}
 
 }

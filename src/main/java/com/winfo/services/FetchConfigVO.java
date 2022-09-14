@@ -180,6 +180,28 @@ public class FetchConfigVO {
     
     private int otherCount;
     
+    private String API_AUTHENTICATION_URL;
+    
+    private String API_AUTHENTICATION_CODE;
+    
+    
+    
+   	public String getAPI_AUTHENTICATION_URL() {
+		return API_AUTHENTICATION_URL;
+	}
+
+	public void setAPI_AUTHENTICATION_URL(String aPI_AUTHENTICATION_URL) {
+		API_AUTHENTICATION_URL = aPI_AUTHENTICATION_URL;
+	}
+
+	public String getAPI_AUTHENTICATION_CODE() {
+		return API_AUTHENTICATION_CODE;
+	}
+
+	public void setAPI_AUTHENTICATION_CODE(String aPI_AUTHENTICATION_CODE) {
+		API_AUTHENTICATION_CODE = aPI_AUTHENTICATION_CODE;
+	}
+    
    	public int getOtherCount() {
 		return otherCount;
 	}
