@@ -71,6 +71,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -18200,7 +18201,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
 			ClientResponse response;
 
-			if (apiValidationData.getRequestBody() != null) {
+			if (apiValidationData.getRequestBody() != null && !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
 				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
 						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
 						.body(BodyInserters.fromObject(strInput)).exchange().block();
