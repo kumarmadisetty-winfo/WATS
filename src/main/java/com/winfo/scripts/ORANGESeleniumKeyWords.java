@@ -18226,7 +18226,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 //			return response.statusCode();
 			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
 			
-			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+fetchMetadataVO.getSeqNum() + "_"
+			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
 					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
@@ -18242,7 +18242,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 //			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
 //					+ customerDetails.getTestSetName();
 			File source = new File(fileName);
-			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName(), name);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName(), name);
 			Files.delete( Paths.get(fileName));
 		} catch (Exception ex) {
 			throw ex;
