@@ -471,9 +471,6 @@ public class RunAutomation {
 		// String start_time=null;
 		// String end_time=null;
 		List<ScriptDetailsDto> excelMetadataListVO = new ArrayList<>();
-//		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
-//				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTestSetLineId())).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
-//				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.SES, null);
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SES, null);
 		
 		try {
