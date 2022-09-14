@@ -409,7 +409,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
 		} catch (Exception e) {
 			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScriptNumber());
 			e.printStackTrace();
@@ -444,7 +444,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails)
+			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial)
 			throws Exception {
 
 		String log4jConfPath = "log4j.properties";
@@ -471,9 +471,11 @@ public class RunAutomation {
 		// String start_time=null;
 		// String end_time=null;
 		List<ScriptDetailsDto> excelMetadataListVO = new ArrayList<>();
-		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
-				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTestSetLineId())).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
-				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.SES, null);
+//		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+//				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTestSetLineId())).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
+//				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.SES, null);
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SES, null);
+		
 		try {
 			script_id = fetchMetadataListVO.get(0).getScriptId();
 			passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
@@ -556,7 +558,7 @@ public class RunAutomation {
 						}
 						startExcelAction = false;
 						testScriptExecService.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true,
-								customerDetails);
+								customerDetails,auditTrial);
 						log.info("In final step of excel end-- " + excelMetadataListVO.size());
 						List<Integer> stepIdList = excelMetadataListVO.stream().map(e -> e.getTestScriptParamId())
 								.map(Integer::valueOf).collect(Collectors.toList());

@@ -814,7 +814,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 	public void runExcelSteps(String param, List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			boolean run, CustomerProjectDto customerDetails) {
+			boolean run, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial) {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -824,9 +824,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		String methodCall;
 		ArrayList<String> methods = new ArrayList<>();
 		PyJabScriptDto dto = new PyJabScriptDto();
-		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
-				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
-				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.EES, null);
+//		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+//				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
+//				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.EES, null);
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.EES, null);
 		System.out
 				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTestSetLineId());
 
