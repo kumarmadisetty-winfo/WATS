@@ -307,7 +307,7 @@ public abstract class AbstractSeleniumKeywords {
 
 	}
 
-	private void createDir(String path) {
+	public void createDir(String path) {
 		File folder1 = new File(path);
 		if (!folder1.exists()) {
 			logger.info("creating directory: " + folder1.getName());
@@ -1435,7 +1435,7 @@ public abstract class AbstractSeleniumKeywords {
 			throws IOException, com.itextpdf.text.DocumentException {
 
 		document.newPage();
-		String folderName = "API" + "/" + customerDetails.getCustomerName() + "/" + customerDetails.getTestSetName();
+		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName();
 		fileName = fileName + "_Passed.txt";
 		String localPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator) + fileName;

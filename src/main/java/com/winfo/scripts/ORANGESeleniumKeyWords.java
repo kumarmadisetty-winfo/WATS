@@ -71,6 +71,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -18200,7 +18201,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
 			ClientResponse response;
 
-			if (apiValidationData.getRequestBody() != null) {
+			if (apiValidationData.getRequestBody() != null && !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
 				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
 						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
 						.body(BodyInserters.fromObject(strInput)).exchange().block();
@@ -18225,17 +18226,24 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 //			return response.statusCode();
 			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
-			String fileName = (fetchMetadataVO.getSeqNum() + "_"
+			
+			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
 					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			String name = (fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
+			
 			try (PrintWriter out = new PrintWriter(fileName)) {
 			    out.println(api.getResponse());
 			}
-			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName();
+//			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
+//					+ customerDetails.getTestSetName();
 			File source = new File(fileName);
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, fileName);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName(), name);
 			Files.delete( Paths.get(fileName));
 		} catch (Exception ex) {
 			throw ex;
