@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +34,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -43,6 +45,7 @@ import com.winfo.services.ScriptXpathService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -397,6 +400,9 @@ public class RunAutomation {
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListsVO.get(0).getExecutedBy())
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
 		try {
 			boolean actionContainsExcel = dataBaseEntry
 					.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
@@ -419,7 +425,7 @@ public class RunAutomation {
 				post.setP_test_set_line_path(scripturl);
 
 //				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
-
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
 						customerDetails.getTestSetName());
@@ -465,7 +471,9 @@ public class RunAutomation {
 		// String start_time=null;
 		// String end_time=null;
 		List<ScriptDetailsDto> excelMetadataListVO = new ArrayList<>();
-
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+				.testSetLineId(Integer.valueOf(fetchMetadataListVO.get(0).getTestSetLineId())).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.SES, null);
 		try {
 			script_id = fetchMetadataListVO.get(0).getScriptId();
 			passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
@@ -1312,6 +1320,7 @@ public class RunAutomation {
 
 					if (fetchMetadataListVO.size() == i && !isError) {
 						String checkPackage = dataBaseEntry.getPackage(test_set_id);
+						dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SEE, null);
 						if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 							FetchScriptVO post = new FetchScriptVO();
 							post.setP_test_set_id(test_set_id);
@@ -1421,6 +1430,7 @@ public class RunAutomation {
 					isError = true;
 				}
 				if (isError) {
+					dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SEF,null);
 					String checkPackage = dataBaseEntry.getPackage(test_set_id);
 					if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 						FetchScriptVO post = new FetchScriptVO();
@@ -1500,6 +1510,7 @@ public class RunAutomation {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SEF, e.getMessage());
 			throw e;
 		}
 	}

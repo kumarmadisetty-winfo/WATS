@@ -22,7 +22,8 @@ public class Constants {
 		RR("Received Request"), SGC("Script Generation Completed"), SQ("Script Queued"), CP("Consumer Picked"),
 		SES("Script Execution Started"), SEE("Script Execution Ended"), SSU("Sent for Status Update"),
 		SU("Status Updated"), SUOQ("Status Update Request Put On Queue"), ERG("Evidence Report Generated"),
-		EIP("Error In Producer"), EISU("Error In Status Updation After Script Run"), DSF("Dependant Script Failed");
+		EIP("Error In Producer"), EISU("Error In Status Updation After Script Run"), DSF("Dependant Script Failed"),
+		DF("Driver Failed"),EES("Excel Execution Started"),SEF("Script Execution Failed");
 
 		public final String label;
 

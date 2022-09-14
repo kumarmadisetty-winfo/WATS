@@ -826,7 +826,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		PyJabScriptDto dto = new PyJabScriptDto();
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
 				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListVO.get(0).getExecutedBy())
-				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.EES, null);
 		System.out
 				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTestSetLineId());
 
