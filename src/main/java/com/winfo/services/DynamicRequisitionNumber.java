@@ -1,5 +1,7 @@
 package com.winfo.services;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +44,9 @@ public class DynamicRequisitionNumber {
 	dao.getTestSetParamIdWithCopyAction(key,value,testSetLineId,testSetId);
 		
 	}
-
+	
+	@Transactional
+	public List<String> getResponseCode(String test_set_id) {
+		return dao.getResponseCode(test_set_id);
+	}
 }

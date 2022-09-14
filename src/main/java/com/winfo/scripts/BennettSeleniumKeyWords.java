@@ -15679,7 +15679,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	@Override
 	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api) throws Exception {
+			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 
 	}

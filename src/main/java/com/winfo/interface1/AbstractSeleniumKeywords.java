@@ -2,8 +2,11 @@ package com.winfo.interface1;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,6 +28,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +54,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -81,9 +88,11 @@ import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.services.DataBaseEntry;
+import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
@@ -99,6 +108,8 @@ public abstract class AbstractSeleniumKeywords {
 	private String ociNamespace;
 	@Value("${configvO.watslogo}")
 	private String watslogo;
+	@Value("${configvO.whiteimage}")
+	private String whiteimage;
 
 	private static final String PNG_EXTENSION = ".png";
 	private static final String JPG_EXTENSION = ".jpg";
@@ -127,6 +138,9 @@ public abstract class AbstractSeleniumKeywords {
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
+	
+	@Autowired
+	DynamicRequisitionNumber dynamicnumber;
 
 	public String screenshot(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
@@ -564,6 +578,25 @@ public abstract class AbstractSeleniumKeywords {
 
 				if ("Detailed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 					generateDetailsPDF(document, watsLogo, passcount, failcount, others, writer);
+					String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
+					if ("API_TESTING".equalsIgnoreCase(checkPackage)) {
+						Map<Integer,Integer> mapOfResponseCodeAndCount = new HashMap<Integer,Integer>();
+						ObjectMapper objectMapper = new ObjectMapper();
+						objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+						List<String> responseCodeList = dynamicnumber.getResponseCode(customerDetails.getTestSetId());
+						for(String responseCode : responseCodeList) {
+							String inputValue = responseCode.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
+							ApiValidationVO apiValidationData = objectMapper.readValue(inputValue,ApiValidationVO.class);
+							if(apiValidationData.getResponseCode() != null) {
+								if(mapOfResponseCodeAndCount.containsKey(apiValidationData.getResponseCode())) {
+									mapOfResponseCodeAndCount.put(apiValidationData.getResponseCode(), mapOfResponseCodeAndCount.get(apiValidationData.getResponseCode())+1);
+								}else {
+									mapOfResponseCodeAndCount.put(apiValidationData.getResponseCode(), 1);
+								}
+							}
+						}
+						inserStatusCodeInCell(document,mapOfResponseCodeAndCount);
+					}
 				} else if ("Passed_Report.pdf".equalsIgnoreCase(pdffileName)) {
 					generatePassPDF(document, passcount, failcount);
 				} else {
@@ -647,6 +680,7 @@ public abstract class AbstractSeleniumKeywords {
 
 		int i = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
+			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
@@ -674,6 +708,9 @@ public abstract class AbstractSeleniumKeywords {
 				String stepDescription = metaDataVO.getTestRunParamDesc();
 				String inputParam = metaDataVO.getInputParameter();
 				String inputValue = metaDataVO.getInputValue();
+				if ("API_TESTING".equalsIgnoreCase(checkPackage)) {
+					inputValue = "";
+				}
 				document.setPageSize(pageSize);
 				document.newPage();
 				String s = "Status: " + status;
@@ -705,6 +742,10 @@ public abstract class AbstractSeleniumKeywords {
 				img.scalePercent(60, 62);
 				document.add(img);
 				document.add(p);
+				
+				if ("API_TESTING".equalsIgnoreCase(checkPackage)) {
+					addingResponseIntoReport(fileName,document,customerDetails,fetchConfigVO);
+				}
 			}
 		}
 
@@ -975,6 +1016,7 @@ public abstract class AbstractSeleniumKeywords {
 		int i = 0;
 		int j = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
+			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
@@ -1061,6 +1103,10 @@ public abstract class AbstractSeleniumKeywords {
 				String inputParam = metaDataVO.getInputParameter();
 
 				String inputValue = metaDataVO.getInputValue();
+				
+				if ("API_TESTING".equalsIgnoreCase(checkPackage)) {
+					inputValue = "";
+				}
 
 				Paragraph pr1 = new Paragraph();
 				pr1.add("Status:");
@@ -1127,6 +1173,10 @@ public abstract class AbstractSeleniumKeywords {
 				p.add(target);
 				p.add(" of " + fileNameList.size());
 				document.add(p);
+				
+				if ("API_TESTING".equalsIgnoreCase(checkPackage)) {
+					addingResponseIntoReport(fileName,document,customerDetails,fetchConfigVO);
+				}
 			}
 
 		}
@@ -1274,6 +1324,164 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
+	}
+	
+	public void createScreenShot(ScriptDetailsDto fetchMetadataVO,FetchConfigVO fetchConfigVO,String message,CustomerProjectDto customerDetails) throws Exception{
+		try {
+		File file = new ClassPathResource(whiteimage).getFile();
+
+		File file1 = new ClassPathResource(watslogo.substring(10)).getFile();
+		BufferedImage logo = null;
+		logo = ImageIO.read(file1);
+
+		BufferedImage image1 = null;
+		image1 = ImageIO.read(file);
+		Graphics g1 = image1.getGraphics();
+		g1.setColor(Color.red);
+		java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+		g1.setFont(font1);
+		g1.drawString(message, 500, 360);
+		g1.drawImage(logo, 1100, 100, null);
+		g1.dispose();
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(image1, "png", baos);
+		
+		String imageName = (fetchMetadataVO.getSeqNum() + "_"
+				+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+				+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+				+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".png");
+		
+		File imagePath = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName() + "/" + customerDetails.getTestSetName());
+		
+		if (!imagePath.exists()) {
+			System.out.println("creating directory: " + imagePath.getName());
+			try {
+				imagePath.mkdirs();
+			} catch (SecurityException se) {
+				System.out.println(se.getMessage());
+			}
+		} else {
+			System.out.println("Folder exist");
+		}
+		System.out.println(imagePath.getName().toString());
+		FileOutputStream fileOutputStream = new FileOutputStream(imagePath+File.separator+imageName);
+		baos.writeTo(fileOutputStream);
+		baos.close();
+		fileOutputStream.close();
+		File source = new File(imagePath+File.separator+imageName);
+		String fileExtension = source.getName();
+
+		fileExtension = fileExtension.substring(fileExtension.indexOf("."));
+
+		String folderName = "Screenshot" + "/" + customerDetails.getCustomerName() + "/"
+				+ customerDetails.getTestSetName();
+		
+		uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+		Files.delete( Paths.get(source.getPath()));
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public void downloadObjectFromObjectStore(String localFilePath, String folderName, String fileName) {
+		GetObjectResponse response = null;
+		try {
+			/**
+			 * Create a default authentication provider that uses the DEFAULT profile in the
+			 * configuration file. Refer to <see
+			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
+			 * public documentation</see> on how to prepare a configuration file.
+			 */
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			final String FILE_NAME = localFilePath;
+			File file = new File(FILE_NAME);
+//			long fileSize = FileUtils.sizeOf(file);
+//			InputStream is = new FileInputStream(file);
+			String destinationFilePath = folderName + "/" + fileName;
+			/* Create a service client */
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+
+				/* Create a request and dependent object(s). */
+
+				GetObjectRequest getObjectRequest = GetObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(destinationFilePath).build();
+
+				response = client.getObject(getObjectRequest);
+				try (final InputStream stream = response.getInputStream();
+						final OutputStream outputStream = new FileOutputStream(file.getPath())) {
+
+					byte[] buf = new byte[8192];
+					int bytesRead;
+					while ((bytesRead = stream.read(buf)) > 0) {
+						outputStream.write(buf, 0, bytesRead);
+					}
+				}
+
+			}
+//			return response.toString();
+		} catch (WatsEBSCustomException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+		}
+
+	}
+
+	public void addingResponseIntoReport(String fileName, Document document, CustomerProjectDto customerDetails, FetchConfigVO fetchConfigVO)
+			throws IOException, com.itextpdf.text.DocumentException {
+
+		document.newPage();
+		String folderName = "API" + "/" + customerDetails.getCustomerName() + "/" + customerDetails.getTestSetName();
+		fileName = fileName + "_Passed.txt";
+		String localPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator) + fileName;
+		downloadObjectFromObjectStore(localPath, folderName, fileName);
+		Path path = Paths.get(localPath);
+		byte[] bytes = Files.readAllBytes(path);
+		String text = new String(bytes);
+		ObjectMapper mapper = new ObjectMapper();
+		Object json = mapper.readValue(text, Object.class);
+		String prettyString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+		Paragraph paragraphResponse = new Paragraph("Response Body :- \n" + prettyString);
+		paragraphResponse.setAlignment(Element.CCITTG3_2D);
+		document.add(paragraphResponse);
+	}
+
+	public void inserStatusCodeInCell(Document document, Map<Integer, Integer> mapOfResponseCodeAndCount) throws com.itextpdf.text.DocumentException {
+		document.newPage();
+		Font font23 = FontFactory.getFont(ARIAL, 23);
+		PdfPTable table1 = new PdfPTable(2);
+		table1.setWidths(new int[] { 1, 1 });
+		table1.setWidthPercentage(100f);
+		String[] statusCodeArray = {"Response Code","200","201","400","401","403","404","405","408","500","503","504","Total"};
+		String[] statusCount = { "Count", "0","0","0","0","0","0","0","0","0","0","0","0" };
+		Integer total = 0;
+		for(int i=0;i<statusCodeArray.length;i++) {
+			String str = statusCodeArray[i];
+			Integer checkInteger = null;
+
+			try {
+				checkInteger = Integer.parseInt(statusCodeArray[i]);
+		    } catch (NumberFormatException e) {
+		        System.out.println("Input String cannot be parsed to Integer.");
+		    }
+			if(checkInteger!= null && mapOfResponseCodeAndCount.containsKey(checkInteger)) {
+				statusCount[i] = mapOfResponseCodeAndCount.get(checkInteger).toString();
+				total += mapOfResponseCodeAndCount.get(checkInteger);
+			}
+			if(str.contains("Total")) {
+				statusCount[i] = total.toString();
+			}
+			String str1 = statusCount[i];
+			insertCell(table1, str, Element.ALIGN_LEFT, 1, font23);
+			insertCell(table1, str1, Element.ALIGN_LEFT, 1, font23);
+		}
+		document.add(table1);
+		document.newPage();
 	}
 
 }
