@@ -18161,7 +18161,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				TestSetAttribute testSetAttributeExpiresIn = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "expires_in");
 				boolean expireIsPresent = testSetAttributeExpiresIn != null;
 				boolean authenticationValues = (fetchConfigVO.getAPI_AUTHENTICATION_URL()!=null && fetchConfigVO.getAPI_AUTHENTICATION_CODE() !=null);
-				if (expireIsPresent || authenticationValues) {
+				if (expireIsPresent && authenticationValues) {
 					if(expireIsPresent) {
 						
 					}else{
