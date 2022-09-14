@@ -54,7 +54,7 @@ public class TestSetLineDto {
 	public TestSetLineDto(TestSetLine scriptData) {
 		this.scriptId = scriptData.getScriptId();
 		this.scriptnumber = scriptData.getScriptNumber();
-		this.status = scriptData.getScriptNumber();
+		this.status = "New";
 		this.enabled = scriptData.getEnabled();
 		this.seqnum = scriptData.getSeqNum();
 		this.createdby = scriptData.getCreatedBy();
