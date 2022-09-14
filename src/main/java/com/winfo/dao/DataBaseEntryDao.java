@@ -3,6 +3,7 @@ package com.winfo.dao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.Format;
@@ -35,7 +36,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
@@ -49,7 +49,6 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -60,12 +59,13 @@ import com.winfo.vo.LookUpVO;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
 
+@SuppressWarnings({ "deprecation", "unchecked" })
 @Repository
 @RefreshScope
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
-	
+
 	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
 
 	private static final String TEST_SET_LINE = "testSetLine";
@@ -95,37 +95,29 @@ public class DataBaseEntryDao {
 		return session.find(TestSetLine.class, lineId);
 	}
 
-	@SuppressWarnings("unchecked")
 	public LookUpCodeVO lookupCode(String lookUpName, String lookupCode) {
 		Session session = em.unwrap(Session.class);
 		List<LookUpCode> listOfLookUpCode = session
 				.createQuery(
 						"from LookUpCode where lookUpName = '" + lookUpName + "' and lookUpCode = '" + lookupCode + "'")
 				.getResultList();
-		LookUpCodeVO lookUpCodeVo = listOfLookUpCode.isEmpty() ? null : new LookUpCodeVO(listOfLookUpCode.get(0));
-		return lookUpCodeVo;
+		return listOfLookUpCode.isEmpty() ? null : new LookUpCodeVO(listOfLookUpCode.get(0));
 	}
 
-	@SuppressWarnings("unchecked")
 	public LookUpVO lookups(String lookUpName, Map<String, LookUpCodeVO> mapOfData) {
 		Session session = em.unwrap(Session.class);
 		List<LookUp> listOfLookUp = session.createQuery("from LookUp where lookUpName = '" + lookUpName + "'")
 				.getResultList();
 		LookUp lookUpObj = listOfLookUp.isEmpty() ? null : listOfLookUp.get(0);
-		LookUpVO lookupVo = new LookUpVO(lookUpObj, mapOfData);
-		return lookupVo;
+		return new LookUpVO(lookUpObj, mapOfData);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Integer> getListOfLineIdByTestSetId(int testSetId) {
 		Session session = em.unwrap(Session.class);
-		List<Integer> testSetLineIDs = session
-				.createQuery("select testRunScriptId from TestSetLine where testRun.testRunId = " + testSetId)
+		return session.createQuery("select testRunScriptId from TestSetLine where testRun.testRunId = " + testSetId)
 				.getResultList();
-		return testSetLineIDs;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<ScriptMaster> getScriptMasterListByScriptId(int scriptId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ScriptMaster> cq = cb.createQuery(ScriptMaster.class);
@@ -138,23 +130,19 @@ public class DataBaseEntryDao {
 
 	public String getConfiNameByConfigId(Integer configId) {
 		Session session = em.unwrap(Session.class);
-		String configurationName = (String) session
+		return (String) session
 				.createNativeQuery("select config_name from win_ta_config where configuration_id ='" + configId + "'")
 				.getSingleResult();
-		return configurationName;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Object[]> getProjectNameById(int projectId) {
 		Session session = em.unwrap(Session.class);
-		List<Object[]> projectNameAndWatsPackage = (List<Object[]>) session
+		return session
 				.createNativeQuery(
 						"select project_name, wats_package from win_ta_projects where project_id =" + projectId)
 				.getResultList();
-		return projectNameAndWatsPackage;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<ScriptMetaData> getScriptMetaDataList(Integer scriptId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ScriptMetaData> cq = cb.createQuery(ScriptMetaData.class);
@@ -165,27 +153,24 @@ public class DataBaseEntryDao {
 		return query.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<TestSetScriptParam> getScriptParamList(Integer testSetLineId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TestSetScriptParam> cq = cb.createQuery(TestSetScriptParam.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
-		Predicate condition = cb.equal(from.get("testSetLine").get("testRunScriptId"), testSetLineId);
+		Predicate condition = cb.equal(from.get(TEST_SET_LINE).get(TEST_RUN_SCRIPT_ID), testSetLineId);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		return query.getResultList();
 	}
 
-	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId, String status) throws ClassNotFoundException, SQLException {
+	public void updatePassedScriptLineStatus(String testScriptParamId, String status) {
 		try {
-			Query query = em.createQuery(
-					"Update TestSetScriptParam set line_execution_status='Pass' where test_script_param_id=" + "'"
-							+ testScriptParamId + "'");
+			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status
+					+ "' where test_script_param_id=" + "'" + testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("cant update passed script line status");
-			System.out.println(e);
+			logger.info("cant update passed script line status");
+			logger.error(e);
 		}
 	}
 
@@ -198,36 +183,11 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			productVersion = (String) query.getResultList().get(0);
 		} catch (Exception e) {
-			System.out.println("cant get product version.");
-			System.out.println(e);
+			logger.info("cant get product version.");
+			logger.error(e);
 		}
 
 		return productVersion;
-	}
-
-	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
-			throws ClassNotFoundException, SQLException {
-		String errorMessage = "";
-		String sqlQuery = "SELECT PARAM.LINE_ERROR_MESSAGE "
-				+ "FROM WIN_TA_TEST_SET_SCRIPT_PARAM PARAM,WIN_TA_TEST_SET_LINES LINES,WIN_TA_TEST_SET TS "
-				+ "WHERE TS.TEST_SET_ID = LINES.TEST_SET_ID " + "AND LINES.TEST_SET_LINE_ID = PARAM.TEST_SET_LINE_ID "
-				+ "AND TS.TEST_SET_ID = (SELECT TEST_SET_ID FROM WIN_TA_TEST_SET WHERE UPPER(TEST_SET_NAME)=UPPER('"
-				+ testRunName + "'))" + "AND UPPER(LINES.SCRIPT_NUMBER) = UPPER('" + ScriptName + "') "
-				+ "AND LINES.SEQ_NUM = " + sndo + " " + "AND PARAM.LINE_ERROR_MESSAGE IS NOT NULL";
-
-		try {
-			Session session = em.unwrap(Session.class);
-			Query query = session.createSQLQuery(sqlQuery);
-			errorMessage = (String) query.getResultList().get(0);
-			/*
-			 * if(errorMessage==null) { throw new RuntimeException(); }
-			 */
-		} catch (Exception e) {
-			System.out.println("cant get error message");
-			System.out.println(e);
-		}
-
-		return errorMessage;
 	}
 
 	public String getErrorMessage(String sndo, String scriptName, String testRunName) {
@@ -243,101 +203,89 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(sqlQuery);
 			errorMessage = (String) query.getResultList().get(0);
-			/*
-			 * if(errorMessage==null) { throw new RuntimeException(); }
-			 */
 		} catch (Exception e) {
-			System.out.println("cant get error message");
-			System.out.println(e);
+			logger.info("cant get error message");
+			logger.error(e);
 		}
 
 		return errorMessage;
 	}
 
-	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String testSetId, String testSetLineId)
-			throws ClassNotFoundException, SQLException {
+	public void updateInProgressScriptStatus(String testSetLineId) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
-
-			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
 				testLines.setStatus(IN_PROGRESS.toUpperCase());
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			System.out.println("cant update in progress script status");
-			System.out.println(e);
+			logger.info("cant update in progress script status");
+			logger.error(e);
 		}
 	}
 
-	public void updateStartTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date startTime1)
-			throws ClassNotFoundException, SQLException {
+	public void updateStartTime(String lineId, String testSetId, Date startTime1) {
 		Format startformat = new SimpleDateFormat(SIMPLE_DATE);
-		String start_time = startformat.format(startTime1);
+		String startTime = startformat.format(startTime1);
 		try {
 			Session session = em.unwrap(Session.class);
 			Query query = session
 					.createSQLQuery("Update WATS_PROD.WIN_TA_TEST_SET_LINES  SET EXECUTION_START_TIME=TO_TIMESTAMP('"
-							+ start_time + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID=" + testSetId
+							+ startTime + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_SET_ID=" + testSetId
 							+ " AND TEST_SET_LINE_ID = " + lineId);
 			query.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("cant update starttime");
-			System.out.println(e);
+			logger.info("cant update starttime");
+			logger.error(e);
 		}
 	}
 
 	public int getNextExecutionNum() {
 		Session session = em.unwrap(Session.class);
 		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
-		SQLQuery query = session.createSQLQuery(sql);
+		SQLQuery<?> query = session.createSQLQuery(sql);
 
-		List results = query.list();
+		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			System.out.println(results.get(0));
+			logger.info(results.get(0));
 
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
-			Integer id = Integer.parseInt(bigDecimal.toString());
-			return id;
+			return Integer.parseInt(bigDecimal.toString());
 		} else {
 			return 0;
 		}
 	}
 
 	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId, CustomerProjectDto customerDetails) throws SQLException {
-		try {
-			String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-					+ File.separator
+			String testScriptParamId, CustomerProjectDto customerDetails) throws IOException {
+		String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+				+ File.separator
 
-					+ customerDetails.getTestSetName() + File.separator + fetchMetadataVO.getSeqNum() + SPECIAL_CHAR[0]
+				+ customerDetails.getTestSetName() + File.separator + fetchMetadataVO.getSeqNum() + SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + fetchMetadataVO.getScenarioName()
-					+ SPECIAL_CHAR[0]
+				+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + fetchMetadataVO.getScenarioName()
+				+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getScriptNumber() + SPECIAL_CHAR[0] + customerDetails.getTestSetName()
-					+ SPECIAL_CHAR[0]
+				+ fetchMetadataVO.getScriptNumber() + SPECIAL_CHAR[0] + customerDetails.getTestSetName()
+				+ SPECIAL_CHAR[0]
 
-					+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + PASSED);
+				+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + PASSED);
 
-			String JpgFile = folder.concat(SPECIAL_CHAR[1] + JPG);
-			String pngFile = folder.concat(SPECIAL_CHAR[1] + PNG);
+		String JpgFile = folder.concat(SPECIAL_CHAR[1] + JPG);
+		String pngFile = folder.concat(SPECIAL_CHAR[1] + PNG);
 
-			File file = new File(JpgFile).exists() ? new File(JpgFile) : new File(pngFile);
-			byte[] screenshotArray = new byte[(int) file.length()];
-			try (FileInputStream fileInputStream = new FileInputStream(file);) {
-				fileInputStream.read(screenshotArray);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"
-					+ testScriptParamId + "'";
-			Query query = em.unwrap(Session.class).createSQLQuery(sql);
-			query.setParameter("screenshot", screenshotArray);
-			query.executeUpdate();
-		} catch (Exception e) {
-			System.out.println(e);
+		File file = new File(JpgFile).exists() ? new File(JpgFile) : new File(pngFile);
+		byte[] screenshotArray = new byte[(int) file.length()];
+		try (FileInputStream fileInputStream = new FileInputStream(file);) {
+			logger.info(fileInputStream.read(screenshotArray));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
+		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET SCREENSHOT= :screenshot where TEST_SCRIPT_PARAM_ID='"
+				+ testScriptParamId + "'";
+		Query query = em.unwrap(Session.class).createSQLQuery(sql);
+		query.setParameter("screenshot", screenshotArray);
+		query.executeUpdate();
 	}
 
 	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
@@ -590,8 +538,8 @@ public class DataBaseEntryDao {
 					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where testRunId='" + testSetId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("Error Updation PDF Generation Status");
-			System.out.println(e);
+			logger.info("Error Updation PDF Generation Status");
+			logger.error(e);
 		}
 	}
 
@@ -1075,8 +1023,8 @@ public class DataBaseEntryDao {
 					+ testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("cant update passed script line status");
-			System.out.println(e);
+			logger.info("cant update passed script line status");
+			logger.error(e);
 		}
 	}
 
@@ -1104,8 +1052,8 @@ public class DataBaseEntryDao {
 				em.merge(scriptParam);
 			}
 		} catch (Exception e) {
-			System.out.println("cant update inprogress scriptLine status");
-			System.out.println(e);
+			logger.info("cant update inprogress scriptLine status");
+			logger.error(e);
 		}
 	}
 
@@ -1119,24 +1067,24 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			System.out.println("cant update in progress script status");
-			System.out.println(e);
+			logger.info("cant update in progress script status");
+			logger.error(e);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
 		try {
-			Query query = em.createQuery("from TestSetLine where testRun.testRunId=" + testSetId
-					+ " and enabled='" + isEnable + "' AND STATUS IN ('IN-PROGRESS','IN-QUEUE','New')");
+			Query query = em.createQuery("from TestSetLine where testRun.testRunId=" + testSetId + " and enabled='"
+					+ isEnable + "' AND STATUS IN ('IN-PROGRESS','IN-QUEUE','New')");
 
 			List<TestSetLine> listOfLineDetails = query.getResultList();
-			
-			for(TestSetLine linesObj : listOfLineDetails) {
+
+			for (TestSetLine linesObj : listOfLineDetails) {
 				linesObj.setStatus(FAIL);
 				em.merge(linesObj);
 			}
-			
+
 		} catch (Exception e) {
 			logger.info("cant update script status to - " + FAIL);
 			logger.info(e.getMessage());
@@ -1153,8 +1101,8 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			System.out.println("cant update script status to - " + status);
-			System.out.println(e);
+			logger.info("cant update script status to - " + status);
+			logger.error(e);
 		}
 	}
 
@@ -1173,12 +1121,12 @@ public class DataBaseEntryDao {
 				+ testSetId + " and (upper(users.user_name) = upper('" + userId + "') or ('" + userId
 				+ "' is null and users.default_user = 'Y')) and rownum = 1";
 
-		System.out.println(sqlStr);
+		logger.info(sqlStr);
 		try {
 			Query query = session.createSQLQuery(sqlStr);
 			password = (String) query.getSingleResult();
 		} catch (Exception e) {
-			System.out.println("________NO_Password________");
+			logger.info("________NO_Password________");
 		}
 		return password;
 
@@ -1195,8 +1143,8 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("cannot update endTime");
-			System.out.println(e);
+			logger.info("cannot update endTime");
+			logger.error(e);
 		}
 	}
 
@@ -1556,6 +1504,7 @@ public class DataBaseEntryDao {
 		boolean flag = Integer.parseInt(count.toString()) > 0 ? true : false;
 		return flag;
 	}
+
 	public int getApiValidationIdActionId() {
 		Object requestCount = null;
 		try {
@@ -1586,11 +1535,12 @@ public class DataBaseEntryDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> checkIfValidationExists(int apiValidationId,String lookUpCode) {
+	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
 		List<String> listOfLookUpCode = null;
 		try {
 			Session session = em.unwrap(Session.class);
-			String query = "select lookup_code from WATS_PROD.win_ta_lookup_codes where lookup_id = "+apiValidationId+" and lookup_code in ('"+lookUpCode+"')";
+			String query = "select lookup_code from WATS_PROD.win_ta_lookup_codes where lookup_id = " + apiValidationId
+					+ " and lookup_code in ('" + lookUpCode + "')";
 			listOfLookUpCode = session.createSQLQuery(query).getResultList();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",

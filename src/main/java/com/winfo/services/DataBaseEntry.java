@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class DataBaseEntry {
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
+		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -73,7 +74,7 @@ public class DataBaseEntry {
 
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
 			throws ClassNotFoundException, SQLException {
-		return dao.getErrorMessage(sndo, ScriptName, testRunName, fetchConfigVO);
+		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
 
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName)
@@ -83,12 +84,12 @@ public class DataBaseEntry {
 
 	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
 			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
+		dao.updateInProgressScriptStatus(test_set_id);
 	}
 
 	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
 			throws ClassNotFoundException, SQLException {
-		dao.updateStartTime(fetchConfigVO, line_id, test_set_id, start_time1);
+		dao.updateStartTime(line_id, test_set_id, start_time1);
 	}
 
 	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
@@ -106,7 +107,7 @@ public class DataBaseEntry {
 	}
 
 	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, CustomerProjectDto customerDetails) throws SQLException {
+			String test_script_param_id, CustomerProjectDto customerDetails) throws SQLException, IOException {
 		dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id, customerDetails);
 	}
 
@@ -210,8 +211,7 @@ public class DataBaseEntry {
 	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
 		dao.updateLineStatusUsingSetIdandIsEnable(testSetId, isEnable);
 	}
-	
-	
+
 	public void updateStatusOfScript(String test_set_line_id, String status) {
 		dao.updateStatusOfScript(test_set_line_id, status);
 	}
@@ -486,7 +486,6 @@ public class DataBaseEntry {
 		dao.updateTestSetLineStatusForSanity(testSetId);
 	}
 
-
 	public List<TestSetLine> getAllTestSetLineRecord(String testSetId) {
 		return dao.getAllTestSetLineRecord(testSetId);
 	}
@@ -502,16 +501,17 @@ public class DataBaseEntry {
 	public boolean checkActionContainsExcel(String script_id) {
 		return dao.checkActionContainsExcel(script_id);
 	}
+
 	public int getApiValidationIdActionId() {
 		return dao.getApiValidationIdActionId();
 	}
 
 	public List<Object> getApiValidationDataFromLookupsCode(int apiValidationId, List<Integer> list) {
-		return dao.getApiValidationDataFromLookupsCode(apiValidationId,list);
+		return dao.getApiValidationDataFromLookupsCode(apiValidationId, list);
 	}
 
 	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
-		return dao.checkIfValidationExists(apiValidationId,lookUpCode);
+		return dao.checkIfValidationExists(apiValidationId, lookUpCode);
 	}
 
 	public void insertApiValidation(LookUpCode lookUpCodes) {
