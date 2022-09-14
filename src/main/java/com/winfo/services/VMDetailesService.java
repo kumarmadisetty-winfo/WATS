@@ -157,7 +157,7 @@ public class VMDetailesService {
 				}
 			}
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testRunId);
-               getWebDriver(fetchConfigVO);
+			getWebDriver(fetchConfigVO);
 
 			log.info("no of vms lanched" + updateResponse.getInstancePool().getSize());
 
@@ -171,8 +171,8 @@ public class VMDetailesService {
 	private void getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException, InterruptedException {
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
-		if (BrowserConstants.CHROME.value.equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.CHROME_DRIVER.value, fetchConfigVO.getChrome_driver_path());
+		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
 			System.setProperty("java.awt.headless", "false");
 			// System.setProperty(DriverConstants.CHROME_DRIVER.value,
 			// "C:\\Users\\watsadmin\\Documents\\Selenium Grid\\chromedriver.exe");
@@ -204,29 +204,28 @@ public class VMDetailesService {
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 
-
-				try {
+			try {
 				driver = new RemoteWebDriver(new URL(config_url), cap);
-				
+
 				driver.quit();
-				}
-		 catch (Exception e) {
-			Thread.sleep(3* 60 * 1000);
-			getWebDriver(fetchConfigVO);
+			} catch (Exception e) {
+				Thread.sleep(3 * 60 * 1000);
+				getWebDriver(fetchConfigVO);
 
-			log.error("failed at stop the vms" + e);
-			e.printStackTrace();
-		}
+				log.error("failed at stop the vms" + e);
+				e.printStackTrace();
 			}
-
+		}
 
 	}
+
 	@Transactional
 	public void stopInstance() throws Exception {
 		ConfigFileAuthenticationDetailsProvider provider = null;
 		ListInstancePoolInstancesResponse listresponse = null;
 		try {
-			ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource(configLocation).getInputStream(), configProfileName);
+			ConfigFile configFile = ConfigFileReader.parse(new ClassPathResource(configLocation).getInputStream(),
+					configProfileName);
 			provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			ComputeManagementClient client = new ComputeManagementClient(provider);
 			ListInstancePoolsRequest listInstancePoolsRequest = ListInstancePoolsRequest.builder()
@@ -274,11 +273,9 @@ public class VMDetailesService {
 					.builder().compartmentId(response.getItems().get(0).getCompartmentId())
 					.instancePoolId(response.getItems().get(0).getId())
 //					.displayName(response.getItems().get(0).getDisplayName())
-					.limit(122)
-					.sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
+					.limit(122).sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
 					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
 
-			
 //			client.setRegion(Region.AP_MUMBAI_1);
 //			GetInstancePoolRequest getInstancePoolRequest = GetInstancePoolRequest.builder().instancePoolId(instancePoolId)
 //					.build();
@@ -289,7 +286,7 @@ public class VMDetailesService {
 //					.displayName(response.getInstancePool().getDisplayName()).limit(122)
 //					.sortBy(ListInstancePoolInstancesRequest.SortBy.Timecreated)
 //					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
-			    return client.listInstancePoolInstances(listInstancePoolInstancesRequest);
+			return client.listInstancePoolInstances(listInstancePoolInstancesRequest);
 		} catch (Exception e) {
 			System.out.println("Exception" + e);
 			log.error("failed at configuration setup" + e);
