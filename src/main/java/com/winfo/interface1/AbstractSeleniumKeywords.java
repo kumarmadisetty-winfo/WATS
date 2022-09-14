@@ -307,7 +307,7 @@ public abstract class AbstractSeleniumKeywords {
 
 	}
 
-	private void createDir(String path) {
+	public void createDir(String path) {
 		File folder1 = new File(path);
 		if (!folder1.exists()) {
 			logger.info("creating directory: " + folder1.getName());

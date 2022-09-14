@@ -18225,17 +18225,24 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 //			return response.statusCode();
 			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
-			String fileName = (fetchMetadataVO.getSeqNum() + "_"
+			
+			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+fetchMetadataVO.getSeqNum() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
 					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			String name = (fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
+			
 			try (PrintWriter out = new PrintWriter(fileName)) {
 			    out.println(api.getResponse());
 			}
-			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName();
+//			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
+//					+ customerDetails.getTestSetName();
 			File source = new File(fileName);
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, fileName);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName(), name);
 			Files.delete( Paths.get(fileName));
 		} catch (Exception ex) {
 			throw ex;
