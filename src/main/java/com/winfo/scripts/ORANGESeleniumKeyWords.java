@@ -18242,7 +18242,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 //			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
 //					+ customerDetails.getTestSetName();
 			File source = new File(fileName);
-			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName(), name);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName(), name);
 			Files.delete( Paths.get(fileName));
 		} catch (Exception ex) {
 			throw ex;

@@ -1435,7 +1435,7 @@ public abstract class AbstractSeleniumKeywords {
 			throws IOException, com.itextpdf.text.DocumentException {
 
 		document.newPage();
-		String folderName = "API" + "/" + customerDetails.getCustomerName() + "/" + customerDetails.getTestSetName();
+		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName();
 		fileName = fileName + "_Passed.txt";
 		String localPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator) + fileName;
