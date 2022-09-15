@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -66,8 +65,17 @@ public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
 
+	private static final String CUSTOMER_DLT_QRY = "SELECT DISTINCT wtp.customer_id,\r\n" + " wtc.customer_number,\r\n"
+			+ "  wtc.customer_name,\r\n" + " wtts.project_id,\r\n" + " wtp.project_name,\r\n"
+			+ "  wttsl.test_set_id,\r\n" + " wtts.TEST_SET_NAME test_run_name\r\n" + " from\r\n"
+			+ " win_ta_test_set wtts,\r\n" + " win_ta_test_set_lines  wttsl,\r\n" + " win_ta_projects wtp,\r\n"
+			+ " win_ta_customers wtc\r\n" + " WHERE 1=1\r\n" + " AND wttsl.test_set_id = wtts.test_set_id\r\n"
+			+ " AND wtts.project_id = wtp.project_id\r\n" + " AND wtp.customer_id = wtc.customer_id\r\n"
+			+ " AND wtts.test_set_id=";
+
 	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
 
+	private static final String EXCEPTION_MSG = "Exception occured while fetching request count for test run script.";
 	private static final String TEST_SET_LINE = "testSetLine";
 	private static final String TEST_RUN_SCRIPT_ID = "testRunScriptId";
 	private static final String TEST_SET_ID = "testRunId";
@@ -271,10 +279,10 @@ public class DataBaseEntryDao {
 
 				+ fetchMetadataVO.getLineNumber() + SPECIAL_CHAR[0] + PASSED);
 
-		String JpgFile = folder.concat(SPECIAL_CHAR[1] + JPG);
+		String jpgFile = folder.concat(SPECIAL_CHAR[1] + JPG);
 		String pngFile = folder.concat(SPECIAL_CHAR[1] + PNG);
 
-		File file = new File(JpgFile).exists() ? new File(JpgFile) : new File(pngFile);
+		File file = new File(jpgFile).exists() ? new File(jpgFile) : new File(pngFile);
 		byte[] screenshotArray = new byte[(int) file.length()];
 		try (FileInputStream fileInputStream = new FileInputStream(file);) {
 			logger.info(fileInputStream.read(screenshotArray));
@@ -288,12 +296,10 @@ public class DataBaseEntryDao {
 		query.executeUpdate();
 	}
 
-	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String test_run_id) {
-		// TODO Auto-generated method stub
-		// ScriptDetailsDto metadataVO=new ScriptDetailsDto();
-		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<String, Map<String, TestSetScriptParam>>();
+	public Map<String, Map<String, TestSetScriptParam>> getTestRunMap(String testRunId) {
+		Map<String, Map<String, TestSetScriptParam>> map = new HashMap<>();
 		String sql = "from TestSetLine where testRun=:testSet";
-		Integer testRunId2 = Integer.parseInt(test_run_id);
+		Integer testRunId2 = Integer.parseInt(testRunId);
 		Query query = em.createQuery(sql);
 		query.setParameter("testSet", em.find(TestSet.class, testRunId2));
 		List<TestSetLine> testSetLinesList = query.getResultList();
@@ -315,24 +321,20 @@ public class DataBaseEntryDao {
 		for (TestSetScriptParam scriptParam : testScriptParamList) {
 			map2.put(String.valueOf(scriptParam.getLineNumber()), scriptParam);
 		}
-		// map.put(String.valueOf(test_set_line.getSeq_num()),map2);
 		return map2;
 	}
 
-	public TestSetLine getTestSetLine(String test_set_line_id) {
-		// TODO Auto-generated method stub
-		return em.find(TestSetLine.class, Integer.parseInt(test_set_line_id));
+	public TestSetLine getTestSetLine(String testSetLineId) {
+		return em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 	}
 
-	public void getDependentScriptNumbers(LinkedHashMap<String, List<ScriptDetailsDto>> dependentScriptMap,
+	public void getDependentScriptNumbers(Map<String, List<ScriptDetailsDto>> dependentScriptMap,
 			List<Integer> dependentList) {
-		// TODO Auto-generated method stub
 		String sql = "Select script_id,dependency from ScriptMaster where script_id in (:dependentList)";
 		Query query = em.unwrap(Session.class).createQuery(sql).setParameterList("dependentList", dependentList);
 
 		List<Object[]> scriptList = query.getResultList();
-		// Object[] objectArray = scriptList.toArray();
-		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> map = new HashMap<>();
 
 		for (Object[] obj : scriptList) {
 			map.put((Integer) obj[0], (Integer) obj[1]);
@@ -346,16 +348,14 @@ public class DataBaseEntryDao {
 
 	}
 
-	public void getTestRunLevelDependentScriptNumbers(LinkedHashMap<String, List<ScriptDetailsDto>> dependentScriptMap,
-			List<Integer> dependentList, String test_set_id) {
-		// TODO Auto-generated method stub
+	public void getTestRunLevelDependentScriptNumbers(Map<String, List<ScriptDetailsDto>> dependentScriptMap,
+			List<Integer> dependentList, String testSetId) {
 		String sql = "Select test_set_line_id,dependency_tr from win_ta_test_set_lines where test_set_line_id in (:dependentList) and test_set_id = :test_set_id  and dependency_tr is not null";
 		Query query = em.unwrap(Session.class).createSQLQuery(sql).setParameterList("dependentList", dependentList)
-				.setParameter("test_set_id", test_set_id);
+				.setParameter("test_set_id", testSetId);
 
 		List<Object[]> scriptList = query.getResultList();
-		// Object[] objectArray = scriptList.toArray();
-		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> map = new HashMap<>();
 
 		for (Object[] obj : scriptList) {
 			map.put(Integer.parseInt(obj[0].toString()), Integer.parseInt(obj[1].toString()));
@@ -380,14 +380,13 @@ public class DataBaseEntryDao {
 		Query query = em.unwrap(Session.class).createSQLQuery(sq1);
 		query.setParameter("test_set_id", testSetId);
 		query.setParameter("dependentScriptNo", dependentScriptNo);
-		// query.setPara
 
 		List<String> list = query.getResultList();
 
 		Status status = new Status();
 		int awaitCount = 0;
 		if (list != null) {
-			if ((list.size() > 0) && (!(list.contains(FAIL) || list.contains(FAIL.toUpperCase())))
+			if ((!list.isEmpty()) && (!(list.contains(FAIL) || list.contains(FAIL.toUpperCase())))
 					&& (!(list.contains(NEW) || list.contains(NEW.toUpperCase())))) {
 				if ((list.contains(IN_PROGRESS) || list.contains(IN_PROGRESS.toUpperCase()))
 						|| (list.contains(IN_QUEUE) || list.contains(IN_QUEUE.toUpperCase()))) {
@@ -430,8 +429,7 @@ public class DataBaseEntryDao {
 	public Customer getCustomer(String args) {
 		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(args));
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
-		Customer customer = em.unwrap(Session.class).find(Customer.class, project.getCustomerId());
-		return customer;
+		return em.unwrap(Session.class).find(Customer.class, project.getCustomerId());
 	}
 
 	public String getTestSetMode(Long testSetId) {
@@ -450,8 +448,7 @@ public class DataBaseEntryDao {
 		Root<AuditStageLookup> from = cq.from(AuditStageLookup.class);
 		Predicate condition = cb.equal(from.get("stageName"), stageName);
 		cq.select(from.get("stageId")).where(condition);
-		Integer result = em.createQuery(cq).getSingleResult();
-		return result;
+		return em.createQuery(cq).getSingleResult();
 
 	}
 
@@ -476,7 +473,7 @@ public class DataBaseEntryDao {
 
 	}
 
-	public ArrayList<String> getStepsStatusByScriptId(int testSetLineId) {
+	public List<String> getStepsStatusByScriptId(int testSetLineId) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
@@ -485,12 +482,11 @@ public class DataBaseEntryDao {
 		Predicate condition = cb.equal(from.get(TEST_SET_LINE).get(TEST_RUN_SCRIPT_ID), testSetLineId);
 		cq.where(condition);
 		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
-		ArrayList<String> result = (ArrayList<String>) query.getResultList();
 
-		return result;
+		return query.getResultList();
 	}
 
-	public ArrayList<String> getStepsStatusForSteps(List<Integer> statusList) {
+	public List<String> getStepsStatusForSteps(List<Integer> statusList) {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
@@ -499,9 +495,7 @@ public class DataBaseEntryDao {
 		Predicate inPredicate = inExpression.in(statusList);
 		cq.where(inPredicate);
 		Query query = em.createQuery(cq.select(from.get("lineExecutionStatus")));
-		ArrayList<String> result = (ArrayList<String>) query.getResultList();
-
-		return result;
+		return query.getResultList();
 	}
 
 	public TestSetLine getScript(long testSetId, long testSetLineId) {
@@ -526,7 +520,7 @@ public class DataBaseEntryDao {
 							+ "join WIN_TA_CONFIG_MASTER cm on cl.KEY_ID=cm.KEY_ID "
 							+ "join win_ta_test_set ts on ts.CONFIGURATION_ID=cl.CONFIGURATION_ID where ts.TEST_SET_ID=:testSetId");
 			query.setParameter("testSetId", testSetId);
-			return (List<Object[]>) query.getResultList();
+			return query.getResultList();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while fetching configuration details", e);
 		}
@@ -550,8 +544,7 @@ public class DataBaseEntryDao {
 		Predicate condition = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
 
 		cq.select(cb.greatest(from.<Date>get("executionEndTime"))).where(condition);
-		Date query = em.createQuery(cq).getSingleResult();
-		return query;
+		return em.createQuery(cq).getSingleResult();
 
 	}
 
@@ -562,8 +555,7 @@ public class DataBaseEntryDao {
 		Predicate condition = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
 
 		cq.select(cb.least(from.<Date>get("executionStartTime"))).where(condition);
-		Date query = em.createQuery(cq).getSingleResult();
-		return query;
+		return em.createQuery(cq).getSingleResult();
 
 	}
 
@@ -571,7 +563,7 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Date> cq = cb.createQuery(Date.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
-		Predicate condition = cb.equal(from.get("testSetLine").get(TEST_RUN_SCRIPT_ID), testSetLineId);
+		Predicate condition = cb.equal(from.get(TEST_SET_LINE).get(TEST_RUN_SCRIPT_ID), testSetLineId);
 
 		cq.select(cb.greatest(from.<Date>get("updateDate"))).where(condition);
 		return em.createQuery(cq).getSingleResult();
@@ -582,11 +574,10 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
 		Root<TestSetScriptParam> from = cq.from(TestSetScriptParam.class);
-		Predicate condition = cb.equal(from.get("testSetLine").get(TEST_RUN_SCRIPT_ID), testSetLineId);
+		Predicate condition = cb.equal(from.get(TEST_SET_LINE).get(TEST_RUN_SCRIPT_ID), testSetLineId);
 		cq.select(from.get("testRunScriptParamId")).where(condition);
 		cq.orderBy(cb.asc(from.get("lineNumber")));
-		Integer result = em.createQuery(cq).setMaxResults(1).getSingleResult();
-		return result;
+		return em.createQuery(cq).setMaxResults(1).getSingleResult();
 
 	}
 
@@ -635,7 +626,6 @@ public class DataBaseEntryDao {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> getTestSetLinesStatusByTestSetId(long testSetId, Boolean enable) {
 		List<String> result = null;
 		try {
@@ -645,7 +635,7 @@ public class DataBaseEntryDao {
 
 			Predicate condition1 = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testSetId);
 			Predicate condition2 = null;
-			Predicate condition = cb.and(condition1, condition2);
+			Predicate condition = null;
 			if (enable != null) {
 				condition2 = cb.equal(from.get("enabled"),
 						enable ? BOOLEAN_STATUS.TRUE.getLabel() : BOOLEAN_STATUS.FALSE.getLabel());
@@ -663,7 +653,6 @@ public class DataBaseEntryDao {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> getStatusByTestSetId(String testSetId) {
 
 		String sqlQry = "select STATUS FROM win_ta_test_set_lines where test_set_id=" + testSetId;
@@ -719,35 +708,27 @@ public class DataBaseEntryDao {
 
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
 		CustomerProjectDto customerDetails = null;
-		String qry = "SELECT DISTINCT wtp.customer_id,\r\n" + "           wtc.customer_number,\r\n"
-				+ "          wtc.customer_name,\r\n" + "           wtts.project_id,\r\n"
-				+ "           wtp.project_name,\r\n" + "           wttsl.test_set_id,\r\n"
-				+ "         wtts.TEST_SET_NAME test_run_name\r\n" + "      from\r\n"
-				+ "      win_ta_test_set        wtts,\r\n" + "           win_ta_test_set_lines  wttsl,\r\n"
-				+ "           win_ta_projects        wtp,\r\n" + "           win_ta_customers       wtc\r\n"
-				+ "     WHERE 1=1\r\n" + "       AND wttsl.test_set_id = wtts.test_set_id\r\n"
-				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
-				+ "       AND wtts.test_set_id=" + testSetId;
+		String qry = CUSTOMER_DLT_QRY + testSetId;
 		try {
-			String NULL_STRING = "null";
+			String nullString = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(qry);
 			Object[] result = (Object[]) query.getSingleResult();
 			customerDetails = new CustomerProjectDto();
 			customerDetails
-					.setCustomerId(NULL_STRING.equals(String.valueOf(result[0])) ? null : String.valueOf(result[0]));
-			customerDetails.setCustomerNumber(
-					NULL_STRING.equals(String.valueOf(result[1])) ? null : String.valueOf(result[1]));
+					.setCustomerId(nullString.equals(String.valueOf(result[0])) ? null : String.valueOf(result[0]));
 			customerDetails
-					.setCustomerName(NULL_STRING.equals(String.valueOf(result[2])) ? null : String.valueOf(result[2]));
+					.setCustomerNumber(nullString.equals(String.valueOf(result[1])) ? null : String.valueOf(result[1]));
 			customerDetails
-					.setProjectId(NULL_STRING.equals(String.valueOf(result[3])) ? null : String.valueOf(result[3]));
+					.setCustomerName(nullString.equals(String.valueOf(result[2])) ? null : String.valueOf(result[2]));
 			customerDetails
-					.setProjectName(NULL_STRING.equals(String.valueOf(result[4])) ? null : String.valueOf(result[4]));
+					.setProjectId(nullString.equals(String.valueOf(result[3])) ? null : String.valueOf(result[3]));
 			customerDetails
-					.setTestSetId(NULL_STRING.equals(String.valueOf(result[5])) ? null : String.valueOf(result[5]));
+					.setProjectName(nullString.equals(String.valueOf(result[4])) ? null : String.valueOf(result[4]));
 			customerDetails
-					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
+					.setTestSetId(nullString.equals(String.valueOf(result[5])) ? null : String.valueOf(result[5]));
+			customerDetails
+					.setTestSetName(nullString.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.",
 					e);
@@ -803,7 +784,7 @@ public class DataBaseEntryDao {
 				+ "          wttsl.script_id,\r\n" + "          wtsmdata.line_number asc";
 
 		try {
-			String NULL_STRING = "null";
+			String nullString = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(sqlQuery);
 			List<Object[]> resultList = query.getResultList();
@@ -813,59 +794,54 @@ public class DataBaseEntryDao {
 				ScriptDetailsDto scriptDetailsDto = new ScriptDetailsDto();
 
 				scriptDetailsDto
-						.setTestSetLineId(NULL_STRING.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
+						.setTestSetLineId(nullString.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
+				scriptDetailsDto.setScriptId(nullString.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
 				scriptDetailsDto
-						.setScriptId(NULL_STRING.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
+						.setScriptNumber(nullString.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
 				scriptDetailsDto
-						.setScriptNumber(NULL_STRING.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
+						.setLineNumber(nullString.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
 				scriptDetailsDto
-						.setLineNumber(NULL_STRING.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
+						.setInputParameter(nullString.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
 				scriptDetailsDto
-						.setInputParameter(NULL_STRING.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
-				scriptDetailsDto
-						.setInputValue(NULL_STRING.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
+						.setInputValue(nullString.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
 
-				scriptDetailsDto.setAction(NULL_STRING.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
-
-				scriptDetailsDto
-						.setXpathLocation(NULL_STRING.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
-				scriptDetailsDto
-						.setXpathLocation1(NULL_STRING.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
+				scriptDetailsDto.setAction(nullString.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
 
 				scriptDetailsDto
-						.setFieldType(NULL_STRING.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
-
-				// testRunExecutionVO.setHint( NULL_STRING.equals(String.valueOf(obj[10]))?
-				// null:String.valueOf(obj[10]));
+						.setXpathLocation(nullString.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
 				scriptDetailsDto
-						.setScenarioName(NULL_STRING.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
+						.setXpathLocation1(nullString.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
 
 				scriptDetailsDto
-						.setDependency(NULL_STRING.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+						.setFieldType(nullString.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
 
 				scriptDetailsDto
-						.setSeqNum(NULL_STRING.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+						.setScenarioName(nullString.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
 
 				scriptDetailsDto
-						.setStatus(NULL_STRING.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
+						.setDependency(nullString.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+
+				scriptDetailsDto.setSeqNum(nullString.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+
+				scriptDetailsDto.setStatus(nullString.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
 
 				scriptDetailsDto.setTestScriptParamId(
-						NULL_STRING.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
+						nullString.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
 
 				scriptDetailsDto
-						.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[16])) ? null : String.valueOf(obj[16]));
+						.setLineErrorMsg(nullString.equals(String.valueOf(obj[16])) ? null : String.valueOf(obj[16]));
 
 				scriptDetailsDto.setTestRunParamDesc(
-						NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
+						nullString.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
 
 				scriptDetailsDto
-						.setExecutedBy(NULL_STRING.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
+						.setExecutedBy(nullString.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
 
 				scriptDetailsDto.setTargetApplicationName(
-						NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+						nullString.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
 
 				scriptDetailsDto.setDependencyScriptNumber(
-						NULL_STRING.equals(String.valueOf(obj[20])) ? null : Integer.valueOf((String) obj[20]));
+						nullString.equals(String.valueOf(obj[20])) ? null : Integer.valueOf((String) obj[20]));
 
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}
@@ -925,7 +901,7 @@ public class DataBaseEntryDao {
 				+ "          wttsl.script_id,\r\n" + "          wtsmdata.line_number asc";
 
 		try {
-			String NULL_STRING = "null";
+			String nullString = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(sqlQuery);
 			List<Object[]> resultList = query.getResultList();
@@ -935,59 +911,58 @@ public class DataBaseEntryDao {
 				FetchMetadataVO testRunExecutionVO = new FetchMetadataVO();
 
 				testRunExecutionVO
-						.setCustomer_id(NULL_STRING.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
+						.setCustomer_id(nullString.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
 				testRunExecutionVO
-						.setCustomer_number(NULL_STRING.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
+						.setCustomer_number(nullString.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
 				testRunExecutionVO
-						.setCustomer_name(NULL_STRING.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
+						.setCustomer_name(nullString.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
 				testRunExecutionVO
-						.setProject_id(NULL_STRING.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
+						.setProject_id(nullString.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
 				testRunExecutionVO
-						.setProject_name(NULL_STRING.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
+						.setProject_name(nullString.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
 				testRunExecutionVO
-						.setTest_set_id(NULL_STRING.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
-				testRunExecutionVO.setTest_set_line_id(
-						NULL_STRING.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
+						.setTest_set_id(nullString.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
 				testRunExecutionVO
-						.setScript_id(NULL_STRING.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
+						.setTest_set_line_id(nullString.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
 				testRunExecutionVO
-						.setScript_number(NULL_STRING.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
+						.setScript_id(nullString.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
 				testRunExecutionVO
-						.setLine_number(NULL_STRING.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
+						.setScript_number(nullString.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
+				testRunExecutionVO
+						.setLine_number(nullString.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
 				testRunExecutionVO.setInput_parameter(
-						NULL_STRING.equals(String.valueOf(obj[10])) ? null : String.valueOf(obj[10]));
+						nullString.equals(String.valueOf(obj[10])) ? null : String.valueOf(obj[10]));
 				testRunExecutionVO
-						.setInput_value(NULL_STRING.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
+						.setInput_value(nullString.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
 				testRunExecutionVO
-						.setAction(NULL_STRING.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
-				testRunExecutionVO.setXpath_location(
-						NULL_STRING.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+						.setAction(nullString.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+				testRunExecutionVO
+						.setXpath_location(nullString.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
 				testRunExecutionVO.setXpath_location1(
-						NULL_STRING.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
+						nullString.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
 				testRunExecutionVO
-						.setField_type(NULL_STRING.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
-				// testRunExecutionVO.setHint( NULL_STRING.equals(String.valueOf(obj[16]))?
-				// null:String.valueOf(obj[16]));
+						.setField_type(nullString.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
+
 				testRunExecutionVO
-						.setScenario_name(NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
+						.setScenario_name(nullString.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
 				testRunExecutionVO.setDependencyScriptNumber(
-						NULL_STRING.equals(String.valueOf(obj[18])) ? null : Integer.valueOf((String) obj[18]));
+						nullString.equals(String.valueOf(obj[18])) ? null : Integer.valueOf((String) obj[18]));
 				testRunExecutionVO
-						.setTest_run_name(NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+						.setTest_run_name(nullString.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
 				testRunExecutionVO
-						.setSeq_num(NULL_STRING.equals(String.valueOf(obj[20])) ? null : String.valueOf(obj[20]));
+						.setSeq_num(nullString.equals(String.valueOf(obj[20])) ? null : String.valueOf(obj[20]));
 				testRunExecutionVO
-						.setStatus(NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
+						.setStatus(nullString.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
 				testRunExecutionVO.setTest_script_param_id(
-						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
+						nullString.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				testRunExecutionVO
-						.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
+						.setLineErrorMsg(nullString.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
 				testRunExecutionVO.setTestRunParamDesc(
-						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
+						nullString.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
 				testRunExecutionVO
-						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[25])) ? null : String.valueOf(obj[25]));
+						.setExecuted_by(nullString.equals(String.valueOf(obj[25])) ? null : String.valueOf(obj[25]));
 				testRunExecutionVO.setTargetApplicationName(
-						NULL_STRING.equals(String.valueOf(obj[26])) ? null : String.valueOf(obj[26]));
+						nullString.equals(String.valueOf(obj[26])) ? null : String.valueOf(obj[26]));
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
 		} catch (Exception e) {
@@ -997,8 +972,7 @@ public class DataBaseEntryDao {
 		return listOfTestRunExecutionVo;
 	}
 
-	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId, String status, String message) {
+	public void updatePassedScriptLineStatus(String testScriptParamId, String status, String message) {
 		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String updateDateFormatStr = updateDateFormat.format(new Date());
 		try {
@@ -1012,8 +986,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId, String status, String value, String message) {
+	public void updatePassedScriptLineStatus(String testScriptParamId, String status, String value, String message) {
 		Format updateDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String updateDateFormatStr = updateDateFormat.format(new Date());
 		try {
@@ -1028,8 +1001,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String testScriptParamId, String status, String errorMessage) {
+	public void updateFailedScriptLineStatus(String testScriptParamId, String errorMessage) {
 
 		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message where TEST_SCRIPT_PARAM_ID='"
 				+ testScriptParamId + "'";
@@ -1044,9 +1016,6 @@ public class DataBaseEntryDao {
 	public void updateInProgressScriptLineStatus(String testScriptParamId, String status) {
 		try {
 			TestSetScriptParam scriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));
-			/*
-			 * if(scriptParam==null) { throw new RuntimeException(); }
-			 */
 			if (scriptParam != null) {
 				scriptParam.setLineExecutionStatus(status);
 				em.merge(scriptParam);
@@ -1057,7 +1026,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateInProgressScriptStatus(String testSetId, String testSetLineId, Date startDate) {
+	public void updateInProgressScriptStatus(String testSetLineId, Date startDate) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
 
@@ -1072,7 +1041,6 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
 		try {
 			Query query = em.createQuery("from TestSetLine where testRun.testRunId=" + testSetId + " and enabled='"
@@ -1094,19 +1062,17 @@ public class DataBaseEntryDao {
 	public void updateStatusOfScript(String testSetLineId, String status) {
 		try {
 			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
-
-			/* if(testLines==null) { throw new RuntimeException(); } */
 			if (testLines != null) {
 				testLines.setStatus(status);
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info("cant update script status to - " + status);
+			logger.info(String.format("cant update script status to - %s", status));
 			logger.error(e);
 		}
 	}
 
-	public String getTrMode(String testSetId, FetchConfigVO fetchConfigVO) throws SQLException {
+	public String getTrMode(String testSetId) throws SQLException {
 		TestSet testSet = em.find(TestSet.class, Integer.parseInt(testSetId));
 		if (testSet == null) {
 			throw new SQLException();
@@ -1114,7 +1080,7 @@ public class DataBaseEntryDao {
 		return testSet.getTestRunMode();
 	}
 
-	public String getPassword(String testSetId, String userId, FetchConfigVO fetchConfigVO) {
+	public String getPassword(String testSetId, String userId) {
 		Session session = em.unwrap(Session.class);
 		String password = null;
 		String sqlStr = "select WIN_DBMS_CRYPTO.DECRYPT(users.password , users.encrypt_key) PASSWORD from win_ta_test_set test_set,win_ta_config config,win_ta_config_users users where test_set.configuration_id = config.configuration_id and config.configuration_id = users.config_id and test_set.test_set_id = "
@@ -1132,7 +1098,7 @@ public class DataBaseEntryDao {
 
 	}
 
-	public void updateEndTime(FetchConfigVO fetchConfigVO, String lineId, String testSetId, Date endTime1) {
+	public void updateEndTime(String lineId, String testSetId, Date endTime1) {
 		Format startformat = new SimpleDateFormat(SIMPLE_DATE);
 		String endTime = startformat.format(endTime1);
 
@@ -1278,7 +1244,6 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
 		List<Object[]> listObj = null;
 		try {
@@ -1292,10 +1257,10 @@ public class DataBaseEntryDao {
 	}
 
 	public void getPassAndFailCount(String testSetId, EmailParamDto emailParam) {
-		String passQry = "SELECT\r\n" + "COUNT(1)\r\n" + "FROM\r\n" + "WIN_TA_TEST_SET_LINES\r\n" + "WHERE\r\n"
-				+ "TEST_SET_ID = " + testSetId + "\r\n" + " AND UPPER(STATUS) = 'PASS'\r\n" + " AND ENABLED = 'Y'";
-		String failQry = "SELECT\r\n" + "COUNT(1)\r\n" + "FROM\r\n" + "WIN_TA_TEST_SET_LINES\r\n" + "WHERE\r\n"
-				+ "TEST_SET_ID = " + testSetId + "\r\n" + "AND UPPER(STATUS) = 'FAIL'\r\n" + "AND ENABLED = 'Y'";
+		String passQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID = " + testSetId
+				+ " AND UPPER(STATUS) = 'PASS'\r\n" + " AND ENABLED = 'Y'";
+		String failQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID = " + testSetId
+				+ " AND UPPER(STATUS) = 'FAIL' AND ENABLED = 'Y'";
 
 		try {
 			Session session = em.unwrap(Session.class);
@@ -1353,8 +1318,8 @@ public class DataBaseEntryDao {
 	public Integer getCountOfInProgressScript(String testSetId) {
 		Integer count = null;
 
-		String selectQry = "SELECT COUNT(1)\r\n" + "FROM WIN_TA_TEST_SET_LINES\r\n" + "	WHERE TEST_SET_ID = "
-				+ testSetId + "\r\n" + "AND UPPER(STATUS) in ('IN-PROGRESS','IN-QUEUE')";
+		String selectQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID =" + testSetId + "\r\n"
+				+ "AND UPPER(STATUS) in ('IN-PROGRESS','IN-QUEUE')";
 		try {
 			Session session = em.unwrap(Session.class);
 			BigDecimal inProgressCount = (BigDecimal) session.createSQLQuery(selectQry).getSingleResult();
@@ -1387,8 +1352,7 @@ public class DataBaseEntryDao {
 	}
 
 	public void updateExecStatusFlag(String testSetId) {
-		String updateQry = "UPDATE EXECUTE_STATUS\r\n" + "SET\r\n" + "STATUS_FLAG = 'I'\r\n" + "WHERE\r\n"
-				+ "TEST_RUN_ID = " + testSetId;
+		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I' WHERE TEST_RUN_ID = " + testSetId;
 
 		try {
 			Session session = em.unwrap(Session.class);
@@ -1411,8 +1375,7 @@ public class DataBaseEntryDao {
 					+ "TEST_RUN_ID = " + testSetId + ")";
 			requestCount = session.createSQLQuery(execQry).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
-					e);
+			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
 		}
 		return requestCount;
 	}
@@ -1424,16 +1387,15 @@ public class DataBaseEntryDao {
 		Root<TestSetLine> from = cq.from(TestSetLine.class);
 		Predicate condition1 = cb.equal(from.get(TEST_RUN).get(TEST_SET_ID), testRunId);
 		Predicate condition2 = cb.equal(from.get(STATUS), scriptStatus);
-		List<String> statusList = Arrays.asList(new String[] { PASS, FAIL });
-		Expression<String> inExpression = from.get("status");
+		List<String> statusList = Arrays.asList(PASS, FAIL);
+		Expression<String> inExpression = from.get(STATUS);
 		Predicate inPredicate = inExpression.in(statusList);
 
 		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2)
 				: cb.and(condition1, inPredicate);
 
 		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
-		List<Object[]> query = em.createQuery(cq).getResultList();
-		return query;
+		return em.createQuery(cq).getResultList();
 
 	}
 
@@ -1487,22 +1449,20 @@ public class DataBaseEntryDao {
 	}
 
 	public TestSet getTestRunDetails(String testSetId) {
-		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(testSetId));
-		return testSet;
+		return em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(testSetId));
 	}
 
-	public boolean checkActionContainsExcel(String script_id) {
+	public boolean checkActionContainsExcel(String scriptId) {
 		Object count = null;
 		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action like '%excel%'";
 		try {
 			Session session = em.unwrap(Session.class);
-			count = session.createSQLQuery(updateQry).setParameter("script_id", script_id).getSingleResult();
+			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains excel or not.",
 					e);
 		}
-		boolean flag = Integer.parseInt(count.toString()) > 0 ? true : false;
-		return flag;
+		return Integer.parseInt(count.toString()) > 0;
 	}
 
 	public int getApiValidationIdActionId() {
@@ -1513,13 +1473,11 @@ public class DataBaseEntryDao {
 			String execQry = "select lookup_id from win_ta_lookups where lookup_name = 'API_VALIDATION'";
 			requestCount = session.createSQLQuery(execQry).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
-					e);
+			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
 		}
 		return Integer.parseInt(requestCount.toString());
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Object> getApiValidationDataFromLookupsCode(int apiValidationId, List<Integer> list) {
 		List<Object> listOfLookUpCodesData = null;
 		try {
@@ -1528,13 +1486,11 @@ public class DataBaseEntryDao {
 					"from LookUpCode lu where lu.lookUpId in :lookupId and lu.lookUpCodeId in (:listOfLookUpId)")
 					.setParameter("lookupId", apiValidationId).setParameter("listOfLookUpId", list).getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
-					e);
+			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
 		}
 		return listOfLookUpCodesData;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
 		List<String> listOfLookUpCode = null;
 		try {
@@ -1543,8 +1499,7 @@ public class DataBaseEntryDao {
 					+ " and lookup_code in ('" + lookUpCode + "')";
 			listOfLookUpCode = session.createSQLQuery(query).getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching request count for test run script.",
-					e);
+			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
 		}
 		return listOfLookUpCode;
 	}

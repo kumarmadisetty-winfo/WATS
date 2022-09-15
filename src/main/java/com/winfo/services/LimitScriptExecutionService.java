@@ -87,7 +87,7 @@ public class LimitScriptExecutionService {
 	public int getLimitedCountForConfiguration(String testRunNo) {
 		log.info("goto limitScriptExecutionDao class");
 		System.out.println("goto limitScriptExecutionDao class");
-		return limitScriptExecutionDao.getLimitedCountForConfiguration(testRunNo);
+		return limitScriptExecutionDao.getLimitedCountForConfiguration();
 	}
 
 	@Transactional

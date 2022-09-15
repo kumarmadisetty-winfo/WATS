@@ -59,10 +59,6 @@ public class TestRunMigrationGetDao {
 		return scritplinesData.getTestRunScriptParamId();
 	}
 
-//	public void addTestRunData(Testrundata testrundata) {
-//		insertTestRun(testrundata);
-//	}
-
 	public int checkScriptPresent(String productVersion, String scriptNumber) {
 		Session session = entityManager.unwrap(Session.class);
 

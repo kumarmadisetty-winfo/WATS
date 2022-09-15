@@ -64,7 +64,7 @@ public class DataBaseEntry {
 	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String error_message)
 			throws ClassNotFoundException, SQLException {
-		dao.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, error_message);
+		dao.updateFailedScriptLineStatus(test_script_param_id, status);
 	}
 
 	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
@@ -93,17 +93,17 @@ public class DataBaseEntry {
 	}
 
 	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
-		return dao.getTrMode(args, fetchConfigVO);
+		return dao.getTrMode(args);
 	}
 
 	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
 			throws SQLException, ClassNotFoundException {
-		return dao.getPassword(args, userId, fetchConfigVO);
+		return dao.getPassword(args, userId);
 	}
 
 	public void updateEndTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date end_time1)
 			throws ClassNotFoundException, SQLException {
-		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
+		dao.updateEndTime(line_id, test_set_id, end_time1);
 	}
 
 	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -218,8 +218,7 @@ public class DataBaseEntry {
 
 	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId, String errMessage) {
 		int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
-		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel(),
-				errMessage);
+		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel());
 	}
 
 	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
@@ -374,7 +373,7 @@ public class DataBaseEntry {
 
 	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id, Date startDate)
 			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus(test_set_id, test_set_line_id, startDate);
+		dao.updateInProgressScriptStatus(test_set_id, startDate);
 	}
 
 	public Date findMinExecutionStartDate(long testSetId) {
@@ -387,13 +386,13 @@ public class DataBaseEntry {
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
+		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String value, String message)
 			throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);
+		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	@Transactional
