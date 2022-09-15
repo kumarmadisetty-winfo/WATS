@@ -87,7 +87,7 @@ public class PluginTestrunService {
 			master.addMetadata(metadata);
 
 			TestSetScriptParam setScriptlinedata = new TestSetScriptParam();
-			int sectiptlineid = dao.getParam_id();
+			int sectiptlineid = dao.getParamId();
 			System.out.println("sectiptlineid" + sectiptlineid);
 
 			setScriptlinedata.setTestRunScriptParamId(sectiptlineid);
@@ -114,7 +114,7 @@ public class PluginTestrunService {
 		int newSeqNum = seqNum + 1;
 		TestSet getTestrun = dao.getTestrunData(testSetId);
 
-		int Testsetlineid = dao.getTest_set_line_id();
+		int Testsetlineid = dao.getTestSetLineId();
 		setScriptdata.setTestRunScriptId(Testsetlineid);
 		setScriptdata.setScriptId(master.getScript_id());
 

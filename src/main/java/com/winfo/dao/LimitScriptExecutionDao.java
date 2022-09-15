@@ -21,24 +21,23 @@ import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
-import com.winfo.services.TestCaseDataService;
 
+@SuppressWarnings("unchecked")
 @Repository
 public class LimitScriptExecutionDao {
-	Logger logger = LogManager.getLogger(TestCaseDataService.class);
+	Logger logger = LogManager.getLogger(LimitScriptExecutionDao.class);
 	@Autowired
 	private EntityManager entityManager;
 
-	public int getLimitedCountForConfiguration(String testRunNo) {
+	public int getLimitedCountForConfiguration() {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "select count(STATUS) from win_ta_test_set_lines WHERE STATUS='IN-QUEUE' or STATUS='IN-PROGRESS'";
-		NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
 
+		NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			System.out.println(results.get(0));
-			logger.info("result" + results.get(0));
+			logger.info("Result {}", results.get(0));
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
 		}
@@ -60,8 +59,7 @@ public class LimitScriptExecutionDao {
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			System.out.println(results.get(0));
-			logger.info("result" + results.get(0));
+			logger.info("Result {}", results.get(0));
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
 		}
@@ -77,8 +75,7 @@ public class LimitScriptExecutionDao {
 		List<String> results = query.list();
 		String mailId = null;
 		if (results != null && !results.isEmpty()) {
-			System.out.println(results.get(0));
-			logger.info("result" + results.get(0));
+			logger.info("**result {}", results.get(0));
 			mailId = results.get(0);
 		}
 		return mailId;
@@ -93,8 +90,7 @@ public class LimitScriptExecutionDao {
 		List<String> results = query.list();
 		String mailId = null;
 		if (results != null && !results.isEmpty()) {
-			System.out.println(results.get(0));
-			logger.info("result" + results.get(0));
+			logger.info("**result {}", results.get(0));
 			mailId = results.get(0);
 		}
 		return mailId;
@@ -103,15 +99,14 @@ public class LimitScriptExecutionDao {
 	public int getFailedScriptRunCount(String testSetLineId, String testSetId) {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT RUN_COUNT from WIN_TA_TEST_SET_LINES where TEST_SET_LINE_ID=" + testSetLineId
-				+ " AND TEST_SET_ID=" + testSetId + "";
+				+ " AND TEST_SET_ID = " + testSetId + "";
 		Integer id = 0;
 		try {
 			NativeQuery<BigDecimal> query = session.createSQLQuery(sql);
 
 			List<BigDecimal> results = query.list();
 			if (results != null && !results.isEmpty()) {
-				System.out.println(results.get(0));
-				logger.info("result" + results.get(0));
+				logger.info("result {}", results.get(0));
 				BigDecimal bigDecimal = results.get(0);
 				id = Integer.parseInt(bigDecimal.toString());
 			}
@@ -120,8 +115,8 @@ public class LimitScriptExecutionDao {
 		}
 		int failedScriptRunCount = id + 1;
 		try {
-			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
-					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
+			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT =" + failedScriptRunCount
+					+ " WHERE TEST_SET_LINE_ID =" + testSetLineId + " AND TEST_SET_ID =" + testSetId + "";
 			Query query = session.createSQLQuery(sql1);
 			query.executeUpdate();
 
@@ -137,7 +132,7 @@ public class LimitScriptExecutionDao {
 		Session session = entityManager.unwrap(Session.class);
 		try {
 			String sql1 = "UPDATE WIN_TA_TEST_SET_LINES SET RUN_COUNT=" + failedScriptRunCount
-					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID=" + testSetId + "";
+					+ " WHERE TEST_SET_LINE_ID=" + testSetLineId + " AND TEST_SET_ID =" + testSetId + "";
 			Query query = session.createSQLQuery(sql1);
 			query.executeUpdate();
 
@@ -157,7 +152,7 @@ public class LimitScriptExecutionDao {
 
 			List<BigDecimal> results = query.list();
 			if (results != null && !results.isEmpty()) {
-				logger.info("result" + results.get(0));
+				logger.info("result {}", results.get(0));
 				BigDecimal bigDecimal = results.get(0);
 				id = bigDecimal != null ? Integer.parseInt(bigDecimal.toString()) : 0;
 			}

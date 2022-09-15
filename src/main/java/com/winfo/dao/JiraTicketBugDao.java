@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 
 import com.winfo.vo.TestRunVO;
 
+@SuppressWarnings("unchecked")
 @Repository
 public class JiraTicketBugDao {
 
 	@Autowired
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")
 	public List<Object> createJiraTicket(Integer testsetid, List<Integer> scriptIds, int testSetLineId)
 
 	{
@@ -42,7 +42,6 @@ public class JiraTicketBugDao {
 		return summaryresult;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> createDescription(TestRunVO slist) {
 		Session session = entityManager.unwrap(Session.class);
 		Query<?> fetchdescription = session.createQuery(
@@ -53,12 +52,11 @@ public class JiraTicketBugDao {
 		return (List<String>) fetchdescription.list();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<String> getJiraIssueUrl(Integer configurationId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query<?> fetchjiraissueurl = session
 				.createQuery("select jira_issue_url from ConfigTable where configuration_id=" + configurationId);
-	
+
 		return (List<String>) fetchjiraissueurl.list();
 	}
 
