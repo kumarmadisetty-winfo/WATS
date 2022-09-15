@@ -10,13 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1246,7 +1242,8 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
-	public void deleteOldScreenshotForScriptFrmObjStore(ScriptDetailsDto testSetLine, CustomerProjectDto customerDetails) {
+	public void deleteOldScreenshotForScriptFrmObjStore(ScriptDetailsDto testSetLine,
+			CustomerProjectDto customerDetails) {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);

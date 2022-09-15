@@ -1,6 +1,6 @@
 //package com.winfo.interceptor;
 //
-//import java.awt.BasicStroke;
+//
 //import java.awt.Color;
 //import java.awt.Graphics;
 //import java.awt.Graphics2D;
@@ -76,7 +76,7 @@
 //public class PdfGeneration {
 //
 //	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException, DocumentException, com.itextpdf.text.DocumentException {
-//		// TODO Auto-generated method stub
+//
 //
 //		String testrunId="";
 //		String testRunName="";
