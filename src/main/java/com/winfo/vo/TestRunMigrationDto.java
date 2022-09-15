@@ -83,10 +83,10 @@ public class TestRunMigrationDto {
 	private int configurationId;
 
 	@JsonProperty("scriptMasterData")
-	private List<ScriptMasterDto> scriptMasterData = new ArrayList<ScriptMasterDto>();
+	private List<ScriptMasterDto> scriptMasterData = new ArrayList<>();
 
 	@JsonProperty("testSetLinesAndParaData")
-	private List<TestSetLineDto> testSetLinesAndParaData = new ArrayList<TestSetLineDto>();
+	private List<TestSetLineDto> testSetLinesAndParaData = new ArrayList<>();
 
 	@JsonProperty("lookUpData")
 	private Map<String, LookUpVO> lookUpData;
@@ -159,7 +159,7 @@ public class TestRunMigrationDto {
 		this.scriptMasterData = scriptMasterData;
 	}
 
-	public String getLastExecuted_by() {
+	public String getLastExecutedBy() {
 		return lastExecutedBy;
 	}
 
@@ -167,7 +167,7 @@ public class TestRunMigrationDto {
 		this.lastExecutedBy = lastExecutedBy;
 	}
 
-	public String getTsComplete_flag() {
+	public String getTsCompleteFlag() {
 		return tsCompleteFlag;
 	}
 

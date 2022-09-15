@@ -5,25 +5,20 @@ public class StringUtils {
 	private static String projectPath = System.getProperty("user.dir");
 
 	public static String getFilePath(String fileName) {
-		String filePath = projectPath + fileName;
-		return filePath;
+		return projectPath + fileName;
 	}
 
 	public static boolean isNotNullorBlank(String input) {
-		//Changed != to not equals method			
-		return input != null ||  !input.trim().equals("");
+		
+		return input.isEmpty() || input.isBlank();
 	}
 
 	public static final boolean isNullOrBlank(String input) {
 		return input == null || "".equals(input.trim()) || "null".equals(input.trim());
 	}
 
-	public static final boolean isNotNullOrBlank(String input) {
-		return input != null && !"".equals(input.trim());
-	}
-
 	public static final boolean isNullOrBlank(Object o) {
-		return (o != null && !"".equals(o.toString())) ? false : true;
+		return !(o != null && !"".equals(o.toString()));
 	}
 
 	public static String convertToString(Object input) {
@@ -47,6 +42,10 @@ public class StringUtils {
 			input = input.replace(oldChar, newChar);
 		}
 		return convertToString(input);
+	}
+	
+	private StringUtils() {
+		throw new IllegalStateException("Utility class");
 	}
 
 }

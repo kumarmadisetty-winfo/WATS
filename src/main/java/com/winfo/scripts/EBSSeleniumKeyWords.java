@@ -12722,11 +12722,11 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		for (CodeLines robotCodeLine : listOfCodeLines) {
 //				logger.info("robotCode line number"+robotCodeLine.getCodeLineId());
 
-			codeLine = robotCodeLine.getRobot_line();
-			if (robotCodeLine.getParam_values() != null) {
+			codeLine = robotCodeLine.getRobotLine();
+			if (robotCodeLine.getParamValues() != null) {
 				lineToBeAdded = true;
 
-				String param_value = robotCodeLine.getParam_values();
+				String param_value = robotCodeLine.getParamValues();
 				try {
 					result = new ObjectMapper().readValue(param_value, HashMap.class);
 					for (Map.Entry<String, Object> entry : result.entrySet()) {

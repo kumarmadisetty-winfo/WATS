@@ -272,7 +272,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
 						Constants.ERR_MSG_FOR_SCRIPT_RUN);
 			}
-			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.FAIL.getLabel());
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
 		}
 

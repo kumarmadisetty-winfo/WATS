@@ -314,9 +314,9 @@ public abstract class AbstractSeleniumKeywords {
 		int failCount = 0;
 		int other = 0;
 		for (String testLinesStatus : testLineStatusList) {
-			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.PASS.getLabel())) {
 				passCount++;
-			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Fail.getLabel())) {
+			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.FAIL.getLabel())) {
 				failCount++;
 			} else {
 				other++;

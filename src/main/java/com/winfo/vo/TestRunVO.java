@@ -7,43 +7,43 @@ public class TestRunVO
 	
 	
 	@JsonProperty("test_set_id")
-	private Integer test_set_id;
+	private Integer testSetId;
 	
 	@JsonProperty("test_set_line_id")
-	private Integer test_set_line_id;
+	private Integer testSetLineId;
 	
 	@JsonProperty("script_id")
-	private Integer script_id;
+	private Integer scriptId;
 	
 	@JsonProperty("seq_num")
-	private Integer seq_num;
+	private Integer seqNum;
 
 	@JsonProperty("issue_key")
-	private String issue_key;
+	private String issueKey;
 
 	@JsonProperty("test_set_name")
-	private String  test_set_name;
+	private String  testSetName;
 	
 	@JsonProperty("status")
 	private String status;
 	
 	@JsonProperty("configuration_id")
-	private Integer configuration_id;
+	private Integer configurationId;
 
 	@JsonProperty("script_number")
-	private String script_number;
+	private String scriptNumber;
 	
 	@JsonProperty("scenario_name")
-	private String scenario_name;
+	private String scenarioName;
 
 	
 
-	public String getScenario_name() {
-		return scenario_name;
+	public String getScenarioName() {
+		return scenarioName;
 	}
 
-	public void setScenario_name(String scenario_name) {
-		this.scenario_name = scenario_name;
+	public void setScenarioName(String scenarioName) {
+		this.scenarioName = scenarioName;
 	}
 
 	public String getStatus() {
@@ -54,70 +54,70 @@ public class TestRunVO
 		this.status = status;
 	}
 
-	public Integer getConfiguration_id() {
-		return configuration_id;
+	public Integer getConfigurationId() {
+		return configurationId;
 	}
 
-	public void setConfiguration_id(Integer configuration_id) {
-		this.configuration_id = configuration_id;
+	public void setConfigurationId(Integer configurationId) {
+		this.configurationId = configurationId;
 	}
 
-	public Integer getTest_set_id() {
-		return test_set_id;
+	public Integer getTestSetId() {
+		return testSetId;
 	}
 
-	public void setTest_set_id(Integer test_set_id) {
-		this.test_set_id = test_set_id;
+	public void setTestSetId(Integer testSetId) {
+		this.testSetId = testSetId;
 	}
 
-	public Integer getTest_set_line_id() {
-		return test_set_line_id;
+	public Integer getTestSetLineId() {
+		return testSetLineId;
 	}
 
-	public void setTest_set_line_id(Integer test_set_line_id) {
-		this.test_set_line_id = test_set_line_id;
+	public void setTestSetLineId(Integer testSetLineId) {
+		this.testSetLineId = testSetLineId;
 	}
 
-	public Integer getScript_id() {
-		return script_id;
+	public Integer getScriptId() {
+		return scriptId;
 	}
 
-	public void setScript_id(Integer script_id) {
-		this.script_id = script_id;
+	public void setScriptId(Integer scriptId) {
+		this.scriptId = scriptId;
 	}
 
-	public Integer getSeq_num() {
-		return seq_num;
+	public Integer getSeqNum() {
+		return seqNum;
 	}
 
-	public void setSeq_num(Integer seq_num) {
-		this.seq_num = seq_num;
+	public void setSeqNum(Integer seqNum) {
+		this.seqNum = seqNum;
 	}
 
 
 
-	public String getScript_number() {
-		return script_number;
+	public String getScriptNumber() {
+		return scriptNumber;
 	}
 
-	public void setScript_number(String script_number) {
-		this.script_number = script_number;
+	public void setScriptNumber(String scriptNumber) {
+		this.scriptNumber = scriptNumber;
 	}
 
-	public String getIssue_key() {
-		return issue_key;
+	public String getIssueKey() {
+		return issueKey;
 	}
 
-	public void setIssue_key(String issue_key) {
-		this.issue_key = issue_key;
+	public void setIssueKey(String issueKey) {
+		this.issueKey = issueKey;
 	}
 
-	public String getTest_set_name() {
-		return test_set_name;
+	public String getTestSetName() {
+		return testSetName;
 	}
 
-	public void setTest_set_name(String test_set_name) {
-		this.test_set_name = test_set_name;
+	public void setTestSetName(String testSetName) {
+		this.testSetName = testSetName;
 	}
 
 	

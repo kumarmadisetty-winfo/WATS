@@ -31,5 +31,10 @@ public class WatsEBSCustomException extends RuntimeException {
 	public String getErrorMessage() {
 		return errorDetails;
 	}
+	
+	public WatsEBSCustomException() {
+		this.code = 400;
+		this.errorDetails = "Error";
+	}
 
 }

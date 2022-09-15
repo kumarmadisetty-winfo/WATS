@@ -75,11 +75,11 @@ public class CopyTestRunService {
 			TestSetLine testSetLineRecords = new TestSetLine();
 			mapOfLinesData.put(testSetLineObj.getTestRunScriptId(), testSetLineRecords);
 			if (scriptMaster != null) {
-				testSetLineRecords.setScriptId(scriptMaster.getScript_id());
+				testSetLineRecords.setScriptId(scriptMaster.getScriptId());
 				testSetLineRecords.setCreatedBy(copyTestrunvo.getCreatedBy());
 				testSetLineRecords.setCreationDate(copyTestrunvo.getCreationDate());
 				testSetLineRecords.setEnabled("Y");
-				testSetLineRecords.setScriptNumber(scriptMaster.getScript_number());
+				testSetLineRecords.setScriptNumber(scriptMaster.getScriptNumber());
 				testSetLineRecords.setSeqNum(testSetLineObj.getSeqNum());
 				mapOfTestRunDependencyOldToNewId.put(testSetLineObj.getTestRunScriptId(), testSetLineObj.getSeqNum());
 				testSetLineRecords.setStatus(NEW);
@@ -102,7 +102,7 @@ public class CopyTestRunService {
 			Comparator<TestSetScriptParam> scriptLineComparator = (TestSetScriptParam s1,
 					TestSetScriptParam s2) -> s1.getLineNumber() - s2.getLineNumber();
 			Comparator<ScriptMetaData> metaDataComparator = (ScriptMetaData s1,
-					ScriptMetaData s2) -> s1.getLine_number() - s2.getLine_number();
+					ScriptMetaData s2) -> s1.getLineNumber() - s2.getLineNumber();
 			Collections.sort(scriptLineList, scriptLineComparator);
 			Collections.sort(metadataList, metaDataComparator);
 			ScriptMetaData metadata = null;
@@ -116,17 +116,17 @@ public class CopyTestRunService {
 
 				if (!(newScriptParamSeq.equals(check))) {
 					setScriptlinedata = new TestSetScriptParam();
-					setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+					setScriptlinedata.setInputParameter(metadata.getInputParameter());
 					setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
 					setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
-					setScriptlinedata.setLineNumber(metadata.getLine_number());
+					setScriptlinedata.setLineNumber(metadata.getLineNumber());
 					setScriptlinedata.setAction(metadata.getAction());
-					setScriptlinedata.setTestRunParamDesc(metadata.getStep_desc());
-					setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+					setScriptlinedata.setTestRunParamDesc(metadata.getStepDesc());
+					setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 					setScriptlinedata.setHint(metadata.getHint());
-					setScriptlinedata.setFieldType(metadata.getField_type());
-					setScriptlinedata.setXpathLocation(metadata.getXpath_location());
-					setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+					setScriptlinedata.setFieldType(metadata.getFieldType());
+					setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
+					setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 					setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 					setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 					setScriptlinedata.setUpdateDate(null);
@@ -134,7 +134,7 @@ public class CopyTestRunService {
 					setScriptlinedata.setLineExecutionStatus(NEW);
 					setScriptlinedata.setLineErrorMessage(null);
 					setScriptlinedata.setDataTypes(metadata.getDatatypes());
-					setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+					setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
 					check = newScriptParamSeq.intValue();
 				}
 				if (setScriptlinedata.getInputParameter() != null && getScriptlinedata.getInputParameter() != null) {
@@ -165,17 +165,17 @@ public class CopyTestRunService {
 			while (newScriptParamSeq < metadataList.size()) {
 				metadata = metadataList.get(newScriptParamSeq);
 				setScriptlinedata = new TestSetScriptParam();
-				setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+				setScriptlinedata.setInputParameter(metadata.getInputParameter());
 				setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
 				setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
-				setScriptlinedata.setLineNumber(metadata.getLine_number());
+				setScriptlinedata.setLineNumber(metadata.getLineNumber());
 				setScriptlinedata.setAction(metadata.getAction());
 
-				setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+				setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 				setScriptlinedata.setHint(metadata.getHint());
-				setScriptlinedata.setFieldType(metadata.getField_type());
-				setScriptlinedata.setXpathLocation(metadata.getXpath_location());
-				setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+				setScriptlinedata.setFieldType(metadata.getFieldType());
+				setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
+				setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 				setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 				setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 				setScriptlinedata.setUpdateDate(null);
@@ -183,7 +183,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setLineExecutionStatus(NEW);
 				setScriptlinedata.setLineErrorMessage(null);
 				setScriptlinedata.setDataTypes(metadata.getDatatypes());
-				setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+				setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
 
 				setScriptlinedata.setInputValue(null);
 
@@ -196,9 +196,9 @@ public class CopyTestRunService {
 		}
 		log.info("before saveTestrun");
 		for (TestSetLine oldTestSetLine : testSetObj.getTestRunScriptDatalist()) {
-			if (oldTestSetLine.getDependency_tr() != null) {
+			if (oldTestSetLine.getDependencyTr() != null) {
 				mapOfLinesData.get(oldTestSetLine.getTestRunScriptId())
-						.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependency_tr()));
+						.setDependencyTr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependencyTr()));
 			}
 		}
 
@@ -210,10 +210,10 @@ public class CopyTestRunService {
 		}
 
 		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
-			if (newTestSetLine.getDependency_tr() != null) {
+			if (newTestSetLine.getDependencyTr() != null) {
 				for(Map.Entry<Integer, Integer> entrySet : dependencyLinesIdAndSeqNum.entrySet()) {
-					if(entrySet.getValue().equals(newTestSetLine.getDependency_tr())) {
-						newTestSetLine.setDependency_tr(entrySet.getKey());
+					if(entrySet.getValue().equals(newTestSetLine.getDependencyTr())) {
+						newTestSetLine.setDependencyTr(entrySet.getKey());
 						break;
 					}
 				}

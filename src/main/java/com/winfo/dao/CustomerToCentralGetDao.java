@@ -24,6 +24,7 @@ import com.winfo.model.FetchData;
 import com.winfo.model.FetchDataMetadata;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+//import com.winfo.utils.StringUtils;
 import com.winfo.vo.ScriptDtlsDto;
 import com.winfo.vo.ScriptMasterDto;
 import com.winfo.vo.ScriptMetaDataDto;
@@ -81,19 +82,19 @@ public class CustomerToCentralGetDao {
 					Object[] obj = (Object[]) itr.next();
 					FetchData fetchData = new FetchData();
 					if (String.valueOf(obj[1]).equals("null")) {
-						fetchData.setScript_number(null);
+						fetchData.setScriptNumber(null);
 					} else {
-						fetchData.setScript_number(String.valueOf(obj[1]));
+						fetchData.setScriptNumber(String.valueOf(obj[1]));
 					}
 					if (String.valueOf(obj[2]).equals("null")) {
-						fetchData.setProcess_area(null);
+						fetchData.setProcessArea(null);
 					} else {
-						fetchData.setProcess_area(String.valueOf(obj[2]));
+						fetchData.setProcessArea(String.valueOf(obj[2]));
 					}
 					if (String.valueOf(obj[3]).equals("null")) {
-						fetchData.setSub_process_area(null);
+						fetchData.setSubProcessArea(null);
 					} else {
-						fetchData.setSub_process_area(String.valueOf(obj[3]));
+						fetchData.setSubProcessArea(String.valueOf(obj[3]));
 					}
 					if (String.valueOf(obj[4]).equals("null")) {
 						fetchData.setModule(null);
@@ -106,36 +107,36 @@ public class CustomerToCentralGetDao {
 						fetchData.setRole(String.valueOf(obj[5]));
 					}
 					if (String.valueOf(obj[6]).equals("null")) {
-						fetchData.setEnd2end_scenario(null);
+						fetchData.setEnd2endScenario(null);
 					} else {
-						fetchData.setEnd2end_scenario(String.valueOf(obj[6]));
+						fetchData.setEnd2endScenario(String.valueOf(obj[6]));
 					}
 					if (String.valueOf(obj[7]).equals("null")) {
-						fetchData.setScenario_name(null);
+						fetchData.setScenarioName(null);
 					} else {
-						fetchData.setScenario_name(String.valueOf(obj[7]));
+						fetchData.setScenarioName(String.valueOf(obj[7]));
 					}
 					if (String.valueOf(obj[8]).equals("null")) {
-						fetchData.setScenario_description(null);
+						fetchData.setScenarioDescription(null);
 					} else {
-						fetchData.setScenario_description(String.valueOf(obj[8]));
+						fetchData.setScenarioDescription(String.valueOf(obj[8]));
 					}
 					if (String.valueOf(obj[9]).equals("null")) {
-						fetchData.setExpected_result(null);
+						fetchData.setExpectedResult(null);
 					} else {
-						fetchData.setExpected_result(String.valueOf(obj[9]));
+						fetchData.setExpectedResult(String.valueOf(obj[9]));
 					}
 					if (String.valueOf(obj[10]).equals("null")) {
-						fetchData.setSelenium_test_script_name(null);
+						fetchData.setSeleniumTestScriptName(null);
 					} else {
-						fetchData.setSelenium_test_script_name(String.valueOf(obj[10]));
+						fetchData.setSeleniumTestScriptName(String.valueOf(obj[10]));
 					}
 					if (String.valueOf(obj[11]).equals("null")) {
-						fetchData.setSelenium_test_method(null);
+						fetchData.setSeleniumTestMethod(null);
 					} else {
-						fetchData.setSelenium_test_method(String.valueOf(obj[11]));
+						fetchData.setSeleniumTestMethod(String.valueOf(obj[11]));
 					}
-
+					
 					if (String.valueOf(obj[12]).equals("null")) {
 						dependency = 0;
 					} else {
@@ -150,24 +151,24 @@ public class CustomerToCentralGetDao {
 
 						String depScriptName = depSname.get(0);
 						fetchData.setDependency(Integer.parseInt(String.valueOf(obj[12])));
-						fetchData.setDependent_script_num(depScriptName);
+						fetchData.setDependentScriptNum(depScriptName);
 
 					}
 					if (String.valueOf(obj[13]).equals("null")) {
-						fetchData.setProduct_version(null);
+						fetchData.setProductVersion(null);
 					} else {
-						fetchData.setProduct_version(String.valueOf(obj[13]));
+						fetchData.setProductVersion(String.valueOf(obj[13]));
 					}
 
 					if (String.valueOf(obj[14]).equals("null")) {
-						fetchData.setStandard_custom(null);
+						fetchData.setStandardCustom(null);
 					} else {
-						fetchData.setStandard_custom(String.valueOf(obj[14]));
+						fetchData.setStandardCustom(String.valueOf(obj[14]));
 					}
 					if (String.valueOf(obj[15]).equals("null")) {
-						fetchData.setTest_script_status(null);
+						fetchData.setTestScriptStatus(null);
 					} else {
-						fetchData.setTest_script_status(String.valueOf(obj[15]));
+						fetchData.setTestScriptStatus(String.valueOf(obj[15]));
 					}
 					if (String.valueOf(obj[16]).equals("null")) {
 						fetchData.setAuthor(null);
@@ -175,29 +176,29 @@ public class CustomerToCentralGetDao {
 						fetchData.setAuthor(String.valueOf(obj[16]));
 					}
 					if (String.valueOf(obj[17]).equals("null")) {
-						fetchData.setCreated_by(null);
+						fetchData.setCreatedBy(null);
 					} else {
-						fetchData.setCreated_by(String.valueOf(obj[17]));
+						fetchData.setCreatedBy(String.valueOf(obj[17]));
 					}
 
-					fetchData.setCreation_date((Date) (obj[18]));
+					fetchData.setCreationDate((Date) (obj[18]));
 					if (String.valueOf(obj[19]).equals("null")) {
-						fetchData.setUpdated_by(null);
+						fetchData.setUpdatedBy(null);
 					} else {
-						fetchData.setUpdated_by(String.valueOf(obj[19]));
+						fetchData.setUpdatedBy(String.valueOf(obj[19]));
 					}
 
-					fetchData.setUpdate_date((Date) (obj[20]));
+					fetchData.setUpdateDate((Date) (obj[20]));
 					if (String.valueOf(obj[21]).equals("null")) {
 						customerId = 0;
 					} else {
 						customerId = 1;
-						fetchData.setCustomer_id(Integer.parseInt(String.valueOf(obj[21])));
+						fetchData.setCustomerId(Integer.parseInt(String.valueOf(obj[21])));
 					}
 					if (String.valueOf(obj[22]).equals("null")) {
-						fetchData.setCustomisation_refrence(null);
+						fetchData.setCustomisationRefrence(null);
 					} else {
-						fetchData.setCustomisation_refrence(String.valueOf(obj[22]));
+						fetchData.setCustomisationRefrence(String.valueOf(obj[22]));
 					}
 
 					if (String.valueOf(obj[23]).equals("null")) {
@@ -264,11 +265,11 @@ public class CustomerToCentralGetDao {
 				while (itr1.hasNext()) {
 					Object[] obj1 = (Object[]) itr1.next();
 					FetchDataMetadata fetchDataMetadata = new FetchDataMetadata();
-					fetchDataMetadata.setLine_number(Integer.parseInt(String.valueOf(obj1[0])));
+					fetchDataMetadata.setLineNumber(Integer.parseInt(String.valueOf(obj1[0])));
 					if (String.valueOf(obj1[1]).equals("null")) {
-						fetchDataMetadata.setInput_parameter(null);
+						fetchDataMetadata.setInputParameter(null);
 					} else {
-						fetchDataMetadata.setInput_parameter(String.valueOf(obj1[1]));
+						fetchDataMetadata.setInputParameter(String.valueOf(obj1[1]));
 					}
 					if (String.valueOf(obj1[2]).equals("null")) {
 						fetchDataMetadata.setAction(null);
@@ -276,38 +277,38 @@ public class CustomerToCentralGetDao {
 						fetchDataMetadata.setAction(String.valueOf(obj1[2]));
 					}
 					if (String.valueOf(obj1[3]).equals("null")) {
-						fetchDataMetadata.setXpath_location(null);
+						fetchDataMetadata.setXpathLocation(null);
 					} else {
-						fetchDataMetadata.setXpath_location(String.valueOf(obj1[3]));
+						fetchDataMetadata.setXpathLocation(String.valueOf(obj1[3]));
 					}
 					if (String.valueOf(obj1[4]).equals("null")) {
-						fetchDataMetadata.setXpath_location1(null);
+						fetchDataMetadata.setXpathLocation1(null);
 					} else {
-						fetchDataMetadata.setXpath_location1(String.valueOf(obj1[4]));
+						fetchDataMetadata.setXpathLocation1(String.valueOf(obj1[4]));
 					}
 					if (String.valueOf(obj1[5]).equals("null")) {
-						fetchDataMetadata.setCreated_by(null);
+						fetchDataMetadata.setCreatedBy(null);
 					} else {
-						fetchDataMetadata.setCreated_by(String.valueOf(obj1[5]));
+						fetchDataMetadata.setCreatedBy(String.valueOf(obj1[5]));
 					}
 
-					fetchDataMetadata.setCreation_date((Date) obj1[6]);
+					fetchDataMetadata.setCreationDate((Date) obj1[6]);
 					if (String.valueOf(obj1[7]).equals("null")) {
-						fetchDataMetadata.setUpdated_by(null);
+						fetchDataMetadata.setUpdatedBy(null);
 					} else {
-						fetchDataMetadata.setUpdated_by(String.valueOf(obj1[7]));
+						fetchDataMetadata.setUpdatedBy(String.valueOf(obj1[7]));
 					}
 
-					fetchDataMetadata.setUpdate_date(((Date) obj1[8]));
+					fetchDataMetadata.setUpdateDate(((Date) obj1[8]));
 					if (String.valueOf(obj1[9]).equals("null")) {
-						fetchDataMetadata.setStep_desc(null);
+						fetchDataMetadata.setStepDesc(null);
 					} else {
-						fetchDataMetadata.setStep_desc(String.valueOf(obj1[9]));
+						fetchDataMetadata.setStepDesc(String.valueOf(obj1[9]));
 					}
 					if (String.valueOf(obj1[10]).equals("null")) {
-						fetchDataMetadata.setField_type(null);
+						fetchDataMetadata.setFieldType(null);
 					} else {
-						fetchDataMetadata.setField_type(String.valueOf(obj1[10]));
+						fetchDataMetadata.setFieldType(String.valueOf(obj1[10]));
 					}
 					if (String.valueOf(obj1[11]).equals("null")) {
 						fetchDataMetadata.setHint(null);
@@ -315,9 +316,9 @@ public class CustomerToCentralGetDao {
 						fetchDataMetadata.setHint(String.valueOf(obj1[11]));
 					}
 					if (String.valueOf(obj1[12]).equals("null")) {
-						fetchDataMetadata.setScript_number(null);
+						fetchDataMetadata.setScriptNumber(null);
 					} else {
-						fetchDataMetadata.setScript_number(String.valueOf(obj1[12]));
+						fetchDataMetadata.setScriptNumber(String.valueOf(obj1[12]));
 					}
 					if (String.valueOf(obj1[13]).equals("null")) {
 						fetchDataMetadata.setDatatypes("NA");
@@ -325,41 +326,41 @@ public class CustomerToCentralGetDao {
 						fetchDataMetadata.setDatatypes(String.valueOf(obj1[13]));
 					}
 					if (String.valueOf(obj1[14]).equals("null")) {
-						fetchDataMetadata.setUnique_mandatory("NA");
+						fetchDataMetadata.setUniqueMandatory("NA");
 					} else {
-						fetchDataMetadata.setUnique_mandatory(String.valueOf(obj1[14]));
+						fetchDataMetadata.setUniqueMandatory(String.valueOf(obj1[14]));
 					}
 					if (String.valueOf(obj1[15]).equals("null")) {
-						fetchDataMetadata.setValidation_type("NA");
+						fetchDataMetadata.setValidationType("NA");
 					} else {
-						fetchDataMetadata.setValidation_type(String.valueOf(obj1[15]));
+						fetchDataMetadata.setValidationType(String.valueOf(obj1[15]));
 					}
 					if (String.valueOf(obj1[16]).equals("null")) {
-						fetchDataMetadata.setValidation_name("NA");
+						fetchDataMetadata.setValidationName("NA");
 					} else {
-						fetchDataMetadata.setValidation_name(String.valueOf(obj1[16]));
+						fetchDataMetadata.setValidationName(String.valueOf(obj1[16]));
 					}
 
 					finalresult1.add(fetchDataMetadata);
 				}
 
 				for (FetchData slist : finalresult) {
-					jsonMaster.put("script_number", slist.getScript_number());
-					jsonMaster.put("process_area", slist.getProcess_area());
-					jsonMaster.put("sub_process_area", slist.getSub_process_area());
+					jsonMaster.put("script_number", slist.getScriptNumber());
+					jsonMaster.put("process_area", slist.getProcessArea());
+					jsonMaster.put("sub_process_area", slist.getSubProcessArea());
 					jsonMaster.put("module", slist.getModule());
 					jsonMaster.put("role", slist.getRole());
-					jsonMaster.put("scenario_name", slist.getScenario_name());
-					jsonMaster.put("scenario_description", slist.getScenario_description());
-					jsonMaster.put("product_version", slist.getProduct_version());
-					jsonMaster.put("standard_custom", slist.getStandard_custom());
-					jsonMaster.put("test_script_status", slist.getTest_script_status());
+					jsonMaster.put("scenario_name", slist.getScenarioName());
+					jsonMaster.put("scenario_description", slist.getScenarioDescription());
+					jsonMaster.put("product_version", slist.getProductVersion());
+					jsonMaster.put("standard_custom", slist.getStandardCustom());
+					jsonMaster.put("test_script_status", slist.getTestScriptStatus());
 					jsonMaster.put("priority", slist.getPriority());
 					jsonMaster.put("target_application", slist.getTargetApplication());
 					if (customerId == 0) {
 						jsonMaster.put("customer_id", null);
 					} else {
-						jsonMaster.put("customer_id", slist.getCustomer_id());
+						jsonMaster.put("customer_id", slist.getCustomerId());
 					}
 
 					if (dependency == 0) {
@@ -368,11 +369,11 @@ public class CustomerToCentralGetDao {
 					} else {
 
 						jsonMaster.put("dependency", slist.getDependency());
-						jsonMaster.put("dependent_script_num", slist.getDependent_script_num());
+						jsonMaster.put("dependent_script_num", slist.getDependentScriptNum());
 
 					}
-					jsonMaster.put("end2end_scenario", slist.getEnd2end_scenario());
-					String expectedResult = slist.getExpected_result();
+					jsonMaster.put("end2end_scenario", slist.getEnd2endScenario());
+					String expectedResult = slist.getExpectedResult();
 					if (expectedResult == null) {
 						jsonMaster.put("expected_result", null);
 					} else {
@@ -382,19 +383,19 @@ public class CustomerToCentralGetDao {
 						String replaceQuotes = expectedResult.replace(str1, str3);
 						jsonMaster.put("expected_result", replaceQuotes);
 					}
-					jsonMaster.put("selenium_test_script_name", slist.getSelenium_test_script_name());
-					jsonMaster.put("selenium_test_method", slist.getSelenium_test_method());
+					jsonMaster.put("selenium_test_script_name", slist.getSeleniumTestScriptName());
+					jsonMaster.put("selenium_test_method", slist.getSeleniumTestMethod());
 					jsonMaster.put("author", slist.getAuthor());
-					jsonMaster.put("created_by", slist.getCreated_by());
-					Date date = slist.getCreation_date();
+					jsonMaster.put("created_by", slist.getCreatedBy());
+					Date date = slist.getCreationDate();
 					DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 					String strDate = dateFormat.format(date);
 					jsonMaster.put("creation_date", strDate);
-					jsonMaster.put("updated_by", slist.getUpdated_by());
-					Date date1 = slist.getUpdate_date();
+					jsonMaster.put("updated_by", slist.getUpdatedBy());
+					Date date1 = slist.getUpdateDate();
 					String strDate1 = dateFormat.format(date1);
 					jsonMaster.put("update_date", strDate1);
-					jsonMaster.put("customatisation_refrence", slist.getCustomisation_refrence());
+					jsonMaster.put("customatisation_refrence", slist.getCustomisationRefrence());
 					jsonMaster.put("attribute1", slist.getAttribute1());
 					jsonMaster.put("attribute2", slist.getAttribute2());
 					jsonMaster.put("attribute3", slist.getAttribute3());
@@ -412,28 +413,28 @@ public class CustomerToCentralGetDao {
 				JSONArray jsonArrayMetaData = new JSONArray();
 				JSONObject jsonMetadata = new JSONObject();
 				for (FetchDataMetadata slist1 : finalresult1) {
-					jsonMetadata.put("line_number", slist1.getLine_number());
-					jsonMetadata.put("input_parameter", slist1.getInput_parameter());
+					jsonMetadata.put("line_number", slist1.getLineNumber());
+					jsonMetadata.put("input_parameter", slist1.getInputParameter());
 					jsonMetadata.put("action", slist1.getAction());
-					jsonMetadata.put("xpath_location", slist1.getXpath_location());
-					jsonMetadata.put("xpath_location1", slist1.getXpath_location1());
-					jsonMetadata.put("created_by", slist1.getCreated_by());
-					Date date = slist1.getCreation_date();
+					jsonMetadata.put("xpath_location", slist1.getXpathLocation());
+					jsonMetadata.put("xpath_location1", slist1.getXpathLocation1());
+					jsonMetadata.put("created_by", slist1.getCreatedBy());
+					Date date = slist1.getCreationDate();
 					DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 					String strDate = dateFormat.format(date);
 					jsonMetadata.put("creation_date", strDate);
-					jsonMetadata.put("updated_by", slist1.getUpdated_by());
-					Date date1 = slist1.getUpdate_date();
+					jsonMetadata.put("updated_by", slist1.getUpdatedBy());
+					Date date1 = slist1.getUpdateDate();
 					String strDate1 = dateFormat.format(date1);
 					jsonMetadata.put("update_date", strDate1);
-					jsonMetadata.put("step_desc", slist1.getStep_desc());
-					jsonMetadata.put("field_type", slist1.getField_type());
+					jsonMetadata.put("step_desc", slist1.getStepDesc());
+					jsonMetadata.put("field_type", slist1.getFieldType());
 					jsonMetadata.put("hint", slist1.getHint());
-					jsonMetadata.put("script_number", slist1.getScript_number());
+					jsonMetadata.put("script_number", slist1.getScriptNumber());
 					jsonMetadata.put("datatypes", slist1.getDatatypes());
-					jsonMetadata.put("unique_mandatory", slist1.getUnique_mandatory());
-					jsonMetadata.put("validation_type", slist1.getValidation_type());
-					jsonMetadata.put("validation_name", slist1.getValidation_name());
+					jsonMetadata.put("unique_mandatory", slist1.getUniqueMandatory());
+					jsonMetadata.put("validation_type", slist1.getValidationType());
+					jsonMetadata.put("validation_name", slist1.getValidationName());
 
 					jsonArrayMetaData.put(jsonMetadata.toString());
 				}
