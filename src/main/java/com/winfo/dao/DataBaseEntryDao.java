@@ -65,6 +65,8 @@ public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
 
+	private static final String NULL_STRING = "null";
+
 	private static final String CUSTOMER_DLT_QRY = "SELECT DISTINCT wtp.customer_id,\r\n" + " wtc.customer_number,\r\n"
 			+ "  wtc.customer_name,\r\n" + " wtts.project_id,\r\n" + " wtp.project_name,\r\n"
 			+ "  wttsl.test_set_id,\r\n" + " wtts.TEST_SET_NAME test_run_name\r\n" + " from\r\n"
@@ -710,25 +712,24 @@ public class DataBaseEntryDao {
 		CustomerProjectDto customerDetails = null;
 		String qry = CUSTOMER_DLT_QRY + testSetId;
 		try {
-			String nullString = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(qry);
 			Object[] result = (Object[]) query.getSingleResult();
 			customerDetails = new CustomerProjectDto();
 			customerDetails
-					.setCustomerId(nullString.equals(String.valueOf(result[0])) ? null : String.valueOf(result[0]));
+					.setCustomerId(NULL_STRING.equals(String.valueOf(result[0])) ? null : String.valueOf(result[0]));
+			customerDetails.setCustomerNumber(
+					NULL_STRING.equals(String.valueOf(result[1])) ? null : String.valueOf(result[1]));
 			customerDetails
-					.setCustomerNumber(nullString.equals(String.valueOf(result[1])) ? null : String.valueOf(result[1]));
+					.setCustomerName(NULL_STRING.equals(String.valueOf(result[2])) ? null : String.valueOf(result[2]));
 			customerDetails
-					.setCustomerName(nullString.equals(String.valueOf(result[2])) ? null : String.valueOf(result[2]));
+					.setProjectId(NULL_STRING.equals(String.valueOf(result[3])) ? null : String.valueOf(result[3]));
 			customerDetails
-					.setProjectId(nullString.equals(String.valueOf(result[3])) ? null : String.valueOf(result[3]));
+					.setProjectName(NULL_STRING.equals(String.valueOf(result[4])) ? null : String.valueOf(result[4]));
 			customerDetails
-					.setProjectName(nullString.equals(String.valueOf(result[4])) ? null : String.valueOf(result[4]));
+					.setTestSetId(NULL_STRING.equals(String.valueOf(result[5])) ? null : String.valueOf(result[5]));
 			customerDetails
-					.setTestSetId(nullString.equals(String.valueOf(result[5])) ? null : String.valueOf(result[5]));
-			customerDetails
-					.setTestSetName(nullString.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
+					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.",
 					e);
@@ -784,7 +785,6 @@ public class DataBaseEntryDao {
 				+ "          wttsl.script_id,\r\n" + "          wtsmdata.line_number asc";
 
 		try {
-			String nullString = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(sqlQuery);
 			List<Object[]> resultList = query.getResultList();
@@ -794,54 +794,57 @@ public class DataBaseEntryDao {
 				ScriptDetailsDto scriptDetailsDto = new ScriptDetailsDto();
 
 				scriptDetailsDto
-						.setTestSetLineId(nullString.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
-				scriptDetailsDto.setScriptId(nullString.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
+						.setTestSetLineId(NULL_STRING.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
 				scriptDetailsDto
-						.setScriptNumber(nullString.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
+						.setScriptId(NULL_STRING.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
 				scriptDetailsDto
-						.setLineNumber(nullString.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
+						.setScriptNumber(NULL_STRING.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
 				scriptDetailsDto
-						.setInputParameter(nullString.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
+						.setLineNumber(NULL_STRING.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
 				scriptDetailsDto
-						.setInputValue(nullString.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
+						.setInputParameter(NULL_STRING.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
+				scriptDetailsDto
+						.setInputValue(NULL_STRING.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
 
-				scriptDetailsDto.setAction(nullString.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
-
-				scriptDetailsDto
-						.setXpathLocation(nullString.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
-				scriptDetailsDto
-						.setXpathLocation1(nullString.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
+				scriptDetailsDto.setAction(NULL_STRING.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
 
 				scriptDetailsDto
-						.setFieldType(nullString.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
+						.setXpathLocation(NULL_STRING.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
+				scriptDetailsDto
+						.setXpathLocation1(NULL_STRING.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
 
 				scriptDetailsDto
-						.setScenarioName(nullString.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
+						.setFieldType(NULL_STRING.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
 
 				scriptDetailsDto
-						.setDependency(nullString.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+						.setScenarioName(NULL_STRING.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
 
-				scriptDetailsDto.setSeqNum(nullString.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+				scriptDetailsDto
+						.setDependency(NULL_STRING.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
 
-				scriptDetailsDto.setStatus(nullString.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
+				scriptDetailsDto
+						.setSeqNum(NULL_STRING.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+
+				scriptDetailsDto
+						.setStatus(NULL_STRING.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
 
 				scriptDetailsDto.setTestScriptParamId(
-						nullString.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
+						NULL_STRING.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
 
 				scriptDetailsDto
-						.setLineErrorMsg(nullString.equals(String.valueOf(obj[16])) ? null : String.valueOf(obj[16]));
+						.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[16])) ? null : String.valueOf(obj[16]));
 
 				scriptDetailsDto.setTestRunParamDesc(
-						nullString.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
+						NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
 
 				scriptDetailsDto
-						.setExecutedBy(nullString.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
+						.setExecutedBy(NULL_STRING.equals(String.valueOf(obj[18])) ? null : String.valueOf(obj[18]));
 
 				scriptDetailsDto.setTargetApplicationName(
-						nullString.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+						NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
 
 				scriptDetailsDto.setDependencyScriptNumber(
-						nullString.equals(String.valueOf(obj[20])) ? null : Integer.valueOf((String) obj[20]));
+						NULL_STRING.equals(String.valueOf(obj[20])) ? null : Integer.valueOf((String) obj[20]));
 
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}
@@ -901,7 +904,6 @@ public class DataBaseEntryDao {
 				+ "          wttsl.script_id,\r\n" + "          wtsmdata.line_number asc";
 
 		try {
-			String nullString = "null";
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(sqlQuery);
 			List<Object[]> resultList = query.getResultList();
@@ -911,58 +913,58 @@ public class DataBaseEntryDao {
 				FetchMetadataVO testRunExecutionVO = new FetchMetadataVO();
 
 				testRunExecutionVO
-						.setCustomer_id(nullString.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
+						.setCustomer_id(NULL_STRING.equals(String.valueOf(obj[0])) ? null : String.valueOf(obj[0]));
 				testRunExecutionVO
-						.setCustomer_number(nullString.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
+						.setCustomer_number(NULL_STRING.equals(String.valueOf(obj[1])) ? null : String.valueOf(obj[1]));
 				testRunExecutionVO
-						.setCustomer_name(nullString.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
+						.setCustomer_name(NULL_STRING.equals(String.valueOf(obj[2])) ? null : String.valueOf(obj[2]));
 				testRunExecutionVO
-						.setProject_id(nullString.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
+						.setProject_id(NULL_STRING.equals(String.valueOf(obj[3])) ? null : String.valueOf(obj[3]));
 				testRunExecutionVO
-						.setProject_name(nullString.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
+						.setProject_name(NULL_STRING.equals(String.valueOf(obj[4])) ? null : String.valueOf(obj[4]));
 				testRunExecutionVO
-						.setTest_set_id(nullString.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
+						.setTest_set_id(NULL_STRING.equals(String.valueOf(obj[5])) ? null : String.valueOf(obj[5]));
+				testRunExecutionVO.setTest_set_line_id(
+						NULL_STRING.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
 				testRunExecutionVO
-						.setTest_set_line_id(nullString.equals(String.valueOf(obj[6])) ? null : String.valueOf(obj[6]));
+						.setScript_id(NULL_STRING.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
 				testRunExecutionVO
-						.setScript_id(nullString.equals(String.valueOf(obj[7])) ? null : String.valueOf(obj[7]));
+						.setScript_number(NULL_STRING.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
 				testRunExecutionVO
-						.setScript_number(nullString.equals(String.valueOf(obj[8])) ? null : String.valueOf(obj[8]));
-				testRunExecutionVO
-						.setLine_number(nullString.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
+						.setLine_number(NULL_STRING.equals(String.valueOf(obj[9])) ? null : String.valueOf(obj[9]));
 				testRunExecutionVO.setInput_parameter(
-						nullString.equals(String.valueOf(obj[10])) ? null : String.valueOf(obj[10]));
+						NULL_STRING.equals(String.valueOf(obj[10])) ? null : String.valueOf(obj[10]));
 				testRunExecutionVO
-						.setInput_value(nullString.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
+						.setInput_value(NULL_STRING.equals(String.valueOf(obj[11])) ? null : String.valueOf(obj[11]));
 				testRunExecutionVO
-						.setAction(nullString.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
-				testRunExecutionVO
-						.setXpath_location(nullString.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
+						.setAction(NULL_STRING.equals(String.valueOf(obj[12])) ? null : String.valueOf(obj[12]));
+				testRunExecutionVO.setXpath_location(
+						NULL_STRING.equals(String.valueOf(obj[13])) ? null : String.valueOf(obj[13]));
 				testRunExecutionVO.setXpath_location1(
-						nullString.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
+						NULL_STRING.equals(String.valueOf(obj[14])) ? null : String.valueOf(obj[14]));
 				testRunExecutionVO
-						.setField_type(nullString.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
+						.setField_type(NULL_STRING.equals(String.valueOf(obj[15])) ? null : String.valueOf(obj[15]));
 
 				testRunExecutionVO
-						.setScenario_name(nullString.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
+						.setScenario_name(NULL_STRING.equals(String.valueOf(obj[17])) ? null : String.valueOf(obj[17]));
 				testRunExecutionVO.setDependencyScriptNumber(
-						nullString.equals(String.valueOf(obj[18])) ? null : Integer.valueOf((String) obj[18]));
+						NULL_STRING.equals(String.valueOf(obj[18])) ? null : Integer.valueOf((String) obj[18]));
 				testRunExecutionVO
-						.setTest_run_name(nullString.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
+						.setTest_run_name(NULL_STRING.equals(String.valueOf(obj[19])) ? null : String.valueOf(obj[19]));
 				testRunExecutionVO
-						.setSeq_num(nullString.equals(String.valueOf(obj[20])) ? null : String.valueOf(obj[20]));
+						.setSeq_num(NULL_STRING.equals(String.valueOf(obj[20])) ? null : String.valueOf(obj[20]));
 				testRunExecutionVO
-						.setStatus(nullString.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
+						.setStatus(NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
 				testRunExecutionVO.setTest_script_param_id(
-						nullString.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
+						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				testRunExecutionVO
-						.setLineErrorMsg(nullString.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
+						.setLineErrorMsg(NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
 				testRunExecutionVO.setTestRunParamDesc(
-						nullString.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
+						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
 				testRunExecutionVO
-						.setExecuted_by(nullString.equals(String.valueOf(obj[25])) ? null : String.valueOf(obj[25]));
+						.setExecuted_by(NULL_STRING.equals(String.valueOf(obj[25])) ? null : String.valueOf(obj[25]));
 				testRunExecutionVO.setTargetApplicationName(
-						nullString.equals(String.valueOf(obj[26])) ? null : String.valueOf(obj[26]));
+						NULL_STRING.equals(String.valueOf(obj[26])) ? null : String.valueOf(obj[26]));
 				listOfTestRunExecutionVo.add(testRunExecutionVO);
 			}
 		} catch (Exception e) {
