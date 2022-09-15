@@ -11,27 +11,27 @@ import javax.persistence.Table;
 public class ConfigTable {
 	@Id
 	@Column(name = "CONFIGURATION_ID")
-	private Integer configuration_id;
+	private Integer configurationId;
 	
 	
 	
 	@Column(name = "JIRA_ISSUE_URL")
-	private String jira_issue_url;
+	private String jiraIssueUrl;
 
-	public Integer getConfiguration_id() {
-		return configuration_id;
+	public Integer getConfigurationId() {
+		return configurationId;
 	}
 
-	public void setConfiguration_id(Integer configuration_id) {
-		this.configuration_id = configuration_id;
+	public void setConfigurationId(Integer configurationId) {
+		this.configurationId = configurationId;
 	}
 
-	public String getJira_issue_url() {
-		return jira_issue_url;
+	public String getJiraIssueUrl() {
+		return jiraIssueUrl;
 	}
 
-	public void setJira_issue_url(String jira_issue_url) {
-		this.jira_issue_url = jira_issue_url;
+	public void setJiraIssueUrl(String jiraIssueUrl) {
+		this.jiraIssueUrl = jiraIssueUrl;
 	}
 	
 	
