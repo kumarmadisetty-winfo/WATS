@@ -392,7 +392,7 @@ public class DataBaseEntryDao {
 					&& (!(list.contains(NEW) || list.contains(NEW.toUpperCase())))) {
 				if ((list.contains(IN_PROGRESS) || list.contains(IN_PROGRESS.toUpperCase()))
 						|| (list.contains(IN_QUEUE) || list.contains(IN_QUEUE.toUpperCase()))) {
-					status.setStatus("Wait");
+					status.setStatusMsg("Wait");
 					for (String stat : list) {
 						if (!stat.equalsIgnoreCase(PASS)) {
 							awaitCount++;
@@ -401,15 +401,15 @@ public class DataBaseEntryDao {
 					status.setInExecutionCount(awaitCount);
 					scriptStatus.put(dependentScriptNo, status);
 				} else {
-					status.setStatus(PASS);
+					status.setStatusMsg(PASS);
 					scriptStatus.put(dependentScriptNo, status);
 				}
 			} else {
-				status.setStatus(FAIL);
+				status.setStatusMsg(FAIL);
 				scriptStatus.put(dependentScriptNo, status);
 			}
 		} else {
-			status.setStatus(FAIL);
+			status.setStatusMsg(FAIL);
 			scriptStatus.put(dependentScriptNo, status);
 		}
 

@@ -46,7 +46,7 @@ public class TestSetLineDto {
 	@JsonProperty("status")
 	private String status;
 	@JsonProperty("scriptParam")
-	private List<WatsTestSetParamVO> scriptParam = new ArrayList<WatsTestSetParamVO>();
+	private List<WatsTestSetParamVO> scriptParam = new ArrayList<>();
 
 	public TestSetLineDto() {
 	}

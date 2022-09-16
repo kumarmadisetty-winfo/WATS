@@ -155,30 +155,30 @@ public class TestRunMigrationGetService {
 			}
 			for (ScriptMasterDto masterdata : testRunMigrateDto.getScriptMasterData()) {
 				ScriptMaster master = new ScriptMaster();
-				master.setScript_id(masterdata.getScriptId());
+				master.setScriptId(masterdata.getScriptId());
 				master.setModule(masterdata.getModule());
-				master.setScenario_name(masterdata.getScenarioName());
-				master.setScenario_description(masterdata.getScenarioDescription());
-				master.setProduct_version(masterdata.getProductVersion());
+				master.setScenarioName(masterdata.getScenarioName());
+				master.setScenarioDescription(masterdata.getScenarioDescription());
+				master.setProductVersion(masterdata.getProductVersion());
 				master.setPriority(masterdata.getPriority());
-				master.setProcess_area(masterdata.getProcessArea());
+				master.setProcessArea(masterdata.getProcessArea());
 				master.setRole(masterdata.getRole());
-				master.setScript_number(masterdata.getScriptNumber());
-				master.setSub_process_area(masterdata.getSubProcessArea());
-				master.setStandard_custom(masterdata.getStandardCustom());
-				master.setTest_script_status(masterdata.getTestScriptStatus());
-				master.setCustomer_id(masterdata.getCustomerId());
+				master.setScriptNumber(masterdata.getScriptNumber());
+				master.setSubProcessArea(masterdata.getSubProcessArea());
+				master.setStandardCustom(masterdata.getStandardCustom());
+				master.setTestScriptStatus(masterdata.getTestScriptStatus());
+				master.setCustomerId(masterdata.getCustomerId());
 				master.setDependency(masterdata.getDependency());
-				master.setEnd2end_scenario(masterdata.getEnd2endScenario());
-				master.setExpected_result(masterdata.getExpectedResult());
-				master.setSelenium_test_script_name(masterdata.getSeleniumTestScriptName());
-				master.setSelenium_test_method(masterdata.getSeleniumTestMethod());
+				master.setEnd2endScenario(masterdata.getEnd2endScenario());
+				master.setExpectedResult(masterdata.getExpectedResult());
+				master.setSeleniumTestScriptName(masterdata.getSeleniumTestScriptName());
+				master.setSeleniumTestMethod(masterdata.getSeleniumTestMethod());
 				master.setAuthor(masterdata.getAuthor());
-				master.setCreated_by(masterdata.getCreatedBy());
-				master.setCreation_date(masterdata.getCreationDate());
-				master.setUpdated_by(masterdata.getUpdatedBy());
-				master.setUpdate_date(masterdata.getUpdateDate());
-				master.setCustomisation_reference(masterdata.getCustomisationReference());
+				master.setCreatedBy(masterdata.getCreatedBy());
+				master.setCreationDate(masterdata.getCreationDate());
+				master.setUpdatedBy(masterdata.getUpdatedBy());
+				master.setUpdateDate(masterdata.getUpdateDate());
+				master.setCustomisationReference(masterdata.getCustomisationReference());
 //				master.setAttribute1(masterdata.getAttribute1());
 				master.setAttribute2(masterdata.getAttribute2());
 				master.setAttribute3(masterdata.getAttribute3());
@@ -193,23 +193,23 @@ public class TestRunMigrationGetService {
 				for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 					ScriptMetaData metadata = new ScriptMetaData();
 					metadata.setAction(metadatavo.getAction());
-					metadata.setLine_number(metadatavo.getLineNumber());
-					metadata.setInput_parameter(metadatavo.getInputParameter());
-					metadata.setScript_number(masterdata.getScriptNumber());
-					metadata.setXpath_location(metadatavo.getXpathLocation());
-					metadata.setXpath_location1(metadatavo.getXpathLocation1());
-					metadata.setCreated_by(metadatavo.getCreatedBy());
-					metadata.setCreation_date(metadatavo.getCreationDate());
-					metadata.setUpdated_by(metadatavo.getUpdatedBy());
-					metadata.setUpdate_date(metadatavo.getUpdateDate());
-					metadata.setStep_desc(metadatavo.getStepDesc());
-					metadata.setField_type(metadatavo.getFieldType());
+					metadata.setLineNumber(metadatavo.getLineNumber());
+					metadata.setInputParameter(metadatavo.getInputParameter());
+					metadata.setScriptNumber(masterdata.getScriptNumber());
+					metadata.setXpathLocation(metadatavo.getXpathLocation());
+					metadata.setXpathLocation1(metadatavo.getXpathLocation1());
+					metadata.setCreatedBy(metadatavo.getCreatedBy());
+					metadata.setCreationDate(metadatavo.getCreationDate());
+					metadata.setUpdatedBy(metadatavo.getUpdatedBy());
+					metadata.setUpdateDate(metadatavo.getUpdateDate());
+					metadata.setStepDesc(metadatavo.getStepDesc());
+					metadata.setFieldType(metadatavo.getFieldType());
 					metadata.setHint(metadatavo.getHint());
-					metadata.setScript_number(metadatavo.getScriptNumber());
+					metadata.setScriptNumber(metadatavo.getScriptNumber());
 					metadata.setDatatypes(metadatavo.getDatatypes());
-					metadata.setUnique_mandatory(metadatavo.getUniqueMandatory());
-					metadata.setValidation_type(metadatavo.getValidationType());
-					metadata.setValidation_name(metadatavo.getValidationName());
+					metadata.setUniqueMandatory(metadatavo.getUniqueMandatory());
+					metadata.setValidationType(metadatavo.getValidationType());
+					metadata.setValidationName(metadatavo.getValidationName());
 					master.addMetadata(metadata);
 
 				}
@@ -346,16 +346,16 @@ public class TestRunMigrationGetService {
 			Map<Integer, Integer> mapOfNewToOld, Map<Integer, Integer> mapOfOldToNew,
 			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
-			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProduct_version(),
-					scriptMaster.getScript_number());
-			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScript_id())
-					&& !mapOfOldToNew.containsKey(scriptMaster.getScript_id())) {
-				if (id.equals(scriptMaster.getScript_id())) {
+			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
+					scriptMaster.getScriptNumber());
+			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
+					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
+				if (id.equals(scriptMaster.getScriptId())) {
 					if (scriptMaster.getDependency() == null) {
-						int originalId = scriptMaster.getScript_id();
+						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
 						for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-							int oldMetaDataId = scriptMetaData.getScript_meta_data_id();
+							int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 							scriptMetaData.setScriptMaster(scriptMaster);
 							int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 							mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
@@ -367,10 +367,10 @@ public class TestRunMigrationGetService {
 						insertedScriptaId = dependentScript(scriptMaster.getDependency(), listOfScriptMaster,
 								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
 						scriptMaster.setDependency(insertedScriptaId);
-						int originalId = scriptMaster.getScript_id();
+						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
 						for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-							int oldMetaDataId = scriptMetaData.getScript_meta_data_id();
+							int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 							scriptMetaData.setScriptMaster(scriptMaster);
 							int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 							mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
@@ -381,7 +381,7 @@ public class TestRunMigrationGetService {
 
 				}
 			} else if (scriptMasterPrsent > 0) {
-				int originalId = scriptMaster.getScript_id();
+				int originalId = scriptMaster.getScriptId();
 				mapOfNewToOld.put(scriptMasterPrsent, originalId);
 				mapOfOldToNew.put(originalId, scriptMasterPrsent);
 			}
@@ -395,21 +395,21 @@ public class TestRunMigrationGetService {
 		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 
-			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProduct_version(),
-					scriptMaster.getScript_number());
+			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
+					scriptMaster.getScriptNumber());
 
-			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScript_id())
-					&& !mapOfOldToNew.containsKey(scriptMaster.getScript_id())) {
+			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
+					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
 				if (scriptMaster.getDependency() != null) {
 					int insertedScriptaId = 0;
-					dependentScript(scriptMaster.getScript_id(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
+					dependentScript(scriptMaster.getScriptId(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
 							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
 				} else {
-					int originalId = scriptMaster.getScript_id();
-					scriptMaster.setScript_id(null);
+					int originalId = scriptMaster.getScriptId();
+					scriptMaster.setScriptId(null);
 					int id = dao.insertScriptMaster(scriptMaster);
 					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-						int oldMetaDataId = scriptMetaData.getScript_meta_data_id();
+						int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 						scriptMetaData.setScriptMaster(scriptMaster);
 						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
@@ -418,7 +418,7 @@ public class TestRunMigrationGetService {
 					mapOfOldToNew.put(originalId, id);
 				}
 			} else {
-				int originalId = scriptMaster.getScript_id();
+				int originalId = scriptMaster.getScriptId();
 				int id = scriptMasterPrsent;
 				if (id > 0) {
 					mapOfNewToOld.put(id, originalId);

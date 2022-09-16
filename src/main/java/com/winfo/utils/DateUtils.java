@@ -11,15 +11,13 @@ public class DateUtils {
 	public static String getSysdate() {
 		DateFormat dateFormat = new SimpleDateFormat(DateConstants.DATE_FORMAT_TWO_MM_DD_YYYY_HH_MM_SS.getValue());
 		Date date = new Date();
-		String sysdate = dateFormat.format(date);
-		return sysdate;
+		return dateFormat.format(date);
 	}
 
 	public static String getSysdate(String dateFormat) {
 		DateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 		Date date = new Date();
-		String sysdate = simpleDateFormat.format(date);
-		return sysdate;
+		return simpleDateFormat.format(date);
 	}
 
 	public static long findTimeDifference(String startTime, String endTime) {
@@ -44,5 +42,9 @@ public class DateUtils {
 		String sec = (time = (diffInTime / 1000) % 60) > 0 ? time + "sec" : "";
 
 		return days + hr + min + sec;
+	}
+
+	private DateUtils() {
+		throw new IllegalStateException("Utility class");
 	}
 }

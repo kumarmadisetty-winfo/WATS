@@ -1,24 +1,24 @@
 package com.winfo.vo;
 
 public class Status {
-	private String status;
+	private String statusMsg;
 	
-	private Integer InExecutionCount;
+	private Integer inExecutionCount;
 
-	public String getStatus() {
-		return status;
+	public String getStatusMsg() {
+		return statusMsg;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatusMsg(String statusMsg) {
+		this.statusMsg = statusMsg;
 	}
 
 	public Integer getInExecutionCount() {
-		return InExecutionCount;
+		return inExecutionCount;
 	}
 
 	public void setInExecutionCount(Integer inExecutionCount) {
-		InExecutionCount = inExecutionCount;
+		this.inExecutionCount = inExecutionCount;
 	}
 	
 	

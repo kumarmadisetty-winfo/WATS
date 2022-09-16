@@ -418,7 +418,7 @@ public class DataBaseEntry {
 
 		}
 
-		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.PASS.getLabel())) {
 			return true;
 		} else {
 			return false;
@@ -440,7 +440,7 @@ public class DataBaseEntry {
 
 		}
 
-		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.PASS.getLabel())) {
 			return true;
 		} else {
 			return false;

@@ -122,22 +122,22 @@ public class CopyDataCustomerDao {
 
 				ScriptMaster master = new ScriptMaster();
 				if (String.valueOf(obj[1]).equals("null")) {
-					master.setScript_number(null);
+					master.setScriptNumber(null);
 				} else {
 
-					master.setScript_number(String.valueOf(obj[1]));
+					master.setScriptNumber(String.valueOf(obj[1]));
 				}
 				if (String.valueOf(obj[2]).equals("null")) {
-					master.setProcess_area(null);
+					master.setProcessArea(null);
 				} else {
 
-					master.setProcess_area(String.valueOf(obj[2]));
+					master.setProcessArea(String.valueOf(obj[2]));
 				}
 				if (String.valueOf(obj[3]).equals("null")) {
-					master.setSub_process_area(null);
+					master.setSubProcessArea(null);
 				} else {
 
-					master.setSub_process_area(String.valueOf(obj[3]));
+					master.setSubProcessArea(String.valueOf(obj[3]));
 				}
 				if (String.valueOf(obj[4]).equals("null")) {
 					master.setModule(null);
@@ -152,40 +152,40 @@ public class CopyDataCustomerDao {
 					master.setRole(String.valueOf(obj[5]));
 				}
 				if (String.valueOf(obj[6]).equals("null")) {
-					master.setEnd2end_scenario(null);
+					master.setEnd2endScenario(null);
 				} else {
 
-					master.setEnd2end_scenario(String.valueOf(obj[6]));
+					master.setEnd2endScenario(String.valueOf(obj[6]));
 				}
 				if (String.valueOf(obj[7]).equals("null")) {
-					master.setScenario_name(null);
+					master.setScenarioName(null);
 				} else {
 
-					master.setScenario_name(String.valueOf(obj[7]));
+					master.setScenarioName(String.valueOf(obj[7]));
 				}
 				if (String.valueOf(obj[8]).equals("null")) {
-					master.setScenario_description(null);
+					master.setScenarioDescription(null);
 				} else {
-					master.setScenario_description(String.valueOf(obj[8]));
+					master.setScenarioDescription(String.valueOf(obj[8]));
 				}
 				if (String.valueOf(obj[9]).equals("null")) {
-					master.setExpected_result(null);
+					master.setExpectedResult(null);
 				} else {
-					master.setExpected_result(String.valueOf(obj[9]));
+					master.setExpectedResult(String.valueOf(obj[9]));
 				}
 				if (String.valueOf(obj[10]).equals("null")) {
-					master.setSelenium_test_script_name(null);
+					master.setSeleniumTestScriptName(null);
 				} else {
-					master.setSelenium_test_script_name(String.valueOf(obj[10]));
+					master.setSeleniumTestScriptName(String.valueOf(obj[10]));
 				}
 				if (String.valueOf(obj[11]).equals("null")) {
-					master.setSelenium_test_method(null);
+					master.setSeleniumTestMethod(null);
 				} else {
-					master.setSelenium_test_method(String.valueOf(obj[11]));
+					master.setSeleniumTestMethod(String.valueOf(obj[11]));
 				}
 				if (String.valueOf(obj[12]).equals("null")) {
 					master.setDependency(null);
-					master.setDependent_script_num(null);
+					master.setDependentScriptNum(null);
 				} else {
 
 					Integer scriptIdDependency = Integer.parseInt(String.valueOf(obj[12]));
@@ -198,19 +198,19 @@ public class CopyDataCustomerDao {
 
 					String depScriptName = depSname.get(0);
 					master.setDependency(Integer.parseInt(String.valueOf(obj[12])));
-					master.setDependent_script_num(depScriptName);
+					master.setDependentScriptNum(depScriptName);
 
 				}
-				master.setProduct_version(productVersionNew);
+				master.setProductVersion(productVersionNew);
 				if (String.valueOf(obj[14]).equals("null")) {
-					master.setStandard_custom(null);
+					master.setStandardCustom(null);
 				} else {
-					master.setStandard_custom(String.valueOf(obj[14]));
+					master.setStandardCustom(String.valueOf(obj[14]));
 				}
 				if (String.valueOf(obj[15]).equals("null")) {
-					master.setTest_script_status(null);
+					master.setTestScriptStatus(null);
 				} else {
-					master.setTest_script_status(String.valueOf(obj[15]));
+					master.setTestScriptStatus(String.valueOf(obj[15]));
 				}
 				if (String.valueOf(obj[16]).equals("null")) {
 					master.setAuthor(null);
@@ -218,40 +218,40 @@ public class CopyDataCustomerDao {
 					master.setAuthor(String.valueOf(obj[16]));
 				}
 				if (String.valueOf(obj[17]).equals("null")) {
-					master.setCreated_by(null);
+					master.setCreatedBy(null);
 				} else {
-					master.setCreated_by(String.valueOf(obj[17]));
+					master.setCreatedBy(String.valueOf(obj[17]));
 				}
 
 				if (String.valueOf(obj[18]).equals("null")) {
-					master.setCreation_date(null);
+					master.setCreationDate(null);
 				} else {
-					master.setCreation_date((Date) (obj[18]));
+					master.setCreationDate((Date) (obj[18]));
 				}
 
 				if (String.valueOf(obj[19]).equals("null")) {
-					master.setUpdated_by(null);
+					master.setUpdatedBy(null);
 				} else {
-					master.setUpdated_by(String.valueOf(obj[19]));
+					master.setUpdatedBy(String.valueOf(obj[19]));
 				}
 
 				if (String.valueOf(obj[20]).equals("null")) {
-					master.setUpdate_date(null);
+					master.setUpdateDate(null);
 				} else {
-					master.setUpdate_date((Date) (obj[20]));
+					master.setUpdateDate((Date) (obj[20]));
 				}
 
 				if (String.valueOf(obj[21]).equals("null")) {
 
-					master.setCustomer_id(null);
+					master.setCustomerId(null);
 				} else {
 
-					master.setCustomer_id(Integer.parseInt(String.valueOf(obj[21])));
+					master.setCustomerId(Integer.parseInt(String.valueOf(obj[21])));
 				}
 				if (String.valueOf(obj[22]).equals("null")) {
-					master.setCustomisation_reference(null);
+					master.setCustomisationReference(null);
 				} else {
-					master.setCustomisation_reference(String.valueOf(obj[22]));
+					master.setCustomisationReference(String.valueOf(obj[22]));
 				}
 
 				if (String.valueOf(obj[24]).equals("null")) {
@@ -311,16 +311,16 @@ public class CopyDataCustomerDao {
 				} else {
 					master.setTargetApplication(String.valueOf(obj[35]));
 				}
-				master.setAppr_for_migration(null);
+				master.setApprForMigration(null);
 
 				while (itr1.hasNext()) {
 					Object[] obj1 = (Object[]) itr1.next();
 					ScriptMetaData metadata = new ScriptMetaData();
-					metadata.setLine_number(Integer.parseInt(String.valueOf(obj1[0])));
+					metadata.setLineNumber(Integer.parseInt(String.valueOf(obj1[0])));
 					if (String.valueOf(obj1[1]).equals("null")) {
-						metadata.setInput_parameter(null);
+						metadata.setInputParameter(null);
 					} else {
-						metadata.setInput_parameter(String.valueOf(obj1[1]));
+						metadata.setInputParameter(String.valueOf(obj1[1]));
 					}
 					if (String.valueOf(obj1[2]).equals("null")) {
 						metadata.setAction(null);
@@ -328,38 +328,38 @@ public class CopyDataCustomerDao {
 						metadata.setAction(String.valueOf(obj1[2]));
 					}
 					if (String.valueOf(obj1[3]).equals("null")) {
-						metadata.setXpath_location(null);
+						metadata.setXpathLocation(null);
 					} else {
-						metadata.setXpath_location(String.valueOf(obj1[3]));
+						metadata.setXpathLocation(String.valueOf(obj1[3]));
 					}
 					if (String.valueOf(obj1[4]).equals("null")) {
-						metadata.setXpath_location1(null);
+						metadata.setXpathLocation1(null);
 					} else {
-						metadata.setXpath_location1(String.valueOf(obj1[4]));
+						metadata.setXpathLocation1(String.valueOf(obj1[4]));
 					}
 					if (String.valueOf(obj1[5]).equals("null")) {
-						metadata.setCreated_by(null);
+						metadata.setCreatedBy(null);
 					} else {
-						metadata.setCreated_by(String.valueOf(obj1[5]));
+						metadata.setCreatedBy(String.valueOf(obj1[5]));
 					}
 
-					metadata.setCreation_date((Date) obj1[6]);
+					metadata.setCreationDate((Date) obj1[6]);
 					if (String.valueOf(obj1[7]).equals("null")) {
-						metadata.setUpdated_by(null);
+						metadata.setUpdatedBy(null);
 					} else {
-						metadata.setUpdated_by(String.valueOf(obj1[7]));
+						metadata.setUpdatedBy(String.valueOf(obj1[7]));
 					}
 
-					metadata.setUpdate_date(((Date) obj1[8]));
+					metadata.setUpdateDate(((Date) obj1[8]));
 					if (String.valueOf(obj1[9]).equals("null")) {
-						metadata.setStep_desc(null);
+						metadata.setStepDesc(null);
 					} else {
-						metadata.setStep_desc(String.valueOf(obj1[9]));
+						metadata.setStepDesc(String.valueOf(obj1[9]));
 					}
 					if (String.valueOf(obj1[10]).equals("null")) {
-						metadata.setField_type(null);
+						metadata.setFieldType(null);
 					} else {
-						metadata.setField_type(String.valueOf(obj1[10]));
+						metadata.setFieldType(String.valueOf(obj1[10]));
 					}
 					if (String.valueOf(obj1[11]).equals("null")) {
 						metadata.setHint(null);
@@ -367,9 +367,9 @@ public class CopyDataCustomerDao {
 						metadata.setHint(String.valueOf(obj1[11]));
 					}
 					if (String.valueOf(obj1[12]).equals("null")) {
-						metadata.setScript_number(null);
+						metadata.setScriptNumber(null);
 					} else {
-						metadata.setScript_number(String.valueOf(obj1[12]));
+						metadata.setScriptNumber(String.valueOf(obj1[12]));
 					}
 					if (String.valueOf(obj1[13]).equals("null")) {
 						metadata.setDatatypes("NA");
@@ -377,24 +377,24 @@ public class CopyDataCustomerDao {
 						metadata.setDatatypes(String.valueOf(obj1[13]));
 					}
 					if (String.valueOf(obj1[14]).equals("null")) {
-						metadata.setUnique_mandatory("NA");
+						metadata.setUniqueMandatory("NA");
 					} else {
-						metadata.setUnique_mandatory(String.valueOf(obj1[14]));
+						metadata.setUniqueMandatory(String.valueOf(obj1[14]));
 					}
 					if (String.valueOf(obj1[15]).equals("null")) {
-						metadata.setValidation_type("NA");
+						metadata.setValidationType("NA");
 					} else {
-						metadata.setValidation_type(String.valueOf(obj1[15]));
+						metadata.setValidationType(String.valueOf(obj1[15]));
 					}
 					if (String.valueOf(obj1[16]).equals("null")) {
-						metadata.setValidation_name("NA");
+						metadata.setValidationName("NA");
 					} else {
-						metadata.setValidation_name(String.valueOf(obj1[16]));
+						metadata.setValidationName(String.valueOf(obj1[16]));
 					}
 					if (String.valueOf(obj1[17]).equals("null")) {
-						metadata.setMetadata_inputvalue("NA");
+						metadata.setMetadataInputvalue("NA");
 					} else {
-						metadata.setMetadata_inputvalue(String.valueOf(obj1[17]));
+						metadata.setMetadataInputvalue(String.valueOf(obj1[17]));
 					}
 
 					master.addMetadata(metadata);

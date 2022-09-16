@@ -1336,11 +1336,11 @@ public class RunAutomation {
 								if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
 									if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScriptId()))) {
 										Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScriptId()));
-										if (!"Fail".equalsIgnoreCase(s.getStatus())) {
+										if (!"Fail".equalsIgnoreCase(s.getStatusMsg())) {
 											int awaitCounter = s.getInExecutionCount();
 											s.setInExecutionCount(--awaitCounter);
 											if (awaitCounter <= 0) {
-												s.setStatus("Pass");
+												s.setStatusMsg("Pass");
 											}
 										}
 									}
@@ -1411,7 +1411,7 @@ public class RunAutomation {
 					e.printStackTrace();
 					if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScriptId()))) {
 						Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScriptId()));
-						s.setStatus("Fail");
+						s.setStatusMsg("Fail");
 					}
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(

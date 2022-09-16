@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.winfo.model.ScriptMaster;
 
 public class WatsMasterDataVOList {
 	

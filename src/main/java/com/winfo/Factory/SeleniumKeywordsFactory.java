@@ -1,5 +1,6 @@
 package com.winfo.Factory;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 
 @Configuration
 public class SeleniumKeywordsFactory {
+	Logger log = Logger.getLogger("Logger");
 	@Autowired
 	private ApplicationContext context;
 
@@ -17,7 +19,7 @@ public class SeleniumKeywordsFactory {
 
 			return context.getBean(instanceName, SeleniumKeyWordsInterface.class);
 		} catch (Exception e) {
-			System.out.println("instance name not found");
+			log.info("instance name not found");
 		}
 		return null;
 	}
@@ -27,7 +29,7 @@ public class SeleniumKeywordsFactory {
 
 			return context.getBean(instanceName, AbstractSeleniumKeywords.class);
 		} catch (Exception e) {
-			System.out.println("instance name not found");
+			log.info("instance name not found");
 		}
 		return null;
 	}

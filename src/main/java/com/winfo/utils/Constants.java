@@ -5,7 +5,7 @@ import java.io.File;
 public class Constants {
 
 	public enum TEST_SET_LINE_ID_STATUS {
-		IN_QUEUE("IN-QUEUE"), STOPPED("STOPPED"), Fail("Fail"), IN_PROGRESS("IN-PROGRESS"), Pass("Pass"), NEW("NEW");
+		IN_QUEUE("IN-QUEUE"), STOPPED("STOPPED"), FAIL("Fail"), IN_PROGRESS("IN-PROGRESS"), PASS("Pass"), NEW("NEW");
 
 		public final String label;
 

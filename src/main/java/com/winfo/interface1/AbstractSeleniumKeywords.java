@@ -10,13 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -318,9 +314,9 @@ public abstract class AbstractSeleniumKeywords {
 		int failCount = 0;
 		int other = 0;
 		for (String testLinesStatus : testLineStatusList) {
-			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+			if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.PASS.getLabel())) {
 				passCount++;
-			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Fail.getLabel())) {
+			} else if (testLinesStatus.equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.FAIL.getLabel())) {
 				failCount++;
 			} else {
 				other++;
@@ -1246,7 +1242,8 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
-	public void deleteOldScreenshotForScriptFrmObjStore(ScriptDetailsDto testSetLine, CustomerProjectDto customerDetails) {
+	public void deleteOldScreenshotForScriptFrmObjStore(ScriptDetailsDto testSetLine,
+			CustomerProjectDto customerDetails) {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);

@@ -1,5 +1,6 @@
 package com.winfo.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +11,7 @@ import com.winfo.vo.ConfigurationVO;
 
 public class PropertyReader {
 
-	private static String fileName = "/Property/config.properties";
+	private static String fileName = File.separator+"Property"+File.separator+"config.properties";
 
 	public static ConfigurationVO getConfigurationData() {
 		ConfigurationVO config = null;
@@ -40,4 +41,9 @@ public class PropertyReader {
 		}
 		return propertyValue;
 	}
+	
+	private PropertyReader() {
+		throw new IllegalStateException("Utility class");
+	}
+	
 }

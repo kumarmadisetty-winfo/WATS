@@ -46,7 +46,7 @@ public class JiraTicketBugDao {
 		Session session = entityManager.unwrap(Session.class);
 		Query<?> fetchdescription = session.createQuery(
 				"select a.line_error_message from TestSetScriptParam a join  a.testSetLines b  on a.script_id=b.script_id  join b.testSet c on c.test_set_id="
-						+ slist.getTest_set_id() + " and b.script_id=" + slist.getScript_id()
+						+ slist.getTestSetId() + " and b.script_id=" + slist.getScriptId()
 						+ " and upper(a.line_execution_status)='FAIL'");
 
 		return (List<String>) fetchdescription.list();
@@ -63,7 +63,7 @@ public class JiraTicketBugDao {
 	public int updateIssueKey(String issueKey, TestRunVO slist, int count) {
 		Session session = entityManager.unwrap(Session.class);
 		Query<?> updateissuekey = session.createQuery("update TestSetLines a set a.issue_key='" + issueKey
-				+ "'  where a.test_set_line_id=" + slist.getTest_set_line_id());
+				+ "'  where a.test_set_line_id=" + slist.getTestSetLineId());
 		count += updateissuekey.executeUpdate();
 		return count;
 	}

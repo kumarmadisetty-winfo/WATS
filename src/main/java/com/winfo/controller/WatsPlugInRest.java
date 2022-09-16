@@ -2,6 +2,7 @@ package com.winfo.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import com.winfo.vo.WatsPluginMasterVO;
 @RestController
 public class WatsPlugInRest {
 
+	Logger log = Logger.getLogger("Logger");
+
 	@Autowired
 	WatsPluginService service;
 	@Autowired
@@ -28,30 +31,26 @@ public class WatsPlugInRest {
 	@PostMapping("/pluginData")
 	public DomGenericResponseBean pluginData(@RequestBody WatsPluginMasterVO mastervo) {
 		return service.pluginData(mastervo);
-		
+
 	}
-	
-	
+
 	@PostMapping("/login")
-	public DomGenericResponseBean watsLogin(@RequestBody WatsLoginVO loginvo){
+	public DomGenericResponseBean watsLogin(@RequestBody WatsLoginVO loginvo) {
 		return service.watslogin(loginvo);
 	}
-	
-	
+
 	@GetMapping("/testrunNames/{productverson}")
-	public List<String> getTestrunData(@PathVariable String productverson){
-	      System.out.println(productverson);
-	      System.out.println(service.getTestrunDataPVerson(productverson));
+	public List<String> getTestrunData(@PathVariable String productverson) {
+		log.info(productverson);
+		log.info(service.getTestrunDataPVerson(productverson));
 		return service.getTestrunDataPVerson(productverson);
 	}
-	
-	
+
 	@PostMapping("/testrunData")
-	public DomGenericResponseBean updateTestrun(@RequestBody WatsPluginMasterVO mastervo){
-		if(mastervo.getTestrunName().equals("")) {
+	public DomGenericResponseBean updateTestrun(@RequestBody WatsPluginMasterVO mastervo) {
+		if (mastervo.getTestRunName().equals("")) {
 			return service.pluginData(mastervo);
-		}
-		else {
+		} else {
 			return testrunservice.updateTestrun(mastervo);
 
 		}
