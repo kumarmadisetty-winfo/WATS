@@ -25,7 +25,7 @@ public class MessageQueueDto implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private Date startDate;
 	private boolean manualTrigger;
-	private transient AuditScriptExecTrail autditTrial;
+	private AuditScriptExecTrail autditTrial;
 	private AUDIT_TRAIL_STAGES stage;
 
 	public MessageQueueDto() {
