@@ -5,8 +5,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 
-public interface TestAutoInterface extends Remote{  
+public interface TestAutoInterface extends Remote {
 
 	String runAutomation(String[] args) throws RemoteException, MalformedURLException, SQLException;
-	
-}  
+
+}

@@ -17,6 +17,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 
+@SuppressWarnings({ "deprecation", "unchecked" })
 @Repository
 public class CopyTestRunDao {
 	Logger log = Logger.getLogger("Logger");
@@ -25,28 +26,25 @@ public class CopyTestRunDao {
 	private EntityManager entityManager;
 
 	public TestSet getdata(int testScriptNo) {
-		TestSet getTestrun = entityManager.find(TestSet.class, testScriptNo);
-		return getTestrun;
+		return entityManager.find(TestSet.class, testScriptNo);
 	}
 
-	public int saveTestrun(TestSet testSetObj) {
+	public TestSet saveTestrun(TestSet testSetObj) {
 		entityManager.persist(testSetObj);
-		System.out.println("setTestrundata.getTestsetid() 1:" + testSetObj.getTestRunId());
-		return testSetObj.getTestRunId();
+		log.info("setTestrundata.getTestsetid() 1:" + testSetObj.getTestRunId());
+		return testSetObj;
 	}
 
 	public int getIds() {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT WATS_PROD.win_ta_test_set_id_seq.nextval FROM DUAL";
-		SQLQuery query = session.createSQLQuery(sql);
+		SQLQuery<?> query = session.createSQLQuery(sql);
 
-		List results = query.list();
-		if (results.size() > 0) {
-			System.out.println(results.get(0));
-
+		List<?> results = query.list();
+		if (!results.isEmpty()) {
+			log.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
-			Integer id = Integer.parseInt(bigDecimal.toString());
-			return id;
+			return Integer.parseInt(bigDecimal.toString());
 		} else {
 			return 0;
 		}
@@ -55,15 +53,14 @@ public class CopyTestRunDao {
 	public int getscrtiptIds() {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT win_ta_test_set_line_seq.NEXTVAL FROM DUAL";
-		SQLQuery query = session.createSQLQuery(sql);
+		SQLQuery<?> query = session.createSQLQuery(sql);
 
-		List results = query.list();
-		if (results.size() > 0) {
-			System.out.println(results.get(0));
-
+		List<?> results = query.list();
+		if (!results.isEmpty()) {
+			log.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			System.out.println("id" + id);
+			log.info("id" + id);
 			return id;
 		} else {
 			return 0;
@@ -73,15 +70,13 @@ public class CopyTestRunDao {
 	public int getscrtiptlineIds() {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT win_ta_param_id_seq.NEXTVAL FROM DUAL";
-		SQLQuery query = session.createSQLQuery(sql);
+		SQLQuery<?> query = session.createSQLQuery(sql);
 
-		List results = query.list();
-		if (results.size() > 0) {
-			System.out.println(results.get(0));
-
+		List<?> results = query.list();
+		if (!results.isEmpty()) {
+			log.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
-			Integer id = Integer.parseInt(bigDecimal.toString());
-			return id;
+			return Integer.parseInt(bigDecimal.toString());
 		} else {
 			return 0;
 		}
@@ -93,99 +88,77 @@ public class CopyTestRunDao {
 		return testSetObj.getTestRunId();
 
 	}
-	
+
 	public void updatelinesRecord(TestSetLine testSetLines) {
 		entityManager.persist(testSetLines);
 	}
 
-	public String getProductVersion(Integer project_id) {
+	public String getProductVersion(Integer projectId) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "Select product_version from win_ta_projects where project_id=" + project_id;
-		SQLQuery query = session.createSQLQuery(sql);
-		List results = query.list();
-		if (results.size() > 0) {
-			System.out.println(results.get(0));
-
-			String product_version = (String) results.get(0);
-			return product_version;
-
+		String sql = "Select product_version from win_ta_projects where project_id=" + projectId;
+		SQLQuery<?> query = session.createSQLQuery(sql);
+		List<?> results = query.list();
+		if (!results.isEmpty()) {
+			log.info(results.get(0));
+			return (String) results.get(0);
 		}
 		return null;
 	}
 
 	public Object[] getScriptMasterInfoByProjectId(String scriptNumber, Integer projectId) {
 		Session session = entityManager.unwrap(Session.class);
-		String product_version = getProductVersion(projectId);
+		String productVersion = getProductVersion(projectId);
 		String sql = "Select * from win_ta_script_master where script_number='" + scriptNumber
-				+ "' and product_version='" + product_version + "'";
+				+ "' and product_version='" + productVersion + "'";
 		Query query = session.createSQLQuery(sql);
 		List<Object[]> rows = query.getResultList();
-		// ScriptMaster master=new ScriptMaster();
-		if (rows != null) {
-			if (rows.size() > 0) {
-				return rows.get(0);
-			}
+		if (!rows.isEmpty()) {
+			return rows.get(0);
 		}
-		return null;
-
+		return new Object[0];
 	}
 
 	public ScriptMaster getScriptMasterInfo(String scriptNumber, String productVersion) {
-		Session session = entityManager.unwrap(Session.class);
 		String sql = "from ScriptMaster where script_number='" + scriptNumber + "' and product_version='"
 				+ productVersion + "'";
 		Query query = entityManager.createQuery(sql);
 		List<ScriptMaster> rows = query.getResultList();
-		if (rows != null) {
-			if (rows.size() > 0) {
-				return rows.get(0);
-			}
+		if (!rows.isEmpty()) {
+			return rows.get(0);
 		}
 		return null;
 
 	}
 
-	public List<Object[]> getScriptMetadataInfoByScriptId(int script_id) {
+	public List<Object[]> getScriptMetadataInfoByScriptId(int scriptId) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "Select * from win_ta_script_metadata where script_id =" + script_id;
+		String sql = "Select * from win_ta_script_metadata where script_id =" + scriptId;
 		Query query = session.createSQLQuery(sql);
-		List<Object[]> metadata = query.getResultList();
-		if (metadata != null) {
-			return metadata;
-		}
-		return null;
+		return query.getResultList();
 
 	}
 
-	public List<ScriptMetaData> getScriptMetadataInfo(int script_id) {
-		// Session session = entityManager.unwrap(Session.class);
-		String sql = "from ScriptMetaData S where script_id =" + script_id + " order by S.line_number";
+	public List<ScriptMetaData> getScriptMetadataInfo(int scriptId) {
+		String sql = "from ScriptMetaData S where script_id =" + scriptId + " order by S.line_number";
 		Query query = entityManager.createQuery(sql);
-		List<ScriptMetaData> metadata = query.getResultList();
-		if (metadata != null) {
-			return metadata;
-		}
-		return null;
+		return query.getResultList();
 
 	}
-	
+
 	public Integer findMaxSeqNumOfTestRun(Integer testSetId) {
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "select max(seq_num) from WIN_TA_TEST_SET_LINES where test_set_id = "+testSetId;
+		String sql = "select max(seq_num) from WIN_TA_TEST_SET_LINES where test_set_id = " + testSetId;
 		Query query = session.createSQLQuery(sql);
 		List<BigDecimal> maxSeqnumList = query.getResultList();
-		if(maxSeqnumList.isEmpty()) {
-			return 1;
+		if (maxSeqnumList.isEmpty()) {
+			return 0;
 		}
-		return maxSeqnumList.get(0).intValue() + 1;
+		return maxSeqnumList.get(0).intValue();
 	}
-	
-	
+
 	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
-		log.info("TestSetLineID *** "+testSetLineId);
-		TestSetLine testSetLineObj = entityManager.find(TestSetLine.class, testSetLineId);
-		return testSetLineObj;
+		log.info("TestSetLineID *** " + testSetLineId);
+		return entityManager.find(TestSetLine.class, testSetLineId);
 	}
-	
 
 }

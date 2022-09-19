@@ -1,4 +1,5 @@
 package com.winfo.constants;
+@SuppressWarnings("unused")
 public enum BrowserConstants{
 	
 	CHROME("chrome"),
@@ -15,11 +16,16 @@ public enum BrowserConstants{
 	DISABLE_INFOBARS("disable-infobars"),
 	MARIONETTE("marionette")
 	;
-	public String value;
+	
+	private final String value;
 	
 	BrowserConstants(String value) {
 		this.value = value;
 	}
+	
+	 public String getValue() {
+			return value;
+	    }
 }
 
 

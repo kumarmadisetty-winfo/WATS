@@ -114,17 +114,17 @@ public class WatsPluginMasterVO {
 	private String moduleSrt;
 
 	@JsonProperty("TestrunName")
-	private String TestrunName;
+	private String testRunName;
 
 	@JsonProperty("MetaDataList")
-	private List<WatsPluginMetaDataVO> MetaDataList = new ArrayList<WatsPluginMetaDataVO>();
+	private List<WatsPluginMetaDataVO> metaDataList = new ArrayList<>();
 
-	public String getTestrunName() {
-		return TestrunName;
+	public String getTestRunName() {
+		return testRunName;
 	}
 
-	public void setTestrunName(String testrunName) {
-		TestrunName = testrunName;
+	public void setTestRunName(String testRunName) {
+		this.testRunName = testRunName;
 	}
 
 	public Integer getScriptId() {
@@ -147,7 +147,7 @@ public class WatsPluginMasterVO {
 		return processArea;
 	}
 
-	public void setProcess_area(String processArea) {
+	public void setProcessArea(String processArea) {
 		this.processArea = processArea;
 	}
 
@@ -195,7 +195,7 @@ public class WatsPluginMasterVO {
 		return scenarioDescription;
 	}
 
-	public void setScenario_description(String scenarioDescription) {
+	public void setScenarioDescription(String scenarioDescription) {
 		this.scenarioDescription = scenarioDescription;
 	}
 
@@ -203,7 +203,7 @@ public class WatsPluginMasterVO {
 		return expectedResult;
 	}
 
-	public void setExpected_result(String expectedResult) {
+	public void setExpectedResult(String expectedResult) {
 		this.expectedResult = expectedResult;
 	}
 
@@ -267,7 +267,7 @@ public class WatsPluginMasterVO {
 		return createdBy;
 	}
 
-	public void setCreated_by(String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -400,11 +400,11 @@ public class WatsPluginMasterVO {
 	}
 
 	public List<WatsPluginMetaDataVO> getMetaDataList() {
-		return MetaDataList;
+		return metaDataList;
 	}
 
 	public void setMetaDataList(List<WatsPluginMetaDataVO> metaDataList) {
-		MetaDataList = metaDataList;
+		this.metaDataList = metaDataList;
 	}
 
 	public String getModuleSrt() {

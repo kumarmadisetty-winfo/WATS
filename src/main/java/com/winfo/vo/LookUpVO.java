@@ -26,7 +26,8 @@ public class LookUpVO {
 	@JsonProperty("updateDate")
 	private Date updateDate;
 	
-	public LookUpVO() {};
+	public LookUpVO() {	
+	}
 	
 	public LookUpVO(LookUp lookUp, Map<String, LookUpCodeVO> mapOfData) {
 		this.lookupId = lookUp.getLookUpId();

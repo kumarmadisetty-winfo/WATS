@@ -11,12 +11,9 @@ public enum ActionEnum {
 	ENTER("enter")
 	;
 
-
-//    private final String key;
     private final String value;
 
     ActionEnum(String  value) {
-//        this.key = key;
         this.value = value;
     }
 

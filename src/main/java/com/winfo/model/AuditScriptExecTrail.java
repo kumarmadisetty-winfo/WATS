@@ -1,5 +1,6 @@
 package com.winfo.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,8 +10,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "audit_script_execution_trail")
-public class AuditScriptExecTrail {
-
+public class AuditScriptExecTrail implements Serializable{
+	
+	private static final long serialVersionUID = 6915558297579903655L;
 	@Id
 	@GeneratedValue
 	private int id;

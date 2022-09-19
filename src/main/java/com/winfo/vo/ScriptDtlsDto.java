@@ -3,8 +3,6 @@ package com.winfo.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class ScriptDtlsDto {
 
 	private List<Integer> scriptId= new ArrayList<>();

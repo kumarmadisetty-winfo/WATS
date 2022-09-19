@@ -39,7 +39,7 @@ import com.winfo.vo.ResponseDto;
 @Service
 public class CopyTestRunService {
 	Logger log = Logger.getLogger("Logger");
-	
+
 	private static final String NEW = "New";
 
 	@Autowired
@@ -71,19 +71,24 @@ public class CopyTestRunService {
 		newTestSetObj.setLastExecutBy(null);
 
 		String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
-		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<>();
+
+		Map<Integer, TestSetLine> mapOfLinesData = new HashMap<>();
+
 		for (TestSetLine testSetLineObj : testSetObj.getTestRunScriptDatalist()) {// getScriptdata
 
 			ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(testSetLineObj.getScriptNumber(),
 					productVersion);
 			TestSetLine testSetLineRecords = new TestSetLine();
+			mapOfLinesData.put(testSetLineObj.getTestRunScriptId(), testSetLineRecords);
 			if (scriptMaster != null) {
-				testSetLineRecords.setScriptId(scriptMaster.getScript_id());
+				testSetLineRecords.setScriptId(scriptMaster.getScriptId());
 				testSetLineRecords.setCreatedBy(copyTestrunvo.getCreatedBy());
 				testSetLineRecords.setCreationDate(copyTestrunvo.getCreationDate());
 				testSetLineRecords.setEnabled("Y");
-				testSetLineRecords.setScriptNumber(scriptMaster.getScript_number());
+				testSetLineRecords.setScriptNumber(scriptMaster.getScriptNumber());
 				testSetLineRecords.setSeqNum(testSetLineObj.getSeqNum());
+				mapOfTestRunDependencyOldToNewId.put(testSetLineObj.getTestRunScriptId(), testSetLineObj.getSeqNum());
 				testSetLineRecords.setStatus(NEW);
 				testSetLineRecords.setLastUpdatedBy(null);
 				testSetLineRecords.setScriptUpadated("N");
@@ -92,7 +97,6 @@ public class CopyTestRunService {
 				testSetLineRecords.setExecutedBy(null);
 				testSetLineRecords.setExecutionStartTime(null);
 				testSetLineRecords.setExecutionEndTime(null);
-//				testSetLineRecords.setDependency_tr(testSetLineObj.getDependency_tr());
 				newTestSetObj.addTestRunScriptData(testSetLineRecords);
 			} else {
 
@@ -105,7 +109,7 @@ public class CopyTestRunService {
 			Comparator<TestSetScriptParam> scriptLineComparator = (TestSetScriptParam s1,
 					TestSetScriptParam s2) -> s1.getLineNumber() - s2.getLineNumber();
 			Comparator<ScriptMetaData> metaDataComparator = (ScriptMetaData s1,
-					ScriptMetaData s2) -> s1.getLine_number() - s2.getLine_number();
+					ScriptMetaData s2) -> s1.getLineNumber() - s2.getLineNumber();
 			Collections.sort(scriptLineList, scriptLineComparator);
 			Collections.sort(metadataList, metaDataComparator);
 			ScriptMetaData metadata = null;
@@ -119,17 +123,17 @@ public class CopyTestRunService {
 
 				if (!(newScriptParamSeq.equals(check))) {
 					setScriptlinedata = new TestSetScriptParam();
-					setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+					setScriptlinedata.setInputParameter(metadata.getInputParameter());
 					setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
 					setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
-					setScriptlinedata.setLineNumber(metadata.getLine_number());
+					setScriptlinedata.setLineNumber(metadata.getLineNumber());
 					setScriptlinedata.setAction(metadata.getAction());
-					setScriptlinedata.setTestRunParamDesc(metadata.getStep_desc());
-					setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+					setScriptlinedata.setTestRunParamDesc(metadata.getStepDesc());
+					setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 					setScriptlinedata.setHint(metadata.getHint());
-					setScriptlinedata.setFieldType(metadata.getField_type());
-					setScriptlinedata.setXpathLocation(metadata.getXpath_location());
-					setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+					setScriptlinedata.setFieldType(metadata.getFieldType());
+					setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
+					setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 					setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 					setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 					setScriptlinedata.setUpdateDate(null);
@@ -137,7 +141,7 @@ public class CopyTestRunService {
 					setScriptlinedata.setLineExecutionStatus(NEW);
 					setScriptlinedata.setLineErrorMessage(null);
 					setScriptlinedata.setDataTypes(metadata.getDatatypes());
-					setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+					setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
 					check = newScriptParamSeq.intValue();
 				}
 				if (setScriptlinedata.getInputParameter() != null && getScriptlinedata.getInputParameter() != null) {
@@ -168,17 +172,17 @@ public class CopyTestRunService {
 			while (newScriptParamSeq < metadataList.size()) {
 				metadata = metadataList.get(newScriptParamSeq);
 				setScriptlinedata = new TestSetScriptParam();
-				setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+				setScriptlinedata.setInputParameter(metadata.getInputParameter());
 				setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
 				setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
-				setScriptlinedata.setLineNumber(metadata.getLine_number());
+				setScriptlinedata.setLineNumber(metadata.getLineNumber());
 				setScriptlinedata.setAction(metadata.getAction());
 
-				setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+				setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 				setScriptlinedata.setHint(metadata.getHint());
-				setScriptlinedata.setFieldType(metadata.getField_type());
-				setScriptlinedata.setXpathLocation(metadata.getXpath_location());
-				setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+				setScriptlinedata.setFieldType(metadata.getFieldType());
+				setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
+				setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 				setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 				setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 				setScriptlinedata.setUpdateDate(null);
@@ -186,7 +190,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setLineExecutionStatus(NEW);
 				setScriptlinedata.setLineErrorMessage(null);
 				setScriptlinedata.setDataTypes(metadata.getDatatypes());
-				setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+				setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
 
 				setScriptlinedata.setInputValue(null);
 
@@ -198,16 +202,34 @@ public class CopyTestRunService {
 
 		}
 		log.info("before saveTestrun");
-		if (!mapOfTestRunDependencyOldToNewId.isEmpty()) {
-			for (TestSetLine testSetLine : newTestSetObj.getTestRunScriptDatalist()) {
-				if (testSetLine.getDependency_tr() != null) {
-					testSetLine.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(testSetLine.getDependency_tr()));
-				}
+		for (TestSetLine oldTestSetLine : testSetObj.getTestRunScriptDatalist()) {
+			if (oldTestSetLine.getDependencyTr() != null) {
+				mapOfLinesData.get(oldTestSetLine.getTestRunScriptId())
+						.setDependencyTr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependencyTr()));
 			}
 		}
-		int newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
-		log.info("newtestrun 1:" + newtestrun);
-		return newtestrun;
+
+		TestSet newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
+
+		Map<Integer, Integer> dependencyLinesIdAndSeqNum = new HashMap<>();
+		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
+			dependencyLinesIdAndSeqNum.put(newTestSetLine.getTestRunScriptId(), newTestSetLine.getSeqNum());
+		}
+
+		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
+			if (newTestSetLine.getDependencyTr() != null) {
+				for(Map.Entry<Integer, Integer> entrySet : dependencyLinesIdAndSeqNum.entrySet()) {
+					if(entrySet.getValue().equals(newTestSetLine.getDependencyTr())) {
+						newTestSetLine.setDependencyTr(entrySet.getKey());
+						break;
+					}
+				}
+				copyTestrunDao.updatelinesRecord(newTestSetLine);
+			}
+		}
+
+		log.info("newtestrun 1:" + newtestrun.getTestRunId());
+		return newtestrun.getTestRunId();
 	}
 
 	private void addInputvalues(TestSetScriptParam getScriptlinedata, TestSetScriptParam setScriptlinedata,
@@ -323,8 +345,14 @@ public class CopyTestRunService {
 
 			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
 					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
-				setScriptlinedata.setInputValue(
-						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+				String oldTestRunName=getInputvalues;
+				int index=oldTestRunName.indexOf(">");
+				if(index!=-1)
+				{
+					oldTestRunName=oldTestRunName.substring(0,index);
+					oldTestRunName=oldTestRunName.replace("(","");
+				}
+				setScriptlinedata.setInputValue(getInputvalues.replace(oldTestRunName, copyTestrunvo.getNewtestrunname()));
 			} else {
 				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
 			}
