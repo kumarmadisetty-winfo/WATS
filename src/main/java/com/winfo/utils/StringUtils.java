@@ -8,6 +8,9 @@ public class StringUtils {
 		return projectPath + fileName;
 	}
 
+	public static final boolean isNullOrBlank(String input) {
+		return input == null || "".equals(input.trim()) || "null".equals(input.trim());
+	}
 
 	public static String convertToString(Object input) {
 		String outputString = null;
@@ -17,6 +20,10 @@ public class StringUtils {
 		return outputString;
 	}
 
+
+	public static final int convertStringToInteger(final String input, int defaultValue) {
+		return StringUtils.isNullOrBlank(input) ? defaultValue : Integer.parseInt(input);
+	}
 	
 	private StringUtils() {
 		throw new IllegalStateException("Utility class");
