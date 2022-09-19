@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 
@@ -27,6 +26,7 @@ import com.winfo.model.Customer;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
+import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants;
@@ -501,6 +501,18 @@ public class DataBaseEntry {
 		return dao.checkActionContainsExcel(script_id);
 	}
 
+	public boolean checkActionContainsSfApplication(String script_Id) {
+		
+		return dao.checkActionContainsSfApplication(script_Id);
+	}
+	
+	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
+		return dao.getApiValueBySetIdAndAPIKey(testSetId, apiKey);
+	}
+
+	public void insertRecordInTestSetAttribute(String testSetLineId, String string, String token, String executedBy) {
+		dao.insertRecordInTestSetAttribute(testSetLineId, string, token, executedBy);
+	}
 	public int getApiValidationIdActionId() {
 		return dao.getApiValidationIdActionId();
 	}

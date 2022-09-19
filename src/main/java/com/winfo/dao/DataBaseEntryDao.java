@@ -46,6 +46,7 @@ import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
+import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.services.FetchConfigVO;
@@ -1510,6 +1511,46 @@ public class DataBaseEntryDao {
 	public void insertApiValidation(LookUpCode lookUpCodes) {
 		Session session = em.unwrap(Session.class);
 		session.persist(lookUpCodes);
+	}
+
+	public boolean checkActionContainsSfApplication(String script_Id) {
+		Object count = null;
+		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
+		try {
+			Session session = em.unwrap(Session.class);
+			count = session.createSQLQuery(updateQry).setParameter("script_id", script_Id).getSingleResult();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains Login into SFApplication or not.", e);
+		}
+		boolean flag = Integer.parseInt(count.toString())>0 ? true : false;
+		return flag;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
+
+		Session session = em.unwrap(Session.class);
+		
+		List<TestSetAttribute> listOfSetAttr = session.createQuery(
+				"from TestSetAttribute where id.testSetId =" + testSetId + " and id.attributeName = '" + apiKey + "'")
+				.getResultList();
+		TestSetAttribute setAttrObj =  listOfSetAttr.isEmpty() ? null : listOfSetAttr.get(0);
+		
+		return setAttrObj;
+	}
+
+	public void insertRecordInTestSetAttribute(String testSetLineId, String string, String token, String executedBy) {
+		Session session = em.unwrap(Session.class);
+		Date date = new Date();
+		int listOfSetAttr = session.createNativeQuery("INSERT INTO win_ta_test_set_attribute (TEST_SET_ID,ATTRIBUTE_NAME,ATTRIBUTE_VALUE,CREATED_DATE,UPDATED_DATE,CREATED_BY,UPDATED_BY) VALUES (:P5_TEST_RUN_ID,:P5_TEST_Attribute_Name,:P5_ACCESS_TOKEN_EDIT,:SYSDATE1,:SYSDATE2,:APP_USER1,:APP_USER2)")
+				.setParameter("P5_TEST_RUN_ID", testSetLineId)
+				.setParameter("P5_TEST_Attribute_Name", string)
+				.setParameter("P5_ACCESS_TOKEN_EDIT", token)
+				.setParameter("SYSDATE1", date)
+				.setParameter("SYSDATE2", date)
+				.setParameter("APP_USER1", executedBy)
+				.setParameter("APP_USER2", executedBy)
+				.executeUpdate();
 	}
 
 }

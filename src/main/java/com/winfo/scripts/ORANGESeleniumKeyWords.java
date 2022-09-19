@@ -17,14 +17,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,6 +71,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -99,6 +106,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.model.TestSetAttribute;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -18007,6 +18015,74 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public void apiAccessTokenCreation(FetchConfigVO fetchConfigVO,ScriptDetailsDto fetchMetadataVO,CustomerProjectDto customerDetails)
+			throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		String str = "{\n"
+				+ "  \"HTTP Type\": \"POST\",\n"
+				+ "  \"Request Header\": {\n"
+				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n"
+				+ "  },\n"
+				+ "  \"Request Body\": {\n"
+				+ "    \"grant_type\": \"client_credentials\"\n"
+				+ "  }\n"
+				+ "}";
+		ApiValidationVO apiValidationData = objectMapper.readValue(str,ApiValidationVO.class);
+		apiValidationData.setUrl(fetchConfigVO.getAPI_AUTHENTICATION_URL());
+		String token = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+			headers.set("Authorization", "Basic "+fetchConfigVO.getAPI_AUTHENTICATION_CODE());		// Converting object to string
+//			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Converting Request body object into map
+			Gson gson = new Gson();
+			Map<String, String> attributes = gson.fromJson(gson.toJson(apiValidationData.getRequestBody()), Map.class);
+
+			// Setting Map value to MultiValueMap
+			MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+			for (Entry<String, String> map : attributes.entrySet()) {
+				bodyValues.set(map.getKey(), map.getValue());
+			}
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+
+			// Creating WebClient
+			WebClient client = WebClient.create();
+			Map<String, String> response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+					.headers(headersHttp -> headersHttp.addAll(headers))
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(BodyInserters.fromFormData(bodyValues))
+					.retrieve().bodyToMono(Map.class).block();
+
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(response);
+			apiValidationData.setResponse(json);
+
+
+			// Getting the token from the response
+			token = response.get("access_token");
+			
+			databaseentry.insertRecordInTestSetAttribute(customerDetails.getTestSetId(),"access_token",token,fetchMetadataVO.getExecutedBy());
+			Date date = new Date(System.currentTimeMillis() - 3600 * 1000);
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+			TimeZone timeZone = TimeZone.getTimeZone("GMT");
+			formatter.setTimeZone(timeZone);
+			String expiresTime = formatter.format(date);
+			databaseentry.insertRecordInTestSetAttribute(customerDetails.getTestSetId(),"expires_in",expiresTime,fetchMetadataVO.getExecutedBy());
+		} catch (Exception ex) {
+			throw ex;
+		}
+//		return token;
+	}
 
 	@Override
 	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
@@ -18072,13 +18148,34 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	@Override
 	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api) throws Exception {
+			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		ApiValidationVO apiValidationData = objectMapper.readValue(fetchMetadataVO.getInputValue(),
+		String inputValue = fetchMetadataVO.getInputValue().replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
+		ApiValidationVO apiValidationData = objectMapper.readValue(inputValue,
 				ApiValidationVO.class);
 
 		try {
+			
+			TestSetAttribute testSetAttributeAccessToken = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "access_token");
+			if(testSetAttributeAccessToken!=null) {
+				TestSetAttribute testSetAttributeExpiresIn = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "expires_in");
+				boolean expireIsPresent = testSetAttributeExpiresIn != null;
+				boolean authenticationValues = (fetchConfigVO.getAPI_AUTHENTICATION_URL()!=null && fetchConfigVO.getAPI_AUTHENTICATION_CODE() !=null);
+				if (expireIsPresent && authenticationValues) {
+					if(expireIsPresent) {
+						
+					}else{
+						apiAccessTokenCreation(fetchConfigVO,fetchMetadataVO,customerDetails);
+					}
+				}else {
+					apiValidationData.setAccessToken(testSetAttributeAccessToken.getAttributeValue());
+				}
+				
+			}
+			else {
+				apiAccessTokenCreation(fetchConfigVO,fetchMetadataVO,customerDetails);
+			}
 
 			WebClient client = WebClient.create();
 
@@ -18088,13 +18185,14 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			}
 
 			if (apiValidationData.getAccessToken() != null) {
-				String[] str = apiValidationData.getAccessToken().split(">");
-				System.out.println(str);
-				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
-				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
-				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
-				headers.set("Authorization", "Bearer " + map.get(str[4]));
+//				String[] str = apiValidationData.getAccessToken().split(">");
+//				System.out.println(str);
+//				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
+//				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
+//				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
+				headers.set("Authorization", "Bearer "+apiValidationData.getAccessToken());
 			}
+			apiValidationData.setAccessToken(null);
 			// Converting object to string
 			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 			String strInput = ow.writeValueAsString(apiValidationData.getRequestBody());
@@ -18103,7 +18201,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
 			ClientResponse response;
 
-			if (apiValidationData.getRequestBody() != null) {
+			if (apiValidationData.getRequestBody() != null && !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
 				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
 						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
 						.body(BodyInserters.fromObject(strInput)).exchange().block();
@@ -18119,20 +18217,47 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			}, (ex) -> {
 			});
 			api.setResponseCode(response.statusCode().value());
+			apiValidationData.setResponseCode(response.statusCode().value());
+			apiValidationData.setAccessToken("");
+			ObjectWriter ow1 = new ObjectMapper().writer();
+			String value = ow1.writeValueAsString(apiValidationData);
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 //			return response.statusCode();
+			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
+			
+			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			String name = (fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
+			
+			try (PrintWriter out = new PrintWriter(fileName)) {
+			    out.println(api.getResponse());
+			}
+//			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
+//					+ customerDetails.getTestSetName();
+			File source = new File(fileName);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName(), name);
+			Files.delete( Paths.get(fileName));
 		} catch (Exception ex) {
 			throw ex;
 		}
 	}
 
-	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) throws Exception {
 		String[] values = fetchMetadataVO.getInputValue().split("/");
 		for (String str : values) {
 			if (api.getResponseCode().toString().contains(str)) {
 				return true;
 			}
 		}
-		return false;
+		throw new Exception("Validation Failed.");
 	}
 
 	@Override
@@ -18321,6 +18446,11 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
+		
+	}
+	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
 
