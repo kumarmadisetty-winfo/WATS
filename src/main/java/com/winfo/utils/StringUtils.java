@@ -10,7 +10,7 @@ public class StringUtils {
 
 	public static boolean isNotNullorBlank(String input) {
 		
-		return input.isEmpty() || input.isBlank();
+		return input.isEmpty();
 	}
 
 	public static final boolean isNullOrBlank(String input) {
