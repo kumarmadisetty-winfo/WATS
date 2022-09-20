@@ -133,7 +133,7 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ScriptMaster> cq = cb.createQuery(ScriptMaster.class);
 		Root<ScriptMaster> from = cq.from(ScriptMaster.class);
-		Predicate condition = cb.equal(from.get("script_id"), scriptId);
+		Predicate condition = cb.equal(from.get("scriptId"), scriptId);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		return query.getResultList();
@@ -158,7 +158,7 @@ public class DataBaseEntryDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<ScriptMetaData> cq = cb.createQuery(ScriptMetaData.class);
 		Root<ScriptMetaData> from = cq.from(ScriptMetaData.class);
-		Predicate condition = cb.equal(from.get("scriptMaster").get("script_id"), scriptId);
+		Predicate condition = cb.equal(from.get("scriptMaster").get("scriptId"), scriptId);
 		cq.where(condition);
 		Query query = em.createQuery(cq);
 		return query.getResultList();
