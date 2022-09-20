@@ -722,7 +722,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 
 	public void updateStartStatus(MessageQueueDto args) throws ClassNotFoundException, SQLException {
-		dataBaseEntry.updateInProgressScriptStatus(null, args.getTestSetLineId(), new Date());
+		dataBaseEntry.updateInProgressScriptStatus(args.getTestSetLineId(), new Date());
 	}
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
