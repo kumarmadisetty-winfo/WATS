@@ -874,17 +874,16 @@ public class RunAutomation {
 							try {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
-									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, count, customerDetails);
+									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											count, customerDetails);
 									break;
 								} else {
 
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1,
-										param2, param3, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
+										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
 							}
 								case "clickLink":
