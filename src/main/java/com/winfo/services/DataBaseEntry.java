@@ -371,9 +371,8 @@ public class DataBaseEntry {
 		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
 	}
 
-	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id, Date startDate)
-			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus(test_set_id, startDate);
+	public void updateInProgressScriptStatus(String testSetLineId, Date startDate) {
+		dao.updateInProgressScriptStatus(testSetLineId, startDate);
 	}
 
 	public Date findMinExecutionStartDate(long testSetId) {
