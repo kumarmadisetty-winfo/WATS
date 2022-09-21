@@ -590,7 +590,7 @@ public class DataBaseEntryDao {
 		CriteriaQuery<ScriptMaster> cq = cb.createQuery(ScriptMaster.class);
 		Root<ScriptMaster> from = cq.from(ScriptMaster.class);
 
-		Predicate condition1 = cb.equal(from.get("script_id"), scriptId);
+		Predicate condition1 = cb.equal(from.get("scriptId"), scriptId);
 
 		cq.where(condition1);
 		Query query = em.createQuery(cq);
