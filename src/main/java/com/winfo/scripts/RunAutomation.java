@@ -819,24 +819,6 @@ public class RunAutomation {
 								}
 
 							}
-						
-						case "clickLink":
-								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
-										xpathPerformance.clickLink(driver, param1, param2,
-												fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2,
-											fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
 							
 
 
@@ -946,7 +928,6 @@ public class RunAutomation {
 										fetchMetadataVO, fetchConfigVO,customerDetails);
 								break;
 							}
-
 						case "clickNotificationLink":
 							seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
