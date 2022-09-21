@@ -1,7 +1,6 @@
 package com.winfo.controller;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,34 +19,32 @@ import com.winfo.vo.TestRunDetails;
 
 @RestController
 public class MigrationSender {
-	public final Logger logger = LogManager.getLogger(MigrationSender.class);
+
+	public static final Logger logger = Logger.getLogger(MigrationSender.class);
 	@Autowired
 	PostApiValidationMigrationService apiValidationMigrationService;
 	@Autowired
 	CustomerToCentralGetService service;
 	@Autowired
 	TestRunMigrationService testRunMigrationService;
-	
+
 	@PostMapping("/apiValidationMigrationSender")
 	public ResponseDto apiValidationMigration(@RequestBody ApiValidationMigrationDto apiValidationMigration) {
 		return apiValidationMigrationService.apiValidationMigration(apiValidationMigration);
 	}
-	
+
 	@RequestMapping("/scriptMigrateFromCustomerToCentral")
 	public String customerRepoData(@RequestBody ScriptDtlsDto scriptDtls) {
 		logger.info("SCRIPT IDS**" + scriptDtls.getScriptId());
 		return service.scriptMetaData(scriptDtls);
 
 	}
-	
+
 	@PostMapping("/testRunMigration")
 	public String testRunMigration(@RequestBody TestRunDetails testRunDetails)
 			throws ParseException, JsonProcessingException {
 		logger.info("TestRunId**" + testRunDetails.getListOfTestRun().get(0));
-		String result =  testRunMigrationService.testRunMigration(testRunDetails);
-		return result;
+		return testRunMigrationService.testRunMigration(testRunDetails);
 	}
-	
-
 
 }

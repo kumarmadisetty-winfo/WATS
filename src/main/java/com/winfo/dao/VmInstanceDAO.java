@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Transactional
 @Repository
 public class VmInstanceDAO {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger log = Logger.getLogger(VmInstanceDAO.class);
 
 	@Autowired
 	private EntityManager entityManager;
@@ -98,7 +98,7 @@ public class VmInstanceDAO {
 				timeslist.put((Date) user[0], id);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 
 		}
 		return timeslist;
@@ -114,7 +114,7 @@ public class VmInstanceDAO {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 
 		}
 	}
@@ -128,7 +128,7 @@ public class VmInstanceDAO {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 
 		}
 	}

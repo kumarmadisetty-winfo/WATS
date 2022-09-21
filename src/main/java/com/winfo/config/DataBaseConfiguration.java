@@ -68,8 +68,4 @@ public class DataBaseConfiguration {
 		this.dbschemaPsw = dbschemaPsw;
 	}
 	
-	
-	
-	
-	
 }
