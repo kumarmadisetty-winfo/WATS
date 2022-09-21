@@ -492,7 +492,7 @@ public class RunAutomation {
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
-			String checkValidScript = xpathService.checkValidScript(scriptID);
+			String checkValidScript = "Yes";
 			log.info("Valid script check.......::" + checkValidScript);
 
 			Boolean validationFlag = null;
@@ -801,6 +801,26 @@ public class RunAutomation {
 								}
 
 							}
+						
+						case "clickLink":
+								try {
+									if (checkValidScript.equalsIgnoreCase("Yes")) {
+										xpathPerformance.clickLink(driver, param1, param2,
+												fetchMetadataVO, fetchConfigVO, count,
+												customerDetails);
+										break;
+									} else {
+
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2,
+											fetchMetadataVO, fetchConfigVO,
+											customerDetails);
+									break;
+								}
+							
+
 
 						case "clickCheckbox":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
@@ -819,6 +839,10 @@ public class RunAutomation {
 											customerDetails);
 									break;
 								}
+							}
+							else
+							{
+								break;
 							}
 
 						case "clickRadiobutton":
@@ -841,6 +865,10 @@ public class RunAutomation {
 								}
 
 							}
+							else
+							{
+								break;
+							}
 						case "selectAValue":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
@@ -861,6 +889,10 @@ public class RunAutomation {
 								}
 
 							}
+							else
+							{
+								break;
+							}
 
 						case "clickTableLink":
 							try {
@@ -879,7 +911,6 @@ public class RunAutomation {
 										customerDetails);
 								break;
 							}
-
 						case "clickNotificationLink":
 							seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -1018,6 +1049,10 @@ public class RunAutomation {
 									break;
 								}
 							}
+							else
+							{
+								break;
+							}
 
 						case "mousehover":
 							try {
@@ -1110,6 +1145,10 @@ public class RunAutomation {
 											customerDetails);
 									break;
 								}
+							}
+							else
+							{
+								break;
 							}
 
 						case "copy":

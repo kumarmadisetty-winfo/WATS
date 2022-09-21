@@ -23,22 +23,39 @@ public class WatsXpathDao {
 	private EntityManager entityManager;
 
 	public int saveXpathParams(String scriptID, String lineNumber, String xpath) {
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_id=:scriptID and m.line_number=:line_number";
-		SQLQuery<?> query = session.createSQLQuery(sql);
-		query.setParameter("xpath", xpath);
-		query.setParameter(SCRIPT_ID, scriptID);
-		query.setParameter("line_number", lineNumber);
-		return query.executeUpdate();
+		return 0;
+//		Session session = entityManager.unwrap(Session.class);
+//		String sql = "UPDATE win_ta_script_metadata m SET m.xpath_location =:xpath WHERE m.script_id=:scriptID and m.line_number=:line_number";
+//		SQLQuery<?> query = session.createSQLQuery(sql);
+//		query.setParameter("xpath", xpath);
+//		query.setParameter(SCRIPT_ID, scriptID);
+//		query.setParameter("line_number", lineNumber);
+//		return query.executeUpdate();
 	}
 
-	public String getXpathParams(String scriptID, String lineNumber) {
+//	public String getXpathParams(String scriptID, String lineNumber) {
+//
+//		Session session = entityManager.unwrap(Session.class);
+//		String sql = "select m.xpath_location from  win_ta_script_metadata m WHERE m.script_id=:scriptID and m.line_number=:line_number";
+//		SQLQuery<?> query = session.createSQLQuery(sql);
+//		query.setParameter(SCRIPT_ID, scriptID);
+//		query.setParameter("line_number", lineNumber);
+//		List<?> results = query.list();
+//		if (!results.isEmpty()) {
+//			return (String) results.get(0);
+//		} else {
+//			return null;
+//		}
+//	}
+	
+	public String getXpathParams(String scriptID, String lineNumber,String testSetLine) {
 
 		Session session = entityManager.unwrap(Session.class);
-		String sql = "select m.xpath_location from  win_ta_script_metadata m WHERE m.script_id=:scriptID and m.line_number=:line_number";
+		String sql = "select m.xpath_location from  WIN_TA_TEST_SET_SCRIPT_PARAM m WHERE m.script_id=:scriptID and m.line_number=:line_number and m.test_set_line_id=:testSetLine";
 		SQLQuery<?> query = session.createSQLQuery(sql);
 		query.setParameter(SCRIPT_ID, scriptID);
 		query.setParameter("line_number", lineNumber);
+		query.setParameter("testSetLine", testSetLine);
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
 			return (String) results.get(0);

@@ -44,7 +44,7 @@ public class DriverConfiguration {
 			prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
-			if (os.contains("win")) {
+			if (!os.contains("win")) {
 				logger.info("windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 			} else {
