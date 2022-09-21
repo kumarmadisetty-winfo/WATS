@@ -10,6 +10,7 @@ public class FetchConfigVO {
 	
 	private String OIC_APPLICATION_URL;
 	
+	private String SF_APPLICATION_URL;
 	
 	private String SHAREPOINT_SITE_ID; 
 	
@@ -178,6 +179,28 @@ public class FetchConfigVO {
     private List<Object[]> seqNumAndStatus; 
     
     private int otherCount;
+    
+    private String API_AUTHENTICATION_URL;
+    
+    private String API_AUTHENTICATION_CODE;
+    
+    
+    
+   	public String getAPI_AUTHENTICATION_URL() {
+		return API_AUTHENTICATION_URL;
+	}
+
+	public void setAPI_AUTHENTICATION_URL(String aPI_AUTHENTICATION_URL) {
+		API_AUTHENTICATION_URL = aPI_AUTHENTICATION_URL;
+	}
+
+	public String getAPI_AUTHENTICATION_CODE() {
+		return API_AUTHENTICATION_CODE;
+	}
+
+	public void setAPI_AUTHENTICATION_CODE(String aPI_AUTHENTICATION_CODE) {
+		API_AUTHENTICATION_CODE = aPI_AUTHENTICATION_CODE;
+	}
     
    	public int getOtherCount() {
 		return otherCount;
@@ -698,5 +721,12 @@ public int getMax_num_scripts() {
 		INFORMATICA_APPLICATION_URL = iNFORMATICA_APPLICATION_URL;
 	}
 	
+	public String getSF_APPLICATION_URL() {
+		return SF_APPLICATION_URL;
+	}
+
+	public void setSF_APPLICATION_URL(String sF_APPLICATION_URL) {
+		SF_APPLICATION_URL = sF_APPLICATION_URL;
+	}
 	
 }

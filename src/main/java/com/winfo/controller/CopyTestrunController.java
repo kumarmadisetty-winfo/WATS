@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.winfo.services.CopyTestRunService;
 import com.winfo.vo.CopyTestrunjson;
 import com.winfo.vo.CopytestrunVo;
@@ -27,7 +29,7 @@ public class CopyTestrunController {
 
 	@PostMapping(value = "copyTestrun", produces = MediaType.APPLICATION_JSON_VALUE)
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
-			BindingResult bindingResult) throws InterruptedException {
+			BindingResult bindingResult) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		log.info("Test Run Name**" + copyTestrunvo.getNewtestrunname());
 		log.info("copyTestrunvo.getCreation_date()" + copyTestrunvo.getCreationDate());
 		int newtestrun = 0;
