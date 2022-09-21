@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -30,6 +31,12 @@ public class DriverConfiguration {
 
 	@Value("${configvO.config_url}")
 	private String configUrl;
+	
+	
+	/*
+	 * Edge Browser is not working due to Incompatilility issue Providing related
+	 * Jira Ticket Number : https://winfosolutions.atlassian.net/browse/WATS-1566
+	 */
 
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
 		logger.info("Start of get web driver method");
@@ -47,9 +54,11 @@ public class DriverConfiguration {
 			if (!os.contains("win")) {
 				logger.info("windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
+				cap.setPlatform(Platform.WINDOWS);
 			} else {
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
+				cap.setPlatform(Platform.LINUX);
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
 //			options.addArguments("--headless");
@@ -60,6 +69,7 @@ public class DriverConfiguration {
 			options.setExperimentalOption("prefs", prefs);
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
+			
 
 //			 driver = new ChromeDriver(cap);
 			driver = new RemoteWebDriver(new URL(configUrl), cap);

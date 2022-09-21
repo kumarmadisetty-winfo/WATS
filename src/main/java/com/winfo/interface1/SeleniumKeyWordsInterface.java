@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
 import com.winfo.services.FetchConfigVO;
+import com.winfo.services.FetchMetadataVO;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
@@ -150,6 +151,10 @@ public interface SeleniumKeyWordsInterface {
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String input_value,
 			String password, CustomerProjectDto customerDetails) throws Exception;
+	
+	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3,
+			String input_value, String password,CustomerProjectDto customerDetails) throws Exception;
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception;
@@ -287,12 +292,12 @@ public interface SeleniumKeyWordsInterface {
 			throws Exception;
 
 	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api) throws Exception;
+			ApiValidationVO api,CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception;
 
 	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, ApiValidationVO api, boolean validationFlag, CustomerProjectDto customerDetails)
 			throws IOException, DocumentException, com.lowagie.text.DocumentException;
 
-	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api);
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) throws Exception;
 
 }
