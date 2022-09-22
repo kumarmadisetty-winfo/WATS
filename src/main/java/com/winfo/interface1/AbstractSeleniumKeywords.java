@@ -46,6 +46,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -147,6 +148,7 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
+			checkReloadStatus(driver);
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			String fileExtension = source.getName();
@@ -166,6 +168,7 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + "/" + imageName;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
 			logger.info("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
@@ -1482,6 +1485,16 @@ public abstract class AbstractSeleniumKeywords {
 		}
 		document.add(table1);
 		document.newPage();
+	}
+	
+	private void checkReloadStatus(WebDriver driver) throws InterruptedException {
+
+		boolean flag = false;
+		while(!flag){
+			JavascriptExecutor j = (JavascriptExecutor) driver;
+			flag = j.executeScript("return document.readyState").toString().equals("complete");
+			Thread.sleep(1000);
+		}
 	}
 
 }
