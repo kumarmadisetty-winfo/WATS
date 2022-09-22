@@ -1500,7 +1500,6 @@ public abstract class AbstractSeleniumKeywords {
 		while(!flag && count<=10){
 			JavascriptExecutor j = (JavascriptExecutor) driver;
 			flag = j.executeScript("return document.readyState").toString().equals("complete");
-			System.out.println("hey");
 			Thread.sleep(1000);
 			count++;
 		}
