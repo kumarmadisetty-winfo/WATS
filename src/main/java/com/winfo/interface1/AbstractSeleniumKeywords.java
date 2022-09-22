@@ -183,10 +183,11 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public String screenshotFail(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		String imageName = null;
 		String folderName = null;
 		try {
+			checkReloadStatus(driver);
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
@@ -206,8 +207,8 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during screenshotFail Action. " + scripNumber);
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			throw e;
 		}
 	}
 
