@@ -144,7 +144,7 @@ public abstract class AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 
 	public String screenshot(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
 		try {
@@ -171,12 +171,13 @@ public abstract class AbstractSeleniumKeywords {
 			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
-			throw e;
+			return e.getMessage();
+//			throw e;
 		}
 	}
 
 	public String screenshotFail(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
 		try {
@@ -202,7 +203,8 @@ public abstract class AbstractSeleniumKeywords {
 			e.printStackTrace();
 			logger.error("Failed during screenshotFail Action. " + scripNumber);
 			logger.error("Exception while taking Screenshot" + e.getMessage());
-			throw e;
+			return e.getMessage();
+//			throw e;
 		}
 	}
 
