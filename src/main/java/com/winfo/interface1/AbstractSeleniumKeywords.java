@@ -199,6 +199,7 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + "/" + imageName;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
+			e.printStackTrace();
 			logger.error("Failed during screenshotFail Action. " + scripNumber);
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			throw e;
