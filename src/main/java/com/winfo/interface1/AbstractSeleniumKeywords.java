@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,6 +28,8 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -47,9 +50,13 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -144,7 +151,7 @@ public abstract class AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 
 	public String screenshot(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		String imageName = null;
 		String folderName = null;
 		try {
@@ -170,8 +177,8 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
-			logger.info("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			throw e;
 		}
 	}
 
@@ -1488,12 +1495,14 @@ public abstract class AbstractSeleniumKeywords {
 	}
 	
 	private void checkReloadStatus(WebDriver driver) throws InterruptedException {
-
 		boolean flag = false;
-		while(!flag){
+		int count = 0;
+		while(!flag && count<=10){
 			JavascriptExecutor j = (JavascriptExecutor) driver;
 			flag = j.executeScript("return document.readyState").toString().equals("complete");
+			System.out.println("hey");
 			Thread.sleep(1000);
+			count++;
 		}
 	}
 
