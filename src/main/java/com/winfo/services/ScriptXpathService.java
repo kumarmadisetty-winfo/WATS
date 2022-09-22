@@ -19,9 +19,13 @@ public class ScriptXpathService {
 	public void saveXpathParams(String scriptID, String line_number, String xpath) {
 		dao.saveXpathParams(scriptID,line_number,xpath);
 	}
+//	@Transactional
+//	public String getXpathParams(String scriptID, String line_number) {
+//		return dao.getXpathParams(scriptID,line_number);
+//	}
 	@Transactional
-	public String getXpathParams(String scriptID, String line_number) {
-		return dao.getXpathParams(scriptID,line_number);
+	public String getXpathParams(String scriptID, String line_number, String testSetLine) {
+		return dao.getXpathParams(scriptID,line_number,testSetLine);
 	}
 	@Transactional
 	public String checkValidScript(String scriptID) {

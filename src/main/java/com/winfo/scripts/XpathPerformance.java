@@ -120,9 +120,11 @@ public class XpathPerformance {
 //         int count=0;
 		String action = fetchMetadataVO.getAction();
 		String scriptID = fetchMetadataVO.getScriptId();
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
 
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
@@ -193,8 +195,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -268,8 +271,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -315,8 +319,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -363,8 +368,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -414,8 +420,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -464,8 +471,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -512,8 +520,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+		log.info("xpathlocation is" +xpathlocation);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -530,7 +539,6 @@ public class XpathPerformance {
 				System.out.println("it's working ClickLink.......");
 
 			} catch (Exception e) {
-
 				if (count == 0) {
 					count = 1;
 					System.out.println(" The Count Value is : " + count);
@@ -643,8 +651,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -693,8 +702,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -743,8 +753,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -848,8 +859,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -911,8 +923,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -959,8 +972,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -1482,8 +1496,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 
 			String param1r = xpathlocation.replace("param1", param1);
@@ -1545,8 +1560,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("keysToSend", keysToSend);
@@ -1594,8 +1610,9 @@ public class XpathPerformance {
 		String action = fetchMetadataVO.getAction();
 
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String param2r = param1r.replace("param2", param2);
@@ -1664,8 +1681,9 @@ public class XpathPerformance {
 		String action = fetchMetadataVO.getAction();
 
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String param2r = param1r.replace("param2", param2);
@@ -1973,8 +1991,9 @@ public class XpathPerformance {
 		String action = fetchMetadataVO.getAction();
 
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 
@@ -2023,8 +2042,9 @@ public class XpathPerformance {
 		String action = fetchMetadataVO.getAction();
 
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
@@ -2118,8 +2138,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("inputParam", inputParam);
 			try {
@@ -2175,8 +2196,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("inputParam", inputParam);
 			try {
@@ -2217,8 +2239,9 @@ public class XpathPerformance {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
-
+//		String xpathlocation = service.getXpathParams(scriptID, lineNumber);
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("inputParam1", inputParam1);
 			String paramsr = param1r.replace("inputParam2", inputParam2);
