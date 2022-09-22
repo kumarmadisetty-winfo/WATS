@@ -46,6 +46,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -143,10 +144,11 @@ public abstract class AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 
 	public String screenshot(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		String imageName = null;
 		String folderName = null;
 		try {
+			checkReloadStatus(driver);
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			String fileExtension = source.getName();
@@ -166,17 +168,19 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + "/" + imageName;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
-			logger.info("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			throw e;
 		}
 	}
 
 	public String screenshotFail(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		String imageName = null;
 		String folderName = null;
 		try {
+			checkReloadStatus(driver);
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
@@ -195,9 +199,10 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + "/" + imageName;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
+			e.printStackTrace();
 			logger.error("Failed during screenshotFail Action. " + scripNumber);
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			throw e;
 		}
 	}
 
@@ -1482,6 +1487,17 @@ public abstract class AbstractSeleniumKeywords {
 		}
 		document.add(table1);
 		document.newPage();
+	}
+	
+	private void checkReloadStatus(WebDriver driver) throws InterruptedException {
+		boolean flag = false;
+		int count = 0;
+		while(!flag && count<=10){
+			JavascriptExecutor j = (JavascriptExecutor) driver;
+			flag = j.executeScript("return document.readyState").toString().equals("complete");
+			Thread.sleep(1000);
+			count++;
+		}
 	}
 
 }
