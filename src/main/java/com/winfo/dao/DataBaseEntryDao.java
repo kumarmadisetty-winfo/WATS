@@ -1498,7 +1498,7 @@ public class DataBaseEntryDao {
 		List<String> listOfLookUpCode = null;
 		try {
 			Session session = em.unwrap(Session.class);
-			String query = "select lookup_code from WATS_PROD.win_ta_lookup_codes where lookup_id = " + apiValidationId
+			String query = "select lookup_code from win_ta_lookup_codes where lookup_id = " + apiValidationId
 					+ " and lookup_code in ('" + lookUpCode + "')";
 			listOfLookUpCode = session.createSQLQuery(query).getResultList();
 		} catch (Exception e) {

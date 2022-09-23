@@ -35,6 +35,7 @@ public class PostApiValidationMigrationService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String finalResult = result.block();
 			ResponseDto response = objectMapper.readValue(finalResult, ResponseDto.class);
+			System.out.println("response " +response.toString());
 			return response;
 		}
 		
@@ -51,7 +52,7 @@ public class PostApiValidationMigrationService {
 			List<LookUpCodeVO> listOfLookUpCodesData = Arrays
 					.asList(objectMapper.convertValue(lookUpCodesData, LookUpCodeVO[].class));
 			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getCustomerName());
-			return webClientService(listOfLookUpCodesData, "http://localhost:38080/wats");
+			return webClientService(listOfLookUpCodesData, customerUrl);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
