@@ -148,9 +148,16 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			checkReloadStatus(driver);
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
+			
+			TakesScreenshot ts;
+			File source;
+			try {
+				ts = (TakesScreenshot) driver;
+				source = ts.getScreenshotAs(OutputType.FILE);
+			}catch(Exception e) {
+				ts = getScreenShotObject(driver);
+				source = ts.getScreenshotAs(OutputType.FILE);
+			}
 			String fileExtension = source.getName();
 
 			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
@@ -181,9 +188,15 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			checkReloadStatus(driver);
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
+			TakesScreenshot ts;
+			File source;
+			try {
+				ts = (TakesScreenshot) driver;
+				source = ts.getScreenshotAs(OutputType.FILE);
+			}catch(Exception e) {
+				ts = getScreenShotObject(driver);
+				source = ts.getScreenshotAs(OutputType.FILE);
+			}
 
 			String fileExtension = source.getName();
 
@@ -1489,7 +1502,7 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 	}
 	
-	private void checkReloadStatus(WebDriver driver) throws InterruptedException {
+	private TakesScreenshot getScreenShotObject(WebDriver driver) throws InterruptedException {
 		boolean flag = false;
 		int count = 0;
 		while(!flag && count<=17){
@@ -1499,6 +1512,8 @@ public abstract class AbstractSeleniumKeywords {
 			count++;
 		}
 		Thread.sleep(3000);
+		
+		return (TakesScreenshot) driver;
 	}
 
 }
