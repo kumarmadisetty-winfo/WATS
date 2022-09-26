@@ -5,29 +5,29 @@ import java.util.List;
 
 public class ApiValidationMigrationDto {
 	
-	private List<Integer> lookUpCodeIds= new ArrayList<>();
+	private List<Integer> validation_lookup_codes= new ArrayList<>();
 	
-	private String customerName;
+	private String targetEnvironment;
 
-	public List<Integer> getLookUpCodeIds() {
-		return lookUpCodeIds;
+	public List<Integer> getValidation_lookup_codes() {
+		return validation_lookup_codes;
 	}
 
-	public void setLookUpCodeIds(List<Integer> lookUpCodeIds) {
-		this.lookUpCodeIds = lookUpCodeIds;
+	public void setValidation_lookup_codes(List<Integer> lookUpCodeIds) {
+		this.validation_lookup_codes = lookUpCodeIds;
 	}
 
-	public String getCustomerName() {
-		return customerName;
+	public String getTargetEnvironment() {
+		return targetEnvironment;
 	}
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setTargetEnvironment(String customerName) {
+		this.targetEnvironment = customerName;
 	}
 
 	public ApiValidationMigrationDto(List<Integer> lookUpCodeIds, String customerName) {
-		this.lookUpCodeIds = lookUpCodeIds;
-		this.customerName = customerName;
+		this.validation_lookup_codes = lookUpCodeIds;
+		this.targetEnvironment = customerName;
 	}
 
 	public ApiValidationMigrationDto() {

@@ -35,7 +35,6 @@ public class PostApiValidationMigrationService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String finalResult = result.block();
 			ResponseDto response = objectMapper.readValue(finalResult, ResponseDto.class);
-			System.out.println("response " +response.toString());
 			return response;
 		}
 		
@@ -47,11 +46,11 @@ public class PostApiValidationMigrationService {
 		try {
 			int apiValidationId = dataBaseEntry.getApiValidationIdActionId();
 			List<Object> lookUpCodesData = dataBaseEntry.getApiValidationDataFromLookupsCode(apiValidationId,
-					apiValidationMigration.getLookUpCodeIds());
+					apiValidationMigration.getValidation_lookup_codes());
 			ObjectMapper objectMapper = new ObjectMapper();
 			List<LookUpCodeVO> listOfLookUpCodesData = Arrays
 					.asList(objectMapper.convertValue(lookUpCodesData, LookUpCodeVO[].class));
-			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getCustomerName());
+			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getTargetEnvironment());
 			return webClientService(listOfLookUpCodesData, customerUrl);
 		} catch (Exception e) {
 			e.printStackTrace();

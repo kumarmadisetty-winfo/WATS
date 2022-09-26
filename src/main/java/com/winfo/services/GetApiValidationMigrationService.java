@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -34,8 +35,16 @@ public class GetApiValidationMigrationService {
 			String lookUpCodes = String.join("','", listOfLookUpCodeName);
 			List<String> existsLookUpCode = dataBaseEntry.checkIfValidationExists(apiValidationId,lookUpCodes);
 			if(!existsLookUpCode.isEmpty()) {
+				List<String> lookUpCodeId = new ArrayList();
+				String existsLookUpCodeId = null;
 				String existsLookUpCodeName = String.join(",", existsLookUpCode);
-				return new ResponseDto(409, Constants.CONFLICT, existsLookUpCodeName);
+				for(LookUpCode lookcode: listOfLookUpCodesData) {
+					lookUpCodeId.add(lookcode.getLookUpCodeId().toString());
+					 existsLookUpCodeId=String.join(",", lookUpCodeId);
+					System.out.println("existsLookUpCodeId " +existsLookUpCodeId );
+				}
+				return new ResponseDto(409, Constants.CONFLICT,existsLookUpCodeId);
+
 			}
 			listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
 				listOfLookUpCodes.setLookUpCodeId(null);
