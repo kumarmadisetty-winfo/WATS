@@ -1492,7 +1492,7 @@ public abstract class AbstractSeleniumKeywords {
 	private void checkReloadStatus(WebDriver driver) throws InterruptedException {
 		boolean flag = false;
 		int count = 0;
-		while(!flag && count<=20){
+		while(!flag && count<=17){
 			JavascriptExecutor j = (JavascriptExecutor) driver;
 			flag = j.executeScript("return document.readyState").toString().equals("complete");
 			Thread.sleep(1000);
