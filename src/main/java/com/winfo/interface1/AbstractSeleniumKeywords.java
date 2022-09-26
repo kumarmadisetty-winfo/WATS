@@ -46,7 +46,6 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -148,16 +147,8 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			
-			TakesScreenshot ts;
-			File source;
-			try {
-				ts = (TakesScreenshot) driver;
-				source = ts.getScreenshotAs(OutputType.FILE);
-			}catch(Exception e) {
-				ts = getScreenShotObject(driver);
-				source = ts.getScreenshotAs(OutputType.FILE);
-			}
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
 			String fileExtension = source.getName();
 
 			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
@@ -188,15 +179,8 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			TakesScreenshot ts;
-			File source;
-			try {
-				ts = (TakesScreenshot) driver;
-				source = ts.getScreenshotAs(OutputType.FILE);
-			}catch(Exception e) {
-				ts = getScreenShotObject(driver);
-				source = ts.getScreenshotAs(OutputType.FILE);
-			}
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
 
 			String fileExtension = source.getName();
 
@@ -1501,19 +1485,6 @@ public abstract class AbstractSeleniumKeywords {
 		document.add(table1);
 		document.newPage();
 	}
-	
-	private TakesScreenshot getScreenShotObject(WebDriver driver) throws InterruptedException {
-		boolean flag = false;
-		int count = 0;
-		while(!flag && count<=17){
-			JavascriptExecutor j = (JavascriptExecutor) driver;
-			flag = j.executeScript("return document.readyState").toString().equals("complete");
-			Thread.sleep(1000);
-			count++;
-		}
-		Thread.sleep(3000);
-		
-		return (TakesScreenshot) driver;
-	}
+
 
 }
