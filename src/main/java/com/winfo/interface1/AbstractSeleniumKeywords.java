@@ -46,7 +46,6 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -148,7 +147,6 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			checkReloadStatus(driver);
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			String fileExtension = source.getName();
@@ -181,7 +179,6 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			checkReloadStatus(driver);
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 
@@ -285,23 +282,21 @@ public abstract class AbstractSeleniumKeywords {
 					File file = new File(screenshotPath + File.separator + imageName);
 					logger.info("Image Name ****** "+imageName);
 					logger.info(file.exists() + "FileExist or not ******" + file.getPath());
-					if (!file.exists()) {
-						try (final InputStream stream = getResponse.getInputStream();
-								final OutputStream outputStream = new FileOutputStream(file.getPath())) {
+					try (final InputStream stream = getResponse.getInputStream();
+							final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
-							// final OutputStream outputStream = Files.newOutputStream(file.toPath(),
-							// CREATE_NEW)) {
-							// use fileStream
-							byte[] buf = new byte[8192];
-							int bytesRead;
-							while ((bytesRead = stream.read(buf)) > 0) {
-								outputStream.write(buf, 0, bytesRead);
-							}
-						} catch (IOException e1) {
-							e1.printStackTrace();
-							throw new WatsEBSCustomException(500,
-									"Exception occured while read or write screenshot from Object Storage", e1);
+						// final OutputStream outputStream = Files.newOutputStream(file.toPath(),
+						// CREATE_NEW)) {
+						// use fileStream
+						byte[] buf = new byte[8192];
+						int bytesRead;
+						while ((bytesRead = stream.read(buf)) > 0) {
+							outputStream.write(buf, 0, bytesRead);
 						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						throw new WatsEBSCustomException(500,
+								"Exception occured while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
@@ -1490,16 +1485,6 @@ public abstract class AbstractSeleniumKeywords {
 		document.add(table1);
 		document.newPage();
 	}
-	
-	private void checkReloadStatus(WebDriver driver) throws InterruptedException {
-		boolean flag = false;
-		int count = 0;
-		while(!flag && count<=10){
-			JavascriptExecutor j = (JavascriptExecutor) driver;
-			flag = j.executeScript("return document.readyState").toString().equals("complete");
-			Thread.sleep(1000);
-			count++;
-		}
-	}
+
 
 }
