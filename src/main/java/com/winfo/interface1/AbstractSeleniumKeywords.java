@@ -406,7 +406,7 @@ public abstract class AbstractSeleniumKeywords {
 				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
 				if (seqNumMap.get(seqNum.toString()).equals(FAIL)) {
 					if (!filesMap.containsKey(seqNum)) {
-						filesMap.put(seqNum, new ArrayList<>());
+						filesMap.put(seqNum, new ArrayList<File>());
 					}
 					filesMap.get(seqNum).add(newFile);
 					targetFailedPdf.add(newFile.getName());
@@ -582,7 +582,7 @@ public abstract class AbstractSeleniumKeywords {
 					generateDetailsPDF(document, watsLogo, passcount, failcount, others, writer);
 					String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 					if (API_TESTING.equalsIgnoreCase(checkPackage)) {
-						Map<Integer, Integer> mapOfResponseCodeAndCount = new HashMap<>();
+						Map<Integer, Integer> mapOfResponseCodeAndCount = new HashMap<Integer,Integer>();
 						ObjectMapper objectMapper = new ObjectMapper();
 						objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 						List<String> responseCodeList = dynamicnumber.getResponseCode(customerDetails.getTestSetId());
@@ -1195,7 +1195,7 @@ public abstract class AbstractSeleniumKeywords {
 		// set the cell alignment
 
 		cell.setUseVariableBorders(true);
-		if (text.equalsIgnoreCase(STATUS)) {
+		if (STATUS.equalsIgnoreCase(text)) {
 			cell.setBorderWidthLeft(0.3f);
 			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
 			cell.setBorderWidthTop(0.3f);
@@ -1204,14 +1204,14 @@ public abstract class AbstractSeleniumKeywords {
 			cell.setBorderColorRight(new BaseColor(230, 225, 225));
 			cell.setBorderWidthBottom(0.3f);
 			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		} else if (text.equalsIgnoreCase(TOTAL) || text.equalsIgnoreCase(PERCENTAGE)) {
+		} else if (TOTAL.equalsIgnoreCase(text) || PERCENTAGE.equalsIgnoreCase(text)) {
 			cell.setBorderWidthTop(0.3f);
 			cell.setBorderColorTop(new BaseColor(230, 225, 225));
 			cell.setBorderWidthRight(0.3f);
 			cell.setBorderColorRight(new BaseColor(230, 225, 225));
 			cell.setBorderWidthBottom(0.3f);
 			cell.setBorderColorBottom(new BaseColor(230, 225, 225));
-		} else if (text.equalsIgnoreCase(PASSED) || text.equalsIgnoreCase(FAILED)) {
+		} else if (PASSED.equalsIgnoreCase(text) || FAILED.equalsIgnoreCase(text)) {
 			cell.setBorderWidthLeft(0.3f);
 			cell.setBorderColorLeft(new BaseColor(230, 225, 225));
 			cell.setBorderWidthRight(0.3f);
@@ -1323,7 +1323,9 @@ public abstract class AbstractSeleniumKeywords {
 						String objectName = listIt.next();
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
-						logger.info("DELETED MARKER " + getResponse.getIsDeleteMarker());
+						if(getResponse != null) {
+							logger.info("DELETED MARKER " + getResponse.getIsDeleteMarker());
+						}
 					}
 				} else {
 					logger.info("Screenshot is not present");
@@ -1408,7 +1410,7 @@ public abstract class AbstractSeleniumKeywords {
 				try {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
-					logger.error(se.getMessage());
+					logger.error(se);
 				}
 			} else {
 				logger.error("Folder exist");
