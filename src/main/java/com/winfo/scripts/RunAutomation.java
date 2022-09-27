@@ -1005,12 +1005,11 @@ public class RunAutomation {
 										&& !message.startsWith("Course Title")) {
 
 									fetchConfigVO.setErrormessage(message);
-									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "",
-											fetchMetadataVO, fetchConfigVO, customerDetails);
+									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, fetchMetadataVO,
+											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO,
-										fetchConfigVO, customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 

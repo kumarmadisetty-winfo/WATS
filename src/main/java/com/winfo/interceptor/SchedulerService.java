@@ -12,7 +12,7 @@ import com.winfo.services.VMDetailesService;
 
 @Component
 public class SchedulerService {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger log = Logger.getLogger(SchedulerService.class);
 	@Autowired
 	private VmInstanceDAO vmInstanceDAO;
 	@Autowired
