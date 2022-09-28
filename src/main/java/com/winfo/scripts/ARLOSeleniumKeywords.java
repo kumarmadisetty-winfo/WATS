@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,12 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.log4j.Logger;
 import org.bytedeco.javacpp.avcodec;
@@ -310,57 +304,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		}
 		return fileNameList;
-	}
-
-	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			CustomerProjectDto customerDetails) throws IOException {
-		List<String> fileNameList = null;
-		String customerName = customerDetails.getCustomerName();
-		String testRunName = customerDetails.getTestSetName();
-		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO, customerDetails);
-
-		for (String image : fileNameList) {
-
-			FileInputStream inputStream = new FileInputStream(fetchConfigVO.getScreenshot_path() + File.separator
-					+ customerName + File.separator + testRunName + File.separator + image);
-			BufferedImage inputImage = ImageIO.read(inputStream);
-
-			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
-			jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-			jpegParams.setCompressionQuality(.4f);
-
-			final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
-			// specifies where the jpg image has to be written
-			writer.setOutput(new FileImageOutputStream(new File("C:\\Kaushik" + File.separator + image)));
-
-			BufferedImage convertedImg = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(),
-					BufferedImage.TYPE_INT_RGB);
-			convertedImg.getGraphics().drawImage(inputImage, 0, 0, null);
-
-			// writes the file with given compression level
-			// from your JPEGImageWriteParam instance
-			writer.write(null, new IIOImage(convertedImg, null, null), jpegParams);
-
-//			BufferedImage originalImage = ImageIO.read(new File(Folder+image));
-//			int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-
-//			BufferedImage resizeImageGif = resizeImage(originalImage, type);
-//			ImageIO.write(resizeImageGif, "jpg", new File("C:\\Kaushik"+File.separator+image));
-
-			/*
-			 * BufferedImage resizeImagePng = resizeImage(originalImage, type);
-			 * ImageIO.write(resizeImagePng, "png", new File("c:\\image\\mkyong_png.jpg"));
-			 * 
-			 * BufferedImage resizeImageHintJpg = resizeImageWithHint(originalImage, type);
-			 * ImageIO.write(resizeImageHintJpg, "jpg", new
-			 * File("c:\\image\\mkyong_hint_jpg.jpg"));
-			 * 
-			 * BufferedImage resizeImageHintPng = resizeImageWithHint(originalImage, type);
-			 * ImageIO.write(resizeImageHintPng, "png", new
-			 * File("c:\\image\\mkyong_hint_png.jpg"));
-			 */
-		}
-
 	}
 
 	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
@@ -5433,7 +5376,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				logger.info("Clicked Expand Succesfully.");
 			} else {
 				waittill.click();
-				logger.info("");
 				logger.info("Clicked Expand Succesfully.");
 			}
 		} catch (StaleElementReferenceException e) {
