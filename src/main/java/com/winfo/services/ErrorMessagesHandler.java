@@ -297,6 +297,7 @@ public class ErrorMessagesHandler {
 				// new changes-errorMessage added to else block
 				fetchConfigVO.setErrormessage(errorMessage);
 			}
+			fetchMetadataVO.setLineErrorMsg(errorMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
