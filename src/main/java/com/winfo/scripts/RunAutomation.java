@@ -394,10 +394,9 @@ public class RunAutomation {
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
 		try {
-			boolean actionContainsExcel = dataBaseEntry
-					.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			actionContainsExcel = dataBaseEntry.checkActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
-			String operatingSystem = actionContainsExcel ? "windows" : null;
+			boolean actionContainsExcel = dataBaseEntry.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
+			boolean actionContainsSF = dataBaseEntry.checkActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
+			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails);
@@ -1308,20 +1307,12 @@ public class RunAutomation {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									test_script_param_id, "Pass");
 							fetchMetadataVO.setStatus("Pass");
-
-//							if (validationFlag != null && !validationFlag) {
-//								dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
-//										test_script_param_id, "Fail", "");
-//							}
-//							dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 						} catch (Exception e) {
 							System.out.println("e");
 						}
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
-//						String checkPackage = dataBaseEntry.getPackage(test_set_id);
-//						if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 							FetchScriptVO post = new FetchScriptVO();
 							post.setP_test_set_id(test_set_id);
 							post.setP_status("Pass");
@@ -1374,36 +1365,6 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 										.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
 							}
-//						} else {
-//							Date enddate = new Date();
-//							fetchConfigVO.setEndtime(enddate);
-//							FetchScriptVO post = new FetchScriptVO();
-//							post.setP_test_set_id(test_set_id);
-//							if (validationFlag) {
-//								post.setP_status("Pass");
-//							} else {
-//								post.setP_status("Fail");
-//							}
-//							post.setP_script_id(script_id);
-//							post.setP_test_set_line_id(test_set_line_id);
-//							post.setP_pass_path(passurl);
-//							post.setP_fail_path(failurl);
-//							post.setP_exception_path(detailurl);
-//							post.setP_test_set_line_path(scripturl);
-//							dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-//							dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
-//							if (!validationFlag) {
-//								int failedScriptRunCount = limitScriptExecutionService
-//										.getFailedScriptRunCount(test_set_line_id, test_set_id);
-//								seleniumFactory.getInstanceObj(instanceName).createDriverFailedPdf(fetchMetadataListVO,
-//										fetchConfigVO,
-//										seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", api,
-//										validationFlag, customerDetails);
-//							} else {
-//								seleniumFactory.getInstanceObj(instanceName).createDriverFailedPdf(fetchMetadataListVO,
-//										fetchConfigVO, seq_num + "_" + script_Number + ".pdf", api, validationFlag, customerDetails);
-//							}
-//						}
 					}
 
 				} catch (Exception e) {
@@ -1420,8 +1381,6 @@ public class RunAutomation {
 					isError = true;
 				}
 				if (isError) {
-//					String checkPackage = dataBaseEntry.getPackage(test_set_id);
-//					if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(test_set_id);
 						post.setP_status("Fail");
@@ -1450,33 +1409,6 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
 						}
-//					} else {
-//						Date enddate = new Date();
-//						fetchConfigVO.setEndtime(enddate);
-//						FetchScriptVO post = new FetchScriptVO();
-//						post.setP_test_set_id(test_set_id);
-//						if (validationFlag) {
-//							post.setP_status("Pass");
-//						} else {
-//							post.setP_status("Fail");
-//						}
-//						post.setP_script_id(script_id);
-//						post.setP_test_set_line_id(test_set_line_id);
-//						post.setP_pass_path(passurl);
-//						post.setP_fail_path(failurl);
-//						post.setP_exception_path(detailurl);
-//						post.setP_test_set_line_path(scripturl);
-//						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-//						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
-//
-//						int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
-//								test_set_id);
-//						seleniumFactory.getInstanceObj(instanceName).createDriverFailedPdf(fetchMetadataListVO,
-//								fetchConfigVO, seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf",
-//								api, validationFlag, customerDetails);
-//						dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id,
-//								"Fail", "");
-//					}
 					return;
 				}
 
