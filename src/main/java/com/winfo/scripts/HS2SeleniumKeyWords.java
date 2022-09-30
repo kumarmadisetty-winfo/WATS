@@ -17234,24 +17234,25 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
-            
-            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-            WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+value1+"']/following::input[1]"));
-            Thread.sleep(1000);
-        //    wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+value1+"']/following::input[1]"), value1));
-            Actions actions = new Actions(driver);
-            actions.moveToElement(waittill).build().perform();
-            typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-            screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
-            return;
 
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebElement waittill = driver.findElement(
+					By.xpath("//*[text()='" + param1 + "']/following::*[text()='" + value1 + "']/following::input[1]"));
+			Thread.sleep(1000);
+			// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+value1+"']/following::input[1]"),
+			// value1));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
+			screenshot(driver, fetchMetadataVO, customerDetails);
+			return;
 
-
-       } catch (Exception e) {
-            System.out.println(e);
-            logger.error("Failed during Click action.");
-            screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO,customerDetails);
-        }
+		} catch (Exception e) {
+			System.out.println(e);
+			logger.error("Failed during Click action.");
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			throw e;
+		}
 	}
 
 	private String copyValuesWithSpc(String value) {
