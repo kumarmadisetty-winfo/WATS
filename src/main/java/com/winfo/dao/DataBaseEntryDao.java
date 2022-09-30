@@ -1148,7 +1148,7 @@ public class DataBaseEntryDao {
 	}
 
 	public Integer findGraceAllowance(BigDecimal subscriptionId) {
-		Integer sum = null;
+		BigDecimal sum = null;
 		String qry = "select sum(round(WTC.GRACE_ALLOWANCE*WS.quantity/100)) \r\n"
 				+ "        from wats_subscription WS,WIN_TA_CUSTOMERS WTC\r\n"
 				+ "        where uom = 'Script' and status = 'Active'\r\n"
@@ -1158,11 +1158,11 @@ public class DataBaseEntryDao {
 		try {
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(qry);
-			sum = (Integer) query.getSingleResult();
+			sum = (BigDecimal) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sum;
+		return sum.intValue();
 	}
 
 	public void updateSubscriptionExecuteAndBalance(BigDecimal executedCount, BigDecimal updatedBalanceCount,

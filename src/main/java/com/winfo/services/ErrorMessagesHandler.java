@@ -47,13 +47,6 @@ public class ErrorMessagesHandler {
 				fetchConfigVO.setErrormessage(errorMessage);
 				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
 						errorMessage);
-			} else if (actionName.equalsIgnoreCase("Table SendKeys")) {
-				errorMessage = "Failed at Table SendKeys => Not able to enter the value in " + param1 + " and "
-						+ param2;
-				fetchConfigVO.setErrormessage(errorMessage);
-				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
-						errorMessage);
-
 			} else if (actionName.equalsIgnoreCase("multiplelinestableSendKeys")) {
 				errorMessage = "Failed at multiplelinestableSendKeys => Not able to enter the value in " + param1
 						+ " and " + param2;
@@ -304,6 +297,7 @@ public class ErrorMessagesHandler {
 				// new changes-errorMessage added to else block
 				fetchConfigVO.setErrormessage(errorMessage);
 			}
+			fetchMetadataVO.setLineErrorMsg(errorMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

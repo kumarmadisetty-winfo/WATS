@@ -491,8 +491,10 @@ public class RunAutomation {
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
+			String checkValidScript = "Yes";
+
 			//String checkValidScript = xpathService.checkValidScript(scriptID);
-			String checkValidScript = "NO";
+
 			log.info("Valid script check.......::" + checkValidScript);
 
 			Boolean validationFlag = null;
@@ -817,6 +819,8 @@ public class RunAutomation {
 								}
 
 							}
+							
+
 
 						case "clickCheckbox":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
@@ -835,6 +839,10 @@ public class RunAutomation {
 											customerDetails);
 									break;
 								}
+							}
+							else
+							{
+								break;
 							}
 
 						case "clickRadiobutton":
@@ -857,6 +865,10 @@ public class RunAutomation {
 								}
 
 							}
+							else
+							{
+								break;
+							}
 						case "selectAValue":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
@@ -877,25 +889,29 @@ public class RunAutomation {
 								}
 
 							}
+							else
+							{
+								break;
+							}
 
 						case "clickTableLink":
 							try {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
-									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, count, customerDetails);
+									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											count, customerDetails);
 									break;
 								} else {
 
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1,
-										param2, param3, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
+										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
 							}
-								case "clickLink":
+              
+						case "clickLink":
 							try {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
@@ -911,7 +927,6 @@ public class RunAutomation {
 										fetchMetadataVO, fetchConfigVO,customerDetails);
 								break;
 							}
-
 						case "clickNotificationLink":
 							seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -1049,6 +1064,10 @@ public class RunAutomation {
 									break;
 								}
 							}
+							else
+							{
+								break;
+							}
 
 						case "mousehover":
 							try {
@@ -1141,6 +1160,10 @@ public class RunAutomation {
 											customerDetails);
 									break;
 								}
+							}
+							else
+							{
+								break;
 							}
 
 						case "copy":
