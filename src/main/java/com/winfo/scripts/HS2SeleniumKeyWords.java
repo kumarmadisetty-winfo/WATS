@@ -17242,7 +17242,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
             Actions actions = new Actions(driver);
             actions.moveToElement(waittill).build().perform();
             typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-            screenshot(driver, "", fetchMetadataVO, fetchConfigVO,customerDetails);
+            screenshot(driver, fetchMetadataVO, customerDetails);
             return;
 
 
@@ -17250,7 +17250,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
        } catch (Exception e) {
             System.out.println(e);
             logger.error("Failed during Click action.");
-            screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO,customerDetails);
+            screenshotFail(driver, fetchMetadataVO, customerDetails);
         }
 	}
 
