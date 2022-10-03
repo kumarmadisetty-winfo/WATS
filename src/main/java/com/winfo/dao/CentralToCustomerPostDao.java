@@ -9,17 +9,19 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.model.LookUp;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.vo.DomGenericResponseBean;
 
 @Repository
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class CentralToCustomerPostDao {
 
 	@Autowired
 	private EntityManager entityManager;
 
-	@SuppressWarnings({"unchecked","rawtypes"})
 	public DomGenericResponseBean centralRepoData(ScriptMaster master, String scriptnumber, String productversion) {
 		Session session = entityManager.unwrap(Session.class);
 		DomGenericResponseBean response = new DomGenericResponseBean();
@@ -52,6 +54,32 @@ public class CentralToCustomerPostDao {
 		}
 
 		return response;
+	}
+	
+	public void insertLookUpObj(LookUp lookUpObj) {
+		entityManager.persist(lookUpObj);
+	}
+	
+	public void insertLookUpCodeObj(LookUpCode lookUpCodeObj) {
+		entityManager.persist(lookUpCodeObj);	
+	}
+	
+	public int checkLookUpCountByLookUpName(String lookUpName) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session
+				.createNativeQuery("Select count(*) FROM WIN_TA_LOOKUPS WHERE LOOKUP_NAME='" + lookUpName + "'");
+
+		return (int) query.getSingleResult();
+
+	}
+
+	public int checkLookUpCodeCountByLookUpCode(String lookUpName, String lookUpCode) {
+
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createNativeQuery("Select count(*) FROM WIN_TA_LOOKUP_CODES WHERE LOOKUP_NAME='"
+				+ lookUpName + "' AND LOOKUP_CODE='" + lookUpCode + "'");
+		
+		return (int) query.getSingleResult();
 	}
 
 }

@@ -81,6 +81,9 @@ public class ScriptMasterDto {
 	private String dependentScriptNum;
 	@JsonProperty("targetApplication")
 	private String targetApplication;
+	
+	@JsonProperty("lookUpVO")
+	private LookUpVO lookUpVO;
 
 	@JsonProperty("metaDataList")
 	private List<ScriptMetaDataDto> metaDataList = new ArrayList<>();
@@ -412,6 +415,14 @@ public class ScriptMasterDto {
 
 	public void setMetaDataList(List<ScriptMetaDataDto> metaDataList) {
 		this.metaDataList = metaDataList;
+	}
+
+	public LookUpVO getLookUpVO() {
+		return lookUpVO;
+	}
+
+	public void setLookUpVO(LookUpVO lookUpVO) {
+		this.lookUpVO = lookUpVO;
 	}
 
 }

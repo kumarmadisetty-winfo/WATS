@@ -2,6 +2,8 @@ package com.winfo.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
@@ -9,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winfo.dao.CentralToCustomerPostDao;
+import com.winfo.model.LookUp;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.WatsMasterDataVOList;
+import com.winfo.vo.LookUpCodeVO;
+import com.winfo.vo.LookUpVO;
 import com.winfo.vo.ScriptMasterDto;
 import com.winfo.vo.ScriptMetaDataDto;
+import com.winfo.vo.WatsMasterDataVOList;
 
 @Service
 public class CentralToCustomerPostService {
@@ -87,10 +93,58 @@ public class CentralToCustomerPostService {
 				master.addMetadata(metadata);
 
 			}
+			LookUpVO lookUpVoObj = masterdata.getLookUpVO();
+			if (lookUpVoObj != null) {
+				String lookUpName = lookUpVoObj.getLookupName() == null ? "" : lookUpVoObj.getLookupName();
+				if (dao.checkLookUpCountByLookUpName(lookUpName) == 0) {
+					LookUp lookUpObj = new LookUp();
+					lookUpObj.setLookUpName(lookUpVoObj.getLookupName());
+					lookUpObj.setLookUpDesc(lookUpVoObj.getLookupDesc());
+					lookUpObj.setCreatedBy(lookUpVoObj.getCreatedBy());
+					lookUpObj.setLastUpdatedBy(lookUpVoObj.getLastUpdatedBy());
+					lookUpObj.setCreationDate(lookUpVoObj.getCreationDate());
+					lookUpObj.setUpdatedDate(lookUpVoObj.getUpdateDate());
+					dao.insertLookUpObj(lookUpObj);
+				}
+				
+				Map<String, LookUpCodeVO> mapOfLookUpCodeVO = lookUpVoObj.getMapOfData();
+				
+				if(mapOfLookUpCodeVO != null) {
+					for(Entry<String, LookUpCodeVO> entry : mapOfLookUpCodeVO.entrySet()) {
+						
+						String lookUpNameKey = entry.getKey();
+						LookUpCodeVO lookUpCodeValue = entry.getValue();
+						if(dao.checkLookUpCountByLookUpName(lookUpNameKey)== 0) {
+							LookUpCode lookUpCodeObj = new LookUpCode();
+							lookUpCodeObj.setLookUpId(lookUpCodeValue.getLookUpId());
+							lookUpCodeObj.setLookUpName(lookUpCodeValue.getLookUpName());
+							lookUpCodeObj.setLookUpCode(lookUpCodeValue.getLookUpCode());
+							lookUpCodeObj.setTargetCode(lookUpCodeValue.getTargetCode());
+							lookUpCodeObj.setMeaning(lookUpCodeValue.getMeaning());
+							lookUpCodeObj.setDescription(lookUpCodeValue.getDescription());
+							lookUpCodeObj.setEffectiveFrom(lookUpCodeValue.getEffectiveFrom());
+							lookUpCodeObj.setEffectiveTo(lookUpCodeValue.getEffectiveTo());
+							lookUpCodeObj.setCreatedBy(lookUpCodeValue.getCreatedBy());
+							lookUpCodeObj.setLastUpdatedBy(lookUpCodeValue.getLastUpdatedBy());
+							lookUpCodeObj.setCreationDate(lookUpCodeValue.getCreationDate());
+							lookUpCodeObj.setUpdateDate(lookUpCodeValue.getUpdateDate());
+							lookUpCodeObj.setProcessCode(lookUpCodeValue.getProcessCode());
+							lookUpCodeObj.setModuleCode(lookUpCodeValue.getModuleCode());
+							lookUpCodeObj.setTargetApplication(lookUpCodeValue.getTargetApplication());
+							
+							dao.insertLookUpCodeObj(lookUpCodeObj);
+						}
+						
+					}
+				}
+				
+			}
+
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
 		}
 
 		return bean;
 
 	}
+
 }
