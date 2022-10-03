@@ -394,8 +394,8 @@ public class RunAutomation {
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
 		try {
-			boolean actionContainsExcel = dataBaseEntry.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			boolean actionContainsSF = dataBaseEntry.checkActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
+			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
+			boolean actionContainsSF = dataBaseEntry.doesActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
 			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;

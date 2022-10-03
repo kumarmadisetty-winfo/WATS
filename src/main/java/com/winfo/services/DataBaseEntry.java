@@ -492,13 +492,13 @@ public class DataBaseEntry {
 		return dao.getTestRunDetails(testSetId);
 	}
 
-	public boolean checkActionContainsExcel(String script_id) {
-		return dao.checkActionContainsExcel(script_id);
+	public boolean doesActionContainsExcel(String scriptId) {
+		return dao.doesActionContainsExcel(scriptId);
 	}
 
-	public boolean checkActionContainsSfApplication(String script_Id) {
+	public boolean doesActionContainsSfApplication(String scriptId) {
 		
-		return dao.checkActionContainsSfApplication(script_Id);
+		return dao.doesActionContainsSfApplication(scriptId);
 	}
 	
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
