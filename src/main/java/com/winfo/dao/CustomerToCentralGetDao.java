@@ -37,6 +37,7 @@ import com.winfo.vo.ScriptMetaDataDto;
 public class CustomerToCentralGetDao {
 
 	private final Logger logger = LogManager.getLogger(CustomerToCentralGetDao.class);
+	private static final String API_VALIDATION = "API_VALIDATION";
 
 	@Autowired
 	private EntityManager entityManager;
@@ -489,13 +490,13 @@ public class CustomerToCentralGetDao {
 			for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
 				ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
 				scriptMetaDataListDto.add(scriptMetaDataDto);
-				if(scriptMetaData.getValidationType().equals("API_VALIDATION")) {
+				if(scriptMetaData.getValidationName() != null && scriptMetaData.getValidationType().equals(API_VALIDATION)) {
 					LookUpCodeVO lookUpCodeObj = dataBaseEntryDao.lookupCode(scriptMetaData.getValidationType(), scriptMetaData.getValidationName());
 					lookUpCodeMap.put(scriptMetaData.getValidationName(), lookUpCodeObj);
-					validationType = "API_VALIDATION";
+					validationType = API_VALIDATION;
 				}
 			}
-			if("API_VALIDATION".equals(validationType)) {
+			if(API_VALIDATION.equals(validationType)) {
 				lookUpVo = dataBaseEntryDao.lookups(validationType, lookUpCodeMap);
 			}
 			scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
