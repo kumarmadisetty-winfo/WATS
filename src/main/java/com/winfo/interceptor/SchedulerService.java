@@ -1,9 +1,4 @@
 package com.winfo.interceptor;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -17,7 +12,7 @@ import com.winfo.services.VMDetailesService;
 
 @Component
 public class SchedulerService {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger log = Logger.getLogger(SchedulerService.class);
 	@Autowired
 	private VmInstanceDAO vmInstanceDAO;
 	@Autowired
@@ -29,8 +24,8 @@ public class SchedulerService {
    @Transactional
    public void schedulingToStopVm() throws Exception {
 	   try {
-	    Boolean scriptsActive=vmInstanceDAO.isAnyScriptsInprogresOrInqueue();
-	    if(!scriptsActive&&flag) {
+	    boolean scriptsActive=vmInstanceDAO.isAnyScriptsInprogresOrInqueue();
+	    if(!scriptsActive && flag) {
 	    	vmDetaliesService.stopInstance();
 	    	log.info("all vms are stooped");
 	    }

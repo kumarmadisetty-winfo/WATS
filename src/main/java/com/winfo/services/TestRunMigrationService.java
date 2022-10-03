@@ -137,20 +137,20 @@ public class TestRunMigrationService {
 							lookUpCodeDataTypes.put(scriptMetaData.getDatatypes(),
 									dataBaseEntryDao.lookupCode(DATATYPES, scriptMetaData.getDatatypes()));
 						}
-						if (!NA.equals(scriptMetaData.getUnique_mandatory())) {
-							lookUpCodeUnique.put(scriptMetaData.getUnique_mandatory().toUpperCase(), dataBaseEntryDao
-									.lookupCode(UNIQUE_MANDATORY, scriptMetaData.getUnique_mandatory()));
+						if (!NA.equals(scriptMetaData.getUniqueMandatory())) {
+							lookUpCodeUnique.put(scriptMetaData.getUniqueMandatory().toUpperCase(), dataBaseEntryDao
+									.lookupCode(UNIQUE_MANDATORY, scriptMetaData.getUniqueMandatory()));
 						}
 
-						if (!NA.equals(scriptMetaData.getValidation_name())) {
-							validationMap.put(scriptMetaData.getValidation_name(),
-									dataBaseEntryDao.lookupCode(scriptMetaData.getValidation_type().toUpperCase(),
-											scriptMetaData.getValidation_name()));
+						if (!NA.equals(scriptMetaData.getValidationName())) {
+							validationMap.put(scriptMetaData.getValidationName(),
+									dataBaseEntryDao.lookupCode(scriptMetaData.getValidationType().toUpperCase(),
+											scriptMetaData.getValidationName()));
 						}
 
-						if (!NA.equals(scriptMetaData.getValidation_type())) {
-							lookUpDataMap.put(scriptMetaData.getValidation_type(), dataBaseEntryDao
-									.lookups(scriptMetaData.getValidation_type().toUpperCase(), validationMap));
+						if (!NA.equals(scriptMetaData.getValidationType())) {
+							lookUpDataMap.put(scriptMetaData.getValidationType(), dataBaseEntryDao
+									.lookups(scriptMetaData.getValidationType().toUpperCase(), validationMap));
 
 						}
 					}

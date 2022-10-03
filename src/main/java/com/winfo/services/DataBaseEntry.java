@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
@@ -56,13 +58,13 @@ public class DataBaseEntry {
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status);
+		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String error_message)
 			throws ClassNotFoundException, SQLException {
-		dao.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, error_message);
+		dao.updateFailedScriptLineStatus(test_script_param_id, error_message);
 	}
 
 	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
@@ -72,7 +74,7 @@ public class DataBaseEntry {
 
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
 			throws ClassNotFoundException, SQLException {
-		return dao.getErrorMessage(sndo, ScriptName, testRunName, fetchConfigVO);
+		return dao.getErrorMessage(sndo, ScriptName, testRunName);
 	}
 
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName)
@@ -82,30 +84,30 @@ public class DataBaseEntry {
 
 	public void updateInProgressScriptStatus(FetchConfigVO fetchConfigVO, String test_set_id, String test_set_line_id)
 			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
+		dao.updateInProgressScriptStatus(test_set_id);
 	}
 
 	public void updateStartTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date start_time1)
 			throws ClassNotFoundException, SQLException {
-		dao.updateStartTime(fetchConfigVO, line_id, test_set_id, start_time1);
+		dao.updateStartTime(line_id, test_set_id, start_time1);
 	}
 
 	public String getTrMode(String args, FetchConfigVO fetchConfigVO) throws SQLException {
-		return dao.getTrMode(args, fetchConfigVO);
+		return dao.getTrMode(args);
 	}
 
 	public String getPassword(String args, String userId, FetchConfigVO fetchConfigVO)
 			throws SQLException, ClassNotFoundException {
-		return dao.getPassword(args, userId, fetchConfigVO);
+		return dao.getPassword(args, userId);
 	}
 
 	public void updateEndTime(FetchConfigVO fetchConfigVO, String line_id, String test_set_id, Date end_time1)
 			throws ClassNotFoundException, SQLException {
-		dao.updateEndTime(fetchConfigVO, line_id, test_set_id, end_time1);
+		dao.updateEndTime(line_id, test_set_id, end_time1);
 	}
 
 	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, CustomerProjectDto customerDetails) throws SQLException {
+			String test_script_param_id, CustomerProjectDto customerDetails) throws SQLException, IOException {
 		dao.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id, customerDetails);
 	}
 
@@ -206,14 +208,17 @@ public class DataBaseEntry {
 		return auditTrial;
 	}
 
+	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
+		dao.updateLineStatusUsingSetIdandIsEnable(testSetId, isEnable);
+	}
+
 	public void updateStatusOfScript(String test_set_line_id, String status) {
 		dao.updateStatusOfScript(test_set_line_id, status);
 	}
 
 	public void updateDefaultMessageForFailedScriptInFirstStep(String testSetLineId, String errMessage) {
 		int firstStepScriptParamId = dao.findFirstStepIdInScript(testSetLineId);
-		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel(),
-				errMessage);
+		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel());
 	}
 
 	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
@@ -366,9 +371,8 @@ public class DataBaseEntry {
 		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
 	}
 
-	public void updateInProgressScriptStatus(String test_set_id, String test_set_line_id, Date startDate)
-			throws ClassNotFoundException, SQLException {
-		dao.updateInProgressScriptStatus(test_set_id, test_set_line_id, startDate);
+	public void updateInProgressScriptStatus(String testSetLineId, Date startDate) {
+		dao.updateInProgressScriptStatus(testSetLineId, startDate);
 	}
 
 	public Date findMinExecutionStartDate(long testSetId) {
@@ -381,13 +385,13 @@ public class DataBaseEntry {
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, message);
+		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String value, String message)
 			throws ClassNotFoundException, SQLException {
-		dao.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, status, value, message);
+		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	@Transactional
@@ -413,7 +417,7 @@ public class DataBaseEntry {
 
 		}
 
-		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.PASS.getLabel())) {
 			return true;
 		} else {
 			return false;
@@ -435,7 +439,7 @@ public class DataBaseEntry {
 
 		}
 
-		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.Pass.getLabel())) {
+		if (testLines.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.PASS.getLabel())) {
 			return true;
 		} else {
 			return false;
@@ -507,7 +511,21 @@ public class DataBaseEntry {
 
 	public void insertRecordInTestSetAttribute(String testSetLineId, String string, String token, String executedBy) {
 		dao.insertRecordInTestSetAttribute(testSetLineId, string, token, executedBy);
-		
+	}
+	public int getApiValidationIdActionId() {
+		return dao.getApiValidationIdActionId();
+	}
+
+	public List<Object> getApiValidationDataFromLookupsCode(int apiValidationId, List<Integer> list) {
+		return dao.getApiValidationDataFromLookupsCode(apiValidationId, list);
+	}
+
+	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
+		return dao.checkIfValidationExists(apiValidationId, lookUpCode);
+	}
+
+	public void insertApiValidation(LookUpCode lookUpCodes) {
+		dao.insertApiValidation(lookUpCodes);
 	}
 
 }

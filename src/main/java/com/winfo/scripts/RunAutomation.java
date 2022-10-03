@@ -310,7 +310,14 @@ public class RunAutomation {
 										post.setP_test_set_line_path(scripturl);
 										failcount = failcount + 1;
 										System.out.println("Came here to check fail condition");
-										dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
+
+//										dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
+
+										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
+												post.getP_status());
+										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
 										int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(
@@ -359,11 +366,8 @@ public class RunAutomation {
 				Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error in Cloud test run method");
-			FetchScriptVO post = new FetchScriptVO();
-			post.setP_status("Fail");
-			dataService.updateTestCaseStatus(post, testSetId, null);
+			log.error("Error in Cloud test run method " + e.getMessage());
+			dataBaseEntry.updateLineStatusUsingSetIdandIsEnable(testSetId, "Y");
 		}
 		return executeTestrunVo;
 	}
@@ -413,7 +417,13 @@ public class RunAutomation {
 				post.setP_fail_path(failurl);
 				post.setP_exception_path(detailurl);
 				post.setP_test_set_line_path(scripturl);
-				dataService.updateTestCaseStatus(post, args, fetchConfigVO);
+
+//				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
+
+				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
+				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
+						customerDetails.getTestSetName());
+
 				failList.add(scriptId);
 			}
 		} finally {
@@ -443,21 +453,19 @@ public class RunAutomation {
 		String actionName = null;
 		String detailurl = null;
 		String scripturl = null;
-		String test_set_id = null;
-		String test_set_line_id = null;
-		String script_id = null;
-		String script_id1 = null;
-		String script_Number = null;
-		String seq_num = null;
-		String test_script_param_id = null;
+		String testSetId = null;
+		String testSetLineId = null;
+		String scriptId = null;
+		String scriptId1 = null;
+		String scriptNumber = null;
+		String seqNum = null;
+		String testScriptParamId = null;
 		boolean startExcelAction = false;
 		boolean isError = false;
-		// String start_time=null;
-		// String end_time=null;
 		List<ScriptDetailsDto> excelMetadataListVO = new ArrayList<>();
 
 		try {
-			script_id = fetchMetadataListVO.get(0).getScriptId();
+			scriptId = fetchMetadataListVO.get(0).getScriptId();
 			passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 					+ "Passed_Report.pdf";
@@ -477,13 +485,15 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
-			seleniumFactory.getInstanceObjFromAbstractClass(instanceName).delatedScreenshoots(fetchMetadataListVO,
-					fetchConfigVO, customerDetails);
+			seleniumFactory.getInstanceObjFromAbstractClass(instanceName)
+					.deleteOldScreenshotForScriptFrmObjStore(fetchMetadataListVO.get(0), customerDetails);
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
+			String checkValidScript = "Yes";
+
 			//String checkValidScript = xpathService.checkValidScript(scriptID);
-			String checkValidScript = "NO";
+
 			log.info("Valid script check.......::" + checkValidScript);
 
 			Boolean validationFlag = null;
@@ -492,17 +502,16 @@ public class RunAutomation {
 			for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
 				actionName = fetchMetadataVO.getAction();
-				test_set_id = customerDetails.getTestSetId();
-				test_set_line_id = fetchMetadataVO.getTestSetLineId();
-				script_id1 = fetchMetadataVO.getScriptId();
-				script_Number = fetchMetadataVO.getScriptNumber();
-				seq_num = fetchMetadataVO.getSeqNum();
+				testSetId = customerDetails.getTestSetId();
+				testSetLineId = fetchMetadataVO.getTestSetLineId();
+				scriptId1 = fetchMetadataVO.getScriptId();
+				scriptNumber = fetchMetadataVO.getScriptNumber();
+				seqNum = fetchMetadataVO.getSeqNum();
 
 				String screenParameter = fetchMetadataVO.getInputParameter();
-				test_script_param_id = fetchMetadataVO.getTestScriptParamId();
+				testScriptParamId = fetchMetadataVO.getTestScriptParamId();
 				if (i == 0) {
-					dataBaseEntry.updateInProgressScriptStatus(fetchConfigVO, test_set_id, test_set_line_id);
-					dataBaseEntry.updateStartTime(fetchConfigVO, test_set_line_id, test_set_id, startdate);
+					dataBaseEntry.updateInProgressScriptStatus(testSetLineId, startdate);
 				}
 
 				String param1 = null;
@@ -554,15 +563,14 @@ public class RunAutomation {
 						log.info("Adding record to excel list");
 						excelMetadataListVO.add(fetchMetadataVO);
 					} else if (!isError) {
-						dataBaseEntry.updateInProgressScriptLineStatus(test_script_param_id, "In-Progress");
+						dataBaseEntry.updateInProgressScriptLineStatus(testScriptParamId, "In-Progress");
 						switch (actionName) {
 
 						case "Login into Application":
 							userName = fetchMetadataVO.getInputValue();
 							log.info("Navigating to Login into Application Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName)
-										.loginApplication(driver, fetchConfigVO,
+							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue().equals("")) {
+								seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
 										dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
@@ -573,7 +581,7 @@ public class RunAutomation {
 							}
 						case "Login into SFApplication":
 							userName = fetchMetadataVO.getInputValue();
-							log.info("Navigating to Login into Application Action");
+							log.info("Navigating to Login into SFApplication Action");
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								seleniumFactory.getInstanceObj(instanceName).loginSFApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
@@ -599,7 +607,7 @@ public class RunAutomation {
 							}
 						case "Login into Application(OIC)":
 							userName = fetchMetadataVO.getInputValue();
-							log.info("Navigating to Login into Application Action");
+							log.info("Navigating to Login into (OIC)Application Action");
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								seleniumFactory.getInstanceObj(instanceName).loginOicApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
@@ -624,7 +632,6 @@ public class RunAutomation {
 							} else {
 								break;
 							}
-
 
 						case "Navigate":
 							log.info("Navigating to Navigate Action");
@@ -674,7 +681,8 @@ public class RunAutomation {
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
 
@@ -709,15 +717,15 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.textarea(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
 
@@ -733,8 +741,7 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.tableSendKeys(driver, param1, param2, param3,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count);
 										break;
 									} else {
 
@@ -755,8 +762,8 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.multiplelinestableSendKeys(driver, param1, param2, param3,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count, customerDetails);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+												customerDetails);
 										break;
 									} else {
 
@@ -796,8 +803,8 @@ public class RunAutomation {
 								try {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 										xpathPerformance.clickLinkAction(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count, customerDetails);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+												customerDetails);
 										break;
 									} else {
 
@@ -805,11 +812,14 @@ public class RunAutomation {
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
 
 							}
+							
+
 
 						case "clickCheckbox":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
@@ -824,9 +834,14 @@ public class RunAutomation {
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
+							}
+							else
+							{
+								break;
 							}
 
 						case "clickRadiobutton":
@@ -834,8 +849,8 @@ public class RunAutomation {
 								try {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 										xpathPerformance.clickRadiobutton(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count, customerDetails);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+												customerDetails);
 										break;
 									} else {
 
@@ -843,10 +858,15 @@ public class RunAutomation {
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver, param1,
-											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
 
+							}
+							else
+							{
+								break;
 							}
 						case "selectAValue":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
@@ -868,6 +888,10 @@ public class RunAutomation {
 								}
 
 							}
+							else
+							{
+								break;
+							}
 
 						case "clickTableLink":
 							try {
@@ -885,7 +909,8 @@ public class RunAutomation {
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
 							}
-								case "clickLink":
+              
+						case "clickLink":
 							try {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
@@ -901,7 +926,6 @@ public class RunAutomation {
 										fetchMetadataVO, fetchConfigVO,customerDetails);
 								break;
 							}
-
 						case "clickNotificationLink":
 							seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -946,7 +970,8 @@ public class RunAutomation {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 									xpathPerformance.clickTableImage(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count, customerDetails);
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+											customerDetails);
 									break;
 								} else {
 
@@ -954,7 +979,8 @@ public class RunAutomation {
 								}
 							} catch (Exception e) {
 								seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1, param2,
-										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+										customerDetails);
 								break;
 							}
 
@@ -993,12 +1019,11 @@ public class RunAutomation {
 										&& !message.startsWith("Course Title")) {
 
 									fetchConfigVO.setErrormessage(message);
-									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "",
-											fetchMetadataVO, fetchConfigVO, customerDetails);
+									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, fetchMetadataVO,
+											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO,
-										fetchConfigVO, customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
@@ -1024,8 +1049,8 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.clickButtonDropdown(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count, customerDetails);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+												customerDetails);
 										break;
 									} else {
 
@@ -1033,15 +1058,21 @@ public class RunAutomation {
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver, param1,
-											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
+							}
+							else
+							{
+								break;
 							}
 
 						case "mousehover":
 							try {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
-									xpathPerformance.mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+									xpathPerformance.mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								} else {
 									throw new Exception("ScriptNotValid");
@@ -1063,7 +1094,8 @@ public class RunAutomation {
 								}
 							} catch (Exception e) {
 								seleniumFactory.getInstanceObj(instanceName).scrollUsingElement(driver,
-										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+										customerDetails);
 								break;
 							}
 
@@ -1103,7 +1135,8 @@ public class RunAutomation {
 							} catch (Exception e) {
 
 								seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver,
-										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+										customerDetails);
 								break;
 							}
 
@@ -1113,8 +1146,8 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.selectByText(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												count, customerDetails);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+												customerDetails);
 										break;
 									} else {
 
@@ -1122,13 +1155,19 @@ public class RunAutomation {
 									}
 								} catch (Exception e) {
 									seleniumFactory.getInstanceObj(instanceName).selectByText(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
 									break;
 								}
 							}
+							else
+							{
+								break;
+							}
 
 						case "copy":
-							seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+							seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO, fetchConfigVO,
+									customerDetails);
 							break;
 						case "copynumber":
 							globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver,
@@ -1136,11 +1175,13 @@ public class RunAutomation {
 							break;
 						case "copyy":
 							seleniumFactory.getInstanceObj(instanceName).copyy(driver,
-									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO, customerDetails);
+									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
+									customerDetails);
 							break;
 						case "copytext":
 							seleniumFactory.getInstanceObj(instanceName).copytext(driver,
-									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO, customerDetails);
+									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
+									customerDetails);
 							break;
 						case "clear":
 							try {
@@ -1161,10 +1202,12 @@ public class RunAutomation {
 							}
 							// XpathPerformance code for cases ended
 						case "enter":
-							seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+							seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO, fetchConfigVO,
+									customerDetails);
 							break;
 						case "tab":
-							seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+							seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO, fetchConfigVO,
+									customerDetails);
 							break;
 						case "paste":
 							seleniumFactory.getInstanceObj(instanceName).paste(driver,
@@ -1194,7 +1237,8 @@ public class RunAutomation {
 						case "DatePicker":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								seleniumFactory.getInstanceObj(instanceName).datePicker(driver, param1, param2,
-										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+										customerDetails);
 								break;
 							} else {
 								break;
@@ -1243,17 +1287,18 @@ public class RunAutomation {
 						case "sendvalues(Informatica)":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								seleniumFactory.getInstanceObj(instanceName).InformaticaSendValue(driver, param1,
-										param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+										customerDetails);
 								break;
 							} else {
 								break;
 							}
 
 						case "selectAValue(Informatica)":
-							if (fetchMetadataVO.getInputValue() != null
-									|| "".equals(fetchMetadataVO.getInputValue())) {
+							if (fetchMetadataVO.getInputValue() != null || "".equals(fetchMetadataVO.getInputValue())) {
 								seleniumFactory.getInstanceObj(instanceName).InformaticaSelectAValue(driver, param1,
-										param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+										customerDetails);
 							}
 							break;
 
@@ -1305,7 +1350,7 @@ public class RunAutomation {
 						System.out.println("Successfully Executed the" + "" + actionName);
 						try {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
-									test_script_param_id, "Pass");
+									testScriptParamId, "Pass");
 							fetchMetadataVO.setStatus("Pass");
 						} catch (Exception e) {
 							System.out.println("e");
@@ -1314,10 +1359,10 @@ public class RunAutomation {
 
 					if (fetchMetadataListVO.size() == i && !isError) {
 							FetchScriptVO post = new FetchScriptVO();
-							post.setP_test_set_id(test_set_id);
+							post.setP_test_set_id(testSetId);
 							post.setP_status("Pass");
-							post.setP_script_id(script_id);
-							post.setP_test_set_line_id(test_set_line_id);
+							post.setP_script_id(scriptId);
+							post.setP_test_set_line_id(testSetLineId);
 							post.setP_pass_path(passurl);
 							post.setP_fail_path(failurl);
 							post.setP_exception_path(detailurl);
@@ -1336,30 +1381,33 @@ public class RunAutomation {
 								if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
 									if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScriptId()))) {
 										Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScriptId()));
-										if (!"Fail".equalsIgnoreCase(s.getStatus())) {
+										if (!"Fail".equalsIgnoreCase(s.getStatusMsg())) {
 											int awaitCounter = s.getInExecutionCount();
 											s.setInExecutionCount(--awaitCounter);
 											if (awaitCounter <= 0) {
-												s.setStatus("Pass");
+												s.setStatusMsg("Pass");
 											}
 										}
 									}
 								}
 
-								dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-								dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+								dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
+								dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
+										fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+
+								dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 
 							limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-									script_id1, script_Number, "pass", startdate, enddate, customerDetails);
-							limitScriptExecutionService.updateFaileScriptscount(test_set_line_id, test_set_id);
+									scriptId1, scriptNumber, "pass", startdate, enddate, customerDetails);
+							limitScriptExecutionService.updateFaileScriptscount(testSetLineId, testSetId);
 							downloadScreenShot(fetchConfigVO, fetchMetadataVO, customerDetails, false);
 							fetchMetadataVO.setStatus("Pass");
-							seleniumFactory
-									.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
-									fetchMetadataListVO, fetchConfigVO, seq_num + "_" + script_Number + ".pdf", customerDetails);
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+									fetchMetadataListVO, fetchConfigVO, seqNum + "_" + scriptNumber + ".pdf",
+									customerDetails);
 
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
@@ -1371,21 +1419,21 @@ public class RunAutomation {
 					e.printStackTrace();
 					if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScriptId()))) {
 						Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScriptId()));
-						s.setStatus("Fail");
+						s.setStatusMsg("Fail");
 					}
 					System.out.println("Failed to Execute the " + "" + actionName);
 					System.out.println(
 							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
-					errorMessagesHandler.getError(actionName, fetchMetadataVO, fetchConfigVO, test_script_param_id,
+					errorMessagesHandler.getError(actionName, fetchMetadataVO, fetchConfigVO, testScriptParamId,
 							message, param1, param2, dataBaseEntry.getPassword(param, userName, fetchConfigVO));
 					isError = true;
 				}
 				if (isError) {
 						FetchScriptVO post = new FetchScriptVO();
-						post.setP_test_set_id(test_set_id);
+						post.setP_test_set_id(testSetId);
 						post.setP_status("Fail");
-						post.setP_script_id(script_id);
-						post.setP_test_set_line_id(test_set_line_id);
+						post.setP_script_id(scriptId);
+						post.setP_test_set_line_id(testSetLineId);
 						post.setP_pass_path(passurl);
 						post.setP_fail_path(failurl);
 						post.setP_exception_path(detailurl);
@@ -1393,18 +1441,27 @@ public class RunAutomation {
 						failcount = failcount + 1;
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-						dataService.updateTestCaseStatus(post, param, fetchConfigVO);
-						dataBaseEntry.updateEndTime(fetchConfigVO, test_set_line_id, test_set_id, enddate);
+
+//						dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
+
+						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
+						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
+								fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+
+						dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
+
 						limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO,
-								script_id1, script_Number, "Fail", startdate, enddate, customerDetails);
-						int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(test_set_line_id,
-								test_set_id);
+								scriptId1, scriptNumber, "Fail", startdate, enddate, customerDetails);
+
+						int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(testSetLineId,
+								testSetId);
 
 						fetchConfigVO.setStatus1("Fail");
-						downloadScreenShot(fetchConfigVO, fetchMetadataVO,customerDetails, false);
+						downloadScreenShot(fetchConfigVO, fetchMetadataVO, customerDetails, false);
 						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 								fetchMetadataListVO, fetchConfigVO,
-								seq_num + "_" + script_Number + "_RUN" + failedScriptRunCount + ".pdf", customerDetails);
+								seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf",
+								customerDetails);
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);

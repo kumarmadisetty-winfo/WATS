@@ -50,37 +50,37 @@ public class WatsPluginService {
 
 		ScriptMaster master = new ScriptMaster();
 		master.setModule(mastervo.getModule());
-		master.setScenario_name(mastervo.getScenarioName());
-		master.setScenario_description(mastervo.getScenarioDescription());
-		master.setProduct_version(mastervo.getProductVersion());
+		master.setScenarioName(mastervo.getScenarioName());
+		master.setScenarioDescription(mastervo.getScenarioDescription());
+		master.setProductVersion(mastervo.getProductVersion());
 		master.setPriority(mastervo.getPriority());
-		master.setProcess_area(mastervo.getProcessArea());
+		master.setProcessArea(mastervo.getProcessArea());
 		master.setRole(mastervo.getRole());
-		master.setScript_number(newScriptNumber);
-		master.setSub_process_area(mastervo.getSubProcessArea());
-		master.setStandard_custom(mastervo.getStandardCustom());
-		master.setTest_script_status(mastervo.getTestScriptStatus());
-		master.setCreated_by(mastervo.getCreatedBy());
-		master.setCreation_date(java.sql.Date.valueOf(mastervo.getCreationDate()));
+		master.setScriptNumber(newScriptNumber);
+		master.setSubProcessArea(mastervo.getSubProcessArea());
+		master.setStandardCustom(mastervo.getStandardCustom());
+		master.setTestScriptStatus(mastervo.getTestScriptStatus());
+		master.setCreatedBy(mastervo.getCreatedBy());
+		master.setCreationDate(java.sql.Date.valueOf(mastervo.getCreationDate()));
 		master.setPluginFlag("true");
 		for (WatsPluginMetaDataVO metadatavo : mastervo.getMetaDataList()) {
 			ScriptMetaData metadata = new ScriptMetaData();
 			metadata.setAction(metadatavo.getAction());
-			metadata.setLine_number(metadatavo.getLine_number());
-			metadata.setInput_parameter(metadatavo.getInput_parameter());
-			metadata.setStep_desc(metadatavo.getStep_desc());
-			metadata.setScript_number(newScriptNumber);
-			metadata.setValidation_type("NA");
-			metadata.setValidation_name("NA");
-			metadata.setUnique_mandatory("NA");
+			metadata.setLineNumber(metadatavo.getLineNumber());
+			metadata.setInputParameter(metadatavo.getInputParameter());
+			metadata.setStepDesc(metadatavo.getStepDesc());
+			metadata.setScriptNumber(newScriptNumber);
+			metadata.setValidationType("NA");
+			metadata.setValidationName("NA");
+			metadata.setUniqueMandatory("NA");
 			metadata.setDatatypes("NA");
-			metadata.setCreated_by(mastervo.getCreatedBy());
-			metadata.setCreation_date(java.sql.Date.valueOf(mastervo.getCreationDate()));
-			metadata.setMetadata_inputvalue(metadatavo.getInput_value());
+			metadata.setCreatedBy(mastervo.getCreatedBy());
+			metadata.setCreationDate(java.sql.Date.valueOf(mastervo.getCreationDate()));
+			metadata.setMetadataInputvalue(metadatavo.getInputValue());
 			master.addMetadata(metadata);
 
 		}
-		String scriptnumber = master.getScript_number();
+		String scriptnumber = master.getScriptNumber();
 		return dao.pluginData(master, scriptnumber);
 	}
 

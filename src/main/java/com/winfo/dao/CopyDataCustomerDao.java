@@ -9,14 +9,9 @@ import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.json.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.winfo.model.FetchData;
-import com.winfo.model.FetchDataMetadata;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.CopyDataDetails;
@@ -25,12 +20,17 @@ import com.winfo.vo.DomGenericResponseBean;
 @Repository
 public class CopyDataCustomerDao {
 
+	private static final String SCRIPT_DTL_QRY = "select %s from %s where product_version='%s' and standard_custom='%s'";
+	private static final String SCRIPT_MASTER = "ScriptMaster";
+	private static final String CUSTOM = "Custom";
+
 	@Autowired
 	private EntityManager entityManager;
 	@Autowired
 	private CopyDataPostCustomerDao dao;
 
-	public List<DomGenericResponseBean> copyData(CopyDataDetails copyDataDetails) throws ParseException {
+	@SuppressWarnings("unchecked")
+	public List<DomGenericResponseBean> copyData(CopyDataDetails copyDataDetails) {
 
 		String productVersionOld = copyDataDetails.getProduct_version_old();
 		String productVersionNew = copyDataDetails.getProduct_version_new();
@@ -39,104 +39,105 @@ public class CopyDataCustomerDao {
 		int j = 0;
 		int count = 0;
 
-		JSONObject responseDetailsJson = new JSONObject();
-		JSONArray jsonArrayMaster = new JSONArray();
-		JSONObject jsonMaster = new JSONObject();
-		Query query3 = session.createQuery("select script_number from ScriptMaster where product_version='"
-				+ productVersionOld + "' and standard_custom='Custom'");
-		List<String> script_numbers = (List<String>) query3.list();
-		Query query4 = session.createQuery("select script_number from ScriptMaster where product_version='"
-				+ productVersionNew + "' and standard_custom='Custom'");
-		List<String> script_numbers1 = (List<String>) query4.list();
-		Query querysid = session.createQuery("select script_id from ScriptMaster where product_version='"
-				+ productVersionOld + "' and standard_custom='Custom'");
-		List<Integer> script_Ids = (List<Integer>) querysid.list();
-		Query querysid1 = session.createQuery("select script_id from ScriptMaster where product_version='"
-				+ productVersionNew + "' and standard_custom='Custom'");
-		List<Integer> script_id1 = (List<Integer>) querysid1.list();
+		String sqlQry = String.format(SCRIPT_DTL_QRY, "script_number", SCRIPT_MASTER, productVersionOld, CUSTOM);
 
-		for (j = 0; j < script_numbers1.size(); j++) {
-			if (script_numbers.contains(script_numbers1.get(j))) {
-				script_numbers.remove(script_numbers1.get(j));
-				script_Ids.remove(script_id1.get(j));
+		Query<?> query3 = session.createQuery(sqlQry);
+
+		List<String> scriptNumbersOld = (List<String>) query3.list();
+
+		sqlQry = String.format(SCRIPT_DTL_QRY, "script_number", SCRIPT_MASTER, productVersionNew, CUSTOM);
+
+		Query<?> query4 = session.createQuery(sqlQry);
+
+		List<String> scriptNumbersNew = (List<String>) query4.list();
+
+		sqlQry = String.format(SCRIPT_DTL_QRY, "script_id", SCRIPT_MASTER, productVersionOld, CUSTOM);
+
+		Query<?> querySid = session.createQuery(sqlQry);
+
+		List<Integer> scriptIdsOld = (List<Integer>) querySid.list();
+
+		sqlQry = String.format(SCRIPT_DTL_QRY, "script_id", SCRIPT_MASTER, productVersionNew, CUSTOM);
+
+		Query<?> querysid1 = session.createQuery(sqlQry);
+		List<Integer> scriptIdsNew = (List<Integer>) querysid1.list();
+
+		for (j = 0; j < scriptNumbersNew.size(); j++) {
+			if (scriptNumbersOld.contains(scriptNumbersNew.get(j))) {
+				scriptNumbersOld.remove(scriptNumbersNew.get(j));
+				scriptIdsOld.remove(scriptIdsNew.get(j));
 			}
 		}
 
-		List<String> wrong_dependency_scripts = new ArrayList<String>();
-		for (i = 0; i < script_numbers.size(); i++) {
-			Integer script_Id = script_Ids.get(i);
-			String script_num = script_numbers.get(i);
+		List<String> wrongDependencyScripts = new ArrayList<>();
+		for (i = 0; i < scriptNumbersOld.size(); i++) {
+			Integer oldScriptId = scriptIdsOld.get(i);
+			String scriptNum = scriptNumbersOld.get(i);
 
-			Query query = session.createQuery(
+			Query<?> query = session.createQuery(
 					"select script_id,script_number,process_area,sub_process_area,module,role,end2end_scenario,scenario_name,scenario_description,expected_result,selenium_test_script_name,selenium_test_method,dependency,product_version,standard_custom,test_script_status,author,created_by,creation_date,updated_by,update_date,customer_id,customisation_reference,attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,attribute10,priority,pluginFlag,targetApplication from ScriptMaster where script_number='"
-							+ script_num + "' and product_version='" + productVersionOld + "'");
+							+ scriptNum + "' and product_version='" + productVersionOld + "'");
 			List<Object> result = (List<Object>) query.list();
-			Iterator itr6 = result.iterator();
+			Iterator<?> itr6 = result.iterator();
 			Integer scriptId = null;
 			while (itr6.hasNext()) {
 				Object[] obj1 = (Object[]) itr6.next();
 				if (!String.valueOf(obj1[0]).equals("null")) {
 					scriptId = Integer.parseInt(String.valueOf(obj1[0]));
-
-					break;
 				}
 				break;
 			}
 
-			Query query1 = session.createQuery(
+			Query<?> query1 = session.createQuery(
 					"select  line_number,input_parameter,action,xpath_location,xpath_location1,created_by,creation_date,updated_by,update_date,step_desc,field_type,hint,script_number,datatypes,unique_mandatory,validation_type,validation_name,metadataInputValue from ScriptMetaData where script_id="
 							+ scriptId);
 			List<Object> result1 = (List<Object>) query1.list();
-			Iterator itr1 = result1.iterator();
-			List<FetchData> finalresult = new ArrayList<FetchData>();
-			Iterator itr = result.iterator();
-			Iterator itr5 = result.iterator();
+			Iterator<?> itr1 = result1.iterator();
+			Iterator<?> itr = result.iterator();
+			Iterator<?> itr5 = result.iterator();
 			Integer dep = null;
 			while (itr5.hasNext()) {
 				Object[] obj1 = (Object[]) itr5.next();
 				if (!String.valueOf(obj1[12]).equals("null")) {
 					dep = Integer.parseInt(String.valueOf(obj1[12]));
-					break;
 				}
 				break;
 			}
 
 			if (dep != null) {
 
-				Query querydependency = session
+				Query<?> querydependency = session
 						.createQuery("select product_version,standard_custom from ScriptMaster where script_id=" + dep);
 				List<String> productversionlist = (List<String>) querydependency.list();
 				String productversion = productversionlist.get(0);
 				String standardcustom = productversionlist.get(1);
-				if (!productversion.equals(productVersionOld) || !standardcustom.equals("Custom")) {
-					wrong_dependency_scripts.add(script_num);
+				if (!productversion.equals(productVersionOld) || !standardcustom.equals(CUSTOM)) {
+					wrongDependencyScripts.add(scriptNum);
 					continue;
 				}
 			}
-
-			List<FetchDataMetadata> finalresult1 = new ArrayList<FetchDataMetadata>();
 
 			while (itr.hasNext()) {
 				Object[] obj = (Object[]) itr.next();
 
 				ScriptMaster master = new ScriptMaster();
 				if (String.valueOf(obj[1]).equals("null")) {
-					master.setScript_number(null);
+					master.setScriptNumber(null);
 				} else {
 
-					master.setScript_number(String.valueOf(obj[1]));
+					master.setScriptNumber(String.valueOf(obj[1]));
 				}
 				if (String.valueOf(obj[2]).equals("null")) {
-					master.setProcess_area(null);
+					master.setProcessArea(null);
 				} else {
 
-					master.setProcess_area(String.valueOf(obj[2]));
+					master.setProcessArea(String.valueOf(obj[2]));
 				}
 				if (String.valueOf(obj[3]).equals("null")) {
-					master.setSub_process_area(null);
+					master.setSubProcessArea(null);
 				} else {
 
-					master.setSub_process_area(String.valueOf(obj[3]));
+					master.setSubProcessArea(String.valueOf(obj[3]));
 				}
 				if (String.valueOf(obj[4]).equals("null")) {
 					master.setModule(null);
@@ -151,66 +152,65 @@ public class CopyDataCustomerDao {
 					master.setRole(String.valueOf(obj[5]));
 				}
 				if (String.valueOf(obj[6]).equals("null")) {
-					master.setEnd2end_scenario(null);
+					master.setEnd2endScenario(null);
 				} else {
 
-					master.setEnd2end_scenario(String.valueOf(obj[6]));
+					master.setEnd2endScenario(String.valueOf(obj[6]));
 				}
 				if (String.valueOf(obj[7]).equals("null")) {
-					master.setScenario_name(null);
+					master.setScenarioName(null);
 				} else {
 
-					master.setScenario_name(String.valueOf(obj[7]));
+					master.setScenarioName(String.valueOf(obj[7]));
 				}
 				if (String.valueOf(obj[8]).equals("null")) {
-					master.setScenario_description(null);
+					master.setScenarioDescription(null);
 				} else {
-					master.setScenario_description(String.valueOf(obj[8]));
+					master.setScenarioDescription(String.valueOf(obj[8]));
 				}
 				if (String.valueOf(obj[9]).equals("null")) {
-					master.setExpected_result(null);
+					master.setExpectedResult(null);
 				} else {
-					master.setExpected_result(String.valueOf(obj[9]));
+					master.setExpectedResult(String.valueOf(obj[9]));
 				}
 				if (String.valueOf(obj[10]).equals("null")) {
-					master.setSelenium_test_script_name(null);
+					master.setSeleniumTestScriptName(null);
 				} else {
-					master.setSelenium_test_script_name(String.valueOf(obj[10]));
+					master.setSeleniumTestScriptName(String.valueOf(obj[10]));
 				}
 				if (String.valueOf(obj[11]).equals("null")) {
-					master.setSelenium_test_method(null);
+					master.setSeleniumTestMethod(null);
 				} else {
-					master.setSelenium_test_method(String.valueOf(obj[11]));
+					master.setSeleniumTestMethod(String.valueOf(obj[11]));
 				}
 				if (String.valueOf(obj[12]).equals("null")) {
 					master.setDependency(null);
-					master.setDependent_script_num(null);
+					master.setDependentScriptNum(null);
 				} else {
 
-					Integer script_id_dependency = Integer.parseInt(String.valueOf(obj[12]));
-					if (script_Ids.contains(script_id_dependency)) {
-					} else {
-						script_Ids.add(script_id_dependency);
+					Integer scriptIdDependency = Integer.parseInt(String.valueOf(obj[12]));
+					if (!scriptIdsOld.contains(scriptIdDependency)) {
+						scriptIdsOld.add(scriptIdDependency);
 					}
-					Query querydep = session
-							.createQuery("select script_number from ScriptMaster where script_id=" + script_Id);
-					List<String> dep_sname = (List<String>) querydep.list();
+					Query<?> querydep = session
+							.createQuery("select script_number from ScriptMaster where script_id=" + oldScriptId);
+					List<String> depSname = (List<String>) querydep.list();
 
-					String dep_script_name = dep_sname.get(0);
+					String depScriptName = depSname.get(0);
 					master.setDependency(Integer.parseInt(String.valueOf(obj[12])));
-					master.setDependent_script_num(dep_script_name);
+					master.setDependentScriptNum(depScriptName);
 
 				}
-				master.setProduct_version(productVersionNew);
+				master.setProductVersion(productVersionNew);
 				if (String.valueOf(obj[14]).equals("null")) {
-					master.setStandard_custom(null);
+					master.setStandardCustom(null);
 				} else {
-					master.setStandard_custom(String.valueOf(obj[14]));
+					master.setStandardCustom(String.valueOf(obj[14]));
 				}
 				if (String.valueOf(obj[15]).equals("null")) {
-					master.setTest_script_status(null);
+					master.setTestScriptStatus(null);
 				} else {
-					master.setTest_script_status(String.valueOf(obj[15]));
+					master.setTestScriptStatus(String.valueOf(obj[15]));
 				}
 				if (String.valueOf(obj[16]).equals("null")) {
 					master.setAuthor(null);
@@ -218,48 +218,42 @@ public class CopyDataCustomerDao {
 					master.setAuthor(String.valueOf(obj[16]));
 				}
 				if (String.valueOf(obj[17]).equals("null")) {
-					master.setCreated_by(null);
+					master.setCreatedBy(null);
 				} else {
-					master.setCreated_by(String.valueOf(obj[17]));
+					master.setCreatedBy(String.valueOf(obj[17]));
 				}
 
 				if (String.valueOf(obj[18]).equals("null")) {
-					master.setCreation_date(null);
+					master.setCreationDate(null);
 				} else {
-					master.setCreation_date((Date) (obj[18]));
+					master.setCreationDate((Date) (obj[18]));
 				}
 
 				if (String.valueOf(obj[19]).equals("null")) {
-					master.setUpdated_by(null);
+					master.setUpdatedBy(null);
 				} else {
-					master.setUpdated_by(String.valueOf(obj[19]));
+					master.setUpdatedBy(String.valueOf(obj[19]));
 				}
 
 				if (String.valueOf(obj[20]).equals("null")) {
-					master.setUpdate_date(null);
+					master.setUpdateDate(null);
 				} else {
-					master.setUpdate_date((Date) (obj[20]));
+					master.setUpdateDate((Date) (obj[20]));
 				}
 
 				if (String.valueOf(obj[21]).equals("null")) {
 
-					master.setCustomer_id(null);
+					master.setCustomerId(null);
 				} else {
 
-					master.setCustomer_id(Integer.parseInt(String.valueOf(obj[21])));
+					master.setCustomerId(Integer.parseInt(String.valueOf(obj[21])));
 				}
 				if (String.valueOf(obj[22]).equals("null")) {
-					master.setCustomisation_reference(null);
+					master.setCustomisationReference(null);
 				} else {
-					master.setCustomisation_reference(String.valueOf(obj[22]));
+					master.setCustomisationReference(String.valueOf(obj[22]));
 				}
 
-//	           if(String.valueOf(obj[23]).equals("null")) {
-//	        	   master.setAttribute1(null);
-//	           }
-//			   else {
-//				   master.setAttribute1(String.valueOf(obj[23]));
-//			   }
 				if (String.valueOf(obj[24]).equals("null")) {
 					master.setAttribute2(null);
 				} else {
@@ -317,17 +311,16 @@ public class CopyDataCustomerDao {
 				} else {
 					master.setTargetApplication(String.valueOf(obj[35]));
 				}
-				master.setAppr_for_migration(null);
+				master.setApprForMigration(null);
 
 				while (itr1.hasNext()) {
 					Object[] obj1 = (Object[]) itr1.next();
-					FetchDataMetadata fetchDataMetadata = new FetchDataMetadata();
 					ScriptMetaData metadata = new ScriptMetaData();
-					metadata.setLine_number(Integer.parseInt(String.valueOf(obj1[0])));
+					metadata.setLineNumber(Integer.parseInt(String.valueOf(obj1[0])));
 					if (String.valueOf(obj1[1]).equals("null")) {
-						metadata.setInput_parameter(null);
+						metadata.setInputParameter(null);
 					} else {
-						metadata.setInput_parameter(String.valueOf(obj1[1]));
+						metadata.setInputParameter(String.valueOf(obj1[1]));
 					}
 					if (String.valueOf(obj1[2]).equals("null")) {
 						metadata.setAction(null);
@@ -335,38 +328,38 @@ public class CopyDataCustomerDao {
 						metadata.setAction(String.valueOf(obj1[2]));
 					}
 					if (String.valueOf(obj1[3]).equals("null")) {
-						metadata.setXpath_location(null);
+						metadata.setXpathLocation(null);
 					} else {
-						metadata.setXpath_location(String.valueOf(obj1[3]));
+						metadata.setXpathLocation(String.valueOf(obj1[3]));
 					}
 					if (String.valueOf(obj1[4]).equals("null")) {
-						metadata.setXpath_location1(null);
+						metadata.setXpathLocation1(null);
 					} else {
-						metadata.setXpath_location1(String.valueOf(obj1[4]));
+						metadata.setXpathLocation1(String.valueOf(obj1[4]));
 					}
 					if (String.valueOf(obj1[5]).equals("null")) {
-						metadata.setCreated_by(null);
+						metadata.setCreatedBy(null);
 					} else {
-						metadata.setCreated_by(String.valueOf(obj1[5]));
+						metadata.setCreatedBy(String.valueOf(obj1[5]));
 					}
 
-					metadata.setCreation_date((Date) obj1[6]);
+					metadata.setCreationDate((Date) obj1[6]);
 					if (String.valueOf(obj1[7]).equals("null")) {
-						metadata.setUpdated_by(null);
+						metadata.setUpdatedBy(null);
 					} else {
-						metadata.setUpdated_by(String.valueOf(obj1[7]));
+						metadata.setUpdatedBy(String.valueOf(obj1[7]));
 					}
 
-					metadata.setUpdate_date(((Date) obj1[8]));
+					metadata.setUpdateDate(((Date) obj1[8]));
 					if (String.valueOf(obj1[9]).equals("null")) {
-						metadata.setStep_desc(null);
+						metadata.setStepDesc(null);
 					} else {
-						metadata.setStep_desc(String.valueOf(obj1[9]));
+						metadata.setStepDesc(String.valueOf(obj1[9]));
 					}
 					if (String.valueOf(obj1[10]).equals("null")) {
-						metadata.setField_type(null);
+						metadata.setFieldType(null);
 					} else {
-						metadata.setField_type(String.valueOf(obj1[10]));
+						metadata.setFieldType(String.valueOf(obj1[10]));
 					}
 					if (String.valueOf(obj1[11]).equals("null")) {
 						metadata.setHint(null);
@@ -374,9 +367,9 @@ public class CopyDataCustomerDao {
 						metadata.setHint(String.valueOf(obj1[11]));
 					}
 					if (String.valueOf(obj1[12]).equals("null")) {
-						metadata.setScript_number(null);
+						metadata.setScriptNumber(null);
 					} else {
-						metadata.setScript_number(String.valueOf(obj1[12]));
+						metadata.setScriptNumber(String.valueOf(obj1[12]));
 					}
 					if (String.valueOf(obj1[13]).equals("null")) {
 						metadata.setDatatypes("NA");
@@ -384,24 +377,24 @@ public class CopyDataCustomerDao {
 						metadata.setDatatypes(String.valueOf(obj1[13]));
 					}
 					if (String.valueOf(obj1[14]).equals("null")) {
-						metadata.setUnique_mandatory("NA");
+						metadata.setUniqueMandatory("NA");
 					} else {
-						metadata.setUnique_mandatory(String.valueOf(obj1[14]));
+						metadata.setUniqueMandatory(String.valueOf(obj1[14]));
 					}
 					if (String.valueOf(obj1[15]).equals("null")) {
-						metadata.setValidation_type("NA");
+						metadata.setValidationType("NA");
 					} else {
-						metadata.setValidation_type(String.valueOf(obj1[15]));
+						metadata.setValidationType(String.valueOf(obj1[15]));
 					}
 					if (String.valueOf(obj1[16]).equals("null")) {
-						metadata.setValidation_name("NA");
+						metadata.setValidationName("NA");
 					} else {
-						metadata.setValidation_name(String.valueOf(obj1[16]));
+						metadata.setValidationName(String.valueOf(obj1[16]));
 					}
 					if (String.valueOf(obj1[17]).equals("null")) {
-						metadata.setMetadata_inputvalue("NA");
+						metadata.setMetadataInputvalue("NA");
 					} else {
-						metadata.setMetadata_inputvalue(String.valueOf(obj1[17]));
+						metadata.setMetadataInputvalue(String.valueOf(obj1[17]));
 					}
 
 					master.addMetadata(metadata);
@@ -412,7 +405,7 @@ public class CopyDataCustomerDao {
 
 		}
 
-		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
+		List<DomGenericResponseBean> bean = new ArrayList<>();
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count != 0) {
 			response.setStatus(200);

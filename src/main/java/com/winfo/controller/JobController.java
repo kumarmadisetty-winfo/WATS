@@ -2,8 +2,7 @@ package com.winfo.controller;
 
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,11 +20,8 @@ import com.winfo.vo.TestScriptDto;
 @RestController
 public class JobController {
 
-	public final Logger logger = LogManager.getLogger(JobController.class);
+	public static final Logger logger = Logger.getLogger(JobController.class);
 
-	/*
-	 * @Autowired RunAutomation runAutomation;
-	 */
 	@Autowired
 	RunAutomation runAutomation;
 

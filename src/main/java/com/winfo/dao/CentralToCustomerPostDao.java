@@ -24,7 +24,7 @@ public class CentralToCustomerPostDao {
 		Session session = entityManager.unwrap(Session.class);
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		Query query = session
-				.createQuery("select product_version from ScriptMaster where script_number='" + scriptnumber + "'");
+				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "'");
 		List<String> result2 = query.list();
 
 		int i = 0;

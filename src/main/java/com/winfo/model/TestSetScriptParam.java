@@ -2,6 +2,7 @@ package com.winfo.model;
 
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -18,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+
+
 
 @Entity
 @Table(name = "WIN_TA_TEST_SET_SCRIPT_PARAM")
@@ -55,7 +58,14 @@ public class TestSetScriptParam {
 
 	@Column(name = "XPATH_LOCATION1")
 	private String xpathLocation1;
-
+	
+	@Column(name = "XPATH_LOCATION_UPDATED_BY")
+	private String XpathLocationUpdatedBy;
+    
+	@Column(name = "XPATH_LOCATION_UPDATED_DATE")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date XpathLocationUpdatedDate;
+	
 	@Column(name = "TEST_RUN_PARAM_NAME")
 	private String testRunParamName;
 
@@ -181,6 +191,22 @@ public class TestSetScriptParam {
 
 	public void setXpathLocation1(String xpathLocation1) {
 		this.xpathLocation1 = xpathLocation1;
+	}
+	
+	public String getXpathLocationUpdatedBy() {
+		return XpathLocationUpdatedBy;
+	}
+
+	public void setXpathLocationUpdatedBy(String xpathLocationUpdatedBy) {
+		XpathLocationUpdatedBy = xpathLocationUpdatedBy;
+	}
+
+	public Date getXpathLocationUpdatedDate() {
+		return XpathLocationUpdatedDate;
+	}
+
+	public void setXpathLocationUpdatedDate(Date xpathLocationUpdatedDate) {
+		XpathLocationUpdatedDate = xpathLocationUpdatedDate;
 	}
 
 	public String getTestRunParamName() {

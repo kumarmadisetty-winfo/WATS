@@ -5,7 +5,7 @@ import java.io.File;
 public class Constants {
 
 	public enum TEST_SET_LINE_ID_STATUS {
-		IN_QUEUE("IN-QUEUE"), STOPPED("STOPPED"), Fail("Fail"), IN_PROGRESS("IN-PROGRESS"), Pass("Pass"), NEW("NEW");
+		IN_QUEUE("IN-QUEUE"), STOPPED("STOPPED"), FAIL("Fail"), IN_PROGRESS("IN-PROGRESS"), PASS("Pass"), NEW("NEW");
 
 		public final String label;
 
@@ -77,10 +77,13 @@ public class Constants {
 		}
 	}
 
+
 	public static String addQuotes(String string) {
 		return "\"\"\"" + string + "\"\"\"";
 	}
 
+
+	public static final String CONFLICT = "CONFLICT";
 	public static final String SUCCESS = "SUCCESS";
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";

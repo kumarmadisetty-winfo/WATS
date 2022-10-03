@@ -23,9 +23,11 @@ public class LookUpCodeVO {
 	private String uniqueMendatory;
 	private String processCode;
 	private String moduleCode;
-	
-	public LookUpCodeVO() {};
-	
+	private String targetApplication;
+
+	public LookUpCodeVO() {
+	};
+
 	public LookUpCodeVO(LookUpCode lookUpCode) {
 		this.lookUpCodeId = lookUpCode.getLookUpCodeId();
 		this.lookUpId = lookUpCode.getLookUpId();
@@ -41,6 +43,15 @@ public class LookUpCodeVO {
 		this.updateDate = lookUpCode.getUpdateDate();
 		this.processCode = lookUpCode.getProcessCode();
 		this.moduleCode = lookUpCode.getModuleCode();
+		this.targetApplication = lookUpCode.getTargetApplication();
+	}
+
+	public String getTargetApplication() {
+		return targetApplication;
+	}
+
+	public void setTargetApplication(String targetApplication) {
+		this.targetApplication = targetApplication;
 	}
 
 	public Integer getLookUpCodeId() {
@@ -178,6 +189,5 @@ public class LookUpCodeVO {
 	public void setModuleCode(String moduleCode) {
 		this.moduleCode = moduleCode;
 	}
-
 
 }
