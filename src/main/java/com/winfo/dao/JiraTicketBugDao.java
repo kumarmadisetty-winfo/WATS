@@ -26,12 +26,12 @@ public class JiraTicketBugDao {
 		Query<?> fetchsummary = null;
 		if (!scriptIds.isEmpty()) {
 			fetchsummary = session.createQuery(
-					"select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.script_id in (:scriptidlist)");
+					"select ts.testRunId,tsl.scriptId ,tsl.seqNum,tsl.issueKey,ts.testRunName,tsl.testRunScriptId,tsl.status,ts.configurationId,tsl.scriptNumber,mas.scenarioName from TestSet ts,TestSetLine tsl,ScriptMaster mas where ts.testRunId  = tsl.testRun.testRunId and tsl.scriptId = mas.scriptId and  ts.testRunId =(:testsetId) AND tsl.scriptId in (:scriptidlist)");
 			fetchsummary.setParameter("testsetId", testsetid);
 			fetchsummary.setParameterList("scriptidlist", scriptIds);
 		} else if (testSetLineId != 0) {
 			fetchsummary = session.createQuery(
-					"select ts.test_set_id,tsl.script_id ,tsl.seq_num,tsl.issue_key,ts.test_set_name,tsl.test_set_line_id,tsl.status,ts.configuration_id,tsl.script_number,mas.scenario_name from TestSet ts,TestSetLines tsl,ScriptMaster mas where ts.test_set_id  = tsl.testSet.test_set_id and tsl.script_id = mas.script_id and  ts.test_set_id =(:testsetId) AND tsl.test_set_line_id = (:testsetlineid)");
+					"select ts.testRunId,tsl.scriptId ,tsl.seqNum,tsl.issueKey,ts.testRunName,tsl.testRunScriptId,tsl.status,ts.configurationId,tsl.scriptNumber,mas.scenarioName from TestSet ts,TestSetLine tsl,ScriptMaster mas where ts.testRunId  = tsl.testRun.testRunId and tsl.scriptId = mas.scriptId and  ts.testRunId =(:testsetId) AND tsl.testRunScriptId = (:testsetlineid)");
 			fetchsummary.setParameter("testsetId", testsetid);
 			fetchsummary.setParameter("testsetlineid", testSetLineId);
 		}
@@ -45,9 +45,9 @@ public class JiraTicketBugDao {
 	public List<String> createDescription(TestRunVO slist) {
 		Session session = entityManager.unwrap(Session.class);
 		Query<?> fetchdescription = session.createQuery(
-				"select a.line_error_message from TestSetScriptParam a join  a.testSetLines b  on a.script_id=b.script_id  join b.testSet c on c.test_set_id="
-						+ slist.getTestSetId() + " and b.script_id=" + slist.getScriptId()
-						+ " and upper(a.line_execution_status)='FAIL'");
+				"select a.lineErrorMessage from TestSetScriptParam a join  a.testSetLine b  on a.scriptId=b.scriptId  join b.testRun c on c.testRunId="
+						+ slist.getTestSetId() + " and b.scriptId=" + slist.getScriptId()
+						+ " and upper(a.lineExecutionStatus)='FAIL'");
 
 		return (List<String>) fetchdescription.list();
 	}
@@ -62,8 +62,8 @@ public class JiraTicketBugDao {
 
 	public int updateIssueKey(String issueKey, TestRunVO slist, int count) {
 		Session session = entityManager.unwrap(Session.class);
-		Query<?> updateissuekey = session.createQuery("update TestSetLines a set a.issue_key='" + issueKey
-				+ "'  where a.test_set_line_id=" + slist.getTestSetLineId());
+		Query<?> updateissuekey = session.createQuery("update TestSetLine a set a.issueKey='" + issueKey
+				+ "'  where a.testRunScriptId=" + slist.getTestSetLineId());
 		count += updateissuekey.executeUpdate();
 		return count;
 	}
