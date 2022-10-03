@@ -1455,7 +1455,8 @@ public class DataBaseEntryDao {
 		return em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(testSetId));
 	}
 
-	public boolean checkActionContainsExcel(String scriptId) {
+
+	public boolean doesActionContainsExcel(String scriptId) {
 		Object count = null;
 		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action like '%excel%'";
 		try {
@@ -1513,7 +1514,7 @@ public class DataBaseEntryDao {
 		session.persist(lookUpCodes);
 	}
 
-	public boolean checkActionContainsSfApplication(String scriptId) {
+	public boolean doesActionContainsSfApplication(String scriptId) {
 		Object count = null;
 		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
 		try {
@@ -1523,7 +1524,7 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500,
 					"Exception occured while Checking if actions contains Login into SFApplication or not.", e);
 		}
-		return Integer.parseInt(count.toString()) > 0;
+		return Integer.parseInt(count.toString())>0;
 	}
 
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {

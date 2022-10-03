@@ -398,10 +398,9 @@ public class RunAutomation {
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
 		try {
-			boolean actionContainsExcel = dataBaseEntry
-					.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			actionContainsExcel = dataBaseEntry.checkActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
-			String operatingSystem = actionContainsExcel ? "windows" : null;
+			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
+			boolean actionContainsSF = dataBaseEntry.doesActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
+			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails);
@@ -1353,20 +1352,12 @@ public class RunAutomation {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									testScriptParamId, "Pass");
 							fetchMetadataVO.setStatus("Pass");
-
-//							if (validationFlag != null && !validationFlag) {
-//								dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
-//										test_script_param_id, "Fail", "");
-//							}
-//							dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 						} catch (Exception e) {
 							System.out.println("e");
 						}
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
-//						String checkPackage = dataBaseEntry.getPackage(test_set_id);
-//						if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 							FetchScriptVO post = new FetchScriptVO();
 							post.setP_test_set_id(testSetId);
 							post.setP_status("Pass");
@@ -1438,8 +1429,6 @@ public class RunAutomation {
 					isError = true;
 				}
 				if (isError) {
-//					String checkPackage = dataBaseEntry.getPackage(test_set_id);
-//					if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(testSetId);
 						post.setP_status("Fail");
