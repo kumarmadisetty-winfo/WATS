@@ -17284,6 +17284,34 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("WATS Inbound Inv Transactions") && param2.equalsIgnoreCase("Run")) {
+				Thread.sleep(3000);
+				Actions action = new Actions(driver);
+				WebElement we = driver.findElement(By.xpath(
+						"(//*[text()='WATS Inbound Inv Transactions'])[1]/following::*[text()='Scheduled Orchestration'][1]"));
+				action.moveToElement(we).perform();
+				Thread.sleep(5000);
+				WebElement run = driver.findElement(By.xpath(
+						"(//*[text()='WATS Inbound Inv Transactions'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]"));
+				run.click();
+				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(5000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				String xpath1 = "(//*[text()='WATS Inbound Inv Transactions'])[1]/following::*[text()='Scheduled Orchestration'][1]";
+				String xpath2 = "(//*[text()='WATS Inbound Inv Transactions'])[1]/following::*[text()='Scheduled Orchestration']/following::*[@title='Run'][1]";
+				String xpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 			if (param1.equalsIgnoreCase("Oracle ERP OPERA Trigger Synchronization") && param2.equalsIgnoreCase("Run")) {
 				Thread.sleep(3000);
 				Actions action = new Actions(driver);
