@@ -490,14 +490,14 @@ public class CustomerToCentralGetDao {
 			for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
 				ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
 				scriptMetaDataListDto.add(scriptMetaDataDto);
-				if(scriptMetaData.getValidationName() != null && scriptMetaData.getValidationType().equals(API_VALIDATION)) {
-					LookUpCodeVO lookUpCodeObj = dataBaseEntryDao.lookupCode(scriptMetaData.getValidationType(), scriptMetaData.getValidationName());
+				if(scriptMetaData.getValidationName() != null && API_VALIDATION.equals(scriptMetaData.getValidationType())) {
+					LookUpCodeVO lookUpCodeObj = dataBaseEntryDao.getLookupCode(scriptMetaData.getValidationType(), scriptMetaData.getValidationName());
 					lookUpCodeMap.put(scriptMetaData.getValidationName(), lookUpCodeObj);
 					validationType = API_VALIDATION;
 				}
 			}
 			if(API_VALIDATION.equals(validationType)) {
-				lookUpVo = dataBaseEntryDao.lookups(validationType, lookUpCodeMap);
+				lookUpVo = dataBaseEntryDao.getLookUp(validationType, lookUpCodeMap);
 			}
 			scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
 			scriptMasterDto.setLookUpVO(lookUpVo);
