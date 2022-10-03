@@ -1,5 +1,6 @@
 package com.winfo.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -55,21 +56,22 @@ public class CentralToCustomerPostDao {
 
 		return response;
 	}
-	
+
 	public void insertLookUpObj(LookUp lookUpObj) {
 		entityManager.persist(lookUpObj);
 	}
-	
+
 	public void insertLookUpCodeObj(LookUpCode lookUpCodeObj) {
-		entityManager.persist(lookUpCodeObj);	
+		entityManager.persist(lookUpCodeObj);
 	}
-	
+
 	public int checkLookUpCountByLookUpName(String lookUpName) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session
 				.createNativeQuery("Select count(*) FROM WIN_TA_LOOKUPS WHERE LOOKUP_NAME='" + lookUpName + "'");
 
-		return (int) query.getSingleResult();
+		BigDecimal count = (BigDecimal) query.getSingleResult();
+		return count.intValue();
 
 	}
 
@@ -78,8 +80,8 @@ public class CentralToCustomerPostDao {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createNativeQuery("Select count(*) FROM WIN_TA_LOOKUP_CODES WHERE LOOKUP_NAME='"
 				+ lookUpName + "' AND LOOKUP_CODE='" + lookUpCode + "'");
-		
-		return (int) query.getSingleResult();
+		BigDecimal count = (BigDecimal) query.getSingleResult();
+		return count.intValue();
 	}
 
 }

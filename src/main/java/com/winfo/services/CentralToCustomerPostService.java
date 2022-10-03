@@ -106,15 +106,16 @@ public class CentralToCustomerPostService {
 					lookUpObj.setUpdatedDate(lookUpVoObj.getUpdateDate());
 					dao.insertLookUpObj(lookUpObj);
 				}
-				
+
 				Map<String, LookUpCodeVO> mapOfLookUpCodeVO = lookUpVoObj.getMapOfData();
-				
-				if(mapOfLookUpCodeVO != null) {
-					for(Entry<String, LookUpCodeVO> entry : mapOfLookUpCodeVO.entrySet()) {
-						
+
+				if (mapOfLookUpCodeVO != null) {
+					for (Entry<String, LookUpCodeVO> entry : mapOfLookUpCodeVO.entrySet()) {
+
 						String lookUpNameKey = entry.getKey();
 						LookUpCodeVO lookUpCodeValue = entry.getValue();
-						if(dao.checkLookUpCountByLookUpName(lookUpNameKey)== 0) {
+						if (lookUpNameKey != null
+								&& dao.checkLookUpCodeCountByLookUpCode(lookUpName, lookUpNameKey) == 0) {
 							LookUpCode lookUpCodeObj = new LookUpCode();
 							lookUpCodeObj.setLookUpId(lookUpCodeValue.getLookUpId());
 							lookUpCodeObj.setLookUpName(lookUpCodeValue.getLookUpName());
@@ -131,13 +132,13 @@ public class CentralToCustomerPostService {
 							lookUpCodeObj.setProcessCode(lookUpCodeValue.getProcessCode());
 							lookUpCodeObj.setModuleCode(lookUpCodeValue.getModuleCode());
 							lookUpCodeObj.setTargetApplication(lookUpCodeValue.getTargetApplication());
-							
+
 							dao.insertLookUpCodeObj(lookUpCodeObj);
 						}
-						
+
 					}
 				}
-				
+
 			}
 
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
