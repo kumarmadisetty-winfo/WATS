@@ -106,7 +106,7 @@ public class DataBaseEntryDao {
 		return session.find(TestSetLine.class, lineId);
 	}
 
-	public LookUpCodeVO lookupCode(String lookUpName, String lookupCode) {
+	public LookUpCodeVO getLookupCode(String lookUpName, String lookupCode) {
 		Session session = em.unwrap(Session.class);
 		List<LookUpCode> listOfLookUpCode = session
 				.createQuery(
@@ -115,7 +115,7 @@ public class DataBaseEntryDao {
 		return listOfLookUpCode.isEmpty() ? null : new LookUpCodeVO(listOfLookUpCode.get(0));
 	}
 
-	public LookUpVO lookups(String lookUpName, Map<String, LookUpCodeVO> mapOfData) {
+	public LookUpVO getLookUp(String lookUpName, Map<String, LookUpCodeVO> mapOfData) {
 		Session session = em.unwrap(Session.class);
 		List<LookUp> listOfLookUp = session.createQuery("from LookUp where lookUpName = '" + lookUpName + "'")
 				.getResultList();
