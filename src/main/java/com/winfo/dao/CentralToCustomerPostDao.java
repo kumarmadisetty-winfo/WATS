@@ -65,23 +65,26 @@ public class CentralToCustomerPostDao {
 		entityManager.persist(lookUpCodeObj);
 	}
 
-	public int checkLookUpCountByLookUpName(String lookUpName) {
+	public boolean doesLookUpExist(String lookUpName) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session
-				.createNativeQuery("Select count(*) FROM WIN_TA_LOOKUPS WHERE LOOKUP_NAME='" + lookUpName + "'");
+
+		String qry = "SELECT count(1) FROM DUAL WHERE EXISTS (select 1 from  wats_prod.WIN_TA_LOOKUP_CODES where LOOKUP_CODE='"
+				+ lookUpName + "')";
+		Query query = session.createNativeQuery(qry);
 
 		BigDecimal count = (BigDecimal) query.getSingleResult();
-		return count.intValue();
+		return count.intValue() == 0;
 
 	}
 
-	public int checkLookUpCodeCountByLookUpCode(String lookUpName, String lookUpCode) {
+	public boolean doesLookUpCodeExist(String lookUpName, String lookUpCode) {
 
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createNativeQuery("Select count(*) FROM WIN_TA_LOOKUP_CODES WHERE LOOKUP_NAME='"
-				+ lookUpName + "' AND LOOKUP_CODE='" + lookUpCode + "'");
+		String qry = "SELECT count(1) FROM DUAL WHERE EXISTS (SELECT 1 FROM WIN_TA_LOOKUP_CODES WHERE LOOKUP_NAME='"
+				+ lookUpName + "' AND LOOKUP_CODE='" + lookUpCode + "')";
+		Query query = session.createNativeQuery(qry);
 		BigDecimal count = (BigDecimal) query.getSingleResult();
-		return count.intValue();
+		return count.intValue() == 0;
 	}
 
 }

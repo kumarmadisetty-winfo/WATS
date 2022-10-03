@@ -96,7 +96,7 @@ public class CentralToCustomerPostService {
 			LookUpVO lookUpVoObj = masterdata.getLookUpVO();
 			if (lookUpVoObj != null) {
 				String lookUpName = lookUpVoObj.getLookupName() == null ? "" : lookUpVoObj.getLookupName();
-				if (dao.checkLookUpCountByLookUpName(lookUpName) == 0) {
+				if (dao.doesLookUpExist(lookUpName)) {
 					LookUp lookUpObj = new LookUp();
 					lookUpObj.setLookUpName(lookUpVoObj.getLookupName());
 					lookUpObj.setLookUpDesc(lookUpVoObj.getLookupDesc());
@@ -115,7 +115,7 @@ public class CentralToCustomerPostService {
 						String lookUpNameKey = entry.getKey();
 						LookUpCodeVO lookUpCodeValue = entry.getValue();
 						if (lookUpNameKey != null
-								&& dao.checkLookUpCodeCountByLookUpCode(lookUpName, lookUpNameKey) == 0) {
+								&& dao.doesLookUpCodeExist(lookUpName, lookUpNameKey)) {
 							LookUpCode lookUpCodeObj = new LookUpCode();
 							lookUpCodeObj.setLookUpId(lookUpCodeValue.getLookUpId());
 							lookUpCodeObj.setLookUpName(lookUpCodeValue.getLookUpName());
