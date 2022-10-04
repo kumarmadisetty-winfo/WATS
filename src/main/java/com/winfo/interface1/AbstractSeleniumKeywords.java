@@ -67,8 +67,10 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
@@ -610,11 +612,11 @@ public abstract class AbstractSeleniumKeywords {
 					generateFailedPDF(document, passcount, failcount);
 				}
 				addRestOfPagesToPDF(document, fileNameList, watsLogo, fetchConfigVO, fetchMetadataListVO,
-						customerDetails);
+						customerDetails,writer);
 			} else if (!(PASSED_PDF.equalsIgnoreCase(pdffileName) || FAILED_PDF.equalsIgnoreCase(pdffileName)
 					|| DETAILED_PDF.equalsIgnoreCase(pdffileName))) {
 				generateScriptLvlPDF(document, fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime(), watsLogo,
-						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails);
+						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails,writer);
 			}
 			document.close();
 
@@ -635,7 +637,7 @@ public abstract class AbstractSeleniumKeywords {
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, List<String> fileNameList,
-			CustomerProjectDto customerDetails) throws IOException, com.itextpdf.text.DocumentException {
+			CustomerProjectDto customerDetails,PdfWriter writer) throws IOException, com.itextpdf.text.DocumentException {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
@@ -685,11 +687,19 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 
 		int i = 0;
+		int m = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			String s2 = "0";
+			String s1 = "0";
+			m++;
+			if(m < fetchMetadataListVO.size()) {
+			 s1 = metaDataVO.getSeqNum();
+			 s2 = fetchMetadataListVO.get(m).getSeqNum();
+			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_" + PASSED + PNG_EXTENSION)) {
 				image = fileName + "_" + PASSED + PNG_EXTENSION;
@@ -751,6 +761,26 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (API_TESTING.equalsIgnoreCase(checkPackage)) {
 					addingResponseIntoReport(fileName, document, customerDetails, fetchConfigVO);
+				}
+				
+				//Adding the downloaded pdf after that particular script
+				
+				if(!s1.equalsIgnoreCase(s2) || fetchMetadataListVO.size() == m) {
+					String docName = (metaDataVO.getSeqNum() + "_"
+		                    + metaDataVO.getScenarioName() + "_"
+		                    + metaDataVO.getScriptNumber() + "_" 
+		                    + customerDetails.getTestSetName() + "_Passed");
+					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					if(file.exists()) {
+					PdfContentByte cb = writer.getDirectContent();
+					PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					for(int page=1; page<=pdfReader.getNumberOfPages(); page++) { 
+						PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
+						document.newPage();
+						cb.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+						
+					      }
+					}
 				}
 			}
 		}
@@ -929,7 +959,7 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
-			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails)
+			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails,PdfWriter writer)
 			throws IOException, com.itextpdf.text.DocumentException {
 		int k = 0;
 		int l = 0;
@@ -1021,11 +1051,19 @@ public abstract class AbstractSeleniumKeywords {
 
 		int i = 0;
 		int j = 0;
+		int m = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			String s2 = "0";
+			String s1 = "0";
+			m++;
+			if(m < fetchMetadataListVO.size()) {
+			 s1 = metaDataVO.getSeqNum();
+			 s2 = fetchMetadataListVO.get(m).getSeqNum();
+			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_Passed.png")) {
 				image = fileName + "_Passed.png";
@@ -1182,6 +1220,24 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (API_TESTING.equalsIgnoreCase(checkPackage)) {
 					addingResponseIntoReport(fileName, document, customerDetails, fetchConfigVO);
+				}
+				
+				//Adding the downloaded pdf after that particular script
+
+				if (!s1.equalsIgnoreCase(s2) || fetchMetadataListVO.size() == m) {
+					String docName = (metaDataVO.getSeqNum() + "_" + metaDataVO.getScenarioName() + "_"
+							+ metaDataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					if (file.exists()) {
+						PdfContentByte cb = writer.getDirectContent();
+						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
+							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
+							document.newPage();
+							cb.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+
+						}
+					}
 				}
 			}
 
