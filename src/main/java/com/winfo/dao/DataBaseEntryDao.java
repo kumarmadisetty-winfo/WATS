@@ -16,10 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -65,6 +65,9 @@ import com.winfo.vo.Status;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	private static final String NULL_STRING = "null";
 
@@ -1513,6 +1516,11 @@ public class DataBaseEntryDao {
 		session.persist(lookUpCodes);
 	}
 
+	public void updateApiValidation(LookUpCode listOfLookUpCodes) {
+		Session session = em.unwrap(Session.class);
+		session.merge(listOfLookUpCodes);
+	}
+
 	public boolean checkActionContainsSfApplication(String script_Id) {
 		Object count = null;
 		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
@@ -1553,4 +1561,18 @@ public class DataBaseEntryDao {
 				.executeUpdate();
 	}
 
+	public List<LookUpCode> checkIfValidationExists1(int apiValidationId, String lookUpCode) throws Exception {
+		  TypedQuery<LookUpCode> query ;
+		  try {
+			Session session = em.unwrap(Session.class); query = entityManager.createQuery("from LookUpCode where lookup_id = :apiValidationId and lookup_code in :lookUpCode", LookUpCode.class);
+			  
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains excel or not.",e);
+		}
+		 return query.setParameter("apiValidationId", apiValidationId).setParameter("lookUpCode", lookUpCode).getResultList();
+		}
 }
+	
+	
+
+

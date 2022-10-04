@@ -528,4 +528,15 @@ public class DataBaseEntry {
 		dao.insertApiValidation(lookUpCodes);
 	}
 
+	public void updateApiValidation(LookUpCode listOfLookUpCodes) {
+		dao.updateApiValidation(listOfLookUpCodes);
+		
+	}
+
+	public List<LookUpCode> checkIfValidationExists1(int apiValidationId, String lookUpCode) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.checkIfValidationExists1(apiValidationId,lookUpCode);
+	}
+	
+
 }

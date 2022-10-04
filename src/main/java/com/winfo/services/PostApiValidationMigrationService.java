@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.utils.Constants;
+import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.ApiValidationMigrationDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.ResponseDto;
@@ -25,7 +26,7 @@ public class PostApiValidationMigrationService {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
-	public ResponseDto webClientService(List<LookUpCodeVO> listOfLookUpCodesData, String customerUrl) throws JsonMappingException, JsonProcessingException {
+	public ResponseDto webClientService(ApiValidationDto listOfLookUpCodesData, String customerUrl) throws JsonMappingException, JsonProcessingException {
 		if (customerUrl.equals("")) {
 			return new ResponseDto(500,"Invalid URL","Invalid URL!!");
 		} else {
@@ -47,11 +48,14 @@ public class PostApiValidationMigrationService {
 			int apiValidationId = dataBaseEntry.getApiValidationIdActionId();
 			List<Object> lookUpCodesData = dataBaseEntry.getApiValidationDataFromLookupsCode(apiValidationId,
 					apiValidationMigration.getValidation_lookup_codes());
+			
 			ObjectMapper objectMapper = new ObjectMapper();
-			List<LookUpCodeVO> listOfLookUpCodesData = Arrays
-					.asList(objectMapper.convertValue(lookUpCodesData, LookUpCodeVO[].class));
+			LookUpCodeVO[] listOfLookUpCodesData =objectMapper.convertValue(lookUpCodesData, LookUpCodeVO[].class);
+			ApiValidationDto apiDto =new ApiValidationDto();
+			apiDto.setLookup_codes(Arrays.asList(listOfLookUpCodesData));
+			apiDto.setFlag(apiValidationMigration.isFlag());
 			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getTargetEnvironment());
-			return webClientService(listOfLookUpCodesData, customerUrl);
+			return webClientService(apiDto, customerUrl);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
