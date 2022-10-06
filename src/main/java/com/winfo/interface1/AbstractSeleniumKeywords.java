@@ -687,18 +687,18 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 
 		int i = 0;
-		int m = 0;
+		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
-			String s2 = "0";
-			String s1 = "0";
-			m++;
-			if(m < fetchMetadataListVO.size()) {
-			 s1 = metaDataVO.getSeqNum();
-			 s2 = fetchMetadataListVO.get(m).getSeqNum();
+			String nextSeqNumber = "0";
+			String currentSeqNumber = "0";
+			increment++;
+			if(increment < fetchMetadataListVO.size()) {
+				currentSeqNumber = metaDataVO.getSeqNum();
+				nextSeqNumber = fetchMetadataListVO.get(increment).getSeqNum();
 			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_" + PASSED + PNG_EXTENSION)) {
@@ -765,19 +765,19 @@ public abstract class AbstractSeleniumKeywords {
 				
 				//Adding the downloaded pdf after that particular script
 				
-				if(!s1.equalsIgnoreCase(s2) || fetchMetadataListVO.size() == m) {
+				if(!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
 					String docName = (metaDataVO.getSeqNum() + "_"
 		                    + metaDataVO.getScenarioName() + "_"
 		                    + metaDataVO.getScriptNumber() + "_" 
 		                    + customerDetails.getTestSetName() + "_Passed");
 					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
 					if(file.exists()) {
-					PdfContentByte cb = writer.getDirectContent();
+					PdfContentByte contentByte = writer.getDirectContent();
 					PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
 					for(int page=1; page<=pdfReader.getNumberOfPages(); page++) { 
 						PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
 						document.newPage();
-						cb.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+						contentByte.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
 						
 					      }
 					}
@@ -1051,18 +1051,18 @@ public abstract class AbstractSeleniumKeywords {
 
 		int i = 0;
 		int j = 0;
-		int m = 0;
+		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
-			String s2 = "0";
-			String s1 = "0";
-			m++;
-			if(m < fetchMetadataListVO.size()) {
-			 s1 = metaDataVO.getSeqNum();
-			 s2 = fetchMetadataListVO.get(m).getSeqNum();
+			String nextSeqNumber = "0";
+			String currentSeqNumber = "0";
+			increment++;
+			if(increment < fetchMetadataListVO.size()) {
+				currentSeqNumber = metaDataVO.getSeqNum();
+				nextSeqNumber = fetchMetadataListVO.get(increment).getSeqNum();
 			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_Passed.png")) {
@@ -1224,17 +1224,17 @@ public abstract class AbstractSeleniumKeywords {
 				
 				//Adding the downloaded pdf after that particular script
 
-				if (!s1.equalsIgnoreCase(s2) || fetchMetadataListVO.size() == m) {
+				if (!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
 					String docName = (metaDataVO.getSeqNum() + "_" + metaDataVO.getScenarioName() + "_"
 							+ metaDataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
 					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
 					if (file.exists()) {
-						PdfContentByte cb = writer.getDirectContent();
+						PdfContentByte contentByte = writer.getDirectContent();
 						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
 						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
 							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
 							document.newPage();
-							cb.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+							contentByte.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
 
 						}
 					}

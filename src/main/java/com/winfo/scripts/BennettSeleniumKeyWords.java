@@ -14453,30 +14453,29 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
 
 			/* Download Window Open */
-			Thread.sleep(10000);
+			Thread.sleep(3000);
 			String fileName = (String) jse.executeScript(
 					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
 			driver.close();
 			driver.switchTo().window(tabs.get(0));
 			log.info("File Name*** " + fileName);
 			if (fileName != null) {
-				File oldfile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+				File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
 
 				String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
 						+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
 				if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
 					new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
 
-				if (oldfile.exists()) {
-					if (oldfile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
-						System.out.println("File name changed succesful");
+				if (oldFile.exists()) {
+					if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+						log.info("File name changed succesful");
 					} else {
-						System.out.println("Rename failed");
+						log.info("Rename failed");
 					}
 				}
 			}
 
-			Thread.sleep(3000);
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -14517,30 +14516,29 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
 
 			/* Download Window Open */
-			Thread.sleep(10000);
+			Thread.sleep(3000);
 			String fileName = (String) jse.executeScript(
 					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
 			driver.close();
 			driver.switchTo().window(tabs.get(0));
 			log.info("File Name*** " + fileName);
 			if (fileName != null) {
-				File oldfile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+				File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
 
 				String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
 						+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
 				if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
 					new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
 
-				if (oldfile.exists()) {
-					if (oldfile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
-						System.out.println("File name changed succesful");
+				if (oldFile.exists()) {
+					if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+						log.info("File name changed succesful");
 					} else {
-						System.out.println("Rename failed");
+						log.info("Rename failed");
 					}
 				}
 			}
 
-			Thread.sleep(3000);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
