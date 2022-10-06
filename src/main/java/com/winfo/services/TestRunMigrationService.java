@@ -131,26 +131,26 @@ public class TestRunMigrationService {
 
 						if (scriptMetaData.getAction() != null || !NA.equals(scriptMetaData.getAction())) {
 							lookUpCodeAction.put(scriptMetaData.getAction(),
-									dataBaseEntryDao.lookupCode(ACTION, scriptMetaData.getAction()));
+									dataBaseEntryDao.getLookupCode(ACTION, scriptMetaData.getAction()));
 						}
 						if (!(scriptMetaData.getDatatypes() == null || NA.equals(scriptMetaData.getDatatypes()))) {
 							lookUpCodeDataTypes.put(scriptMetaData.getDatatypes(),
-									dataBaseEntryDao.lookupCode(DATATYPES, scriptMetaData.getDatatypes()));
+									dataBaseEntryDao.getLookupCode(DATATYPES, scriptMetaData.getDatatypes()));
 						}
-						if (!NA.equals(scriptMetaData.getUnique_mandatory())) {
-							lookUpCodeUnique.put(scriptMetaData.getUnique_mandatory().toUpperCase(), dataBaseEntryDao
-									.lookupCode(UNIQUE_MANDATORY, scriptMetaData.getUnique_mandatory()));
-						}
-
-						if (!NA.equals(scriptMetaData.getValidation_name())) {
-							validationMap.put(scriptMetaData.getValidation_name(),
-									dataBaseEntryDao.lookupCode(scriptMetaData.getValidation_type().toUpperCase(),
-											scriptMetaData.getValidation_name()));
+						if (!NA.equals(scriptMetaData.getUniqueMandatory())) {
+							lookUpCodeUnique.put(scriptMetaData.getUniqueMandatory().toUpperCase(), dataBaseEntryDao
+									.getLookupCode(UNIQUE_MANDATORY, scriptMetaData.getUniqueMandatory()));
 						}
 
-						if (!NA.equals(scriptMetaData.getValidation_type())) {
-							lookUpDataMap.put(scriptMetaData.getValidation_type(), dataBaseEntryDao
-									.lookups(scriptMetaData.getValidation_type().toUpperCase(), validationMap));
+						if (!NA.equals(scriptMetaData.getValidationName())) {
+							validationMap.put(scriptMetaData.getValidationName(),
+									dataBaseEntryDao.getLookupCode(scriptMetaData.getValidationType().toUpperCase(),
+											scriptMetaData.getValidationName()));
+						}
+
+						if (!NA.equals(scriptMetaData.getValidationType())) {
+							lookUpDataMap.put(scriptMetaData.getValidationType(), dataBaseEntryDao
+									.getLookUp(scriptMetaData.getValidationType().toUpperCase(), validationMap));
 
 						}
 					}
@@ -162,10 +162,10 @@ public class TestRunMigrationService {
 			}
 			testRunMigrateDto.setTestSetLinesAndParaData(testSetLinesAndParaData);
 			testRunMigrateDto.setScriptMasterData(listOfMasterVO);
-			lookUpDataMap.put(ACTION.toLowerCase(), dataBaseEntryDao.lookups(ACTION, lookUpCodeAction));
+			lookUpDataMap.put(ACTION.toLowerCase(), dataBaseEntryDao.getLookUp(ACTION, lookUpCodeAction));
 			lookUpDataMap.put(UNIQUE_MANDATORY.toLowerCase(),
-					dataBaseEntryDao.lookups(UNIQUE_MANDATORY, lookUpCodeUnique));
-			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.lookups(DATATYPES, lookUpCodeDataTypes));
+					dataBaseEntryDao.getLookUp(UNIQUE_MANDATORY, lookUpCodeUnique));
+			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.getLookUp(DATATYPES, lookUpCodeDataTypes));
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
 		}

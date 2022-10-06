@@ -46,7 +46,7 @@ public class CopytestrunVo {
 		return creationDate;
 	}
 
-	public void setCreation_date(Date creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 

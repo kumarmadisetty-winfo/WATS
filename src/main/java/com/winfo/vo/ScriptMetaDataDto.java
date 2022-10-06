@@ -53,24 +53,24 @@ public class ScriptMetaDataDto {
 
 	public ScriptMetaDataDto(ScriptMetaData scriptMetaData) {
 		this.setAction(scriptMetaData.getAction());
-		this.setCreatedBy(scriptMetaData.getCreated_by());
-		this.setCreationDate(scriptMetaData.getCreation_date());
+		this.setCreatedBy(scriptMetaData.getCreatedBy());
+		this.setCreationDate(scriptMetaData.getCreationDate());
 		this.setDatatypes(scriptMetaData.getDatatypes());
-		this.setFieldType(scriptMetaData.getField_type());
+		this.setFieldType(scriptMetaData.getFieldType());
 		this.setHint(scriptMetaData.getHint());
-		this.setInputParameter(scriptMetaData.getInput_parameter());
-		this.setLineNumber(scriptMetaData.getLine_number());
-		this.setMetadataInputValue(scriptMetaData.getMetadata_inputvalue());
-		this.setScriptMetaDataId(scriptMetaData.getScript_meta_data_id());
-		this.setScriptNumber(scriptMetaData.getScript_number());
-		this.setStepDesc(scriptMetaData.getStep_desc());
-		this.setUniqueMandatory(scriptMetaData.getUnique_mandatory());
-		this.setUpdateDate(scriptMetaData.getUpdate_date());
-		this.setUpdatedBy(scriptMetaData.getUpdated_by());
-		this.setValidationName(scriptMetaData.getValidation_name());
-		this.setValidationType(scriptMetaData.getValidation_type());
-		this.setXpathLocation(scriptMetaData.getXpath_location());
-		this.setXpathLocation1(scriptMetaData.getXpath_location1());
+		this.setInputParameter(scriptMetaData.getInputParameter());
+		this.setLineNumber(scriptMetaData.getLineNumber());
+		this.setMetadataInputValue(scriptMetaData.getMetadataInputvalue());
+		this.setScriptMetaDataId(scriptMetaData.getScriptMetaDataId());
+		this.setScriptNumber(scriptMetaData.getScriptNumber());
+		this.setStepDesc(scriptMetaData.getStepDesc());
+		this.setUniqueMandatory(scriptMetaData.getUniqueMandatory());
+		this.setUpdateDate(scriptMetaData.getUpdateDate());
+		this.setUpdatedBy(scriptMetaData.getUpdatedBy());
+		this.setValidationName(scriptMetaData.getValidationName());
+		this.setValidationType(scriptMetaData.getValidationType());
+		this.setXpathLocation(scriptMetaData.getXpathLocation());
+		this.setXpathLocation1(scriptMetaData.getXpathLocation1());
 	}
 
 	public String getMetadataInputValue() {

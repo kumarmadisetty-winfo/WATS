@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.winfo.services.CopyDataCustomerService;
 import com.winfo.vo.CopyDataDetails;
 import com.winfo.vo.DomGenericResponseBean;
-//import com.winfo.vo.ScriptAndCustomeridDetails;
+
 @RestController
 public class CopyDataCustomerRest {
 	@Autowired
 	CopyDataCustomerService service;
 
 	@RequestMapping("/copydata_customer")
-	public List<DomGenericResponseBean> copyData(@RequestBody CopyDataDetails copyDataDetails ) throws ParseException {
+	public List<DomGenericResponseBean> copyData(@RequestBody CopyDataDetails copyDataDetails) throws ParseException {
 		return service.copyData(copyDataDetails);
-		
+
 	}
 }

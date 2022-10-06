@@ -9,56 +9,81 @@ public class WatsTestSetParamVO {
 
 	@JsonProperty("scriptMetaDataId")
 	private Integer scriptMetaDataId;
+	
 	@JsonProperty("scriptNumber")
 	private String scriptNumber;
+	
 	@JsonProperty("lineNumber")
 	private Integer lineNumber;
+	
 	@JsonProperty("inputParameter")
 	private String inputParameter;
+	
 	@JsonProperty("action")
 	private String action;
+	
 	@JsonProperty("xpathLocation")
 	private String xpathLocation;
+	
 	@JsonProperty("xpathLocation1")
 	private String xpathLocation1;
+	
 	@JsonProperty("createdBy")
 	private String createdBy;
+	
 	@JsonProperty("creationDate")
 	private Date creationDate;
+	
 	@JsonProperty("updatedBy")
 	private String updatedBy;
+	
 	@JsonProperty("updateDate")
 	private Date updateDate;
+	
 	@JsonProperty("stepDesc")
 	private String stepDesc;
+	
 	@JsonProperty("fieldType")
 	private String fieldType;
+	
 	@JsonProperty("hint")
 	private String hint;
+	
 	@JsonProperty("datatypes")
 	private String datatypes;
+	
 	@JsonProperty("uniqueMandatory")
 	private String uniqueMandatory;
+	
 	@JsonProperty("validationType")
 	private String validationType;
+	
 	@JsonProperty("validationName")
 	private String validationName;
+	
 	@JsonProperty("lineExecutionStatus")
 	private String lineExecutionStatus;
+	
 	@JsonProperty("inputValue")
 	private String inputValue;
+	
 	@JsonProperty("testRunParamDesc")
 	private String testRunParamDesc;
+	
 	@JsonProperty("lineErrorMessage")
 	private String lineErrorMessage;
+	
 	@JsonProperty("testRunParamName")
 	private String testRunParamName;
+	
 	@JsonProperty("lastUpdatedBy")
 	private String lastUpdatedBy;
+	
 	@JsonProperty("metadataId")
 	private Integer metadataId;
+	
 	@JsonProperty("dataTypes")
-	private String dataTypes;
+	private String dataType;
 
 	public WatsTestSetParamVO() {
 	}
@@ -80,7 +105,7 @@ public class WatsTestSetParamVO {
 		this.metadataId = testSetScriptParam.getMetadataId();
 		this.hint = testSetScriptParam.getHint();
 		this.fieldType = testSetScriptParam.getFieldType();
-		this.dataTypes = testSetScriptParam.getDataTypes();
+		this.dataType = testSetScriptParam.getDataTypes();
 		this.lineExecutionStatus = testSetScriptParam.getLineExecutionStatus();
 		this.uniqueMandatory = testSetScriptParam.getUniqueMandatory();
 		this.validationType = testSetScriptParam.getValidationType();
@@ -107,7 +132,7 @@ public class WatsTestSetParamVO {
 		this.metadataId = testSetScriptParam.getMetadataId();
 		this.hint = testSetScriptParam.getHint();
 		this.fieldType = testSetScriptParam.getFieldType();
-		this.dataTypes = testSetScriptParam.getDataTypes();
+		this.dataType = testSetScriptParam.getDataTypes();
 		this.lineExecutionStatus = testSetScriptParam.getLineExecutionStatus();
 		this.uniqueMandatory = testSetScriptParam.getUniqueMandatory();
 		this.validationType = testSetScriptParam.getValidationType();
@@ -307,12 +332,12 @@ public class WatsTestSetParamVO {
 		this.metadataId = metadataId;
 	}
 
-	public String getDataTypes() {
-		return dataTypes;
+	public String getDataType() {
+		return dataType;
 	}
 
-	public void setDataTypes(String dataTypes) {
-		this.dataTypes = dataTypes;
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 
 	public Integer getScriptMetaDataId() {

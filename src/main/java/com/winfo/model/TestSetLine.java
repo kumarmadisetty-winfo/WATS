@@ -86,13 +86,13 @@ public class TestSetLine {
 	private String scriptUpadated;
 	
 	@Column(name = "DEPENDENCY_TR")
-	private Integer dependency_tr;
+	private Integer dependencyTr;
 	
-    public Integer getDependency_tr() {
-		return dependency_tr;
+    public Integer getDependencyTr() {
+		return dependencyTr;
 	}
-	public void setDependency_tr(Integer dependency_tr) {
-		this.dependency_tr = dependency_tr;
+	public void setDependencyTr(Integer dependencyTr) {
+		this.dependencyTr = dependencyTr;
 	}
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -100,7 +100,7 @@ public class TestSetLine {
 	private TestSet testRun;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
-	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<TestSetScriptParam>();
+	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<>();
 	
 	public List<TestSetScriptParam> getTestRunScriptParam() {
 		return testRunScriptParam;
@@ -241,14 +241,13 @@ public class TestSetLine {
 		this.testRun = testRun;
 	}
 
-//	public List<TestSetScriptParam> getTestRunScriptParam() {
-//		return testRunScriptParam;
-//	}
-//
-//	public void setTestRunScriptParam(List<TestSetScriptParam> testRunScriptParam) {
-//		this.testRunScriptParam = testRunScriptParam;
-//	}
-
+	/*
+	 * public List<TestSetScriptParam> getTestRunScriptParam() { return
+	 * testRunScriptParam; }
+	 * 
+	 * public void setTestRunScriptParam(List<TestSetScriptParam>
+	 * testRunScriptParam) { this.testRunScriptParam = testRunScriptParam; }
+	 */
 	public Integer getRunCount() {
 		return runCount;
 	}

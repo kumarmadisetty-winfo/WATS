@@ -36,4 +36,8 @@ public class ArithmeticUtils {
 		return input1.equalsIgnoreCase(input2);
 	}
 
+	private ArithmeticUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 }

@@ -17,7 +17,13 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
@@ -25,6 +31,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants;
+import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.InsertScriptsVO;
 import com.winfo.vo.ResponseDto;
@@ -39,7 +46,7 @@ public class CopyTestRunService {
 	CopyTestRunDao copyTestrunDao;
 
 	@Transactional
-	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
+	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
 		TestSet newTestSetObj = new TestSet();
 
@@ -75,11 +82,11 @@ public class CopyTestRunService {
 			TestSetLine testSetLineRecords = new TestSetLine();
 			mapOfLinesData.put(testSetLineObj.getTestRunScriptId(), testSetLineRecords);
 			if (scriptMaster != null) {
-				testSetLineRecords.setScriptId(scriptMaster.getScript_id());
+				testSetLineRecords.setScriptId(scriptMaster.getScriptId());
 				testSetLineRecords.setCreatedBy(copyTestrunvo.getCreatedBy());
 				testSetLineRecords.setCreationDate(copyTestrunvo.getCreationDate());
 				testSetLineRecords.setEnabled("Y");
-				testSetLineRecords.setScriptNumber(scriptMaster.getScript_number());
+				testSetLineRecords.setScriptNumber(scriptMaster.getScriptNumber());
 				testSetLineRecords.setSeqNum(testSetLineObj.getSeqNum());
 				mapOfTestRunDependencyOldToNewId.put(testSetLineObj.getTestRunScriptId(), testSetLineObj.getSeqNum());
 				testSetLineRecords.setStatus(NEW);
@@ -102,7 +109,7 @@ public class CopyTestRunService {
 			Comparator<TestSetScriptParam> scriptLineComparator = (TestSetScriptParam s1,
 					TestSetScriptParam s2) -> s1.getLineNumber() - s2.getLineNumber();
 			Comparator<ScriptMetaData> metaDataComparator = (ScriptMetaData s1,
-					ScriptMetaData s2) -> s1.getLine_number() - s2.getLine_number();
+					ScriptMetaData s2) -> s1.getLineNumber() - s2.getLineNumber();
 			Collections.sort(scriptLineList, scriptLineComparator);
 			Collections.sort(metadataList, metaDataComparator);
 			ScriptMetaData metadata = null;
@@ -116,17 +123,17 @@ public class CopyTestRunService {
 
 				if (!(newScriptParamSeq.equals(check))) {
 					setScriptlinedata = new TestSetScriptParam();
-					setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+					setScriptlinedata.setInputParameter(metadata.getInputParameter());
 					setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
 					setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
-					setScriptlinedata.setLineNumber(metadata.getLine_number());
+					setScriptlinedata.setLineNumber(metadata.getLineNumber());
 					setScriptlinedata.setAction(metadata.getAction());
-					setScriptlinedata.setTestRunParamDesc(metadata.getStep_desc());
-					setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+					setScriptlinedata.setTestRunParamDesc(metadata.getStepDesc());
+					setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 					setScriptlinedata.setHint(metadata.getHint());
-					setScriptlinedata.setFieldType(metadata.getField_type());
-					setScriptlinedata.setXpathLocation(metadata.getXpath_location());
-					setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+					setScriptlinedata.setFieldType(metadata.getFieldType());
+					setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
+					setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 					setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 					setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 					setScriptlinedata.setUpdateDate(null);
@@ -134,7 +141,7 @@ public class CopyTestRunService {
 					setScriptlinedata.setLineExecutionStatus(NEW);
 					setScriptlinedata.setLineErrorMessage(null);
 					setScriptlinedata.setDataTypes(metadata.getDatatypes());
-					setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+					setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
 					check = newScriptParamSeq.intValue();
 				}
 				if (setScriptlinedata.getInputParameter() != null && getScriptlinedata.getInputParameter() != null) {
@@ -165,17 +172,17 @@ public class CopyTestRunService {
 			while (newScriptParamSeq < metadataList.size()) {
 				metadata = metadataList.get(newScriptParamSeq);
 				setScriptlinedata = new TestSetScriptParam();
-				setScriptlinedata.setInputParameter(metadata.getInput_parameter());
+				setScriptlinedata.setInputParameter(metadata.getInputParameter());
 				setScriptlinedata.setScriptId(testSetLineRecords.getScriptId());
 				setScriptlinedata.setScriptNumber(testSetLineRecords.getScriptNumber());
-				setScriptlinedata.setLineNumber(metadata.getLine_number());
+				setScriptlinedata.setLineNumber(metadata.getLineNumber());
 				setScriptlinedata.setAction(metadata.getAction());
 
-				setScriptlinedata.setMetadataId(metadata.getScript_meta_data_id());
+				setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 				setScriptlinedata.setHint(metadata.getHint());
-				setScriptlinedata.setFieldType(metadata.getField_type());
-				setScriptlinedata.setXpathLocation(metadata.getXpath_location());
-				setScriptlinedata.setXpathLocation1(metadata.getXpath_location1());
+				setScriptlinedata.setFieldType(metadata.getFieldType());
+				setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
+				setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 				setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 				setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 				setScriptlinedata.setUpdateDate(null);
@@ -183,7 +190,7 @@ public class CopyTestRunService {
 				setScriptlinedata.setLineExecutionStatus(NEW);
 				setScriptlinedata.setLineErrorMessage(null);
 				setScriptlinedata.setDataTypes(metadata.getDatatypes());
-				setScriptlinedata.setUniqueMandatory(metadata.getUnique_mandatory());
+				setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
 
 				setScriptlinedata.setInputValue(null);
 
@@ -196,9 +203,9 @@ public class CopyTestRunService {
 		}
 		log.info("before saveTestrun");
 		for (TestSetLine oldTestSetLine : testSetObj.getTestRunScriptDatalist()) {
-			if (oldTestSetLine.getDependency_tr() != null) {
+			if (oldTestSetLine.getDependencyTr() != null) {
 				mapOfLinesData.get(oldTestSetLine.getTestRunScriptId())
-						.setDependency_tr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependency_tr()));
+						.setDependencyTr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependencyTr()));
 			}
 		}
 
@@ -210,10 +217,10 @@ public class CopyTestRunService {
 		}
 
 		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
-			if (newTestSetLine.getDependency_tr() != null) {
+			if (newTestSetLine.getDependencyTr() != null) {
 				for(Map.Entry<Integer, Integer> entrySet : dependencyLinesIdAndSeqNum.entrySet()) {
-					if(entrySet.getValue().equals(newTestSetLine.getDependency_tr())) {
-						newTestSetLine.setDependency_tr(entrySet.getKey());
+					if(entrySet.getValue().equals(newTestSetLine.getDependencyTr())) {
+						newTestSetLine.setDependencyTr(entrySet.getKey());
 						break;
 					}
 				}
@@ -226,13 +233,13 @@ public class CopyTestRunService {
 	}
 
 	private void addInputvalues(TestSetScriptParam getScriptlinedata, TestSetScriptParam setScriptlinedata,
-			CopytestrunVo copyTestrunvo, TestSetLine setScriptdata) throws InterruptedException {
+			CopytestrunVo copyTestrunvo, TestSetLine setScriptdata) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		String getInputvalues = getScriptlinedata.getInputValue();
 		String[] actios = { "clearandtype", "textarea", "selectAValue", "clickCheckbox", "selectByText",
 				"clickButton Dropdown", "clickLinkAction", "Table Dropdown Values", "Table SendKeys", "enterIntoTable",
 				"SendKeys", "Login into Application", "Dropdown Values", "typeAtPosition", "clickAndTypeAtPosition",
 				"clickRadiobutton", "clickCheckbox", "multipleSendKeys", "multiplelinestableSendKeys", "DatePicker",
-				"copynumber", "copytext", "paste" };
+				"copynumber", "copytext", "paste", "apiValidationResponse" };
 		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
 		if ("y".equalsIgnoreCase(copyTestrunvo.getIncrementValue())
 				&& (setScriptlinedata.getUniqueMandatory() != null && setScriptlinedata.getUniqueMandatory() != "NA")
@@ -248,7 +255,43 @@ public class CopyTestRunService {
 				int fistOff = Integer.parseInt(covertDateobj.substring(0, 8));
 				int secondHalf = Integer.parseInt(covertDateobj.substring(8, 15));
 				String hexaDecimal = Integer.toString(fistOff, 36) + Integer.toString(secondHalf, 36);
-				if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
+				if("apiValidationResponse".equalsIgnoreCase(setScriptlinedata.getAction())) {
+					TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+					String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
+					ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(setScriptlinedata.getScriptNumber(), productVersion);
+					String[] incrementValues = scriptMaster.getAttribute2().split(",");
+
+					ObjectMapper objectMapper = new ObjectMapper();
+					objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+					String inputValue = getInputvalues.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
+					ApiValidationVO apiValidationData = objectMapper.readValue(inputValue,ApiValidationVO.class);
+					if (apiValidationData != null && apiValidationData.getResponse() != null
+							&& !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
+						Object requestBody = apiValidationData.getRequestBody();
+						ObjectWriter ow1 = new ObjectMapper().writer().withDefaultPrettyPrinter();
+						String json1 = ow1.writeValueAsString(requestBody);
+						Map<String, String> mapping = null;
+						mapping = new ObjectMapper().readValue(json1, HashMap.class);
+						for (String keys : incrementValues) {
+							if (mapping.containsKey(keys)) {
+								String value = mapping.get(keys);
+								String newValue = incrementValueForApi(value);
+								mapping.put(keys, newValue);
+							}
+						}
+						ObjectWriter ow = new ObjectMapper().writer();
+						String json = ow.writeValueAsString(mapping);
+						apiValidationData.setRequestBody(json);
+						apiValidationData.setResponseCode(null);
+						apiValidationData.setAccessToken("");
+						String finalJson = ow.writeValueAsString(apiValidationData);
+						hexaDecimal = finalJson.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])", "");
+					} else {
+						ObjectWriter ow = new ObjectMapper().writer();
+						String finalJson = ow.writeValueAsString(apiValidationData);
+						hexaDecimal = finalJson.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])", "");
+					}
+				}else if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
 					hexaDecimal = getInputvalues;
 					if (actionsList.contains(setScriptlinedata.getAction())) {
 						setScriptdata.setScriptUpadated("Y");
@@ -318,7 +361,7 @@ public class CopyTestRunService {
 	}
 
 	@Transactional
-	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException {
+	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
 		log.info("getTestrun infromation");
 		for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
@@ -410,6 +453,33 @@ public class CopyTestRunService {
 		response.setStatusMessage(Constants.SUCCESS);
 		return response;
 
+	}
+	
+	public String incrementValueForApi(String str) {
+//		String str="123xvcf22";
+        String temp=str.substring(str.length()-3);
+        String s=str.substring(0,str.length()-3);
+        String firstIndex=temp.substring(0,1);
+        String middleIndex=temp.substring(1,2);
+        String lastIndex=str.substring(str.length()-1);
+        if((lastIndex.toLowerCase()).matches(".*[a-z].*") || !(temp.toLowerCase()).matches(".*[0-9].*"))
+        {
+            str=str.concat("111");
+        }
+        else if((temp.toLowerCase()).matches(".*[0-9].*") && !(temp.toLowerCase()).matches(".*[a-z].*")) {
+            int increment=Integer.parseInt(temp)+1;
+            str=s.concat(String.valueOf(increment));
+        }
+        else if((firstIndex.toLowerCase()).matches(".*[a-z].*") && (temp.toLowerCase()).matches(".*[0-9].*") && (middleIndex.toLowerCase()).matches(".*[0-9].*"))
+        {
+             str=str.concat("1");
+        }
+      else if((lastIndex.toLowerCase()).matches(".*[0-9].*") && (firstIndex.toLowerCase()).matches(".*[a-z].*") || (firstIndex.toLowerCase()).matches(".*[0-9].*"))
+        {
+            str=str.concat("11");
+        }
+        System.out.println(" \n Final String "+ str);
+		return str;
 	}
 
 }

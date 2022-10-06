@@ -7,128 +7,168 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class WatsPluginMetaDataVO {
 
 	@JsonProperty("SCRIPT META DATA ID")
-	private Integer script_meta_data_id;
+	private Integer scriptMetaDataId;
+
 	@JsonProperty("SCRIPT NUMBER")
-	private String script_number;
+	private String scriptNumber;
+
 	@JsonProperty("LINE NUMBER")
-	private Integer line_number;
+	private Integer lineNumber;
+
 	@JsonProperty("INPUT PARAMETER")
-	private String input_parameter;
+	private String inputParameter;
+
 	@JsonProperty("ACTION")
 	private String action;
+
 	@JsonProperty("XPATH_LOCATION")
-	private String xpath_location;
+	private String xpathLocation;
+
 	@JsonProperty("XPATH_LOCATION1")
-	private String xpath_location1;
+	private String xpathLocation1;
+
 	@JsonProperty("CREATED_BY")
-	private String created_by;
+	private String createdBy;
+
 	@JsonProperty("CREATION_DATE")
-	private String creation_date;
+	private String creationDate;
+
 	@JsonProperty("UPDATED_BY")
-	private String updated_by;
+	private String updatedBy;
+
 	@JsonProperty("UPDATE_DATE")
-	private Date update_date;
+	private Date updateDate;
+
 	@JsonProperty("STEP DESCRIPTION")
-	private String step_desc;
+	private String stepDesc;
+
 	@JsonProperty("FIELD_TYPE")
-	private String field_type;
+	private String fieldType;
+
 	@JsonProperty("HINT")
 	private String hint;
+
 	@JsonProperty("INPUT VALUE")
-	private String input_value;
-	
-	public String getInput_value() {
-		return input_value;
+	private String inputValue;
+
+	public String getInputValue() {
+		return inputValue;
 	}
-	public void setInput_value(String input_value) {
-		this.input_value = input_value;
+
+	public void setInputValue(String inputValue) {
+		this.inputValue = inputValue;
 	}
-	public Integer getScript_meta_data_id() {
-		return script_meta_data_id;
+
+	public Integer getScriptMetaDataId() {
+		return scriptMetaDataId;
 	}
-	public void setScript_meta_data_id(Integer script_meta_data_id) {
-		this.script_meta_data_id = script_meta_data_id;
+
+	public void setScriptMetaDataId(Integer scriptMetaDataId) {
+		this.scriptMetaDataId = scriptMetaDataId;
 	}
-	public String getScript_number() {
-		return script_number;
+
+	public String getScriptNumber() {
+		return scriptNumber;
 	}
-	public void setScript_number(String script_number) {
-		this.script_number = script_number;
+
+	public void setScriptNumber(String scriptNumber) {
+		this.scriptNumber = scriptNumber;
 	}
-	public Integer getLine_number() {
-		return line_number;
+
+	public Integer getLineNumber() {
+		return lineNumber;
 	}
-	public void setLine_number(Integer line_number) {
-		this.line_number = line_number;
+
+	public void setLineNumber(Integer lineNumber) {
+		this.lineNumber = lineNumber;
 	}
-	public String getInput_parameter() {
-		return input_parameter;
+
+	public String getInputParameter() {
+		return inputParameter;
 	}
-	public void setInput_parameter(String input_parameter) {
-		this.input_parameter = input_parameter;
+
+	public void setInputParameter(String inputParameter) {
+		this.inputParameter = inputParameter;
 	}
+
 	public String getAction() {
 		return action;
 	}
+
 	public void setAction(String action) {
 		this.action = action;
 	}
-	public String getXpath_location() {
-		return xpath_location;
+
+	public String getXpathLocation() {
+		return xpathLocation;
 	}
-	public void setXpath_location(String xpath_location) {
-		this.xpath_location = xpath_location;
+
+	public void setXpathLocation(String xpathLocation) {
+		this.xpathLocation = xpathLocation;
 	}
-	public String getXpath_location1() {
-		return xpath_location1;
+
+	public String getXpathLocation1() {
+		return xpathLocation1;
 	}
-	public void setXpath_location1(String xpath_location1) {
-		this.xpath_location1 = xpath_location1;
+
+	public void setXpathLocation1(String xpathLocation1) {
+		this.xpathLocation1 = xpathLocation1;
 	}
-	public String getCreated_by() {
-		return created_by;
+
+	public String getCreatedBy() {
+		return createdBy;
 	}
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
-	
-	public String getCreation_date() {
-		return creation_date;
+
+	public String getCreationDate() {
+		return creationDate;
 	}
-	public void setCreation_date(String creation_date) {
-		this.creation_date = creation_date;
+
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
 	}
-	public String getUpdated_by() {
-		return updated_by;
+
+	public String getUpdatedBy() {
+		return updatedBy;
 	}
-	public void setUpdated_by(String updated_by) {
-		this.updated_by = updated_by;
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
-	public Date getUpdate_date() {
-		return update_date;
+
+	public Date getUpdateDate() {
+		return updateDate;
 	}
-	public void setUpdate_date(Date update_date) {
-		this.update_date = update_date;
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
-	public String getStep_desc() {
-		return step_desc;
+
+	public String getStepDesc() {
+		return stepDesc;
 	}
-	public void setStep_desc(String step_desc) {
-		this.step_desc = step_desc;
+
+	public void setStepDesc(String stepDesc) {
+		this.stepDesc = stepDesc;
 	}
-	public String getField_type() {
-		return field_type;
+
+	public String getFieldType() {
+		return fieldType;
 	}
-	public void setField_type(String field_type) {
-		this.field_type = field_type;
+
+	public void setFieldType(String fieldType) {
+		this.fieldType = fieldType;
 	}
+
 	public String getHint() {
 		return hint;
 	}
+
 	public void setHint(String hint) {
 		this.hint = hint;
 	}
 
-	
-	
 }

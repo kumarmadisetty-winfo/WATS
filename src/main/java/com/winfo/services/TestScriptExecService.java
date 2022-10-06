@@ -272,7 +272,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				dataBaseEntry.updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
 						Constants.ERR_MSG_FOR_SCRIPT_RUN);
 			}
-			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.Fail.getLabel());
+			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.FAIL.getLabel());
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
 		}
 
@@ -683,7 +683,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	}
 
-	private void createDir(String path) {
+	public void createDir(String path) {
 		File folder1 = new File(path);
 		if (!folder1.exists()) {
 			logger.info("creating directory: " + folder1.getName());
@@ -722,7 +722,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 
 	public void updateStartStatus(MessageQueueDto args) throws ClassNotFoundException, SQLException {
-		dataBaseEntry.updateInProgressScriptStatus(null, args.getTestSetLineId(), new Date());
+		dataBaseEntry.updateInProgressScriptStatus(args.getTestSetLineId(), new Date());
 	}
 
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {

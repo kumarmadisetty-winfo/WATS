@@ -8,42 +8,42 @@ public class ExecutionVO {
 	private String testCasePackage;
 	private String priority;
 	private String flag;
-	private String tests__commands__targets__001;
+	private String testsCommandsTargets001;
 	
-	private String Script_Id;
-	private String Actions;
-	private String Xpath;
-	private String Values;
+	private String scriptId;
+	private String actions;
+	private String xPath;
+	private String values;
 	
-	public String getScript_Id() {
-		return Script_Id;
+	public String getScriptId() {
+		return scriptId;
 	}
-	public void setScript_Id(String script_Id) {
-		Script_Id = script_Id;
+	public void setScriptId(String scriptId) {
+		this.scriptId = scriptId;
 	}
 	public String getActions() {
-		return Actions;
+		return actions;
 	}
 	public void setActions(String actions) {
-		Actions = actions;
+		this.actions = actions;
 	}
 	public String getXpath() {
-		return Xpath;
+		return xPath;
 	}
-	public void setXpath(String xpath) {
-		Xpath = xpath;
+	public void setXpath(String xPath) {
+		this.xPath = xPath;
 	}
 	public String getValues() {
-		return Values;
+		return values;
 	}
 	public void setValues(String values) {
-		Values = values;
+		this.values = values;
 	}
-	public String getTests__commands__targets__001() {
-		return tests__commands__targets__001;
+	public String getTestsCommandsTargets001() {
+		return testsCommandsTargets001;
 	}
-	public void setTests__commands__targets__001(String tests__commands__targets__001) {
-		this.tests__commands__targets__001 = tests__commands__targets__001;
+	public void setTestsCommandsTargets001(String testsCommandsTargets001) {
+		this.testsCommandsTargets001 = testsCommandsTargets001;
 	}
 	public String getTestcasemethod() {
 		return testCasePackage;

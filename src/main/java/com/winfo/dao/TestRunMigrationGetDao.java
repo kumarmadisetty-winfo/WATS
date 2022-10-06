@@ -26,14 +26,14 @@ public class TestRunMigrationGetDao {
 	public int insertScriptMetaData(ScriptMetaData scriptMetaData) {
 		Session session = entityManager.unwrap(Session.class);
 		session.save(scriptMetaData);
-		return scriptMetaData.getScript_meta_data_id();
+		return scriptMetaData.getScriptMetaDataId();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public int insertScriptMaster(ScriptMaster master) {
 		Session session = entityManager.unwrap(Session.class);
 		session.save(master);
-		return master.getScript_id();
+		return master.getScriptId();
 	}
 
 	@Transactional
@@ -58,10 +58,6 @@ public class TestRunMigrationGetDao {
 		session.close();
 		return scritplinesData.getTestRunScriptParamId();
 	}
-
-//	public void addTestRunData(Testrundata testrundata) {
-//		insertTestRun(testrundata);
-//	}
 
 	public int checkScriptPresent(String productVersion, String scriptNumber) {
 		Session session = entityManager.unwrap(Session.class);

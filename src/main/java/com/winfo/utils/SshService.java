@@ -25,7 +25,7 @@ public class SshService {
 	public static final Logger logger = LogManager.getLogger(SshService.class);
 
 	private static final String SFTP = "sftp";
-	private static final String exType = "Auth fail";
+	private static final String EX_TYPE = "Auth fail";
 
 	public static Session sftpSessionPasswordless(String localPrivateKeyPath, String host, String user)
 			throws JSchException {
@@ -51,7 +51,7 @@ public class SshService {
 			session.setConfig(config);
 			session.connect();
 		} catch (JSchException jse) {
-			if (jse.getMessage().equals(exType)) {
+			if (jse.getMessage().equals(EX_TYPE)) {
 				throw new WatsEBSCustomException(500, "Please verify ssh user credentials", jse);
 			} else {
 				throw new WatsEBSCustomException(500, "Exception occured while creating Sftp Connection", jse);
@@ -73,12 +73,10 @@ public class SshService {
 			sftpChannel.put(inputStream, destPath);
 			ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
 			execChannel.setCommand("python " + destPath);
-			System.out.println(execChannel.getExitStatus());
-//			execChannel.
-			InputStream err = execChannel.getErrStream();
+			logger.info(execChannel.getExitStatus());
 			String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-			System.out.println("---");
-			System.out.println(result);
+			logger.info("---");
+			logger.info(result);
 			closeSftp(null, execChannel);
 			closeSftp(session, sftpChannel);
 

@@ -81,6 +81,9 @@ public class ScriptMasterDto {
 	private String dependentScriptNum;
 	@JsonProperty("targetApplication")
 	private String targetApplication;
+	
+	@JsonProperty("lookUpVO")
+	private LookUpVO lookUpVO;
 
 	@JsonProperty("metaDataList")
 	private List<ScriptMetaDataDto> metaDataList = new ArrayList<>();
@@ -99,31 +102,31 @@ public class ScriptMasterDto {
 		this.setAttribute8(scriptMaster.getAttribute8());
 		this.setAttribute9(scriptMaster.getAttribute9());
 		this.setAuthor(scriptMaster.getAuthor());
-		this.setCreatedBy(scriptMaster.getCreated_by());
-		this.setCreationDate(scriptMaster.getCreation_date());
-		this.setCustomerId(scriptMaster.getCustomer_id());
-		this.setCustomisationReference(scriptMaster.getCustomisation_reference());
+		this.setCreatedBy(scriptMaster.getCreatedBy());
+		this.setCreationDate(scriptMaster.getCreationDate());
+		this.setCustomerId(scriptMaster.getCustomerId());
+		this.setCustomisationReference(scriptMaster.getCustomisationReference());
 		this.setDependency(scriptMaster.getDependency());
-		this.setDependentScriptNum(scriptMaster.getDependent_script_num());
-		this.setEnd2endScenario(scriptMaster.getEnd2end_scenario());
-		this.setExpectedResult(scriptMaster.getExpected_result());
+		this.setDependentScriptNum(scriptMaster.getDependentScriptNum());
+		this.setEnd2endScenario(scriptMaster.getEnd2endScenario());
+		this.setExpectedResult(scriptMaster.getExpectedResult());
 		this.setModule(scriptMaster.getModule());
 		this.setPriority(scriptMaster.getPriority());
-		this.setProcessArea(scriptMaster.getProcess_area());
-		this.setProductVersion(scriptMaster.getProduct_version());
+		this.setProcessArea(scriptMaster.getProcessArea());
+		this.setProductVersion(scriptMaster.getProductVersion());
 		this.setRole(scriptMaster.getRole());
-		this.setScenarioDescription(scriptMaster.getScenario_description());
-		this.setScenarioName(scriptMaster.getScenario_name());
-		this.setScriptId(scriptMaster.getScript_id());
-		this.setScriptNumber(scriptMaster.getScript_number());
-		this.setSeleniumTestMethod(scriptMaster.getSelenium_test_method());
-		this.setSeleniumTestScriptName(scriptMaster.getSelenium_test_script_name());
-		this.setStandardCustom(scriptMaster.getStandard_custom());
-		this.setSubProcessArea(scriptMaster.getSub_process_area());
+		this.setScenarioDescription(scriptMaster.getScenarioDescription());
+		this.setScenarioName(scriptMaster.getScenarioName());
+		this.setScriptId(scriptMaster.getScriptId());
+		this.setScriptNumber(scriptMaster.getScriptNumber());
+		this.setSeleniumTestMethod(scriptMaster.getSeleniumTestMethod());
+		this.setSeleniumTestScriptName(scriptMaster.getSeleniumTestScriptName());
+		this.setStandardCustom(scriptMaster.getStandardCustom());
+		this.setSubProcessArea(scriptMaster.getSubProcessArea());
 		this.setTargetApplication(scriptMaster.getTargetApplication());
-		this.setTestScriptStatus(scriptMaster.getTest_script_status());
-		this.setUpdateDate(scriptMaster.getUpdate_date());
-		this.setUpdatedBy(scriptMaster.getUpdated_by());
+		this.setTestScriptStatus(scriptMaster.getTestScriptStatus());
+		this.setUpdateDate(scriptMaster.getUpdateDate());
+		this.setUpdatedBy(scriptMaster.getUpdatedBy());
 	}
 
 	public String getTargetApplication() {
@@ -412,6 +415,14 @@ public class ScriptMasterDto {
 
 	public void setMetaDataList(List<ScriptMetaDataDto> metaDataList) {
 		this.metaDataList = metaDataList;
+	}
+
+	public LookUpVO getLookUpVO() {
+		return lookUpVO;
+	}
+
+	public void setLookUpVO(LookUpVO lookUpVO) {
+		this.lookUpVO = lookUpVO;
 	}
 
 }

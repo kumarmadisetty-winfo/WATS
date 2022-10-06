@@ -132,35 +132,35 @@ public class JiraTicketBugService {
 			Object[] obj = (Object[]) itr.next();
 			TestRunVO testrunvo = new TestRunVO();
 			if (String.valueOf(obj[0]).equals("null")) {
-				testrunvo.setTest_set_id(null);
+				testrunvo.setTestSetId(null);
 			} else {
-				testrunvo.setTest_set_id(Integer.parseInt(String.valueOf(obj[0])));
+				testrunvo.setTestSetId(Integer.parseInt(String.valueOf(obj[0])));
 			}
 			if (String.valueOf(obj[1]).equals("null")) {
-				testrunvo.setScript_id(null);
+				testrunvo.setScriptId(null);
 			} else {
-				testrunvo.setScript_id(Integer.parseInt(String.valueOf(obj[1])));
+				testrunvo.setScriptId(Integer.parseInt(String.valueOf(obj[1])));
 			}
 			if (String.valueOf(obj[2]).equals("null")) {
-				testrunvo.setSeq_num(null);
+				testrunvo.setSeqNum(null);
 			} else {
-				testrunvo.setSeq_num(Integer.parseInt(String.valueOf(obj[2])));
+				testrunvo.setSeqNum(Integer.parseInt(String.valueOf(obj[2])));
 			}
 			if (String.valueOf(obj[3]).equals("null")) {
-				testrunvo.setIssue_key(null);
+				testrunvo.setIssueKey(null);
 			} else {
-				testrunvo.setIssue_key(String.valueOf(obj[3]));
+				testrunvo.setIssueKey(String.valueOf(obj[3]));
 			}
 
 			if (String.valueOf(obj[4]).equals("null")) {
-				testrunvo.setTest_set_name(null);
+				testrunvo.setTestSetName(null);
 			} else {
-				testrunvo.setTest_set_name(String.valueOf(obj[4]));
+				testrunvo.setTestSetName(String.valueOf(obj[4]));
 			}
 			if (String.valueOf(obj[5]).equals("null")) {
-				testrunvo.setTest_set_line_id(null);
+				testrunvo.setTestSetLineId(null);
 			} else {
-				testrunvo.setTest_set_line_id(Integer.parseInt(String.valueOf(obj[5])));
+				testrunvo.setTestSetLineId(Integer.parseInt(String.valueOf(obj[5])));
 			}
 			if (String.valueOf(obj[6]).equals("null")) {
 				testrunvo.setStatus(null);
@@ -168,19 +168,19 @@ public class JiraTicketBugService {
 				testrunvo.setStatus(String.valueOf(obj[6]));
 			}
 			if (String.valueOf(obj[7]).equals("null")) {
-				testrunvo.setConfiguration_id(null);
+				testrunvo.setConfigurationId(null);
 			} else {
-				testrunvo.setConfiguration_id(Integer.parseInt(String.valueOf(obj[7])));
+				testrunvo.setConfigurationId(Integer.parseInt(String.valueOf(obj[7])));
 			}
 			if (String.valueOf(obj[8]).equals("null")) {
-				testrunvo.setScript_number(null);
+				testrunvo.setScriptNumber(null);
 			} else {
-				testrunvo.setScript_number(String.valueOf(obj[8]));
+				testrunvo.setScriptNumber(String.valueOf(obj[8]));
 			}
 			if (String.valueOf(obj[9]).equals("null")) {
-				testrunvo.setScenario_name(null);
+				testrunvo.setScenarioName(null);
 			} else {
-				testrunvo.setScenario_name(String.valueOf(obj[9]));
+				testrunvo.setScenarioName(String.valueOf(obj[9]));
 			}
 
 			finalresult.add(testrunvo);
@@ -188,12 +188,12 @@ public class JiraTicketBugService {
 
 		for (TestRunVO slist : finalresult) {
 
-			if (slist.getIssue_key() == null && slist.getStatus().equalsIgnoreCase("FAIL")) {
+			if (slist.getIssueKey() == null && slist.getStatus().equalsIgnoreCase("FAIL")) {
 
 				List fields = new ArrayList();
-				String summary = "Test run name=" + slist.getTest_set_name().toString() + " Seqnumber="
-						+ slist.getSeq_num().toString() + " Script Number=" + slist.getScript_number().toString()
-						+ " Test Case Name=" + slist.getScenario_name().toString();
+				String summary = "Test run name=" + slist.getTestSetName().toString() + " Seqnumber="
+						+ slist.getSeqNum().toString() + " Script Number=" + slist.getScriptNumber().toString()
+						+ " Test Case Name=" + slist.getScenarioName().toString();
 
 				JSONArray jsonarray = new JSONArray();
 				JSONObject jsonobject = new JSONObject();
@@ -214,6 +214,11 @@ public class JiraTicketBugService {
 				String description = descriptionResult.get(0);
 
 				jsonobject.put("description", description);
+				
+				Map<String, String> envName = new HashMap<String, String>();
+				envName.put("id", "10125");
+				
+				jsonobject.put("customfield_10063", envName);
 
 				jsonarray.put(jsonobject.toString());
 				requestjson.put("fields", jsonarray);
@@ -261,19 +266,19 @@ public class JiraTicketBugService {
 				if (issuekey != null) {
 					String jiraattachmenturl = jiraissueurl + issuekey + "/attachments";
 
-					String jiraattachemtresponse = webClient1(jiraattachmenturl, slist.getTest_set_name(),
-							slist.getSeq_num(), slist.getScript_number(), slist.getTest_set_id());
+					String jiraattachemtresponse = webClient1(jiraattachmenturl, slist.getTestSetName(),
+							slist.getSeqNum(), slist.getScriptNumber(), slist.getTestSetId());
 
 					// String jiraattachemtresponse= webClient1(jiraissueurlattachment);
 
 					String issue_key = String.valueOf(issuekey);
 
 					count = dao.updateIssueKey(issue_key, slist, count);
-					scriptId.add(slist.getScript_id());
-					scriptNumber.add(slist.getScript_number());
+					scriptId.add(slist.getScriptId());
+					scriptNumber.add(slist.getScriptNumber());
 				}
 			}else {
-				scriptNumber.add(slist.getScript_number());
+				scriptNumber.add(slist.getScriptNumber());
 			}
 
 		}
