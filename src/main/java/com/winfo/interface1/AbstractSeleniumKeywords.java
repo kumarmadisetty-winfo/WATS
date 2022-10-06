@@ -45,6 +45,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.Log;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -1595,5 +1596,38 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 	}
 
+	public static void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,CustomerProjectDto customerDetails) throws InterruptedException {
+		// For getting the name of the downloaded file name
+
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("window.open()");
+		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+
+		driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
+
+		/* Download Window Open */
+		Thread.sleep(3000);
+		String fileName = (String) jse.executeScript(
+				"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+		driver.close();
+		driver.switchTo().window(tabs.get(0));
+		logger.info("File Name*** " + fileName);
+		if (fileName != null) {
+			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+
+			String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
+				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
+
+			if (oldFile.exists()) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+					logger.info("File name changed succesful");
+				} else {
+					logger.info("Rename failed");
+				}
+			}
+		}
+	}
 
 }
