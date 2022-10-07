@@ -69,6 +69,8 @@ public class DataBaseEntryDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
+
 	private static final String NULL_STRING = "null";
 
 	private static final String CUSTOMER_DLT_QRY = "SELECT DISTINCT wtp.customer_id,\r\n" + " wtc.customer_number,\r\n"
@@ -78,8 +80,6 @@ public class DataBaseEntryDao {
 			+ " win_ta_customers wtc\r\n" + " WHERE 1=1\r\n" + " AND wttsl.test_set_id = wtts.test_set_id\r\n"
 			+ " AND wtts.project_id = wtp.project_id\r\n" + " AND wtp.customer_id = wtc.customer_id\r\n"
 			+ " AND wtts.test_set_id=";
-
-	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
 
 	private static final String EXCEPTION_MSG = "Exception occured while fetching request count for test run script.";
 	private static final String TEST_SET_LINE = "testSetLine";
@@ -109,7 +109,7 @@ public class DataBaseEntryDao {
 		return session.find(TestSetLine.class, lineId);
 	}
 
-	public LookUpCodeVO lookupCode(String lookUpName, String lookupCode) {
+	public LookUpCodeVO getLookupCode(String lookUpName, String lookupCode) {
 		Session session = em.unwrap(Session.class);
 		List<LookUpCode> listOfLookUpCode = session
 				.createQuery(
@@ -118,7 +118,7 @@ public class DataBaseEntryDao {
 		return listOfLookUpCode.isEmpty() ? null : new LookUpCodeVO(listOfLookUpCode.get(0));
 	}
 
-	public LookUpVO lookups(String lookUpName, Map<String, LookUpCodeVO> mapOfData) {
+	public LookUpVO getLookUp(String lookUpName, Map<String, LookUpCodeVO> mapOfData) {
 		Session session = em.unwrap(Session.class);
 		List<LookUp> listOfLookUp = session.createQuery("from LookUp where lookUpName = '" + lookUpName + "'")
 				.getResultList();
@@ -1151,7 +1151,7 @@ public class DataBaseEntryDao {
 	}
 
 	public Integer findGraceAllowance(BigDecimal subscriptionId) {
-		Integer sum = null;
+		BigDecimal sum = null;
 		String qry = "select sum(round(WTC.GRACE_ALLOWANCE*WS.quantity/100)) \r\n"
 				+ "        from wats_subscription WS,WIN_TA_CUSTOMERS WTC\r\n"
 				+ "        where uom = 'Script' and status = 'Active'\r\n"
@@ -1161,11 +1161,11 @@ public class DataBaseEntryDao {
 		try {
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(qry);
-			sum = (Integer) query.getSingleResult();
+			sum = (BigDecimal) query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sum;
+		return sum.intValue();
 	}
 
 	public void updateSubscriptionExecuteAndBalance(BigDecimal executedCount, BigDecimal updatedBalanceCount,
@@ -1458,7 +1458,8 @@ public class DataBaseEntryDao {
 		return em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(testSetId));
 	}
 
-	public boolean checkActionContainsExcel(String scriptId) {
+
+	public boolean doesActionContainsExcel(String scriptId) {
 		Object count = null;
 		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action like '%excel%'";
 		try {
@@ -1515,45 +1516,44 @@ public class DataBaseEntryDao {
 		Session session = em.unwrap(Session.class);
 		session.persist(lookUpCodes);
 	}
-	
-	public boolean checkActionContainsSfApplication(String script_Id) {
+  
+	public boolean doesActionContainsSfApplication(String scriptId) {
 		Object count = null;
 		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
 		try {
 			Session session = em.unwrap(Session.class);
-			count = session.createSQLQuery(updateQry).setParameter("script_id", script_Id).getSingleResult();
+			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains Login into SFApplication or not.", e);
+			throw new WatsEBSCustomException(500,
+					"Exception occured while Checking if actions contains Login into SFApplication or not.", e);
 		}
-		boolean flag = Integer.parseInt(count.toString())>0 ? true : false;
-		return flag;
+		return Integer.parseInt(count.toString())>0;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
 
 		Session session = em.unwrap(Session.class);
-		
+
 		List<TestSetAttribute> listOfSetAttr = session.createQuery(
 				"from TestSetAttribute where id.testSetId =" + testSetId + " and id.attributeName = '" + apiKey + "'")
 				.getResultList();
-		TestSetAttribute setAttrObj =  listOfSetAttr.isEmpty() ? null : listOfSetAttr.get(0);
-		
-		return setAttrObj;
+		return listOfSetAttr.isEmpty() ? null : listOfSetAttr.get(0);
 	}
 
 	public void insertRecordInTestSetAttribute(String testSetLineId, String string, String token, String executedBy) {
 		Session session = em.unwrap(Session.class);
 		Date date = new Date();
-		int listOfSetAttr = session.createNativeQuery("INSERT INTO win_ta_test_set_attribute (TEST_SET_ID,ATTRIBUTE_NAME,ATTRIBUTE_VALUE,CREATED_DATE,UPDATED_DATE,CREATED_BY,UPDATED_BY) VALUES (:P5_TEST_RUN_ID,:P5_TEST_Attribute_Name,:P5_ACCESS_TOKEN_EDIT,:SYSDATE1,:SYSDATE2,:APP_USER1,:APP_USER2)")
-				.setParameter("P5_TEST_RUN_ID", testSetLineId)
-				.setParameter("P5_TEST_Attribute_Name", string)
-				.setParameter("P5_ACCESS_TOKEN_EDIT", token)
-				.setParameter("SYSDATE1", date)
-				.setParameter("SYSDATE2", date)
-				.setParameter("APP_USER1", executedBy)
-				.setParameter("APP_USER2", executedBy)
-				.executeUpdate();
+		int listOfSetAttr = session.createNativeQuery(
+				"INSERT INTO win_ta_test_set_attribute (TEST_SET_ID,ATTRIBUTE_NAME,ATTRIBUTE_VALUE,CREATED_DATE,UPDATED_DATE,CREATED_BY,UPDATED_BY) VALUES (:P5_TEST_RUN_ID,:P5_TEST_Attribute_Name,:P5_ACCESS_TOKEN_EDIT,:SYSDATE1,:SYSDATE2,:APP_USER1,:APP_USER2)")
+				.setParameter("P5_TEST_RUN_ID", testSetLineId).setParameter("P5_TEST_Attribute_Name", string)
+				.setParameter("P5_ACCESS_TOKEN_EDIT", token).setParameter("SYSDATE1", date)
+				.setParameter("SYSDATE2", date).setParameter("APP_USER1", executedBy)
+				.setParameter("APP_USER2", executedBy).executeUpdate();
+		if(listOfSetAttr > 0) {
+			logger.info("Reocrds Updated Successfully..");
+		} else {
+			logger.info("Some issue occured while inserting records...");
+		}
 	}
 
 	public List<LookUpCode> getExistingData(int apiValidationId, String lookUpCode) throws Exception {

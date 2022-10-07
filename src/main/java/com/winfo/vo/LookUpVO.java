@@ -10,10 +10,13 @@ public class LookUpVO {
 
 	@JsonProperty("lookupId")
 	private Integer lookupId;
+	
 	@JsonProperty("lastUpdatedBy")
 	private String lastUpdatedBy;
+	
 	@JsonProperty("lookupName")
 	private String lookupName;
+
 	@JsonProperty("mapOfData")
 	private Map<String, LookUpCodeVO> mapOfData;
 

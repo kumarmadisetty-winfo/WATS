@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class WatsXpathDao {
 
-	Logger log = Logger.getLogger("Logger");
+	Logger log = Logger.getLogger(WatsXpathDao.class);
 
 	private static final String SCRIPT_ID = "scriptID";
 

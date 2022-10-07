@@ -4,8 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -24,6 +26,8 @@ import com.winfo.model.FetchData;
 import com.winfo.model.FetchDataMetadata;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.vo.LookUpCodeVO;
+import com.winfo.vo.LookUpVO;
 //import com.winfo.utils.StringUtils;
 import com.winfo.vo.ScriptDtlsDto;
 import com.winfo.vo.ScriptMasterDto;
@@ -33,6 +37,7 @@ import com.winfo.vo.ScriptMetaDataDto;
 public class CustomerToCentralGetDao {
 
 	private final Logger logger = LogManager.getLogger(CustomerToCentralGetDao.class);
+	private static final String API_VALIDATION = "API_VALIDATION";
 
 	@Autowired
 	private EntityManager entityManager;
@@ -479,11 +484,23 @@ public class CustomerToCentralGetDao {
 			List<ScriptMetaData> scriptMetaDataList = dataBaseEntryDao.getScriptMetaDataList(scriptId);
 			ScriptMasterDto scriptMasterDto = new ScriptMasterDto(scriptMasterDtls);
 			List<ScriptMetaDataDto> scriptMetaDataListDto = new ArrayList<>();
+			LookUpVO lookUpVo = null;
+			String validationType = null;
+			Map<String, LookUpCodeVO> lookUpCodeMap = new HashMap<>();
 			for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
 				ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
 				scriptMetaDataListDto.add(scriptMetaDataDto);
+				if(scriptMetaData.getValidationName() != null && API_VALIDATION.equals(scriptMetaData.getValidationType())) {
+					LookUpCodeVO lookUpCodeObj = dataBaseEntryDao.getLookupCode(scriptMetaData.getValidationType(), scriptMetaData.getValidationName());
+					lookUpCodeMap.put(scriptMetaData.getValidationName(), lookUpCodeObj);
+					validationType = API_VALIDATION;
+				}
+			}
+			if(API_VALIDATION.equals(validationType)) {
+				lookUpVo = dataBaseEntryDao.getLookUp(validationType, lookUpCodeMap);
 			}
 			scriptMasterDto.setMetaDataList(scriptMetaDataListDto);
+			scriptMasterDto.setLookUpVO(lookUpVo);
 			scriptMasterList.add(scriptMasterDto);
 		}
 		return scriptMasterList;

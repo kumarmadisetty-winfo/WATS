@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +34,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
@@ -43,6 +45,7 @@ import com.winfo.services.ScriptXpathService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
+import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -397,14 +400,16 @@ public class RunAutomation {
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
+		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
+				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListsVO.get(0).getExecutedBy())
+				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
 		try {
-			boolean actionContainsExcel = dataBaseEntry
-					.checkActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			actionContainsExcel = dataBaseEntry.checkActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
-			String operatingSystem = actionContainsExcel ? "windows" : null;
+			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
+			boolean actionContainsSF = dataBaseEntry.doesActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
+			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
 		} catch (Exception e) {
 			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScriptNumber());
 			e.printStackTrace();
@@ -420,7 +425,7 @@ public class RunAutomation {
 				post.setP_test_set_line_path(scripturl);
 
 //				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
-
+				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
 						customerDetails.getTestSetName());
@@ -439,7 +444,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails)
+			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial)
 			throws Exception {
 
 		String log4jConfPath = "log4j.properties";
@@ -464,7 +469,8 @@ public class RunAutomation {
 		boolean startExcelAction = false;
 		boolean isError = false;
 		List<ScriptDetailsDto> excelMetadataListVO = new ArrayList<>();
-
+		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SES, null);
+		
 		try {
 			scriptId = fetchMetadataListVO.get(0).getScriptId();
 			passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
@@ -549,7 +555,7 @@ public class RunAutomation {
 						}
 						startExcelAction = false;
 						testScriptExecService.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true,
-								customerDetails);
+								customerDetails,auditTrial);
 						log.info("In final step of excel end-- " + excelMetadataListVO.size());
 						List<Integer> stepIdList = excelMetadataListVO.stream().map(e -> e.getTestScriptParamId())
 								.map(Integer::valueOf).collect(Collectors.toList());
@@ -898,17 +904,16 @@ public class RunAutomation {
 							try {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
-									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, count, customerDetails);
+									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											count, customerDetails);
 									break;
 								} else {
 
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver, param1,
-										param2, param3, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
+										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
 							}
               
@@ -1021,12 +1026,11 @@ public class RunAutomation {
 										&& !message.startsWith("Course Title")) {
 
 									fetchConfigVO.setErrormessage(message);
-									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, "",
-											fetchMetadataVO, fetchConfigVO, customerDetails);
+									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, fetchMetadataVO,
+											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, "", fetchMetadataVO,
-										fetchConfigVO, customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
@@ -1355,20 +1359,12 @@ public class RunAutomation {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									testScriptParamId, "Pass");
 							fetchMetadataVO.setStatus("Pass");
-
-//							if (validationFlag != null && !validationFlag) {
-//								dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
-//										test_script_param_id, "Fail", "");
-//							}
-//							dataBaseEntry.updateFailedImages(fetchMetadataVO, fetchConfigVO, test_script_param_id);
 						} catch (Exception e) {
 							System.out.println("e");
 						}
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
-//						String checkPackage = dataBaseEntry.getPackage(test_set_id);
-//						if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 							FetchScriptVO post = new FetchScriptVO();
 							post.setP_test_set_id(testSetId);
 							post.setP_status("Pass");
@@ -1440,8 +1436,6 @@ public class RunAutomation {
 					isError = true;
 				}
 				if (isError) {
-//					String checkPackage = dataBaseEntry.getPackage(test_set_id);
-//					if (!"API_TESTING".equalsIgnoreCase(checkPackage)) {
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(testSetId);
 						post.setP_status("Fail");
@@ -1485,6 +1479,7 @@ public class RunAutomation {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SEF, e.getMessage());
 			throw e;
 		}
 	}

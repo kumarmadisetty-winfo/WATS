@@ -214,6 +214,11 @@ public class JiraTicketBugService {
 				String description = descriptionResult.get(0);
 
 				jsonobject.put("description", description);
+				
+				Map<String, String> envName = new HashMap<String, String>();
+				envName.put("id", "10125");
+				
+				jsonobject.put("customfield_10063", envName);
 
 				jsonarray.put(jsonobject.toString());
 				requestjson.put("fields", jsonarray);

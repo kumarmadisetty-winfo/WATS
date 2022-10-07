@@ -20,7 +20,7 @@ import com.winfo.vo.DomGenericResponseBean;
 @Repository
 
 public class WatsPluginDao {
-	Logger log = Logger.getLogger("Logger");
+	Logger log = Logger.getLogger(WatsPluginDao.class);
 	private static final String USER_ID = "userId";
 
 	@Autowired
