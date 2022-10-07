@@ -47,12 +47,12 @@ public class PostApiValidationMigrationService {
 		try {
 			int apiValidationId = dataBaseEntry.getApiValidationIdActionId();
 			List<Object> lookUpCodesData = dataBaseEntry.getApiValidationDataFromLookupsCode(apiValidationId,
-					apiValidationMigration.getValidation_lookup_codes());
+					apiValidationMigration.getValidationLookupCodes());
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			LookUpCodeVO[] listOfLookUpCodesData =objectMapper.convertValue(lookUpCodesData, LookUpCodeVO[].class);
 			ApiValidationDto apiDto =new ApiValidationDto();
-			apiDto.setLookup_codes(Arrays.asList(listOfLookUpCodesData));
+			apiDto.setLookupCodes(Arrays.asList(listOfLookUpCodesData));
 			apiDto.setFlag(apiValidationMigration.isFlag());
 			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getTargetEnvironment());
 			return webClientService(apiDto, customerUrl);

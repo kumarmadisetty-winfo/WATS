@@ -5,17 +5,17 @@ import java.util.List;
 
 public class ApiValidationMigrationDto {
 	
-	private List<Integer> validation_lookup_codes= new ArrayList<>();
+	private List<Integer> validationLookupCodes= new ArrayList<>();
 	
 	private String targetEnvironment;
 	private boolean flag;
 
-	public List<Integer> getValidation_lookup_codes() {
-		return validation_lookup_codes;
+	public List<Integer> getValidationLookupCodes() {
+		return validationLookupCodes;
 	}
 
-	public void setValidation_lookup_codes(List<Integer> lookUpCodeIds) {
-		this.validation_lookup_codes = lookUpCodeIds;
+	public void setValidationLookupCodes(List<Integer> lookUpCodeIds) {
+		this.validationLookupCodes = lookUpCodeIds;
 	}
 
 	public String getTargetEnvironment() {
@@ -36,9 +36,9 @@ public class ApiValidationMigrationDto {
 		this.flag = flag;
 	}
 
-	public ApiValidationMigrationDto(List<Integer> validation_lookup_codes, String targetEnvironment, boolean flag) {
+	public ApiValidationMigrationDto(List<Integer> validationLookupCodes, String targetEnvironment, boolean flag) {
 		super();
-		this.validation_lookup_codes = validation_lookup_codes;
+		this.validationLookupCodes = validationLookupCodes;
 		this.targetEnvironment = targetEnvironment;
 		this.flag = flag;
 	}

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApiValidationDto {
-private List<LookUpCodeVO> lookup_codes= new ArrayList<>();
+private List<LookUpCodeVO> lookupCodes= new ArrayList<>();
 	private boolean flag;
-	public List<LookUpCodeVO> getLookup_codes() {
-		return lookup_codes;
+	public List<LookUpCodeVO> getLookupCodes() {
+		return lookupCodes;
 	}
-	public void setLookup_codes(List<LookUpCodeVO> lookup_codes) {
-		this.lookup_codes = lookup_codes;
+	public void setLookupCodes(List<LookUpCodeVO> lookup_codes) {
+		this.lookupCodes = lookup_codes;
 	}
 	public boolean isFlag() {
 		return flag;
@@ -21,14 +21,14 @@ private List<LookUpCodeVO> lookup_codes= new ArrayList<>();
 	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
-	public ApiValidationDto(List<LookUpCodeVO> lookup_codes, boolean flag) {
+	
+	public ApiValidationDto(List<LookUpCodeVO> lookupCodes, boolean flag) {
 		super();
-		this.lookup_codes = lookup_codes;
+		this.lookupCodes = lookupCodes;
 		this.flag = flag;
 	}
-	
 	public ApiValidationDto() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	

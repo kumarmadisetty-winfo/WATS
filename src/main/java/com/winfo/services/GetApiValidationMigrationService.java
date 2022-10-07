@@ -29,22 +29,20 @@ public class GetApiValidationMigrationService {
 			int apiValidationId = dataBaseEntry.getApiValidationIdActionId();
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			List<LookUpCode> listOfLookUpCodesData = Arrays.asList(objectMapper.convertValue(lookUpCodeVOData.getLookup_codes(), LookUpCode[].class));
+			List<LookUpCode> listOfLookUpCodesData = Arrays.asList(objectMapper.convertValue(lookUpCodeVOData.getLookupCodes(), LookUpCode[].class));
 			List<String> listOfLookUpCodeName = listOfLookUpCodesData.stream().map(LookUpCode::getLookUpCode).collect(Collectors.toList());
 			String lookUpCodes = String.join("','", listOfLookUpCodeName);
-			
 			boolean flag =  lookUpCodeVOData.isFlag();
 			List<String> lookUpCodeId = new ArrayList();
 			String existsLookUpCodeId = null;
-			lookUpCodeVOData.getLookup_codes().forEach((ele)->{
-				List<String> existsLookUpCode = dataBaseEntry.checkIfValidationExists(apiValidationId,String.valueOf(ele.getLookUpCode()));
-				System.out.println("existsLookUpCode " +existsLookUpCode);
-				if(flag==true)
+			lookUpCodeVOData.getLookupCodes().forEach(ele->{
+			List<String> existsLookUpCode = dataBaseEntry.getIfValidationExists(apiValidationId,String.valueOf(ele.getLookUpCode()));
+				if(flag)
 				{
 					listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
 						List<LookUpCode> id = null;
 						try {
-							id = dataBaseEntry.checkIfValidationExists1(apiValidationId,String.valueOf(ele.getLookUpCode()));
+							id = dataBaseEntry.getExistingData(apiValidationId,String.valueOf(ele.getLookUpCode()));
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -59,7 +57,7 @@ public class GetApiValidationMigrationService {
 				else {
 					
 				
-				if(existsLookUpCode.size()==0) {
+				if(existsLookUpCode.isEmpty()) {
 					listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
 						listOfLookUpCodes.setLookUpCodeId(null);
 						listOfLookUpCodes.setLookUpId(apiValidationId);
@@ -75,7 +73,7 @@ public class GetApiValidationMigrationService {
 			});
 			existsLookUpCodeId=String.join(",", lookUpCodeId);
 
-			if(lookUpCodeId.size()!=0)
+			if(!lookUpCodeId.isEmpty())
 			{
 			return new ResponseDto(409, Constants.CONFLICT,existsLookUpCodeId);
 			}
