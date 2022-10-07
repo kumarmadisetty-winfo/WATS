@@ -66,9 +66,6 @@ public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
 	
-	@PersistenceContext
-	private EntityManager entityManager;
-
 	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
 
 	private static final String NULL_STRING = "null";
@@ -1560,7 +1557,7 @@ public class DataBaseEntryDao {
 		  TypedQuery<LookUpCode> query ;
 		  try {
 			Session session = em.unwrap(Session.class); 
-			query = entityManager.createQuery("from LookUpCode where lookup_id = :apiValidationId and lookup_code in :lookUpCode", LookUpCode.class);
+			query = em.createQuery("from LookUpCode where lookup_id = :apiValidationId and lookup_code in :lookUpCode", LookUpCode.class);
 			  
 		} catch (Exception e) {
 			logger.error("Not able to fetch LookUpCode data from database");
