@@ -1333,19 +1333,17 @@ public class RunAutomation {
 							break;
 
 						case "apiAccessToken":
-							seleniumFactory.getInstanceObj(instanceName).apiAccessToken(fetchMetadataVO,
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).apiAccessToken(fetchMetadataVO,
 									accessTokenStorage, customerDetails);
-							validationFlag = true;
 							break;
 
 						case "apiValidationResponse":
-							seleniumFactory.getInstanceObj(instanceName).apiValidationResponse(fetchMetadataVO,
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).apiValidationResponse(fetchMetadataVO,
 									accessTokenStorage, api,customerDetails,fetchConfigVO);
 							break;
 
 						case "validation":
-							validationFlag = seleniumFactory.getInstanceObj(instanceName).validation(fetchMetadataVO,
-									api);
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).validation(fetchMetadataVO, api);
 							break;
 
 						default:
