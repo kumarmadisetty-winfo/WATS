@@ -12403,7 +12403,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				logger.info(driver.switchTo().window(childWindow).getTitle());
 			}
 			
-			AbstractSeleniumKeywords.renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
@@ -12436,7 +12436,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 			
-			AbstractSeleniumKeywords.renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();

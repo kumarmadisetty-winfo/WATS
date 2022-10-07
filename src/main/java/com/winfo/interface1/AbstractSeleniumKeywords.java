@@ -1596,7 +1596,7 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 	}
 
-	public static void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,CustomerProjectDto customerDetails) throws InterruptedException {
+	public void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,CustomerProjectDto customerDetails) throws InterruptedException {
 		// For getting the name of the downloaded file name
 
 		JavascriptExecutor jse = (JavascriptExecutor) driver;

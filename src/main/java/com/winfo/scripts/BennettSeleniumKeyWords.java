@@ -14445,7 +14445,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 			
-			AbstractSeleniumKeywords.renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
@@ -14478,7 +14478,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 			
-			AbstractSeleniumKeywords.renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
