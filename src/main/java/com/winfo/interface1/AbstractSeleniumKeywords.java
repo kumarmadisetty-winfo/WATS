@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -51,10 +54,21 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -88,6 +102,7 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.TestSetAttribute;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -96,6 +111,8 @@ import com.winfo.utils.DateUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
+
+import reactor.core.publisher.Mono;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -111,6 +128,8 @@ public abstract class AbstractSeleniumKeywords {
 	private String watslogo;
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
+	@Autowired
+	private DataBaseEntry databaseentry;
 
 	private static final String PASSED_PDF = "Passed_Report.pdf";
 	private static final String FAILED_PDF = "Failed_Report.pdf";
@@ -1537,6 +1556,248 @@ public abstract class AbstractSeleniumKeywords {
 		}
 		document.add(table1);
 		document.newPage();
+	}
+	
+	public void apiAccessTokenCreation(FetchConfigVO fetchConfigVO,ScriptDetailsDto fetchMetadataVO,CustomerProjectDto customerDetails)
+			throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		String str = "{\n"
+				+ "  \"HTTP Type\": \"POST\",\n"
+				+ "  \"Request Header\": {\n"
+				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n"
+				+ "  },\n"
+				+ "  \"Request Body\": {\n"
+				+ "    \"grant_type\": \"client_credentials\"\n"
+				+ "  }\n"
+				+ "}";
+		ApiValidationVO apiValidationData = objectMapper.readValue(str,ApiValidationVO.class);
+		apiValidationData.setUrl(fetchConfigVO.getAPI_AUTHENTICATION_URL());
+		String token = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+			headers.set("Authorization", "Basic "+fetchConfigVO.getAPI_AUTHENTICATION_CODE());		// Converting object to string
+//			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Converting Request body object into map
+			Gson gson = new Gson();
+			Map<String, String> attributes = gson.fromJson(gson.toJson(apiValidationData.getRequestBody()), Map.class);
+
+			// Setting Map value to MultiValueMap
+			MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+			for (Entry<String, String> map : attributes.entrySet()) {
+				bodyValues.set(map.getKey(), map.getValue());
+			}
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+
+			// Creating WebClient
+			WebClient client = WebClient.create();
+			Map<String, String> response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+					.headers(headersHttp -> headersHttp.addAll(headers))
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(BodyInserters.fromFormData(bodyValues))
+					.retrieve().bodyToMono(Map.class).block();
+
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(response);
+			apiValidationData.setResponse(json);
+
+
+			// Getting the token from the response
+			token = response.get("access_token");
+			
+			databaseentry.insertRecordInTestSetAttribute(customerDetails.getTestSetId(),"access_token",token,fetchMetadataVO.getExecutedBy());
+			Date date = new Date(System.currentTimeMillis() - 3600 * 1000);
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+			TimeZone timeZone = TimeZone.getTimeZone("GMT");
+			formatter.setTimeZone(timeZone);
+			String expiresTime = formatter.format(date);
+			databaseentry.insertRecordInTestSetAttribute(customerDetails.getTestSetId(),"expires_in",expiresTime,fetchMetadataVO.getExecutedBy());
+		} catch (Exception ex) {
+			throw ex;
+		}
+//		return token;
+	}
+
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
+			throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ApiValidationVO apiValidationData = objectMapper.readValue(fetchMetadataVO.getInputValue(),
+				ApiValidationVO.class);
+
+		String token = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+
+			// Converting object to string
+//			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Converting Request body object into map
+			Gson gson = new Gson();
+			Map<String, String> attributes = gson.fromJson(gson.toJson(apiValidationData.getRequestBody()), Map.class);
+
+			// Setting Map value to MultiValueMap
+			MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+			for (Entry<String, String> map : attributes.entrySet()) {
+				bodyValues.set(map.getKey(), map.getValue());
+			}
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+
+			// Creating WebClient
+			WebClient client = WebClient.create();
+			Map<String, String> response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+					.headers(headersHttp -> headersHttp.addAll(headers))
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(BodyInserters.fromFormData(bodyValues))
+					.retrieve().bodyToMono(Map.class).block();
+
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(response);
+			apiValidationData.setResponse(json);
+
+			String value = ow.writeValueAsString(apiValidationData);
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+
+			// Getting the token from the response
+			token = response.get("access_token");
+//			String key = "Access Token";
+			String key = customerDetails.getTestSetName() + ">" + fetchMetadataVO.getSeqNum() + ">"
+					+ fetchMetadataVO.getLineNumber();
+			accessTokenStorage.put(key, token);
+		} catch (Exception ex) {
+			throw ex;
+		}
+//		return token;
+	}
+
+	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		String inputValue = fetchMetadataVO.getInputValue().replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
+		ApiValidationVO apiValidationData = objectMapper.readValue(inputValue,
+				ApiValidationVO.class);
+
+		try {
+			
+			TestSetAttribute testSetAttributeAccessToken = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "access_token");
+			if(testSetAttributeAccessToken!=null) {
+				TestSetAttribute testSetAttributeExpiresIn = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "expires_in");
+				boolean expireIsPresent = testSetAttributeExpiresIn != null;
+				boolean authenticationValues = (fetchConfigVO.getAPI_AUTHENTICATION_URL()!=null && fetchConfigVO.getAPI_AUTHENTICATION_CODE() !=null);
+				if (expireIsPresent && authenticationValues) {
+					if(expireIsPresent) {
+						
+					}else{
+						apiAccessTokenCreation(fetchConfigVO,fetchMetadataVO,customerDetails);
+					}
+				}else {
+					apiValidationData.setAccessToken(testSetAttributeAccessToken.getAttributeValue());
+				}
+				
+			}
+			else {
+				apiAccessTokenCreation(fetchConfigVO,fetchMetadataVO,customerDetails);
+			}
+
+			WebClient client = WebClient.create();
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+
+			if (apiValidationData.getAccessToken() != null) {
+//				String[] str = apiValidationData.getAccessToken().split(">");
+//				System.out.println(str);
+//				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
+//				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
+//				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
+				headers.set("Authorization", "Bearer "+apiValidationData.getAccessToken());
+			}
+			apiValidationData.setAccessToken(null);
+			// Converting object to string
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String strInput = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+			ClientResponse response;
+
+			if (apiValidationData.getRequestBody() != null && !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
+				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
+						.body(BodyInserters.fromObject(strInput)).exchange().block();
+			} else {
+				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
+						.exchange().block();
+			}
+
+			Mono<String> bodyToMono = response.bodyToMono(String.class);
+			bodyToMono.subscribe((body) -> {
+				api.setResponse(body);
+			}, (ex) -> {
+			});
+			api.setResponseCode(response.statusCode().value());
+			apiValidationData.setResponseCode(response.statusCode().value());
+			apiValidationData.setAccessToken("");
+			ObjectWriter ow1 = new ObjectMapper().writer();
+			String value = ow1.writeValueAsString(apiValidationData);
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+//			return response.statusCode();
+			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
+			
+			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			String name = (fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
+			
+			try (PrintWriter out = new PrintWriter(fileName)) {
+			    out.println(api.getResponse());
+			}
+//			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
+//					+ customerDetails.getTestSetName();
+			File source = new File(fileName);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName(), name);
+			Files.delete( Paths.get(fileName));
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) throws Exception {
+		String[] values = fetchMetadataVO.getInputValue().split("/");
+		for (String str : values) {
+			if (api.getResponseCode().toString().contains(str)) {
+				return true;
+			}
+		}
+		throw new Exception("Validation Failed.");
 	}
 
 
