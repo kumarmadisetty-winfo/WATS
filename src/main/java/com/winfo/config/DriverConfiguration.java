@@ -12,6 +12,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -77,6 +78,9 @@ public class DriverConfiguration {
 			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
 					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.value, fetchConfigVO.getFirefox_driver_path());
+			FirefoxProfile profile = new FirefoxProfile();
+
+			profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
 
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			FirefoxOptions options = new FirefoxOptions();
@@ -91,6 +95,7 @@ public class DriverConfiguration {
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
 			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
+			options.setProfile(profile);
 			// driver = new FirefoxDriver(options);
 			driver = new RemoteWebDriver(new URL(configUrl), options);
 		}
