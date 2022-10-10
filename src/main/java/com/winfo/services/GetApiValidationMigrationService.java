@@ -57,7 +57,7 @@ public class GetApiValidationMigrationService {
 				else {
 					
 				
-				if(existsLookUpCode.isEmpty()) {
+				if(existsLookUpCode.isEmpty() || existsLookUpCode==null) {
 					listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
 						listOfLookUpCodes.setLookUpCodeId(null);
 						listOfLookUpCodes.setLookUpId(apiValidationId);
