@@ -1495,7 +1495,7 @@ public class DataBaseEntryDao {
 		return listOfLookUpCodesData;
 	}
 
-	public List<String> getIfValidationExists(int apiValidationId, String lookUpCode) {
+	public List<String> getExistingLookupCodeByValidationId(int apiValidationId, String lookUpCode) {
 		List<String> listOfLookUpCode = null;
 		try {
 			Session session = em.unwrap(Session.class);
@@ -1553,7 +1553,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public List<LookUpCode> getExistingData(int apiValidationId, String lookUpCode) throws Exception {
+	public List<LookUpCode> getExistingLookupListByValidationId(int apiValidationId, String lookUpCode) throws Exception {
 		  TypedQuery<LookUpCode> query ;
 		  try {
 			Session session = em.unwrap(Session.class); 

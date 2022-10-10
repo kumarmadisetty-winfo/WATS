@@ -36,13 +36,13 @@ public class GetApiValidationMigrationService {
 			List<String> lookUpCodeId = new ArrayList();
 			String existsLookUpCodeId = null;
 			lookUpCodeVOData.getLookupCodes().forEach(ele->{
-			List<String> existsLookUpCode = dataBaseEntry.getIfValidationExists(apiValidationId,String.valueOf(ele.getLookUpCode()));
+			List<String> existsLookUpCode = dataBaseEntry.getExistingLookupCodeByValidationId(apiValidationId,String.valueOf(ele.getLookUpCode()));
 				if(flag)
 				{
 					listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
 						List<LookUpCode> id = null;
 						try {
-							id = dataBaseEntry.getExistingData(apiValidationId,String.valueOf(ele.getLookUpCode()));
+							id = dataBaseEntry.getExistingLookupListByValidationId(apiValidationId,String.valueOf(ele.getLookUpCode()));
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
