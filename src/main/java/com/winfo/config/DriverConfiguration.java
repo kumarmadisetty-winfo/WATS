@@ -79,7 +79,7 @@ public class DriverConfiguration {
 					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.value, fetchConfigVO.getFirefox_driver_path());
 			FirefoxProfile profile = new FirefoxProfile();
-
+			profile.setPreference("browser.download.folderList", 2);
 			profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
 
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
