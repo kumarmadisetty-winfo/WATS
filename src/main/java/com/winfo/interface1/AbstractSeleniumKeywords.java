@@ -1602,16 +1602,28 @@ public abstract class AbstractSeleniumKeywords {
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("window.open()");
 		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-
-		driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
-
-		/* Download Window Open */
-		Thread.sleep(3000);
-		String fileName = (String) jse.executeScript(
-				"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
-		driver.close();
-		driver.switchTo().window(tabs.get(0));
-		logger.info("File Name*** " + fileName);
+		String fileName = null;
+		if(fetchConfigVO.getBrowser().equalsIgnoreCase("chrome")) {
+			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
+			/* Download Window Open */
+			Thread.sleep(3000);
+			 fileName = (String) jse.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			logger.info("File Name*** " + fileName);
+			
+		}else if(fetchConfigVO.getBrowser().equalsIgnoreCase("firefox")) {
+			driver.switchTo().window(tabs.get(1)).get("about:downloads");
+			/* Download Window Open */
+			Thread.sleep(3000);
+			 fileName = (String) jse.executeScript(
+					"return document.querySelector('#contentAreaDownloadsView .downloadMainArea .downloadContainer description:nth-of-type(1)').value");
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			logger.info("File Name*** " + fileName);
+		}
+		
 		if (fileName != null) {
 			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
 
