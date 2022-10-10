@@ -79,8 +79,11 @@ public class DriverConfiguration {
 					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.value, fetchConfigVO.getFirefox_driver_path());
 			FirefoxProfile profile = new FirefoxProfile();
+			
 			profile.setPreference("browser.download.folderList", 2);
 			profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
+			profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf;text/plain;application/text;text/xml;application/xml");
+			profile.setPreference("pdfjs.disabled", true);
 
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			FirefoxOptions options = new FirefoxOptions();
