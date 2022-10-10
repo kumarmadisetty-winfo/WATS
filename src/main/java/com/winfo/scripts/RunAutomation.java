@@ -999,7 +999,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-								if (message != null && !message.startsWith("Example") && !message.startsWith("Submission Notes Operator")
+								if (message != null && !message.startsWith("Example")
 										&& !message.startsWith("Offer Comments") && !message.startsWith("Context Value")
 										&& !message.startsWith("Select Book")
 										&& !message.startsWith("Enter a date between")
