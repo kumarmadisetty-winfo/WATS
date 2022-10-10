@@ -520,12 +520,22 @@ public class DataBaseEntry {
 		return dao.getApiValidationDataFromLookupsCode(apiValidationId, list);
 	}
 
-	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
-		return dao.checkIfValidationExists(apiValidationId, lookUpCode);
+	public List<String> getExistingLookupCodeByValidationId(int apiValidationId, String lookUpCode) {
+		return dao.getExistingLookupCodeByValidationId(apiValidationId, lookUpCode);
 	}
 
 	public void insertApiValidation(LookUpCode lookUpCodes) {
 		dao.insertApiValidation(lookUpCodes);
 	}
+
+	public void updateApiValidation(LookUpCode listOfLookUpCodes) {
+		dao.updateApiValidation(listOfLookUpCodes);
+		
+	}
+
+	public List<LookUpCode> getExistingLookupListByValidationId(int apiValidationId, String lookUpCode) throws Exception {
+		return dao.getExistingLookupListByValidationId(apiValidationId,lookUpCode);
+	}
+	
 
 }

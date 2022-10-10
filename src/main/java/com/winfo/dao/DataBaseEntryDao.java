@@ -16,10 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -65,7 +65,7 @@ import com.winfo.vo.Status;
 public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
-
+	
 	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
 
 	private static final String NULL_STRING = "null";
@@ -1495,11 +1495,11 @@ public class DataBaseEntryDao {
 		return listOfLookUpCodesData;
 	}
 
-	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
+	public List<String> getExistingLookupCodeByValidationId(int apiValidationId, String lookUpCode) {
 		List<String> listOfLookUpCode = null;
 		try {
 			Session session = em.unwrap(Session.class);
-			String query = "select lookup_code from WATS_PROD.win_ta_lookup_codes where lookup_id = " + apiValidationId
+			String query = "select lookup_code from win_ta_lookup_codes where lookup_id = " + apiValidationId
 					+ " and lookup_code in ('" + lookUpCode + "')";
 			listOfLookUpCode = session.createSQLQuery(query).getResultList();
 		} catch (Exception e) {
@@ -1513,10 +1513,10 @@ public class DataBaseEntryDao {
 		Session session = em.unwrap(Session.class);
 		session.persist(lookUpCodes);
 	}
-
+  
 	public boolean doesActionContainsSfApplication(String scriptId) {
 		Object count = null;
-		String updateQry = "select count(*) from WATS_PROD.win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
+		String updateQry = "select count(*) from win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
 		try {
 			Session session = em.unwrap(Session.class);
 			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
@@ -1553,4 +1553,25 @@ public class DataBaseEntryDao {
 		}
 	}
 
+	public List<LookUpCode> getExistingLookupListByValidationId(int apiValidationId, String lookUpCode) throws Exception {
+		  TypedQuery<LookUpCode> query ;
+		  try {
+			Session session = em.unwrap(Session.class); 
+			query = em.createQuery("from LookUpCode where lookup_id = :apiValidationId and lookup_code in :lookUpCode", LookUpCode.class);
+			  
+		} catch (Exception e) {
+			logger.error("Not able to fetch LookUpCode data from database");
+			throw new WatsEBSCustomException(500, "Exception occured while fetching LookUpCode data",e);
+		}
+		 return query.setParameter("apiValidationId", apiValidationId).setParameter("lookUpCode", lookUpCode).getResultList();
+		}
+	
+	public void updateApiValidation(LookUpCode listOfLookUpCodes) {
+		Session session = em.unwrap(Session.class);
+		session.merge(listOfLookUpCodes);
+	}
 }
+	
+	
+
+

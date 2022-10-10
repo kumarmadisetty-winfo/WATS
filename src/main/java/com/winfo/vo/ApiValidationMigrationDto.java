@@ -5,29 +5,42 @@ import java.util.List;
 
 public class ApiValidationMigrationDto {
 	
-	private List<Integer> lookUpCodeIds= new ArrayList<>();
+	private List<Integer> validationLookupCodes= new ArrayList<>();
 	
-	private String customerName;
+	private String targetEnvironment;
+	private boolean flag;
 
-	public List<Integer> getLookUpCodeIds() {
-		return lookUpCodeIds;
+	public List<Integer> getValidationLookupCodes() {
+		return validationLookupCodes;
 	}
 
-	public void setLookUpCodeIds(List<Integer> lookUpCodeIds) {
-		this.lookUpCodeIds = lookUpCodeIds;
+	public void setValidationLookupCodes(List<Integer> lookUpCodeIds) {
+		this.validationLookupCodes = lookUpCodeIds;
 	}
 
-	public String getCustomerName() {
-		return customerName;
+	public String getTargetEnvironment() {
+		return targetEnvironment;
 	}
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setTargetEnvironment(String customerName) {
+		this.targetEnvironment = customerName;
 	}
 
-	public ApiValidationMigrationDto(List<Integer> lookUpCodeIds, String customerName) {
-		this.lookUpCodeIds = lookUpCodeIds;
-		this.customerName = customerName;
+	
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public ApiValidationMigrationDto(List<Integer> validationLookupCodes, String targetEnvironment, boolean flag) {
+		super();
+		this.validationLookupCodes = validationLookupCodes;
+		this.targetEnvironment = targetEnvironment;
+		this.flag = flag;
 	}
 
 	public ApiValidationMigrationDto() {

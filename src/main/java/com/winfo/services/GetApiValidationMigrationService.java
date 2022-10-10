@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -12,6 +13,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.model.LookUpCode;
 import com.winfo.utils.Constants;
+import com.winfo.vo.ApiValidationDto;
+import com.winfo.vo.ApiValidationMigrationDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.ResponseDto;
 
@@ -20,28 +23,61 @@ public class GetApiValidationMigrationService {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
-	public ResponseDto apiValidationMigration(List<LookUpCodeVO> lookUpCodeVOData) {
+	public ResponseDto apiValidationMigration(ApiValidationDto lookUpCodeVOData) {
 		try {
+			
 			int apiValidationId = dataBaseEntry.getApiValidationIdActionId();
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//			lookUpCodeVOData.forEach(lookUpCodeVO -> {
-//				lookUpCodeVO.setLookUpCodeId(null);
-//				lookUpCodeVO.set
-//			});
-			List<LookUpCode> listOfLookUpCodesData = Arrays.asList(objectMapper.convertValue(lookUpCodeVOData, LookUpCode[].class));
+			List<LookUpCode> listOfLookUpCodesData = Arrays.asList(objectMapper.convertValue(lookUpCodeVOData.getLookupCodes(), LookUpCode[].class));
 			List<String> listOfLookUpCodeName = listOfLookUpCodesData.stream().map(LookUpCode::getLookUpCode).collect(Collectors.toList());
 			String lookUpCodes = String.join("','", listOfLookUpCodeName);
-			List<String> existsLookUpCode = dataBaseEntry.checkIfValidationExists(apiValidationId,lookUpCodes);
-			if(!existsLookUpCode.isEmpty()) {
-				String existsLookUpCodeName = String.join(",", existsLookUpCode);
-				return new ResponseDto(409, Constants.CONFLICT, existsLookUpCodeName);
+			boolean flag =  lookUpCodeVOData.isFlag();
+			List<String> lookUpCodeId = new ArrayList();
+			String existsLookUpCodeId = null;
+			lookUpCodeVOData.getLookupCodes().forEach(ele->{
+			List<String> existsLookUpCode = dataBaseEntry.getExistingLookupCodeByValidationId(apiValidationId,String.valueOf(ele.getLookUpCode()));
+				if(flag)
+				{
+					listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
+						List<LookUpCode> id = null;
+						try {
+							id = dataBaseEntry.getExistingLookupListByValidationId(apiValidationId,String.valueOf(ele.getLookUpCode()));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						LookUpCode lookUpCode = listOfLookUpCodes;
+						lookUpCode.setLookUpCodeId(id.get(0).getLookUpCodeId());
+						lookUpCode.setLookUpId(id.get(0).getLookUpId());
+						dataBaseEntry.updateApiValidation(lookUpCode);
+					}); 
+					
+					
+				}
+				else {
+					
+				
+				if( existsLookUpCode==null || existsLookUpCode.isEmpty()) {
+					listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
+						listOfLookUpCodes.setLookUpCodeId(null);
+						listOfLookUpCodes.setLookUpId(apiValidationId);
+						dataBaseEntry.insertApiValidation(listOfLookUpCodes);
+						});
+				}
+				else {
+					
+					lookUpCodeId.add(ele.getLookUpCodeId().toString());
+
+				}
+				}
+			});
+			existsLookUpCodeId=String.join(",", lookUpCodeId);
+
+			if(!lookUpCodeId.isEmpty())
+			{
+			return new ResponseDto(409, Constants.CONFLICT,existsLookUpCodeId);
 			}
-			listOfLookUpCodesData.forEach(listOfLookUpCodes -> {
-				listOfLookUpCodes.setLookUpCodeId(null);
-				listOfLookUpCodes.setLookUpId(apiValidationId);
-				dataBaseEntry.insertApiValidation(listOfLookUpCodes);
-				});
+			
 		}catch(Exception e) {
 			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
 		}
