@@ -48,6 +48,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.Log;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -81,8 +82,10 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
@@ -629,11 +632,11 @@ public abstract class AbstractSeleniumKeywords {
 					generateFailedPDF(document, passcount, failcount);
 				}
 				addRestOfPagesToPDF(document, fileNameList, watsLogo, fetchConfigVO, fetchMetadataListVO,
-						customerDetails);
+						customerDetails,writer);
 			} else if (!(PASSED_PDF.equalsIgnoreCase(pdffileName) || FAILED_PDF.equalsIgnoreCase(pdffileName)
 					|| DETAILED_PDF.equalsIgnoreCase(pdffileName))) {
 				generateScriptLvlPDF(document, fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime(), watsLogo,
-						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails);
+						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails,writer);
 			}
 			document.close();
 
@@ -654,7 +657,7 @@ public abstract class AbstractSeleniumKeywords {
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, List<String> fileNameList,
-			CustomerProjectDto customerDetails) throws IOException, com.itextpdf.text.DocumentException {
+			CustomerProjectDto customerDetails,PdfWriter writer) throws IOException, com.itextpdf.text.DocumentException {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
@@ -704,11 +707,19 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 
 		int i = 0;
+		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			String nextSeqNumber = "0";
+			String currentSeqNumber = "0";
+			increment++;
+			if(increment < fetchMetadataListVO.size()) {
+				currentSeqNumber = metaDataVO.getSeqNum();
+				nextSeqNumber = fetchMetadataListVO.get(increment).getSeqNum();
+			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_" + PASSED + PNG_EXTENSION)) {
 				image = fileName + "_" + PASSED + PNG_EXTENSION;
@@ -770,6 +781,26 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (API_TESTING.equalsIgnoreCase(checkPackage)) {
 					addingResponseIntoReport(fileName, document, customerDetails, fetchConfigVO);
+				}
+				
+				//Adding the downloaded pdf after that particular script
+				
+				if(!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
+					String docName = (metaDataVO.getSeqNum() + "_"
+		                    + metaDataVO.getScenarioName() + "_"
+		                    + metaDataVO.getScriptNumber() + "_" 
+		                    + customerDetails.getTestSetName() + "_Passed");
+					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					if(file.exists()) {
+					PdfContentByte contentByte = writer.getDirectContent();
+					PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					for(int page=1; page<=pdfReader.getNumberOfPages(); page++) { 
+						PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
+						document.newPage();
+						contentByte.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+						
+					      }
+					}
 				}
 			}
 		}
@@ -948,7 +979,7 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
-			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails)
+			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails,PdfWriter writer)
 			throws IOException, com.itextpdf.text.DocumentException {
 		int k = 0;
 		int l = 0;
@@ -1040,11 +1071,19 @@ public abstract class AbstractSeleniumKeywords {
 
 		int i = 0;
 		int j = 0;
+		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			String nextSeqNumber = "0";
+			String currentSeqNumber = "0";
+			increment++;
+			if(increment < fetchMetadataListVO.size()) {
+				currentSeqNumber = metaDataVO.getSeqNum();
+				nextSeqNumber = fetchMetadataListVO.get(increment).getSeqNum();
+			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_Passed.png")) {
 				image = fileName + "_Passed.png";
@@ -1201,6 +1240,24 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (API_TESTING.equalsIgnoreCase(checkPackage)) {
 					addingResponseIntoReport(fileName, document, customerDetails, fetchConfigVO);
+				}
+				
+				//Adding the downloaded pdf after that particular script
+
+				if (!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
+					String docName = (metaDataVO.getSeqNum() + "_" + metaDataVO.getScenarioName() + "_"
+							+ metaDataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					if (file.exists()) {
+						PdfContentByte contentByte = writer.getDirectContent();
+						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
+							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
+							document.newPage();
+							contentByte.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+
+						}
+					}
 				}
 			}
 
@@ -1800,5 +1857,50 @@ public abstract class AbstractSeleniumKeywords {
 		throw new Exception("Validation Failed.");
 	}
 
+	public void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,CustomerProjectDto customerDetails) throws InterruptedException {
+		// For getting the name of the downloaded file name
+
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("window.open()");
+		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+		String fileName = null;
+		if(fetchConfigVO.getBrowser().equalsIgnoreCase("chrome")) {
+			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
+			/* Download Window Open */
+			Thread.sleep(3000);
+			 fileName = (String) jse.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			logger.info("File Name*** " + fileName);
+			
+		}else if(fetchConfigVO.getBrowser().equalsIgnoreCase("firefox")) {
+			driver.switchTo().window(tabs.get(1)).get("about:downloads");
+			/* Download Window Open */
+			Thread.sleep(3000);
+			 fileName = (String) jse.executeScript(
+					"return document.querySelector('#contentAreaDownloadsView .downloadMainArea .downloadContainer description:nth-of-type(1)').value");
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			logger.info("File Name*** " + fileName);
+		}
+		
+		if (fileName != null) {
+			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+
+			String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
+				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
+
+			if (oldFile.exists()) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+					logger.info("File name changed succesful");
+				} else {
+					logger.info("Rename failed");
+				}
+			}
+		}
+	}
 
 }
