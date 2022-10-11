@@ -11025,6 +11025,55 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("Country")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())='" + param1
+						+ "']/following::label[text()='" + param2 + "']/following::a[1]")));
+				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
+						+ "']/following::label[text()='" + param2 + "']/following::a[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				actions.click(waittext).build().perform();
+				Thread.sleep(10000);
+				WebElement search = driver.findElement(By.xpath(
+						"//div[contains(@id,'inputComboboxListOfValues1')]/following-sibling::a[contains(text(),'Search')]"));
+				search.click();
+				Thread.sleep(3000);
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]")));
+				WebElement searchResult = driver.findElement(By.xpath(
+						"(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"));
+				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(5000);
+				WebElement text = driver.findElement(By
+						.xpath("//span[text()='Name']/following::span[normalize-space(text())='" + keysToSend + "']"));
+				text.click();
+				Thread.sleep(5000);
+				WebElement button = driver.findElement(By.xpath(
+						"//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]"));
+				button.click();
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+
+				String xpath = "//*[normalize-space(text())='param1']/following::label[text()='param2']/following::a[1]"
+						+ ";"
+						+ "//*[contains(@id,'territoryShortNameId')]/following-sibling::a[contains(text(),'Search')]"
+						+ ";"
+						+ "(//h2[normalize-space(text())='Search']/following::label[normalize-space(text())='Name']/following::input)[1]"
+						+ ";" + "//span[text()='Name']/following::span[normalize-space(text())='keysToSend']" + ";"
+						+ "//*[normalize-space(text())='Search']/following::*[normalize-space(text())='Name']/following::*[text()='OK'][1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully Clicked Create Bank Account or Country dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception ex) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Create Bank Account or Country dropdownValues" + scripNumber);
+			System.out.println(ex);
+		}
 
 		// DH 32
 		try {

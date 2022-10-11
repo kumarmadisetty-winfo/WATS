@@ -9367,25 +9367,16 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (param1.equalsIgnoreCase("Driver's Licenses") || param2.equalsIgnoreCase("Unapply Accounting Date")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='"
-								+ param2 + "']/following::input[@type='text'])[1]")));
-				Thread.sleep(5000);
-				wait.until(
-						ExpectedConditions
-								.textToBePresentInElementLocated(
-										By.xpath("//*[normalize-space(text())=\"" + param1
-												+ "\"]/following::label[normalize-space(text())='" + param2 + "']"),
-										param2));
-				WebElement waittill = driver.findElement(By.xpath(
-						"//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='"
-								+ param2 + "']/following::input[@type='text'])[1]"));
+						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='\"+param2+\"']/following::input[@type='text'])[1]")));
+				Thread.sleep(5000);								
+				WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())='\"+param2+\"']/following::input[@type='text'])[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Unapply Accounting Date sendValue" + scripNumber);
-				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[@type='text'])[1]";
+				String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::input[@type='text'])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
