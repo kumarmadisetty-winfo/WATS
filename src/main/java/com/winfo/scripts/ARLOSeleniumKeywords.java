@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,21 +23,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.FileImageOutputStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.openqa.selenium.By;
-//import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -46,7 +38,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-//import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +54,6 @@ import org.springframework.web.client.RestTemplate;
 import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
-import com.winfo.services.DataBaseEntry;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
@@ -74,17 +64,7 @@ import com.winfo.vo.ScriptDetailsDto;
 @Service("ARLO")
 public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 
-	@Autowired
-	private DataBaseEntry databaseentry;
-	Logger logger = LogManager.getLogger(ARLOSeleniumKeywords.class);
-	/*
-	 * private Integer ElementWait = Integer
-	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
-	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
-	 */
-	public String Main_Window = "";
-	public WebElement fromElement;
-	public WebElement toElement;
+	public static final Logger log = Logger.getLogger("Logger");
 
 	@Autowired
 	ScriptXpathService service;
@@ -102,14 +82,16 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
+			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			throws Exception {
 		String param3 = "Navigator";
 		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 	}
 
 	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception {
+			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			throws Exception {
 		String param3 = "Tasks";
 		clickImage(driver, param3, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 		clickTaskLink(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -117,7 +99,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
+			throws Exception {
 		String param4 = "UIScmil1u";
 		String param5 = "Sign Out";
 		String param6 = "Confirm";
@@ -139,7 +122,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During Navigation");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			logger.info("Not able to navitage to the Url");
 		}
 	}
 
@@ -151,7 +134,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.sleep(seconds);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -161,7 +145,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -171,7 +156,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -179,16 +165,16 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			CustomerProjectDto customerDetails) {
 		try {
 			String sharepoint = fetchConfigVO.getSharepoint_resp();
-			System.out.println(sharepoint);
+			logger.info(sharepoint);
 			String accessToken = getAccessToken();
-			List imageUrlList = new ArrayList();
-			File imageDir = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
-					+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName());
+			List<String> imageUrlList = new ArrayList<>();
+			File imageDir = new File(System.getProperty("user.dir") + File.separator + "Screenshot" + File.separator
+					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
+				logger.info(imageFileName);
 				imageUrlList.add(imageFileName);
-				BufferedImage bImage = ImageIO.read(new File(imageDir + "\\" + imageFileName));
+				BufferedImage bImage = ImageIO.read(new File(imageDir + File.separator + imageFileName));
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				ImageIO.write(bImage, "png", bos);
 				byte[] data = bos.toByteArray();
@@ -211,12 +197,13 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 								+ customerDetails.getCustomerName() + "/" + imageFileName + ":/content",
 						HttpMethod.PUT, requestEntity, byte[].class);
 
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
+				logger.info("response status: " + response.getStatusCode());
+				logger.info("response body: " + response.getBody());
+				logger.info("response : " + response);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -244,167 +231,28 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					"https://login.microsoftonline.com/7c51d221-e93b-4397-b4c7-775faf9f6d10/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
 
-			System.out.println(response);
+			logger.info(response);
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
-		System.out.println(acessToken);
+		logger.info(acessToken);
 		return acessToken;
-	}
-
-	public List<String> getFileNameList(List<ScriptDetailsDto> fetchMetadataListVO,
-			CustomerProjectDto customerDetails) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
-				+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName() + "\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
-		String Number = fetchMetadataListVO.get(0).getLineNumber();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && scripNumber.equalsIgnoreCase(currentScriptNumber)
-						&& "Passed".equalsIgnoreCase(status)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getPassedPdf(List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir") + "\\" + "Screenshot\\"
-				+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName() + "\\");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
-		String STATUS = fetchMetadataListVO.get(0).getStatus();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails) {
-
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir") + "/" + "Screenshot/" + customerDetails.getCustomerName()
-				+ "/" + customerDetails.getTestSetName() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt) && ("Failed".equalsIgnoreCase(status))) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
-	}
-
-	public List<String> getDetailPdf(List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(System.getProperty("user.dir") + "/" + "Screenshot/" + customerDetails.getCustomerName()
-				+ "/" + customerDetails.getTestSetName() + "/");
-		File[] listOfFiles = folder.listFiles();
-		Arrays.sort(listOfFiles, new Comparator<File>() {
-			public int compare(File f1, File f2) {
-				return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
-
-			}
-		});
-		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
-				String fileName = listOfFiles[i].getName();
-				String[] fileNameArr = fileName.split("\\.");
-				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
-				if ("PNG".equalsIgnoreCase(fileExt)) {
-					fileNameList.add(fileName);
-				}
-			}
-		}
-		return fileNameList;
 	}
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name,
 			CustomerProjectDto customerDetails) {
-		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "\\"
-				+ customerDetails.getTestSetName() + "\\" + name);
-		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "\\"
-				+ customerDetails.getTestSetName() + "\\");
-		File theDir = new File(Folder);
-		if (!theDir.exists()) {
-			System.out.println("creating directory: " + theDir.getName());
-			boolean result = false;
-			try {
-				theDir.mkdirs();
-				result = true;
-			} catch (SecurityException se) {
-				// handle it
-				System.out.println(se.getMessage());
-			}
-		} else {
-			System.out.println("Folder exist");
-		}
-		// String vidPath = "C:\\Users\\Winfo Solutions\\Desktop\\"+name;
+		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator + name);
+		String folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+				+ customerDetails.getTestSetName() + File.separator);
+		createDir(folder);
 		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
 		FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath, 1366, 614);
 		String str = null;
@@ -416,24 +264,20 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			recorder.setFormat("mp4");
 			recorder.setVideoQuality(0); // maximum quality
 			recorder.start();
-//            for (int i=0;i<targetFileList.size();i++)
-//            {
-//           	 System.out.println(targetFileList.get(i));
-//            }
 			if (targetFile1 != null) {
-				System.out.println(targetFile1);
+				logger.info(targetFile1);
 				str = targetFile1;
 				ipl = cvLoadImage(str);
 				recorder.record(grabberConverter.convert(ipl));
 			}
 			for (String image : targetFileList) {
-				System.out.println(image);
+				logger.info(image);
 				str = image;
 				ipl = cvLoadImage(str);
 				recorder.record(grabberConverter.convert(ipl));
 			}
 			recorder.stop();
-			System.out.println("ok");
+			logger.info("ok");
 		} catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
 			e.printStackTrace();
 		}
@@ -441,20 +285,19 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
-		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName() + "\\"
-				+ customerDetails.getTestSetName() + "\\");
+		List<String> fileNameList = new ArrayList<>();
+		File folder = new File(fetchConfigVO.getScreenshot_path() + File.separator + customerDetails.getCustomerName()
+				+ File.separator + customerDetails.getTestSetName() + File.separator);
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				logger.info("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
-				String[] _arr = fileName.split("_");
-				String currentScriptNumber = _arr[2];
-				String Status = _arr[6];
-				String status = Status.split("\\.")[0];
+				String[] arr = fileName.split("_");
+				String status = arr[6];
+				status = status.split("\\.")[0];
 				if ("jpg".equalsIgnoreCase(fileExt) && "Passed".equalsIgnoreCase(status)) {
 					fileNameList.add(fileName);
 				}
@@ -463,73 +306,20 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		return fileNameList;
 	}
 
-	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
-			CustomerProjectDto customerDetails) throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName() + "\\"
-				+ customerDetails.getTestSetName() + "\\");
-		List<String> fileNameList = null;
-		String customer_Name = customerDetails.getCustomerName();
-		String test_Run_Name = customerDetails.getTestSetName();
-		fileNameList = getImages(fetchMetadataListVO, fetchConfigVO, customerDetails);
-
-		for (String image : fileNameList) {
-
-			FileInputStream inputStream = new FileInputStream(
-					fetchConfigVO.getScreenshot_path() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
-			BufferedImage inputImage = ImageIO.read(inputStream);
-
-			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
-			jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-			jpegParams.setCompressionQuality(.4f);
-
-			final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
-			// specifies where the jpg image has to be written
-			writer.setOutput(new FileImageOutputStream(new File("C:\\Kaushik" + "\\" + image)));
-
-			BufferedImage convertedImg = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(),
-					BufferedImage.TYPE_INT_RGB);
-			convertedImg.getGraphics().drawImage(inputImage, 0, 0, null);
-
-			// writes the file with given compression level
-			// from your JPEGImageWriteParam instance
-			writer.write(null, new IIOImage(convertedImg, null, null), jpegParams);
-
-//			BufferedImage originalImage = ImageIO.read(new File(Folder+image));
-//			int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-
-//			BufferedImage resizeImageGif = resizeImage(originalImage, type);
-//			ImageIO.write(resizeImageGif, "jpg", new File("C:\\Kaushik"+"\\"+image));
-
-			/*
-			 * BufferedImage resizeImagePng = resizeImage(originalImage, type);
-			 * ImageIO.write(resizeImagePng, "png", new File("c:\\image\\mkyong_png.jpg"));
-			 * 
-			 * BufferedImage resizeImageHintJpg = resizeImageWithHint(originalImage, type);
-			 * ImageIO.write(resizeImageHintJpg, "jpg", new
-			 * File("c:\\image\\mkyong_hint_jpg.jpg"));
-			 * 
-			 * BufferedImage resizeImageHintPng = resizeImageWithHint(originalImage, type);
-			 * ImageIO.write(resizeImageHintPng, "png", new
-			 * File("c:\\image\\mkyong_hint_png.jpg"));
-			 */
-		}
-
-	}
-
 	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
 			String accessToken = getAccessTokenPdf();
-			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "\\"
-					+ customerDetails.getTestSetName() + "\\");
-			System.out.println(imageDir);
+			List<String> imageUrlList = new ArrayList<>();
+			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+					+ customerDetails.getTestSetName() + File.separator);
+			logger.info(imageDir);
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
+				logger.info(imageFileName);
 				imageUrlList.add(imageFileName);
-				File pdfFile = new File(imageDir + "\\" + imageFileName);
-				System.out.println(pdfFile);
+				File pdfFile = new File(imageDir + File.separator + imageFileName);
+				logger.info(pdfFile);
 				FileInputStream input = new FileInputStream(pdfFile);
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				byte[] buffer = new byte[99999999];
@@ -550,10 +340,10 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
 				ResponseEntity<Object> response = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/drives/b!KcGTxB8fRUOsVkFTx3_XQI27VIClhktAidGIE0ZEKfowr1GL3k-zRrQ5i52Xg3Jv/items/01NZEJ6GV6Y2GOVW7725BZO354PWSELRRZ:/ArloSelenium/"
-								+ customerDetails.getCustomerName() + "\\" + customerDetails.getTestSetName() + "\\"
-								+ imageFileName + ":/createUploadSession",
+								+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+								+ File.separator + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
-				System.out.println(response);
+				logger.info(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
 						: null;
@@ -568,13 +358,14 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
 						uploadingFileRequest, byte[].class);
 
-				System.out.println(putResponse);
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
+				logger.info(putResponse);
+				logger.info("response status: " + response.getStatusCode());
+				logger.info("response body: " + response.getBody());
+				logger.info("response : " + response);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -594,16 +385,17 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ResponseEntity<Object> response = restTemplate.exchange(
 					"https://login.microsoftonline.com/0e295999-ec13-4f09-9407-28050f7372cc/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
-			System.out.println(response);
+			logger.info(response);
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
-		System.out.println(acessToken);
+		logger.info(acessToken);
 		return acessToken;
 	}
 
@@ -612,9 +404,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			WebElement copy = driver.findElement(By.xpath("(//*[text()='Succeeded'])[1]/preceding::span[text()][1]"));
 			String number = copy.getText();
-			System.out.println(number);
+			logger.info(number);
 			// String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
-			// System.out.println(num);
+			// logger.info(num);
 			driver.get(fetchConfigVO.getDownlod_file_path() + "/" + number + ".log");
 			Thread.sleep(2000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
@@ -625,7 +417,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -657,7 +450,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			driver.navigate().back();
 			Thread.sleep(8000);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -669,7 +463,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			driver.navigate().back();
 			Thread.sleep(8000);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -715,7 +510,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			Thread.sleep(2000);
@@ -730,7 +526,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver
@@ -744,7 +541,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + inputParam + "')]"));
@@ -756,7 +554,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver
@@ -770,7 +569,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return;
 		} catch (Exception e) {
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			throw e;
 		}
 	}
@@ -789,7 +589,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				// equal,we will close.
 				if (!mainWindow.equals(childWindow)) {
 					driver.switchTo().window(childWindow);
-					System.out.println(driver.switchTo().window(childWindow).getTitle());
+					logger.info(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
@@ -813,7 +613,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During switchToActiveElement Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 			throw e;
 		}
 	}
@@ -841,7 +641,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} catch (Exception e) {
-				System.out.println(e);
+				logger.error(e);
+				Thread.currentThread().interrupt();
 			}
 		}
 		try {
@@ -861,7 +662,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -878,7 +680,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -894,7 +697,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -911,7 +715,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -926,7 +731,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -945,9 +751,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -969,9 +775,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1001,7 +807,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2.equalsIgnoreCase("Publish to Managers")) {
@@ -1026,7 +833,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			// updating budget method to budget pool after 21A Execution and [2] to [1]
@@ -1047,7 +855,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Workforce Compensation") && param2.equalsIgnoreCase("Search")) {
@@ -1082,7 +891,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1105,7 +915,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1126,7 +937,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1144,7 +956,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1160,9 +973,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1190,7 +1003,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1210,7 +1024,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1227,9 +1042,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1256,7 +1071,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1277,7 +1093,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1300,7 +1117,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1321,9 +1139,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1352,7 +1170,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Worker Name") || param1.equalsIgnoreCase("Manager")) {
@@ -1381,7 +1200,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Worker")) {
@@ -1409,7 +1229,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Document Eligibility")) {
@@ -1433,7 +1254,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1452,7 +1274,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1473,7 +1296,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1492,9 +1316,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1527,7 +1351,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1551,7 +1376,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1575,7 +1401,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1605,7 +1432,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Back")) {
@@ -1627,7 +1455,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 
@@ -1646,7 +1475,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 
@@ -1664,7 +1494,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1691,7 +1522,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 
@@ -1713,7 +1545,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1734,7 +1567,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1760,7 +1594,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1781,7 +1616,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1802,7 +1638,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			Thread.sleep(3000);
@@ -1823,7 +1660,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1842,7 +1680,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1861,7 +1700,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1883,7 +1723,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1901,9 +1742,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -2249,7 +2090,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Subject Areas") && param2.equalsIgnoreCase("Name")) {
@@ -2274,7 +2116,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Plan Cycle")) {
@@ -2301,7 +2144,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
@@ -2328,7 +2172,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2.equalsIgnoreCase("Submit")) {
@@ -2353,7 +2198,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2.equalsIgnoreCase("Save and Close")) {
@@ -2378,7 +2224,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goals") && param2.equals("Actions")) {
@@ -2401,7 +2248,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2425,7 +2273,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2446,7 +2295,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2468,7 +2318,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Warning")) {
@@ -2492,7 +2343,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2513,7 +2365,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2535,7 +2388,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2557,7 +2411,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2579,7 +2434,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2601,7 +2457,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -2630,7 +2487,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2651,9 +2509,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -2680,9 +2538,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -2710,9 +2568,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click Approve Button.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -2742,7 +2600,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goals") && param2.equalsIgnoreCase("Performance Goals")) {
@@ -2765,7 +2624,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Viewing plan")) {
@@ -2792,7 +2652,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2 != null) {
@@ -2823,7 +2684,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Select Template")) {
@@ -2846,7 +2708,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2873,7 +2736,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2890,7 +2754,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2909,7 +2774,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2928,7 +2794,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2947,7 +2814,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2966,7 +2834,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		// Need to check for what purpose
 		try {
@@ -2987,7 +2856,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3006,7 +2876,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3025,9 +2896,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -3065,7 +2936,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3082,9 +2954,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -3118,7 +2990,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback")) {
@@ -3143,7 +3016,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (keysToSend.equalsIgnoreCase("Include terminated work relationships")
@@ -3172,7 +3046,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goals") && (keysToSend.equalsIgnoreCase("Private"))) {
@@ -3200,7 +3075,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goal Weights") || param1.equalsIgnoreCase("Refresh Options")
@@ -3229,7 +3105,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3258,7 +3135,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3283,7 +3161,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3311,7 +3190,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3338,7 +3218,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3365,7 +3246,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3384,9 +3266,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -3412,9 +3294,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -3454,7 +3336,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3484,7 +3367,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3505,7 +3389,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 
 		}
 		try {// *[text()='Worker Name']/following::*[text()='Kaushik (Kaushik)
@@ -3529,7 +3414,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3550,9 +3436,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -3586,7 +3472,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3605,7 +3492,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3625,7 +3513,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3647,7 +3536,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -3678,10 +3568,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return keysToSend;
 			} else {
-				System.out.println("Not Entered Name");
+				logger.info("Not Entered Name");
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search") && (param2.equalsIgnoreCase("Match With"))) {
@@ -3706,7 +3597,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -3730,7 +3622,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback") && (param2.equalsIgnoreCase("Participant"))) {
@@ -3753,7 +3646,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Transfer")) {
@@ -3778,7 +3672,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents")) {
@@ -3803,7 +3698,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Duplicate Plan Cycle")) {
@@ -3826,7 +3722,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")) {
@@ -3851,7 +3748,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Location") && (param2.equalsIgnoreCase("Location"))) {
@@ -3887,7 +3785,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3913,7 +3812,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3929,7 +3829,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3955,7 +3856,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3981,7 +3883,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4005,7 +3908,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -4032,7 +3936,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4054,7 +3959,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4078,7 +3984,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2.equalsIgnoreCase("Performance Document Types")) {
@@ -4107,7 +4014,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")) {
@@ -4126,7 +4034,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -4145,7 +4054,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -4164,7 +4074,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -4183,7 +4094,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Change Access for All Managers")) {
@@ -4208,7 +4120,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4227,7 +4140,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4246,7 +4160,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4266,7 +4181,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4287,7 +4203,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4308,7 +4225,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4328,7 +4246,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4372,7 +4291,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4397,7 +4317,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement button = driver
@@ -4410,7 +4331,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4429,7 +4351,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4452,7 +4375,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -4482,7 +4406,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
@@ -4506,7 +4431,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return;
 
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
@@ -4526,9 +4452,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -4561,7 +4487,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + param1
@@ -4577,7 +4504,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + param1
@@ -4593,7 +4521,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())='" + param1
@@ -4609,7 +4538,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + param1
@@ -4626,7 +4556,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + param1
@@ -4642,7 +4573,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + param1
@@ -4656,9 +4588,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -4684,7 +4616,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4703,9 +4636,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -4736,7 +4669,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4757,7 +4691,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4775,9 +4710,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -4813,7 +4748,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance") && param2.equalsIgnoreCase("Performance Documents")) {
@@ -4838,7 +4774,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")
@@ -4863,7 +4800,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Other Plans")) {
@@ -4886,7 +4824,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")
@@ -4910,7 +4849,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goal Name") && (param2.equalsIgnoreCase("Status"))) {
@@ -4933,7 +4873,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param2.equalsIgnoreCase("Plan") || param2.equalsIgnoreCase("Option")) {
@@ -4965,7 +4906,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -4988,7 +4930,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -5011,7 +4954,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback") && (param2.equalsIgnoreCase("Review Period"))) {
@@ -5035,7 +4979,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("When and Why")
@@ -5075,7 +5020,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 						}
 					}
-
+					logger.error(e);
+					Thread.currentThread().interrupt();
 				}
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				actions.release();
@@ -5088,7 +5034,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5113,7 +5060,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5134,7 +5082,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5153,7 +5102,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					Thread.sleep(1000);
 					break;
 				} finally {
-					System.out.println("Clicked 1st time");
+					logger.info("Clicked 1st time");
 				}
 			}
 			try {
@@ -5176,7 +5125,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Basic Information") || param1.equalsIgnoreCase("Communication")
@@ -5201,7 +5151,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Selected Eligibility Profiles")
@@ -5227,7 +5178,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Details")) {
@@ -5250,7 +5202,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5270,7 +5223,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5287,7 +5241,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					Thread.sleep(1000);
 					break;
 				} finally {
-					System.out.println("Clicked 1st time");
+					logger.info("Clicked 1st time");
 				}
 			}
 			try {
@@ -5310,7 +5264,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5333,7 +5288,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5352,9 +5308,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -5418,12 +5374,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement element = wait.until(ExpectedConditions.elementToBeClickable(waittill));
 				element.click();
 				logger.info("Clicked Expand Succesfully.");
-				return;
 			} else {
 				waittill.click();
-				System.out.println("");
 				logger.info("Clicked Expand Succesfully.");
-				return;
 			}
 		} catch (StaleElementReferenceException e) {
 			logger.error("Falied During ClickExpand Action.");
@@ -5434,7 +5387,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Falied During ClickExpand Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath1);
+			logger.info(xpath1);
 			throw e;
 		}
 	}
@@ -5451,7 +5404,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return keysToSend;
 		} catch (Exception e) {
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			throw e;
 		}
 	}
@@ -5492,7 +5446,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			Thread.sleep(2000);
@@ -5509,7 +5463,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
@@ -5522,7 +5476,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
@@ -5535,7 +5489,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
@@ -5548,7 +5502,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -5562,7 +5516,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
@@ -5575,7 +5529,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
@@ -5588,7 +5542,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
@@ -5601,7 +5555,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -5615,7 +5569,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
@@ -5628,7 +5582,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
@@ -5641,7 +5595,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -5655,7 +5609,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -5669,7 +5623,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
@@ -5682,7 +5636,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())='" + inputParam + "']"));
@@ -5695,7 +5649,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
@@ -5706,11 +5660,10 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
 			logger.error("Failed During scrollUsingElement");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(inputParam);
+			logger.info(inputParam);
 			e.printStackTrace();
 			throw e;
 		}
@@ -5736,7 +5689,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During clicking the tab");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed to do TAB Action");
+			logger.info("Failed to do TAB Action");
 			e.printStackTrace();
 			throw e;
 		}
@@ -5763,7 +5716,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			Actions actions = new Actions(driver);
@@ -5777,9 +5731,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -5793,7 +5747,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actionObject.sendKeys(Keys.ENTER).build().perform();
 			Thread.sleep(3000);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -5807,7 +5762,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed To Delete All The Cookies.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("cookies not deleted");
+			logger.info("cookies not deleted");
 			throw e;
 		}
 	}
@@ -5825,7 +5780,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error("Failed While Selecting Checkbox.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
-			System.out.println(xpath);
+			logger.info(xpath);
 			throw e;
 		}
 	}
@@ -5843,7 +5798,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement waittext = driver
@@ -5854,9 +5809,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -5868,7 +5822,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		selectBox.selectByVisibleText(inputData);
 		logger.info("selectedBYText Successfully");
 		screenshot(driver, fetchMetadataVO, customerDetails);
-		return;
 	}
 
 	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
@@ -5881,7 +5834,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During selectByValue Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			logger.info(xpath);
 			e.printStackTrace();
 			throw e;
 		}
@@ -5911,7 +5864,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return inputParam;
 			}
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			logger.info(inputParam);
 		}
 		try {
 			WebElement webElement = driver.findElement(By.xpath("//img[@title='In Balance ']/following::td[1]"));
@@ -5927,7 +5880,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During copynumber Action");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(inputParam);
+			logger.info(inputParam);
 			throw e;
 		}
 		return inputParam;
@@ -5935,9 +5888,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	private void copyMethod(WebElement webElement) {
 		String number = webElement.getText();
-		System.out.println(number);
+		logger.info(number);
 		String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
-		System.out.println(num);
+		logger.info(num);
 		StringSelection stringSelection = new StringSelection(num);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 		logger.info("Successfully Copied the Number");
@@ -5948,7 +5901,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
-			System.out.println(number);
+			logger.info(number);
 			String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
@@ -5956,7 +5909,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During copyy Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			logger.info(xpath);
 			throw e;
 		}
 		return xpath;
@@ -5971,7 +5924,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String[] text = element.getText().split(":");
 				if (text.length == 2) {
 					texts.add(text[1].trim().toString());
-					System.out.println(texts.get(0));
+					logger.info(texts.get(0));
 					StringSelection stringSelection = new StringSelection(texts.get(0));
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
@@ -5980,7 +5933,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During copytext Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			logger.info(xpath);
 			throw e;
 		}
 		return xpath;
@@ -5995,7 +5948,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During Maximize Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not maximize");
+			logger.info("can not maximize");
 			e.printStackTrace();
 			throw e;
 
@@ -6005,12 +5958,12 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void switchWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			driver.switchTo().window(Main_Window);
+			driver.switchTo().window("");
 			logger.info("Successfully Switched to Another Window");
 		} catch (Exception e) {
 			logger.error("Failed During Switching to Window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not switch to window");
+			logger.info("can not switch to window");
 			e.printStackTrace();
 
 			throw e;
@@ -6025,7 +5978,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During switching to Default Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not switch");
+			logger.info("can not switch");
 			throw e;
 		}
 	}
@@ -6034,17 +5987,15 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			WebElement dragElement = driver.findElement(By.xpath(xpath));
-			fromElement = dragElement;
 			WebElement dropElement = driver.findElement(By.xpath(xpath1));
-			toElement = dropElement;
 			Actions action = new Actions(driver);
 			// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
-			action.dragAndDrop(fromElement, toElement).build().perform();
+			action.dragAndDrop(dragElement, dropElement).build().perform();
 			logger.info("Successfully Drag and drop the values");
 		} catch (Exception e) {
 			logger.error("Failed During dragAnddrop Action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			logger.info(xpath);
 			e.printStackTrace();
 			throw e;
 		}
@@ -6060,7 +6011,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String childWindow = itr.next();
 				if (!mainWindow.equals(childWindow)) {
 					driver.switchTo().window(childWindow);
-					System.out.println(driver.switchTo().window(childWindow).getTitle());
+					logger.info(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
@@ -6072,7 +6023,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
+			logger.info("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -6093,7 +6044,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase("Overall Comments/Manager Rating")
@@ -6112,7 +6064,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Goal 1,2,3")
@@ -6132,7 +6085,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Goal 4 5 6") || (param1.equalsIgnoreCase(
@@ -6152,7 +6106,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase(
@@ -6170,7 +6125,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (param1.equalsIgnoreCase(
@@ -6188,7 +6144,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@title,'" + param1 + "')]"));
@@ -6200,9 +6157,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
+			Thread.currentThread().interrupt();
 			logger.error("Failed During switchToFrame Action");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -6211,9 +6168,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO) throws Exception {
 		try {
-			// String autoitscriptpath = System.getProperty("user.dir") + "\\" +
+			// String autoitscriptpath = System.getProperty("user.dir") + File.separator +
 			// "File_upload_selenium_webdriver.au3";
-//			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fetchConfigVO.getUpload_file_path()+"\\"+filelocation + "\"");
+//			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fetchConfigVO.getUpload_file_path()+File.separator+filelocation + "\"");
 			Runtime.getRuntime()
 					.exec("C:\\Selenium\\Spring\\WinfoAutomation_MultiThread\\File_upload_selenium_webdriver.exe");
 			// Runtime.getRuntime().exec("E:\\AutoIT\\FileUpload.exe");
@@ -6221,7 +6178,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Uploaded The File");
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			System.out.println(filelocation);
+			logger.info(filelocation);
 			e.printStackTrace();
 			throw e;
 		}
@@ -6235,14 +6192,14 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During refreshPage Action");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not refresh the page");
+			logger.info("can not refresh the page");
 			e.printStackTrace();
 			throw e;
 
 		}
 	}
 
-	public void DelatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+	public void delatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
 		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/");
@@ -6270,54 +6227,48 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-		
+
 	}
+
 	@Override
 	public String getErrorMessages(WebDriver driver) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void moveToElement(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
+	public void moveToElement(WebDriver driver, String inputParameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
+		// EMPTY METHOD
 
 	}
-	
+
 	@Override
 	public String closeExcel() throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String typeIntoCell(WebDriver driver, String param1, String value1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Integer addRow(Integer addrow) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String menuItemOfExcel(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
@@ -6325,95 +6276,93 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e);
+			Thread.currentThread().interrupt();
 		}
 
 	}
 
 	@Override
 	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
+	public void compareValue(WebDriver driver, String inputParameter, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails)
+			throws Exception {
+		// EMPTY METHOD
 
 	}
 
 	@Override
-	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
-			throws Exception {
-		// TODO Auto-generated method stub
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
+			CustomerProjectDto customerDetails) throws Exception {
+		// EMPTY METHOD
 
 	}
 
 	@Override
 	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
+			ApiValidationVO api, CustomerProjectDto customerDetails, FetchConfigVO fetchConfigVO) throws Exception {
+		// EMPTY METHOD
 
 	}
 
-
 	@Override
 	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,
-			String input_value, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String inputValue, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void switchToParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
-	public void datePicker(WebDriver driver, String param1, String param2, String input_value,
+	public void datePicker(WebDriver driver, String param1, String param2, String inputValue,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void switchParentWindow(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void clickButtonCheckPopup(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void oicLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public String oicLoginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -6421,21 +6370,19 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void oicNavigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public String oicNavigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String oicMenuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -6443,152 +6390,146 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public String oicMenuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String type1, String type2, String param1, String param2, int count,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void oicClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public String oicSendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void oicMouseHover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
 			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void navigateOICUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void loginOicApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void loginInformaticaApplication(WebDriver driver, FetchConfigVO fetchConfigVO,
 			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
 			String param3, String keysToSend, String value, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public String InformaticaLoginPage(WebDriver driver, String param1, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void InformaticaClickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public String InformaticaSendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void InformaticaclickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void InformaticaSelectAValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void InformaticaClickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void InformaticaLogout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String input_value,
+			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
 			String password, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		// EMPTY METHOD
+
 	}
 
 	@Override
 	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, ApiValidationVO api, boolean validationFlag, CustomerProjectDto customerDetails)
 			throws IOException, DocumentException, com.lowagie.text.DocumentException {
-		// TODO Auto-generated method stub
-		
-	}
+		// EMPTY METHOD
 
+	}
 
 }
