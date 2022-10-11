@@ -124,6 +124,8 @@ public class JiraTicketBugService {
 		List<Integer> scriptId = new ArrayList<Integer>();
 		List<String> scriptNumber = new ArrayList<String>();
 		int count = 0;
+		String issue_key=null;
+		List<String> issueKeyList=new ArrayList<>();
 
 		List<Object> result = dao.createJiraTicket(testsetid, scriptIds, testSetLineId);
 		List<TestRunVO> finalresult = new ArrayList<TestRunVO>();
@@ -262,7 +264,7 @@ public class JiraTicketBugService {
 
 					e.printStackTrace();
 				}
-
+              
 				if (issuekey != null) {
 					String jiraattachmenturl = jiraissueurl + issuekey + "/attachments";
 
@@ -271,8 +273,8 @@ public class JiraTicketBugService {
 
 					// String jiraattachemtresponse= webClient1(jiraissueurlattachment);
 
-					String issue_key = String.valueOf(issuekey);
-
+					issue_key = String.valueOf(issuekey);
+					issueKeyList.add(issue_key);
 					count = dao.updateIssueKey(issue_key, slist, count);
 					scriptId.add(slist.getScriptId());
 					scriptNumber.add(slist.getScriptNumber());
@@ -284,12 +286,12 @@ public class JiraTicketBugService {
 		}
 
 		System.out.println(count + " Record(s) Updated.");
-
+		String finalIssuekey=String.join("','", issueKeyList);
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count > 0) {
 			response.setStatus(200);
 			response.setStatusMessage("SUCCESS");
-			response.setDescription("Issue Created Successfully for script number " + scriptNumber.toString());
+			response.setDescription("Issue Created Successfully for script number " + scriptNumber.toString() + "," + "Jira Ticket Number " + "[" + finalIssuekey + "]");
 			bean.add(response);
 		} else {
 			response.setStatus(400);
