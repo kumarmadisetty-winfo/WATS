@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -45,16 +48,28 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.Log;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.Gson;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -67,8 +82,10 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
@@ -88,6 +105,7 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.TestSetAttribute;
 import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
@@ -96,6 +114,8 @@ import com.winfo.utils.DateUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
+
+import reactor.core.publisher.Mono;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -111,6 +131,8 @@ public abstract class AbstractSeleniumKeywords {
 	private String watslogo;
 	@Value("${configvO.whiteimage}")
 	private String whiteimage;
+	@Autowired
+	private DataBaseEntry databaseentry;
 
 	private static final String PASSED_PDF = "Passed_Report.pdf";
 	private static final String FAILED_PDF = "Failed_Report.pdf";
@@ -173,9 +195,11 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + FORWARD_SLASH + imageName;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
-			logger.info("Exception while taking Screenshot" + e.getMessage());
+			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
+//			throw e;
 		}
 	}
 
@@ -202,9 +226,11 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + FORWARD_SLASH + imageName;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
+			e.printStackTrace();
 			logger.error("Failed during screenshotFail Action. " + scripNumber);
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
+//			throw e;
 		}
 	}
 
@@ -286,23 +312,21 @@ public abstract class AbstractSeleniumKeywords {
 					File file = new File(screenshotPath + File.separator + imageName);
 					logger.info("Image Name ****** " + imageName);
 					logger.info(file.exists() + "FileExist or not ******" + file.getPath());
-					if (!file.exists()) {
-						try (final InputStream stream = getResponse.getInputStream();
-								final OutputStream outputStream = new FileOutputStream(file.getPath())) {
+					try (final InputStream stream = getResponse.getInputStream();
+							final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
-							// final OutputStream outputStream = Files.newOutputStream(file.toPath(),
-							// CREATE_NEW)) {
-							// use fileStream
-							byte[] buf = new byte[8192];
-							int bytesRead;
-							while ((bytesRead = stream.read(buf)) > 0) {
-								outputStream.write(buf, 0, bytesRead);
-							}
-						} catch (IOException e1) {
-							e1.printStackTrace();
-							throw new WatsEBSCustomException(500,
-									"Exception occured while read or write screenshot from Object Storage", e1);
+						// final OutputStream outputStream = Files.newOutputStream(file.toPath(),
+						// CREATE_NEW)) {
+						// use fileStream
+						byte[] buf = new byte[8192];
+						int bytesRead;
+						while ((bytesRead = stream.read(buf)) > 0) {
+							outputStream.write(buf, 0, bytesRead);
 						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						throw new WatsEBSCustomException(500,
+								"Exception occured while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
@@ -608,11 +632,11 @@ public abstract class AbstractSeleniumKeywords {
 					generateFailedPDF(document, passcount, failcount);
 				}
 				addRestOfPagesToPDF(document, fileNameList, watsLogo, fetchConfigVO, fetchMetadataListVO,
-						customerDetails);
+						customerDetails,writer);
 			} else if (!(PASSED_PDF.equalsIgnoreCase(pdffileName) || FAILED_PDF.equalsIgnoreCase(pdffileName)
 					|| DETAILED_PDF.equalsIgnoreCase(pdffileName))) {
 				generateScriptLvlPDF(document, fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime(), watsLogo,
-						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails);
+						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails,writer);
 			}
 			document.close();
 
@@ -633,7 +657,7 @@ public abstract class AbstractSeleniumKeywords {
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, List<String> fileNameList,
-			CustomerProjectDto customerDetails) throws IOException, com.itextpdf.text.DocumentException {
+			CustomerProjectDto customerDetails,PdfWriter writer) throws IOException, com.itextpdf.text.DocumentException {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
 		Font font23 = FontFactory.getFont(ARIAL, 23);
@@ -683,11 +707,19 @@ public abstract class AbstractSeleniumKeywords {
 		document.newPage();
 
 		int i = 0;
+		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			String nextSeqNumber = "0";
+			String currentSeqNumber = "0";
+			increment++;
+			if(increment < fetchMetadataListVO.size()) {
+				currentSeqNumber = metaDataVO.getSeqNum();
+				nextSeqNumber = fetchMetadataListVO.get(increment).getSeqNum();
+			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_" + PASSED + PNG_EXTENSION)) {
 				image = fileName + "_" + PASSED + PNG_EXTENSION;
@@ -749,6 +781,26 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (API_TESTING.equalsIgnoreCase(checkPackage)) {
 					addingResponseIntoReport(fileName, document, customerDetails, fetchConfigVO);
+				}
+				
+				//Adding the downloaded pdf after that particular script
+				
+				if(!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
+					String docName = (metaDataVO.getSeqNum() + "_"
+		                    + metaDataVO.getScenarioName() + "_"
+		                    + metaDataVO.getScriptNumber() + "_" 
+		                    + customerDetails.getTestSetName() + "_Passed");
+					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					if(file.exists()) {
+					PdfContentByte contentByte = writer.getDirectContent();
+					PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					for(int page=1; page<=pdfReader.getNumberOfPages(); page++) { 
+						PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
+						document.newPage();
+						contentByte.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+						
+					      }
+					}
 				}
 			}
 		}
@@ -927,7 +979,7 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
-			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails)
+			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails,PdfWriter writer)
 			throws IOException, com.itextpdf.text.DocumentException {
 		int k = 0;
 		int l = 0;
@@ -1019,11 +1071,19 @@ public abstract class AbstractSeleniumKeywords {
 
 		int i = 0;
 		int j = 0;
+		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
 					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			String nextSeqNumber = "0";
+			String currentSeqNumber = "0";
+			increment++;
+			if(increment < fetchMetadataListVO.size()) {
+				currentSeqNumber = metaDataVO.getSeqNum();
+				nextSeqNumber = fetchMetadataListVO.get(increment).getSeqNum();
+			}
 			String image = null;
 			if (fileNameList.contains(fileName + "_Passed.png")) {
 				image = fileName + "_Passed.png";
@@ -1180,6 +1240,24 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (API_TESTING.equalsIgnoreCase(checkPackage)) {
 					addingResponseIntoReport(fileName, document, customerDetails, fetchConfigVO);
+				}
+				
+				//Adding the downloaded pdf after that particular script
+
+				if (!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
+					String docName = (metaDataVO.getSeqNum() + "_" + metaDataVO.getScenarioName() + "_"
+							+ metaDataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					if (file.exists()) {
+						PdfContentByte contentByte = writer.getDirectContent();
+						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
+							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
+							document.newPage();
+							contentByte.addTemplate(pages, 1f, 0, 0, 1, 130, 0);
+
+						}
+					}
 				}
 			}
 
@@ -1535,6 +1613,294 @@ public abstract class AbstractSeleniumKeywords {
 		}
 		document.add(table1);
 		document.newPage();
+	}
+	
+	public void apiAccessTokenCreation(FetchConfigVO fetchConfigVO,ScriptDetailsDto fetchMetadataVO,CustomerProjectDto customerDetails)
+			throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		String str = "{\n"
+				+ "  \"HTTP Type\": \"POST\",\n"
+				+ "  \"Request Header\": {\n"
+				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n"
+				+ "  },\n"
+				+ "  \"Request Body\": {\n"
+				+ "    \"grant_type\": \"client_credentials\"\n"
+				+ "  }\n"
+				+ "}";
+		ApiValidationVO apiValidationData = objectMapper.readValue(str,ApiValidationVO.class);
+		apiValidationData.setUrl(fetchConfigVO.getAPI_AUTHENTICATION_URL());
+		String token = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+			headers.set("Authorization", "Basic "+fetchConfigVO.getAPI_AUTHENTICATION_CODE());		// Converting object to string
+//			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Converting Request body object into map
+			Gson gson = new Gson();
+			Map<String, String> attributes = gson.fromJson(gson.toJson(apiValidationData.getRequestBody()), Map.class);
+
+			// Setting Map value to MultiValueMap
+			MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+			for (Entry<String, String> map : attributes.entrySet()) {
+				bodyValues.set(map.getKey(), map.getValue());
+			}
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+
+			// Creating WebClient
+			WebClient client = WebClient.create();
+			Map<String, String> response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+					.headers(headersHttp -> headersHttp.addAll(headers))
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(BodyInserters.fromFormData(bodyValues))
+					.retrieve().bodyToMono(Map.class).block();
+
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(response);
+			apiValidationData.setResponse(json);
+
+
+			// Getting the token from the response
+			token = response.get("access_token");
+			
+			databaseentry.insertRecordInTestSetAttribute(customerDetails.getTestSetId(),"access_token",token,fetchMetadataVO.getExecutedBy());
+			Date date = new Date(System.currentTimeMillis() - 3600 * 1000);
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+			TimeZone timeZone = TimeZone.getTimeZone("GMT");
+			formatter.setTimeZone(timeZone);
+			String expiresTime = formatter.format(date);
+			databaseentry.insertRecordInTestSetAttribute(customerDetails.getTestSetId(),"expires_in",expiresTime,fetchMetadataVO.getExecutedBy());
+		} catch (Exception ex) {
+			throw ex;
+		}
+//		return token;
+	}
+
+	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
+			throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ApiValidationVO apiValidationData = objectMapper.readValue(fetchMetadataVO.getInputValue(),
+				ApiValidationVO.class);
+
+		String token = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+
+			// Converting object to string
+//			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Converting Request body object into map
+			Gson gson = new Gson();
+			Map<String, String> attributes = gson.fromJson(gson.toJson(apiValidationData.getRequestBody()), Map.class);
+
+			// Setting Map value to MultiValueMap
+			MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+			for (Entry<String, String> map : attributes.entrySet()) {
+				bodyValues.set(map.getKey(), map.getValue());
+			}
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+
+			// Creating WebClient
+			WebClient client = WebClient.create();
+			Map<String, String> response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+					.headers(headersHttp -> headersHttp.addAll(headers))
+					.contentType(MediaType.APPLICATION_FORM_URLENCODED).body(BodyInserters.fromFormData(bodyValues))
+					.retrieve().bodyToMono(Map.class).block();
+
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(response);
+			apiValidationData.setResponse(json);
+
+			String value = ow.writeValueAsString(apiValidationData);
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+
+			// Getting the token from the response
+			token = response.get("access_token");
+//			String key = "Access Token";
+			String key = customerDetails.getTestSetName() + ">" + fetchMetadataVO.getSeqNum() + ">"
+					+ fetchMetadataVO.getLineNumber();
+			accessTokenStorage.put(key, token);
+		} catch (Exception ex) {
+			throw ex;
+		}
+//		return token;
+	}
+
+	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
+			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		String inputValue = fetchMetadataVO.getInputValue().replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
+		ApiValidationVO apiValidationData = objectMapper.readValue(inputValue,
+				ApiValidationVO.class);
+
+		try {
+			
+			TestSetAttribute testSetAttributeAccessToken = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "access_token");
+			if(testSetAttributeAccessToken!=null) {
+				TestSetAttribute testSetAttributeExpiresIn = databaseentry.getApiValueBySetIdAndAPIKey(customerDetails.getTestSetId(), "expires_in");
+				boolean expireIsPresent = testSetAttributeExpiresIn != null;
+				boolean authenticationValues = (fetchConfigVO.getAPI_AUTHENTICATION_URL()!=null && fetchConfigVO.getAPI_AUTHENTICATION_CODE() !=null);
+				if (expireIsPresent && authenticationValues) {
+					if(expireIsPresent) {
+						
+					}else{
+						apiAccessTokenCreation(fetchConfigVO,fetchMetadataVO,customerDetails);
+					}
+				}else {
+					apiValidationData.setAccessToken(testSetAttributeAccessToken.getAttributeValue());
+				}
+				
+			}
+			else {
+				apiAccessTokenCreation(fetchConfigVO,fetchMetadataVO,customerDetails);
+			}
+
+			WebClient client = WebClient.create();
+
+			HttpHeaders headers = new HttpHeaders();
+			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
+				headers.set(map.getKey(), map.getValue());
+			}
+
+			if (apiValidationData.getAccessToken() != null) {
+//				String[] str = apiValidationData.getAccessToken().split(">");
+//				System.out.println(str);
+//				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
+//				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
+//				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
+				headers.set("Authorization", "Bearer "+apiValidationData.getAccessToken());
+			}
+			apiValidationData.setAccessToken(null);
+			// Converting object to string
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String strInput = ow.writeValueAsString(apiValidationData.getRequestBody());
+
+			// Fetching HttpMethod
+			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
+			ClientResponse response;
+
+			if (apiValidationData.getRequestBody() != null && !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
+				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
+						.body(BodyInserters.fromObject(strInput)).exchange().block();
+			} else {
+				response = client.method(httpMethod).uri(new URI(apiValidationData.getUrl()))
+						.headers(headersHttp -> headersHttp.addAll(headers)).accept(MediaType.APPLICATION_JSON)
+						.exchange().block();
+			}
+
+			Mono<String> bodyToMono = response.bodyToMono(String.class);
+			bodyToMono.subscribe((body) -> {
+				api.setResponse(body);
+			}, (ex) -> {
+			});
+			api.setResponseCode(response.statusCode().value());
+			apiValidationData.setResponseCode(response.statusCode().value());
+			apiValidationData.setAccessToken("");
+			ObjectWriter ow1 = new ObjectMapper().writer();
+			String value = ow1.writeValueAsString(apiValidationData);
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
+			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
+//			return response.statusCode();
+			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
+			
+			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			String name = (fetchMetadataVO.getSeqNum() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
+					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
+			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
+			
+			try (PrintWriter out = new PrintWriter(fileName)) {
+			    out.println(api.getResponse());
+			}
+//			String folderName = "API" + "/" + customerDetails.getCustomerName() + "/"
+//					+ customerDetails.getTestSetName();
+			File source = new File(fileName);
+			uploadObjectToObjectStore(source.getCanonicalPath(), fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getCustomerName()+"/"+customerDetails.getTestSetName(), name);
+			Files.delete( Paths.get(fileName));
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) throws Exception {
+		String[] values = fetchMetadataVO.getInputValue().split("/");
+		for (String str : values) {
+			if (api.getResponseCode().toString().contains(str)) {
+				return true;
+			}
+		}
+		throw new Exception("Validation Failed.");
+	}
+
+	public void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,CustomerProjectDto customerDetails) throws InterruptedException {
+		// For getting the name of the downloaded file name
+
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("window.open()");
+		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+		String fileName = null;
+		if(fetchConfigVO.getBrowser().equalsIgnoreCase("chrome")) {
+			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
+			/* Download Window Open */
+			Thread.sleep(3000);
+			 fileName = (String) jse.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			logger.info("File Name*** " + fileName);
+			
+		}else if(fetchConfigVO.getBrowser().equalsIgnoreCase("firefox")) {
+			driver.switchTo().window(tabs.get(1)).get("about:downloads");
+			/* Download Window Open */
+			Thread.sleep(3000);
+			 fileName = (String) jse.executeScript(
+					"return document.querySelector('#contentAreaDownloadsView .downloadMainArea .downloadContainer description:nth-of-type(1)').value");
+			driver.close();
+			driver.switchTo().window(tabs.get(0));
+			logger.info("File Name*** " + fileName);
+		}
+		
+		if (fileName != null) {
+			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+
+			String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
+					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
+				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
+
+			if (oldFile.exists()) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+					logger.info("File name changed succesful");
+				} else {
+					logger.info("Rename failed");
+				}
+			}
+		}
 	}
 
 }

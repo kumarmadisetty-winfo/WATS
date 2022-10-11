@@ -16989,6 +16989,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				driver.switchTo().window(childWindow);
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
+			
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -17019,6 +17022,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
+			
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
@@ -17233,6 +17239,25 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			log.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
+		try {
+            
+            WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+            WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+value1+"']/following::input[1]"));
+            Thread.sleep(1000);
+        //    wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+value1+"']/following::input[1]"), value1));
+            Actions actions = new Actions(driver);
+            actions.moveToElement(waittill).build().perform();
+            typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
+            screenshot(driver, fetchMetadataVO, customerDetails);
+            return;
+
+
+
+       } catch (Exception e) {
+            System.out.println(e);
+            logger.error("Failed during Click action.");
+            screenshotFail(driver, fetchMetadataVO, customerDetails);
+        }
 	}
 
 	private String copyValuesWithSpc(String value) {

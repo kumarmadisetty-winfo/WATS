@@ -64,7 +64,7 @@ public class DataBaseEntry {
 	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status, String error_message)
 			throws ClassNotFoundException, SQLException {
-		dao.updateFailedScriptLineStatus(test_script_param_id, status);
+		dao.updateFailedScriptLineStatus(test_script_param_id, error_message);
 	}
 
 	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
@@ -496,13 +496,13 @@ public class DataBaseEntry {
 		return dao.getTestRunDetails(testSetId);
 	}
 
-	public boolean checkActionContainsExcel(String script_id) {
-		return dao.checkActionContainsExcel(script_id);
+	public boolean doesActionContainsExcel(String scriptId) {
+		return dao.doesActionContainsExcel(scriptId);
 	}
 
-	public boolean checkActionContainsSfApplication(String script_Id) {
+	public boolean doesActionContainsSfApplication(String scriptId) {
 		
-		return dao.checkActionContainsSfApplication(script_Id);
+		return dao.doesActionContainsSfApplication(scriptId);
 	}
 	
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
@@ -520,12 +520,22 @@ public class DataBaseEntry {
 		return dao.getApiValidationDataFromLookupsCode(apiValidationId, list);
 	}
 
-	public List<String> checkIfValidationExists(int apiValidationId, String lookUpCode) {
-		return dao.checkIfValidationExists(apiValidationId, lookUpCode);
+	public List<String> getExistingLookupCodeByValidationId(int apiValidationId, String lookUpCode) {
+		return dao.getExistingLookupCodeByValidationId(apiValidationId, lookUpCode);
 	}
 
 	public void insertApiValidation(LookUpCode lookUpCodes) {
 		dao.insertApiValidation(lookUpCodes);
 	}
+
+	public void updateApiValidation(LookUpCode listOfLookUpCodes) {
+		dao.updateApiValidation(listOfLookUpCodes);
+		
+	}
+
+	public List<LookUpCode> getExistingLookupListByValidationId(int apiValidationId, String lookUpCode) throws Exception {
+		return dao.getExistingLookupListByValidationId(apiValidationId,lookUpCode);
+	}
+	
 
 }

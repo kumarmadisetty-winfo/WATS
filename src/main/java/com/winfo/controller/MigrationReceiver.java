@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.winfo.services.CentralToCustomerPostService;
 import com.winfo.services.GetApiValidationMigrationService;
 import com.winfo.services.TestRunMigrationGetService;
+import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.ResponseDto;
@@ -41,7 +42,7 @@ public class MigrationReceiver {
 	}
 
 	@PostMapping("/apiValidationMigrationReceiver")
-	public ResponseDto apiValidationMigration(@RequestBody List<LookUpCodeVO> lookUpCodeVOData) {
+	public ResponseDto apiValidationMigration(@RequestBody ApiValidationDto lookUpCodeVOData) {
 		return apiValidationMigrationService.apiValidationMigration(lookUpCodeVOData);
 	}
 

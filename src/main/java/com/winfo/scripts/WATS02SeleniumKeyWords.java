@@ -14327,6 +14327,9 @@ public class WATS02SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				driver.switchTo().window(childWindow);
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
+			
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -14357,6 +14360,9 @@ public class WATS02SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
+			
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
