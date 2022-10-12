@@ -8173,6 +8173,31 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Sign Contract") && (param2.equalsIgnoreCase("Signed Date"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1
+						+ "']//following::label[text()='" + param2 + "'][1]/preceding::span[1]/preceding::input[1]")));
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1
+						+ "']//following::label[text()='" + param2 + "'][1]/preceding::span[1]/preceding::input[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				waittill.sendKeys(keysToSend);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				String xpath = "//*[text()='param1']//following::label[text()='param2'][1]/preceding::span[1]/preceding::input[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
 		// prod
 		try {
 			if (param1.equalsIgnoreCase("Maintain Managers")) {
