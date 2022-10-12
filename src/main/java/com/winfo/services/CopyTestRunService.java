@@ -351,8 +351,12 @@ public class CopyTestRunService {
 				{
 					oldTestRunName=oldTestRunName.substring(0,index);
 					oldTestRunName=oldTestRunName.replace("(","");
+					setScriptlinedata.setInputValue(getInputvalues.replace(oldTestRunName, copyTestrunvo.getNewtestrunname()));
 				}
-				setScriptlinedata.setInputValue(getInputvalues.replace(oldTestRunName, copyTestrunvo.getNewtestrunname()));
+				else
+				{
+					setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
+				}
 			} else {
 				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
 			}
