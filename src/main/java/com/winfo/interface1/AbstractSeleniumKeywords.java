@@ -515,10 +515,10 @@ public abstract class AbstractSeleniumKeywords {
 		return fileNameList;
 	}
 
-	public Map<String,String> findExecutionTimeForScript(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForScript(String testSetId, String pdffileName) {
 
 		String scriptStatus = null;
-		Map<String,String> totalExecutedTime = new HashMap<>();
+		Map<String, String> totalExecutedTime = new HashMap<>();
 		if (pdffileName.equalsIgnoreCase(PASSED_PDF)) {
 			scriptStatus = PASS;
 		} else if (pdffileName.equalsIgnoreCase(FAILED_PDF)) {
@@ -529,19 +529,25 @@ public abstract class AbstractSeleniumKeywords {
 
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
 		long totalDiff = 0;
-		Date startDate = (Date)startAndEndDates.get(0)[0];
-		Date finishDate = (Date)startAndEndDates.get(0)[1];
+		Date startDate = null;
+		Date finishDate = null;
 		for (Object[] date : startAndEndDates) {
 			if (date[0] != null && date[1] != null) {
-				if(startDate.after((Date)date[0])) {
-					startDate = (Date)date[0];
-				}else if(finishDate.before((Date)date[1])) {
-					finishDate = (Date)date[1];
+				if (startDate == null || startDate.after((Date) date[0])) {
+					startDate = (Date) date[0];
+				}
+				if (finishDate == null || finishDate.before((Date) date[1])) {
+					finishDate = (Date) date[1];
 				}
 				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
 			}
 		}
-		totalExecutedTime.put("totalTime", DateUtils.convertMiliSecToDayFormat(DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
+		if (startDate != null && finishDate != null) {
+			totalExecutedTime.put("totalTime", DateUtils.convertMiliSecToDayFormat(
+					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
+		} else {
+			totalExecutedTime.put("totalTime", "0");
+		}
 		totalExecutedTime.put("executionTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
 		return totalExecutedTime;
