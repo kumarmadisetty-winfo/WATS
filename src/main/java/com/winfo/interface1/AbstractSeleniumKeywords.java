@@ -515,7 +515,7 @@ public abstract class AbstractSeleniumKeywords {
 		return fileNameList;
 	}
 
-	public Map<String, String> findExecutionTimeForScript(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
 
 		String scriptStatus = null;
 		Map<String, String> totalExecutedTime = new HashMap<>();
@@ -546,7 +546,7 @@ public abstract class AbstractSeleniumKeywords {
 			totalExecutedTime.put("totalTime", DateUtils.convertMiliSecToDayFormat(
 					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
 		} else {
-			totalExecutedTime.put("totalTime", "0");
+			totalExecutedTime.put("totalTime", "Not Available");
 		}
 		totalExecutedTime.put("executionTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
@@ -596,7 +596,7 @@ public abstract class AbstractSeleniumKeywords {
 				int failcount = fetchConfigVO.getFailcount();
 				int others = fetchConfigVO.getOtherCount();
 				
-				Map<String,String> totalTimeTaken = findExecutionTimeForScript(customerDetails.getTestSetId(), pdffileName);
+				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName);
 				String executedTime = totalTimeTaken.get("executionTime");
 				String totalTime = totalTimeTaken.get("totalTime");
 				String startTime = dateFormat.format(tStarttime);

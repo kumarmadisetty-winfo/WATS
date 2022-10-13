@@ -697,7 +697,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public Map<String, String> findExecutionTimeForScript(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
 
 		String scriptStatus = null;
 		Map<String, String> totalExecutedTime = new HashMap<>();
@@ -728,7 +728,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			totalExecutedTime.put("totalTime", DateUtils.convertMiliSecToDayFormat(
 					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
 		} else {
-			totalExecutedTime.put("totalTime", "0");
+			totalExecutedTime.put("totalTime", "Not Available");
 		}
 		totalExecutedTime.put("executionTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
