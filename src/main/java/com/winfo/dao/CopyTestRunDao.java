@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -160,6 +161,25 @@ public class CopyTestRunDao {
 	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
 		log.info("TestSetLineID *** " + testSetLineId);
 		return entityManager.find(TestSetLine.class, testSetLineId);
+	}
+	
+	public String findProductVersionByTestSetId(Integer testSetId) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "select productVersion from Project where projectId = (select projectId from TestSet where testRunId = :testSetId )";
+		Query query = session.createQuery(sql);
+		query.setParameter("testSetId", testSetId);
+		List<String> listOfProductVersion = query.getResultList();
+		return listOfProductVersion == null ? "" : listOfProductVersion.get(0);
+	}
+	
+	public Integer getScriptIdFromMaster(String scriptNumber, String productVersion) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "select scriptId from ScriptMaster where scriptNumber = :scriptNumber AND productVersion = :productVersion";
+		Query query = session.createQuery(sql);
+		query.setParameter("scriptNumber", scriptNumber);
+		query.setParameter("productVersion", productVersion);
+		List<Integer> listOfProductVersion = query.getResultList();
+		return CollectionUtils.isEmpty(listOfProductVersion) ? null : listOfProductVersion.get(0);
 	}
 
 }

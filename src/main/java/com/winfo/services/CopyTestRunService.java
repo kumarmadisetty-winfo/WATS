@@ -387,75 +387,158 @@ public class CopyTestRunService {
 	@Transactional
 	public ResponseDto addScriptsOnTestRun(InsertScriptsVO scriptVO) {
 
-		ResponseDto response = new ResponseDto();
+		List<String> listOfScriptNumberWrongProductVersion = new ArrayList<>();
 
 		TestSet testSetObj = copyTestrunDao.getdata(scriptVO.getTestSetId());
 
 		Integer maxSeqNum = copyTestrunDao.findMaxSeqNumOfTestRun(scriptVO.getTestSetId());
 
+		String existingProductVersion = copyTestrunDao.findProductVersionByTestSetId(scriptVO.getTestSetId());
+
+		List<TestSetLine> listOfTestSetLinesObj = new ArrayList<>();
+
 		for (Integer lineId : scriptVO.getListOfLineIds()) {
 
 			TestSetLine existLineObj = copyTestrunDao.getLineDtlByTestSetId(lineId);
+			Integer testRunId = existLineObj.getTestRun().getTestRunId();
 
-			List<TestSetScriptParam> existScriptParamList = existLineObj.getTestRunScriptParam();
+			String newProductVersion = copyTestrunDao.findProductVersionByTestSetId(testRunId);
+			String invalidTestRunName = null;
+			if (existingProductVersion == null || newProductVersion == null) {
+				invalidTestRunName = existingProductVersion == null ? testSetObj.getTestRunName()
+						: existLineObj.getTestRun().getTestRunName();
+				return new ResponseDto(500, Constants.ERROR,
+						String.format(Constants.INVALID_PRODUCT_VERSION, invalidTestRunName));
+			} else if (!existingProductVersion.equalsIgnoreCase(newProductVersion)) {
+				Integer scriptIdFromMaster = copyTestrunDao.getScriptIdFromMaster(existLineObj.getScriptNumber(),
+						existingProductVersion);
+				if (scriptIdFromMaster != null) {
+					List<ScriptMetaData> scriptMetaDataList = copyTestrunDao.getScriptMetadataInfo(scriptIdFromMaster);
+					List<TestSetScriptParam> newTestRunScriptParam = new ArrayList<>();
+					Map<String, String> inputParamAndInputValueMap = new HashMap<>();
+					existLineObj.getTestRunScriptParam().stream().forEach(
+							obj -> inputParamAndInputValueMap.put(obj.getInputParameter(), obj.getInputValue()));
+					TestSetLine newLineObj = new TestSetLine();
+					for (ScriptMetaData scriptMetaDataObj : scriptMetaDataList) {
+						TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
+						newScriptParamObj.setTestRunScripts(newLineObj);
+						newScriptParamObj.setInputParameter(scriptMetaDataObj.getInputParameter());
+						newScriptParamObj
+								.setInputValue(inputParamAndInputValueMap.get(scriptMetaDataObj.getInputParameter()));
+						newScriptParamObj.setScriptId(scriptMetaDataObj.getScriptMaster().getScriptId());
+						newScriptParamObj.setScriptNumber(scriptMetaDataObj.getScriptNumber());
+						newScriptParamObj.setLineNumber(scriptMetaDataObj.getLineNumber());
+						newScriptParamObj.setAction(scriptMetaDataObj.getAction());
+						newScriptParamObj.setTestRunParamDesc(scriptMetaDataObj.getStepDesc());
+						newScriptParamObj.setMetadataId(scriptMetaDataObj.getScriptMetaDataId());
+						newScriptParamObj.setHint(scriptMetaDataObj.getHint());
+						newScriptParamObj.setFieldType(scriptMetaDataObj.getFieldType());
+						newScriptParamObj.setXpathLocation(scriptMetaDataObj.getXpathLocation());
+						newScriptParamObj.setXpathLocation1(scriptMetaDataObj.getXpathLocation1());
+						newScriptParamObj.setCreatedBy(scriptMetaDataObj.getCreatedBy());
+						newScriptParamObj.setCreationDate(scriptMetaDataObj.getCreationDate());
+						newScriptParamObj.setUpdateDate(null);
+						newScriptParamObj.setLastUpdatedBy(null);
+						newScriptParamObj.setLineExecutionStatus(NEW);
+						newScriptParamObj.setLineErrorMessage(null);
+						newScriptParamObj.setDataTypes(scriptMetaDataObj.getDatatypes());
+						newScriptParamObj.setUniqueMandatory(scriptMetaDataObj.getUniqueMandatory());
+						newTestRunScriptParam.add(newScriptParamObj);
+					}
+					newLineObj.setScriptId(scriptIdFromMaster);
+					newLineObj.setCreatedBy(existLineObj.getCreatedBy());
+					newLineObj.setCreationDate(existLineObj.getCreationDate());
+					newLineObj.setEnabled(existLineObj.getEnabled());
+					newLineObj.setScriptNumber(existLineObj.getScriptNumber());
+					maxSeqNum += scriptVO.getIncrementalValue();
+					newLineObj.setSeqNum(maxSeqNum);
+					newLineObj.setStatus(NEW);
+					newLineObj.setLastUpdatedBy(null);
+					newLineObj.setScriptUpadated("N");
+					newLineObj.setUpdateDate(null);
+					newLineObj.setTestRunScriptPath(existLineObj.getTestRunScriptPath());
+					newLineObj.setExecutedBy(null);
+					newLineObj.setExecutionStartTime(null);
+					newLineObj.setExecutionEndTime(null);
+					newLineObj.setTestRunScriptParam(newTestRunScriptParam);
+					newLineObj.setTestRun(testSetObj);
+					listOfTestSetLinesObj.add(newLineObj);
+				} else {
+					String customType = copyTestrunDao
+							.getScriptMasterInfo(existLineObj.getScriptNumber(), newProductVersion).getStandardCustom();
+					if ("CUSTOM".equalsIgnoreCase(customType)) {
+						listOfScriptNumberWrongProductVersion.add(existLineObj.getScriptNumber());
+					}
+				}
 
-			Comparator<TestSetScriptParam> scriptLineComparator = (TestSetScriptParam s1,
-					TestSetScriptParam s2) -> s1.getLineNumber() - s2.getLineNumber();
-			Collections.sort(existScriptParamList, scriptLineComparator);
+			} else {
+				List<TestSetScriptParam> existScriptParamList = existLineObj.getTestRunScriptParam();
+				Comparator<TestSetScriptParam> scriptLineComparator = (TestSetScriptParam s1,
+						TestSetScriptParam s2) -> s1.getLineNumber() - s2.getLineNumber();
+				Collections.sort(existScriptParamList, scriptLineComparator);
+				List<TestSetScriptParam> newTestRunScriptParam = new ArrayList<>();
+				TestSetLine newLineObj = new TestSetLine();
+				for (TestSetScriptParam existScriptParamObj : existLineObj.getTestRunScriptParam()) {
 
-			List<TestSetScriptParam> newTestRunScriptParam = new ArrayList<>();
-
-			TestSetLine newLineObj = new TestSetLine();
-
-			for (TestSetScriptParam existScriptParamObj : existLineObj.getTestRunScriptParam()) {
-
-				TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
-				newScriptParamObj.setTestRunScripts(newLineObj);
-				newScriptParamObj.setInputParameter(existScriptParamObj.getInputParameter());
-				newScriptParamObj.setInputValue(existScriptParamObj.getInputValue());
-				newScriptParamObj.setScriptId(existScriptParamObj.getScriptId());
-				newScriptParamObj.setScriptNumber(existScriptParamObj.getScriptNumber());
-				newScriptParamObj.setLineNumber(existScriptParamObj.getLineNumber());
-				newScriptParamObj.setAction(existScriptParamObj.getAction());
-				newScriptParamObj.setTestRunParamDesc(existScriptParamObj.getTestRunParamDesc());
-				newScriptParamObj.setMetadataId(existScriptParamObj.getMetadataId());
-				newScriptParamObj.setHint(existScriptParamObj.getHint());
-				newScriptParamObj.setFieldType(existScriptParamObj.getFieldType());
-				newScriptParamObj.setXpathLocation(existScriptParamObj.getXpathLocation());
-				newScriptParamObj.setXpathLocation1(existScriptParamObj.getXpathLocation1());
-				newScriptParamObj.setCreatedBy(existScriptParamObj.getCreatedBy());
-				newScriptParamObj.setCreationDate(existScriptParamObj.getCreationDate());
-				newScriptParamObj.setUpdateDate(null);
-				newScriptParamObj.setLastUpdatedBy(null);
-				newScriptParamObj.setLineExecutionStatus(NEW);
-				newScriptParamObj.setLineErrorMessage(null);
-				newScriptParamObj.setDataTypes(existScriptParamObj.getDataTypes());
-				newScriptParamObj.setUniqueMandatory(existScriptParamObj.getUniqueMandatory());
-				newTestRunScriptParam.add(newScriptParamObj);
+					TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
+					newScriptParamObj.setTestRunScripts(newLineObj);
+					newScriptParamObj.setInputParameter(existScriptParamObj.getInputParameter());
+					newScriptParamObj.setInputValue(existScriptParamObj.getInputValue());
+					newScriptParamObj.setScriptId(existScriptParamObj.getScriptId());
+					newScriptParamObj.setScriptNumber(existScriptParamObj.getScriptNumber());
+					newScriptParamObj.setLineNumber(existScriptParamObj.getLineNumber());
+					newScriptParamObj.setAction(existScriptParamObj.getAction());
+					newScriptParamObj.setTestRunParamDesc(existScriptParamObj.getTestRunParamDesc());
+					newScriptParamObj.setMetadataId(existScriptParamObj.getMetadataId());
+					newScriptParamObj.setHint(existScriptParamObj.getHint());
+					newScriptParamObj.setFieldType(existScriptParamObj.getFieldType());
+					newScriptParamObj.setXpathLocation(existScriptParamObj.getXpathLocation());
+					newScriptParamObj.setXpathLocation1(existScriptParamObj.getXpathLocation1());
+					newScriptParamObj.setCreatedBy(existScriptParamObj.getCreatedBy());
+					newScriptParamObj.setCreationDate(existScriptParamObj.getCreationDate());
+					newScriptParamObj.setUpdateDate(null);
+					newScriptParamObj.setLastUpdatedBy(null);
+					newScriptParamObj.setLineExecutionStatus(NEW);
+					newScriptParamObj.setLineErrorMessage(null);
+					newScriptParamObj.setDataTypes(existScriptParamObj.getDataTypes());
+					newScriptParamObj.setUniqueMandatory(existScriptParamObj.getUniqueMandatory());
+					newTestRunScriptParam.add(newScriptParamObj);
+				}
+				newLineObj.setScriptId(existLineObj.getScriptId());
+				newLineObj.setCreatedBy(existLineObj.getCreatedBy());
+				newLineObj.setCreationDate(existLineObj.getCreationDate());
+				newLineObj.setEnabled(existLineObj.getEnabled());
+				newLineObj.setScriptNumber(existLineObj.getScriptNumber());
+				maxSeqNum += scriptVO.getIncrementalValue();
+				newLineObj.setSeqNum(maxSeqNum);
+				newLineObj.setStatus(NEW);
+				newLineObj.setLastUpdatedBy(null);
+				newLineObj.setScriptUpadated("N");
+				newLineObj.setUpdateDate(null);
+				newLineObj.setTestRunScriptPath(existLineObj.getTestRunScriptPath());
+				newLineObj.setExecutedBy(null);
+				newLineObj.setExecutionStartTime(null);
+				newLineObj.setExecutionEndTime(null);
+				newLineObj.setTestRunScriptParam(newTestRunScriptParam);
+				newLineObj.setTestRun(testSetObj);
+				listOfTestSetLinesObj.add(newLineObj);
 			}
-			newLineObj.setScriptId(existLineObj.getScriptId());
-			newLineObj.setCreatedBy(existLineObj.getCreatedBy());
-			newLineObj.setCreationDate(existLineObj.getCreationDate());
-			newLineObj.setEnabled(existLineObj.getEnabled());
-			newLineObj.setScriptNumber(existLineObj.getScriptNumber());
-			maxSeqNum+= scriptVO.getIncrementalValue();
-			newLineObj.setSeqNum(maxSeqNum);
-			newLineObj.setStatus(NEW);
-			newLineObj.setLastUpdatedBy(null);
-			newLineObj.setScriptUpadated("N");
-			newLineObj.setUpdateDate(null);
-			newLineObj.setTestRunScriptPath(existLineObj.getTestRunScriptPath());
-			newLineObj.setExecutedBy(null);
-			newLineObj.setExecutionStartTime(null);
-			newLineObj.setExecutionEndTime(null);
-			newLineObj.setTestRunScriptParam(newTestRunScriptParam);
-			newLineObj.setTestRun(testSetObj);
-			copyTestrunDao.updatelinesRecord(newLineObj);
 		}
-		response.setStatusCode(200);
-		response.setStatusDescr(Constants.SCRIPT_UPDATE_MSG);
-		response.setStatusMessage(Constants.SUCCESS);
-		return response;
+		for (TestSetLine testSetLineObj : listOfTestSetLinesObj) {
+			copyTestrunDao.updatelinesRecord(testSetLineObj);
+		}
+		if(listOfTestSetLinesObj.isEmpty()) {
+			return new ResponseDto(500, Constants.ERROR, Constants.INVALID_SCRIPT_MSG);
+			
+		}
+		
+		if (listOfScriptNumberWrongProductVersion.isEmpty()) {
+			return new ResponseDto(200, Constants.SUCCESS, Constants.SCRIPT_UPDATE_MSG);
+		} else {
+			String msg = listOfScriptNumberWrongProductVersion.toString().replace("[", "").replace("]", "");
+			return new ResponseDto(500, Constants.ERROR,
+					String.format(Constants.PRODUCT_VERSION_ERROR, existingProductVersion, msg));
+		}
 
 	}
 	
