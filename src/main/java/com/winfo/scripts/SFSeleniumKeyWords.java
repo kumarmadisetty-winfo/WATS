@@ -13682,7 +13682,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(2000);
 ////div[@class='AFDetectExpansion']/following::span[text()='"+param2+"']/following::span[starts-with(text(),'" + keysToSend + "')][1]
 				WebElement select = driver
-						.findElement(By.xpath("(//*[text()='"+keysToSend+"'])[1]"));
+						.findElement(By.xpath("//*[text()='"+param1+"']/following::span[text()='"+keysToSend+"'][1]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				Thread.sleep(5000);
 				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
