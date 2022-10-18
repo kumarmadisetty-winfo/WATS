@@ -20632,4 +20632,10 @@ public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, 
 	// TODO Auto-generated method stub
 	
 }
+@Override
+public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
+		ApiValidationVO api, CustomerProjectDto customerDetails, FetchConfigVO fetchConfigVO) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
 }
