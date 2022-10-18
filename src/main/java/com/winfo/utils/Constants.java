@@ -98,5 +98,8 @@ public class Constants {
 	public static final String ERR_MSG_FOR_DEP_FAILED = "Dependent Script Failed";
 	public static final String SPLIT = "@";
 	public static final String SCRIPT_UPDATE_MSG = "Successfully Updated scripts in given TestRun!!";
+	public static final String PRODUCT_VERSION_ERROR =  "%s product version is missing from the script(s) %s.";
+	public static final String INVALID_PRODUCT_VERSION =  "Invalid product version for test run %s.";
+	public static final String INVALID_SCRIPT_MSG = "Script could not be added. Please contact wats support team.";
 
 }
