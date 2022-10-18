@@ -23,6 +23,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -370,7 +371,7 @@ public class RunAutomation {
 			}
 		} catch (Exception e) {
 			log.error("Error in Cloud test run method " + e.getMessage());
-			dataBaseEntry.updateLineStatusUsingSetIdandIsEnable(testSetId, "Y");
+			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
 		}
 		return executeTestrunVo;
 	}
@@ -410,7 +411,15 @@ public class RunAutomation {
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
-		} catch (Exception e) {
+		}
+		catch (WebDriverException e) {
+			if(driver == null)
+			{
+					String enableStatus=dataBaseEntry.getEnabledStatusByTestSetLineID(testSetLineId);	
+					dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId,enableStatus);
+			}
+		}
+		catch (Exception e) {
 			log.info("Exception occured while running script - {} ", fetchMetadataListsVO.get(0).getScriptNumber());
 			e.printStackTrace();
 			if (isDriverError) {
@@ -1491,5 +1500,6 @@ public class RunAutomation {
 				.downloadScreenshotsFromObjectStore(screenShotFolder, customerDetails.getCustomerName(),
 						customerDetails.getTestSetName(), seqNumber);
 	}
+	
 
 }
