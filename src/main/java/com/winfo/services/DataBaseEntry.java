@@ -208,8 +208,8 @@ public class DataBaseEntry {
 		return auditTrial;
 	}
 
-	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
-		dao.updateLineStatusUsingSetIdandIsEnable(testSetId, isEnable);
+	public void updateEnabledStatusForTestSetLine(String testSetId, String isEnable) {
+		dao.updateEnabledStatusForTestSetLine(testSetId, isEnable);
 	}
 
 	public void updateStatusOfScript(String test_set_line_id, String status) {
@@ -536,8 +536,8 @@ public class DataBaseEntry {
 	public List<LookUpCode> getExistingLookupListByValidationId(int apiValidationId, String lookUpCode) throws Exception {
 		return dao.getExistingLookupListByValidationId(apiValidationId,lookUpCode);
 	}
-	public String getEnabledStatus(String testSetId, String testSetLineId) {
-		return dao.getEnabledStatus(testSetId,testSetLineId);
+	public String getEnabledStatusByTestSetLineID(String testSetLineId) {
+		return dao.getEnabledStatusByTestSetLineID(testSetLineId);
 	}
 	
 }

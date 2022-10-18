@@ -1044,7 +1044,7 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateLineStatusUsingSetIdandIsEnable(String testSetId, String isEnable) {
+	public void updateEnabledStatusForTestSetLine(String testSetId, String isEnable) {
 		try {
 			Query query = em.createQuery("from TestSetLine where testRun.testRunId=" + testSetId + " and enabled='"
 					+ isEnable + "' AND STATUS IN ('IN-PROGRESS','IN-QUEUE','New')");
@@ -1570,10 +1570,10 @@ public class DataBaseEntryDao {
 		Session session = em.unwrap(Session.class);
 		session.merge(listOfLookUpCodes);
 	}
-	public String getEnabledStatus(String testSetId, String testSetLineId) {
+	public String getEnabledStatusByTestSetLineID(String testSetLineId) {
 		Session session = em.unwrap(Session.class);
-		String query = "select enabled from WIN_TA_TEST_SET_LINES where  test_set_id = :testSetId and test_set_line_id=:testSetLineId ";
-		String result = session.createSQLQuery(query).setParameter("testSetId", testSetId).setParameter("testSetLineId", testSetLineId).getSingleResult().toString();
+		String query = "select enabled from WIN_TA_TEST_SET_LINES where test_set_line_id=:testSetLineId ";
+		String result = session.createSQLQuery(query).setParameter("testSetLineId", testSetLineId).getSingleResult().toString();
 		return result;
 	}
 }

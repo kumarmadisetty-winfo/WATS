@@ -371,7 +371,7 @@ public class RunAutomation {
 			}
 		} catch (Exception e) {
 			log.error("Error in Cloud test run method " + e.getMessage());
-			dataBaseEntry.updateLineStatusUsingSetIdandIsEnable(testSetId, "Y");
+			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
 		}
 		return executeTestrunVo;
 	}
@@ -415,8 +415,8 @@ public class RunAutomation {
 		catch (WebDriverException e) {
 			if(driver == null)
 			{
-					String enableStatus=dataBaseEntry.getEnabledStatus(testSetId,testSetLineId);	
-					dataBaseEntry.updateLineStatusUsingSetIdandIsEnable(testSetId,enableStatus);
+					String enableStatus=dataBaseEntry.getEnabledStatusByTestSetLineID(testSetLineId);	
+					dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId,enableStatus);
 			}
 		}
 		catch (Exception e) {
