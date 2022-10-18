@@ -1570,6 +1570,12 @@ public class DataBaseEntryDao {
 		Session session = em.unwrap(Session.class);
 		session.merge(listOfLookUpCodes);
 	}
+	public String getEnabledStatus(String testSetId, String testSetLineId) {
+		Session session = em.unwrap(Session.class);
+		String query = "select enabled from WIN_TA_TEST_SET_LINES where  test_set_id = :testSetId and test_set_line_id=:testSetLineId ";
+		String result = session.createSQLQuery(query).setParameter("testSetId", testSetId).setParameter("testSetLineId", testSetLineId).getSingleResult().toString();
+		return result;
+	}
 }
 	
 	

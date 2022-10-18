@@ -536,6 +536,8 @@ public class DataBaseEntry {
 	public List<LookUpCode> getExistingLookupListByValidationId(int apiValidationId, String lookUpCode) throws Exception {
 		return dao.getExistingLookupListByValidationId(apiValidationId,lookUpCode);
 	}
+	public String getEnabledStatus(String testSetId, String testSetLineId) {
+		return dao.getEnabledStatus(testSetId,testSetLineId);
+	}
 	
-
 }
