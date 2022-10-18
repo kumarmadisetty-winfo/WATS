@@ -149,10 +149,10 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	}
 
 	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			String type1, String type2, String param1, String param2, String param3, int count, CustomerProjectDto customerDetails)
 			throws Exception {
-		String param3 = "Navigator";
-		String xpath = navigator(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String param = "Navigator";
+		String xpath = navigator(driver, param, fetchMetadataVO, fetchConfigVO, customerDetails);
 		String xpath1 = menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		String xpath2 = menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
@@ -555,11 +555,11 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (count == 0) {
 				count = 1;
 				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
 				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
 			} else {
 				System.out.println("Count value exceeds the limit");
 				log.error("Failed During Navigation");

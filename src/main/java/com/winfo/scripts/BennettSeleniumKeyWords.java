@@ -69,7 +69,6 @@ import org.springframework.web.client.RestTemplate;
 import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
-import com.winfo.services.DataBaseEntry;
 import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.LimitScriptExecutionService;
@@ -83,9 +82,9 @@ import com.winfo.vo.ScriptDetailsDto;
 //@Service("WATS")
 @RefreshScope
 public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
-//New-changes - added annotation for DatabaseEntry
-	@Autowired
-	private DataBaseEntry databaseentry;
+	
+	private static final Logger log = Logger.getLogger(BennettSeleniumKeyWords.class);
+	
 	@Autowired
 	ScriptXpathService service;
 	@Autowired
@@ -108,7 +107,6 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
 	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
 	 */
-	Logger log = Logger.getLogger("Logger");
 
 	public String Main_Window = "";
 	public WebElement fromElement;
@@ -137,16 +135,16 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	}
 
 	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			String type1, String type2, String param1, String param2, String param3, int count, CustomerProjectDto customerDetails)
 			throws Exception {
-		String param3 = "Navigator";
-		String xpath = navigator(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
-		String xpath1 = menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String param = "Navigator";
+		String xpath = navigator(driver, param, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath1 = menuNavigation(driver, param1, null, null, fetchMetadataVO, fetchConfigVO, customerDetails);
 
-		String xpath2 = menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
-				count, customerDetails);
+//		String xpath2 = menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
+//				count, customerDetails);
 		String scripNumber = fetchMetadataVO.getScriptNumber();
-		String xpaths = xpath + ">" + xpath1 + ">" + xpath2;
+//		String xpaths = xpath + ">" + xpath1 + ">" + xpath2;
 		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLineNumber();
 		service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -217,7 +215,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			}
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -259,7 +257,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			log.error("Failed During Navigation");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.info("Not able to navitage to the Url");
 			throw e;
 		}
 	}
@@ -274,7 +272,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			log.error("Failed During Navigation");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
+			log.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -285,30 +283,30 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			WebElement wait = driver.findElement(By.xpath("//*[text()='Select Year']/preceding-sibling::input[1]"));
 			String yearValue = wait.getAttribute("title");
 			int year = Integer.parseInt(yearValue);
-			System.out.println("The value of the year is: " + year);
+			log.info("The value of the year is: " + year);
 			if (year < Integer.parseInt(param1)) {
 				while (year != Integer.parseInt(param1)) {
 					WebElement increment = driver.findElement(By.xpath("//a[@title='increment']"));
 					increment.click();
 					year = year + 1;
-					System.out.println(year);
+					log.info(year);
 				}
 			} else if (year > Integer.parseInt(param1)) {
 				while (year != Integer.parseInt(param1)) {
 					WebElement decrement = driver.findElement(By.xpath("//a[@title='decrement']"));
 					decrement.click();
 					year = year - 1;
-					System.out.println(year);
+					log.info(year);
 				}
 			} else {
-				System.out.println("The given year is matched with the Oracle year");
+				log.info("The given year is matched with the Oracle year");
 			}
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			return;
 		} catch (Exception e) {
 			log.error("Failed During Navigation");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
+			log.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -337,7 +335,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.info("Not able to navitage to the Url");
 		}
 	}
 
@@ -372,7 +370,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -395,7 +393,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed During Login page");
+			log.info("Failed During Login page");
 		}
 		return xpath;
 	}
@@ -420,45 +418,48 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.info("Not able to navitage to the Url");
 			throw e;
 		}
 	}
 
-	public String menuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+	public String menuNavigation(WebDriver driver, String param1, String param2,
+			String param3, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			if (param1.equalsIgnoreCase("Expenses")) {
+			if (param1.equalsIgnoreCase("More")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
+						By.xpath("//div[contains(@id,'popup-container')]//a[text()='More...']")));
 				wait.until(ExpectedConditions.elementToBeClickable(
-						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
+						By.xpath("//div[contains(@id,'popup-container')]//a[text()='More...']")));
 				WebElement waittext = driver
-						.findElement(By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]"));
+						.findElement(By.xpath("//div[contains(@id,'popup-container')]//a[text()='More...']"));
 				Actions actions = new Actions(driver);
 				Thread.sleep(3000);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
+				Thread.sleep(4000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
+				WebElement navigate = driver
+						.findElement(By.xpath("//div[contains(@id,'popup-container')]//span[text()='"+param2+"']/following::a[text()='"+param3+"']"));
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully MenuNavigation is done " + scripNumber);
-				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='param1'])[2]";
+				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='"+param1+"'])[2]";
 
 				return xpath;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during MenuNavigation " + scripNumber);
-			// TODO: handle exception
+			Thread.currentThread().interrupt();
 		}
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+					By.xpath("//div[contains(@id,'popup-container')]//span[text()='"+param1+"']/following::a[text()='"+param2+"']")));
 			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+					By.xpath("//div[contains(@id,'popup-container')]//span[text()='"+param1+"']/following::a[text()='"+param2+"']")));
 			/*
 			 * WebElement waittext = driver
 			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" +
@@ -468,22 +469,11 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			// ------------------------(New Change)-----------------------
 
 			WebElement waittext = driver.findElement(By.xpath(
-					"//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']//div[2]/a/*[name()='svg'][1]"));
-
-			WebElement showmore = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show More']"));
+					"//div[contains(@id,'popup-container')]//span[text()='"+param1+"']/following::a[text()='"+param2+"']"));
 			Actions actions = new Actions(driver);
-			actions.moveToElement(showmore).build().perform();
-			actions.moveToElement(showmore).click().build().perform();
-			Thread.sleep(15000);
-			WebElement showless = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show Less']"));
-			actions.moveToElement(showless).build().perform();
-			actions.moveToElement(showless).click().build().perform();
-			Thread.sleep(15000);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			Thread.sleep(15000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully menunavigation is clicked " + scripNumber);
 			String xpath = "//*[contains(@id,'popup-container')]//a[text()='Show More']" + ">"
@@ -496,7 +486,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.error("Failed during Menunavigation " + scripNumber);
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
+			log.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -543,17 +533,17 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			if (count == 0) {
 				count = 1;
-				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+				log.info(" The Count Value is : " + count);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
-				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+				log.info(" The Count Value is : " + count);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
 			} else {
-				System.out.println("Count value exceeds the limit");
+				log.info("Count value exceeds the limit");
 				log.error("Failed During Navigation");
 				screenshotFail(driver, fetchMetadataVO, customerDetails);
-				System.out.println("Not able to navitage to the :" + "" + param1);
+				log.info("Not able to navitage to the :" + "" + param1);
 				throw e;
 			}
 
@@ -583,7 +573,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed During Task " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed to Open Task Menu");
+			log.info("Failed to Open Task Menu");
 			throw e;
 		}
 	}
@@ -616,17 +606,17 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			if (count == 0) {
 				count = 1;
-				System.out.println(" The Count Value is : " + count);
+				log.info(" The Count Value is : " + count);
 				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
-				System.out.println(" The Count Value is : " + count);
+				log.info(" The Count Value is : " + count);
 				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
 			} else {
-				System.out.println("Count value exceeds the limit");
+				log.info("Count value exceeds the limit");
 				log.error("Failed to Open Task Menu");
 				screenshotFail(driver, fetchMetadataVO, customerDetails);
-				System.out.println("Failed to Open Task Menu");
+				log.info("Failed to Open Task Menu");
 				throw e;
 
 			}
@@ -690,17 +680,17 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				+ customerDetails.getTestSetName() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
-			System.out.println("creating directory: " + theDir.getName());
+			log.info("creating directory: " + theDir.getName());
 			boolean result = false;
 			try {
 				theDir.mkdirs();
 				result = true;
 			} catch (SecurityException se) {
 				// handle it
-				System.out.println(se.getMessage());
+				log.info(se.getMessage());
 			}
 		} else {
-			System.out.println("Folder exist");
+			log.info("Folder exist");
 		}
 		// String vidPath = "C:\\Users\\Winfo Solutions\\Desktop\\"+name;
 		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
@@ -716,22 +706,22 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			recorder.start();
 //             for (int i=0;i<targetFileList.size();i++)
 //             {
-//            	 System.out.println(targetFileList.get(i));
+//            	 log.info(targetFileList.get(i));
 //             }
 			if (targetFile1 != null) {
-				System.out.println(targetFile1);
+				log.info(targetFile1);
 				str = targetFile1;
 				ipl = cvLoadImage(str);
 				recorder.record(grabberConverter.convert(ipl));
 			}
 			for (String image : targetFileList) {
-				System.out.println(image);
+				log.info(image);
 				str = image;
 				ipl = cvLoadImage(str);
 				recorder.record(grabberConverter.convert(ipl));
 			}
 			recorder.stop();
-			System.out.println("ok");
+			log.info("ok");
 		} catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
 			e.printStackTrace();
 		}
@@ -745,7 +735,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				log.info("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
@@ -836,7 +826,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		String Number = fetchMetadataListVO.get(0).getLineNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				log.info("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
@@ -867,7 +857,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		String STATUS = fetchMetadataListVO.get(0).getStatus();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				log.info("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
@@ -897,7 +887,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				log.info("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
@@ -926,7 +916,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		String scripNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
+				log.info("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
@@ -949,13 +939,13 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			List imageUrlList = new ArrayList();
 			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
-			System.out.println(imageDir);
+			log.info(imageDir);
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
+				log.info(imageFileName);
 				imageUrlList.add(imageFileName);
 				File pdfFile = new File(imageDir + "/" + imageFileName);
-				System.out.println(pdfFile);
+				log.info(pdfFile);
 				FileInputStream input = new FileInputStream(pdfFile);
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				byte[] buffer = new byte[99999999];
@@ -972,8 +962,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				HttpHeaders uploadSessionHeader = new HttpHeaders();
 				// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
 				uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
-				System.out.println(fetchConfigVO.getSHAREPOINT_SITE_ID());
-				System.out.println(fetchConfigVO.getSharepoint_item_id());
+				log.info(fetchConfigVO.getSHAREPOINT_SITE_ID());
+				log.info(fetchConfigVO.getSharepoint_item_id());
 
 				// HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null,
 				// uploadSessionHeader);
@@ -994,7 +984,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 								+ imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
 
-				System.out.println(response);
+				log.info(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
 						: null;
@@ -1009,13 +999,13 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
 						uploadingFileRequest, byte[].class);
 
-				System.out.println(putResponse);
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
+				log.info(putResponse);
+				log.info("response status: " + response.getStatusCode());
+				log.info("response body: " + response.getBody());
+				log.info("response : " + response);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 	}
 
@@ -1035,16 +1025,16 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			ResponseEntity<Object> response = restTemplate.exchange(
 					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
-			System.out.println(response);
+			log.info(response);
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
-		System.out.println(acessToken);
+		log.info(acessToken);
 		return acessToken;
 	}
 
@@ -1094,7 +1084,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 					copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
 							testSetId);
 				}
-				System.out.println("copynumberValue:::" + copynumberValue);
+				log.info("copynumberValue:::" + copynumberValue);
 
 				String value = globalValueForSteps;
 				// Thread.sleep(2000);
@@ -1146,7 +1136,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 					copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
 							testSetId);
 				}
-				System.out.println("copynumberValue:::" + copynumberValue);
+				log.info("copynumberValue:::" + copynumberValue);
 
 				String value = globalValueForSteps;
 				Thread.sleep(2000);
@@ -1196,7 +1186,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
 			}
 
-			System.out.println("copynumberValue:::" + copynumberValue);
+			log.info("copynumberValue:::" + copynumberValue);
 
 			String value = globalValueForSteps;
 
@@ -1233,7 +1223,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -1258,7 +1248,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
 			}
 			String value = globalValueForSteps;
-			System.out.println("copynumberValue:::" + copynumberValue);
+			log.info("copynumberValue:::" + copynumberValue);
 			waittill.click();
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -1305,7 +1295,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (inputParam2.equals("Accounting Period")) {
@@ -1324,7 +1314,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Accounting Period Clear" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -1336,7 +1326,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Thread.sleep(4000);
@@ -1351,7 +1341,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 		}
@@ -1368,7 +1358,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver
@@ -1385,7 +1375,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
+			log.error(e);
 			throw e;
 		}
 	}
@@ -1404,7 +1394,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				// equal,we will close.
 				if (!mainWindow.equals(childWindow)) {
 					driver.switchTo().window(childWindow);
-					System.out.println(driver.switchTo().window(childWindow).getTitle());
+					log.info(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
@@ -1432,7 +1422,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During switchToActiveElement Action." + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e.getMessage());
+			log.info(e.getMessage());
 			throw e;
 		}
 	}
@@ -1465,7 +1455,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1487,7 +1477,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1511,7 +1501,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1535,7 +1525,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1558,7 +1548,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1579,7 +1569,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			System.out.println(e);
+			log.error(e);
 			log.error("failed during ClickMenu " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1601,7 +1591,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			System.out.println(e);
+			log.error(e);
 			log.error("Failed during SingnInSignOut " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1637,7 +1627,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1662,7 +1652,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1685,7 +1675,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			System.out.println(e);
+			log.error(e);
 			log.error("Failed during NotificationLink" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1717,7 +1707,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -1741,7 +1731,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -1768,7 +1758,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Publish to Managers")) {
@@ -1793,7 +1783,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1812,7 +1802,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -1840,7 +1830,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1857,7 +1847,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1871,7 +1861,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -1919,7 +1909,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Process Monitor ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1951,7 +1941,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1989,7 +1979,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Thread.sleep(4000);
@@ -2014,7 +2004,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2043,7 +2033,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2077,7 +2067,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2114,7 +2104,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2144,7 +2134,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2174,7 +2164,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 32
@@ -2201,7 +2191,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -2228,7 +2218,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payment Process Requests") && param1.equalsIgnoreCase("Name")) {
@@ -2254,7 +2244,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 15
@@ -2279,7 +2269,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2305,7 +2295,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2332,7 +2322,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2355,7 +2345,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2376,7 +2366,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2414,7 +2404,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2440,7 +2430,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2462,7 +2452,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2489,7 +2479,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 15
@@ -2509,7 +2499,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// Dh 9
@@ -2555,7 +2545,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickImag" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -2585,7 +2575,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -2609,7 +2599,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -2635,7 +2625,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Provider or Receiver clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -2660,7 +2650,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// label[contains(text(),'Enter Cost Centre')]/following::input[1]
 		try {
@@ -2685,7 +2675,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -2710,7 +2700,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Customer")) {
@@ -2734,7 +2724,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add to Selected") || param1.equalsIgnoreCase("Remove from Selected")) {
@@ -2757,7 +2747,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Selected clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Go to Member Selection")) {
@@ -2781,7 +2771,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Go to Member Selection clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		/*
 		 * try { if (param1.equalsIgnoreCase("Provider") ||
@@ -2804,7 +2794,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		 * scriptID,metadataID,xpath); return; } } catch (Exception e) { String
 		 * scripNumber = fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during Provider or Receiver clickImag" + scripNumber);
-		 * System.out.println(e); }
+		 * log.error(e); }
 		 */
 		try {
 			// Changed == to equals method
@@ -2829,7 +2819,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -2854,7 +2844,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Back")) {
@@ -2876,7 +2866,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Back clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2903,7 +2893,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2925,7 +2915,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2948,7 +2938,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2974,7 +2964,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2998,7 +2988,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -3021,7 +3011,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3090,7 +3080,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// Dh 39
@@ -3121,7 +3111,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// Dh 39
@@ -3152,7 +3142,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 31
@@ -3192,7 +3182,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3234,7 +3224,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3264,7 +3254,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 29
@@ -3295,7 +3285,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 29
@@ -3326,7 +3316,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 10
@@ -3369,7 +3359,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clicking Done Button" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3410,7 +3400,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3453,7 +3443,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -3493,7 +3483,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3536,7 +3526,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3575,7 +3565,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -3629,7 +3619,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH changes 6
 		try {
@@ -3654,7 +3644,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH changes 6
 		try {
@@ -3678,7 +3668,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH changes 6
 		try {
@@ -3705,7 +3695,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH fix 4
 		try {
@@ -3732,7 +3722,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH fix 4
@@ -3754,7 +3744,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH fix4
@@ -3780,7 +3770,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
@@ -3806,7 +3796,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
@@ -3836,7 +3826,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 //for "PTP.AP.327 Applying a prepayment to Invoice" when exectuing in Fusion instance
 		try {
@@ -3887,7 +3877,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
@@ -3912,7 +3902,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Notifications")) {
@@ -3939,7 +3929,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expend")) {
@@ -3965,7 +3955,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("OK")) {
@@ -3992,13 +3982,13 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Line")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				Thread.sleep(8000);
-				System.out.println("here1234");
+				log.info("here1234");
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("//*[contains(text(),'" + param1 + "')]/following::span[normalize-space(text())='K']"))));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -4020,7 +4010,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit Line clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Members") || param1.equalsIgnoreCase("Complete Report")) {
@@ -4044,7 +4034,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Contacts") && param2.equalsIgnoreCase("OK")) {
@@ -4069,7 +4059,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Contacts clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Thread.sleep(2000);
@@ -4098,7 +4088,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
@@ -4125,7 +4115,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
@@ -4151,7 +4141,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
@@ -4178,7 +4168,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Select clickButton" + scripNumber);
 		}
@@ -4205,7 +4195,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Done clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Apply")) {
@@ -4232,7 +4222,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
@@ -4692,7 +4682,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -4718,7 +4708,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during OK clickButton" + scripNumber);
 		}
@@ -4763,7 +4753,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during add Application clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Unapply Application")) {
@@ -4808,7 +4798,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Application clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Submit")) {
@@ -4857,7 +4847,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Columns") || param1.equalsIgnoreCase("Show All")) {
@@ -4886,7 +4876,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Columns or Show All clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add to Document Builder")) {
@@ -4911,7 +4901,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Document Builder clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Freeze")) {
@@ -5013,7 +5003,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit")) {
@@ -5039,7 +5029,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reverse")) {
@@ -5064,7 +5054,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reverse clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
@@ -5088,7 +5078,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Republish")) {
@@ -5113,7 +5103,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Match Invoice Lines") && param2.equalsIgnoreCase("OK")) {
@@ -5138,7 +5128,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -5165,7 +5155,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -5191,7 +5181,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -5218,7 +5208,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -5244,7 +5234,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -5290,7 +5280,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5311,7 +5301,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5332,7 +5322,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -5363,13 +5353,13 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 //	              fetchConfigVO.setErrormessage(text);
 //	  			return;
 //	        } catch (Exception e) {
-//	            System.out.println(e);
+//	            log.error(e);
 //	        }try {
 //	              String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
 //	              fetchConfigVO.setErrormessage(text);
 //	  			return;
 //	        } catch (Exception e) {
-//	            System.out.println(e);
+//	            log.error(e);
 //	        }
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5392,7 +5382,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -5448,7 +5438,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -5478,7 +5468,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Addresses")) {
@@ -5503,7 +5493,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -5530,7 +5520,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Approved")) {
@@ -5556,7 +5546,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approved clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Orders")) {
@@ -5582,7 +5572,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Orders clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts")) {
@@ -5608,7 +5598,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Receipts clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// Adding Xpath for 'Checking the dashboard for unposted & journals in error for
 		// all journals(GL.125)’
@@ -5657,7 +5647,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Journals in Requiring Attention clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("List of Processes Meeting Search Criteria")) {
@@ -5682,7 +5672,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -5710,7 +5700,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5771,7 +5761,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("SecondLine")) {
@@ -5793,11 +5783,11 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during SecondLine tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Thread.sleep(6000);
-			// System.out.println("Here1 came");
+			// log.info("Here1 came");
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//td)[1]")));
@@ -5818,7 +5808,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Here1 came tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5841,7 +5831,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5863,7 +5853,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5883,7 +5873,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -5909,7 +5899,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			throw e;
 		}
 	}
@@ -5958,7 +5948,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			} catch (Exception e) {
 
-				System.out.println(e);
+				log.error(e);
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -6009,7 +5999,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 				log.error("Failed during Scanned clickLink" + scripNumber);
 
-				System.out.println(e);
+				log.error(e);
 
 			}
 			// DH fix
@@ -6038,7 +6028,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during Export clickLink" + scripNumber);
-				System.out.println(e);
+				log.error(e);
 			}
 			if (param1.equalsIgnoreCase("Report") && param2.equalsIgnoreCase("Apply")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6061,7 +6051,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Home")) {
@@ -6086,7 +6076,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Home clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Financials Details") && param2.equalsIgnoreCase("Invoices")) {
@@ -6113,7 +6103,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financials Details or Invoices  clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Approve")) {
@@ -6137,7 +6127,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approve clickLink" + scripNumber);
 		}
@@ -6170,7 +6160,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Export")) {
@@ -6197,7 +6187,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Export")) {
@@ -6224,7 +6214,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project")) {
@@ -6265,7 +6255,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			}
 
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 		}
@@ -6296,7 +6286,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financial Reporting Center clickLink" + scripNumber);
 		}
@@ -6330,7 +6320,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receivables clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
@@ -6356,7 +6346,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -6382,7 +6372,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Details")) {
@@ -6408,7 +6398,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Details" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6441,7 +6431,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Journal")) {
@@ -6473,7 +6463,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Journal clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Receipt Details") || param1.equalsIgnoreCase("General Information")) {
@@ -6498,7 +6488,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receipt Details clickLink" + scripNumber);
 		}
@@ -6523,7 +6513,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during View clickLink" + scripNumber);
 		}
@@ -6573,12 +6563,12 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during clickLink" + scripNumber);
-				System.out.println(e);
+				log.error(e);
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Invoice Actions clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6606,7 +6596,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics")) {
@@ -6633,7 +6623,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Attachment") || param1.equalsIgnoreCase("Invoice Summary")
@@ -6661,7 +6651,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Attachment or Invoice Summary clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6685,7 +6675,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6710,7 +6700,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6736,7 +6726,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6760,7 +6750,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6785,7 +6775,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6810,7 +6800,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// Need to check for what purpose
 		try {
@@ -6836,7 +6826,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -6860,7 +6850,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6880,7 +6870,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -6906,7 +6896,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -6942,7 +6932,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -6977,7 +6967,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7000,7 +6990,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -7021,7 +7011,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7059,7 +7049,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 31
@@ -7090,7 +7080,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 25
@@ -7118,7 +7108,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -7147,7 +7137,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -7179,7 +7169,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -7214,7 +7204,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Item Description clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Purpose")) {
@@ -7247,7 +7237,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Scenario")) {
@@ -7278,7 +7268,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Scenario clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Purpose")) {
@@ -7309,7 +7299,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Name")) {
@@ -7330,7 +7320,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Name clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Match Invoice Lines")
@@ -7360,7 +7350,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Match Invoice Lines clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7386,7 +7376,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7416,7 +7406,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7445,7 +7435,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7474,7 +7464,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7500,7 +7490,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -7530,7 +7520,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -7570,7 +7560,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -7595,7 +7585,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// Changed == to equals method
@@ -7622,7 +7612,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7647,7 +7637,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7670,7 +7660,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7698,7 +7688,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -7728,7 +7718,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7757,7 +7747,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7777,7 +7767,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7811,7 +7801,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 39 SCM.PM.509
@@ -7840,7 +7830,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 39 OTC.AR.236
@@ -7868,7 +7858,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 12
@@ -7898,7 +7888,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -7924,7 +7914,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Password sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// Here Adding xpath for invoice dates AP.452
 
@@ -7971,7 +7961,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during Invoice Dates  sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -8010,7 +8000,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -8038,7 +8028,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -8077,7 +8067,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -8105,7 +8095,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
@@ -8130,7 +8120,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account")
@@ -8160,7 +8150,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account")
@@ -8188,7 +8178,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -8213,7 +8203,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Phone or Mobile sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Line") && param2.equalsIgnoreCase("Name")) {
@@ -8239,7 +8229,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Line or Name  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("Person Name")) {
@@ -8269,7 +8259,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card or Person Name sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -8298,7 +8288,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Query By Example  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Unapply Accounting Date")) {
@@ -8330,7 +8320,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Accounting Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 
@@ -8368,7 +8358,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Accounting Periods")
@@ -8398,7 +8388,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Accounting Periods sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics") && param2.equalsIgnoreCase("Search")) {
@@ -8424,7 +8414,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Report")) {
@@ -8452,7 +8442,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Daily Rates")) {
@@ -8480,7 +8470,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Daily Rates sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Line") && param2.equalsIgnoreCase("Category Name")) {
@@ -8537,7 +8527,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH 15
 		try {
@@ -8563,7 +8553,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH 18
 		try {
@@ -8591,7 +8581,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			// throw e;
 		}
 
@@ -8623,7 +8613,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8651,7 +8641,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 		}
@@ -8678,7 +8668,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8708,7 +8698,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8738,7 +8728,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8767,7 +8757,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8792,7 +8782,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -8817,7 +8807,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -8881,7 +8871,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Postal Code Legal Entity  dropdownTexts" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -8904,7 +8894,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8929,7 +8919,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8985,7 +8975,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9008,7 +8998,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9031,7 +9021,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9096,7 +9086,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -9139,7 +9129,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry multiplelinestableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -9311,7 +9301,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			}
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -9488,7 +9478,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			}
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -9657,7 +9647,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  multiplelinestableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -9689,7 +9679,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 34
@@ -9721,7 +9711,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 29
@@ -9749,7 +9739,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// New Code for PTP.PO.511
@@ -9774,7 +9764,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -9798,7 +9788,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// Dh changes 8
@@ -9823,7 +9813,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add Project Customer")) {
@@ -9847,7 +9837,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH changes
 		try {
@@ -9871,7 +9861,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH changes
 		try {
@@ -9898,7 +9888,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Funded Amount tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -9930,7 +9920,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Associated Projects or Funded Amount tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -9962,7 +9952,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or FProject Number tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -9994,7 +9984,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Task Number tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -10025,7 +10015,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Mon")) {
@@ -10188,7 +10178,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -10227,7 +10217,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Lines") && param2.equalsIgnoreCase("Price")) {
@@ -10251,7 +10241,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Price  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Lines") && param2.equalsIgnoreCase("Expenditure Item Date")) {
@@ -10275,7 +10265,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Expenditure Item Date tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Lines") || param2.equalsIgnoreCase("Item")) {
@@ -10298,7 +10288,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 12
@@ -10322,7 +10312,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -10346,7 +10336,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Application Reference tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// Add Xpath for "Register a mass promise to pay(AR.249)
 
@@ -10386,7 +10376,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during tableSendKeys" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Provider") || param1.equalsIgnoreCase("Receiver")) {
@@ -10412,7 +10402,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Thread.sleep(6000);
@@ -10438,7 +10428,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath(
@@ -10458,7 +10448,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[text()='" + param1 + "']/following::span[text()='"
@@ -10478,7 +10468,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// Add Xpath for "Journal submitted but Approver on vacation(RTR.GL.115)"
@@ -10501,7 +10491,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath(
@@ -10522,7 +10512,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1
@@ -10542,7 +10532,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1
@@ -10562,7 +10552,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittill = driver
@@ -10583,7 +10573,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			// tab(driver, fetchMetadataVO, fetchConfigVO);
@@ -10603,7 +10593,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -10643,7 +10633,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -10660,7 +10650,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -10679,7 +10669,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -10724,7 +10714,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10765,7 +10755,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -10778,7 +10768,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
@@ -10808,7 +10798,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -10831,7 +10821,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
@@ -10855,7 +10845,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
@@ -10883,7 +10873,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Billing tableDropdownValues" + scripNumber);
 		}
@@ -10910,7 +10900,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableDropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10934,7 +10924,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10956,7 +10946,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -10989,7 +10979,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 29
@@ -11021,7 +11011,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		// DH 14 SCP.512
@@ -11072,7 +11062,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		/*
@@ -11129,7 +11119,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		 * scripNumber); return; } } catch (Exception e) { String scripNumber =
 		 * fetchMetadataVO.getScriptNumber();
 		 * log.error("Failed during Schedule New Process or Name dropdownValues" +
-		 * scripNumber); System.out.println(e); }
+		 * scripNumber); log.error(e); }
 		 */
 
 		// DH 23
@@ -11177,7 +11167,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -11234,7 +11224,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Invoice Header") && param2.equalsIgnoreCase("Business Unit")) {
@@ -11283,14 +11273,14 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				} catch (Exception e) {
 					// String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
-					System.out.println(e);
+					log.error(e);
 				}
 				return;
 			}
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.info(ex);
 		}
 		// This is to select the dropdown and select 'All' and deselect All then
 		// Selecting Draft
@@ -11324,7 +11314,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.info(ex);
 		}
 		// --------------------------(including new change
 		// here)<------------------------------
@@ -11364,7 +11354,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.info(ex);
 		}
 
 		// --------------------------------------------(ends
@@ -11407,7 +11397,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.info(ex);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account") && param2.equalsIgnoreCase("Country")) {
@@ -11456,7 +11446,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Bank Account or Country dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.info(ex);
 		}
 		// for "PTP.PO.301 Request New Supplier" when exectuing in Fusion instance
 		try {
@@ -11486,7 +11476,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.info(ex);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("Country")) {
@@ -11536,7 +11526,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Address or Country  dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.info(ex);
 		}
 		try {
 
@@ -11576,7 +11566,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Assets dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 
 		}
 		// DH 20
@@ -11606,7 +11596,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Request dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -11639,7 +11629,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 
@@ -11754,7 +11744,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("FIN-7073-UDG Cognos Extract")) {
@@ -11827,7 +11817,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH 27
 		try {
@@ -11910,7 +11900,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		// DH 27
 		try {
@@ -12174,7 +12164,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			log.error("Failed during  dropdownValues" + scripNumber);
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 		try {
@@ -12224,7 +12214,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
@@ -12554,7 +12544,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Ledger")) {
@@ -12703,7 +12693,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12772,7 +12762,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			}
 			return;
 		} catch (Exception exe) {
-			System.out.println(exe);
+			log.info(exe);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 		}
@@ -12856,7 +12846,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12880,7 +12870,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12903,7 +12893,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12923,7 +12913,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		}
@@ -12970,7 +12960,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13000,7 +12990,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement button = driver
@@ -13019,7 +13009,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13047,7 +13037,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 
 		try {
@@ -13069,7 +13059,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -13109,7 +13099,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
+			log.info("(//img[@title='" + param1 + "']/following::*[text()='" + param2
 					+ "']/preceding::input[@type='text'])[3]");
 		}
 
@@ -13126,7 +13116,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("(//img[@title='" + param1 + "']/following::*[text()='" + param2
+			log.info("(//img[@title='" + param1 + "']/following::*[text()='" + param2
 					+ "']/preceding::input[@type='text'])[3]");
 		}
 		try {
@@ -13143,7 +13133,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("//img[@title='" + param1 + "'][1]");
+			log.info("//img[@title='" + param1 + "'][1]");
 			// throw e;
 		}
 		// DH changes 6
@@ -13162,7 +13152,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("//img[@title='" + param1 + "'][1]");
+			log.info("//img[@title='" + param1 + "'][1]");
 			throw e;
 		}
 	}
@@ -13179,7 +13169,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  password" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
+			log.error(e);
 			throw e;
 		}
 	}
@@ -13239,7 +13229,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())='" + inputParam + "']"));
@@ -13254,7 +13244,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']"));
@@ -13269,7 +13259,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Field during scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())='" + inputParam + "'])"));
@@ -13284,7 +13274,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -13298,7 +13288,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())='" + inputParam + "']"));
@@ -13311,7 +13301,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),'" + inputParam + "')]"));
@@ -13326,7 +13316,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary='" + inputParam + "']//td//a)[1]"));
@@ -13341,7 +13331,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -13355,7 +13345,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,'" + inputParam + "')]"));
@@ -13370,7 +13360,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())='" + inputParam + "']"));
@@ -13385,7 +13375,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -13401,7 +13391,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -13417,7 +13407,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title='" + inputParam + "']"));
@@ -13432,7 +13422,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
+			log.info(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title='" + inputParam + "'])[1]"));
@@ -13448,7 +13438,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(inputParam);
+			log.info(inputParam);
 			e.printStackTrace();
 			throw e;
 		}
@@ -13480,7 +13470,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tab" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed to do TAB Action");
+			log.info("Failed to do TAB Action");
 			e.printStackTrace();
 			throw e;
 		}
@@ -13510,7 +13500,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Actions actions = new Actions(driver);
@@ -13529,7 +13519,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -13547,7 +13537,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  enter" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -13561,7 +13551,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			log.error("Failed To Delete All The Cookies.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("cookies not deleted");
+			log.info("cookies not deleted");
 			throw e;
 		}
 	}
@@ -13581,7 +13571,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.error("Failed during selectCheckBox" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
-			System.out.println(xpath);
+			log.info(xpath);
 			throw e;
 		}
 	}
@@ -13607,7 +13597,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Holds")) {
@@ -13628,7 +13618,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Holds selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Batch Status")) {
@@ -13649,7 +13639,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Batch Status selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Release") && param2.equalsIgnoreCase("Name")) {
@@ -13670,7 +13660,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Release selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -13688,7 +13678,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -13706,7 +13696,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -13724,7 +13714,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -13742,7 +13732,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			if (param2 == "") {
@@ -13761,7 +13751,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
+			log.info(param2);
 		}
 		try {
 			WebElement waittext = driver
@@ -13776,7 +13766,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(param2);
+			log.info(param2);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -13808,7 +13798,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			log.info(xpath);
 			e.printStackTrace();
 			throw e;
 		}
@@ -13861,7 +13851,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
+				log.info(stringToSearch);
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
@@ -13882,7 +13872,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
+			log.info(inputParam2);
 
 		}
 
@@ -13898,7 +13888,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
+				log.info(stringToSearch);
 				value = copyNumbers(stringToSearch);
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -13918,7 +13908,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
-			System.out.println(inputParam2);
+			log.info(inputParam2);
 
 		}
 
@@ -13954,7 +13944,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
-			System.out.println(inputParam2);
+			log.info(inputParam2);
 
 		}
 		try {
@@ -13991,7 +13981,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  copynumber" + scripNumber);
 
-			System.out.println(inputParam2);
+			log.info(inputParam2);
 
 		}
 
@@ -14034,7 +14024,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
+			log.info(inputParam2);
 
 		}
 
@@ -14070,7 +14060,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
-			System.out.println(inputParam1);
+			log.info(inputParam1);
 
 		}
 
@@ -14104,7 +14094,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
-			System.out.println(inputParam1);
+			log.info(inputParam1);
 
 		}
 		try {
@@ -14139,7 +14129,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
-			System.out.println(inputParam1);
+			log.info(inputParam1);
 
 		}
 
@@ -14174,7 +14164,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 
-			System.out.println(inputParam1);
+			log.info(inputParam1);
 
 			throw e;
 
@@ -14190,22 +14180,22 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 		try {
 
-//          System.out.println(value);
+//          log.info(value);
 
 			String number = webElement.getText();
 
-			System.out.println(number);
+			log.info(number);
 
 			num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 
-			System.out.println(num);
+			log.info(num);
 
 			log.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
 			log.error("Sucessfully Clicked copynumber");
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -14220,21 +14210,21 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	 * 
 	 * try {
 	 * 
-	 * // System.out.println(value);
+	 * // log.info(value);
 	 * 
 	 * String number = webElement.getText().toString();
 	 * 
-	 * System.out.println(number);
+	 * log.info(number);
 	 * 
 	 * num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 	 * 
-	 * System.out.println(num);
+	 * log.info(num);
 	 * 
 	 * log.info("Successfully Copied the Number");
 	 * 
 	 * } catch (Exception e) {
 	 * 
-	 * System.out.println(e);
+	 * log.error(e);
 	 * 
 	 * }
 	 * 
@@ -14251,32 +14241,32 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 		try {
 			String number = webElement.getText().toString();
-			System.out.println(number);
+			log.info(number);
 			num = number.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 			num1 = num.replaceAll("[().$#@!*&^\\/\\\\]", "");
 			String num2 = num1.replaceAll("[^a-zA-Z0-9]", "").trim();
-			System.out.println(num2);
+			log.info(num2);
 			Thread.sleep(2000);
 			log.info("Successfully Copied the Number");
 			return num2;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 
 			String number = webElement.getText().toString();
 
-			System.out.println(number);
+			log.info(number);
 
 			num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 
-			System.out.println(num);
+			log.info(num);
 
 			log.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -14290,19 +14280,19 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 		try {
 
-//          System.out.println(value);
+//          log.info(value);
 
 			String number = webElement.getText().toString();
 
-			System.out.println(number);
+			log.info(number);
 
 			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", number);
-			System.out.println(num);
+			log.info(num);
 			log.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e);
 
 		}
 
@@ -14315,7 +14305,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
-			System.out.println(number);
+			log.info(number);
 			String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
@@ -14325,7 +14315,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copyy" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			log.info(xpath);
 			throw e;
 		}
 		return xpath;
@@ -14340,7 +14330,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				String[] text = element.getText().split(":");
 				if (text.length == 2) {
 					texts.add(text[1].trim().toString());
-					System.out.println(texts.get(0));
+					log.info(texts.get(0));
 					StringSelection stringSelection = new StringSelection(texts.get(0));
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
@@ -14351,7 +14341,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copytext" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			log.info(xpath);
 			throw e;
 		}
 		return xpath;
@@ -14368,7 +14358,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during maximize" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not maximize");
+			log.info("can not maximize");
 			e.printStackTrace();
 			throw e;
 
@@ -14385,7 +14375,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchWindow" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not switch to window");
+			log.info("can not switch to window");
 			e.printStackTrace();
 
 			throw e;
@@ -14401,7 +14391,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			while (itr.hasNext()) {
 				String childWindow = itr.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
+				log.info(driver.switchTo().window(childWindow).getTitle());
 				Thread.sleep(4000);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -14410,7 +14400,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchDefaultContent" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
+			log.info("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -14425,7 +14415,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			while (itr.hasNext()) {
 				String childWindow = itr.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
+				log.info(driver.switchTo().window(childWindow).getTitle());
 			}
 			driver.close();
 			Thread.sleep(2000);
@@ -14434,7 +14424,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			while (itr1.hasNext()) {
 				String childWindow = itr1.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
+				log.info(driver.switchTo().window(childWindow).getTitle());
 			}
 			driver.close();
 			Set<String> set2 = driver.getWindowHandles();
@@ -14442,7 +14432,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			while (itr2.hasNext()) {
 				String childWindow = itr2.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
+				log.info(driver.switchTo().window(childWindow).getTitle());
 			}
 			
 			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -14450,7 +14440,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
+			log.info("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -14465,7 +14455,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			while (itr.hasNext()) {
 				String childWindow = itr.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
+				log.info(driver.switchTo().window(childWindow).getTitle());
 			}
 			driver.close();
 			Set<String> set1 = driver.getWindowHandles();
@@ -14473,7 +14463,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			while (itr1.hasNext()) {
 				String childWindow = itr1.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
+				log.info(driver.switchTo().window(childWindow).getTitle());
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
@@ -14484,7 +14474,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
+			log.info("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -14506,7 +14496,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During dragAnddrop Action." + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
+			log.info(xpath);
 			e.printStackTrace();
 			throw e;
 		}
@@ -14523,7 +14513,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				String childWindow = itr.next();
 				if (!mainWindow.equals(childWindow)) {
 					driver.switchTo().window(childWindow);
-					System.out.println(driver.switchTo().window(childWindow).getTitle());
+					log.info(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
@@ -14537,7 +14527,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to Handle the window" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
+			log.info("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -14560,7 +14550,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,'" + inputParam + "')]"));
@@ -14574,7 +14564,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			Thread.sleep(5000);
@@ -14589,7 +14579,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			Thread.sleep(10000);
@@ -14603,9 +14594,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			log.error("Failed During switchToFrame Action");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -14621,7 +14611,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
 //			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			System.out.println(filelocation);
+			log.info(filelocation);
 			e.printStackTrace();
 			throw e;
 
@@ -14638,7 +14628,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during refreshPage" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not refresh the page");
+			log.info("can not refresh the page");
 			e.printStackTrace();
 			throw e;
 
@@ -14647,47 +14637,19 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	public String getErrorMessages(WebDriver driver) {
 		try {
-			String text = driver.findElement(By.xpath("//td[@class='AFNoteWindow']")).getText();
-			return text;
+			return driver.findElement(By.xpath("//td[@class='AFNoteWindow']")).getText();
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
-			String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
-			return text;
+			return driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 		}
 		return null;
 	}
 
-	@Override
-	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	@Override
 	public void multipleSendKeys(WebDriver driver, String param1, String param2, String value1, String value2,
@@ -14705,12 +14667,12 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
-				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			log.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -14725,15 +14687,15 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			if (m.find()) {
 				// we're only looking for one group, so get it
 				theGroup = m.group(0);
-				System.out.println(theGroup);
+				log.info(theGroup);
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
-				// System.out.println(theGroup);
+				// log.info(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
 				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			throw e;
 		}
 
@@ -14753,9 +14715,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			WebElement signout = driver.findElement(By.xpath("//*[text()='Sign Out']"));
 			signout.click();
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -14815,7 +14776,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
-			System.out.println(e);
+			log.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14838,7 +14800,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed During Login page");
+			log.info("Failed During Login page");
+			Thread.currentThread().interrupt();
 		}
 		return xpath;
 	}
@@ -14882,7 +14845,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.info("Not able to navitage to the Url");
 			throw e;
 		}
 	}
@@ -14913,7 +14876,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.error("Failed during Menunavigation " + scripNumber);
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
+			log.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -14942,10 +14905,10 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			return xpath;
 
 		} catch (Exception e) {
-			System.out.println("Count value exceeds the limit");
+			log.info("Count value exceeds the limit");
 			log.error("Failed During Navigation");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
+			log.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 
@@ -14986,7 +14949,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15006,7 +14970,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			if (!param2.equalsIgnoreCase("")) {
@@ -15029,7 +14994,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e);
+			Thread.currentThread().interrupt();
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15045,7 +15011,6 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
@@ -15077,7 +15042,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			return keysToSend;
 
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -15102,7 +15067,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e);
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -15130,21 +15095,18 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.info("Not able to navitage to the Url");
 		}
 	}
 
 	@Override
 	public String loginToExcel(WebDriver driver, String param1, String param2, String username, String password,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		String s = "    Login To Excel    " + username + "    " + password;
-		return s;
+		return "    Login To Excel    " + username + "    " + password;
 	}
 
 	@Override
 	public Integer addRow(Integer addrow) throws Exception {
-		// TODO Auto-generated method stub
 		int a = addrow.intValue();
 		a++;
 		return a;
@@ -15154,23 +15116,18 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	@Override
 	public String menuItemOfExcel(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
-		String s = "    Select Menu Item Of Excel    " + param1;
-		return s;
+		return "    Select Menu Item Of Excel    " + param1;
 	}
 
 	@Override
 	public String closeExcel() throws Exception {
-		// TODO Auto-generated method stub
-		String s = "    Close Excel";
-		return s;
+		return "    Close Excel";
 	}
 
 	@Override
 	public List<String> openExcelFileWithSheet(WebDriver driver, String param1, String param2, String fileName,
 			String sheetName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
 		List<String> openExcelSteps = new ArrayList<String>();
 		String s = "*** Settings ***";
 		openExcelSteps.add(s);
@@ -15214,7 +15171,6 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	@Override
 	public String typeIntoCell(WebDriver driver, String param1, String value1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, Integer addrowCounter) throws Exception {
-		// TODO Auto-generated method stub
 		String s = "";
 		if (addrowCounter > 1) {
 			s = "    Type Into Cell    " + param1 + "    " + value1 + "    " + addrowCounter;
@@ -15261,7 +15217,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.info("Not able to navitage to the Url");
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -15303,10 +15260,10 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			}
 		} catch (Exception e) {
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-
+			Thread.currentThread().interrupt();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
-			System.out.println(e);
+			log.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15331,7 +15288,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed During Login page");
+			log.info("Failed During Login page");
+			Thread.currentThread().interrupt();
 		}
 		return xpath;
 	}
@@ -15366,6 +15324,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			Thread.currentThread().interrupt();
 			// throw e;
 		}
 
@@ -15396,6 +15355,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			Thread.currentThread().interrupt();
 			// throw e;
 		}
 
@@ -15426,6 +15386,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			Thread.currentThread().interrupt();
 			// throw e;
 		}
 
@@ -15448,7 +15409,6 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			return;
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -15487,7 +15447,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e);
 			throw e;
 		}
 
@@ -15529,16 +15489,12 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-				return;
-
 			}
 
 		} catch (Exception e) {
-
-			System.out.println(e);
-
+			log.error(e);
+			Thread.currentThread().interrupt();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-
 			log.error("Failed during Approve clickLink" + scripNumber);
 
 		}
@@ -15565,11 +15521,9 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked selectAValue" + scripNumber);
 				String xpath = "//*[contains(@data-afr-popupid,'param1')]//*[contains(normalize-space(text()),'keysToSend')][1]";
-
-				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -15593,10 +15547,9 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 				Thread.sleep(45000);
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
-				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			throw e;
 		}
 
@@ -15615,9 +15568,8 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			WebElement signout = driver.findElement(By.xpath("(//*[text()='Log Out'])[3]"));
 			signout.click();
-			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -15633,7 +15585,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		try {
 			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			Thread.currentThread().interrupt();
 			e.printStackTrace();
 		}
 
@@ -15641,42 +15593,40 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	@Override
 	public String uploadObjectToObjectStore(String sourceFilePath, String destinationFilePath) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 
 	}
 
 	@Override
 	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 
 	}
 
 	@Override
 	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
 			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 
 	}
 
 
 	@Override
 	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void oicClickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 		
 	}
 
@@ -15684,7 +15634,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	public void loginOicJob(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 		
 	}
 
@@ -15692,7 +15642,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String input_value,
 			String password, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 		
 	}
 
@@ -15700,13 +15650,41 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	public void createDriverFailedPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			String pdffileName, ApiValidationVO api, boolean validationFlag, CustomerProjectDto customerDetails)
 			throws IOException, DocumentException, com.lowagie.text.DocumentException {
-		// TODO Auto-generated method stub
+		//EMPTY METHOD
 		
 	}
 	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-		
+		//EMPTY METHOD
+	}
+	
+	@Override
+	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
+		// EMPTY METHOD
+
+	}
+
+	@Override
+	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		// EMPTY METHOD
+
+	}
+
+	@Override
+	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
+		// EMPTY METHOD
+
+	}
+
+	@Override
+	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// EMPTY METHOD
+
 	}
 
 
