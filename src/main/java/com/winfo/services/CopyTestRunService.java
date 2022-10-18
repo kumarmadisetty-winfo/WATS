@@ -232,21 +232,22 @@ public class CopyTestRunService {
 		return newtestrun.getTestRunId();
 	}
 
-	private void addInputvalues(TestSetScriptParam getScriptlinedata, TestSetScriptParam setScriptlinedata,
-			CopytestrunVo copyTestrunvo, TestSetLine setScriptdata) throws InterruptedException, JsonMappingException, JsonProcessingException {
-		String getInputvalues = getScriptlinedata.getInputValue();
+	private void addInputvalues(TestSetScriptParam testSetScriptParamObj, TestSetScriptParam scriptParamObj,
+			CopytestrunVo copyTestrunvo, TestSetLine testSetLineObj) throws InterruptedException, JsonProcessingException {
+		String inputValues = testSetScriptParamObj.getInputValue();
 		String[] actios = { "clearandtype", "textarea", "selectAValue", "clickCheckbox", "selectByText",
 				"clickButton Dropdown", "clickLinkAction", "Table Dropdown Values", "Table SendKeys", "enterIntoTable",
 				"SendKeys", "Login into Application", "Dropdown Values", "typeAtPosition", "clickAndTypeAtPosition",
 				"clickRadiobutton", "clickCheckbox", "multipleSendKeys", "multiplelinestableSendKeys", "DatePicker",
 				"copynumber", "copytext", "paste", "apiValidationResponse" };
 		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
+		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
 		if ("y".equalsIgnoreCase(copyTestrunvo.getIncrementValue())
-				&& (setScriptlinedata.getUniqueMandatory() != null && setScriptlinedata.getUniqueMandatory() != "NA")
-				&& (setScriptlinedata.getUniqueMandatory().equalsIgnoreCase("Unique")
-						|| setScriptlinedata.getUniqueMandatory().equalsIgnoreCase("Both"))) {
-			if ((setScriptlinedata.getDataTypes() != null && setScriptlinedata.getDataTypes() != "NA")
-					&& setScriptlinedata.getDataTypes().equalsIgnoreCase("Alpha-Numeric")) {
+				&& (scriptParamObj.getUniqueMandatory() != null && !scriptParamObj.getUniqueMandatory().equals("NA"))
+				&& (scriptParamObj.getUniqueMandatory().equalsIgnoreCase("Unique")
+						|| scriptParamObj.getUniqueMandatory().equalsIgnoreCase("Both"))) {
+			if ((scriptParamObj.getDataTypes() != null && !scriptParamObj.getDataTypes().equals("NA"))
+					&& scriptParamObj.getDataTypes().equalsIgnoreCase("Alpha-Numeric")) {
 				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 				Date dateobj = new Date();
 				String covertDateobj = dateformate.format(dateobj);
@@ -255,15 +256,14 @@ public class CopyTestRunService {
 				int fistOff = Integer.parseInt(covertDateobj.substring(0, 8));
 				int secondHalf = Integer.parseInt(covertDateobj.substring(8, 15));
 				String hexaDecimal = Integer.toString(fistOff, 36) + Integer.toString(secondHalf, 36);
-				if("apiValidationResponse".equalsIgnoreCase(setScriptlinedata.getAction())) {
-					TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+				if("apiValidationResponse".equalsIgnoreCase(scriptParamObj.getAction())) {
 					String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
-					ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(setScriptlinedata.getScriptNumber(), productVersion);
+					ScriptMaster scriptMaster = copyTestrunDao.getScriptMasterInfo(scriptParamObj.getScriptNumber(), productVersion);
 					String[] incrementValues = scriptMaster.getAttribute2().split(",");
 
 					ObjectMapper objectMapper = new ObjectMapper();
 					objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-					String inputValue = getInputvalues.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
+					String inputValue = inputValues.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])","");
 					ApiValidationVO apiValidationData = objectMapper.readValue(inputValue,ApiValidationVO.class);
 					if (apiValidationData != null && apiValidationData.getResponse() != null
 							&& !ObjectUtils.isEmpty(apiValidationData.getRequestBody())) {
@@ -291,74 +291,72 @@ public class CopyTestRunService {
 						String finalJson = ow.writeValueAsString(apiValidationData);
 						hexaDecimal = finalJson.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])", "");
 					}
-				}else if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
-					hexaDecimal = getInputvalues;
-					if (actionsList.contains(setScriptlinedata.getAction())) {
-						setScriptdata.setScriptUpadated("Y");
+				}else if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
+					hexaDecimal = inputValues;
+					if (actionsList.contains(scriptParamObj.getAction())) {
+						testSetLineObj.setScriptUpadated("Y");
 					}
-				} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+				} else if ("paste".equalsIgnoreCase(scriptParamObj.getAction())
 						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
-					hexaDecimal = getInputvalues.replace(getInputvalues.split(">")[0],
+					hexaDecimal = inputValues.replace(inputValues.split(">")[0],
 							copyTestrunvo.getNewtestrunname());
-				} else if (getInputvalues.length() > 5) {
-					hexaDecimal = getInputvalues.substring(0, 5) + hexaDecimal;
+				} else if (inputValues.length() > 5) {
+					hexaDecimal = inputValues.substring(0, 5) + hexaDecimal;
 				} else {
-					hexaDecimal = getInputvalues + hexaDecimal;
+					hexaDecimal = inputValues + hexaDecimal;
 				}
-				setScriptlinedata.setInputValue(hexaDecimal);
+				scriptParamObj.setInputValue(hexaDecimal);
 			} else {
 				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
 				Date dateobj = new Date();
 				String covertDateobj = dateformate.format(dateobj);
 				Thread.sleep(1);
 				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
-				if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
-					setScriptlinedata.setInputValue(getInputvalues);
-					if (actionsList.contains(setScriptlinedata.getAction())) {
-						setScriptdata.setScriptUpadated("Y");
+				if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
+					scriptParamObj.setInputValue(inputValues);
+					if (actionsList.contains(scriptParamObj.getAction())) {
+						testSetLineObj.setScriptUpadated("Y");
 					}
-				} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+				} else if ("paste".equalsIgnoreCase(scriptParamObj.getAction())
 						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
-					setScriptlinedata.setInputValue(
-							getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+					scriptParamObj.setInputValue(
+							inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 				} else {
-					setScriptlinedata.setInputValue(covertDateobj);
+					scriptParamObj.setInputValue(covertDateobj);
 				}
 			}
-		} else if ("Mandatory".equalsIgnoreCase(setScriptlinedata.getUniqueMandatory())) {
-			if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
-				setScriptlinedata.setInputValue(null);
-				if (actionsList.contains(setScriptlinedata.getAction())) {
-					setScriptdata.setScriptUpadated("Y");
+		} else if ("Mandatory".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
+			if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
+				scriptParamObj.setInputValue(null);
+				if (actionsList.contains(scriptParamObj.getAction())) {
+					testSetLineObj.setScriptUpadated("Y");
 				}
 
-			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+			} else if ("paste".equalsIgnoreCase(scriptParamObj.getAction())
 					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
-				setScriptlinedata.setInputValue(
-						getInputvalues.replace(getInputvalues.split(">")[0], copyTestrunvo.getNewtestrunname()));
+				scriptParamObj.setInputValue(
+						inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 			} else {
-				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
+				scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 			}
 		} else {
-			if (getInputvalues == null || "copynumber".equalsIgnoreCase(setScriptlinedata.getAction())) {
-				setScriptlinedata.setInputValue(null);
+			if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
+				scriptParamObj.setInputValue(null);
 
-			} else if ("paste".equalsIgnoreCase(setScriptlinedata.getAction())
+			} else if ("paste".equalsIgnoreCase(scriptParamObj.getAction())
 					&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
-				String oldTestRunName=getInputvalues;
-				int index=oldTestRunName.indexOf(">");
+				String previousTestRunName = testSetObj.getTestRunName();
+				int index=inputValues.indexOf(">");
 				if(index!=-1)
 				{
-					oldTestRunName=oldTestRunName.substring(0,index);
-					oldTestRunName=oldTestRunName.replace("(","");
-					setScriptlinedata.setInputValue(getInputvalues.replace(oldTestRunName, copyTestrunvo.getNewtestrunname()));
+					scriptParamObj.setInputValue(inputValues.replace(previousTestRunName, copyTestrunvo.getNewtestrunname()));
 				}
 				else
 				{
-					setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
+					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 				}
 			} else {
-				setScriptlinedata.setInputValue(getScriptlinedata.getInputValue());
+				scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 			}
 		}
 
