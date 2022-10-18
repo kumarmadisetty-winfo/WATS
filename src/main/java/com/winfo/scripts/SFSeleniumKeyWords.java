@@ -6695,20 +6695,20 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			System.out.println(e);
 		}
 		try {
-			if (param1.equalsIgnoreCase("Recently Viewed")) {
+			if (param1.equalsIgnoreCase("Projects")&&(param2.equalsIgnoreCase("Recently Viewed"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"(//span[text()='"+param1+"'])[1]/following::div[1]")));
+						"(//span[text()='"+param1+"']/following::span[text()='"+param2+"'])[2]")));
 				WebElement waittext = driver.findElement(By
-						.xpath("(//span[text()='"+param1+"'])[1]/following::div[1]"));
+						.xpath("(//span[text()='"+param1+"']/following::span[text()='"+param2+"'])[2]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				//waittext.click();
+				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
 				screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
-				String xpath = "(//span[text()='param1'])[1]/following::div[1]";
+				String xpath = "(//span[text()='param1']/following::span[text()='param2'])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
