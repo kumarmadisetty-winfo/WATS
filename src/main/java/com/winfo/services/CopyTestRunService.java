@@ -291,7 +291,28 @@ public class CopyTestRunService {
 						String finalJson = ow.writeValueAsString(apiValidationData);
 						hexaDecimal = finalJson.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])", "");
 					}
-				}else if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
+				}else if(inputValues!=null || "Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
+						|| "Both".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
+					try
+			        {
+						
+			            String[] SplitinputValue = inputValues.split(" ");
+			            int incrementValue= Integer.parseInt(SplitinputValue[SplitinputValue.length-1]);
+			            incrementValue++;
+			            String updatedInputValue = "";
+			            
+			            SplitinputValue[SplitinputValue.length-1]=String.valueOf(incrementValue);
+			            updatedInputValue=String.join(" ", SplitinputValue);
+			            hexaDecimal=updatedInputValue;
+			            
+			        }
+			        catch(NumberFormatException e)
+			        {
+			        	
+			        	hexaDecimal=inputValues;
+			        }
+				}
+				else if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 					hexaDecimal = inputValues;
 					if (actionsList.contains(scriptParamObj.getAction())) {
 						testSetLineObj.setScriptUpadated("Y");
