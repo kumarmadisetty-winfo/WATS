@@ -296,13 +296,13 @@ public class CopyTestRunService {
 					try
 			        {
 						
-			            String[] SplitinputValue = inputValues.split(" ");
-			            int incrementValue= Integer.parseInt(SplitinputValue[SplitinputValue.length-1]);
+			            String[] SplitInputValue = inputValues.split(" ");
+			            int incrementValue= Integer.parseInt(SplitInputValue[SplitInputValue.length-1]);
 			            incrementValue++;
 			            String updatedInputValue = "";
 			            
-			            SplitinputValue[SplitinputValue.length-1]=String.valueOf(incrementValue);
-			            updatedInputValue=String.join(" ", SplitinputValue);
+			            SplitInputValue[SplitInputValue.length-1]=String.valueOf(incrementValue);
+			            updatedInputValue=String.join(" ", SplitInputValue);
 			            hexaDecimal=updatedInputValue;
 			            
 			        }
