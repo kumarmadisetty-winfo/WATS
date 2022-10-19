@@ -543,12 +543,12 @@ public abstract class AbstractSeleniumKeywords {
 			}
 		}
 		if (startDate != null && finishDate != null) {
-			totalExecutedTime.put("totalTime", DateUtils.convertMiliSecToDayFormat(
+			totalExecutedTime.put("totalElapsedTime", DateUtils.convertMiliSecToDayFormat(
 					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
 		} else {
-			totalExecutedTime.put("totalTime", "Not Available");
+			totalExecutedTime.put("totalElapsedTime", "Not Available");
 		}
-		totalExecutedTime.put("executionTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
+		totalExecutedTime.put("totalExecutedTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
 		return totalExecutedTime;
 	}
@@ -597,19 +597,12 @@ public abstract class AbstractSeleniumKeywords {
 				int others = fetchConfigVO.getOtherCount();
 				
 				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName);
-				String executedTime = totalTimeTaken.get("executionTime");
-				String totalTime = totalTimeTaken.get("totalTime");
+				String totalExecutedTime = totalTimeTaken.get("totalExecutedTime");
+				String totalElapsedTime = totalTimeTaken.get("totalElapsedTime");
 				String startTime = dateFormat.format(tStarttime);
 				String endTime = dateFormat.format(tendTime);
-				String executionTime = executedTime;
-				String tr = TEST_RUN_NAME;
-				String sn = EXECUTED_BY;
-				String sn1 = START_TIME;
-				String s1 = END_TIME;
-				String scenarios1 = EXECUTION_TIME;
-				String totalTimeLapsed = ELAPSED_TIME;
-				String[] testArr = { tr, testRunName1, sn, executedBy, sn1, startTime, s1, endTime, scenarios1,
-						executionTime, totalTimeLapsed, totalTime };
+				String[] testArr = { TEST_RUN_NAME, testRunName1, EXECUTED_BY, executedBy, START_TIME, startTime, END_TIME, endTime, EXECUTION_TIME,
+						totalExecutedTime, ELAPSED_TIME, totalElapsedTime };
 				document.add(watsLogo);
 				document.add(new Paragraph(report, font23));
 				document.add(Chunk.NEWLINE);
