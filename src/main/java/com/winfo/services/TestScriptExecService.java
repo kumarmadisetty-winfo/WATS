@@ -725,12 +725,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			}
 		}
 		if (startDate != null && finishDate != null) {
-			totalExecutedTime.put("totalTime", DateUtils.convertMiliSecToDayFormat(
+			totalExecutedTime.put("totalElapsedTime", DateUtils.convertMiliSecToDayFormat(
 					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
 		} else {
-			totalExecutedTime.put("totalTime", "Not Available");
+			totalExecutedTime.put("totalElapsedTime", "Not Available");
 		}
-		totalExecutedTime.put("executionTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
+		totalExecutedTime.put("totalExecutedTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
 		return totalExecutedTime;
 	}
