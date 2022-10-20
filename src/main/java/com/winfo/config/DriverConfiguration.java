@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -52,6 +53,7 @@ public class DriverConfiguration {
 			prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
+			cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			if (os.contains("win")) {
 				logger.info("windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
@@ -67,6 +69,8 @@ public class DriverConfiguration {
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
 			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
+//			options.addArguments("--disable-popup-blocking");
+//			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", prefs);
 			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
