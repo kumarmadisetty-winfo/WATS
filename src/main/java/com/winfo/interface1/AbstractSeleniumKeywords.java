@@ -165,6 +165,7 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String SCENARIO_NAME = "Test Case Name";
 	private static final String STEP_NO = "Step No : ";
 	private static final String SCREENSHOT = "Screenshot";
+	private static final String ELAPSED_TIME = "Elapsed Time";
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -514,10 +515,10 @@ public abstract class AbstractSeleniumKeywords {
 		return fileNameList;
 	}
 
-	public String findExecutionTimeForScript(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
 
 		String scriptStatus = null;
-
+		Map<String, String> totalExecutedTime = new HashMap<>();
 		if (pdffileName.equalsIgnoreCase(PASSED_PDF)) {
 			scriptStatus = PASS;
 		} else if (pdffileName.equalsIgnoreCase(FAILED_PDF)) {
@@ -528,13 +529,28 @@ public abstract class AbstractSeleniumKeywords {
 
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
 		long totalDiff = 0;
+		Date startDate = null;
+		Date finishDate = null;
 		for (Object[] date : startAndEndDates) {
 			if (date[0] != null && date[1] != null) {
+				if (startDate == null || startDate.after((Date) date[0])) {
+					startDate = (Date) date[0];
+				}
+				if (finishDate == null || finishDate.before((Date) date[1])) {
+					finishDate = (Date) date[1];
+				}
 				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
 			}
 		}
+		if (startDate != null && finishDate != null) {
+			totalExecutedTime.put("totalElapsedTime", DateUtils.convertMiliSecToDayFormat(
+					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
+		} else {
+			totalExecutedTime.put("totalElapsedTime", "Not Available");
+		}
+		totalExecutedTime.put("totalExecutedTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
-		return DateUtils.convertMiliSecToDayFormat(totalDiff);
+		return totalExecutedTime;
 	}
 
 	public void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
@@ -579,18 +595,14 @@ public abstract class AbstractSeleniumKeywords {
 				int passcount = fetchConfigVO.getPasscount();
 				int failcount = fetchConfigVO.getFailcount();
 				int others = fetchConfigVO.getOtherCount();
-
-				String executedTime = findExecutionTimeForScript(customerDetails.getTestSetId(), pdffileName);
+				
+				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName);
+				String totalExecutedTime = totalTimeTaken.get("totalExecutedTime");
+				String totalElapsedTime = totalTimeTaken.get("totalElapsedTime");
 				String startTime = dateFormat.format(tStarttime);
 				String endTime = dateFormat.format(tendTime);
-				String executionTime = executedTime;
-				String tr = TEST_RUN_NAME;
-				String sn = EXECUTED_BY;
-				String sn1 = START_TIME;
-				String s1 = END_TIME;
-				String scenarios1 = EXECUTION_TIME;
-				String[] testArr = { tr, testRunName1, sn, executedBy, sn1, startTime, s1, endTime, scenarios1,
-						executionTime };
+				String[] testArr = { TEST_RUN_NAME, testRunName1, EXECUTED_BY, executedBy, START_TIME, startTime, END_TIME, endTime, EXECUTION_TIME,
+						totalExecutedTime, ELAPSED_TIME, totalElapsedTime };
 				document.add(watsLogo);
 				document.add(new Paragraph(report, font23));
 				document.add(Chunk.NEWLINE);

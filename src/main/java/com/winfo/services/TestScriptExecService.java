@@ -697,10 +697,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public String findExecutionTimeForScript(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
 
 		String scriptStatus = null;
-
+		Map<String, String> totalExecutedTime = new HashMap<>();
 		if (pdffileName.equalsIgnoreCase("Passed_Report.pdf")) {
 			scriptStatus = "Pass";
 		} else if (pdffileName.equalsIgnoreCase("Failed_Report.pdf")) {
@@ -711,13 +711,28 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
 		long totalDiff = 0;
+		Date startDate = null;
+		Date finishDate = null;
 		for (Object[] date : startAndEndDates) {
 			if (date[0] != null && date[1] != null) {
+				if (startDate == null || startDate.after((Date) date[0])) {
+					startDate = (Date) date[0];
+				}
+				if (finishDate == null || finishDate.before((Date) date[1])) {
+					finishDate = (Date) date[1];
+				}
 				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
 			}
 		}
+		if (startDate != null && finishDate != null) {
+			totalExecutedTime.put("totalElapsedTime", DateUtils.convertMiliSecToDayFormat(
+					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
+		} else {
+			totalExecutedTime.put("totalElapsedTime", "Not Available");
+		}
+		totalExecutedTime.put("totalExecutedTime", DateUtils.convertMiliSecToDayFormat(totalDiff));
 
-		return DateUtils.convertMiliSecToDayFormat(totalDiff);
+		return totalExecutedTime;
 	}
 
 
