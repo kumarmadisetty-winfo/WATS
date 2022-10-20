@@ -160,7 +160,7 @@ public class WatsPluginService {
 
 		                // create a list to add files to be zipped
 //		                ArrayList<File> files = new ArrayList<>();
-		                File file = new File("\\objstore\\tst\\WATS Script Assistant.zip");
+		                File file = new File("/objstore/tst/WATS Script Assistant.zip");
 //		                File[] listOfFiles = folder.listFiles();
 //		                if (listOfFiles != null)
 //		                {
@@ -191,8 +191,8 @@ public class WatsPluginService {
 		}
 	
 	public void zipFolder() throws IOException {
-        String sourceFile = "\\objstore\\tst\\WATS-Auto-Recording";
-        FileOutputStream fos = new FileOutputStream("\\objstore\\tst\\WATS Script Assistant.zip");
+        String sourceFile = "/objstore/tst/WATS-Auto-Recording";
+        FileOutputStream fos = new FileOutputStream("/objstore/tst/WATS Script Assistant.zip");
         ZipOutputStream zipOut = new ZipOutputStream(fos);
         File fileToZip = new File(sourceFile);
 
@@ -231,8 +231,8 @@ public class WatsPluginService {
 	    }
 	
 	public void unZipFolder() throws IOException {
-		String fileZip = "\\objstore\\tst\\WATS Script Assistant.zip";
-        File destDir = new File("\\objstore\\tst");
+		String fileZip = "/objstore/tst/WATS Script Assistant.zip";
+        File destDir = new File("/objstore/tst");
         byte[] buffer = new byte[1024];
         ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
         ZipEntry zipEntry = zis.getNextEntry();
@@ -288,7 +288,7 @@ public class WatsPluginService {
 
 		// Write into the file
 		try (FileWriter file = new FileWriter(
-				"\\objstore\\tst\\WATS-Auto-Recording\\properties.json")) {
+				"/objstore/tst/WATS-Auto-Recording/properties.json")) {
 			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root));
 			System.out.println("Successfully updated json object to file...!!");
 		}
