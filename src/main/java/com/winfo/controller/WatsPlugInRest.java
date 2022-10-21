@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -60,7 +61,7 @@ public class WatsPlugInRest {
 		}
 	}
 	
-	@GetMapping(value="/getPluginZipFile",  produces="application/zip")
+	@RequestMapping(value="/getPluginZipFile",  produces="application/zip")
 	public ResponseEntity<StreamingResponseBody> getPluginZip(@RequestBody PlugInVO plugInVO) throws IOException {
 		return service.getPluginZipFile(plugInVO);
 	}
