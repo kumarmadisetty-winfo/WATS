@@ -180,7 +180,7 @@ public interface SeleniumKeyWordsInterface {
 			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception;
 
 	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails) throws Exception;
+			String type2, String param1, String param2, String param3, int count, CustomerProjectDto customerDetails) throws Exception;
 
 	public void datePicker(WebDriver driver, String param1, String param2, String inputValue,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)

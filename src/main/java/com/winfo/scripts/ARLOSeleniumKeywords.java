@@ -82,10 +82,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
-			throws Exception {
-		String param3 = "Navigator";
-		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+			String type2, String param1, String param2, String param3, int count, CustomerProjectDto customerDetails) throws Exception {
+		String param = "Navigator";
+		clickLink(driver, param, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 	}
 

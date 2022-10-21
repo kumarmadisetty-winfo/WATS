@@ -652,7 +652,7 @@ public class RunAutomation {
 						case "Navigate":
 							log.info("Navigating to Navigate Action");
 							seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO,
-									fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+									fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
 							break;
 
 						case "Click Menu(OIC)":
