@@ -508,7 +508,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 						.findElement(By.xpath("//div[contains(@id,'popup-container')]//a[text()='More...']"));
 				Actions actions = new Actions(driver);
 				Thread.sleep(3000);
-				actions.moveToElement(waittext).build().perform();
+//				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
 				Thread.sleep(4000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
