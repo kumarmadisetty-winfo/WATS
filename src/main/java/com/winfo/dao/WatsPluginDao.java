@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.vo.DomGenericResponseBean;
@@ -277,5 +278,31 @@ public class WatsPluginDao {
 		query.setParameter("productverson", productVersion);
 		return query.list();
 	}
+	
+	public String getCustomerUri(String customerName) {
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			String sql = "select customer_uri from WIN_CENTRAL_REPO_CONFIG where customer_name = :customerName";
+			@SuppressWarnings("rawtypes")
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setParameter("customerName", customerName);
+			return query.getSingleResult().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Customer uri not present", e);
+		}
+	}
 
+	public String getDirectoryPath() {
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			String sql = "select directory_path from all_directories where directory_name = 'WATS_OBJ_DIR'";
+			@SuppressWarnings("rawtypes")
+			SQLQuery query = session.createSQLQuery(sql);
+			return query.getSingleResult().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Directory path is not present", e);
+		}
+	}
 }
