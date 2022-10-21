@@ -61,7 +61,7 @@ public class WatsPlugInRest {
 		}
 	}
 	
-	@RequestMapping(value="/getPluginZipFile",  produces="application/zip")
+	@PostMapping(value="/getPluginZipFile",  produces="application/zip")
 	public ResponseEntity<StreamingResponseBody> getPluginZip(@RequestBody PlugInVO plugInVO) throws IOException {
 		return service.getPluginZipFile(plugInVO);
 	}
