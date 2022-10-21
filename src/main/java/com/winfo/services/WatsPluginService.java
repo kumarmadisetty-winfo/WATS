@@ -152,11 +152,13 @@ public class WatsPluginService {
 	}
 
 	public ResponseEntity<StreamingResponseBody> getPluginZipFile(PlugInVO plugInVO) throws IOException {
-		unZipFolder();
-		writePropertiesFile();
+		String customerUri = dao.getCustomerUri(plugInVO.getTargetEnvironment());
+		String directoryPath = dao.getDirectoryPath();
+		unZipFolder(directoryPath);
+		writePropertiesFile(directoryPath,customerUri,plugInVO.getTargetEnvironment());
 		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WATS Script Assistant.zip\"")
 				.body(out -> {
-					String sourceFile = "/objstore/tst/WATS-Auto-Recording";
+					String sourceFile = directoryPath+"/WATS-Auto-Recording";
 					ZipOutputStream zipOut = new ZipOutputStream(out);
 					File fileToZip = new File(sourceFile);
 					zipFile(fileToZip, fileToZip.getName(), zipOut);
@@ -193,9 +195,9 @@ public class WatsPluginService {
 		fis.close();
 	}
 
-	public void unZipFolder() throws IOException {
-		String fileZip = "/objstore/tst/WATS Script Assistant.zip";
-		File destDir = new File("/objstore/tst");
+	public void unZipFolder(String directoryPath) throws IOException {
+		String fileZip = directoryPath+"/WATS Script Assistant.zip";
+		File destDir = new File(directoryPath);
 		byte[] buffer = new byte[1024];
 		ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
 		ZipEntry zipEntry = zis.getNextEntry();
@@ -239,18 +241,18 @@ public class WatsPluginService {
 		return destFile;
 	}
 
-	public void writePropertiesFile() throws IOException {
+	public void writePropertiesFile(String directoryPath, String customerUri, String customerName) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		PlugInVO root = new PlugInVO();
 		List<Map<String, String>> listOfGroups = new ArrayList<>();
 		Map<String, String> map = new HashMap<>();
-		map.put("baseURL", "newLink");
-		map.put("name", "DEV");
+		map.put("baseURL", customerUri+"/wats_workspace_prod/plug_in/");
+		map.put("name", customerName);
 		listOfGroups.add(map);
 		root.setGroups(listOfGroups);
 
 		// Write into the file
-		try (FileWriter file = new FileWriter("/objstore/tst/WATS-Auto-Recording/properties.json")) {
+		try (FileWriter file = new FileWriter(directoryPath+"/WATS-Auto-Recording/properties.json")) {
 			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root));
 			log.info("Successfully updated json object to file...!!");
 		}

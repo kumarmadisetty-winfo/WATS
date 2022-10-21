@@ -3,11 +3,12 @@ package com.winfo.vo;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 public class PlugInVO {
 	
-	@JsonIgnore
+	@JsonInclude(Include.NON_NULL)
 	private String targetEnvironment;
 	
 	private List<Map<String,String>> groups;
@@ -27,5 +28,4 @@ public class PlugInVO {
 	public void setGroups(List<Map<String, String>> groups) {
 		this.groups = groups;
 	}
-
 }
