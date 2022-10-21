@@ -140,8 +140,9 @@ public class CopyTestRunDao {
 	}
 
 	public List<ScriptMetaData> getScriptMetadataInfo(int scriptId) {
-		String sql = "from ScriptMetaData S where script_id =" + scriptId + " order by S.line_number";
+		String sql = "from ScriptMetaData where scriptMaster.scriptId = :scriptId order by lineNumber";
 		Query query = entityManager.createQuery(sql);
+		query.setParameter("scriptId", scriptId);
 		return query.getResultList();
 
 	}
