@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.dao.CopyTestRunDao;
+import com.winfo.model.ExecuteStatus;
+import com.winfo.model.ExecuteStatusPK;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -47,7 +49,7 @@ public class CopyTestRunService {
 
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
-		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());	
 		TestSet newTestSetObj = new TestSet();
 
 		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
@@ -227,7 +229,17 @@ public class CopyTestRunService {
 				copyTestrunDao.updatelinesRecord(newTestSetLine);
 			}
 		}
-
+		ExecuteStatus executeStatusObj = new ExecuteStatus();
+		
+		ExecuteStatusPK executeStatusPK = new ExecuteStatusPK();
+		
+		executeStatusPK.setExecutedBy(copyTestrunvo.getCreatedBy());
+		executeStatusPK.setTestSetId(newtestrun.getTestRunId());
+		executeStatusObj.setExecuteStatusPK(executeStatusPK);
+		executeStatusObj.setExecutionDate(new Date());
+		executeStatusObj.setFlag('I');
+		executeStatusObj.setTestRunName(copyTestrunvo.getNewtestrunname());
+		copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
 		log.info("newtestrun 1:" + newtestrun.getTestRunId());
 		return newtestrun.getTestRunId();
 	}
