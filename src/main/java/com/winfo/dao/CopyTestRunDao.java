@@ -13,6 +13,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -181,6 +182,12 @@ public class CopyTestRunDao {
 		query.setParameter("productVersion", productVersion);
 		List<Integer> listOfProductVersion = query.getResultList();
 		return CollectionUtils.isEmpty(listOfProductVersion) ? null : listOfProductVersion.get(0);
+	}
+	
+	public void updateExecuteStatusDtls(ExecuteStatus executeStatus) {
+		entityManager.persist(executeStatus);
+		log.info("setTestrundata.getTestsetid() 1:" + executeStatus.getTestRunName());
+
 	}
 
 }
