@@ -12,7 +12,7 @@ compartment-id=ocid1.tenancy.oc1..aaaaaaaa334y2rtopxbcy7vhakwbgtbkrh36waziibyhee
 user=ocid1.user.oc1..aaaaaaaasmdw6yucjx6z3fof3l2ylka5sp4424z2zsfamilptx3p4u5bd2ma
 fingerprint=bd:7d:cc:41:df:3e:b3:70:72:b0:09:37:fc:b0:fc:8b
 tenancy=ocid1.tenancy.oc1..aaaaaaaa334y2rtopxbcy7vhakwbgtbkrh36waziibyheeni63lnbwenbkqa
-region=uk-london-1
+region=us-ashburn-1
 key_file=/home/appwatsp/oci/oci_api_key_wats.pem
 
 [WATS_WINFOERP]
