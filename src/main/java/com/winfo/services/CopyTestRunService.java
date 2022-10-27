@@ -303,38 +303,38 @@ public class CopyTestRunService {
 						String finalJson = ow.writeValueAsString(apiValidationData);
 						hexaDecimal = finalJson.replaceAll("(\")(?=[\\{])|(?<=[\\}])(\")|(\\\\)(?=[\\\"])", "");
 					}
-				}else if(inputValues!=null || "Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
-						|| "Both".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
+				}else if(inputValues!=null && ("Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
+						|| "Both".equalsIgnoreCase(scriptParamObj.getUniqueMandatory()))) {
 					int incrementValue = 0;
-					String updatedInputValue = "";
-					try
-			        {
-			            String[] splitInputValue = inputValues.split(" ");
-			            incrementValue= Integer.parseInt(splitInputValue[splitInputValue.length-1]);
-			            incrementValue++;
-			            splitInputValue[splitInputValue.length-1]=String.valueOf(incrementValue);
-			            updatedInputValue=String.join(" ", splitInputValue);
-			            hexaDecimal=updatedInputValue;
-			        }
-			        catch(NumberFormatException e)
-			        {
-			        	char[] ch=inputValues.toCharArray();
-			        	if(Character.isDigit(ch[ch.length-1]))
-				        {
-			        		String regex = "((?<=[a-zA-Z])(?=[0-9]))|((?<=[0-9])(?=[a-zA-Z]))";
-			        		String[] splitAlphaNumeric=inputValues.split(regex);
-			        		incrementValue=Integer.valueOf(splitAlphaNumeric[splitAlphaNumeric.length-1]);
-			        		incrementValue++;
-			        		splitAlphaNumeric[splitAlphaNumeric.length-1]=String.valueOf(incrementValue);
-			        		updatedInputValue=String.join("", splitAlphaNumeric);
-			        		hexaDecimal=updatedInputValue;
-			        	}
-			            else {
-			        	inputValues=inputValues.concat(" 1");
-			        	hexaDecimal=inputValues;
-			        }
-			        	
-				 }
+					String numericValue="";
+					String updatedNumericValue="";
+					char[] charArray=inputValues.toCharArray();
+			        if(Character.isDigit(charArray[charArray.length-1]))
+				     {
+			        		for(int i=charArray.length-1;i>=0;i--)
+				        	{
+				        	    if(Character.isDigit(charArray[i]))
+				        	    {
+				        	    	numericValue=String.valueOf(numericValue+(charArray[i]));
+				        	         StringBuilder stringbuffer = new StringBuilder(numericValue);
+				        	         updatedNumericValue=String.valueOf(stringbuffer.reverse());
+				        	    }
+				        	    else
+				        	    {
+				        	        break;
+				        	    }
+				        	}
+				            incrementValue= Integer.parseInt(updatedNumericValue);
+				            incrementValue++;
+				            String updatedInputValue=inputValues.replace(updatedNumericValue,String.valueOf(incrementValue));
+				            String finalResult=String.join(" ",String.valueOf(updatedInputValue));
+				            hexaDecimal=finalResult;
+				     }
+			         else
+			         {
+			        		inputValues=inputValues.concat(" 1");
+			        		hexaDecimal=inputValues;
+			         }
 				}
 				else if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 					hexaDecimal = inputValues;
