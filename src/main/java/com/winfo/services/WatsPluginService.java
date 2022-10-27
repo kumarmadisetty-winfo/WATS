@@ -16,6 +16,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.dao.WatsPluginDao;
+import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
@@ -33,12 +35,15 @@ import com.winfo.vo.WatsPluginMasterVO;
 import com.winfo.vo.WatsPluginMetaDataVO;
 
 @Service
-public class WatsPluginService {
+public class WatsPluginService extends AbstractSeleniumKeywords{
 	
 	Logger log = Logger.getLogger("Logger");
 
 	@Autowired
 	WatsPluginDao dao;
+	
+	@Autowired
+	DataBaseEntry dataBaseEntry;
 
 	@Transactional
 	public DomGenericResponseBean pluginData(WatsPluginMasterVO mastervo) {
@@ -151,13 +156,14 @@ public class WatsPluginService {
 	}
 	
 	public ResponseEntity<StreamingResponseBody> getPluginZipFile(PlugInVO plugInVO) throws IOException {
-		String customerUri = dao.getCustomerUri(plugInVO.getTargetEnvironment());
+		String customerUri = dataBaseEntry.getCentralRepoUrl("PUBLIC_URL");
 		String directoryPath = dao.getDirectoryPath();
-		unZipFolder(directoryPath);
-		writePropertiesFile(directoryPath,customerUri,plugInVO.getTargetEnvironment());
-		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WATS Script Assistant.zip\"")
+		downloadObjectFromObjectStore(directoryPath+"/temp/plugin/WATS Script Assistant.zip", "WATS Script Assistant/"+plugInVO.getBrowser(), "WATS Script Assistant.zip");
+		unZipFolder(directoryPath+"/temp/plugin");
+		writePropertiesFile(directoryPath+"/temp/plugin",customerUri,plugInVO.getTargetEnvironment());
+		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WATS Script Assistant - "+StringUtils.capitalize(plugInVO.getBrowser())+".zip\"")
 				.body(out -> {
-					String sourceFile = directoryPath+"/WATS-Auto-Recording";
+					String sourceFile = directoryPath+"/temp/plugin/WATS-Auto-Recording";
 					ZipOutputStream zipOut = new ZipOutputStream(out);
 					File fileToZip = new File(sourceFile);
 					zipFile(fileToZip, fileToZip.getName(), zipOut);
