@@ -305,24 +305,36 @@ public class CopyTestRunService {
 					}
 				}else if(inputValues!=null || "Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
 						|| "Both".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
+					int incrementValue = 0;
+					String updatedInputValue = "";
 					try
 			        {
-						
-			            String[] SplitInputValue = inputValues.split(" ");
-			            int incrementValue= Integer.parseInt(SplitInputValue[SplitInputValue.length-1]);
+			            String[] splitInputValue = inputValues.split(" ");
+			            incrementValue= Integer.parseInt(splitInputValue[splitInputValue.length-1]);
 			            incrementValue++;
-			            String updatedInputValue = "";
-			            
-			            SplitInputValue[SplitInputValue.length-1]=String.valueOf(incrementValue);
-			            updatedInputValue=String.join(" ", SplitInputValue);
+			            splitInputValue[splitInputValue.length-1]=String.valueOf(incrementValue);
+			            updatedInputValue=String.join(" ", splitInputValue);
 			            hexaDecimal=updatedInputValue;
-			            
 			        }
 			        catch(NumberFormatException e)
 			        {
-			        	
+			        	char[] ch=inputValues.toCharArray();
+			        	if(Character.isDigit(ch[ch.length-1]))
+				        {
+			        		String regex = "((?<=[a-zA-Z])(?=[0-9]))|((?<=[0-9])(?=[a-zA-Z]))";
+			        		String[] splitAlphaNumeric=inputValues.split(regex);
+			        		incrementValue=Integer.valueOf(splitAlphaNumeric[splitAlphaNumeric.length-1]);
+			        		incrementValue++;
+			        		splitAlphaNumeric[splitAlphaNumeric.length-1]=String.valueOf(incrementValue);
+			        		updatedInputValue=String.join("", splitAlphaNumeric);
+			        		hexaDecimal=updatedInputValue;
+			        	}
+			            else {
+			        	inputValues=inputValues.concat(" 1");
 			        	hexaDecimal=inputValues;
 			        }
+			        	
+				 }
 				}
 				else if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 					hexaDecimal = inputValues;
