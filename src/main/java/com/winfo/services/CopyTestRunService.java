@@ -313,16 +313,13 @@ public class CopyTestRunService {
 				     {
 			        		for(int i=charArray.length-1;i>=0;i--)
 				        	{
-				        	    if(Character.isDigit(charArray[i]))
+				        	    if(!Character.isDigit(charArray[i]))
 				        	    {
-				        	    	numericValue=String.valueOf(numericValue+(charArray[i]));
-				        	         StringBuilder stringbuffer = new StringBuilder(numericValue);
-				        	         updatedNumericValue=String.valueOf(stringbuffer.reverse());
+				        	    	break;
 				        	    }
-				        	    else
-				        	    {
-				        	        break;
-				        	    }
+				        	    numericValue=String.valueOf(numericValue+(charArray[i]));
+			        	        StringBuilder stringbuilder = new StringBuilder(numericValue);
+			        	        updatedNumericValue=String.valueOf(stringbuilder.reverse());
 				        	}
 				            incrementValue= Integer.parseInt(updatedNumericValue);
 				            incrementValue++;
