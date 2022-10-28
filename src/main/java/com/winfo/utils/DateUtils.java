@@ -2,7 +2,9 @@ package com.winfo.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import com.winfo.constants.DateConstants;
 
@@ -42,6 +44,16 @@ public class DateUtils {
 		String sec = (time = (diffInTime / 1000) % 60) > 0 ? time + "sec" : "";
 
 		return days + hr + min + sec;
+	}
+	
+	public static Date findMinStartTimeAndMaxEndTime(List<Date> listOfDates, String maxOrMin) {
+		Collections.sort(listOfDates);
+		
+		if("MAX".equalsIgnoreCase(maxOrMin)) {
+			return listOfDates.get(0);
+		} else {
+			return listOfDates.get(listOfDates.size() - 1);
+		}
 	}
 
 	private DateUtils() {

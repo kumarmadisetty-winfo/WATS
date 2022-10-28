@@ -1412,7 +1412,6 @@ public class DataBaseEntryDao {
 
 		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2)
 				: cb.and(condition1, inPredicate);
-		cq.orderBy(cb.asc(from.get("executionStartTime")));
 		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
 		return em.createQuery(cq).getResultList();
 

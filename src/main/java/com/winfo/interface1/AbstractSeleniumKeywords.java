@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -528,11 +528,8 @@ public abstract class AbstractSeleniumKeywords {
 		}
 
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
-		if(!startAndEndDates.isEmpty()) {
-			fetchConfigVO.setStarttime((Date)startAndEndDates.get(0)[0]);
-			fetchConfigVO.setEndtime((Date)startAndEndDates.get(startAndEndDates.size()-1)[1]);
-		}
-		
+		List<Date> listOfStartTime = new ArrayList<>();
+		List<Date> listOfEndTime = new ArrayList<>();
 		long totalDiff = 0;
 		Date startDate = null;
 		Date finishDate = null;
@@ -545,8 +542,16 @@ public abstract class AbstractSeleniumKeywords {
 					finishDate = (Date) date[1];
 				}
 				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
+
+				listOfStartTime.add((Date) date[0]);
+				listOfEndTime.add((Date) date[1]);
 			}
 		}
+		if(!(listOfStartTime.isEmpty() && listOfEndTime.isEmpty())) {
+			fetchConfigVO.setStarttime(DateUtils.findMinStartTimeAndMaxEndTime(listOfStartTime, "MIN"));
+			fetchConfigVO.setEndtime(DateUtils.findMinStartTimeAndMaxEndTime(listOfEndTime, "MAX"));
+		}
+		
 		if (startDate != null && finishDate != null) {
 			totalExecutedTime.put("totalElapsedTime", DateUtils.convertMiliSecToDayFormat(
 					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
