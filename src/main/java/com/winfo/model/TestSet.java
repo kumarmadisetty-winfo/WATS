@@ -91,6 +91,13 @@ public class TestSet {
 	@Column(name = "TR_MODE")
 	private String  testRunMode;
 	
+	@Column(name = "START_TIME")
+	private Date startTime;
+	
+	@Column(name = "END_TIME")
+	private Date endTime;
+	
+	
 	@Column(name = "PDF_GENERATION")
 	private String pdfGenerationEnabled;
 	

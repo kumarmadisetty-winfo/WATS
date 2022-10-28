@@ -515,7 +515,7 @@ public abstract class AbstractSeleniumKeywords {
 		return fileNameList;
 	}
 
-	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName, FetchConfigVO fetchConfigVO) {
 
 		String scriptStatus = null;
 		Map<String, String> totalExecutedTime = new HashMap<>();
@@ -528,6 +528,11 @@ public abstract class AbstractSeleniumKeywords {
 		}
 
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
+		if(!startAndEndDates.isEmpty()) {
+			fetchConfigVO.setStarttime((Date)startAndEndDates.get(0)[0]);
+			fetchConfigVO.setEndtime((Date)startAndEndDates.get(startAndEndDates.size()-1)[1]);
+		}
+		
 		long totalDiff = 0;
 		Date startDate = null;
 		Date finishDate = null;
@@ -596,7 +601,7 @@ public abstract class AbstractSeleniumKeywords {
 				int failcount = fetchConfigVO.getFailcount();
 				int others = fetchConfigVO.getOtherCount();
 				
-				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName);
+				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName, fetchConfigVO);
 				String totalExecutedTime = totalTimeTaken.get("totalExecutedTime");
 				String totalElapsedTime = totalTimeTaken.get("totalElapsedTime");
 				String startTime = dateFormat.format(tStarttime);
