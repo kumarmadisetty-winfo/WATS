@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -320,16 +321,18 @@ public class CopyTestRunService {
 				        	    numericValue=String.valueOf(numericValue+(charArray[i]));
 			        	        StringBuilder stringbuilder = new StringBuilder(numericValue);
 			        	        updatedNumericValue=String.valueOf(stringbuilder.reverse());
+			        	       
 				        	}
 				            incrementValue= Integer.parseInt(updatedNumericValue);
 				            int updatedIncrementValue=incrementValue+1;
 				            String finalIncrementValue=String.valueOf(updatedIncrementValue);
-				            char[] charArray1=updatedNumericValue.toCharArray();
-				            if(charArray1[0]=='0' )
-				            {
-				            	finalIncrementValue=updatedNumericValue.replace(String.valueOf(incrementValue), String.valueOf(updatedIncrementValue));
-				            	
-				            }
+				            if(String.valueOf(incrementValue).length()!=updatedNumericValue.length())
+			            	 {
+			            	    int differenceDigit=inputValues.length()-String.valueOf(incrementValue).length();
+			            	    finalIncrementValue= StringUtils.leftPad(finalIncrementValue, differenceDigit+String.valueOf(incrementValue).length(),"0");
+			            	    
+			            	 }
+				            
 				            String updatedInputValue=inputValues.replace(updatedNumericValue,finalIncrementValue);
 				            String finalResult=String.join(" ",String.valueOf(updatedInputValue));
 				            hexaDecimal=finalResult;
