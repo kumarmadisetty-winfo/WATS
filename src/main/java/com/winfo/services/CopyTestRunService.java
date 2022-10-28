@@ -322,8 +322,15 @@ public class CopyTestRunService {
 			        	        updatedNumericValue=String.valueOf(stringbuilder.reverse());
 				        	}
 				            incrementValue= Integer.parseInt(updatedNumericValue);
-				            incrementValue++;
-				            String updatedInputValue=inputValues.replace(updatedNumericValue,String.valueOf(incrementValue));
+				            int updatedIncrementValue=incrementValue+1;
+				            String finalIncrementValue=String.valueOf(updatedIncrementValue);
+				            char[] charArray1=updatedNumericValue.toCharArray();
+				            if(charArray1[0]=='0' )
+				            {
+				            	finalIncrementValue=updatedNumericValue.replace(String.valueOf(incrementValue), String.valueOf(updatedIncrementValue));
+				            	
+				            }
+				            String updatedInputValue=inputValues.replace(updatedNumericValue,finalIncrementValue);
 				            String finalResult=String.join(" ",String.valueOf(updatedInputValue));
 				            hexaDecimal=finalResult;
 				     }
