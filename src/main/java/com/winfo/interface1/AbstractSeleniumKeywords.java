@@ -547,7 +547,7 @@ public abstract class AbstractSeleniumKeywords {
 				listOfEndTime.add((Date) date[1]);
 			}
 		}
-		if(!(listOfStartTime.isEmpty() && listOfEndTime.isEmpty())) {
+		if(!listOfStartTime.isEmpty() && !listOfEndTime.isEmpty()) {
 			fetchConfigVO.setStarttime(DateUtils.findMinStartTimeAndMaxEndTime(listOfStartTime, "MIN"));
 			fetchConfigVO.setEndtime(DateUtils.findMinStartTimeAndMaxEndTime(listOfEndTime, "MAX"));
 		}
