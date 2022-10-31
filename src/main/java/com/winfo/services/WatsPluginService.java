@@ -156,6 +156,9 @@ public class WatsPluginService extends AbstractSeleniumKeywords{
 	}
 	
 	public ResponseEntity<StreamingResponseBody> getPluginZipFile(PlugInVO plugInVO) throws IOException {
+		if(plugInVO.getBrowser() == null || "".equalsIgnoreCase(plugInVO.getBrowser())) {
+			plugInVO.setBrowser("chrome");
+		}
 		String customerUri = dataBaseEntry.getCentralRepoUrl("PUBLIC_URL");
 		String directoryPath = dao.getDirectoryPath();
 		downloadObjectFromObjectStore(directoryPath+"/temp/plugin/WATS Script Assistant.zip", "WATS Script Assistant/"+plugInVO.getBrowser(), "WATS Script Assistant.zip");

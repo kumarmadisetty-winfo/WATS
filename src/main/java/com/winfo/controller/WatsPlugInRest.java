@@ -1,7 +1,7 @@
 package com.winfo.controller;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.services.PluginTestrunService;
 import com.winfo.services.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
@@ -60,9 +61,20 @@ public class WatsPlugInRest {
 		}
 	}
 	
-	@PostMapping(value="/getPluginZipFile",  produces="application/zip")
-	public ResponseEntity<StreamingResponseBody> getPluginZip(@RequestBody PlugInVO plugInVO) throws IOException {
-		return service.getPluginZipFile(plugInVO);
+	@GetMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
+	public ResponseEntity<StreamingResponseBody> getPluginZip(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
+
+		if (targetEnvironment != null && (!"".equalsIgnoreCase(targetEnvironment))) {
+			PlugInVO plugInVO = new PlugInVO();
+			plugInVO.setTargetEnvironment(targetEnvironment);
+			if(browser.isPresent()) {
+				plugInVO.setBrowser(browser.get());
+			}
+			return service.getPluginZipFile(plugInVO);
+		} else {
+			throw new WatsEBSCustomException(500, "Customer can not be null or empty");
+		}
+
 	}
 
 }
