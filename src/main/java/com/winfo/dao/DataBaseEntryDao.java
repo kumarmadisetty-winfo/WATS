@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -99,6 +100,21 @@ public class DataBaseEntryDao {
 	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
 		Session session = em.unwrap(Session.class);
 		return session.find(TestSet.class, testSetId);
+	}
+	
+	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
+		
+		try {
+			Query query = em.createQuery("Update TestSet set startTime= :tStartTime, endTime=:tEndTime where testRunId=:testSetId");
+			query.setParameter("tStartTime", startTime);
+			query.setParameter("tEndTime", endTime);
+			query.setParameter("testSetId", Integer.parseInt(testSetId));
+			query.executeUpdate();
+		} catch (Exception e) {
+			logger.info("cant update start time and end time in TestSet");
+			logger.error(e);
+		}
+		
 	}
 
 	public TestSetLine getScriptDataByLineID(int lineId) {
@@ -1396,7 +1412,6 @@ public class DataBaseEntryDao {
 
 		Predicate condition3 = (scriptStatus != null) ? cb.and(condition1, condition2)
 				: cb.and(condition1, inPredicate);
-
 		cq.multiselect(from.get("executionStartTime"), from.get("executionEndTime")).where(condition3);
 		return em.createQuery(cq).getResultList();
 

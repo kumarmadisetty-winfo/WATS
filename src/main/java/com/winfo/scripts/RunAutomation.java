@@ -355,6 +355,8 @@ public class RunAutomation {
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 						fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
 
+				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
+				
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {

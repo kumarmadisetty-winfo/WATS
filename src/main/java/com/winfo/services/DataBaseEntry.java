@@ -56,6 +56,12 @@ public class DataBaseEntry {
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
 
+	
+	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
+		dao.updateStartAndEndTimeForTestSetTable(testSetId, startTime, endTime);
+		
+	}
+	
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(test_script_param_id, status);

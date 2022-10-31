@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -515,7 +515,7 @@ public abstract class AbstractSeleniumKeywords {
 		return fileNameList;
 	}
 
-	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
+	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName, FetchConfigVO fetchConfigVO) {
 
 		String scriptStatus = null;
 		Map<String, String> totalExecutedTime = new HashMap<>();
@@ -528,6 +528,8 @@ public abstract class AbstractSeleniumKeywords {
 		}
 
 		List<Object[]> startAndEndDates = dataBaseEntry.findStartAndEndTimeForTestRun(testSetId, scriptStatus);
+		List<Date> listOfStartTime = new ArrayList<>();
+		List<Date> listOfEndTime = new ArrayList<>();
 		long totalDiff = 0;
 		Date startDate = null;
 		Date finishDate = null;
@@ -540,8 +542,16 @@ public abstract class AbstractSeleniumKeywords {
 					finishDate = (Date) date[1];
 				}
 				totalDiff += DateUtils.findTimeDifference(date[0].toString(), date[1].toString());
+
+				listOfStartTime.add((Date) date[0]);
+				listOfEndTime.add((Date) date[1]);
 			}
 		}
+		if(!listOfStartTime.isEmpty() && !listOfEndTime.isEmpty()) {
+			fetchConfigVO.setStarttime(DateUtils.findMinStartTimeAndMaxEndTime(listOfStartTime, "MIN"));
+			fetchConfigVO.setEndtime(DateUtils.findMinStartTimeAndMaxEndTime(listOfEndTime, "MAX"));
+		}
+		
 		if (startDate != null && finishDate != null) {
 			totalExecutedTime.put("totalElapsedTime", DateUtils.convertMiliSecToDayFormat(
 					DateUtils.findTimeDifference(startDate.toString(), finishDate.toString())));
@@ -596,7 +606,7 @@ public abstract class AbstractSeleniumKeywords {
 				int failcount = fetchConfigVO.getFailcount();
 				int others = fetchConfigVO.getOtherCount();
 				
-				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName);
+				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName, fetchConfigVO);
 				String totalExecutedTime = totalTimeTaken.get("totalExecutedTime");
 				String totalElapsedTime = totalTimeTaken.get("totalElapsedTime");
 				String startTime = dateFormat.format(tStarttime);
