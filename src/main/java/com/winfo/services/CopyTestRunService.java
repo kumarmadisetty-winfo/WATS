@@ -328,8 +328,8 @@ public class CopyTestRunService {
 				            String finalIncrementValue=String.valueOf(updatedIncrementValue);
 				            if(String.valueOf(incrementValue).length()!=updatedNumericValue.length())
 			            	 {
-			            	    int differenceDigit=inputValues.length()-String.valueOf(incrementValue).length();
-			            	    finalIncrementValue= StringUtils.leftPad(finalIncrementValue, differenceDigit+String.valueOf(incrementValue).length(),"0");
+				            	int differenceDigit=updatedNumericValue.length()-String.valueOf(incrementValue).length();
+				            	finalIncrementValue= StringUtils.leftPad(finalIncrementValue, differenceDigit+String.valueOf(incrementValue).length(),"0");
 			            	    
 			            	 }
 				            
