@@ -704,7 +704,7 @@ public abstract class AbstractSeleniumKeywords {
 		String scriptNumber = fetchMetadataListVO.get(0).getScriptNumber();
 		String executedBy = fetchMetadataListVO.get(0).getExecutedBy();
 		String customerName = customerDetails.getCustomerName();
-		String errorMsgs = fetchConfigVO.getErrormessage();
+		String errorMsgs = fetchMetadataListVO.get(0).getLineErrorMsg();
 		document.add(watsLogo);
 
 		document.add(new Paragraph(report, font23));
