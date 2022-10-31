@@ -50,9 +50,9 @@ public class DateUtils {
 		Collections.sort(listOfDates);
 		
 		if("MAX".equalsIgnoreCase(maxOrMin)) {
-			return listOfDates.get(0);
-		} else {
 			return listOfDates.get(listOfDates.size() - 1);
+		} else {
+			return listOfDates.get(0);
 		}
 	}
 

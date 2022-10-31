@@ -595,8 +595,6 @@ public abstract class AbstractSeleniumKeywords {
 			logger.info("after enter Images/wats_icon.png1");
 			watsLogo.scalePercent(65, 68);
 			watsLogo.setAlignment(Image.ALIGN_RIGHT);
-			Date tendTime = fetchConfigVO.getEndtime();
-			Date tStarttime = fetchConfigVO.getStarttime();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss aa");
 			String testRunName1 = customerDetails.getTestSetName();
 
@@ -609,6 +607,8 @@ public abstract class AbstractSeleniumKeywords {
 				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName, fetchConfigVO);
 				String totalExecutedTime = totalTimeTaken.get("totalExecutedTime");
 				String totalElapsedTime = totalTimeTaken.get("totalElapsedTime");
+				Date tendTime = fetchConfigVO.getEndtime();
+				Date tStarttime = fetchConfigVO.getStarttime();
 				String startTime = dateFormat.format(tStarttime);
 				String endTime = dateFormat.format(tendTime);
 				String[] testArr = { TEST_RUN_NAME, testRunName1, EXECUTED_BY, executedBy, START_TIME, startTime, END_TIME, endTime, EXECUTION_TIME,
