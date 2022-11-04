@@ -1,6 +1,5 @@
 package com.winfo.controller;
 
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,7 @@ public class CopyDataCustomerRest {
 	CopyDataCustomerService service;
 
 	@RequestMapping("/copyScriptUsingProductVersion")
-	public DomGenericResponseBean copyData(@RequestBody CopyDataDetails copyDataDetails) throws ParseException {
+	public DomGenericResponseBean copyData(@RequestBody CopyDataDetails copyDataDetails) {
 		return service.copyData(copyDataDetails);
 
 	}
