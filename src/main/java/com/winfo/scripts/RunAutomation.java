@@ -446,9 +446,9 @@ public class RunAutomation {
 		} finally {
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScriptNumber());
 			if (driver != null) {
-				driver.close();
+//				driver.close();
 				driver.quit();
-				driver = null;
+//				driver = null;
 			}
 		}
 	}
