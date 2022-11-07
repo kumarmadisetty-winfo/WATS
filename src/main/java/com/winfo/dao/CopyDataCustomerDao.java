@@ -28,10 +28,10 @@ public class CopyDataCustomerDao {
 		return dependentScriptMasterList;
 	}
 
-	public void updateScriptDtlsInMasterTable(ScriptMaster masterObj) {
+	public ScriptMaster insertScriptDtlsInMasterTable(ScriptMaster masterObj) {
 
 		Session session1 = entityManager.unwrap(Session.class);
-		session1.save(masterObj);
+		return (ScriptMaster) session1.merge(masterObj);
 	}
 
 	public List<ScriptMaster> getScriptMasterDtlByProductVersion(String productVersion) {

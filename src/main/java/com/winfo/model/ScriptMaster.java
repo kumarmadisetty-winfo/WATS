@@ -64,8 +64,7 @@ public class ScriptMaster {
 	@Column(name = "SELENIUM_TEST_METHOD")
 	private String seleniumTestMethod;
 
-	@JsonIgnore
-	@Column(name = "DEPENDENCY", insertable = false, updatable = false)
+	@Column(name = "DEPENDENCY")
 	private Integer dependency;
 
 	@Column(name = "PRODUCT_VERSION")
@@ -142,10 +141,9 @@ public class ScriptMaster {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "scriptMaster", fetch = FetchType.LAZY)
 	private List<ScriptMetaData> scriptMetaDatalist;
 	
-	
-	@JsonIgnore
+
 	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "DEPENDENCY")
+	@JoinColumn(name = "DEPENDENCY", insertable = false, updatable = false)
     private ScriptMaster parent;   
 
 	public ScriptMaster getParent() {

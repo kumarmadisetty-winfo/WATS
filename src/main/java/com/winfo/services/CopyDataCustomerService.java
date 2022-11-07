@@ -38,8 +38,7 @@ public class CopyDataCustomerService {
 			mapOfScriptMasterNew.put(newScriptMasterDtl.getScriptNumber(), newScriptMasterDtl);
 
 		}
-		Map<Integer, ScriptMaster> mapOfScriptMasterNewToUpdate = new HashMap<>();
-		
+
 		List<ScriptMaster> newScriptWithNewProductVersion = new ArrayList<>();
 
 		int count = 0;
@@ -54,21 +53,25 @@ public class CopyDataCustomerService {
 				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				ScriptMaster newScriptMasterDtl;
 				newScriptMasterDtl = mapper.convertValue(oldScriptMasterDtl, ScriptMaster.class);
-
-					mapOfScriptMasterNewToUpdate.put(oldScriptMasterDtl.getScriptId(), newScriptMasterDtl);
-					newScriptMasterDtl.setProductVersion(copyDataDetails.getProductVersionNew());
-					newScriptWithNewProductVersion.add(newScriptMasterDtl);
-				}
-				
+				newScriptMasterDtl.setScriptId(null);
+				newScriptMasterDtl.setProductVersion(copyDataDetails.getProductVersionNew());
+				newScriptWithNewProductVersion.add(newScriptMasterDtl);
 			}
 
+		}
+		Map<String, Integer> scriptMasterIdAndNumber = new HashMap<>();
 		for (ScriptMaster masterObj : newScriptWithNewProductVersion) {
-			dao.updateScriptDtlsInMasterTable(masterObj);
+			masterObj = dao.insertScriptDtlsInMasterTable(masterObj);
+			scriptMasterIdAndNumber.put(masterObj.getScriptNumber(), masterObj.getScriptId());
+			if (masterObj.getParent() != null) {
+				masterObj.setDependency(scriptMasterIdAndNumber.get(masterObj.getParent().getScriptNumber()));
+				dao.insertScriptDtlsInMasterTable(masterObj);
+			}
 		}
 
 		return new DomGenericResponseBean(200, "success",
 				count + " Script'(s) Copied" + " to " + copyDataDetails.getProductVersionNew() + " Successfully");
 
-	}		
-		
+	}
+
 }
