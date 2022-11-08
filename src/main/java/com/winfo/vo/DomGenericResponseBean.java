@@ -1,13 +1,32 @@
 package com.winfo.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class DomGenericResponseBean{
 	
 	private int status;
 	private String statusMessage;
 	private String description;
+	
+	@JsonInclude(Include.NON_NULL)
 	private String failed_Script;
-	private int scriptID;
+	
+	@JsonInclude(Include.NON_NULL)
+	private Integer scriptID;
+	
+	@JsonInclude(Include.NON_NULL)
 	private String testRunName;
+	
+	public DomGenericResponseBean() {
+		
+	}
+	
+	public DomGenericResponseBean(int status , String statusMessage, String description) {
+		this.status =status;
+		this.statusMessage = statusMessage;
+		this.description = description;
+	}
 	
 	public String getTestRunName() {
 		return testRunName;
@@ -15,10 +34,10 @@ public class DomGenericResponseBean{
 	public void setTestRunName(String testRunName) {
 		this.testRunName = testRunName;
 	}
-	public int getScriptID() {
+	public Integer getScriptID() {
 		return scriptID;
 	}
-	public void setScriptID(int scriptID) {
+	public void setScriptID(Integer scriptID) {
 		this.scriptID = scriptID;
 	}
 	public String getFailed_Script() {

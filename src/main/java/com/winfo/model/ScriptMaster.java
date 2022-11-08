@@ -1,23 +1,30 @@
 package com.winfo.model;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "WIN_TA_SCRIPT_MASTER")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "scriptId")
 public class ScriptMaster {
-
+	
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "master_generator")
 	@SequenceGenerator(name = "master_generator", sequenceName = "WIN_TA_SCRIPT_MASTER_SEQ", allocationSize = 1)
 	@Id
@@ -131,9 +138,21 @@ public class ScriptMaster {
 	@Column(name = "TARGET_APPLICATION")
 	private String targetApplication;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "scriptMaster")
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "scriptMaster", fetch = FetchType.LAZY)
+	private List<ScriptMetaData> scriptMetaDatalist;
+	
 
-	private List<ScriptMetaData> scriptMetaDatalist = new ArrayList<>();
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "DEPENDENCY", insertable = false, updatable = false)
+    private ScriptMaster parent;   
+
+	public ScriptMaster getParent() {
+		return parent;
+	}
+
+	public void setParent(ScriptMaster parent) {
+		this.parent = parent;
+	}
 
 	public String getPluginFlag() {
 		return pluginFlag;
