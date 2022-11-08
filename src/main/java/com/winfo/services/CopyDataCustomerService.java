@@ -42,6 +42,8 @@ public class CopyDataCustomerService {
 		List<ScriptMaster> newScriptWithNewProductVersion = new ArrayList<>();
 
 		int count = 0;
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		for (ScriptMaster oldScriptMasterDtl : masterDtlsforOldProductVersion) {
 
 			if (mapOfScriptMasterNew.containsKey(oldScriptMasterDtl.getScriptNumber())) {
@@ -49,8 +51,6 @@ public class CopyDataCustomerService {
 						"Source script already present in Target Location. Please check the Script in target product version.");
 			} else {
 				count++;
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				ScriptMaster newScriptMasterDtl;
 				newScriptMasterDtl = mapper.convertValue(oldScriptMasterDtl, ScriptMaster.class);
 				newScriptMasterDtl.setScriptId(null);
