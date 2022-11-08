@@ -14,9 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "WIN_TA_SCRIPT_METADATA")
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "scriptMetaDataId")
 public class ScriptMetaData {
 
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metadata_generator")
@@ -79,9 +82,6 @@ public class ScriptMetaData {
 	@Column(name = "METADATA_INPUT_VALUE")
 	private String metadataInputvalue;
 
-	/*
-	 * @Column(name = "script_id") private Integer script_id;
-	 */
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "SCRIPT_ID")
 	private ScriptMaster scriptMaster;

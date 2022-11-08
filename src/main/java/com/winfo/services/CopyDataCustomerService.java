@@ -1,26 +1,77 @@
 package com.winfo.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.dao.CopyDataCustomerDao;
+import com.winfo.model.ScriptMaster;
 import com.winfo.vo.CopyDataDetails;
 import com.winfo.vo.DomGenericResponseBean;
+
 @Service
 public class CopyDataCustomerService {
 	@Autowired
 	CopyDataCustomerDao dao;
 
-	 
-	
 	@Transactional
-	public List<DomGenericResponseBean> copyData(CopyDataDetails copyDataDetails ) throws ParseException {
-		return dao.copyData( copyDataDetails);
+	public DomGenericResponseBean copyData(CopyDataDetails copyDataDetails) {
+
+		List<ScriptMaster> masterDtlsforOldProductVersion = dao
+				.getScriptMasterDtlByProductVersion(copyDataDetails.getProductVersionOld());
+
+		List<ScriptMaster> masterDtlsforNewProductVersion = dao
+				.getScriptMasterDtlByProductVersion(copyDataDetails.getProductVersionNew());
+
+		Map<String, ScriptMaster> mapOfScriptMasterNew = new HashMap<>();
+
+		for (ScriptMaster newScriptMasterDtl : masterDtlsforNewProductVersion) {
+
+			mapOfScriptMasterNew.put(newScriptMasterDtl.getScriptNumber(), newScriptMasterDtl);
+
+		}
+
+		List<ScriptMaster> newScriptWithNewProductVersion = new ArrayList<>();
+
+		int count = 0;
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		for (ScriptMaster oldScriptMasterDtl : masterDtlsforOldProductVersion) {
+
+			if (mapOfScriptMasterNew.containsKey(oldScriptMasterDtl.getScriptNumber())) {
+				return new DomGenericResponseBean(409, "error",
+						"Source script already present in Target Location. Please check the Script in target product version.");
+			} else {
+				count++;
+				ScriptMaster newScriptMasterDtl;
+				newScriptMasterDtl = mapper.convertValue(oldScriptMasterDtl, ScriptMaster.class);
+				newScriptMasterDtl.setScriptId(null);
+				newScriptMasterDtl.setProductVersion(copyDataDetails.getProductVersionNew());
+				newScriptWithNewProductVersion.add(newScriptMasterDtl);
+			}
+
+		}
+		Map<String, Integer> scriptMasterIdAndNumber = new HashMap<>();
+		for (ScriptMaster masterObj : newScriptWithNewProductVersion) {
+			masterObj = dao.insertScriptDtlsInMasterTable(masterObj);
+			scriptMasterIdAndNumber.put(masterObj.getScriptNumber(), masterObj.getScriptId());
+			if (masterObj.getParent() != null) {
+				masterObj.setDependency(scriptMasterIdAndNumber.get(masterObj.getParent().getScriptNumber()));
+				dao.insertScriptDtlsInMasterTable(masterObj);
+			}
+		}
+
+		return new DomGenericResponseBean(200, "success",
+				count + " Script'(s) Copied" + " to " + copyDataDetails.getProductVersionNew() + " Successfully");
 
 	}
+
 }
