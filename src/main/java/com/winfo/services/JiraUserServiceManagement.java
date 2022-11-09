@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.utils.Constants;
 import com.winfo.utils.HttpMethodUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.JiraUserManagement;
@@ -41,12 +42,19 @@ public class JiraUserServiceManagement {
 	private static final String CONTENT_TYPE = "Content-Type";
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String ACCEPT = "Accept";
-	private static final String URL = "https://winfosolutions.atlassian.net/rest/servicedeskapi";
+	private static final String VALUES = "values";
+	private static final String ACCOUNT_ID = "accountId";
 
 	@Value("${jira.username}")
 	private String userName;
 	@Value("${jira.password}")
 	private String password;
+	@Value("${jira.url}")
+	private String url;
+	@Value("${jira.projectId}")
+	private String projectId;
+	@Value("${jira.url1}")
+	private String userSearchUrl;
 
 	@SuppressWarnings("unchecked")
 	public ResponseDto userManegement(JiraUserManagement jiraUserManagementDTO) throws Exception {
@@ -67,7 +75,7 @@ public class JiraUserServiceManagement {
 
 			/******************** ORGANIZATION RELATED OPERATION *************************/
 			// Fetching all the organization.
-			listOfOrganization = (List<Map<String, Object>>) getAllTheOrganization().get("values");
+			listOfOrganization = (List<Map<String, Object>>) getAllTheOrganization().get(VALUES);
 
 			// Checking if organization exists or not.
 			getOrganizationIfExists = listOfOrganization.stream()
@@ -86,7 +94,7 @@ public class JiraUserServiceManagement {
 
 			// Getting all the organization present in serviceDesk.
 			listOfOrganization.clear();
-			listOfOrganization = (List<Map<String, Object>>) getOrganizationPresentInServiceDesk().get("values");
+			listOfOrganization = (List<Map<String, Object>>) getOrganizationPresentInServiceDesk().get(VALUES);
 
 			// Checking if organization exists in service desk or not.
 			getOrganizationIfExists = listOfOrganization.stream()
@@ -113,10 +121,10 @@ public class JiraUserServiceManagement {
 			if (!getUserIfExists.isPresent()) {
 				mapOfBody.put("displayName", jiraUserManagementDTO.getUserName());
 				mapOfBody.put("email", jiraUserManagementDTO.getUserMail());
-				userId = createUser(mapOfBody).get("accountId").toString();
+				userId = createUser(mapOfBody).get(ACCOUNT_ID).toString();
 				mapOfBody.clear();
 			} else {
-				userId = getUserIfExists.get().get("accountId").toString();
+				userId = getUserIfExists.get().get(ACCOUNT_ID).toString();
 			}
 
 			// Adding user to the organization.
@@ -124,10 +132,10 @@ public class JiraUserServiceManagement {
 			addUserToOrganization(mapOfBody, organizationId);
 			mapOfBody.clear();
 
-			return new ResponseDto(200, "Success", "User Creation Completed!");
+			return new ResponseDto(200, Constants.SUCCESS, "User Creation Completed!");
 		} catch (Exception e) {
 			log.error(e);
-			return new ResponseDto(500, "Error", e.getMessage());
+			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 	}
 
@@ -142,7 +150,7 @@ public class JiraUserServiceManagement {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
-			apiValidationData.setUrl("https://winfosolutions.atlassian.net/rest/api/3/user/search?query=" + userMail);
+			apiValidationData.setUrl(userSearchUrl + userMail);
 			Map<String, String> map = new HashMap<>();
 			map.put(ACCEPT, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(map);
@@ -161,7 +169,7 @@ public class JiraUserServiceManagement {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
-			apiValidationData.setUrl(URL + "/organization");
+			apiValidationData.setUrl(url + "/organization");
 			Map<String, String> map = new HashMap<>();
 			map.put(ACCEPT, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(map);
@@ -184,7 +192,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/organization");
+			apiValidationData.setUrl(url + "/organization");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
@@ -208,7 +216,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/servicedesk/3/organization");
+			apiValidationData.setUrl(url + "/servicedesk/"+projectId+"/organization");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
@@ -226,7 +234,7 @@ public class JiraUserServiceManagement {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
-			apiValidationData.setUrl(URL + "/servicedesk/3/organization");
+			apiValidationData.setUrl(url + "/servicedesk/"+projectId+"/organization");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
@@ -249,7 +257,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/customer");
+			apiValidationData.setUrl(url + "/customer");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
@@ -274,7 +282,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/organization/" + organizationId + "/user");
+			apiValidationData.setUrl(url + "/organization/" + organizationId + "/user");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
@@ -296,7 +304,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/organization/" + organizationId + "/user");
+			apiValidationData.setUrl(url + "/organization/" + organizationId + "/user");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
@@ -317,7 +325,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/servicedesk/3/customer");
+			apiValidationData.setUrl(url + "/servicedesk/"+projectId+"/customer");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			mapOfHeaders.put("X-ExperimentalApi", "opt-in");
@@ -339,7 +347,7 @@ public class JiraUserServiceManagement {
 			Object bodyObject = mapper.convertValue(mapOfBody, Object.class);
 			apiValidationData.setRequestBody(bodyObject);
 
-			apiValidationData.setUrl(URL + "/servicedesk/3/organization");
+			apiValidationData.setUrl(url + "/servicedesk/"+projectId+"/organization");
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
@@ -373,7 +381,7 @@ public class JiraUserServiceManagement {
 			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
 				headers.set(map.getKey(), map.getValue());
 			}
-			headers.setBasicAuth("uday.singh@winfosolutions.com", "c9jZGixInYLmlffEL7LuCBDC");
+			headers.setBasicAuth(userName, password);
 
 			// Fetching HttpMethod
 			HttpMethod httpMethod = HttpMethod.valueOf(apiValidationData.getHttpType());
@@ -422,7 +430,7 @@ public class JiraUserServiceManagement {
 			Optional<Map<String, Object>> getUserIfExists;
 
 			// Fetching all the organization.
-			listOfOrganization = (List<Map<String, Object>>) getAllTheOrganization().get("values");
+			listOfOrganization = (List<Map<String, Object>>) getAllTheOrganization().get(VALUES);
 
 			// Checking if organization exists or not.
 			getOrganizationIfExists = listOfOrganization.stream()
@@ -439,17 +447,17 @@ public class JiraUserServiceManagement {
 
 			if (getUserIfExists.isPresent() && getOrganizationIfExists.isPresent()) {
 				String organizationId = getOrganizationIfExists.get().get("id").toString();
-				String userId = getUserIfExists.get().get("accountId").toString();
+				String userId = getUserIfExists.get().get(ACCOUNT_ID).toString();
 				mapOfBody.put("accountIds", Arrays.asList(userId));
 				removeUserFromOrganization(mapOfBody, organizationId);
 				removeUserFromProject(mapOfBody);
-				return new ResponseDto(200, "Success", "Successfully removed the user!");
+				return new ResponseDto(200, Constants.SUCCESS, "Successfully removed the user!");
 			} else {
-				return new ResponseDto(500, "Warning", "User does not exists!");
+				return new ResponseDto(299, Constants.WARNING, "User does not exists!");
 			}
 		} catch (Exception e) {
 			log.error(e);
-			return new ResponseDto(500, "Error", e.getMessage());
+			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 	}
 
@@ -468,7 +476,7 @@ public class JiraUserServiceManagement {
 			String organizationId = null;
 
 			// Fetching all the organization.
-			listOfOrganization = (List<Map<String, Object>>) getAllTheOrganization().get("values");
+			listOfOrganization = (List<Map<String, Object>>) getAllTheOrganization().get(VALUES);
 
 			// Checking if organization exists or not.
 			getOrganizationIfExists = listOfOrganization.stream()
@@ -479,13 +487,13 @@ public class JiraUserServiceManagement {
 				organizationId = getOrganizationIfExists.get().get("id").toString();
 				mapOfBody.put("organizationId", organizationId);
 				removeOrganization(mapOfBody);
-				return new ResponseDto(200, "Success", "Successfully removed the organization!");
+				return new ResponseDto(200, Constants.SUCCESS, "Successfully removed the organization!");
 			} else {
-				return new ResponseDto(500, "Warning", "Organization does not exists!");
+				return new ResponseDto(299, Constants.WARNING, "Organization does not exists!");
 			}
 		} catch (Exception e) {
 			log.error(e);
-			return new ResponseDto(500, "Error", e.getMessage());
+			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 
 	}
