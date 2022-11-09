@@ -73,7 +73,7 @@ public class CopyTestRunService {
 		newTestSetObj.setTestRunMode("ACTIVE");
 		newTestSetObj.setLastExecutBy(null);
 
-		String productVersion = copyTestrunDao.getProductVersion(testSetObj.getProjectId());
+		String productVersion = copyTestrunDao.getProductVersion(newTestSetObj.getProjectId());
 		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<>();
 
 		Map<Integer, TestSetLine> mapOfLinesData = new HashMap<>();
