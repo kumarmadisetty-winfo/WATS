@@ -61,7 +61,7 @@ public class WatsPlugInRest {
 		}
 	}
 	
-	@GetMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
+	@PostMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
 	public ResponseEntity<StreamingResponseBody> getPluginZip(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
 
 		if (targetEnvironment != null && (!"".equalsIgnoreCase(targetEnvironment))) {
