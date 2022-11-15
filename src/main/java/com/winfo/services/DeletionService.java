@@ -53,6 +53,9 @@ public class DeletionService{
 
 	@Value("${oci.namespace}")
 	private String ociNamespace;
+	
+	@Value("${oci.config.path}")
+	private String ociConfigPath;
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -77,7 +80,7 @@ public class DeletionService{
 		CustomerProjectDto customerDetails = mapper.convertValue(customer, CustomerProjectDto.class);
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}
@@ -108,7 +111,7 @@ public class DeletionService{
 		ConfigFileReader.ConfigFile configFile = null;
 
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}

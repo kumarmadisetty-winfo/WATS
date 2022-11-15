@@ -105,12 +105,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	@Value("${configvO.watslogo}")
 	private String watslogo;
 
+	@Value("${oci.config.path}")
+	private String ociConfigPath;
 	@Value("${chrome.driver.path}")
 	private String chromeDriverPath;
 	@Value("${dll.path}")
 	private String dllPath;
-	@Value("${oci.config.path}")
-	private String ociConfigPath;
 	@Value("${oci.config.name}")
 	private String ociConfigName;
 	@Value("${oci.bucket.name}")
@@ -434,7 +434,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+					.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
 			/* Create a service client */
@@ -466,7 +466,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+					.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			final String FILE_NAME = sourceFile;
 			File file = new File(FILE_NAME);
