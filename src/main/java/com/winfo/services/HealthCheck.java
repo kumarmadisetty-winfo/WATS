@@ -110,6 +110,7 @@ public class HealthCheck {
 			objectStoreAccessChecks(null);
 			healthCheckVO.setObjectStoreAccess(GREEN);
 		} catch (Exception e) {
+			e.printStackTrace();
 			healthCheckVO.setObjectStoreAccess(RED);
 			count++;
 		}
@@ -173,6 +174,8 @@ public class HealthCheck {
 			System.out.println(file.exists()+"-->"+file.getPath()+"-->"+file.isFile());
 			
 			configFile = ConfigFileReader.parse(new ClassPathResource(path).getInputStream(), ociConfigName);
+			
+			System.out.println(configFile.get(ociConfigName)+"-------------------->");
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}
