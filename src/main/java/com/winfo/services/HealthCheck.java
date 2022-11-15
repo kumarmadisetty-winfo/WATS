@@ -1,6 +1,7 @@
 package com.winfo.services;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -173,7 +173,7 @@ public class HealthCheck {
 			File file = new File(path);
 			System.out.println(file.exists()+"-->"+file.getPath()+"-->"+file.isFile());
 			
-			configFile = ConfigFileReader.parse(new ClassPathResource(path).getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 			
 			System.out.println(configFile.get(ociConfigName)+"-------------------->");
 		} catch (IOException e) {
