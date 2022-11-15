@@ -168,14 +168,8 @@ public class HealthCheck {
 	public ResponseDto objectStoreAccessChecks(Optional<String> testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			String path = ociConfigPath;
-			
-			File file = new File(path);
-			System.out.println(file.exists()+"-->"+file.getPath()+"-->"+file.isFile());
-			
+			File file = new File(ociConfigPath);
 			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
-			
-			System.out.println(configFile.get(ociConfigName)+"-------------------->");
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}
