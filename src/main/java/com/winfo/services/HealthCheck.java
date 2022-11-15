@@ -20,6 +20,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.jcabi.github.Github;
+import com.jcabi.github.Repo;
+import com.jcabi.github.RtGithub;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
@@ -53,6 +56,9 @@ public class HealthCheck {
 
 	@Value("${oci.namespace}")
 	private String ociNamespace;
+
+	@Value("${oci.config.path}")
+	private String ociConfigPath;
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -163,7 +169,7 @@ public class HealthCheck {
 	public ResponseDto objectStoreAccessChecks(Optional<String> testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource("oci/config").getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}
