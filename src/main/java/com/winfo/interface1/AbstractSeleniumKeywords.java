@@ -1800,7 +1800,7 @@ public abstract class AbstractSeleniumKeywords {
 			}
 
 			WebClient client = WebClient.create();
-
+//            String accessType="Bearer";
 			HttpHeaders headers = new HttpHeaders();
 			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
 				headers.set(map.getKey(), map.getValue());
@@ -1812,7 +1812,15 @@ public abstract class AbstractSeleniumKeywords {
 //				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
 //				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
 //				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
-				headers.set("Authorization", "Bearer "+apiValidationData.getAccessToken());
+				if("Bearer".equalsIgnoreCase(apiValidationData.getAccessType()) || "Basic".equalsIgnoreCase(apiValidationData.getAccessType()))
+                {
+                    
+                    headers.set("Authorization", apiValidationData.getAccessType() +apiValidationData.getAccessToken());
+                }
+                else
+                {
+                	headers.set("Authorization", "Bearer" +apiValidationData.getAccessToken());
+                }
 			}
 			apiValidationData.setAccessToken(null);
 			// Converting object to string

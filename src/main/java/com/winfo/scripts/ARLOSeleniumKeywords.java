@@ -6302,17 +6302,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	}
 
-	@Override
-	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api, CustomerProjectDto customerDetails, FetchConfigVO fetchConfigVO) throws Exception {
-		// EMPTY METHOD
-
-	}
-
-	@Override
-	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
-		return false;
-	}
 
 	@Override
 	public void multiplelinestableSendKeys(WebDriver driver, String param1, String param2, String param3,

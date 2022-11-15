@@ -15369,12 +15369,6 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	}
 
 	@Override
-	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
@@ -15467,13 +15461,6 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	@Override
 	public void apiAccessToken(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
 			CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, String> accessTokenStorage,
-			ApiValidationVO api, CustomerProjectDto customerDetails,FetchConfigVO fetchConfigVO) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
