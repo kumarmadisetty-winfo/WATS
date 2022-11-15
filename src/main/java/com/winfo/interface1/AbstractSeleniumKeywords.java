@@ -1809,13 +1809,14 @@ public abstract class AbstractSeleniumKeywords {
 //				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
 //				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
 //				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
-				if("Bearer".equalsIgnoreCase(apiValidationData.getAccessType()))
+				if("Bearer".equalsIgnoreCase(apiValidationData.getAccessType()) || "Basic".equalsIgnoreCase(apiValidationData.getAccessType()))
                 {
                     
                     headers.set("Authorization", apiValidationData.getAccessType() +apiValidationData.getAccessToken());
                 }
-                else {
-                    headers.set("Authorization", apiValidationData.getAccessType() +apiValidationData.getAccessToken());
+                else
+                {
+                	headers.set("Authorization", "Bearer" +apiValidationData.getAccessToken());
                 }
 			}
 			apiValidationData.setAccessToken(null);
