@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -166,7 +167,12 @@ public class HealthCheck {
 	public ResponseDto objectStoreAccessChecks(Optional<String> testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+			String path = ociConfigPath;
+			
+			File file = new File(path);
+			System.out.println(file.exists()+"-->"+file.getPath()+"-->"+file.isFile());
+			
+			configFile = ConfigFileReader.parse(new ClassPathResource(path).getInputStream(), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}
