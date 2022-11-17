@@ -526,9 +526,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			}
 			FetchConfigVO fetchConfigVO = fetchConfigVO(args.getTestSetId());
 
-			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
-					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
-			fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
+//			fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
+//					System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
+//			fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(args.getTestSetId());
 
