@@ -1591,6 +1591,24 @@ public class DataBaseEntryDao {
 		String result = session.createSQLQuery(query).setParameter("testSetLineId", testSetLineId).getSingleResult().toString();
 		return result;
 	}
+
+	public ScriptMaster getScriptDetailsByScriptId(Integer scriptId) {
+		Session session = em.unwrap(Session.class);
+		return session.find(ScriptMaster.class, scriptId);
+	}
+
+	public String getDirectoryPath() {
+		try {
+			Session session = em.unwrap(Session.class);
+			String sql = "select directory_path from all_directories where directory_name = 'WATS_OBJ_DIR'";
+			@SuppressWarnings("rawtypes")
+			SQLQuery query = session.createSQLQuery(sql);
+			return query.getSingleResult().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Directory path is not present", e);
+		}
+	}
 }
 	
 	

@@ -545,5 +545,13 @@ public class DataBaseEntry {
 	public String getEnabledStatusByTestSetLineID(String testSetLineId) {
 		return dao.getEnabledStatusByTestSetLineID(testSetLineId);
 	}
+
+	public ScriptMaster getScriptDetailsByScriptId(Integer scriptId) {
+		return dao.getScriptDetailsByScriptId(scriptId);
+	}
+	
+	public String getDirectoryPath() {
+		return dao.getDirectoryPath();
+	}
 	
 }
