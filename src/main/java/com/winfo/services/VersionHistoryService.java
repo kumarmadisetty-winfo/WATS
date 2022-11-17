@@ -34,10 +34,11 @@ public class VersionHistoryService extends AbstractSeleniumKeywords {
 	public static final Logger logger = Logger.getLogger(VersionHistoryService.class);
 	public static final String HISTORY = "History";
 	public static final String JSON = ".json";
+	public static final String TEMP = "temp";
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
-	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws IOException {
+	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
@@ -46,7 +47,7 @@ public class VersionHistoryService extends AbstractSeleniumKeywords {
 
 			Integer newNumber = null;
 			String directoryPath = dataBaseEntry.getDirectoryPath();
-			String localPath = directoryPath + FORWARD_SLASH + "temp" + FORWARD_SLASH + HISTORY + FORWARD_SLASH
+			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId() + FORWARD_SLASH;
 			createDir(localPath);
@@ -112,15 +113,16 @@ public class VersionHistoryService extends AbstractSeleniumKeywords {
 			});
 			return map;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WatsEBSCustomException(500, "Not able to get the history list!", e);
 		}
 	}
 
-	public ScriptMaster getVersionHistory(@Valid VersionHistoryDto versionHistoryDto) throws IOException {
+	public ScriptMaster getVersionHistory(@Valid VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId() + FORWARD_SLASH;
-			String localPath = directoryPath + FORWARD_SLASH + "temp" + FORWARD_SLASH + HISTORY + FORWARD_SLASH
+			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String fileName = URLEncoder
 					.encode(new String(versionHistoryDto.getVersionNumber().getBytes(StandardCharsets.ISO_8859_1),
@@ -130,6 +132,7 @@ public class VersionHistoryService extends AbstractSeleniumKeywords {
 			ObjectMapper mapper = new ObjectMapper();
 			return mapper.readValue(new File(localPath + FORWARD_SLASH + fileName + JSON), ScriptMaster.class);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WatsEBSCustomException(500, "Not able to get the history!", e);
 		}
 	}

@@ -1,6 +1,5 @@
 package com.winfo.controller;
 
-import java.io.IOException;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -29,7 +28,7 @@ public class VersionHistoryController {
 
 	@ResponseBody
 	@PostMapping(value = "/saveVersionHistory")
-	public ResponseDto saveVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws IOException {
+	public ResponseDto saveVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		return versionHistoryService.saveVersionHistory(versionHistoryDto);
 	}
 
@@ -42,7 +41,7 @@ public class VersionHistoryController {
 
 	@ResponseBody
 	@GetMapping(value = "/getVersionHistory")
-	public ScriptMaster getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws IOException {
+	public ScriptMaster getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		return versionHistoryService.getVersionHistory(versionHistoryDto);
 	}
 }

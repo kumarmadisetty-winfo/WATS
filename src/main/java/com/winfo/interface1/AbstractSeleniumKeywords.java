@@ -1955,7 +1955,7 @@ public abstract class AbstractSeleniumKeywords {
 			}
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500,
-					"Exception occured while downloading screenshots from object path location.", e);
+					"Exception occured while getting files from object path location.", e);
 		}
 
 	}
@@ -1992,7 +1992,7 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSCustomException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
+			throw new WatsEBSCustomException(500, "Exception occured while creating folder in Object Storage..", e);
 		}
 	}
 
