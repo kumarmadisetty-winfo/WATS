@@ -1,8 +1,11 @@
 package com.winfo.vo;
 
+import javax.validation.constraints.NotBlank;
+
 public class VersionHistoryDto {
 	
 	private String versionNumber;
+	@NotBlank
 	private Integer scriptId;
 	public String getVersionNumber() {
 		return versionNumber;

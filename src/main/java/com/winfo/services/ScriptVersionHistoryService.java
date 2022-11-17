@@ -30,8 +30,8 @@ import com.winfo.vo.ResponseDto;
 import com.winfo.vo.VersionHistoryDto;
 
 @Service
-public class VersionHistoryService extends AbstractSeleniumKeywords {
-	public static final Logger logger = Logger.getLogger(VersionHistoryService.class);
+public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
+	public static final Logger logger = Logger.getLogger(ScriptVersionHistoryService.class);
 	public static final String HISTORY = "History";
 	public static final String JSON = ".json";
 	public static final String TEMP = "temp";

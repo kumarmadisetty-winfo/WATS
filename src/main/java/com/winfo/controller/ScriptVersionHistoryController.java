@@ -1,6 +1,7 @@
 package com.winfo.controller;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
@@ -13,18 +14,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
-import com.winfo.services.VersionHistoryService;
+import com.winfo.services.ScriptVersionHistoryService;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.VersionHistoryDto;
 
 @CrossOrigin("*")
 @RestController
-public class VersionHistoryController {
-	public static final Logger logger = Logger.getLogger(VersionHistoryController.class);
+public class ScriptVersionHistoryController {
+	public static final Logger logger = Logger.getLogger(ScriptVersionHistoryController.class);
 
 	@Autowired
-	private VersionHistoryService versionHistoryService;
+	private ScriptVersionHistoryService versionHistoryService;
 
 	@ResponseBody
 	@PostMapping(value = "/saveVersionHistory")
@@ -42,6 +44,10 @@ public class VersionHistoryController {
 	@ResponseBody
 	@GetMapping(value = "/getVersionHistory")
 	public ScriptMaster getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
-		return versionHistoryService.getVersionHistory(versionHistoryDto);
+		if (!(Objects.isNull(versionHistoryDto.getVersionNumber()) || versionHistoryDto.getVersionNumber().isEmpty())) {
+			return versionHistoryService.getVersionHistory(versionHistoryDto);
+		} else {
+			throw new WatsEBSCustomException(500, "Version can not be null!", null);
+		}
 	}
 }
