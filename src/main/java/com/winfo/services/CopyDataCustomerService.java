@@ -47,8 +47,7 @@ public class CopyDataCustomerService {
 		for (ScriptMaster oldScriptMasterDtl : masterDtlsforOldProductVersion) {
 
 			if (mapOfScriptMasterNew.containsKey(oldScriptMasterDtl.getScriptNumber())) {
-				return new DomGenericResponseBean(409, "error",
-						"Source script already present in Target Location. Please check the Script in target product version.");
+				continue;
 			} else {
 				count++;
 				ScriptMaster newScriptMasterDtl;
