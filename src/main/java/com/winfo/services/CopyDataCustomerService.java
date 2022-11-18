@@ -46,9 +46,7 @@ public class CopyDataCustomerService {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		for (ScriptMaster oldScriptMasterDtl : masterDtlsforOldProductVersion) {
 
-			if (mapOfScriptMasterNew.containsKey(oldScriptMasterDtl.getScriptNumber())) {
-				continue;
-			} else {
+			if (!mapOfScriptMasterNew.containsKey(oldScriptMasterDtl.getScriptNumber())) {
 				count++;
 				ScriptMaster newScriptMasterDtl;
 				newScriptMasterDtl = mapper.convertValue(oldScriptMasterDtl, ScriptMaster.class);
