@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -1933,6 +1934,76 @@ public abstract class AbstractSeleniumKeywords {
 					logger.info("Rename failed");
 				}
 			}
+		}
+	}
+	
+	public List<String> getListOfFileNamesPresentInObjectStore(String objectStorePdfPath) throws Exception {
+
+		List<String> objNames = null;
+		ConfigFileReader.ConfigFile configFile = null;
+		try {
+			configFile = ConfigFileReader.parse(new ClassPathResource(OCI_CONFIG).getInputStream(), ociConfigName);
+		} catch (IOException e) {
+			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
+		}
+		try {
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			try (ObjectStorage client = new ObjectStorageClient(provider);) {
+
+				ListObjectsRequest listPdfObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).prefix(objectStorePdfPath).delimiter("/").build();
+
+				ListObjectsResponse responsePdf = client.listObjects(listPdfObjectsRequest);
+
+				objNames = responsePdf.getListObjects().getObjects().stream().map((objSummary) -> objSummary.getName())
+						.collect(Collectors.toList());
+
+				logger.info(objNames.size());
+				return objNames;
+			} catch (Exception e1) {
+
+				throw new WatsEBSCustomException(500, "Not able to connect with object store");
+			}
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500,
+					"Exception occured while getting files from object path location.", e);
+		}
+
+	}
+
+	public String createDirInCloud(String folderName) {
+
+		PutObjectResponse response = null;
+		try {
+			/**
+			 * Create a default authentication provider that uses the DEFAULT profile in the
+			 * configuration file. Refer to <see
+			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
+			 * public documentation</see> on how to prepare a configuration file.
+			 */
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new ClassPathResource(OCI_CONFIG).getInputStream(), ociConfigName);
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			String destinationFilePath = folderName + FORWARD_SLASH;
+			/* Create a service client */
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+
+				// create empty content
+				InputStream emptyContent = new ByteArrayInputStream(new byte[0]);
+
+				/* Create a request and dependent object(s). */
+				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(0L)
+						.putObjectBody(emptyContent).build();
+
+				/* Send request to the Client */
+				response = client.putObject(putObjectRequest);
+			}
+			return response.toString();
+		} catch (WatsEBSCustomException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while creating folder in Object Storage..", e);
 		}
 	}
 
