@@ -1813,10 +1813,10 @@ public abstract class AbstractSeleniumKeywords {
 //				String data = dynamicnumber.getCopynumber(str[0], str[1], str[2]);
 //				ApiValidationVO token = objectMapper.readValue(data, ApiValidationVO.class);
 //				Map<String, String> map = objectMapper.readValue(token.getResponse(), Map.class);
-				if("Bearer".equalsIgnoreCase(apiValidationData.getAccessType()) || "Basic".equalsIgnoreCase(apiValidationData.getAccessType()))
+				if("Bearer".equalsIgnoreCase(apiValidationData.getAuthenticationType()) || "Basic".equalsIgnoreCase(apiValidationData.getAuthenticationType()))
                 {
                     
-                    headers.set("Authorization", apiValidationData.getAccessType() +apiValidationData.getAccessToken());
+                    headers.set("Authorization", apiValidationData.getAuthenticationType() +apiValidationData.getAccessToken());
                 }
                 else
                 {

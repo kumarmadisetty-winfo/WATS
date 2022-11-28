@@ -19,8 +19,8 @@ public class ApiValidationVO {
 	@JsonProperty("Response Code")
 	private Integer responseCode;
 	private String accessToken;
-	@JsonProperty("Access Type")
-	private String accessType;
+	@JsonProperty("Authentication Type")
+	private String authenticationType;
 	
 
 	public String getUrl() {
@@ -80,12 +80,14 @@ public class ApiValidationVO {
 		this.accessToken = accessToken;
 	}
 
-	public String getAccessType() {
-		return accessType;
+	
+
+	public String getAuthenticationType() {
+		return authenticationType;
 	}
 
-	public void setAccessType(String accessType) {
-		this.accessType = accessType;
+	public void setAuthenticationType(String authenticationType) {
+		this.authenticationType = authenticationType;
 	}
 
 	public ApiValidationVO(String url, String httpType, Map<String, String> requestHeader, Object requestBody,
