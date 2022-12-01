@@ -15546,7 +15546,13 @@ public class WATS02SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	}
 
 	@Override
-	public void uploadFileAutoIT(String field_type, ScriptDetailsDto fetchMetadataVO) throws Exception {
+	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2, String param3) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

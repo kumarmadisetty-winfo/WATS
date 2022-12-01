@@ -16332,16 +16332,18 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		}
 	}
 
-	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO) throws Exception {
+	public void uploadFileAutoIT(WebDriver webDriver, String filelocation, String param1, String param2, String param3) throws Exception {
 		try {
-			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
-
-			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
+			
+			WebElement uploadZip = webDriver.findElement(By.xpath("//div[text()='"+param1+"']/following::label[text()='"+param2+"']/preceding::input[1]"));
+			Thread.sleep(5000);
+			File file = new File(filelocation+param3);
+			uploadZip.sendKeys(file.getAbsolutePath());
 			log.info("Successfully Uploaded The File");
+			log.info("Is file Present*** "+file.isFile());
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
-//			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
-			System.out.println(filelocation);
+			log.error(filelocation);
 			e.printStackTrace();
 			throw e;
 
