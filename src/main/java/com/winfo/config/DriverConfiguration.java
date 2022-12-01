@@ -79,15 +79,16 @@ public class DriverConfiguration {
 //			 driver = new ChromeDriver(cap);
 			driver = new RemoteWebDriver(new URL(configUrl), cap);
 		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
-					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
-//			System.setProperty(DriverConstants.FIREFOX_DRIVER.value, fetchConfigVO.getFirefox_driver_path());
+//			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
+//					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
+			
+			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(), fetchConfigVO.getFirefox_driver_path());
 			FirefoxProfile profile = new FirefoxProfile();
 			
-			profile.setPreference("browser.download.folderList", 2);
-			profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
-			profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf;text/plain;application/text;text/xml;application/xml");
-			profile.setPreference("pdfjs.disabled", true);
+//			profile.setPreference("browser.download.folderList", 2);
+//			profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
+//			profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf;text/plain;application/text;text/xml;application/xml");
+//			profile.setPreference("pdfjs.disabled", true);
 
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			FirefoxOptions options = new FirefoxOptions();

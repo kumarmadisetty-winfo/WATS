@@ -6165,7 +6165,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 	}
 
-	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO) throws Exception {
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
 		try {
 			// String autoitscriptpath = System.getProperty("user.dir") + File.separator +
 			// "File_upload_selenium_webdriver.au3";

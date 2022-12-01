@@ -1,5 +1,7 @@
 package com.winfo.services;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -109,6 +110,7 @@ public class HealthCheck {
 			objectStoreAccessChecks(null);
 			healthCheckVO.setObjectStoreAccess(GREEN);
 		} catch (Exception e) {
+			e.printStackTrace();
 			healthCheckVO.setObjectStoreAccess(RED);
 			count++;
 		}
@@ -166,7 +168,8 @@ public class HealthCheck {
 	public ResponseDto objectStoreAccessChecks(Optional<String> testSetId) throws Exception {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+			File file = new File(ociConfigPath);
+			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to connect with object store");
 		}

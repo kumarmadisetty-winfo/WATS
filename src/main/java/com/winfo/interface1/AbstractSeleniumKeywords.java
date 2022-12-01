@@ -250,7 +250,7 @@ public abstract class AbstractSeleniumKeywords {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			final String FILE_NAME = localFilePath;
 			File file = new File(FILE_NAME);
@@ -282,7 +282,7 @@ public abstract class AbstractSeleniumKeywords {
 		ConfigFileReader.ConfigFile configFile = null;
 		List<String> objNames = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
 		}
@@ -1398,7 +1398,7 @@ public abstract class AbstractSeleniumKeywords {
 			CustomerProjectDto customerDetails) {
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}
@@ -1452,7 +1452,7 @@ public abstract class AbstractSeleniumKeywords {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			final String FILE_NAME = sourceFile;
 			File file = new File(FILE_NAME);
@@ -1550,7 +1550,7 @@ public abstract class AbstractSeleniumKeywords {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource(ociConfigPath).getInputStream(), ociConfigName);
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			final String FILE_NAME = localFilePath;
 			File file = new File(FILE_NAME);

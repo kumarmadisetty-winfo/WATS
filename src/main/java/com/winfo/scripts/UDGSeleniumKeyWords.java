@@ -15390,7 +15390,7 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	}
 
 	@Override
-	public void uploadFileAutoIT(String field_type, ScriptDetailsDto fetchMetadataVO) throws Exception {
+	public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2, String param3) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
