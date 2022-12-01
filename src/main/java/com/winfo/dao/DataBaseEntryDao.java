@@ -1610,12 +1610,10 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-	public List<String> getAllModule() {
+	public List<String> getAllModules() {
 		try {
 			Session session = em.unwrap(Session.class);
-			String sql = "select meaning from win_ta_lookup_codes where lookup_name = 'MODULE'";
-			@SuppressWarnings("rawtypes")
-			SQLQuery query = session.createSQLQuery(sql);
+			Query query = session.createQuery("select meaning from LookUpCode where lookUpName = 'MODULE'");
 			return query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();

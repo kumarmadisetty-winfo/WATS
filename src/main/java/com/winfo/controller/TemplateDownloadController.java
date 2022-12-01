@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.winfo.services.TempleteDownloadService;
+import com.winfo.services.TemplateDownloadService;
 
 @RestController
-public class TempleteDownloadController {
+public class TemplateDownloadController {
 	
 	@Autowired
-	private TempleteDownloadService templeteDownloaderService;
+	private TemplateDownloadService templateDownloaderService;
 	
-	@GetMapping(value="/downloadTemplete")
+	@GetMapping(value="/downloadTemplate")
 	public ResponseEntity<StreamingResponseBody> test() throws Exception {
-		return templeteDownloaderService.generateTemplete();
+		return templateDownloaderService.generateTemplate();
 	}
 	
 }

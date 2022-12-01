@@ -28,14 +28,14 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import com.winfo.exception.WatsEBSCustomException;
 
 @Service
-public class TempleteDownloadService {
+public class TemplateDownloadService {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
-	public ResponseEntity<StreamingResponseBody> generateTemplete() {
+	public ResponseEntity<StreamingResponseBody> generateTemplate() {
 
 		try {
-			List<String> listOfModuls = dataBaseEntry.getAllModule();
+			List<String> listOfModuls = dataBaseEntry.getAllModules();
 
 			Workbook workbook = new XSSFWorkbook();
 
