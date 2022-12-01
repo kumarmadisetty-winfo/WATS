@@ -554,4 +554,8 @@ public class DataBaseEntry {
 		return dao.getDirectoryPath();
 	}
 	
+	public List<String> getAllModules() {
+		return dao.getAllModules();
+		
+	}
 }
