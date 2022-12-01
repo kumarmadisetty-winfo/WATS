@@ -1609,6 +1609,19 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Directory path is not present", e);
 		}
 	}
+	
+	public List<String> getAllModule() {
+		try {
+			Session session = em.unwrap(Session.class);
+			String sql = "select meaning from win_ta_lookup_codes where lookup_name = 'MODULE'";
+			@SuppressWarnings("rawtypes")
+			SQLQuery query = session.createSQLQuery(sql);
+			return query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Not able to fetch the module", e);
+		}
+	}
 }
 	
 	
