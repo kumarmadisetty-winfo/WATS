@@ -15424,7 +15424,7 @@ public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api)
 }
 
 @Override
-public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2) throws Exception {
+public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2, String param3) throws Exception {
 	// TODO Auto-generated method stub
 	
 }

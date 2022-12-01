@@ -1236,7 +1236,7 @@ public class RunAutomation {
 							break;
 						case "uploadFileAutoIT":
 							seleniumFactory.getInstanceObj(instanceName)
-									.uploadFileAutoIT(driver, fetchConfigVO.getUpload_file_path(), param1, param2);
+									.uploadFileAutoIT(driver, fetchConfigVO.getUpload_file_path(), param1, param2, param3);
 							break;
 						case "windowclose":
 							seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
