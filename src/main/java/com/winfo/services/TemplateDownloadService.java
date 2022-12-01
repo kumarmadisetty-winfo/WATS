@@ -138,7 +138,7 @@ public class TemplateDownloadService {
 					sheet.autoSizeColumn(i);
 				}
 			}
-			sheet.setColumnWidth(4, max);
+			sheet.setColumnWidth(4, max*256);
 			// data validations
 			DataValidationHelper dvHelper = sheet.getDataValidationHelper();
 			DataValidationConstraint dvConstraint = dvHelper.createFormulaListConstraint("Categories");
