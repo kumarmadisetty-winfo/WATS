@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
@@ -553,9 +554,26 @@ public class DataBaseEntry {
 	public String getDirectoryPath() {
 		return dao.getDirectoryPath();
 	}
-	
+
 	public List<String> getAllModules() {
 		return dao.getAllModules();
-		
 	}
+	
+	public void getTestRunLinesDataByTestSetLineId(TestSetLine testSetLineObj) {
+	
+		TestSetLine newTestSetLineObj = dao.getTestSetLine(testSetLineObj.getTestRunScriptId().toString());
+		
+		appContext.getBean(this.getClass()).deleteScriptFromTestRun(newTestSetLineObj);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void deleteScriptFromTestRun(TestSetLine testSetLineObj) {
+		dao.deleteTestSetScriptParamRecordsByTestSetLineId(testSetLineObj);
+		dao.deleteTestSetLinesRecordsByTestSetLineId(testSetLineObj);
+	}
+	
+	public TestSetLine getTestSetLineRecordsByTestSetLineId(String testSetLineId) {
+		return dao.getTestSetLine(testSetLineId);
+	}
+	
 }
