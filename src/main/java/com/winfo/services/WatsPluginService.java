@@ -29,7 +29,7 @@ import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.PlugInVO;
+import com.winfo.vo.WatsScriptAssistantVO;
 import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 import com.winfo.vo.WatsPluginMetaDataVO;
@@ -155,16 +155,16 @@ public class WatsPluginService extends AbstractSeleniumKeywords{
 		return dao.getTestrunDataPVerson(productverson);
 	}
 	
-	public ResponseEntity<StreamingResponseBody> getPluginZipFile(PlugInVO plugInVO) throws IOException {
-		if(plugInVO.getBrowser() == null || "".equalsIgnoreCase(plugInVO.getBrowser())) {
-			plugInVO.setBrowser("chrome");
+	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistantFile(WatsScriptAssistantVO watsScriptAssistantVO) throws IOException {
+		if(watsScriptAssistantVO.getBrowser() == null || "".equalsIgnoreCase(watsScriptAssistantVO.getBrowser())) {
+			watsScriptAssistantVO.setBrowser("chrome");
 		}
 		String customerUri = dataBaseEntry.getCentralRepoUrl("PUBLIC_URL");
 		String directoryPath = dao.getDirectoryPath();
-		downloadObjectFromObjectStore(directoryPath+"/temp/plugin/WATS Script Assistant.zip", "WATS Script Assistant/"+plugInVO.getBrowser(), "WATS Script Assistant.zip");
+		downloadObjectFromObjectStore(directoryPath+"/temp/plugin/WATS Script Assistant.zip", "WATS Script Assistant/"+watsScriptAssistantVO.getBrowser(), "WATS Script Assistant.zip");
 		unZipFolder(directoryPath+"/temp/plugin");
-		writePropertiesFile(directoryPath+"/temp/plugin",customerUri,plugInVO.getTargetEnvironment());
-		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WATS Script Assistant - "+StringUtils.capitalize(plugInVO.getBrowser())+".zip\"")
+		writePropertiesFile(directoryPath+"/temp/plugin",customerUri,watsScriptAssistantVO.getTargetEnvironment());
+		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WATS Script Assistant - "+StringUtils.capitalize(watsScriptAssistantVO.getBrowser())+".zip\"")
 				.body(out -> {
 					String sourceFile = directoryPath+"/temp/plugin/WATS-Auto-Recording";
 					ZipOutputStream zipOut = new ZipOutputStream(out);
@@ -251,7 +251,7 @@ public class WatsPluginService extends AbstractSeleniumKeywords{
 
 	public void writePropertiesFile(String directoryPath, String customerUri, String customerName) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		PlugInVO root = new PlugInVO();
+		WatsScriptAssistantVO root = new WatsScriptAssistantVO();
 		List<Map<String, String>> listOfGroups = new ArrayList<>();
 		Map<String, String> map = new HashMap<>();
 		map.put("baseURL", customerUri+"/wats_workspace_prod/plug_in/");

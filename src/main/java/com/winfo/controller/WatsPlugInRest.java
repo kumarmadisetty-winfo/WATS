@@ -18,7 +18,7 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.services.PluginTestrunService;
 import com.winfo.services.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.PlugInVO;
+import com.winfo.vo.WatsScriptAssistantVO;
 import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 
@@ -62,15 +62,15 @@ public class WatsPlugInRest {
 	}
 	
 	@PostMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
-	public ResponseEntity<StreamingResponseBody> getPluginZip(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
+	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistant(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
 
 		if (targetEnvironment != null && (!"".equalsIgnoreCase(targetEnvironment))) {
-			PlugInVO plugInVO = new PlugInVO();
+			WatsScriptAssistantVO plugInVO = new WatsScriptAssistantVO();
 			plugInVO.setTargetEnvironment(targetEnvironment);
 			if(browser.isPresent()) {
 				plugInVO.setBrowser(browser.get());
 			}
-			return service.getPluginZipFile(plugInVO);
+			return service.getWatsScriptAssistantFile(plugInVO);
 		} else {
 			throw new WatsEBSCustomException(500, "Customer can not be null or empty");
 		}

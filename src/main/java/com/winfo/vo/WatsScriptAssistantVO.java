@@ -6,7 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-public class PlugInVO {
+public class WatsScriptAssistantVO {
 	
 	@JsonInclude(Include.NON_NULL)
 	private String targetEnvironment;
