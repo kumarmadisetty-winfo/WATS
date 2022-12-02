@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,14 +34,14 @@ public class ScriptVersionHistoryController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/getVersionHistoryDetails")
+	@PostMapping(value = "/getVersionHistoryDetails")
 	public Map<String, String> getMapOfVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto)
 			throws Exception {
 		return versionHistoryService.getMapOfVersionHistory(versionHistoryDto);
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/getVersionHistory")
+	@PostMapping(value = "/getVersionHistory")
 	public ScriptMaster getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		if (!(Objects.isNull(versionHistoryDto.getVersionNumber()) || versionHistoryDto.getVersionNumber().isEmpty())) {
 			return versionHistoryService.getVersionHistory(versionHistoryDto);
