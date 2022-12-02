@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
@@ -278,27 +279,11 @@ public class WatsPluginDao {
 		query.setParameter("productverson", productVersion);
 		return query.list();
 	}
-	
-	public String getCustomerUri(String customerName) {
-		try {
-			Session session = entityManager.unwrap(Session.class);
-			String sql = "select customer_uri from WIN_CENTRAL_REPO_CONFIG where customer_name = :customerName";
-			@SuppressWarnings("rawtypes")
-			SQLQuery query = session.createSQLQuery(sql);
-			query.setParameter("customerName", customerName);
-			return query.getSingleResult().toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Customer uri not present", e);
-		}
-	}
 
 	public String getDirectoryPath() {
 		try {
 			Session session = entityManager.unwrap(Session.class);
-			String sql = "select directory_path from all_directories where directory_name = 'WATS_OBJ_DIR'";
-			@SuppressWarnings("rawtypes")
-			SQLQuery query = session.createSQLQuery(sql);
+			Query query = session.createQuery("select a.allDirectoriesEmbeddedPK.directoryPath from AllDirectories a where a.allDirectoriesEmbeddedPK.directoryName = 'WATS_OBJ_DIR'");
 			return query.getSingleResult().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
