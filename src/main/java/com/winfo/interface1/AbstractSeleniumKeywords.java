@@ -1553,7 +1553,7 @@ public abstract class AbstractSeleniumKeywords {
 			File file = new File(FILE_NAME);
 //			long fileSize = FileUtils.sizeOf(file);
 //			InputStream is = new FileInputStream(file);
-			String destinationFilePath = folderName + FORWARD_SLASH + fileName;
+			String destinationFilePath = folderName + fileName;
 			/* Create a service client */
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 
