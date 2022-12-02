@@ -34,6 +34,7 @@ import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.exception.WatsEBSCustomException;
@@ -1620,6 +1621,32 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Not able to fetch the module", e);
 		}
 	}
+	
+	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine) {
+		try {
+			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
+					.setParameter("testSetLineId", testSetLine.getTestRunScriptId()).executeUpdate();
+			
+			logger.info("deleted count {}", data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	public void deleteTestSetScriptParamRecordsByTestSetLineId(TestSetLine testSetLine) {
+		try {
+			Integer testRunScriptId = testSetLine.getTestRunScriptId();
+			int data = em
+					.createQuery("delete from TestSetScriptParam where testSetLine.testRunScriptId = :testSetLineId")
+					.setParameter("testSetLineId", testRunScriptId).executeUpdate();
+			logger.info("deleted count {}", data);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
 	
 	

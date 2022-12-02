@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -107,37 +109,57 @@ public class DeletionService{
 		return new ResponseDto(200, Constants.SUCCESS, "Screenshot & Pdf deleted successfully");
 	}
 
-	public ResponseDto deleteScriptFromTestRun(DeleteEvidenceReportDto testScriptDto) throws Exception {		
-		String testSetId = testScriptDto.getTestSetId();
-		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
+	public ResponseDto deleteScriptFromTestRun(DeleteEvidenceReportDto deleteReportDtoObj) {
 		ConfigFileReader.ConfigFile configFile = null;
-
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}
+		
+		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(deleteReportDtoObj.getTestSetId());
+	
+		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+		
+		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(deleteReportDtoObj.getTestSetId());
+		
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		
 		try {
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
-			for (String testSetLineId : testScriptDto.getTestSetLineId()) {
-				TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(testSetId, testSetLineId);
-				deleteScreenShot(testSetLine, customerDetails, provider, testScriptDto.getIsTestRunDelete(), null);
-				deletePdf(testSetLine, customerDetails, provider, testScriptDto.getIsTestRunDelete(), null);
-				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-					String access = healthCheck.getSharePointAccess(fetchConfigVO);
-					deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLine,
-							testScriptDto.getIsTestRunDelete(), null);
-				}
+			for (String lineId : deleteReportDtoObj.getTestSetLineId()) {
+				
+				TestSetLine testSetLineObj = dataBaseEntry.getTestSetLineRecordsByTestSetLineId(lineId);
+				
+				executor.execute(() -> {
+					logger.info("deletion of script number {}", testSetLineObj.getScriptNumber());
+					try {
+						
+						deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
+						dataBaseEntry.getTestRunLinesDataByTestSetLineId(testSetLineObj);
+					} catch (Exception e) {
+						logger.error(e);
+						e.printStackTrace();
+					}
+					logger.info("completed the deletion of script number {}", testSetLineObj.getScriptNumber());
+				});
 			}
+			executor.shutdown();
 		} catch (Exception e) {
-			if (e instanceof WatsEBSCustomException) {
-				throw e;
-			} else {
-				return new ResponseDto(500, Constants.ERROR, "Not able to delete screenshot & pdf");
-			}
+			logger.error(e);
 		}
+		
 		return new ResponseDto(200, Constants.SUCCESS, "Screenshot & Pdf deleted successfully");
+	}
+	
+	public void deleteScriptDtlsForObjStoreAndSharePoint(TestSetLine testSetLineObj, CustomerProjectDto customerDetails, AuthenticationDetailsProvider provider, FetchConfigVO fetchConfigVO, String testSetId) throws Exception {
+		
+		deleteScreenShot(testSetLineObj, customerDetails, provider, false, null);
+		deletePdf(testSetLineObj, customerDetails, provider, false, null);
+		if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+			String access = healthCheck.getSharePointAccess(fetchConfigVO);
+			deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, testSetLineObj,
+					false, null);
+		}
 	}
 
 	private ResponseDto deleteScreenShot(TestSetLine testSetLine, CustomerProjectDto customerDetails,
@@ -149,10 +171,10 @@ public class DeletionService{
 
 			if (isTestRunDelete) {
 				objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
-						+ FORWARD_SLASH + testSet.getTestRunName() + FORWARD_SLASH;
+						+ FORWARD_SLASH + customerDetails.getTestSetName() + FORWARD_SLASH;
 			} else {
 				objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
-						+ FORWARD_SLASH + testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH
+						+ FORWARD_SLASH + customerDetails.getTestSetName() + FORWARD_SLASH
 						+ testSetLine.getSeqNum();
 			}
 
@@ -197,11 +219,11 @@ public class DeletionService{
 			String objectStorePdfPath;
 
 			if (isTestRunDelete) {
-				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH + testSet.getTestRunName()
+				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH + customerDetails.getTestSetName()
 						+ FORWARD_SLASH;
 			} else {
 				objectStorePdfPath = customerDetails.getCustomerName() + FORWARD_SLASH
-						+ testSetLine.getTestRun().getTestRunName() + FORWARD_SLASH + testSetLine.getSeqNum();
+						+ customerDetails.getTestSetName() + FORWARD_SLASH + testSetLine.getSeqNum();
 			}
 
 			ListObjectsRequest listPdfObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
