@@ -83,7 +83,7 @@ public class TestRunMigrationService {
 			testRunMigrateDto.setCustomer(testRunDetails.getCustomerName());
 			testRunMigrateDto.setProjectName(projectNameAndWatsPackage.get(0)[0].toString());
 			testRunMigrateDto.setConfigurationName(configurationName);
-			testRunMigrateDto.setTestRunExists(id.isFlag());
+			testRunMigrateDto.setTestRunExists(id.isForceMigrate());
 			testRunMigrateDto.setWatsPackage(projectNameAndWatsPackage.get(0)[1].toString());
 
 			List<Integer> testSetLineIDs = dataBaseEntryDao.getListOfLineIdByTestSetId(testRunId);
