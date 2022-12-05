@@ -39,12 +39,12 @@ public class DeleteDataDAO {
 				Integer scriptId = scriptIds.get(i);
 				if (scriptIds.size() == 1) {
 					Query<?> query2 = session
-							.createQuery("select script_number from ScriptMaster where script_id=" + scriptId);
+							.createQuery("select scriptNumber from ScriptMaster where scriptId=" + scriptId);
 					scriptNumber = (String) query2.getSingleResult();
 
 				}
-				Query<?> query = session.createQuery("delete from ScriptMaster where script_id=" + scriptId);
-				Query<?> query1 = session.createQuery("delete from ScriptMetaData where script_id=" + scriptId);
+				Query<?> query = session.createQuery("delete from ScriptMaster where scriptId=" + scriptId);
+				Query<?> query1 = session.createQuery("delete from ScriptMetaData where scriptMaster.scriptId=" + scriptId);
 
 				deleted = query1.executeUpdate();
 				deleted1 = query.executeUpdate();
