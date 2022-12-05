@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,26 +21,42 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oracle.bmc.ConfigFileReader;
+import com.oracle.bmc.auth.AuthenticationDetailsProvider;
+import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+import com.oracle.bmc.objectstorage.ObjectStorageClient;
+import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
+import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.dao.WatsPluginDao;
-import com.winfo.interface1.AbstractSeleniumKeywords;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.WatsScriptAssistantVO;
 import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 import com.winfo.vo.WatsPluginMetaDataVO;
+import com.winfo.vo.WatsScriptAssistantVO;
 
 @Service
-public class WatsPluginService extends AbstractSeleniumKeywords{
+public class WatsPluginService {
 	
 	Logger log = Logger.getLogger("Logger");
-
+	
+	@Value("${oci.config.name}")
+	private String ociConfigName;
+	@Value("${oci.bucket.name}")
+	private String ociBucketName;
+	@Value("${oci.namespace}")
+	private String ociNamespace;
+	private static final String OCI_CONFIG = "oci/config";
+	public static final String FORWARD_SLASH = "/";
 	@Autowired
 	WatsPluginDao dao;
 	
@@ -265,5 +283,45 @@ public class WatsPluginService extends AbstractSeleniumKeywords{
 			log.info("Successfully updated json object to file...!!");
 		}
 	}
+	
+	public void downloadObjectFromObjectStore(String localFilePath, String folderName, String fileName) {
+		GetObjectResponse response = null;
+		try {
+			/**
+			 * Create a default authentication provider that uses the DEFAULT profile in the
+			 * configuration file. Refer to <see
+			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
+			 * public documentation</see> on how to prepare a configuration file.
+			 */
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new ClassPathResource(OCI_CONFIG).getInputStream(), ociConfigName);
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			final String FILE_NAME = localFilePath;
+			File file = new File(FILE_NAME);
+			String destinationFilePath = folderName + FORWARD_SLASH + fileName;
+			/* Create a service client */
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+				/* Create a request and dependent object(s). */
+				GetObjectRequest getObjectRequest = GetObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(destinationFilePath).build();
 
+				response = client.getObject(getObjectRequest);
+				try (final InputStream stream = response.getInputStream();
+						final OutputStream outputStream = new FileOutputStream(file.getPath())) {
+
+					byte[] buf = new byte[8192];
+					int bytesRead;
+					while ((bytesRead = stream.read(buf)) > 0) {
+						outputStream.write(buf, 0, bytesRead);
+					}
+				}
+
+			}
+		} catch (WatsEBSCustomException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while downloading file from Object Store", e);
+		}
+
+	}
 }
