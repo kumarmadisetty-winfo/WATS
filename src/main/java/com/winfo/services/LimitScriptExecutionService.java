@@ -59,22 +59,11 @@ public class LimitScriptExecutionService {
 		int remaingScriptsCount = 0;
 		Map<Integer, Boolean> mutableMap = new TreeMap<Integer, Boolean>();
 		try {
-//			int threshold = fetchConfigVO.getMax_num_scripts();
 //		int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
 			int scriptsPassCount = getPassedScriptsCount(fetchConfigVO.getStart_date(), fetchConfigVO.getEnd_date());
 			int inprogressandInqueueCount = getInprogressAndInqueueCount();
-//			int percentageCount = Math.round((threshold * (80.0f / 100.0f)));
 			scriptsPassCount = scriptsPassCount + metaDataMap.size() + inprogressandInqueueCount;
-//			if (percentageCount <= scriptsPassCount && threshold > scriptsPassCount) {
-//				sendAlertmail(testSetLinesDtls.get(0).getExecutedBy(),
-//						fromMail, args);
-//			} else if (threshold < scriptsPassCount) {
-//				remaingScriptsCount = threshold - (scriptsPassCount + inprogressandInqueueCount);
-//				sendExceptionmail(testSetLinesDtls.get(0).getExecutedBy(),
-//						fromMail, args);
 				flag = true;
-
-//			}
 		} catch (Exception e) {
 			System.out.println("limited sctipt condition filed " + e);
 			log.error("limited sctipt condition filed " + e);
