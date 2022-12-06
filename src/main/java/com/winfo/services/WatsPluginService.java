@@ -55,7 +55,8 @@ public class WatsPluginService {
 	private String ociBucketName;
 	@Value("${oci.namespace}")
 	private String ociNamespace;
-	private static final String OCI_CONFIG = "oci/config";
+	@Value("${oci.config.path}")
+	private String ociConfigPath;
 	public static final String FORWARD_SLASH = "/";
 	@Autowired
 	WatsPluginDao dao;
@@ -294,7 +295,7 @@ public class WatsPluginService {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource(OCI_CONFIG).getInputStream(), ociConfigName);
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			final String FILE_NAME = localFilePath;
 			File file = new File(FILE_NAME);
