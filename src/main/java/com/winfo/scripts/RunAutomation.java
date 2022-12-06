@@ -190,25 +190,15 @@ public class RunAutomation {
 					dependentScriptMap);
 			Map<Integer, Status> scriptStatus = new HashMap<>();
 
-			Map<Integer, Boolean> mutableMap = limitScriptExecutionService.getLimitedConditionException(fetchConfigVO,
-					testLinesDetails, metaDataMap, testSetId);
-
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 			Date startDate = sdf.parse(fetchConfigVO.getStart_date());
 			Date endDate = sdf.parse(fetchConfigVO.getEnd_date());
-
-			for (Entry<Integer, Boolean> entryMap : mutableMap.entrySet()) {
-				if (entryMap.getValue() || date.after(endDate) || date.before(startDate)) {
+				if (date.after(endDate) || date.before(startDate)) {
 					executeTestrunVo.setStatusCode(404);
 					executeTestrunVo.setStatusMessage("ERROR");
-					if (entryMap.getKey() > 0) {
-						executeTestrunVo.setStatusDescr(
-								"Your request could not be processed as you have reached the scripts execution threshold. You can run only run "
-										+ entryMap.getKey()
-										+ " more scripts. Reach out to the WATS support team to enhance the limit..");
-					} else if (date.after(endDate) || date.before(startDate)) {
+					if (date.after(endDate) || date.before(startDate)) {
 						executeTestrunVo.setStatusDescr(
 								"Your request could not be processed the Testrun, please check with the Start and End Date");
 
@@ -220,7 +210,7 @@ public class RunAutomation {
 					return executeTestrunVo;
 
 				}
-			}
+			
 
 			fetchConfigVO.setStarttime1(date);
 

@@ -52,17 +52,6 @@ public class LimitScriptExecutionService {
 	private String fromMail;
 
 	@Transactional
-	public Map<Integer, Boolean> getLimitedConditionException(FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> testSetLinesDtls, SortedMap<Integer, List<ScriptDetailsDto>> metaDataMap,
-			String args) {
-		boolean flag = false;
-		int remaingScriptsCount = 0;
-		Map<Integer, Boolean> mutableMap = new TreeMap<Integer, Boolean>();
-		mutableMap.put(remaingScriptsCount, flag);
-		return mutableMap;
-	}
-
-	@Transactional
 	public int getLimitedCountForConfiguration(String testRunNo) {
 		log.info("goto limitScriptExecutionDao class");
 		System.out.println("goto limitScriptExecutionDao class");
