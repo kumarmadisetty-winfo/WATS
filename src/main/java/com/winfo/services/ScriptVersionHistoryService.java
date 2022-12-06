@@ -121,7 +121,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	public ScriptMaster getVersionHistory(@Valid VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
 			String directoryPath = dataBaseEntry.getDirectoryPath();
-			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId() + FORWARD_SLASH;
+			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String fileName = URLEncoder
