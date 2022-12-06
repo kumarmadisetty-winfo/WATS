@@ -58,16 +58,6 @@ public class LimitScriptExecutionService {
 		boolean flag = false;
 		int remaingScriptsCount = 0;
 		Map<Integer, Boolean> mutableMap = new TreeMap<Integer, Boolean>();
-		try {
-//		int limitedExecutionCount = limitScriptExecutionService.getLimitedCountForConfiguration(args);
-			int scriptsPassCount = getPassedScriptsCount(fetchConfigVO.getStart_date(), fetchConfigVO.getEnd_date());
-			int inprogressandInqueueCount = getInprogressAndInqueueCount();
-			scriptsPassCount = scriptsPassCount + metaDataMap.size() + inprogressandInqueueCount;
-				flag = true;
-		} catch (Exception e) {
-			System.out.println("limited sctipt condition filed " + e);
-			log.error("limited sctipt condition filed " + e);
-		}
 		mutableMap.put(remaingScriptsCount, flag);
 		return mutableMap;
 	}
