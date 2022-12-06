@@ -34,7 +34,7 @@ public class ScriptVersionHistoryController {
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/getVersionHistoryDetails")
+	@PostMapping(value = "/getScriptVersionHistoryDetails")
 	public Map<String, String> getMapOfVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto)
 			throws Exception {
 		return versionHistoryService.getMapOfVersionHistory(versionHistoryDto);
