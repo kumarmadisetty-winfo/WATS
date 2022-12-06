@@ -1,19 +1,24 @@
 package com.winfo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.services.PluginTestrunService;
 import com.winfo.services.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
+import com.winfo.vo.WatsScriptAssistantVO;
 import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 
@@ -54,6 +59,22 @@ public class WatsPlugInRest {
 			return testrunservice.updateTestrun(mastervo);
 
 		}
+	}
+	
+	@PostMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
+	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistant(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
+
+		if (targetEnvironment != null && (!"".equalsIgnoreCase(targetEnvironment))) {
+			WatsScriptAssistantVO plugInVO = new WatsScriptAssistantVO();
+			plugInVO.setTargetEnvironment(targetEnvironment);
+			if(browser.isPresent()) {
+				plugInVO.setBrowser(browser.get());
+			}
+			return service.getWatsScriptAssistantFile(plugInVO);
+		} else {
+			throw new WatsEBSCustomException(500, "Customer can not be null or empty");
+		}
+
 	}
 
 }

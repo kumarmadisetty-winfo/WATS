@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
@@ -12,6 +13,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.vo.DomGenericResponseBean;
@@ -278,4 +280,14 @@ public class WatsPluginDao {
 		return query.list();
 	}
 
+	public String getDirectoryPath() {
+		try {
+			Session session = entityManager.unwrap(Session.class);
+			Query query = session.createQuery("select a.allDirectoriesEmbeddedPK.directoryPath from AllDirectories a where a.allDirectoriesEmbeddedPK.directoryName = 'WATS_OBJ_DIR'");
+			return query.getSingleResult().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(500, "Directory path is not present", e);
+		}
+	}
 }
