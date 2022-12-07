@@ -189,6 +189,7 @@ public class TestRunMigrationGetService {
 				master.setAttribute8(masterdata.getAttribute8());
 				master.setAttribute9(masterdata.getAttribute9());
 				master.setAttribute10(masterdata.getAttribute10());
+				master.setScriptMetaDatalist(new ArrayList<>());
 
 				for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 					ScriptMetaData metadata = new ScriptMetaData();
