@@ -49,9 +49,9 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
-			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId() + FORWARD_SLASH;
+			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
 			createDir(localPath);
-			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath);
+			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
 			if (!listOfFiles.isEmpty()) {
 				listOfSortedFiles(listOfFiles);
 				String[] lastValue = listOfFiles.get(0).split("_");
@@ -121,7 +121,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	public ScriptMaster getVersionHistory(@Valid VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
 			String directoryPath = dataBaseEntry.getDirectoryPath();
-			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId() + FORWARD_SLASH;
+			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String fileName = URLEncoder
