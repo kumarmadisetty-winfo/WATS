@@ -142,7 +142,6 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String FAILED_PDF = "Failed_Report.pdf";
 	private static final String DETAILED_PDF = "Detailed_Report.pdf";
 	private static final String API_TESTING = "API_TESTING";
-	private static final String OCI_CONFIG = "oci/config";
 	private static final String PNG_EXTENSION = ".png";
 	private static final String JPG_EXTENSION = ".jpg";
 	public static final String FORWARD_SLASH = "/";
@@ -1942,7 +1941,7 @@ public abstract class AbstractSeleniumKeywords {
 		List<String> objNames = null;
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
-			configFile = ConfigFileReader.parse(new ClassPathResource(OCI_CONFIG).getInputStream(), ociConfigName);
+			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
 		}
@@ -1982,7 +1981,7 @@ public abstract class AbstractSeleniumKeywords {
 			 * public documentation</see> on how to prepare a configuration file.
 			 */
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new ClassPathResource(OCI_CONFIG).getInputStream(), ociConfigName);
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			String destinationFilePath = folderName + FORWARD_SLASH;
 			/* Create a service client */
