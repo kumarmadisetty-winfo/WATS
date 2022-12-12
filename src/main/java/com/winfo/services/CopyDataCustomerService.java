@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.dao.CopyDataCustomerDao;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.CopyDataDetails;
 import com.winfo.vo.DomGenericResponseBean;
 
@@ -51,6 +52,9 @@ public class CopyDataCustomerService {
 				ScriptMaster newScriptMasterDtl;
 				newScriptMasterDtl = mapper.convertValue(oldScriptMasterDtl, ScriptMaster.class);
 				newScriptMasterDtl.setScriptId(null);
+				for(ScriptMetaData scriptMetaDataObj : newScriptMasterDtl.getScriptMetaDatalist()) {
+					scriptMetaDataObj.setScriptMetaDataId(null);
+				}
 				newScriptMasterDtl.setProductVersion(copyDataDetails.getProductVersionNew());
 				newScriptWithNewProductVersion.add(newScriptMasterDtl);
 			}
