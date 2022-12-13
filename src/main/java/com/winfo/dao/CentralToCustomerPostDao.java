@@ -29,6 +29,7 @@ public class CentralToCustomerPostDao {
 		Query query = session
 				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "'");
 		List<String> result2 = query.list();
+		
 		int i = 0;
 		if (result2.isEmpty()) {
 			session.merge(master);
@@ -38,15 +39,15 @@ public class CentralToCustomerPostDao {
 
 		} else {
 			for (i = 0; i < result2.size(); i++) {
-				Query count= session.createQuery("select COUNT(productVersion) from ScriptMaster where productVersion='" + productversion + "' and scriptNumber='" + scriptnumber + "'");
-				long isExist=(long)count.getSingleResult();
+				Query query1= session.createQuery("select COUNT(productVersion) from ScriptMaster where productVersion='" + productversion + "' and scriptNumber='" + scriptnumber + "'");
+				long count=(long)query1.getSingleResult();
 				if (result2.get(i).equalsIgnoreCase(productversion)) {
 					response.setStatus(400);
 					response.setStatusMessage("ERROR");
 					response.setDescription("Script Number Already exists");
 					response.setFailed_Script(scriptnumber);
 					break;
-				} else if(isExist==0){
+				} else if(count==0){
 					session.merge(master);
 					response.setStatus(200);
 					response.setStatusMessage("SUCCESS");
