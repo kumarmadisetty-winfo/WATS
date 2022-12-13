@@ -32,7 +32,7 @@ public class CentralToCustomerPostDao {
 
 		int i = 0;
 		if (result2.isEmpty()) {
-			session.save(master);
+			session.merge(master);
 			response.setStatus(200);
 			response.setStatusMessage("SUCCESS");
 			response.setDescription("Script Copied Successfully");
