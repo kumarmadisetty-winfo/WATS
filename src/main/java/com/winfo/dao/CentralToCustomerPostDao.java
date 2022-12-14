@@ -27,7 +27,7 @@ public class CentralToCustomerPostDao {
 		Session session = entityManager.unwrap(Session.class);
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		Query query = session
-				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "'");
+				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "' and productVersion='" + productversion + "'");
 		List<String> result2 = query.list();
 		
 		int i = 0;
@@ -37,23 +37,14 @@ public class CentralToCustomerPostDao {
 			response.setStatusMessage("SUCCESS");
 			response.setDescription("Script Copied Successfully");
 
-		} else {
-			for (i = 0; i < result2.size(); i++) {
-				Query query1= session.createQuery("select COUNT(productVersion) from ScriptMaster where productVersion='" + productversion + "' and scriptNumber='" + scriptnumber + "'");
-				long count=(long)query1.getSingleResult();
-				if (result2.get(i).equalsIgnoreCase(productversion)) {
-					response.setStatus(400);
-					response.setStatusMessage("ERROR");
-					response.setDescription("Script Number Already exists");
-					response.setFailed_Script(scriptnumber);
-					break;
-				} else if(count==0){
-					session.merge(master);
-					response.setStatus(200);
-					response.setStatusMessage("SUCCESS");
-					response.setDescription("Script Copied Successfully");
-				}
-			}
+		} 
+		
+		else
+		{
+			response.setStatus(400);
+			response.setStatusMessage("ERROR");
+			response.setDescription("Script Number Already exists");
+			response.setFailed_Script(scriptnumber);
 		}
 
 		return response;
