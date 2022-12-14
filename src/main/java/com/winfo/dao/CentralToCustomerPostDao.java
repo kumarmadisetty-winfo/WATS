@@ -29,8 +29,6 @@ public class CentralToCustomerPostDao {
 		Query query = session
 				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "' and productVersion='" + productversion + "'");
 		List<String> result2 = query.list();
-		
-		int i = 0;
 		if (result2.isEmpty()) {
 			session.merge(master);
 			response.setStatus(200);
@@ -38,7 +36,6 @@ public class CentralToCustomerPostDao {
 			response.setDescription("Script Copied Successfully");
 
 		} 
-		
 		else
 		{
 			response.setStatus(400);
