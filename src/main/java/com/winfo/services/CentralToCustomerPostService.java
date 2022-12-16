@@ -69,6 +69,7 @@ public class CentralToCustomerPostService {
 			master.setAttribute9(masterdata.getAttribute9());
 			master.setAttribute10(masterdata.getAttribute10());
 			master.setTargetApplication(masterdata.getTargetApplication());
+			master.setScriptMetaDatalist(new ArrayList<>());
 			for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 				ScriptMetaData metadata = new ScriptMetaData();
 				metadata.setAction(metadatavo.getAction());
