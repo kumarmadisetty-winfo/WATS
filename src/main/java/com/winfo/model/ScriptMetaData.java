@@ -40,12 +40,6 @@ public class ScriptMetaData {
 	@Column(name = "ACTION")
 	private String action;
 
-	@Column(name = "XPATH_LOCATION")
-	private String xpathLocation;
-
-	@Column(name = "XPATH_LOCATION1")
-	private String xpathLocation1;
-
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 
@@ -172,22 +166,6 @@ public class ScriptMetaData {
 
 	public void setAction(String action) {
 		this.action = action;
-	}
-
-	public String getXpathLocation() {
-		return xpathLocation;
-	}
-
-	public void setXpathLocation(String xpathLocation) {
-		this.xpathLocation = xpathLocation;
-	}
-
-	public String getXpathLocation1() {
-		return xpathLocation1;
-	}
-
-	public void setXpathLocation1(String xpathLocation1) {
-		this.xpathLocation1 = xpathLocation1;
 	}
 
 	public String getCreatedBy() {

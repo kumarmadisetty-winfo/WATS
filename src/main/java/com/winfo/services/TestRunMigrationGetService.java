@@ -179,7 +179,6 @@ public class TestRunMigrationGetService {
 				master.setUpdatedBy(masterdata.getUpdatedBy());
 				master.setUpdateDate(masterdata.getUpdateDate());
 				master.setCustomisationReference(masterdata.getCustomisationReference());
-//				master.setAttribute1(masterdata.getAttribute1());
 				master.setAttribute2(masterdata.getAttribute2());
 				master.setAttribute3(masterdata.getAttribute3());
 				master.setAttribute4(masterdata.getAttribute4());
@@ -197,8 +196,6 @@ public class TestRunMigrationGetService {
 					metadata.setLineNumber(metadatavo.getLineNumber());
 					metadata.setInputParameter(metadatavo.getInputParameter());
 					metadata.setScriptNumber(masterdata.getScriptNumber());
-					metadata.setXpathLocation(metadatavo.getXpathLocation());
-					metadata.setXpathLocation1(metadatavo.getXpathLocation1());
 					metadata.setCreatedBy(metadatavo.getCreatedBy());
 					metadata.setCreationDate(metadatavo.getCreationDate());
 					metadata.setUpdatedBy(metadatavo.getUpdatedBy());
