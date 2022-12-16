@@ -76,8 +76,6 @@ public class CentralToCustomerPostService {
 				metadata.setLineNumber(metadatavo.getLineNumber());
 				metadata.setInputParameter(metadatavo.getInputParameter());
 				metadata.setScriptNumber(masterdata.getScriptNumber());
-				metadata.setXpathLocation(metadatavo.getXpathLocation());
-				metadata.setXpathLocation1(metadatavo.getXpathLocation1());
 				metadata.setCreatedBy(metadatavo.getCreatedBy());
 				metadata.setCreationDate(metadatavo.getCreationDate());
 				metadata.setUpdatedBy(metadatavo.getUpdatedBy());

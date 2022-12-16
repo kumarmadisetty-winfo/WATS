@@ -69,8 +69,6 @@ public class ScriptMetaDataDto {
 		this.setUpdatedBy(scriptMetaData.getUpdatedBy());
 		this.setValidationName(scriptMetaData.getValidationName());
 		this.setValidationType(scriptMetaData.getValidationType());
-		this.setXpathLocation(scriptMetaData.getXpathLocation());
-		this.setXpathLocation1(scriptMetaData.getXpathLocation1());
 	}
 
 	public String getMetadataInputValue() {
