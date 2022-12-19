@@ -36,15 +36,7 @@ public class CentralToCustomerPostService {
 		for (ScriptMasterDto masterdata : mastervolist.getData()) {
 			List<String> result = dao.getExistProductVersionByScriptIdAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
 			DomGenericResponseBean response = new DomGenericResponseBean();
-			if(!result.isEmpty())
-			{
-				response.setStatus(400);
-				response.setStatusMessage("ERROR");
-				response.setDescription("Script Number Already exists");
-				response.setFailed_Script(masterdata.getScriptNumber());
-				bean.add(response);
-			}
-			else {
+			if(result.isEmpty()){
 			ScriptMaster master = new ScriptMaster();
 			master.setModule(masterdata.getModule());
 			master.setScenarioName(masterdata.getScenarioName());
@@ -154,6 +146,14 @@ public class CentralToCustomerPostService {
 			}
 
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
+		}
+		else
+		{
+			response.setStatus(400);
+			response.setStatusMessage("ERROR");
+			response.setDescription("Script Number Already exists");
+			response.setFailed_Script(masterdata.getScriptNumber());
+			bean.add(response);	
 		}
 
 

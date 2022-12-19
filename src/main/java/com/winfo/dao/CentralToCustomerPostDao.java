@@ -39,11 +39,13 @@ public class CentralToCustomerPostDao {
 	}
 	public List<String> getExistProductVersionByScriptIdAndProductVersion(String scriptnumber, String productversion)
 	{
+		
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session
-				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "' and productVersion='" + productversion + "'");
-		List<String> result = query.list();
+				.createQuery("select productVersion from ScriptMaster where scriptNumber=:scriptnumber and productVersion=:productversion").setParameter("scriptnumber", scriptnumber).setParameter("productversion",productversion);
+		List<String> result  = query.list();
 		return result;
+		
 	}
   
 	public void insertLookUpObj(LookUp lookUpObj) {
