@@ -1,6 +1,7 @@
 package com.winfo.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,6 +35,17 @@ public class CentralToCustomerPostService {
 		List<DomGenericResponseBean> bean = new ArrayList<>();
 
 		for (ScriptMasterDto masterdata : mastervolist.getData()) {
+			List<String> result = dao.getExistProductVersionByScriptIdAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
+			DomGenericResponseBean response = new DomGenericResponseBean();
+			if(!result.isEmpty())
+			{
+				response.setStatus(400);
+				response.setStatusMessage("ERROR");
+				response.setDescription("Script Number Already exists");
+				response.setFailed_Script(masterdata.getScriptNumber());
+				bean.add(response);
+			}
+			else {
 			ScriptMaster master = new ScriptMaster();
 			master.setModule(masterdata.getModule());
 			master.setScenarioName(masterdata.getScenarioName());
@@ -145,8 +157,8 @@ public class CentralToCustomerPostService {
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
 		}
 
-		return bean;
 
 	}
-
+		return bean;
+	}
 }
