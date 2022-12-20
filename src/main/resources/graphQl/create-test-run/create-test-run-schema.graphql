@@ -1,0 +1,17 @@
+mutation($testRunSummary : String!,$projectKey : String!) {
+    createTestExecution(
+        testIssueIds: []
+        jira: {
+            fields: {
+                summary: $testRunSummary,
+                project: {key: $projectKey} 
+            }
+        }
+    ) {
+        testExecution {
+            issueId
+            jira(fields: ["key"])
+        }
+        warnings
+    }
+}

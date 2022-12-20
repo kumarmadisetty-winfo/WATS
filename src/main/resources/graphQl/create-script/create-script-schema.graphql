@@ -1,0 +1,23 @@
+mutation($listOfStepsWithScript : [CreateStepInput],$projectKey : String!,$summary : String!) {
+    createTest(
+        testType: { name: "Manual" },
+        steps: $listOfStepsWithScript,
+        jira: {
+            fields: { summary:$summary, project: {key: $projectKey} }
+        }
+    ) {
+        test {
+            issueId
+            testType {
+                name
+            }
+            steps {
+                action
+                data
+                result
+            }
+            jira(fields: ["key"])
+        }
+        warnings
+    }
+}

@@ -1,0 +1,32 @@
+query($scriptIssueId : String!,$testRunIssueId : String!){
+    getTestRuns(testIssueIds: [$scriptIssueId],testExecIssueIds: [$testRunIssueId], limit: 100 ) {
+        total
+        limit
+        start
+        results {
+            id
+            status {
+                name
+                color
+                description
+            }
+            gherkin
+            examples {
+                id
+                status {
+                name
+                color
+                description
+                }
+            }
+            test {
+                issueId
+                jira(fields: ["key"])
+            }
+            testExecution {
+                issueId
+                jira(fields: ["key"])
+            }
+        }
+    }
+}

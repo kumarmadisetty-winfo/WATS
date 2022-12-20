@@ -184,9 +184,50 @@ public class FetchConfigVO {
     
     private String API_AUTHENTICATION_CODE;
     
+    private String testRunIssueId;
+    
+    private String scriptIssueId;
+    
+    private String sctiptId;
+    
+    private String MANAGEMENT_TOOL_ENABLED;
     
     
-   	public String getAPI_AUTHENTICATION_URL() {
+    
+   	public String getMANAGEMENT_TOOL_ENABLED() {
+		return MANAGEMENT_TOOL_ENABLED;
+	}
+
+	public void setMANAGEMENT_TOOL_ENABLED(String mANAGEMENT_TOOL_ENABLED) {
+		MANAGEMENT_TOOL_ENABLED = mANAGEMENT_TOOL_ENABLED;
+	}
+
+	public String getSctiptId() {
+		return sctiptId;
+	}
+
+	public void setSctiptId(String sctiptId) {
+		this.sctiptId = sctiptId;
+	}
+
+	public String getScriptIssueId() {
+		return scriptIssueId;
+	}
+
+	public void setScriptIssueId(String scriptIssueId) {
+		this.scriptIssueId = scriptIssueId;
+	}
+
+	public String getTestRunIssueId() {
+		return testRunIssueId;
+	}
+
+	public void setTestRunIssueId(String testRunIssueId) {
+		this.testRunIssueId = testRunIssueId;
+	}
+
+
+	public String getAPI_AUTHENTICATION_URL() {
 		return API_AUTHENTICATION_URL;
 	}
 
