@@ -24,7 +24,7 @@ public class GraphQLService {
 	public String createTestRunInJiraXrayCloud(CustomerProjectDto customerDetails) throws Exception {
 
 		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("create-test-run/create-test-run-schema");
-	    final String variables = GraphqlSchemaReaderUtil.getSchemaFromFileName("create-test-run\\create-test-run-variable");
+	    final String variables = GraphqlSchemaReaderUtil.getSchemaFromFileName("create-test-run/create-test-run-variable");
 //		graphQLRequestBody.setQuery(query);
 //		graphQLRequestBody.setVariables(variables.replace("summary", customerDetails.getTestSetName()).replace("key", "XN"));
 	    JSONObject newJson = executeCommand(query,variables.replace("summary", customerDetails.getTestSetName()).replace("key", "XN"));
@@ -33,7 +33,7 @@ public class GraphQLService {
 	
 	public String createScriptInJiraXrayCloud(List<ScriptDetailsDto> fetchMetadataListVO) throws Exception {
 
-		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("create-script\\create-script-schema");
+		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("create-script/create-script-schema");
 		ScriptJiraXrayCloud scriptJiraXrayCloud = new ScriptJiraXrayCloud();
 		scriptJiraXrayCloud.setSummary(fetchMetadataListVO.get(0).getScriptNumber() +" : "+ fetchMetadataListVO.get(0).getScenarioName());
 		scriptJiraXrayCloud.setProjectKey("XN");
@@ -54,7 +54,7 @@ public class GraphQLService {
 	
 	public void associateScriptToTestRun(FetchConfigVO fetchConfigVO,String key) throws Exception {
 
-		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("associate-script-to-test-run\\associate-script-to-test-run-schema");
+		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("associate-script-to-test-run/associate-script-to-test-run-schema");
 		ScriptJiraXrayCloud scriptJiraXrayCloud = new ScriptJiraXrayCloud();
 		scriptJiraXrayCloud.setTestRunIssueId(fetchConfigVO.getTestRunIssueId());
 		scriptJiraXrayCloud.setScriptIssueId(key);
@@ -77,7 +77,7 @@ public class GraphQLService {
 	}
 	
 	public String getScriptId(FetchConfigVO fetchConfigVO,String scriptIssueId) throws Exception {
-		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("update-script-status\\get-script-id-schema");
+		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("update-script-status/get-script-id-schema");
 		ScriptJiraXrayCloud scriptJiraXrayCloud = new ScriptJiraXrayCloud();
 		scriptJiraXrayCloud.setTestRunIssueId(fetchConfigVO.getTestRunIssueId());
 		scriptJiraXrayCloud.setScriptIssueId(scriptIssueId);
@@ -87,7 +87,7 @@ public class GraphQLService {
 	}
 	
 	public void changeStatusOfScriptInJiraXrayCloud(String id, String status) throws Exception {
-		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("update-script-status\\update-script-status-schema");
+		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("update-script-status/update-script-status-schema");
 		ScriptJiraXrayCloud scriptJiraXrayCloud = new ScriptJiraXrayCloud();
 		scriptJiraXrayCloud.setStatus(status);
 		scriptJiraXrayCloud.setScriptId(id);
@@ -96,7 +96,7 @@ public class GraphQLService {
 	}
 	
 	public void addAttachmentToScript(String scriptId, String is, String fileName) throws Exception {
-		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("update-script-status\\attachment-schema");
+		final String query = GraphqlSchemaReaderUtil.getSchemaFromFileName("update-script-status/attachment-schema");
 		ScriptJiraXrayCloud scriptJiraXrayCloud = new ScriptJiraXrayCloud();
 		scriptJiraXrayCloud.setFileName(fileName);
 		scriptJiraXrayCloud.setScriptId(scriptId);
