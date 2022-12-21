@@ -35,7 +35,7 @@ public class GraphqlSchemaReaderUtil {
 //  	        .lines()
 //  	        .collect(Collectors.joining("\n"));
 //	  		InputStream in = new ClassPathResource("graphQl\\create-script\\create-script-schema.graphql").getInputStream();
-			List<String> t = Files.readAllLines(Paths.get("graphQl/"+ filename + ".graphql"));
+			List<String> t = Files.readAllLines(Paths.get("/objstore/tst/graphQl/"+ filename + ".graphql"));
 			String text = String.join("\n", t);
 			//        GraphqlSchemaReaderUtil.class.getClassLoader().getResourceAsStream("graphQl/" + filename + ".graphql").toString());
 //    InputStream in = GraphqlSchemaReaderUtil.class.getClassLoader().getResourceAsStream("graphQl/" + filename + ".graphql");
