@@ -127,7 +127,7 @@ public class GraphQLService {
 		GraphqlRequestBody graphQLRequestBody = new GraphqlRequestBody(query, variable);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization",
-				"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnQiOiIzYzM4NzA5Mi01NDg5LTM2MTEtYmFkNS1lNGNhNDIxNTZlODYiLCJhY2NvdW50SWQiOiI2MzlhYjMyNGIxMDgyYzMwYmI5MjI3NzMiLCJpc1hlYSI6ZmFsc2UsImlhdCI6MTY3MTUxNTgwMSwiZXhwIjoxNjcxNjAyMjAxLCJhdWQiOiI4MTgzMjRFQkVBNzg0MDg3QjUwQkEzODAzNUU1NkM2MCIsImlzcyI6ImNvbS54cGFuZGl0LnBsdWdpbnMueHJheSIsInN1YiI6IjgxODMyNEVCRUE3ODQwODdCNTBCQTM4MDM1RTU2QzYwIn0.nnu-Rns6PUY6Ph2Ch7-eOgpmpnHFtSeDlSILbWW7dj0");
+				"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnQiOiIzYzM4NzA5Mi01NDg5LTM2MTEtYmFkNS1lNGNhNDIxNTZlODYiLCJhY2NvdW50SWQiOiI2MzlhYjMyNGIxMDgyYzMwYmI5MjI3NzMiLCJpc1hlYSI6ZmFsc2UsImlhdCI6MTY3MTYwMjQ0NiwiZXhwIjoxNjcxNjg4ODQ2LCJhdWQiOiI4MTgzMjRFQkVBNzg0MDg3QjUwQkEzODAzNUU1NkM2MCIsImlzcyI6ImNvbS54cGFuZGl0LnBsdWdpbnMueHJheSIsInN1YiI6IjgxODMyNEVCRUE3ODQwODdCNTBCQTM4MDM1RTU2QzYwIn0.orGJQWgFbFKSnJnEyc_9Yygzknl6cxhe_KjpoMDz0qI");
 		String response = webClient.post().uri("http://xray.cloud.xpand-it.com/api/v1/graphql")
 				.headers(headersHttp -> headersHttp.addAll(headers)).syncBody(graphQLRequestBody).retrieve()
 				.bodyToMono(String.class).block();
