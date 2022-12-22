@@ -26,7 +26,7 @@ public class CentralToCustomerPostDao {
 	public DomGenericResponseBean centralRepoData(ScriptMaster master, String scriptnumber, String productversion) {
 		Session session = entityManager.unwrap(Session.class);
 		DomGenericResponseBean response = new DomGenericResponseBean();
-		List<String> result = getExistProductVersionByScriptIdAndProductVersion(scriptnumber, productversion);
+		List<String> result = getExistScriptDetailsByScriptNumberAndProductVersion(scriptnumber, productversion);
 		if (result.isEmpty()) {
 			session.merge(master);
 			response.setStatus(200);
@@ -37,17 +37,14 @@ public class CentralToCustomerPostDao {
         
 		return response;
 	}
-	public List<String> getExistProductVersionByScriptIdAndProductVersion(String scriptnumber, String productversion)
-	{
-		
+	public List<String> getExistScriptDetailsByScriptNumberAndProductVersion(String scriptnumber,
+			String productversion) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session
-				.createQuery("select productVersion from ScriptMaster where scriptNumber=:scriptnumber and productVersion=:productversion").setParameter("scriptnumber", scriptnumber).setParameter("productversion",productversion);
+				.createQuery("from ScriptMaster where scriptNumber=:scriptnumber and productVersion=:productversion").setParameter("scriptnumber", scriptnumber).setParameter("productversion",productversion);
 		List<String> result  = query.list();
 		return result;
-		
 	}
-  
 	public void insertLookUpObj(LookUp lookUpObj) {
 		entityManager.persist(lookUpObj);
 	}

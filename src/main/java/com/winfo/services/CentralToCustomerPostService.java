@@ -34,7 +34,7 @@ public class CentralToCustomerPostService {
 		List<DomGenericResponseBean> bean = new ArrayList<>();
 
 		for (ScriptMasterDto masterdata : mastervolist.getData()) {
-			List<String> result = dao.getExistProductVersionByScriptIdAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
+			List<String> result = dao.getExistScriptDetailsByScriptNumberAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
 			DomGenericResponseBean response = new DomGenericResponseBean();
 			if(result.isEmpty()){
 			ScriptMaster master = new ScriptMaster();
