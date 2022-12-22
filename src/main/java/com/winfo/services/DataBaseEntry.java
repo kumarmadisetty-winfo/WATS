@@ -313,11 +313,13 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testRunName);
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
-		appContext.getBean(this.getClass()).updateSubscription();
+		if (!isDependentFailBecauseOfIndependent) {
+			appContext.getBean(this.getClass()).updateSubscription();
+		}
 		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
 
