@@ -338,6 +338,26 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		String param6 = " Confirm";
 		logoutDropdown(driver, fetchConfigVO, fetchMetadataVO, param1, customerDetails);
 		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
+		
+		try {
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					JavascriptExecutor jse= (JavascriptExecutor) driver;
+					String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > div.ending-header-zone > div.polaris-header-controls > div.utility-menu.can-animate > div > now-avatar').shadowRoot.querySelector('span > span > img')";
+					WebElement logoutDropdown = (WebElement) jse.executeScript(str);
+					logoutDropdown.click();
+					String str1= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('#userMenu > span > span:nth-child(2) > div > div.user-menu-footer > button > div > now-icon')";
+					WebElement logout = (WebElement) jse.executeScript(str1);
+					logout.click();
+					screenshot(driver, fetchMetadataVO, customerDetails);
+					return;
+			}
+
+		catch(Exception e)
+		{
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.error("Failed during clickLink" + scripNumber);
+				System.out.println(e);
+		}
 		}
 
 	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
@@ -3239,20 +3259,20 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			if (param1.equalsIgnoreCase("Primary Mailing") && param2.equalsIgnoreCase("Edit")) {
+			if (param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("New")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"(//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a)[1]")));
+						"//*[text()='New']")));
 				WebElement waittext = driver.findElement(By
-						.xpath("(//*[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::a)[1]"));
+						.xpath("//*[text()='New']"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(6000);	
-//				screenshot(driver, fetchMetadataVO, customerDetails);
+				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
-				String xpath = "(//*[text()='param1']/following::*[text()='param2']/following::a)[1]";
+				log.info("Sucessfully Clicked  clickButton" + scripNumber);
+				String xpath = "//*[text()='New']";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -3260,7 +3280,32 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during Republish clickButton" + scripNumber);
+			log.error("Failed during  clickButton" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			if (param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Submit") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Entitlements") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Activities") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Contracts") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Depreciation") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Disposal") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("General") || param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("Financial")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//*[text()='" + param1 + "']/following::*[text()='" +param2 + "'][1]")));
+				WebElement waittext = driver.findElement(By
+						.xpath("//*[text()='" + param1 + "']/following::*[text()='" +param2 + "'][1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(6000);	
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked  clickButton" + scripNumber);
+				String xpath = "//*[text()='param1']/following::*[text()='param2'][1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during  clickButton" + scripNumber);
 			System.out.println(e);
 		}
 		try {
@@ -8197,12 +8242,12 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
-			if (param1.equalsIgnoreCase("Compose")) {
+			if (param2.equalsIgnoreCase("Description")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath("//body[contains(@id,'MessageContent')]")));
+						.presenceOfElementLocated(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 + "']/following::textarea[1]")));
 				Thread.sleep(1000);
-				WebElement waittill = driver.findElement(By.xpath("//body[contains(@id,'MessageContent')]"));
+				WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 + "']/following::textarea[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
@@ -8325,10 +8370,61 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// DH
 		try {
-			if (param1.equalsIgnoreCase("Search for proposed manager")) {
+			if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service") || param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item") || param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@placeholder='" + param1 + "']")));
-				WebElement waittill = driver.findElement(By.xpath("//*[@placeholder='" + param1 + "']"));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]")));
+				WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				waittill.sendKeys(keysToSend);
+				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+				// fetchMetadataVO);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				String xpath = "//*[@placeholder='param1']";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			if (param2.equalsIgnoreCase("Asset tag") || param2.equalsIgnoreCase("Serial number") || param2.equalsIgnoreCase("Assigned") || param2.equalsIgnoreCase("Installed") || param2.equalsIgnoreCase("Invoice number") || param2.equalsIgnoreCase("Opened") || param2.equalsIgnoreCase("GL account") || param2.equalsIgnoreCase("Disposal reason") || param2.equalsIgnoreCase("Scheduled retirement") || param2.equalsIgnoreCase("Retired date") || param2.equalsIgnoreCase("Depreciation effective date") || param2.equalsIgnoreCase("Lease contract")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1 +"']/following::*[text()='" + param2 +"'][1]/following::input[2]")));
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 +"']/following::*[text()='" + param2 +"'][1]/following::input[2]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				waittill.sendKeys(keysToSend);
+				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+				// fetchMetadataVO);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(2000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				String xpath = "//*[@placeholder='param1']";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+		
+		try {
+			if (param2.equalsIgnoreCase("Assigned to") || param2.equalsIgnoreCase("Managed by") || param2.equalsIgnoreCase("Owned by") || param2.equalsIgnoreCase("Location") || param2.equalsIgnoreCase("Department") || param2.equalsIgnoreCase("Company") || param2.equalsIgnoreCase("Request line") || param2.equalsIgnoreCase("Vendor") || param2.equalsIgnoreCase("Cost center") || param2.equalsIgnoreCase("Beneficiary") || param2.equalsIgnoreCase("Depreciation") || param2.equalsIgnoreCase("Support group") ||  param2.equalsIgnoreCase("Supported by")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[4]")));
+				WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[4]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
@@ -15349,15 +15445,14 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void selectByText(WebDriver driver, String param1, String param2, String inputData,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 			try {
-			if (param1.equalsIgnoreCase("Address Purposes")) {
+			if (param2.equalsIgnoreCase("Category") || param2.equalsIgnoreCase("Subcategory") || param2.equalsIgnoreCase("Impact") || param2.equalsIgnoreCase("Urgency")) {
 				Thread.sleep(2000);
 				WebElement waittext = driver.findElement(
-						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
-								+ param2 + "']/following::select[not (@title)]")));
+						By.xpath(("//div[text()='" + param1 +"']/following::*[text()='" +param2 + "']/following::select[1]")));
 				selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
+				String xpath = "//div[text()='" + param1 + "']/following::*[text()='" + param2 +"']/following::select[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
