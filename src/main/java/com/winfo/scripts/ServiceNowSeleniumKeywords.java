@@ -8242,6 +8242,22 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
+            if(param2.equalsIgnoreCase("Description")) {
+            JavascriptExecutor jse= (JavascriptExecutor) driver;
+            WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 + "']/following::textarea[1]"));
+            jse.executeScript("arguments[0].click();", waittill);
+            typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+            screenshot(driver, fetchMetadataVO, customerDetails);
+//            waittill.sendKeys(keysToSend);
+            return "";
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            log.error("Failed during Close Date sendValue" + scripNumber);
+            System.out.println(e);
+        }
+		
+		try {
 			if (param2.equalsIgnoreCase("Description")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
@@ -8369,19 +8385,70 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			if(param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service") || param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item") || param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category")) {
-			JavascriptExecutor jse= (JavascriptExecutor) driver;
-			WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]"));
-			jse.executeScript("arguments[0].click();", waittill);
-//	        typeIntoValidxpath(driver, keysToSend, filter, fetchConfigVO, fetchMetadataVO);
-			waittill.sendKeys(keysToSend);
-	        return "";
+			if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service")
+					|| param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item")
+					|| param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category") || param2.equalsIgnoreCase("Short description")) {
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				WebElement waittill = driver.findElement(By.xpath(
+						"//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[4]"));
+				jse.executeScript("arguments[0].click();", waittill);
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+//			waittill.sendKeys(keysToSend);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				return "";
 			}
 		} catch (Exception e) {
-            String scripNumber = fetchMetadataVO.getScriptNumber();
-            log.error("Failed during Close Date sendValue" + scripNumber);
-            System.out.println(e);
-        }
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+
+		try {
+			if (param2.equalsIgnoreCase("Asset tag") || param2.equalsIgnoreCase("Serial number")
+					|| param2.equalsIgnoreCase("Assigned") || param2.equalsIgnoreCase("Installed")
+					|| param2.equalsIgnoreCase("Invoice number") || param2.equalsIgnoreCase("Opened")
+					|| param2.equalsIgnoreCase("GL account") || param2.equalsIgnoreCase("Disposal reason")
+					|| param2.equalsIgnoreCase("Scheduled retirement") || param2.equalsIgnoreCase("Retired date")
+					|| param2.equalsIgnoreCase("Depreciation effective date")
+					|| param2.equalsIgnoreCase("Lease contract")) {
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				WebElement waittill = driver.findElement(By.xpath(
+						"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[2]"));
+				jse.executeScript("arguments[0].click();", waittill);
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+//			waittill.sendKeys(keysToSend);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				return "";
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+
+		try {
+			if (param2.equalsIgnoreCase("Assigned to") || param2.equalsIgnoreCase("Managed by")
+					|| param2.equalsIgnoreCase("Owned by") || param2.equalsIgnoreCase("Location")
+					|| param2.equalsIgnoreCase("Department") || param2.equalsIgnoreCase("Company")
+					|| param2.equalsIgnoreCase("Request line") || param2.equalsIgnoreCase("Vendor")
+					|| param2.equalsIgnoreCase("Cost center") || param2.equalsIgnoreCase("Beneficiary")
+					|| param2.equalsIgnoreCase("Depreciation") || param2.equalsIgnoreCase("Support group")
+					|| param2.equalsIgnoreCase("Supported by")) {
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				WebElement waittill = driver.findElement(By.xpath(
+						"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[4]"));
+				jse.executeScript("arguments[0].click();", waittill);
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+//			waittill.sendKeys(keysToSend);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				return "";
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+		
 		// DH
 		try {
 
