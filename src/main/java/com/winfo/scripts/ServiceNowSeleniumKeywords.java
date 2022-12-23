@@ -8246,7 +8246,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
             JavascriptExecutor jse= (JavascriptExecutor) driver;
             WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 + "']/following::textarea[1]"));
             jse.executeScript("arguments[0].click();", waittill);
-            typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+            typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO,jse);
             screenshot(driver, fetchMetadataVO, customerDetails);
 //            waittill.sendKeys(keysToSend);
             return "";
@@ -8392,7 +8392,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				WebElement waittill = driver.findElement(By.xpath(
 						"//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[4]"));
 				jse.executeScript("arguments[0].click();", waittill);
-				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO,jse);
 //			waittill.sendKeys(keysToSend);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				return "";
@@ -8415,7 +8415,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				WebElement waittill = driver.findElement(By.xpath(
 						"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[2]"));
 				jse.executeScript("arguments[0].click();", waittill);
-				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO,jse);
 //			waittill.sendKeys(keysToSend);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				return "";
@@ -8438,7 +8438,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				WebElement waittill = driver.findElement(By.xpath(
 						"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[4]"));
 				jse.executeScript("arguments[0].click();", waittill);
-				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO,jse);
 //			waittill.sendKeys(keysToSend);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				return "";
@@ -15154,6 +15154,22 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			waittill.clear();
 			waittill.click();
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
+			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+			log.info("clear and typed the given Data");
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Sucessfully Clicked typeIntoValidxpath" + scripNumber);
+
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during  typeIntoValidxpath" + scripNumber);
+			e.printStackTrace();
+		}
+	}
+	
+	public void typeIntoValidxpath1(WebDriver driver, String keysToSend, WebElement waittill,
+			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, JavascriptExecutor jse) {
+		try {
+			waittill.clear();
 			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
 			log.info("clear and typed the given Data");
 			String scripNumber = fetchMetadataVO.getScriptNumber();
