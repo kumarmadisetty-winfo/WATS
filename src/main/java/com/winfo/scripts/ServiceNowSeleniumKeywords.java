@@ -8368,9 +8368,49 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		try {
+			if(param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service") || param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item") || param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category")) {
+			JavascriptExecutor jse= (JavascriptExecutor) driver;
+			WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]"));
+			jse.executeScript("arguments[0].click();", waittill);
+//	        typeIntoValidxpath(driver, keysToSend, filter, fetchConfigVO, fetchMetadataVO);
+			waittill.sendKeys(keysToSend);
+	        return "";
+			}
+		} catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            log.error("Failed during Close Date sendValue" + scripNumber);
+            System.out.println(e);
+        }
 		// DH
 		try {
-			if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service") || param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item") || param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category")) {
+
+            if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service") || param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item") || param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category")) {
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]")));
+                WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]"));
+                Actions actions = new Actions(driver);
+                actions.moveToElement(waittill).build().perform();
+                waittill.sendKeys(keysToSend);
+                // typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+                // fetchMetadataVO);
+                screenshot(driver, fetchMetadataVO, customerDetails);
+                Thread.sleep(2000);
+                String scripNumber = fetchMetadataVO.getScriptNumber();
+                log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+                String xpath = "//*[@placeholder='param1']";
+                String scriptID = fetchMetadataVO.getScriptId();
+                String lineNumber = fetchMetadataVO.getLineNumber();
+                service.saveXpathParams(scriptID, lineNumber, xpath);
+                return keysToSend;
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            log.error("Failed during Close Date sendValue" + scripNumber);
+            System.out.println(e);
+        }
+		try {
+			if (param1.equalsIgnoreCase("Search for proposed manager")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]")));
 				WebElement waittill = driver.findElement(By.xpath("//div[text()='" + param1 +"']/following::*[text()='" + param2 +"']/following::input[4]"));
