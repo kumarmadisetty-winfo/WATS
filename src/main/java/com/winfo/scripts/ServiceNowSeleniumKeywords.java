@@ -60,6 +60,7 @@ import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -3247,7 +3248,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				Thread.sleep(6000);
+				Thread.sleep(6000);	
 //				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
@@ -3262,6 +3263,24 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
+		try {
+			if (param1.equalsIgnoreCase("All")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				JavascriptExecutor jse= (JavascriptExecutor) driver;
+				String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('#d6e462a5c3533010cbd77096e940dd8c')";
+				WebElement All = (WebElement) jse.executeScript(str);
+				All.click();
+				
+				return;
+			} 
+			}
+		catch(Exception e)
+		{
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during clickButton" + scripNumber);
+			System.out.println(e);
+		}
+		
 		try {
 			if (param1.equalsIgnoreCase("Search...")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3734,6 +3753,8 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				return;
 
 			}
+			
+			
 
 		} catch (Exception e) {
 
@@ -6229,6 +6250,61 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 			try {
+				try {
+					if (param1.equalsIgnoreCase("Incident") && param2.equalsIgnoreCase("Create New"))
+					{
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+							JavascriptExecutor jse= (JavascriptExecutor) driver;
+							String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('nav > div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(3)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
+							WebElement createNew = (WebElement) jse.executeScript(str);
+							createNew.click();
+							screenshot(driver, fetchMetadataVO, customerDetails);
+							return;
+					}
+				}
+				catch(Exception e)
+				{
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						log.error("Failed during clickLink" + scripNumber);
+						System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Change") && param2.equalsIgnoreCase("Create New"))
+					{
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+							JavascriptExecutor jse= (JavascriptExecutor) driver;
+							String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('nav > div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(1)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
+							WebElement createNew = (WebElement) jse.executeScript(str);
+							createNew.click();
+							screenshot(driver, fetchMetadataVO, customerDetails);
+							return;
+					}
+				}
+				catch(Exception e)
+				{
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						log.error("Failed during clickLink" + scripNumber);
+						System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Asset") && param2.equalsIgnoreCase("Hardware Assets"))
+					{
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+							JavascriptExecutor jse= (JavascriptExecutor) driver;
+							String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('nav > div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(2)').shadowRoot.querySelector('div > div > ul > li > sn-collapsible-list').shadowRoot.querySelector('div > div > ul > li:nth-child(2) > span > a > span')";
+							WebElement createNew = (WebElement) jse.executeScript(str);
+							createNew.click();
+							screenshot(driver, fetchMetadataVO, customerDetails);
+							return;
+					}
+				}
+				catch(Exception e)
+				{
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						log.error("Failed during clickLink" + scripNumber);
+						System.out.println(e);
+				}
+				
 			try {
 
 				if (param1.equalsIgnoreCase("drop")) {
@@ -6376,6 +6452,25 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			log.error("Failed during clickLink" + scripNumber);
 			System.out.println(e);
 		}
+		try {
+			if (param1.equalsIgnoreCase("Incident"))
+			{
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					JavascriptExecutor jse= (JavascriptExecutor) driver;
+					String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(3)').shadowRoot.querySelector(' button > div > span.label > mark')";
+					WebElement incident = (WebElement) jse.executeScript(str);
+					incident.click();
+					screenshot(driver, fetchMetadataVO, customerDetails);
+					return;
+			}
+		}
+		catch(Exception e)
+		{
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.error("Failed during clickLink" + scripNumber);
+				System.out.println(e);
+		}
+		
 		try {
 			if (param1.equalsIgnoreCase("Home")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8282,6 +8377,23 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			log.error("Failed during Close Date sendValue" + scripNumber);
 			System.out.println(e);
 		}
+		try {
+			if (param1.equalsIgnoreCase("Filter")) {
+				JavascriptExecutor jse= (JavascriptExecutor) driver;
+				String str="return document.querySelector(' macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector(' div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('#filter')";
+				WebElement filter =  (WebElement) jse.executeScript(str);
+//				typeIntoValidxpath(driver, keysToSend, filter, fetchConfigVO, fetchMetadataVO);
+				filter.sendKeys(keysToSend);
+				Thread.sleep(5000);
+				return keysToSend;
+			}
+		
+			}
+	catch (Exception e) {
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		log.error("Failed during filter " + scripNumber);
+		System.out.println(e);
+	}
 		// HS2
 		try {
 			if (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time"))
