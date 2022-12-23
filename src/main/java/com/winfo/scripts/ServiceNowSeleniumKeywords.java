@@ -6255,7 +6255,43 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 					{
 							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							JavascriptExecutor jse= (JavascriptExecutor) driver;
-							String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector(' div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector(' div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div > div > sn-collapsible-list:nth-child(37)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
+							String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('nav > div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(3)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
+							WebElement createNew = (WebElement) jse.executeScript(str);
+							createNew.click();
+							screenshot(driver, fetchMetadataVO, customerDetails);
+							return;
+					}
+				}
+				catch(Exception e)
+				{
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						log.error("Failed during clickLink" + scripNumber);
+						System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Change") && param2.equalsIgnoreCase("Create New"))
+					{
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+							JavascriptExecutor jse= (JavascriptExecutor) driver;
+							String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('nav > div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(1)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
+							WebElement createNew = (WebElement) jse.executeScript(str);
+							createNew.click();
+							screenshot(driver, fetchMetadataVO, customerDetails);
+							return;
+					}
+				}
+				catch(Exception e)
+				{
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						log.error("Failed during clickLink" + scripNumber);
+						System.out.println(e);
+				}
+				try {
+					if (param1.equalsIgnoreCase("Asset") && param2.equalsIgnoreCase("Hardware Assets"))
+					{
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+							JavascriptExecutor jse= (JavascriptExecutor) driver;
+							String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('nav > div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div.sn-polaris-tab-content.-left.is-visible.can-animate > div > sn-collapsible-list:nth-child(2)').shadowRoot.querySelector('div > div > ul > li > sn-collapsible-list').shadowRoot.querySelector('div > div > ul > li:nth-child(2) > span > a > span')";
 							WebElement createNew = (WebElement) jse.executeScript(str);
 							createNew.click();
 							screenshot(driver, fetchMetadataVO, customerDetails);
@@ -8346,9 +8382,9 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				JavascriptExecutor jse= (JavascriptExecutor) driver;
 				String str="return document.querySelector(' macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector(' div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('#filter')";
 				WebElement filter =  (WebElement) jse.executeScript(str);
-				typeIntoValidxpath(driver, keysToSend, filter, fetchConfigVO, fetchMetadataVO);
-				Thread.sleep(2000);
-//				filter.sendKeys(keysToSend);
+//				typeIntoValidxpath(driver, keysToSend, filter, fetchConfigVO, fetchMetadataVO);
+				filter.sendKeys(keysToSend);
+				Thread.sleep(5000);
 				return keysToSend;
 			}
 		
