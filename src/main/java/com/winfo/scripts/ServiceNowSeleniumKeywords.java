@@ -16609,6 +16609,66 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if(inputParam.equalsIgnoreCase("Incident"))
+			{
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				JavascriptExecutor jse= (JavascriptExecutor) driver;
+				String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('#gsft_main')";
+				WebElement waittext = (WebElement) jse.executeScript(str);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				driver.switchTo().frame(waittext);
+//				waittext.click();
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				return;
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		try {
+			if(inputParam.equalsIgnoreCase("Create a change request"))
+			{
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				JavascriptExecutor jse= (JavascriptExecutor) driver;
+				String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('#gsft_main')";
+				WebElement waittext = (WebElement) jse.executeScript(str);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				driver.switchTo().frame(waittext);
+//				waittext.click();
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				return;
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		try {
+			if(inputParam.equalsIgnoreCase("Hardware"))
+			{
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				JavascriptExecutor jse= (JavascriptExecutor) driver;
+				String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('#gsft_main')";
+				WebElement waittext = (WebElement) jse.executeScript(str);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				driver.switchTo().frame(waittext);
+//				waittext.click();
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				return;
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver
 					.findElement(By.xpath("//h1[normalize-space(text())='" + inputParam + "']/following::iframe[1]"));
@@ -16625,6 +16685,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,'" + inputParam + "')]"));
 			Actions actions = new Actions(driver);
