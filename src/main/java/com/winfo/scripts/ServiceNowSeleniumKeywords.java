@@ -16621,6 +16621,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				driver.switchTo().frame(waittext);
 //				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(5000);
 				return;
 			}
 		}
@@ -16641,6 +16642,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				driver.switchTo().frame(waittext);
 //				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(5000);
 				return;
 			}
 		}
@@ -16661,6 +16663,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				driver.switchTo().frame(waittext);
 //				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(5000);
 				return;
 			}
 		}
