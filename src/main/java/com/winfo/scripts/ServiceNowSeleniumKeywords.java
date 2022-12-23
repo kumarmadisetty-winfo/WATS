@@ -6250,6 +6250,25 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 			try {
+				try {
+					if (param1.equalsIgnoreCase("Incident") && param2.equalsIgnoreCase("Create New"))
+					{
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+							JavascriptExecutor jse= (JavascriptExecutor) driver;
+							String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector(' div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector(' div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div > div > sn-collapsible-list:nth-child(37)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
+							WebElement createNew = (WebElement) jse.executeScript(str);
+							createNew.click();
+							screenshot(driver, fetchMetadataVO, customerDetails);
+							return;
+					}
+				}
+				catch(Exception e)
+				{
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						log.error("Failed during clickLink" + scripNumber);
+						System.out.println(e);
+				}
+				
 			try {
 
 				if (param1.equalsIgnoreCase("drop")) {
@@ -6415,24 +6434,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				log.error("Failed during clickLink" + scripNumber);
 				System.out.println(e);
 		}
-		try {
-			if (param1.equalsIgnoreCase("Incident") && param2.equalsIgnoreCase("Create New"))
-			{
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-					JavascriptExecutor jse= (JavascriptExecutor) driver;
-					String str= "return document.querySelector('macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector(' div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector(' div.sn-polaris-nav.d6e462a5c3533010cbd77096e940dd8c.can-animate.keyboard-navigatable > div.sn-tree-menu.sn-polaris-nav-content > div > div > sn-collapsible-list:nth-child(37)').shadowRoot.querySelector('div > div > ul > li:nth-child(1) > span > a > span > span')";
-					WebElement createNew = (WebElement) jse.executeScript(str);
-					createNew.click();
-					screenshot(driver, fetchMetadataVO, customerDetails);
-					return;
-			}
-		}
-		catch(Exception e)
-		{
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.error("Failed during clickLink" + scripNumber);
-				System.out.println(e);
-		}
+		
 		try {
 			if (param1.equalsIgnoreCase("Home")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8344,8 +8346,9 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				JavascriptExecutor jse= (JavascriptExecutor) driver;
 				String str="return document.querySelector(' macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector(' div > sn-polaris-menu:nth-child(1)').shadowRoot.querySelector('#filter')";
 				WebElement filter =  (WebElement) jse.executeScript(str);
-
-				filter.sendKeys(keysToSend);
+				typeIntoValidxpath(driver, keysToSend, filter, fetchConfigVO, fetchMetadataVO);
+				Thread.sleep(2000);
+//				filter.sendKeys(keysToSend);
 				return keysToSend;
 			}
 		
