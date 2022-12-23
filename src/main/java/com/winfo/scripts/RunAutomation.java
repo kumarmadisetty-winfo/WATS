@@ -310,7 +310,7 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true);
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -429,7 +429,7 @@ public class RunAutomation {
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
-						customerDetails.getTestSetName());
+						customerDetails.getTestSetName(),false);
 
 				failList.add(scriptId);
 			}
@@ -1401,7 +1401,7 @@ public class RunAutomation {
 
 								dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 								dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-										fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+										fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false);
 
 								dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 							} catch (Exception e) {
@@ -1454,7 +1454,7 @@ public class RunAutomation {
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-								fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+								fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false);
 
 						dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 
