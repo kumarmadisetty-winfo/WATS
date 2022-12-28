@@ -330,35 +330,27 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
+			throws Exception {
 
-	
-		String param4 = "UIScmil1u";
-		String param5 = "Sign Out";
-		String param6 = " Confirm";
-		logoutDropdown(driver, fetchConfigVO, fetchMetadataVO, param1, customerDetails);
-		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
-		
 		try {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-					JavascriptExecutor jse= (JavascriptExecutor) driver;
-					String str= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > div.ending-header-zone > div.polaris-header-controls > div.utility-menu.can-animate > div > now-avatar').shadowRoot.querySelector('span > span > img')";
-					WebElement logoutDropdown = (WebElement) jse.executeScript(str);
-					logoutDropdown.click();
-					String str1= "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('#userMenu > span > span:nth-child(2) > div > div.user-menu-footer > button > div > now-icon')";
-					WebElement logout = (WebElement) jse.executeScript(str1);
-					logout.click();
-					screenshot(driver, fetchMetadataVO, customerDetails);
-					return;
-			}
+			JavascriptExecutor jse = (JavascriptExecutor) driver;
+			String str = "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > div.ending-header-zone > div.polaris-header-controls > div.utility-menu.can-animate > div > now-avatar').shadowRoot.querySelector('span > span > img')";
+			WebElement logoutDropdown = (WebElement) jse.executeScript(str);
+			logoutDropdown.click();
+			String str1 = "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('#userMenu > span > span:nth-child(2) > div > div.user-menu-footer > button > div > now-icon')";
+			WebElement logout = (WebElement) jse.executeScript(str1);
+			logout.click();
+			screenshot(driver, fetchMetadataVO, customerDetails);
+			return;
+		}
 
-		catch(Exception e)
-		{
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.error("Failed during clickLink" + scripNumber);
-				System.out.println(e);
+		catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during clickLink" + scripNumber);
+			System.out.println(e);
 		}
-		}
+	}
 
 	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String param1, CustomerProjectDto customerDetails) throws Exception {
