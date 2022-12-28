@@ -8259,6 +8259,21 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		try {
+            if(param2.equalsIgnoreCase("Work notes")) {
+            JavascriptExecutor jse= (JavascriptExecutor) driver;
+            WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::textarea[1]"));
+            jse.executeScript("arguments[0].click();", waittill);
+            typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO,jse);
+            screenshot(driver, fetchMetadataVO, customerDetails);
+//            waittill.sendKeys(keysToSend);
+            return "";
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            log.error("Failed during Close Date sendValue" + scripNumber);
+            System.out.println(e);
+        }
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
             if(param2.equalsIgnoreCase("Description")) {
