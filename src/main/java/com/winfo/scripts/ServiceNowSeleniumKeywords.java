@@ -334,6 +334,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			throws Exception {
 
 		try {
+			Thread.sleep(3000);
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 			String str = "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > div.ending-header-zone > div.polaris-header-controls > div.utility-menu.can-animate > div > now-avatar').shadowRoot.querySelector('span > span > img')";
 			WebElement logoutDropdown = (WebElement) jse.executeScript(str);
@@ -3250,6 +3251,32 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		
+				
+		try {
+			if (param1.equalsIgnoreCase("Change Request") && param2.equalsIgnoreCase("Submit")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='Submit'])[1]")));
+				WebElement waittext = driver.findElement(By.xpath("(//*[text()='Submit'])[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(6000);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked  clickButton" + scripNumber);
+				String xpath = "(//*[text()='Submit'])[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during  clickButton" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			if (param1.equalsIgnoreCase("Hardware") && param2.equalsIgnoreCase("New")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8379,7 +8406,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		try {
 			if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service")
 					|| param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item")
-					|| param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category") || param2.equalsIgnoreCase("Short description")) {
+					|| param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category") || param2.equalsIgnoreCase("Short description") || param2.equalsIgnoreCase("Model")) {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				WebElement waittill = driver.findElement(By.xpath(
 						"//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[4]"));
