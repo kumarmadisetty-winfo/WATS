@@ -8406,12 +8406,13 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		try {
 			if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service")
 					|| param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item")
-					|| param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category") || param2.equalsIgnoreCase("Short description") || param2.equalsIgnoreCase("Model")) {
+					|| param2.equalsIgnoreCase("Assignment group") || param2.equalsIgnoreCase("Model category")
+					|| param2.equalsIgnoreCase("Short description") || param2.equalsIgnoreCase("Model")) {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				WebElement waittill = driver.findElement(By.xpath(
 						"//div[text()='" + param1 + "']/following::*[text()='" + param2 + "']/following::input[4]"));
 				jse.executeScript("arguments[0].click();", waittill);
-				typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO,jse);
+				typeIntoValidxpath1(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO, jse);
 //			waittill.sendKeys(keysToSend);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				return "";
@@ -8429,7 +8430,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 					|| param2.equalsIgnoreCase("GL account") || param2.equalsIgnoreCase("Disposal reason")
 					|| param2.equalsIgnoreCase("Scheduled retirement") || param2.equalsIgnoreCase("Retired date")
 					|| param2.equalsIgnoreCase("Depreciation effective date")
-					|| param2.equalsIgnoreCase("Lease contract")) {
+					|| param2.equalsIgnoreCase("Lease contract") || param2.equalsIgnoreCase("Warranty expiration")) {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				WebElement waittill = driver.findElement(By.xpath(
 						"//*[text()='" + param1 + "']/following::*[text()='" + param2 + "'][1]/following::input[2]"));
