@@ -28,9 +28,6 @@ public class ErrorMessagesHandler {
 					|| actionName.equalsIgnoreCase("Table SendKeys")
 					|| actionName.equalsIgnoreCase("multiplelinestableSendKeys")) {
 				errorMessage = errorMessage + " => Not able to enter the value in the <" + param1 + " " + param2 + ">";
-				fetchMetadataVO.setLineErrorMsg(errorMessage);
-				dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, test_script_param_id, "Fail",
-						errorMessage);
 			} else if (actionName.equalsIgnoreCase("Dropdown Values")
 					|| actionName.equalsIgnoreCase("Table Dropdown Values")
 					|| actionName.equalsIgnoreCase("selectByText")) {
