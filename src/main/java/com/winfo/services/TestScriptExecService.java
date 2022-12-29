@@ -54,6 +54,7 @@ import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -254,6 +255,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 								+ screenShotFolderPath);
 				this.kafkaTemp.send(testScriptRunTopicName,
 						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+				
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 			} catch (Exception e) {
 				// suppressing error so that other scripts run if there data has no issue
@@ -886,6 +888,29 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 
+	}
+	
+	public ResponseDto excelStatusCheck(Integer testsetlineid) {
+		ResponseDto response = new ResponseDto();
+
+		List<TestSetScriptParam> testsetscripts = dataBaseEntry.getTestSetScriptParamContainsExcel(testsetlineid);
+		for (TestSetScriptParam testscript : testsetscripts) {
+			if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+				continue;
+			} else if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.FAIL.getLabel())) {
+				break;
+			} else if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+				dataBaseEntry.UpdateTestSetScriptParamContainsExcel(testscript.getTestRunScriptParamId());
+				break;
+			} else if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.NEW.getLabel())) {
+				dataBaseEntry.UpdateTestSetScriptParamContainsExcel(testscript.getTestRunScriptParamId());
+				break;
+			}
+		}
+		response.setStatusCode(200);
+		response.setStatusDescr("Updated Successfully");
+		response.setStatusMessage(Constants.SUCCESS);
+		return response;
 	}
 
 }

@@ -1647,6 +1647,31 @@ public class DataBaseEntryDao {
 		}
 	}
 	
+	public List<TestSetScriptParam> getTestSetScriptParamContainsExcel(Integer testsetlineid) {
+		List<TestSetScriptParam> testscriptparam = null;
+		String qry = "SELECT e FROM TestSetScriptParam e WHERE e.testSetLine.testRunScriptId=:testsetlineid AND e.action LIKE '%excel%' ORDER BY e.lineNumber";
+		try {
+			TypedQuery<TestSetScriptParam > query = em.createQuery(qry, TestSetScriptParam .class);
+			query.setParameter("testsetlineid", testsetlineid);
+			testscriptparam = query.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return testscriptparam;
+	}
+	
+	public void UpdateTestSetScriptParamContainsExcel(Integer testscriptparamid) {
+		String updateQry = "UPDATE WATS_PROD.win_ta_test_set_script_param SET LINE_EXECUTION_STATUS = 'Fail' where TEST_SCRIPT_PARAM_ID = " + testscriptparamid;
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
+		}
+	}
+	
+	
 }
 	
 	

@@ -578,4 +578,12 @@ public class DataBaseEntry {
 		return dao.getTestSetLine(testSetLineId);
 	}
 	
+	public List<TestSetScriptParam> getTestSetScriptParamContainsExcel(Integer testsetlineid) {
+		return dao.getTestSetScriptParamContainsExcel(testsetlineid);
+	}
+	
+	public void UpdateTestSetScriptParamContainsExcel(Integer testscriptparamid) {
+		dao.UpdateTestSetScriptParamContainsExcel(testscriptparamid);
+	}
+	
 }
