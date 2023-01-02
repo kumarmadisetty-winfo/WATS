@@ -23,6 +23,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -1645,6 +1646,18 @@ public class DataBaseEntryDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void updateStatusOfPdfGeneration(String testSetId, String status) {
+		Session session = em.unwrap(Session.class);
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaUpdate<TestSet> cq = cb.createCriteriaUpdate(TestSet.class);
+		Root<TestSet> from = cq.from(TestSet.class);
+		cq.set("pdfGenerationEnabled", status);
+		Predicate condition = cb.equal(from.get(TEST_SET_ID), testSetId);
+		cq.where(condition);
+		Query query = session.createQuery(cq);
+		query.executeUpdate();
 	}
 	
 	public List<TestSetScriptParam> getTestSetScriptParamContainsExcel(Integer testsetlineid) {

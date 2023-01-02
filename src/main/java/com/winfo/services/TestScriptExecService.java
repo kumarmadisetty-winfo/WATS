@@ -802,6 +802,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 	public ResponseDto generateTestRunPdf(String testSetId) {
+		dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.GENERATING);
+		ResponseDto response;
 		boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Long.valueOf(testSetId), null);
 		if (runFinalPdf) {
 			try {
@@ -814,14 +816,16 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
 				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 				testRunPdfGeneration(testSetId, fetchConfigVO);
-				return new ResponseDto(200, Constants.SUCCESS, null);
+				response = new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
 				e.printStackTrace();
-				return new ResponseDto(500, Constants.ERROR, e.getMessage());
+				response = new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		} else {
-			return new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
+			response = new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
+		dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
+		return response;
 	}
 
 

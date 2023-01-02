@@ -577,6 +577,10 @@ public class DataBaseEntry {
 	public TestSetLine getTestSetLineRecordsByTestSetLineId(String testSetLineId) {
 		return dao.getTestSetLine(testSetLineId);
 	}
+
+	public void updateStatusOfPdfGeneration(String testSetId, String status) {
+		dao.updateStatusOfPdfGeneration(testSetId,status);
+	}
 	
 	public List<TestSetScriptParam> getTestSetScriptParamContainsExcel(Integer testsetlineid) {
 		return dao.getTestSetScriptParamContainsExcel(testsetlineid);
