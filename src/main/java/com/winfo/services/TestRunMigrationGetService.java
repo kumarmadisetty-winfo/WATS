@@ -311,9 +311,10 @@ public class TestRunMigrationGetService {
 					testSetParam.setCreationDate(paramVo.getCreationDate());
 					testSetParam.setInputValue(paramVo.getInputValue());
 					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());
-					testSetParam.setLineErrorMessage(paramVo.getLineErrorMessage());
-					testSetParam.setLineExecutionStatus(paramVo.getLineExecutionStatus());
-//				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
+//					testSetParam.setLineErrorMessage(paramVo.getLineErrorMessage());
+//					testSetParam.setLineExecutionStatus(paramVo.getLineExecutionStatus());
+
+					//				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
 //				testSetParam.setScript_id();
 					testSetParam.setScriptNumber(paramVo.getScriptNumber());
 //				testSetParam.setScriptsdata(paramVo.getT);
