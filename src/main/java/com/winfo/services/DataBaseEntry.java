@@ -561,6 +561,7 @@ public class DataBaseEntry {
 		return dao.getAllModules();
 	}
 	
+	@Transactional
 	public void getTestRunLinesDataByTestSetLineId(TestSetLine testSetLineObj) {
 	
 		TestSetLine newTestSetLineObj = dao.getTestSetLine(testSetLineObj.getTestRunScriptId().toString());
@@ -568,7 +569,6 @@ public class DataBaseEntry {
 		appContext.getBean(this.getClass()).deleteScriptFromTestRun(newTestSetLineObj);
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteScriptFromTestRun(TestSetLine testSetLineObj) {
 		dao.deleteTestSetScriptParamRecordsByTestSetLineId(testSetLineObj);
 		dao.deleteTestSetLinesRecordsByTestSetLineId(testSetLineObj);
