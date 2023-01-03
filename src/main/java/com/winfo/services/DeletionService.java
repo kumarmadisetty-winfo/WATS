@@ -78,10 +78,7 @@ public class DeletionService{
 
 	public ResponseDto deleteAllScriptFromTestRun(DeleteEvidenceReportDto testScriptDto) throws Exception {
 		String testSetId = testScriptDto.getTestSetId();
-		Customer customer = dataBaseEntry.getCustomer(testSetId);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		CustomerProjectDto customerDetails = mapper.convertValue(customer, CustomerProjectDto.class);
+		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
