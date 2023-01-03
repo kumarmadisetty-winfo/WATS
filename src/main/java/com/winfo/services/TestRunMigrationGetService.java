@@ -2,6 +2,7 @@ package com.winfo.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.TestRunMigrationGetDao;
+import com.winfo.model.ExecuteStatus;
+import com.winfo.model.ExecuteStatusPK;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -153,10 +156,12 @@ public class TestRunMigrationGetService {
 				}
 
 			}
+			System.out.println("before for loop");
 			for (ScriptMasterDto masterdata : testRunMigrateDto.getScriptMasterData()) {
 				ScriptMaster master = new ScriptMaster();
 				master.setScriptId(masterdata.getScriptId());
 				master.setModule(masterdata.getModule());
+				master.setTargetApplication(masterdata.getTargetApplication());
 				master.setScenarioName(masterdata.getScenarioName());
 				master.setScenarioDescription(masterdata.getScenarioDescription());
 				master.setProductVersion(masterdata.getProductVersion());
@@ -189,7 +194,7 @@ public class TestRunMigrationGetService {
 				master.setAttribute9(masterdata.getAttribute9());
 				master.setAttribute10(masterdata.getAttribute10());
 				master.setScriptMetaDatalist(new ArrayList<>());
-
+				
 				for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 					ScriptMetaData metadata = new ScriptMetaData();
 					metadata.setAction(metadatavo.getAction());
@@ -294,6 +299,7 @@ public class TestRunMigrationGetService {
 				testSetLineData.setStatus(lineVo.getStatus());
 				testSetLineData.setTestRunScriptPath(lineVo.getTestsstlinescriptpath());
 				testSetLineData.setUpdateDate(lineVo.getUpdateddate());
+				
 
 				for (WatsTestSetParamVO paramVo : lineVo.getScriptParam()) {
 					TestSetScriptParam testSetParam = new TestSetScriptParam();
@@ -313,7 +319,7 @@ public class TestRunMigrationGetService {
 					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());
 //					testSetParam.setLineErrorMessage(paramVo.getLineErrorMessage());
 //					testSetParam.setLineExecutionStatus(paramVo.getLineExecutionStatus());
-
+					
 					//				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
 //				testSetParam.setScript_id();
 					testSetParam.setScriptNumber(paramVo.getScriptNumber());
@@ -327,11 +333,22 @@ public class TestRunMigrationGetService {
 					testSetParam.setXpathLocation1(paramVo.getXpathLocation1());
 //				testSetLineData.addMetadata(metadata);
 					testSetLineData.addTestScriptParam(testSetParam);
-
+    
 				}
 				testrundata.addTestRunScriptData(testSetLineData);
 			}
 			dao.insertTestRun(testrundata);
+			ExecuteStatus executeStatusObj = new ExecuteStatus();
+			
+			ExecuteStatusPK executeStatusPK = new ExecuteStatusPK();
+			
+			executeStatusPK.setExecutedBy(testrundata.getCreatedBy());
+			executeStatusPK.setTestSetId(testrundata.getTestRunId());
+			executeStatusObj.setExecuteStatusPK(executeStatusPK);
+			executeStatusObj.setExecutionDate(new Date());
+			executeStatusObj.setFlag('I');
+			executeStatusObj.setTestRunName(testrundata.getTestRunName());
+			copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
 			DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
 			domGenericResponseBean.setStatusMessage("Migrated Successfully");

@@ -32,7 +32,7 @@ public class TestRunMigrationGetDao {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public int insertScriptMaster(ScriptMaster master) {
 		Session session = entityManager.unwrap(Session.class);
-		session.save(master);
+		session.persist(master);
 		return master.getScriptId();
 	}
 
