@@ -411,7 +411,7 @@ public class TestRunMigrationGetService {
 				} else {
 					int originalId = scriptMaster.getScriptId();
 					scriptMaster.setScriptId(null);
-					Integer id = dao.insertScriptMaster(scriptMaster);
+					int id = dao.insertScriptMaster(scriptMaster);
 					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
 						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 						scriptMetaData.setScriptMaster(scriptMaster);
