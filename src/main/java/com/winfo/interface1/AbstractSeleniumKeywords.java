@@ -117,6 +117,9 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -192,7 +195,7 @@ public abstract class AbstractSeleniumKeywords {
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
 					.concat(fileExtension);
-
+	        
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
 
 			logger.info("Successfully Screenshot is taken " + imageName);
@@ -201,6 +204,64 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+//			throw e;
+		}
+	}
+	
+	public String screenshot1(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
+		String imageName = null;
+		String folderName = null;
+		try {
+			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
+					+ customerDetails.getTestSetName();
+			
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed");
+			
+			
+			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
+	        ImageIO.write(s.getImage(),"PNG",file);
+	        
+	        uploadObjectToObjectStore1(file.getCanonicalPath(), folderName, imageName);
+
+			logger.info("Successfully Screenshot is taken " + imageName);
+			return folderName + FORWARD_SLASH + imageName;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed During Taking screenshot");
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+//			throw e;
+		}
+	}
+	
+	public String screenshotFail1(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) {
+		Date newDate = new Date();
+		String imageName = null;
+		String folderName = null;
+		try {
+			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
+					+ customerDetails.getTestSetName();
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed");
+			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
+	        ImageIO.write(s.getImage(),"PNG",file);
+			uploadObjectToObjectStore1(file.getCanonicalPath(), folderName, imageName);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
+			return folderName + FORWARD_SLASH + imageName;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			e.printStackTrace();
+			logger.error("Failed during screenshotFail Action. " + scripNumber);
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
 //			throw e;
@@ -239,6 +300,44 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public String uploadObjectToObjectStore(String localFilePath, String folderName, String fileName) {
+
+		PutObjectResponse response = null;
+		try {
+			/**
+			 * Create a default authentication provider that uses the DEFAULT profile in the
+			 * configuration file. Refer to <see
+			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
+			 * public documentation</see> on how to prepare a configuration file.
+			 */
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			final String FILE_NAME = localFilePath;
+			File file = new File(FILE_NAME);
+			long fileSize = FileUtils.sizeOf(file);
+			InputStream is = new FileInputStream(file);
+			String destinationFilePath = folderName + FORWARD_SLASH + fileName;
+			/* Create a service client */
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+
+				/* Create a request and dependent object(s). */
+
+				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
+						.putObjectBody(is).build();
+
+				/* Send request to the Client */
+				response = client.putObject(putObjectRequest);
+			}
+			return response.toString();
+		} catch (WatsEBSCustomException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
+		}
+	}
+	
+	public String uploadObjectToObjectStore1(String localFilePath, String folderName, String fileName) {
 
 		PutObjectResponse response = null;
 		try {
