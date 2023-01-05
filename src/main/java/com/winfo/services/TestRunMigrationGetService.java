@@ -156,7 +156,6 @@ public class TestRunMigrationGetService {
 				}
 
 			}
-			System.out.println("before for loop");
 			for (ScriptMasterDto masterdata : testRunMigrateDto.getScriptMasterData()) {
 				ScriptMaster master = new ScriptMaster();
 				master.setScriptId(masterdata.getScriptId());
@@ -254,13 +253,11 @@ public class TestRunMigrationGetService {
 
 			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
-//			int testrunid = copyTestrunDao.getIds();
 			if (checkTestRun > 0) {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + Math.random());
 			} else {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
-//			testrundata.setTestRunId(testrunid);
 			testrundata.setConfigurationId(configurationId);
 
 			BigDecimal project = (BigDecimal) session
@@ -283,8 +280,6 @@ public class TestRunMigrationGetService {
 
 			for (TestSetLineDto lineVo : testRunMigrateDto.getTestSetLinesAndParaData()) {
 				TestSetLine testSetLineData = new TestSetLine();
-//				int sectiptid = copyTestrunDao.getscrtiptIds();
-//				testSetLineData.setTestRunScriptId(sectiptid);
 				testSetLineData.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 				testSetLineData.setCreatedBy(lineVo.getCreatedby());
 				testSetLineData.setCreationDate(lineVo.getCreationdate());
@@ -303,8 +298,6 @@ public class TestRunMigrationGetService {
 
 				for (WatsTestSetParamVO paramVo : lineVo.getScriptParam()) {
 					TestSetScriptParam testSetParam = new TestSetScriptParam();
-//					int sectiptlineid = copyTestrunDao.getscrtiptlineIds();
-//					testSetParam.setTestRunScriptParamId(sectiptlineid);
 					testSetParam.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 					testSetParam.setAction(paramVo.getAction());
 					testSetParam.setLineNumber(paramVo.getLineNumber());
@@ -316,10 +309,7 @@ public class TestRunMigrationGetService {
 					testSetParam.setCreatedBy(paramVo.getCreatedBy());
 					testSetParam.setCreationDate(paramVo.getCreationDate());
 					testSetParam.setInputValue(paramVo.getInputValue());
-					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());
-//					testSetParam.setLineErrorMessage(paramVo.getLineErrorMessage());
-//					testSetParam.setLineExecutionStatus(paramVo.getLineExecutionStatus());
-					
+					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());			
 					//				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
 //				testSetParam.setScript_id();
 					testSetParam.setScriptNumber(paramVo.getScriptNumber());

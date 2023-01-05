@@ -65,7 +65,6 @@ public class TestRunMigrationService {
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
 
 		String customerURI = dataBaseEntryDao.getCentralRepoUrl(testRunDetails.getCustomerName());
-		System.out.println("Customer URL is " + customerURI);
 
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
