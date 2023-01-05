@@ -254,13 +254,13 @@ public class TestRunMigrationGetService {
 
 			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
-			int testrunid = copyTestrunDao.getIds();
+//			int testrunid = copyTestrunDao.getIds();
 			if (checkTestRun > 0) {
-				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + testrunid);
+				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + Math.random());
 			} else {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
-			testrundata.setTestRunId(testrunid);
+//			testrundata.setTestRunId(testrunid);
 			testrundata.setConfigurationId(configurationId);
 
 			BigDecimal project = (BigDecimal) session
@@ -283,8 +283,8 @@ public class TestRunMigrationGetService {
 
 			for (TestSetLineDto lineVo : testRunMigrateDto.getTestSetLinesAndParaData()) {
 				TestSetLine testSetLineData = new TestSetLine();
-				int sectiptid = copyTestrunDao.getscrtiptIds();
-				testSetLineData.setTestRunScriptId(sectiptid);
+//				int sectiptid = copyTestrunDao.getscrtiptIds();
+//				testSetLineData.setTestRunScriptId(sectiptid);
 				testSetLineData.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 				testSetLineData.setCreatedBy(lineVo.getCreatedby());
 				testSetLineData.setCreationDate(lineVo.getCreationdate());
@@ -303,8 +303,8 @@ public class TestRunMigrationGetService {
 
 				for (WatsTestSetParamVO paramVo : lineVo.getScriptParam()) {
 					TestSetScriptParam testSetParam = new TestSetScriptParam();
-					int sectiptlineid = copyTestrunDao.getscrtiptlineIds();
-					testSetParam.setTestRunScriptParamId(sectiptlineid);
+//					int sectiptlineid = copyTestrunDao.getscrtiptlineIds();
+//					testSetParam.setTestRunScriptParamId(sectiptlineid);
 					testSetParam.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 					testSetParam.setAction(paramVo.getAction());
 					testSetParam.setLineNumber(paramVo.getLineNumber());
@@ -339,9 +339,7 @@ public class TestRunMigrationGetService {
 			}
 			dao.insertTestRun(testrundata);
 			ExecuteStatus executeStatusObj = new ExecuteStatus();
-			
 			ExecuteStatusPK executeStatusPK = new ExecuteStatusPK();
-			
 			executeStatusPK.setExecutedBy(testrundata.getCreatedBy());
 			executeStatusPK.setTestSetId(testrundata.getTestRunId());
 			executeStatusObj.setExecuteStatusPK(executeStatusPK);
@@ -423,9 +421,9 @@ public class TestRunMigrationGetService {
 				} else {
 					int originalId = scriptMaster.getScriptId();
 					scriptMaster.setScriptId(null);
-					int id = dao.insertScriptMaster(scriptMaster);
+					Integer id = dao.insertScriptMaster(scriptMaster);
 					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-						int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
+						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 						scriptMetaData.setScriptMaster(scriptMaster);
 						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
