@@ -210,7 +210,7 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 	
-	public String screenshot1(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
+	public String fullPagePassedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
 		try {
@@ -236,21 +236,14 @@ public abstract class AbstractSeleniumKeywords {
 			logger.error("Failed During Taking screenshot");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
-//			throw e;
 		}
 	}
 	
-	public String screenshotFail1(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
-		Date newDate = new Date();
 		String imageName = null;
 		String folderName = null;
 		try {
-//			Shutterbug.shootPage(driver,ScrollStrategy.WHOLE_PAGE_CHROME,500,true).withName(fetchMetadataVO.getSeq_num() + "_"
-//					+ fetchMetadataVO.getLine_number() + "_" + fetchMetadataVO.getScenario_name() + "_"
-//					+ fetchMetadataVO.getScript_number() + "_" + fetchMetadataVO.getTest_run_name() + "_"
-//					+ fetchMetadataVO.getLine_number() + "_Passed").save(fetchConfigVO.getScreenshot_path() + fetchMetadataVO.getCustomer_name() + "\\"
-//					+ fetchMetadataVO.getTest_run_name() + "\\");
 			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
