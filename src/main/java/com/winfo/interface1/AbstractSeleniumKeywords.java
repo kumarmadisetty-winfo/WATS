@@ -226,7 +226,7 @@ public abstract class AbstractSeleniumKeywords {
 	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName+PNG_EXTENSION);
 	        ImageIO.write(s.getImage(),"PNG",file);
 	        
-	        uploadObjectToObjectStore1(file.getCanonicalPath(), folderName, imageName);
+	        uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 
 			logger.info("Successfully Screenshot is taken " + imageName);
 			return folderName + FORWARD_SLASH + imageName;
@@ -252,7 +252,7 @@ public abstract class AbstractSeleniumKeywords {
 			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
 	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
 	        ImageIO.write(s.getImage(),"PNG",file);
-			uploadObjectToObjectStore1(file.getCanonicalPath(), folderName, imageName);
+			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
 			return folderName + FORWARD_SLASH + imageName;
@@ -335,44 +335,7 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 	
-	public String uploadObjectToObjectStore1(String localFilePath, String folderName, String fileName) {
-
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = localFilePath;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
-			String destinationFilePath = folderName + FORWARD_SLASH + fileName;
-			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSCustomException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
-		}
-	}
-
+	
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
