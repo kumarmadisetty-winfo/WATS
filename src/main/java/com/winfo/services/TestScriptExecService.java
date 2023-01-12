@@ -540,21 +540,31 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
-			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + "Passed_Report.pdf" + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "b/"
-					+ customerDetails.getTestSetName() + File.separator + "Failed_Report.pdf" + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + "Detailed_Report.pdf" + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + testLinesDetails.get(0).getSeqNum() + "_"
-					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
-					+ fetchConfigVO.getImg_url();
+//			String scriptId = testLinesDetails.get(0).getScriptId();
+//			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
+//					+ customerDetails.getTestSetName() + File.separator + "Passed_Report.pdf" + "AAAparent="
+//					+ fetchConfigVO.getImg_url();
+//			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "b/"
+//					+ customerDetails.getTestSetName() + File.separator + "Failed_Report.pdf" + "AAAparent="
+//					+ fetchConfigVO.getImg_url();
+//			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
+//					+ customerDetails.getTestSetName() + File.separator + "Detailed_Report.pdf" + "AAAparent="
+//					+ fetchConfigVO.getImg_url();
+//			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator+ customerDetails.getProjectName() + "/"
+//					+File.separator+ customerDetails.getTestSetName() + File.separator + testLinesDetails.get(0).getSeqNum() + "_"
+//					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
+//					+ fetchConfigVO.getImg_url();
 
+			String scriptId = testLinesDetails.get(0).getScriptId();
+			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
+					+ customerDetails.getTestSetName() + "/Passed_Report.pdf";
+			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
+					+ customerDetails.getTestSetName() + "/Failed_Report.pdf" ;
+			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
+					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
+			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
+					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION;
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
@@ -580,15 +590,21 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
-			} else {
+				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+			} 
+			else {
 				fetchConfigVO.setErrormessage("Execution Failed");
 				fetchConfigVO.setStatus1(FAIL);
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + PDF_EXTENSION;
+				 scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+							+ customerDetails.getTestSetName() + "/" + pdfName;
+				post.setP_test_set_line_path(scripturl);
+				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			}
-			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+//			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 
 			/* Email processing Updating subscription table code */
