@@ -241,6 +241,11 @@ public class DataBaseEntry {
 
 	public String getScriptStatus(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+		TestSetLine testSetLine =dao.getScriptDataByLineID(Integer.valueOf(testSetLineId));
+		if(testSetLine.getStatus() != null && (!"".equalsIgnoreCase(testSetLine.getStatus())) 
+				&& testSetLine.getStatus().equalsIgnoreCase(UPDATE_STATUS.PASS.getLabel())) {
+			return UPDATE_STATUS.PASS.getLabel();
+		}
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
 			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
 					Constants.ERR_MSG_FOR_SCRIPT_RUN);
