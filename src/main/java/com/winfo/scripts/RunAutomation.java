@@ -434,6 +434,7 @@ public class RunAutomation {
 				failList.add(scriptId);
 			}
 		} finally {
+			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScriptNumber());
 			if (driver != null) {
 				driver.close();
