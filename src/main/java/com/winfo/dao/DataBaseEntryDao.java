@@ -1622,7 +1622,7 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Not able to fetch the module", e);
 		}
 	}
-	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
 			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
@@ -1634,7 +1634,7 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteTestSetScriptParamRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
 			Integer testRunScriptId = testSetLine.getTestRunScriptId();

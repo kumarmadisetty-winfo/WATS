@@ -70,6 +70,9 @@ public class DeletionService{
 	@Autowired
 	TestScriptExecService testScriptExecService;
 	
+	@Autowired
+	ScriptDeletionService scriptDeletionService;
+	
 //	@Autowired
 //	AbstractSeleniumKeywords abstractSeleniumKeywords;
 
@@ -132,7 +135,8 @@ public class DeletionService{
 					try {
 						
 						deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
-						dataBaseEntry.getTestRunLinesDataByTestSetLineId(testSetLineObj);
+//						dataBaseEntry.getTestRunLinesDataByTestSetLineId(lineId);
+						scriptDeletionService.deleteScriptFromTestRun(Integer.parseInt(lineId));
 					} catch (Exception e) {
 						logger.error(e);
 						e.printStackTrace();
