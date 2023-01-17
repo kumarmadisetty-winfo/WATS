@@ -138,6 +138,7 @@ public class DeletionService{
 								&& !testSetLineObj.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.NEW.getLabel())){
 							deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
 						}
+//						dataBaseEntry.getTestRunLinesDataByTestSetLineId(lineId);
 						scriptDeletionService.deleteScriptFromTestRun(Integer.parseInt(lineId));
 					} catch (Exception e) {
 						logger.error(e);
