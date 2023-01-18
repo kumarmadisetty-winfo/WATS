@@ -75,9 +75,9 @@ public class DataBaseEntryDao {
 
 	private static final String CUSTOMER_DLT_QRY = "SELECT DISTINCT wtp.customer_id,\r\n" + " wtc.customer_number,\r\n"
 			+ "  wtc.customer_name,\r\n" + " wtts.project_id,\r\n" + " wtp.project_name,\r\n"
-			+ "  wttsl.test_set_id,\r\n" + " wtts.TEST_SET_NAME test_run_name\r\n" + " from\r\n"
+			+ "  wtts.test_set_id,\r\n" + " wtts.TEST_SET_NAME test_run_name\r\n" + " from\r\n"
 			+ " win_ta_test_set wtts,\r\n" + " win_ta_test_set_lines  wttsl,\r\n" + " win_ta_projects wtp,\r\n"
-			+ " win_ta_customers wtc\r\n" + " WHERE 1=1\r\n" + " AND wttsl.test_set_id = wtts.test_set_id\r\n"
+			+ " win_ta_customers wtc\r\n" + " WHERE 1=1\r\n" //+ " AND wttsl.test_set_id = wtts.test_set_id\r\n"
 			+ " AND wtts.project_id = wtp.project_id\r\n" + " AND wtp.customer_id = wtc.customer_id\r\n"
 			+ " AND wtts.test_set_id=";
 
