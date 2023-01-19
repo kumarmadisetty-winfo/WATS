@@ -741,11 +741,18 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			String title1 = driver.getTitle();
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//button[normalize-space(text())='" + param1 + "']"))));
 			WebElement waittext = driver.findElement(By.xpath(("//button[normalize-space(text())='" + param1 + "']")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			Thread.sleep(5000);
+			String title2 = driver.getTitle();
+			if (title1.equalsIgnoreCase(title2)) {
+				screenshotFail(driver, fetchMetadataVO, customerDetails);
+				throw new IOException("Failed during login page");
+			}
 			String xpath = "//button[normalize-space(text())='param1']";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();

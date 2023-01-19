@@ -134,11 +134,10 @@ public class DeletionService{
 				executor.execute(() -> {
 					logger.info("deletion of script number {}", testSetLineObj.getScriptNumber());
 					try {
-						if(testSetLineObj.getStatus() != null && (!"".equalsIgnoreCase(testSetLineObj.getStatus())) 
-								&& !testSetLineObj.getStatus().equalsIgnoreCase(TEST_SET_LINE_ID_STATUS.NEW.getLabel())){
+						if(!TEST_SET_LINE_ID_STATUS.NEW.getLabel().equalsIgnoreCase(testSetLineObj.getStatus())){
 							deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
 						}
-//						dataBaseEntry.getTestRunLinesDataByTestSetLineId(lineId);
+//					dataBaseEntry.getTestRunLinesDataByTestSetLineId(testSetLineObj);
 						scriptDeletionService.deleteScriptFromTestRun(Integer.parseInt(lineId));
 					} catch (Exception e) {
 						logger.error(e);
