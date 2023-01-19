@@ -519,7 +519,7 @@ public class RunAutomation {
 			Map<String, String> accessTokenStorage = new HashMap<>();
 			ApiValidationVO api = new ApiValidationVO();
 			String scriptIssueId = null;
-			if(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED().equalsIgnoreCase("YES")){
+			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 				scriptIssueId = graphQLService.createScriptInJiraXrayCloud(fetchMetadataListVO);
 //				fetchConfigVO.setScriptIssueId(key);
 				graphQLService.associateScriptToTestRun(fetchConfigVO,scriptIssueId);
