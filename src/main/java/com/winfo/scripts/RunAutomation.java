@@ -1437,7 +1437,7 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 									fetchMetadataListVO, fetchConfigVO, seqNum + "_" + scriptNumber + ".pdf",
 									customerDetails);
-							if(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED().equalsIgnoreCase("YES")){
+							if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 								String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 								+ File.separator + customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber + ".pdf";
 								File file = new File(sourceFilePath);
@@ -1466,7 +1466,7 @@ public class RunAutomation {
 				}
 				if (isError) {
 					String failScriptKey = null;
-					if(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED().equalsIgnoreCase("YES")){
+					if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 						failScriptKey = graphQLService.getScriptId(fetchConfigVO,scriptIssueId);
 //						fetchConfigVO.setSctiptId(key);
 						graphQLService.changeStatusOfScriptInJiraXrayCloud(failScriptKey, "FAILED");
@@ -1504,13 +1504,12 @@ public class RunAutomation {
 								fetchMetadataListVO, fetchConfigVO,
 								seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf",
 								customerDetails);
-						if(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED().equalsIgnoreCase("YES")){
+						if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 							String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 							+ File.separator + customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf";
 							File file = new File(sourceFilePath);
 							byte [] bytes = Files.readAllBytes(file.toPath());
 						     String b64 = Base64.getEncoder().encodeToString(bytes);
-						     System.out.println(b64);
 							graphQLService.addAttachmentToScript(failScriptKey,b64,file.getName());
 						}
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
