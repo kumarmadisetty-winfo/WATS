@@ -186,7 +186,7 @@ public class RunAutomation {
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 			
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-			if(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED().equalsIgnoreCase("YES")){
+			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 				String key = graphQLService.createTestRunInJiraXrayCloud(customerDetails);
 				fetchConfigVO.setTestRunIssueId(key);
 			}
@@ -1383,7 +1383,7 @@ public class RunAutomation {
 
 					if (fetchMetadataListVO.size() == i && !isError) {
 						String passScriptKey = null;
-						if(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED().equalsIgnoreCase("YES")){
+						if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 							passScriptKey = graphQLService.getScriptId(fetchConfigVO,scriptIssueId);
 							graphQLService.changeStatusOfScriptInJiraXrayCloud(passScriptKey, "PASSED");
 						}
@@ -1443,7 +1443,6 @@ public class RunAutomation {
 								File file = new File(sourceFilePath);
 								byte [] bytes = Files.readAllBytes(file.toPath());
 							     String b64 = Base64.getEncoder().encodeToString(bytes);
-							     System.out.println(b64);
 								graphQLService.addAttachmentToScript(passScriptKey,b64,file.getName());
 							}
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
