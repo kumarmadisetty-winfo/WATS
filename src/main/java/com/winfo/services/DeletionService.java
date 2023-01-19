@@ -39,6 +39,7 @@ import com.winfo.model.Customer;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.DeleteEvidenceReportDto;
@@ -133,9 +134,10 @@ public class DeletionService{
 				executor.execute(() -> {
 					logger.info("deletion of script number {}", testSetLineObj.getScriptNumber());
 					try {
-						
-						deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
-//						dataBaseEntry.getTestRunLinesDataByTestSetLineId(testSetLineObj);
+						if(!TEST_SET_LINE_ID_STATUS.NEW.getLabel().equalsIgnoreCase(testSetLineObj.getStatus())){
+							deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
+						}
+//					dataBaseEntry.getTestRunLinesDataByTestSetLineId(testSetLineObj);
 						scriptDeletionService.deleteScriptFromTestRun(Integer.parseInt(lineId));
 					} catch (Exception e) {
 						logger.error(e);
