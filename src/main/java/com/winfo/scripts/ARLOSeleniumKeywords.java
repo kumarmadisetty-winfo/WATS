@@ -120,7 +120,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Navigated to given Url");
 		} catch (Exception e) {
 			logger.error("Failed During Navigation");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("Not able to navitage to the Url");
 		}
 	}
@@ -131,7 +131,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			int time = StringUtils.convertStringToInteger(inputData, 4);
 			int seconds = time * 1000;
 			Thread.sleep(seconds);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 		} catch (InterruptedException e) {
 			logger.error(e);
 			Thread.currentThread().interrupt();
@@ -408,7 +408,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			// logger.info(num);
 			driver.get(fetchConfigVO.getDownlod_file_path() + "/" + number + ".log");
 			Thread.sleep(2000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			driver.navigate().back();
 			Thread.sleep(8000);
 			String xpath = "(//*[text()='Succeeded'])[1]/preceding::span[text()][1]";
@@ -445,7 +445,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			File path1 = getLastModified(path, fetchConfigVO);
 			driver.get("" + path1);
 			Thread.sleep(2000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			driver.navigate().back();
 			Thread.sleep(8000);
 		} catch (Exception e) {
@@ -458,7 +458,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			CustomerProjectDto customerDetails) {
 		try {
 			Thread.sleep(5000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			driver.navigate().back();
 			Thread.sleep(8000);
 		} catch (Exception e) {
@@ -477,7 +477,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			r.keyRelease(KeyEvent.VK_CONTROL);
 
 		} catch (Exception e) {
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
 		}
@@ -490,7 +490,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions action = new Actions(driver);
 			action.keyDown(Keys.CONTROL).sendKeys("v").build().perform();
 		} catch (Exception e) {
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -567,7 +567,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			throw e;
@@ -599,7 +599,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 			logger.error("Failed During WindowClose Acion.");
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -611,7 +611,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Switched to Element Successfully");
 		} catch (Exception e) {
 			logger.error("Failed During switchToActiveElement Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(e.getMessage());
 			throw e;
 		}
@@ -733,7 +733,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -754,7 +754,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -778,7 +778,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -797,7 +797,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -823,7 +823,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				waittext.click();
 //		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -845,7 +845,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 						+ "']/following::a[normalize-space(text())='" + param2 + "'])[2]"));
 				waittext.click();
 				clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -865,7 +865,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement waittext = driver
 						.findElement(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]"));
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 				WebElement search = driver.findElement(By.xpath("//li[text()='Search...']"));
 				search.click();
 				WebElement name = driver
@@ -906,7 +906,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[@title='param2'])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -927,7 +927,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.sleep(4000);
 			WebElement values = driver.findElement(By.xpath("(//td[normalize-space(text())='" + keysToSend + "'])[2]"));
 			clickValidateXpath(driver, fetchMetadataVO, values, fetchConfigVO);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::a[normalize-space(text())='param2'])[1]"
 					+ ";" + "(//td[normalize-space(text())='keysToSend'])[2]";
@@ -947,7 +947,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[@title='param1']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -965,7 +965,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement waittext = driver
 					.findElement(By.xpath("//h1[contains(text(),'" + param1 + "')]/following::a[1]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+//		screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 			clickButtonDropdownText(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[contains(text(),'param1')]/following::a[1]";
@@ -976,7 +976,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -993,7 +993,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.sleep(5000);
 			WebElement waittext = driver.findElement(By.xpath("//li[normalize-space(text())='" + keysToSend + "']"));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//li[normalize-space(text())='keysToSend']";
@@ -1014,7 +1014,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//div[contains(@class,'PopupMenuContent')]//td[text()='keysToSend']";
@@ -1034,7 +1034,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String xpath = "//td[normalize-space(text())='keysToSend']";
@@ -1045,7 +1045,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1062,7 +1062,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h2[normalize-space(text())=' param1']/following::*[@title=' param2 '])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -1084,7 +1084,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())=' param1 ']/following::*[normalize-space(text())=' param2 ']/preceding::*[@title='Expand' and @href and not(@style='display:none')][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -1108,7 +1108,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())=' param1 ']/following::*[@title=' param2 '])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -1132,7 +1132,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(8000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1 ']/preceding::*[@title=' param2'])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -1142,7 +1142,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1188,7 +1188,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1217,7 +1217,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1242,7 +1242,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1285,7 +1285,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1307,7 +1307,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1319,7 +1319,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1340,7 +1340,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
 			highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1365,7 +1365,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
 			highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1390,7 +1390,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(2000);
 			highlightElement(driver, fetchMetadataVO, waittill, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittill, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1403,7 +1403,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1420,7 +1420,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1443,7 +1443,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1463,7 +1463,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement add = driver.findElement(By.xpath(
 						"//div[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 				highlightElement(driver, fetchMetadataVO, add, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1483,7 +1483,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement add = driver.findElement(
 						By.xpath("//div[normalize-space(text())='" + param1 + "']/following::div[@role='button'][1]"));
 				highlightElement(driver, fetchMetadataVO, add, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 				String xpath = "//div[normalize-space(text())='param1']/following::div[@role='button'][1]";
@@ -1510,7 +1510,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement add = driver.findElement(
 					By.xpath("//h1[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1534,7 +1534,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(4000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1556,7 +1556,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1582,7 +1582,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement add = driver.findElement(
 					By.xpath("//*[normalize-space(text())='" + param1 + "']/following::img[@title='" + param2 + "']"));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1605,7 +1605,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1627,7 +1627,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1648,7 +1648,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(3000);
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -1669,7 +1669,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1689,7 +1689,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1711,7 +1711,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1733,7 +1733,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1745,7 +1745,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1759,11 +1759,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()='ne']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ne']"), "ne"));
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='ne']")));
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1778,11 +1778,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()='o']"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='o']"), "o"));
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='o']")));
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1800,10 +1800,10 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='m']")));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				// screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(2000);
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
@@ -1824,7 +1824,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement waittext = driver.findElement(
 						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::span[text()='m']")));
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
@@ -1846,7 +1846,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
@@ -1862,11 +1862,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='x']"), "x"));
 				Thread.sleep(10000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='x']")));
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(20000);
@@ -1887,7 +1887,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(8000);
@@ -1909,7 +1909,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
@@ -1928,7 +1928,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(2000);
@@ -1949,7 +1949,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
@@ -1968,7 +1968,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1983,11 +1983,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='u']"), "u"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='u']")));
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2005,7 +2005,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2022,7 +2022,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2039,7 +2039,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2058,7 +2058,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2074,11 +2074,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ave']"), "ave"));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()='ave']")));
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2103,7 +2103,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				actions.doubleClick(waittext).build().perform();
 				Thread.sleep(1000);
@@ -2131,7 +2131,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
@@ -2159,7 +2159,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
@@ -2184,7 +2184,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
@@ -2210,7 +2210,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(3000);
@@ -2235,7 +2235,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2261,7 +2261,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
@@ -2283,7 +2283,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+			// screenshot1(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(5000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
@@ -2306,7 +2306,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
@@ -2330,7 +2330,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
@@ -2354,7 +2354,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2376,7 +2376,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
@@ -2399,7 +2399,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2422,7 +2422,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
@@ -2445,7 +2445,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
@@ -2459,7 +2459,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -2475,7 +2475,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
@@ -2499,7 +2499,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
@@ -2512,7 +2512,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -2528,7 +2528,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(2000);
@@ -2541,7 +2541,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -2561,7 +2561,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement approve = driver.findElement(By.xpath(("//td[normalize-space(text())=\"" + param2 + "\"][1]")));
 			highlightElement(driver, fetchMetadataVO, approve, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, approve, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String xpath = "//a[normalize-space(text())='param1'][1]" + ";"
 					+ "//td[normalize-space(text())='param2'][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -2571,7 +2571,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click Approve Button.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -2589,7 +2589,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='Performance Goals']/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2613,7 +2613,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='Performance Goals']/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2639,7 +2639,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2671,7 +2671,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2696,7 +2696,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2727,7 +2727,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			// js.executeScript("document.body.style.zoom='100%'");
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//a[normalize-space(text())='param1'][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -2763,7 +2763,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2783,7 +2783,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2803,7 +2803,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2823,7 +2823,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2845,7 +2845,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2865,7 +2865,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2887,7 +2887,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2899,7 +2899,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -2927,7 +2927,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
 
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::label[normalize-space(text())=' keysToSend'])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -2947,7 +2947,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())=' param1']/following::label[normalize-space(text())='keysToSend'])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -2958,7 +2958,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -2980,7 +2980,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[@id][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3006,7 +3006,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[normalize-space(text())='Participant']/preceding::label[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3036,7 +3036,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3065,7 +3065,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3095,7 +3095,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3126,7 +3126,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::span[normalize-space(text())='keysToSend']/preceding::label[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3152,7 +3152,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::span[text()='keysToSend']/preceding::label[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3181,7 +3181,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']/preceding::label[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3209,7 +3209,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::label[normalize-space(text())='keysToSend']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3237,7 +3237,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(3000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='keysToSend']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3259,7 +3259,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(500);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='keysToSend']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3269,7 +3269,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -3287,7 +3287,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			// actions.moveToElement(waittext).build().perform();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			waittext.click();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[@placeholder='param1']/following::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3297,7 +3297,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -3324,7 +3324,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -3356,7 +3356,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -3378,7 +3378,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -3403,7 +3403,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -3427,7 +3427,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -3439,7 +3439,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -3482,7 +3482,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//body[@dir='ltr']";
@@ -3503,7 +3503,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//body[contains(@class,'contents_ltr')][1]";
@@ -3538,7 +3538,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -3558,7 +3558,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 								param2));
 				WebElement waittill = driver.findElement(By.xpath(("//div[@role='" + param1
 						+ "' and not(@style)]//label[normalize-space(text())='" + param2 + "']/following::input[1]")));
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//div[@role='param1' and not(@style)]//label[normalize-space(text())='param2']/following::input[1]";
@@ -3820,7 +3820,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'" + param1 + "')]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + param1 + "')]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			String xpath = "//*[contains(@placeholder,'param1')]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -3910,7 +3910,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -4377,7 +4377,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -4396,7 +4396,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[text()='param1']/following::*[text()='value1']/following::input[@placeholder='m/d/yy'][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4408,7 +4408,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
 
@@ -4421,7 +4421,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[text()='param1']/following::*[text()='value1']/following::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4433,7 +4433,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -4445,7 +4445,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, value2, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[text()='param1']/following::*[text()='value1']/following::input[contains(@id,'NewBdgtPctLst')])[param2]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4455,7 +4455,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -4478,7 +4478,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[text()='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::input[not(@type='hidden')]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4495,7 +4495,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/preceding-sibling::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4512,7 +4512,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4529,7 +4529,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding-sibling::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4547,7 +4547,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::table[@summary='param2']//*[normalize-space(text())='param3']/following::input[contains(@id,'NewBdgtPctLst')][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4564,7 +4564,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//label[normalize-space(text())='param2']/preceding-sibling::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4581,7 +4581,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4591,7 +4591,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -4639,7 +4639,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -4659,7 +4659,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::input[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4682,7 +4682,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 			Thread.sleep(3000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/preceding::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4703,7 +4703,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickTableDropdown(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			tableDropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//table[@summary='param1']//input/following-sibling::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -4713,7 +4713,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -4738,7 +4738,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[@title='param3']";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4764,7 +4764,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[@role='combobox']";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4790,7 +4790,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				waittext.click();
 				// clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='Hire Date Start Range']/following::input[@role='combobox'][2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4814,7 +4814,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::td[normalize-space(text())='param2']/following::a[3])";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4839,7 +4839,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				waittext.click();
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='Hire Date End Range']/following::input[@role='combobox'][2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4863,7 +4863,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4896,7 +4896,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(10000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4920,7 +4920,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *'][1]/following::a[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4944,7 +4944,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				actions.moveToElement(waittext).build().perform();
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *'][1]/following::a[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4969,7 +4969,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='Review Period *'][1]/following::a[contains(@id,'HCMPERFORMANCE_FUSE_PERFORMANCE') and not(@style)][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -5007,7 +5007,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 						dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO,
 								customerDetails);
 						actions.release();
-						screenshot(driver, fetchMetadataVO, customerDetails);
+						fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 					}
 					xpath = xpath + ";" + "//div[contains(@id,'popup-container')]";
 				} catch (Exception e) {
@@ -5024,7 +5024,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				}
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
 				actions.release();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -5051,7 +5051,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			// clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(10000);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5073,7 +5073,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(1000);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//label[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5109,14 +5109,14 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'popup-container')]"));
 				if (popup1.isDisplayed()) {
 					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-					screenshot(driver, fetchMetadataVO, customerDetails);
+					fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				}
 				xpath = xpath + ";" + "//div[contains(@id,'popup-container')]";
 			} catch (Exception e) {
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5141,7 +5141,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				waittext.click();
 				Thread.sleep(1000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -5168,7 +5168,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "(//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[ not(@type='hidden')])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -5192,7 +5192,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(1000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -5214,7 +5214,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 							+ param2 + "\"]/following::input[@placeholder='Select a value']"));
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::input[@placeholder='Select a value']";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5248,14 +5248,14 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement popup1 = driver.findElement(By.xpath("//div[contains(@id,'popup-container')]"));
 				if (popup1.isDisplayed()) {
 					dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-					screenshot(driver, fetchMetadataVO, customerDetails);
+					fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				}
 				xpath = xpath + ";" + "//div[contains(@id,'popup-container')]";
 			} catch (Exception e) {
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5279,7 +5279,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			actions.moveToElement(waittext).build().perform();
 			clickDropdownXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//h1[contains(text(),'param1')]/following::*[normalize-space(text())='param2']/following::a)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5301,7 +5301,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			dropdownTexts(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//label[contains(text(),'param1')]/following::a)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5311,7 +5311,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Click action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -5385,7 +5385,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			waittill.click();
 		} catch (Exception e) {
 			logger.error("Falied During ClickExpand Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(xpath1);
 			throw e;
 		}
@@ -5402,7 +5402,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			throw e;
@@ -5661,7 +5661,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
 			logger.error("Failed During scrollUsingElement");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(inputParam);
 			e.printStackTrace();
 			throw e;
@@ -5676,7 +5676,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-		screenshot(driver, fetchMetadataVO, customerDetails);
+		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 	}
 
 	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -5687,7 +5687,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Clicked the tab.");
 		} catch (Exception e) {
 			logger.error("Failed During clicking the tab");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("Failed to do TAB Action");
 			e.printStackTrace();
 			throw e;
@@ -5707,7 +5707,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					.findElement(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]"));
 			actions.moveToElement(waittext).build().perform();
 			clickImage(driver, param2, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			String xpath = "(//table[@summary='param1']//tr[1]/following::a)[2]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -5733,7 +5733,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error(e);
 			Thread.currentThread().interrupt();
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -5748,7 +5748,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error(e);
 			Thread.currentThread().interrupt();
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -5760,7 +5760,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Deleted All The Cookies.");
 		} catch (Exception e) {
 			logger.error("Failed To Delete All The Cookies.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("cookies not deleted");
 			throw e;
 		}
@@ -5777,7 +5777,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("selected Checkbox Successfully");
 		} catch (Exception e) {
 			logger.error("Failed While Selecting Checkbox.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			logger.info(xpath);
 			throw e;
@@ -5810,7 +5810,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
 			logger.info(inputParam);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -5820,7 +5820,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
 		logger.info("selectedBYText Successfully");
-		screenshot(driver, fetchMetadataVO, customerDetails);
+		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 	}
 
 	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
@@ -5832,7 +5832,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("selectedBYValue Successfully");
 		} catch (Exception e) {
 			logger.error("Failed During selectByValue Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(xpath);
 			e.printStackTrace();
 			throw e;
@@ -5878,7 +5878,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 			logger.error("Failed During copynumber Action");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(inputParam);
 			throw e;
 		}
@@ -5907,7 +5907,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Copied");
 		} catch (Exception e) {
 			logger.error("Failed During copyy Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(xpath);
 			throw e;
 		}
@@ -5931,7 +5931,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Copied");
 		} catch (Exception e) {
 			logger.error("Failed During copytext Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(xpath);
 			throw e;
 		}
@@ -5946,7 +5946,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Maximized");
 		} catch (Exception e) {
 			logger.error("Failed During Maximize Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("can not maximize");
 			e.printStackTrace();
 			throw e;
@@ -5961,7 +5961,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Switched to Another Window");
 		} catch (Exception e) {
 			logger.error("Failed During Switching to Window");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("can not switch to window");
 			e.printStackTrace();
 
@@ -5976,7 +5976,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Switched to Default Content");
 		} catch (Exception e) {
 			logger.error("Failed During switching to Default Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("can not switch");
 			throw e;
 		}
@@ -5993,7 +5993,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Drag and drop the values");
 		} catch (Exception e) {
 			logger.error("Failed During dragAnddrop Action.");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info(xpath);
 			e.printStackTrace();
 			throw e;
@@ -6013,7 +6013,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					logger.info(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
-					screenshot(driver, fetchMetadataVO, customerDetails);
+					fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
 				}
@@ -6021,7 +6021,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Handeled the window");
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("failed while hadling window");
 			e.printStackTrace();
 			throw e;
@@ -6160,7 +6160,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e);
 			Thread.currentThread().interrupt();
 			logger.error("Failed During switchToFrame Action");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -6190,7 +6190,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully refreshed the Page");
 		} catch (Exception e) {
 			logger.error("Failed During refreshPage Action");
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			logger.info("can not refresh the page");
 			e.printStackTrace();
 			throw e;

@@ -117,6 +117,9 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -192,7 +195,7 @@ public abstract class AbstractSeleniumKeywords {
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
 					.concat(fileExtension);
-
+	        
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
 
 			logger.info("Successfully Screenshot is taken " + imageName);
@@ -201,6 +204,62 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed During Taking screenshot");
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+//			throw e;
+		}
+	}
+	
+	public String fullPagePassedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
+		String imageName = null;
+		String folderName = null;
+		try {
+			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
+					+ customerDetails.getTestSetName();
+			
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed").concat(PNG_EXTENSION);
+			
+			
+			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName+PNG_EXTENSION);
+	        ImageIO.write(s.getImage(),"PNG",file);
+	        
+	        uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
+
+			logger.info("Successfully Screenshot is taken " + imageName);
+			return folderName + FORWARD_SLASH + imageName;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed During Taking screenshot");
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+		}
+	}
+	
+	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) {
+		String imageName = null;
+		String folderName = null;
+		try {
+			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
+					+ customerDetails.getTestSetName();
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed").concat(PNG_EXTENSION);
+			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
+	        ImageIO.write(s.getImage(),"PNG",file);
+			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
+			return folderName + FORWARD_SLASH + imageName;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			e.printStackTrace();
+			logger.error("Failed during screenshotFail Action. " + scripNumber);
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
 //			throw e;
@@ -275,7 +334,8 @@ public abstract class AbstractSeleniumKeywords {
 			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
-
+	
+	
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
