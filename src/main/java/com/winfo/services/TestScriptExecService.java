@@ -819,9 +819,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setEndtime(endDate);
-				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
-						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
-				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 				testRunPdfGeneration(testSetId, fetchConfigVO);
 				response = new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
