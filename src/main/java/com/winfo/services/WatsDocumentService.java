@@ -58,13 +58,13 @@ public class WatsDocumentService {
 
 Logger log = Logger.getLogger("Logger");
 	
-	@Value("${oci.config.name}")
+	@Value("${oci.config.name.common}")
 	private String ociConfigName;
 	@Value("${oci.bucket.name.common}")
 	private String ociBucketName;
 	@Value("${oci.namespace.common}")
 	private String ociNamespace;
-	@Value("${oci.config.path}")
+	@Value("${oci.config.path.common}")
 	private String ociConfigPath;
 	public static final String FORWARD_SLASH = "/";
 	@Autowired
