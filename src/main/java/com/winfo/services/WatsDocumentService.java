@@ -64,7 +64,7 @@ Logger log = Logger.getLogger("Logger");
 	private String ociBucketName;
 	@Value("${oci.namespace.common}")
 	private String ociNamespace;
-	@Value("${oci.config.path.common}")
+	@Value("${oci.config.path}")
 	private String ociConfigPath;
 	public static final String FORWARD_SLASH = "/";
 	@Autowired
