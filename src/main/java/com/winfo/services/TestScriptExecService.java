@@ -876,6 +876,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		dto.setOciConfigName(ociConfigName);
 		dto.setBuckerName(ociBucketName);
 		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path().replace("\\", "\\\\"));
+		dto.setExcelDownloadFilePath(fetchConfigVO.getEXCEL_DOWNLOAD_FILE_PATH().replace("\\", "\\\\"));
 
 		final Context ctx = new Context();
 		ctx.setVariable("dto", dto);
