@@ -332,4 +332,10 @@ public interface SeleniumKeyWordsInterface {
 
 	public boolean validation(ScriptDetailsDto fetchMetadataVO, ApiValidationVO api) throws Exception;
 
+	public String fullPagePassedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails);
+
+	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails);
+
 }
