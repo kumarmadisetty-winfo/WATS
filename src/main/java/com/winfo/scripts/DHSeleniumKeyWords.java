@@ -608,6 +608,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
+				Thread.sleep(5000);
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully menuNavigationButton is done " + scripNumber);
