@@ -184,9 +184,19 @@ public class FetchConfigVO {
     
     private String API_AUTHENTICATION_CODE;
     
+    private String EXCEL_DOWNLOAD_FILE_PATH;
     
     
-   	public String getAPI_AUTHENTICATION_URL() {
+    
+   	public String getExcelDownloadFilePath() {
+		return EXCEL_DOWNLOAD_FILE_PATH;
+	}
+
+	public void setExcelDownloadFilePath(String excelDownloadFilePath) {
+		EXCEL_DOWNLOAD_FILE_PATH = excelDownloadFilePath;
+	}
+
+	public String getAPI_AUTHENTICATION_URL() {
 		return API_AUTHENTICATION_URL;
 	}
 
