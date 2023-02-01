@@ -1530,19 +1530,6 @@ public class DataBaseEntryDao {
 		Session session = em.unwrap(Session.class);
 		session.persist(lookUpCodes);
 	}
-  
-	public boolean doesActionContainsSfApplication(String scriptId) {
-		Object count = null;
-		String updateQry = "select count(*) from win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
-		try {
-			Session session = em.unwrap(Session.class);
-			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
-		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
-					"Exception occured while Checking if actions contains Login into SFApplication or not.", e);
-		}
-		return Integer.parseInt(count.toString())>0;
-	}
 
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
 

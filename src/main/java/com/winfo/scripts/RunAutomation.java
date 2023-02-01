@@ -398,8 +398,7 @@ public class RunAutomation {
 				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
 		try {
 			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			boolean actionContainsSF = dataBaseEntry.doesActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
-			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
+			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
