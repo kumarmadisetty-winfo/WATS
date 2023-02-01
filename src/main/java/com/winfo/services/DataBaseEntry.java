@@ -513,11 +513,6 @@ public class DataBaseEntry {
 	public boolean doesActionContainsExcel(String scriptId) {
 		return dao.doesActionContainsExcel(scriptId);
 	}
-
-	public boolean doesActionContainsSfApplication(String scriptId) {
-		
-		return dao.doesActionContainsSfApplication(scriptId);
-	}
 	
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
 		return dao.getApiValueBySetIdAndAPIKey(testSetId, apiKey);
