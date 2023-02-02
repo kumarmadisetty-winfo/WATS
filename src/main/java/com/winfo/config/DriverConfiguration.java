@@ -50,15 +50,16 @@ public class DriverConfiguration {
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			Map<String, Object> prefs = new HashMap<>();
 			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
-			prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
 			DesiredCapabilities cap = DesiredCapabilities.chrome();
 			cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			if (os.contains("win")) {
+				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getExcelDownloadFilePath());
 				logger.info("windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setPlatform(Platform.WINDOWS);
 			} else {
+				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
 				cap.setPlatform(Platform.LINUX);
