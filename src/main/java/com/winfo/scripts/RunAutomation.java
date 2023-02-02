@@ -1426,7 +1426,7 @@ public class RunAutomation {
 							}
 							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){
 								fetchConfigVO.getJIRA_ISSUE_URL();
-								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJIRA_ISSUE_UPDATE_STATUS_URL(),fetchConfigVO.getJIRA_ISSUE_UPDATE_TRANSITIONS());
+								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJiraIssueUpdateStatusURL(),fetchConfigVO.getJiraIssueUpdateTransitions());
 							}
 					}
 

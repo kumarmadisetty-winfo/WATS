@@ -198,20 +198,20 @@ public class FetchConfigVO {
 		EXCEL_DOWNLOAD_FILE_PATH = excelDownloadFilePath;
 	}
 	
-   	public String getJIRA_ISSUE_UPDATE_STATUS_URL() {
+   	public String getJiraIssueUpdateStatusURL() {
 		return JIRA_ISSUE_UPDATE_STATUS_URL;
 	}
 
-	public void setJIRA_ISSUE_UPDATE_STATUS_URL(String jIRA_ISSUE_UPDATE_STATUS_URL) {
-		JIRA_ISSUE_UPDATE_STATUS_URL = jIRA_ISSUE_UPDATE_STATUS_URL;
+	public void setJiraIssueUpdateStatusURL(String jiraIssueUpdateStatusURL) {
+		JIRA_ISSUE_UPDATE_STATUS_URL = jiraIssueUpdateStatusURL;
 	}
 
-	public String getJIRA_ISSUE_UPDATE_TRANSITIONS() {
+	public String getJiraIssueUpdateTransitions() {
 		return JIRA_ISSUE_UPDATE_TRANSITIONS;
 	}
 
-	public void setJIRA_ISSUE_UPDATE_TRANSITIONS(String jIRA_ISSUE_UPDATE_TRANSITIONS) {
-		JIRA_ISSUE_UPDATE_TRANSITIONS = jIRA_ISSUE_UPDATE_TRANSITIONS;
+	public void setJiraIssueUpdateTransitions(String jiraIssueUpdateTransitions) {
+		JIRA_ISSUE_UPDATE_TRANSITIONS = jiraIssueUpdateTransitions;
 	}
 
 	public String getAPI_AUTHENTICATION_URL() {
