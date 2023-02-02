@@ -183,15 +183,12 @@ public class FetchConfigVO {
     private String API_AUTHENTICATION_URL;
     
     private String API_AUTHENTICATION_CODE;
-    
 
     private String EXCEL_DOWNLOAD_FILE_PATH;
 
     private String JIRA_ISSUE_UPDATE_STATUS_URL;
-
     
     private String JIRA_ISSUE_UPDATE_TRANSITIONS;
-
     
    	public String getExcelDownloadFilePath() {
 		return EXCEL_DOWNLOAD_FILE_PATH;

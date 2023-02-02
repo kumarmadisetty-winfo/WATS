@@ -19488,6 +19488,9 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
+			if(text.isEmpty()) {
+				text = null;
+			}
 			return text;
 		} catch (Exception e) {
 			System.out.println(e);
