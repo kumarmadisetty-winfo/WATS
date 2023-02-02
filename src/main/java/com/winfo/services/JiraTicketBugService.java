@@ -343,8 +343,7 @@ public class JiraTicketBugService {
 			}
 			log.info("Status of Passed script in jira Successfully changed.");
 		}catch (Exception e) {
-			log.info("Error occured while updating status of "+jiraIssueKey+" issue in jira");
-			System.out.println(e);
+			log.error("Error occured while updating status of "+jiraIssueKey+" issue in jira");
 		}
 	}
 
