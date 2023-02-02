@@ -3,13 +3,17 @@ package com.winfo.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,9 +31,13 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonParser;
 import com.winfo.dao.JiraTicketBugDao;
+import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestRunVO;
@@ -39,6 +47,9 @@ import reactor.core.publisher.Mono;
 @Service
 @RefreshScope
 public class JiraTicketBugService {
+	
+	public final Logger log = LogManager.getLogger(RunAutomation.class);
+	private static final String TRANSITIONS = "transitions";
 	@Autowired
 	private TestCaseDataService testRunService;
 
@@ -302,6 +313,39 @@ public class JiraTicketBugService {
 		}
 		return bean;
 
+	}
+	
+	@SuppressWarnings("serial")
+	public void jiraIssueFixed(String jiraIssueKey,String jiraIssueUrl,String jiraIssueTransitions) throws JsonMappingException, JsonProcessingException {
+		try{
+			log.info("changing status of Passed script in jira");
+			String[] jiraIssueTransitionsArray = jiraIssueTransitions.split(",");
+			List <String> jiraIssueTransitionsList = Arrays.asList(jiraIssueTransitionsArray);
+			for(int j = 0 ; j < jiraIssueTransitionsList.size() ; j++){
+				WebClient webClient = WebClient.builder().baseUrl(jiraIssueUrl+jiraIssueKey+"/transitions")
+						.defaultHeaders(httpHeaders -> httpHeaders.setBasicAuth(userName, password)).build();
+				Mono<String> result = webClient.get().retrieve().bodyToMono(String.class);
+				String response = result.block();
+				ObjectMapper mapper = new ObjectMapper();
+				Map jsonMap=mapper.readValue(response, Map.class);
+				org.json.JSONObject jsonObject = new org.json.JSONObject(jsonMap);
+				org.json.JSONArray transitionArray = jsonObject.getJSONArray(TRANSITIONS);
+				for(int i = 0 ; i < transitionArray.length() ; i++){
+					String value = transitionArray.optJSONObject(i).getString("name");
+					if(jiraIssueTransitionsList.get(j).equalsIgnoreCase(value)) {
+						String id=transitionArray.optJSONObject(i).getString("id");
+						Map<String,Map<String,String>> statusId = new HashMap<>();
+						statusId.put("transition", new HashMap<String, String>() {{ put("id",id); }});
+						JSONObject body = new JSONObject(statusId);
+						webClient(jiraIssueUrl+jiraIssueKey+"/transitions", body);
+					}
+				}
+			}
+			log.info("Status of Passed script in jira Successfully changed.");
+		}catch (Exception e) {
+			log.info("Error occured while updating status of "+jiraIssueKey+" issue in jira");
+			System.out.println(e);
+		}
 	}
 
 }

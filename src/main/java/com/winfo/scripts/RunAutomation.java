@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +42,7 @@ import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
+import com.winfo.services.JiraTicketBugService;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.services.TestCaseDataService;
@@ -65,7 +67,8 @@ public class RunAutomation {
 	ErrorMessagesHandler errorMessagesHandler;
 	@Autowired
 	DriverConfiguration driverConfiguration;
-
+	@Autowired
+	JiraTicketBugService jiraTicketBugService;
 	@Value("${configvO.watsvediologo}")
 	private String watsvediologo;
 
@@ -1421,6 +1424,10 @@ public class RunAutomation {
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 										.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
+							}
+							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){
+								fetchConfigVO.getJIRA_ISSUE_URL();
+								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJIRA_ISSUE_UPDATE_STATUS_URL(),fetchConfigVO.getJIRA_ISSUE_UPDATE_TRANSITIONS());
 							}
 					}
 
