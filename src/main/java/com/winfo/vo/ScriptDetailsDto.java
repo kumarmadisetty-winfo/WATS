@@ -27,7 +27,7 @@ public class ScriptDetailsDto {
 	private String lineErrorMsg;
 	private String testRunParamDesc;
 	private Integer dependencyScriptNumber;
-
+	private String issueKey;
 //added executed_by
 	private String executedBy;
 	private String targetApplicationName;
@@ -194,6 +194,11 @@ public class ScriptDetailsDto {
 	public void setTargetApplicationName(String targetApplicationName) {
 		this.targetApplicationName = targetApplicationName;
 	}
-
+	public String getIssueKey() {
+		return issueKey;
+	}
+	public void setIssueKey(String issueKey) {
+		this.issueKey = issueKey;
+	}
 
 }
