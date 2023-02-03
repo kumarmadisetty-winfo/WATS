@@ -67,6 +67,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.assertthat.selenium_shutterbug.core.Capture;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -252,10 +254,10 @@ public abstract class AbstractSeleniumKeywords {
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed").concat(PNG_EXTENSION);
 			
-			
-			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
 	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName+PNG_EXTENSION);
-	        ImageIO.write(s.getImage(),"PNG",file);
+	        ImageIO.write(bufferedImage,"PNG",file);
 	        
 	        uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 
@@ -280,9 +282,10 @@ public abstract class AbstractSeleniumKeywords {
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed").concat(PNG_EXTENSION);
-			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
 	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
-	        ImageIO.write(s.getImage(),"PNG",file);
+	        ImageIO.write(bufferedImage,"PNG",file);
 			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
