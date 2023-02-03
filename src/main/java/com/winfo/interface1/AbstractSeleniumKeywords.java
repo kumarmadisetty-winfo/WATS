@@ -912,7 +912,7 @@ public abstract class AbstractSeleniumKeywords {
 		for (int k = 0; k < cells1.length; k++) {
 			cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
 		}
-		String[] strArr = { "Status", df1.format(passCount), df2.format(pass) + "%" };
+		String[] strArr = { PASSED, df1.format(passCount), df2.format(pass) + "%" };
 		for (String str : strArr) {
 			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
