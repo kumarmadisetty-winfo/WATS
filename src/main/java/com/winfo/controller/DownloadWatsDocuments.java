@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +35,8 @@ public class DownloadWatsDocuments {
 	WatsDocumentService service;
 	
 	@PostMapping(value = "/downloadWatsDoc" , produces= MediaType.APPLICATION_PDF_VALUE)
-	public ResponseEntity<StreamingResponseBody>  getWatsDocument(@RequestBody WatsDocumentVo documentVo) throws Exception {
+	public ResponseEntity<StreamingResponseBody>  getWatsDocument(@Valid @RequestBody WatsDocumentVo documentVo) throws Exception {
 
-		
-		if (documentVo.getFileName() != null && documentVo.getFileName() != null
-				&& (!"".equalsIgnoreCase(documentVo.getWatsVersion())) && (!"".equalsIgnoreCase(documentVo.getWatsVersion()))) {
 			return service.getWatsDocumentPDFFile(documentVo);
-		} 
-		else {
-			log.error("File name and WATS version can not be empty");
-			throw new WatsEBSCustomException(500,"File name and WATS version can not be empty");
-		}
 	}
 }

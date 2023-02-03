@@ -1,14 +1,14 @@
 package com.winfo.vo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.validation.constraints.NotNull;
+
 
 public class WatsDocumentVo {
 
-	@JsonInclude(Include.NON_NULL)
+	@NotNull
 	private String fileName;
 	
-	@JsonInclude(Include.NON_NULL)
+	@NotNull
 	private String watsVersion;
 
 	public String getFileName() {

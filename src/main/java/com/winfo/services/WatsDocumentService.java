@@ -93,13 +93,14 @@ public class WatsDocumentService {
 							out.flush();
 							});
 		    } catch (WatsEBSCustomException e) {
+		    	log.error(e.getErrorMessage());
 				throw e;
 			} catch (BmcException e) {
 				log.error(documentVo.getFileName()+".pdf"+ " is not exist for "+documentVo.getWatsVersion()+" WATS Version");
-		    	throw new WatsEBSCustomException(500,documentVo.getFileName()+".pdf"+ " is not exist for "+documentVo.getWatsVersion()+" WATS Version",e);
+		    	throw new WatsEBSCustomException(e.getStatusCode(),documentVo.getFileName()+".pdf"+ " is not exist for "+documentVo.getWatsVersion()+" WATS Version",e);
 		    }catch (IOException e) {
 		    	log.error("Exception occured while returning file from service");
-				throw new WatsEBSCustomException(500, "Exception occured while returning file from service", e);
+				throw new WatsEBSCustomException(403, "Exception occured while returning file from service", e);
 			} catch (Exception e) {
 				log.error("Exception occured while downloading pdf from Object Store");
 		    	throw new WatsEBSCustomException(500, "Exception occured while downloading pdf from Object Store", e);
