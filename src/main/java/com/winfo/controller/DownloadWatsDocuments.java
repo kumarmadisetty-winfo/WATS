@@ -27,7 +27,7 @@ import com.winfo.vo.WatsScriptAssistantVO;
 @RestController
 public class DownloadWatsDocuments {
 	
-	public final Logger log = LogManager.getLogger(WatsDocumentService.class);
+	public final Logger log = LogManager.getLogger(DownloadWatsDocuments.class);
 
 	@Autowired
 	WatsDocumentService service;
