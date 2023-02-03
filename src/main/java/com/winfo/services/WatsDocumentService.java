@@ -1,6 +1,8 @@
 package com.winfo.services;
 
 import java.io.ByteArrayOutputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,7 +25,7 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -44,8 +46,10 @@ import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.dao.WatsPluginDao;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsDocumentVo;
 import com.winfo.vo.WatsLoginVO;
@@ -56,7 +60,7 @@ import com.winfo.vo.WatsScriptAssistantVO;
 @Service
 public class WatsDocumentService {
 
-Logger log = Logger.getLogger("Logger");
+	public final Logger log = LogManager.getLogger(WatsDocumentService.class);
 	
 	@Value("${oci.config.name.common}")
 	private String ociConfigName;
@@ -91,11 +95,13 @@ Logger log = Logger.getLogger("Logger");
 		    } catch (WatsEBSCustomException e) {
 				throw e;
 			} catch (BmcException e) {
+				log.error(documentVo.getFileName()+".pdf"+ " is not exist for "+documentVo.getWatsVersion()+" WATS Version");
 		    	throw new WatsEBSCustomException(500,documentVo.getFileName()+".pdf"+ " is not exist for "+documentVo.getWatsVersion()+" WATS Version",e);
 		    }catch (IOException e) {
+		    	log.error("Exception occured while returning file from service");
 				throw new WatsEBSCustomException(500, "Exception occured while returning file from service", e);
 			} catch (Exception e) {
-				System.out.println(e);
+				log.error("Exception occured while downloading pdf from Object Store");
 		    	throw new WatsEBSCustomException(500, "Exception occured while downloading pdf from Object Store", e);
 		    }
 	}
