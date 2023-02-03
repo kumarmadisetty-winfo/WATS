@@ -17,6 +17,17 @@ public class PyJabScriptDto {
 	private String ociNameSpace;
 	private String scriptFileName;
 	private String downloadPath;
+	private String excelDownloadFilePath;
+	
+	
+
+	public String getExcelDownloadFilePath() {
+		return excelDownloadFilePath;
+	}
+
+	public void setExcelDownloadFilePath(String excelDownloadFilePath) {
+		this.excelDownloadFilePath = excelDownloadFilePath;
+	}
 
 	public String getApplicationName() {
 		return applicationName;

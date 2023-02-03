@@ -23,7 +23,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
-		
 	</properties>
 
 
@@ -453,6 +452,12 @@
 			<groupId>com.aspose</groupId>
 			<artifactId>aspose-cells</artifactId>
 			<version>22.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot -->
+		<dependency>
+		    <groupId>ru.yandex.qatools.ashot</groupId>
+		    <artifactId>ashot</artifactId>
+		    <version>1.5.4</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

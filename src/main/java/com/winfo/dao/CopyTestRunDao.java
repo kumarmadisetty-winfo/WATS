@@ -155,7 +155,7 @@ public class CopyTestRunDao {
 		List<BigDecimal> maxSeqnumList = query.getResultList();
 
 		if(maxSeqnumList == null || maxSeqnumList.isEmpty() || maxSeqnumList.get(0) == null) {
-			return 1;
+			return 0;
 		}
 		return maxSeqnumList.get(0).intValue();
 	}

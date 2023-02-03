@@ -398,8 +398,7 @@ public class RunAutomation {
 				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
 		try {
 			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			boolean actionContainsSF = dataBaseEntry.doesActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
-			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
+			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
@@ -434,6 +433,7 @@ public class RunAutomation {
 				failList.add(scriptId);
 			}
 		} finally {
+			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScriptNumber());
 			if (driver != null) {
 				driver.close();
@@ -1029,11 +1029,11 @@ public class RunAutomation {
 										&& !message.startsWith("Course Title")) {
 
 									fetchConfigVO.setErrormessage(message);
-									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, fetchMetadataVO,
+									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, fetchMetadataVO, customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
