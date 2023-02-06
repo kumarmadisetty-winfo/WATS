@@ -10181,9 +10181,11 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::input[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittill).build().perform();
-				waittill.sendKeys(keysToSend);
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+			 fetchMetadataVO);
+				//Actions actions = new Actions(driver);
+				//actions.moveToElement(waittill).build().perform();
+				//waittill.sendKeys(keysToSend);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
