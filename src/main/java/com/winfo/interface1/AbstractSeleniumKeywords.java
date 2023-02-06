@@ -185,20 +185,19 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
-			String fileExtension = source.getName();
-
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-
 			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
+			
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-					.concat(fileExtension);
-
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed").concat(PNG_EXTENSION);
+			
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName+PNG_EXTENSION);
+	        ImageIO.write(bufferedImage,"PNG",file);
+	        
+	        uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 
 			logger.info("Successfully Screenshot is taken " + imageName);
 			return folderName + FORWARD_SLASH + imageName;
@@ -208,7 +207,6 @@ public abstract class AbstractSeleniumKeywords {
 			logger.error("Failed During Taking screenshot");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
-//			throw e;
 		}
 	}
 
@@ -217,19 +215,16 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
-
-			String fileExtension = source.getName();
-
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
 			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed")
-					.concat(fileExtension);
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed").concat(PNG_EXTENSION);
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
+	        ImageIO.write(bufferedImage,"PNG",file);
+			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
 			return folderName + FORWARD_SLASH + imageName;
