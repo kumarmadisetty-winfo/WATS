@@ -49,11 +49,11 @@ public class WatsPluginService {
 	
 	Logger log = Logger.getLogger("Logger");
 	
-	@Value("${oci.config.name}")
+	@Value("${oci.config.name.common}")
 	private String ociConfigName;
-	@Value("${oci.bucket.name}")
+	@Value("${oci.bucket.name.common}")
 	private String ociBucketName;
-	@Value("${oci.namespace}")
+	@Value("${oci.namespace.common}")
 	private String ociNamespace;
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
