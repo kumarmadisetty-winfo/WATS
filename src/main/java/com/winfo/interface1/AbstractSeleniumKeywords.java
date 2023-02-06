@@ -655,7 +655,7 @@ public abstract class AbstractSeleniumKeywords {
 			logger.info("before enter Images/wats_icon.png1");
 			Image watsLogo = Image.getInstance(watslogo);
 			logger.info("after enter Images/wats_icon.png1");
-			watsLogo.scalePercent(65, 68);
+			watsLogo.scalePercent(13, 13);
 			watsLogo.setAlignment(Image.ALIGN_RIGHT);
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss aa");
 			String testRunName1 = customerDetails.getTestSetName();
@@ -835,7 +835,7 @@ public abstract class AbstractSeleniumKeywords {
 				document.newPage();
 				String s = "Status: " + status;
 				String scenarios = SCENARIO_NAME + " :" + scenario;
-				watsLogo.scalePercent(65, 65);
+				watsLogo.scalePercent(13, 13);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				document.add(watsLogo);
 				document.add(new Paragraph(s, fnt12));
@@ -1230,7 +1230,7 @@ public abstract class AbstractSeleniumKeywords {
 				String scenarios = SCENARIO_NAME + " :" + scenario;
 
 				String sndo = image.split("_")[0];
-				watsLogo.scalePercent(65, 68);
+				watsLogo.scalePercent(13, 13);
 				Rectangle one1 = new Rectangle(1360, 1000);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
