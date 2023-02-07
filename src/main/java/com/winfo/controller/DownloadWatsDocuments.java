@@ -15,6 +15,10 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import com.winfo.services.WatsDocumentService;
 import com.winfo.vo.WatsDocumentVo;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 @RestController
 public class DownloadWatsDocuments {
 	
@@ -24,6 +28,9 @@ public class DownloadWatsDocuments {
 	WatsDocumentService service;
 	
 	@PostMapping(value = "/downloadWatsDoc" , produces= MediaType.APPLICATION_PDF_VALUE)
+	@ApiOperation( value="Download Wats Document ",notes = "<B> FileName and WatsVersion </B> should be provided to download Wats Document <br>"
+			+ "will get file from object store and download wats document")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Wats Document downloaded successfully")})
 	public ResponseEntity<StreamingResponseBody>  getWatsDocument(@Valid @RequestBody WatsDocumentVo documentVo) throws Exception {
 
 			return service.getWatsDocumentPDFFile(documentVo);
