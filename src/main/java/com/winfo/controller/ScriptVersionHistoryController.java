@@ -19,6 +19,10 @@ import com.winfo.services.ScriptVersionHistoryService;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.VersionHistoryDto;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @CrossOrigin("*")
 @RestController
 public class ScriptVersionHistoryController {
@@ -29,12 +33,16 @@ public class ScriptVersionHistoryController {
 
 	@ResponseBody
 	@PostMapping(value = "/saveVersionHistory")
+	@ApiOperation( value="Save Version History ",notes = " <B>scriptId and Version Number</B> is to pass to save the version history for particular scriptId and version Number")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Saved version history successfully")})
 	public ResponseDto saveVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		return versionHistoryService.saveVersionHistory(versionHistoryDto);
 	}
 
 	@ResponseBody
 	@PostMapping(value = "/getScriptVersionHistoryDetails")
+	@ApiOperation( value="Get ScriptVersion History Details ",notes = " <B>scriptId and Version Number</B> is to pass to get the script version history for particular scriptId and version Number")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public Map<String, String> getMapOfVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto)
 			throws Exception {
 		return versionHistoryService.getMapOfVersionHistory(versionHistoryDto);
@@ -42,6 +50,8 @@ public class ScriptVersionHistoryController {
 
 	@ResponseBody
 	@PostMapping(value = "/getVersionHistory")
+	@ApiOperation( value="Get Version History ",notes = " <B>scriptId and Version Number</B> is to pass to get the version history")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public ScriptMaster getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		if (!(Objects.isNull(versionHistoryDto.getVersionNumber()) || versionHistoryDto.getVersionNumber().isEmpty())) {
 			return versionHistoryService.getVersionHistory(versionHistoryDto);

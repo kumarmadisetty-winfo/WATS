@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,10 @@ import com.winfo.scripts.RunAutomation;
 import com.winfo.services.HealthCheck;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin("*")
 @RestController
@@ -29,7 +34,9 @@ public class JobController {
 	HealthCheck healthCheck;
 
 	@ResponseBody
-	@RequestMapping(value = "/executeTestScript")
+	@PostMapping(value = "/executeTestScript")
+	@ApiOperation( value="Test Script Execution ",notes = " TestScriptNo(TestsetId) is to pass to start the script execution")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Script execution completed")})
 	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto, BindingResult bindingResult)
 			throws Exception {
 

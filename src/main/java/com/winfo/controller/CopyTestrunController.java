@@ -19,6 +19,10 @@ import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.InsertScriptsVO;
 import com.winfo.vo.ResponseDto;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 public class CopyTestrunController {
 	Logger log = Logger.getLogger("Logger");
@@ -27,6 +31,11 @@ public class CopyTestrunController {
 	CopyTestRunService service;
 
 	@PostMapping(value = "copyTestrun", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Copy Test Run", notes = " <B> NewTestRunName:</B> Test run name should be pass to create a new test run,<br> "
+			+ "<B>TestSetId:</B> TestsetId should be pass to copy current test run to new test run, <br> "
+			+ "<B>IncrementValue:</B> This field is used to increment param value, if user want to increment value, pass value as 'Y' or else pass value as 'N', <br>"
+			+ "<B>RequestType:</B> We have to pass request type as 'copyTestRun' to copy new testrun because we are checking condition if request type is equal to copyTestRun then it will copy test run")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Created new test run and returned testSetId " )})
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException, JsonProcessingException {
 		log.info("Test Run Name**" + copyTestrunvo.getNewtestrunname());
@@ -46,7 +55,11 @@ public class CopyTestrunController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/addScriptsOnTestRun")
+	@PostMapping(value = "/addScriptsOnTestRun")
+	@ApiOperation( value="Add Scripts on the testrun ", notes = " <B>TestSetId:</B> TestsetId should be required because at which testrun should add new scripts , <br> "
+			+ " <B>ListOfLineIds:</B> listOfLineIds should be pass, for respective LineId, scripts will be added, <br>"
+			+ "<B>IncementalValue:</B> IncrementValue is refer to sequenceNumber. If we add new scripts to the testRun then sequenceNumber should be increment for each script ")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Added script successfully" )})
 	public ResponseDto addScriptOnTestRun(@RequestBody InsertScriptsVO scriptVO) {
 		log.info("Test Set Id *** " + scriptVO.getTestSetId());
 		return service.addScriptsOnTestRun(scriptVO);
