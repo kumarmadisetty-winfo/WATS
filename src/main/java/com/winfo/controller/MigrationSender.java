@@ -34,7 +34,7 @@ public class MigrationSender {
 
 	@PostMapping("/apiValidationMigrationSender")
 	@ApiOperation( value="Api Validation Migration ",notes = "<B>LookUpCodes:</B> LookUpCodes should be provided to migrate the lookUpCode to the customer<br>"
-			+ "<B>TargetEnvironment:</B>TargetEnvironment should be provided to which customer apivalidationMigration <br>")
+			+ "<B>TargetEnvironment:</B>TargetEnvironment should be provided to identify which customer apivalidationMigration can be done<br>")
 	@ApiResponses( value = { @ApiResponse( code=200,message="ApiValidation Lookupcodes Migrated Successfully")})
 	public ResponseDto apiValidationMigration(@RequestBody ApiValidationMigrationDto apiValidationMigration) {
 		return apiValidationMigrationService.apiValidationMigration(apiValidationMigration);
@@ -42,7 +42,7 @@ public class MigrationSender {
 
 	@PostMapping("/scriptMigrateFromCustomerToCentral")
 	@ApiOperation( value="Script Migration ",notes = "<B>ScriptId:</B> ScriptId should be provided to migrate the script to the customer<br>"
-			+ "<B>CustomerName:</B>CustomerName should be provided to which customer to migrate the migrate<br>"
+			+ "<B>CustomerName:</B>CustomerName should be provided to which customer to migrate the script<br>"
 			+ "<B>ProductVersion:</B>productVersion should be provided because if script multple productVersion then based upon productVersion will migrate the script")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script Migrated Successfully")})
 	public String customerRepoData(@RequestBody ScriptDtlsDto scriptDtls) {
