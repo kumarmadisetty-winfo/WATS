@@ -24,7 +24,7 @@ public class DeleteDataRest {
 	DeleteDataService service;
 
 	@PostMapping("/delete_data")
-	@ApiOperation( value="Delete Script from Library",notes = " <B>ScriptId:</B> ScriptId should be pass, it will identify particular Id script and it will delete the script,<br>"
+	@ApiOperation( value="Delete Script from Library",notes = " <B>ScriptId:</B> ScriptId should be pass, it will identify particular scriptId and it will delete the script,<br>"
 			+ "ProductVersion:</B> ProductVersion must be pass because if one script contains multiple product version, with the help of product version we will delete the script,<br>"
 			+ "<B>DeleteAll:</B> If we pass deleteAll as 'true', it will delete all the scripts.")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully deleted the scripts")})

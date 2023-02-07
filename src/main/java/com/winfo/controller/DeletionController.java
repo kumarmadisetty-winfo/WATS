@@ -26,7 +26,7 @@ public class DeletionController {
 
 	@ResponseBody
 	@PostMapping(value = "/deleteScriptEvidenceReportData")
-	@ApiOperation( value="Delete Script and Evidence Report in the TestRun ",notes = "<B> TestSetId and testSetLineId </B>is to pass to delete the script and Evidence Report(Screenshot and pdf in object Storage which are present in the test run, <br>")
+	@ApiOperation( value="Delete Script and Evidence Report in the TestRun ",notes = "<B> TestSetId and testSetLineId </B>is to pass to delete the script and Evidence Report(Screenshot and pdf in object Storage which are present in the test run<br>")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script Evidence Report deleted successfully")})
 	public ResponseDto deleteScriptFromTestRun(@Valid @RequestBody DeleteEvidenceReportDto testScriptDto,
 			BindingResult bindingResult) throws Exception {
@@ -38,8 +38,7 @@ public class DeletionController {
 	@PostMapping(value = "/deleteTestRunEvidenceReportData")
 	@ApiOperation( value="Delete TestRun and EvidenceReportData",notes = "<B> TestSetId and testSetLineId </B>is to pass to delete the script and Evidence Report(Screenshot and pdf in object Storage which are present in the test run, <br>"
 			+ "<B>IsTestRunDelete:</B> If we pass isTestRunDelete as 'true', it will delete testrun")
-	@ApiResponses( value = { @ApiResponse( code=200,message="Testrun and Evidence report deleted successfully"),
-			@ApiResponse( code=500,message="Not able to delete testrun and evidence report in the test run" )})
+	@ApiResponses( value = { @ApiResponse( code=200,message="Testrun and Evidence report deleted successfully")})
 	public ResponseDto deleteAllScriptFromTestRun(@Valid @RequestBody DeleteEvidenceReportDto testScriptDto,
 			BindingResult bindingResult) throws Exception {
 

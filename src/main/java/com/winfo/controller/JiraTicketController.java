@@ -34,7 +34,7 @@ public class JiraTicketController {
 //	@PostMapping(value = "/issue", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
 	@PostMapping(value = "/issue")
 	@ApiOperation( value="Create Jira Ticket ",notes = " <B>TestsetId, TestsetLineId and ScriptId</B> is to pass to create the Issue in the Jira ticket for the particular test run")
-	@ApiResponses( value = { @ApiResponse( code=200,message="Created Jira Ticket successfully")})
+	@ApiResponses( value = { @ApiResponse( code=200,message="Created Jira Ticket successfully and returned Jira Ticket Number")})
 	public List<DomGenericResponseBean> createJiraTicket(@RequestBody BugDetails bugdetails) throws ParseException {
 
 		return service.createJiraTicket(bugdetails);
