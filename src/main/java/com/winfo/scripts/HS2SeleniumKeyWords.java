@@ -17219,6 +17219,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
 				Thread.sleep(3000);
 				log.info("Successfully Uploaded The File");
+				return;
 			}
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
@@ -17234,6 +17235,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			System.out.println("Is file Present*** "+file.isFile());
 			uploadZip.sendKeys(file.getAbsolutePath());
 			log.info("Successfully Uploaded The File");
+			return;
 			}
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
@@ -17250,6 +17252,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			System.out.println("Is file Present*** "+file.isFile());
 			uploadZip.sendKeys(file.getAbsolutePath());
 			log.info("Successfully Uploaded The File");
+			return;
 			}
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
