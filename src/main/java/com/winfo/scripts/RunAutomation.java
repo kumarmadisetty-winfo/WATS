@@ -647,11 +647,22 @@ public class RunAutomation {
 							}
 
 						case "Navigate":
-							log.info("Navigating to Navigate Action");
-							seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO,
-									fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
-							break;
+								try {
+									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
+										xpathPerformance.navigate(driver, fetchConfigVO,
+												fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+										break;
+									} else {
+
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									log.info("Navigating to Navigate Action");
+									seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO,
+											fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
+									break;
+								}
 						case "Click Menu(OIC)":
 							seleniumFactory.getInstanceObj(instanceName).oicClickMenu(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -745,8 +756,24 @@ public class RunAutomation {
 							}
 
 									case "Dropdown Values":
-							seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
-									fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+										if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
+											try {
+												if (checkValidScript.equalsIgnoreCase("Yes")) {
+
+													xpathPerformance.dropdownValues(driver, param1, param2, param3,
+															fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
+													break;
+												} else {
+
+													throw new Exception("ScriptNotValid");
+												}
+											} catch (Exception e) {
+												seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2, param3,
+														fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
+												break;
+											}
+
+										}
 							break;
 						case "Table SendKeys":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
