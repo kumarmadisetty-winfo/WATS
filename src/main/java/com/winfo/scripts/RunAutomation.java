@@ -1228,8 +1228,15 @@ public class RunAutomation {
 									globalValueForSteps, customerDetails);
 							break;
 						case "uploadFileAutoIT":
+							try {
 							seleniumFactory.getInstanceObj(instanceName)
 									.uploadFileAutoIT(driver, fetchConfigVO.getUpload_file_path(), param1, param2, param3);
+							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
+										customerDetails);
+								throw new Exception("FailedToUploadFile");
+							}
 							break;
 						case "windowclose":
 							seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
