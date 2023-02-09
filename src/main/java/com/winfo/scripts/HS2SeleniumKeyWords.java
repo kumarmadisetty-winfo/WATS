@@ -19177,11 +19177,4 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
-
-//	@Override
-//	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
-//			throws Exception {
-//		// TODO Auto-generated method stub
-//		
-//	}
 }
