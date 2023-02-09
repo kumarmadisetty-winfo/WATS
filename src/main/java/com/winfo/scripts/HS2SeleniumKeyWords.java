@@ -14,13 +14,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17200,21 +17195,75 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
-		try {
-			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+//	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+//		try {
+//			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+//
+//			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
+//			log.info("Successfully Uploaded The File");
+//		} catch (Exception e) {
+//			log.error("Failed During uploadFileAutoIT Action.");
+////			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+//			System.out.println(filelocation);
+//			e.printStackTrace();
+//			throw e;
+//
+//		}
+//	}
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3) throws Exception {
 
-			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
-			log.info("Successfully Uploaded The File");
+		try {
+			if(param2.equalsIgnoreCase("") && param3.equalsIgnoreCase("")) {
+				log.info("Started Upload file");
+				Thread.sleep(3000);
+				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
+				Thread.sleep(3000);
+				log.info("Successfully Uploaded The File");
+			}
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
-//			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			System.out.println(filelocation);
+//			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
+			log.error(fileLocation);
+			e.printStackTrace();
+		}
+		try {
+			if(param1.equalsIgnoreCase("Add") && param2.equalsIgnoreCase("File")) {
+			String uploadXPath = "//*[text()='"+param1+" "+param2+"']";
+			WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
+			Thread.sleep(5000);
+			File file = new File(fileLocation+param3);
+			System.out.println("Is file Present*** "+file.isFile());
+			uploadZip.sendKeys(file.getAbsolutePath());
+			log.info("Successfully Uploaded The File");
+//			screenshot(webDriver, scriptDetailsDto, customerProjectDto);
+			}
+		} catch (Exception e) {
+			log.error("Failed During uploadFileAutoIT Action.");
+//			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
+			log.error(fileLocation);
+			e.printStackTrace();
+		}
+
+		try {
+			if(param1.equalsIgnoreCase("Attachments") && param2.equalsIgnoreCase("file name")) {
+
+			WebElement uploadZip = webDriver.findElement(By.xpath("(//*[normalize-space(text())='"+param1+"']/following::label[normalize-space(text())='"+param2+"']/preceding-sibling::input)[1]"));
+			Thread.sleep(5000);
+			File file = new File(fileLocation+param3);
+			System.out.println("Is file Present*** "+file.isFile());
+			uploadZip.sendKeys(file.getAbsolutePath());
+			log.info("Successfully Uploaded The File");
+//			screenshot(webDriver, scriptDetailsDto, customerProjectDto);
+			}
+		} catch (Exception e) {
+			log.error("Failed During uploadFileAutoIT Action.");
+//			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
+			log.error(fileLocation);
 			e.printStackTrace();
 			throw e;
-
 		}
-	}
+
+}
 
 	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
@@ -19133,4 +19182,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
+
+//	@Override
+//	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
+//			throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }
