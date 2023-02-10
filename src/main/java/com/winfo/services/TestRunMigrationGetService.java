@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -256,9 +257,22 @@ public class TestRunMigrationGetService {
 
 			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
-			 SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
 			if (checkTestRun > 0) {
-				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + " " + sdf.format(new Timestamp(System.currentTimeMillis())));
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
+				String testRunName=testRunMigrateDto.getTestSetName() + " " + sdf.format(new Timestamp(System.currentTimeMillis()));
+				int length=testRunName.length();
+				if(length>80)
+				{
+					testRunName=testRunName.substring(0,80);
+				    testrundata.setTestRunName(testRunName);
+				}
+				else
+				{
+					testrundata.setTestRunName(testRunName);
+					
+				}
+				
 			} else {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
