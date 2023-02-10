@@ -1526,7 +1526,7 @@ public class XpathPerformance {
 		String testSetLine=fetchMetadataVO.getTestSetLineId();
 		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
-			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2).replace("param3", param2);
+			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2).replace("param3", param3).replace("keysToSend", keysToSend);
 			String[] mainparams = param1r.split(";");
 			try {
 				for(int i=0;i<mainparams.length;i++) {
