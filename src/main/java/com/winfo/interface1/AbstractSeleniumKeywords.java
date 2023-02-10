@@ -1005,117 +1005,57 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			chartAddition(writer,passCount,failCount,others);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		JFreeChart chart = ChartFactory.createPieChart("", dataSet, true, true, false);
-//		Color c1 = Color.GREEN;
-//		Color c = Color.RED;
-//		Color gray = Color.GRAY;
-//
-//		LegendTitle legend = chart.getLegend();
-//		PiePlot piePlot = (PiePlot) chart.getPlot();
-//		piePlot.setSectionPaint(PASS, c1);
-//		piePlot.setSectionPaint(FAIL, c);
-//		piePlot.setSectionPaint("In Complete", gray);
-//
-//		piePlot.setBackgroundPaint(Color.WHITE);
-//		piePlot.setOutlinePaint(null);
-//		piePlot.setLabelBackgroundPaint(null);
-//		piePlot.setLabelOutlinePaint(null);
-//		piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
-//		piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
-//		piePlot.setLabelShadowPaint(null);
-//		piePlot.setShadowXOffset(0.0D);
-//		piePlot.setShadowYOffset(0.0D);
-//		piePlot.setLabelGenerator(null);
-//		piePlot.setBackgroundAlpha(0.4f);
-//		piePlot.setExplodePercent(PASS, 0.05);
-//		piePlot.setSimpleLabels(true);
-//		piePlot.setSectionOutlinesVisible(false);
-//		java.awt.Font f2 = new java.awt.Font("", java.awt.Font.PLAIN, 22);
-//		piePlot.setLabelFont(f2);
-//		PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}", new DecimalFormat("0"),
-//				new DecimalFormat("0%"));
-//		piePlot.setLabelGenerator(gen);
-//		legend.setPosition(RectangleEdge.RIGHT);
-//		legend.setVerticalAlignment(VerticalAlignment.CENTER);
-//		piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-//		legend.setFrame(BlockBorder.NONE);
-//		legend.setFrame(new LineBorder(Color.white, new BasicStroke(20f), new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
-//
-//		java.awt.Font pass1 = new java.awt.Font("", Font.NORMAL, 22);
-//		legend.setItemFont(pass1);
-//		PdfContentByte contentByte = writer.getDirectContent();
-//		PdfTemplate template = contentByte.createTemplate(1000, 900);
-//		@SuppressWarnings("deprecation")
-//		Graphics2D graphics2d = template.createGraphics(700, 400, new DefaultFontMapper());
-//		Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600, 400);
-//		chart.draw(graphics2d, rectangle2d);
-//		graphics2d.dispose();
-//		contentByte.addTemplate(template, 400, 100);
 	}
 	
 	public void chartAddition(PdfWriter writer, int passCount, int failCount, int others) throws Exception {
 		try {
-//            Document document = new Document();
-//            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("pie_chart.pdf"));
-//            document.open();
-            PdfContentByte contentByte = writer.getDirectContent();
-            JFreeChart chart = ChartFactory.createPieChart(null, createDataset(passCount, failCount, others), true, true, false);   
-            int width = 600;
-            int height = 600;
-            contentByte.saveState();
-            contentByte.stroke();
-            contentByte.restoreState();
-            PiePlot plot = (PiePlot) chart.getPlot();
-            plot.setShadowPaint(Color.LIGHT_GRAY);
-            plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} ({2})", new DecimalFormat("0"), new DecimalFormat("0%")));
-//            plot.setSimpleLabelOffset(new RectangleInsets(UnitType.RELATIVE, 0.09, 0.09, 0.09, 0.09));
-            plot.setLabelFont(new java.awt.Font("SansSerif", Font.BOLD, 12));
-            plot.setLabelBackgroundPaint(Color.WHITE);
-            plot.setLabelGap(0.02);
-            plot.setBackgroundPaint(Color.WHITE);
-            plot.setBaseSectionOutlinePaint(Color.WHITE);
-            plot.setSectionPaint("Fail", Color.RED);
-            plot.setSectionPaint("In Complete", Color.GRAY);
-            plot.setSectionPaint("Pass", Color.GREEN);
-            plot.setOutlinePaint(null);
-            plot.setExplodePercent("Pass", 0.05);
-            
-            LegendTitle legend = chart.getLegend();
-            legend.setFrame(BlockBorder.NONE);
-//            plot.setSectionPaint("D", Color.YELLOW);
-            
-            int w = 1000;
-            int h = 600;
-            Graphics2D g2 = new PdfGraphics2D(contentByte,w, h);
-            int x = 400;
-            int y = -40;
-            Rectangle2D r2D = new Rectangle2D.Double(x, y, width, height);
-            chart.draw(g2, r2D);
-            chart.setBorderVisible(false);
-            g2.dispose();
-//            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			PdfContentByte contentByte = writer.getDirectContent();
+			JFreeChart chart = ChartFactory.createPieChart(null, createDataset(passCount, failCount, others), true,
+					true, false);
+			contentByte.saveState();
+			contentByte.stroke();
+			contentByte.restoreState();
+			PiePlot plot = (PiePlot) chart.getPlot();
+			plot.setShadowPaint(Color.LIGHT_GRAY);
+			plot.setLabelGenerator(
+					new StandardPieSectionLabelGenerator("{0} ({2})", new DecimalFormat("0"), new DecimalFormat("0%")));
+			plot.setLabelFont(new java.awt.Font("SansSerif", Font.BOLD, 12));
+			plot.setLabelBackgroundPaint(Color.WHITE);
+			plot.setLabelGap(0.02);
+			plot.setBackgroundPaint(Color.WHITE);
+			plot.setBaseSectionOutlinePaint(Color.WHITE);
+			plot.setSectionPaint("Fail", Color.RED);
+			plot.setSectionPaint("In Complete", Color.GRAY);
+			plot.setSectionPaint("Pass", Color.GREEN);
+			plot.setOutlinePaint(null);
+			plot.setExplodePercent("Pass", 0.05);
 
-    private static PieDataset createDataset(int passCount, int failCount, int others) {
-        List<Integer> values = new ArrayList<>();
-        values.add(passCount);
-        values.add(failCount);
-        values.add(others);
-//        values.add(10.0);
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Pass", values.get(0));
-        dataset.setValue("Fail", values.get(1));
-        dataset.setValue("In Complete", values.get(2));
-//        dataset.setValue("D", values.get(3));
-        return dataset;
-    }
+			LegendTitle legend = chart.getLegend();
+			legend.setFrame(BlockBorder.NONE);
+
+			Graphics2D g2 = new PdfGraphics2D(contentByte, 1000, 600);
+			Rectangle2D r2D = new Rectangle2D.Double(400, -40, 600, 600);
+			chart.draw(g2, r2D);
+			chart.setBorderVisible(false);
+			g2.dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static PieDataset createDataset(int passCount, int failCount, int others) {
+		List<Integer> values = new ArrayList<>();
+		values.add(passCount);
+		values.add(failCount);
+		values.add(others);
+		DefaultPieDataset dataset = new DefaultPieDataset();
+		dataset.setValue("Pass", values.get(0));
+		dataset.setValue("Fail", values.get(1));
+		dataset.setValue("In Complete", values.get(2));
+		return dataset;
+	}
 
 	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
 			FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> fetchMetadataListVO, CustomerProjectDto customerDetails,PdfWriter writer)
