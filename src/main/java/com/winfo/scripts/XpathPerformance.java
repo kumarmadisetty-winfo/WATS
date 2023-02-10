@@ -6,11 +6,13 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -1519,19 +1521,21 @@ public class XpathPerformance {
 
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, int count,
-			CustomerProjectDto customerDetails) throws Exception {
+			CustomerProjectDto customerDetails,String xpathlocation) throws Exception {
 
 		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLineNumber();
 		String testSetLine=fetchMetadataVO.getTestSetLineId();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+		String[] mainparams=null;
+		if(xpathlocation==null) {
+			xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+		}
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2).replace("param3", param3).replace("keysToSend", keysToSend);
-			String[] mainparams = param1r.split(";");
+			mainparams = param1r.split(";");
 			try {
 				for(int i=0;i<mainparams.length;i++) {
-					String mainparam = mainparams[i];
-					try {
+							String mainparam = mainparams[i];
 							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparam)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparam)));
@@ -1543,10 +1547,8 @@ public class XpathPerformance {
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
 							log.info("Successfully dropdownValues step-"+i+" is done " + scripNumber);
-					} catch (Exception e) {
-						String scripNumber = fetchMetadataVO.getScriptNumber();
-						log.error("Failed during dropdownValues step-"+i+" " + scripNumber);
-					}
+							mainparams=ArrayUtils.removeElement(mainparams, mainparams[i]);
+							i--;
 				}
 				return;
 			} catch (Exception e) {
@@ -1554,15 +1556,17 @@ public class XpathPerformance {
 				if (count == 0) {
 					count = 1;
 					System.out.println(" The Count Value is : " + count);
+					xpathlocation=String.join(";", mainparams);
 					dropdownValues(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count,
-							customerDetails);
+							customerDetails,xpathlocation);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
 					System.out.println(" The Count Value is : " + count);
+					xpathlocation=String.join(";", mainparams);
 					dropdownValues(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count,
-							customerDetails);
+							customerDetails,xpathlocation);
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During dropdownValues");
@@ -1752,22 +1756,24 @@ public class XpathPerformance {
 	}
 
 	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails,String xpathlocation)
 			throws Exception {
-		String param3 = "Navigator";
-		navigator(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
 		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLineNumber();
 		String testSetLine=fetchMetadataVO.getTestSetLineId();
-		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+		String[] mainparams=null;
+		if(xpathlocation==null) {
+			String param3 = "Navigator";
+			navigator(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+			xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+		}
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
-			String[] mainparams = paramsr.split(";");
+			mainparams = paramsr.split(";");
 			try {
 				for(int i=0;i<mainparams.length;i++) {
 					String mainparam = mainparams[i];
-					try {
 							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparam)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparam)));
@@ -1779,23 +1785,24 @@ public class XpathPerformance {
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
 							log.info("Successfully Navigation step-"+i+" is done " + scripNumber);
-					} catch (Exception e) {
-						String scripNumber = fetchMetadataVO.getScriptNumber();
-						log.error("Failed during Navigation step-"+i+" " + scripNumber);
-					}
+//							mainparams=Arrays.stream(mainparams).filter(s -> !s.equals(mainparam)).toArray(String[]::new);
+							mainparams=ArrayUtils.removeElement(mainparams, mainparams[i]);
+							i--;
 				}
 				return;
 			} catch (Exception e) {
 				if (count == 0) {
 					count = 1;
+					xpathlocation=String.join(";", mainparams);
 					navigate(driver, fetchConfigVO,
-							fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+							fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
+					xpathlocation=String.join(";", mainparams);
 					navigate(driver, fetchConfigVO,
-							fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+							fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 				} else {
 					log.error("Failed During Navigate");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
@@ -1846,136 +1853,7 @@ public class XpathPerformance {
 			System.out.println("Not able to navitage to the Url");
 			throw e;
 		}
-	}
-
-	public String menuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		try {
-			if (param1.equalsIgnoreCase("Expenses")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
-				wait.until(ExpectedConditions.elementToBeClickable(
-						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
-				WebElement waittext = driver
-						.findElement(By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]"));
-				Actions actions = new Actions(driver);
-				Thread.sleep(3000);
-				actions.moveToElement(waittext).build().perform();
-				actions.moveToElement(waittext).click().build().perform();
-				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.info("Successfully MenuNavigation is done " + scripNumber);
-				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='param1'])[2]";
-
-				return xpath;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during MenuNavigation " + scripNumber);
-			// TODO: handle exception
-		}
-
-		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
-			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
-			WebElement waittext = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']"));
-
-			WebElement showmore = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show More']"));
-			Actions actions = new Actions(driver);
-			actions.moveToElement(showmore).build().perform();
-			actions.moveToElement(showmore).click().build().perform();
-			Thread.sleep(3000);
-			WebElement showless = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show Less']"));
-			actions.moveToElement(showless).build().perform();
-			actions.moveToElement(showless).click().build().perform();
-			Thread.sleep(3000);
-			actions.moveToElement(waittext).build().perform();
-			actions.moveToElement(waittext).click().build().perform();
-			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Successfully menunavigation is clicked " + scripNumber);
-			String xpath = "//*[contains(@id,'popup-container')]//a[text()='Show More']" + ">"
-					+ "//*[contains(@id,'popup-container')]//a[text()='Show Less']";
-			log.info("Successfully menunavigation is clicked " + scripNumber);
-			return xpath;
-
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during Menunavigation " + scripNumber);
-
-			screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
-			throw e;
-		}
-	}
-
-	public String menuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
-			throws Exception {
-		String xpath = null;
-		try {
-			Thread.sleep(3000);
-			if (param2.equalsIgnoreCase("Assets")) {
-				WebElement asset = driver.findElement(By.xpath(
-						"//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='"
-								+ param1 + "']"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(asset).build().perform();
-				actions.moveToElement(asset).click().build().perform();
-				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.info("Successfully menuNavigationButton is done " + scripNumber);
-				xpath = "//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param1']";
-				log.info("Successfully menuNavigationButton is done " + scripNumber);
-				return xpath;
-
-			} else {
-				// try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
-				wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-						"//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
-				WebElement waittext = driver.findElement(By
-						.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				actions.moveToElement(waittext).click().build().perform();
-				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.info("Successfully menuNavigationButton is done " + scripNumber);
-				xpath = "//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']";
-				log.info("Successfully menuNavigationButton is done " + scripNumber);
-				return xpath;
-			}
-		} catch (Exception e) {
-			if (count == 0) {
-				count = 1;
-				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
-			} else if (count <= 10) {
-				count = count + 1;
-				System.out.println(" The Count Value is : " + count);
-				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
-			} else {
-				System.out.println("Count value exceeds the limit");
-				log.error("Failed During Navigation");
-				screenshotFail(driver, "Failed during Navigation Method", fetchMetadataVO, fetchConfigVO,
-						customerDetails);
-				System.out.println("Not able to navitage to the :" + "" + param1);
-				throw e;
-			}
-
-		}
-		return xpath;
-	}
+	}	
 
 	public String task(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception {

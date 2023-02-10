@@ -649,9 +649,9 @@ public class RunAutomation {
 						case "Navigate":
 								try {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
-
+										String xpathlocation=null;
 										xpathPerformance.navigate(driver, fetchConfigVO,
-												fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+												fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 										break;
 									} else {
 
@@ -759,9 +759,9 @@ public class RunAutomation {
 										if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 											try {
 												if (checkValidScript.equalsIgnoreCase("Yes")) {
-
+													String xpathlocation=null;
 													xpathPerformance.dropdownValues(driver, param1, param2, param3,
-															fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
+															fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails,xpathlocation);
 													break;
 												} else {
 
