@@ -258,19 +258,17 @@ public class TestRunMigrationGetService {
 			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
 			if (checkTestRun > 0) {
-				
+				String testRunName=null;
 				SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
-				String testRunName=testRunMigrateDto.getTestSetName() + " " + sdf.format(new Timestamp(System.currentTimeMillis()));
-				int length=testRunName.length();
-				if(length>80)
+				if(testRunMigrateDto.getTestSetName().length() >= 67 )
 				{
-					testRunName=testRunName.substring(0,80);
-				    testrundata.setTestRunName(testRunName);
-				}
-				else
-				{
+					testRunName=testRunMigrateDto.getTestSetName().substring(0,67);
+					testRunName=testRunName + " " + sdf.format(new Timestamp(System.currentTimeMillis()));
 					testrundata.setTestRunName(testRunName);
-					
+				}else
+				{
+					testRunName=testRunMigrateDto.getTestSetName() + " " + sdf.format(new Timestamp(System.currentTimeMillis()));
+					testrundata.setTestRunName(testRunName);
 				}
 				
 			} else {
