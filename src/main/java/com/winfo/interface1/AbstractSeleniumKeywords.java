@@ -2071,7 +2071,7 @@ public abstract class AbstractSeleniumKeywords {
 			throws Exception {
 
 		try {
-			if (param2 == null && param3 == null || param2.equalsIgnoreCase("") && param3.equalsIgnoreCase("")) {
+			if ((param2 == null && param3 == null) || (param2.equalsIgnoreCase("") && param3.equalsIgnoreCase(""))) {
 				logger.info("Started Upload file");
 				Thread.sleep(4000);
 				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
