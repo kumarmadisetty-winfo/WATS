@@ -17214,8 +17214,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			throw e;
 
 		}
-
-}
+	}
 
 	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
