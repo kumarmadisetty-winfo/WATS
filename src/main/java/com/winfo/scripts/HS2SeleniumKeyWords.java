@@ -14,8 +14,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17198,7 +17203,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
-			
+
 			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
 			log.info("Successfully Uploaded The File");
 		} catch (Exception e) {
