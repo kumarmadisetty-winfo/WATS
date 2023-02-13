@@ -49,6 +49,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.Log;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -2063,6 +2064,39 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while creating folder in Object Storage..", e);
 		}
+	}
+	
+	
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
+			throws Exception {
+
+		try {
+			if (param2 == null && param3 == null || param2.equalsIgnoreCase("") && param3.equalsIgnoreCase("")) {
+				logger.info("Started Upload file");
+				Thread.sleep(4000);
+				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
+				Thread.sleep(3000);
+				logger.info("Successfully Uploaded The File");
+				return;
+			}
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			logger.error(fileLocation);
+			e.printStackTrace();
+		}
+		try {
+			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fileLocation + "\"");
+			logger.info("Successfully Uploaded The File");
+			return;
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			System.out.println(fileLocation);
+			e.printStackTrace();
+			throw e;
+
+		}
+
 	}
 
 }
