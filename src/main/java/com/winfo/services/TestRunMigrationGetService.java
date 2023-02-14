@@ -1,7 +1,11 @@
 package com.winfo.services;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -254,7 +258,19 @@ public class TestRunMigrationGetService {
 			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
 			if (checkTestRun > 0) {
-				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + Math.random());
+				String testRunName=null;
+				SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss");
+				if(testRunMigrateDto.getTestSetName().length() >= 67 )
+				{
+					testRunName=testRunMigrateDto.getTestSetName().substring(0,67);
+					testRunName=testRunName + " " + sdf.format(new Timestamp(System.currentTimeMillis()));
+					testrundata.setTestRunName(testRunName);
+				}else
+				{
+					testRunName=testRunMigrateDto.getTestSetName() + " " + sdf.format(new Timestamp(System.currentTimeMillis()));
+					testrundata.setTestRunName(testRunName);
+				}
+				
 			} else {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
