@@ -1018,23 +1018,24 @@ public abstract class AbstractSeleniumKeywords {
 			contentByte.stroke();
 			contentByte.restoreState();
 			PiePlot plot = (PiePlot) chart.getPlot();
-			plot.setShadowPaint(Color.LIGHT_GRAY);
 			plot.setLabelGenerator(
 					new StandardPieSectionLabelGenerator("{0} ({2})", new DecimalFormat("0"), new DecimalFormat("0%")));
 			plot.setLabelFont(new java.awt.Font("SansSerif", Font.BOLD, 12));
 			plot.setLabelBackgroundPaint(Color.WHITE);
 			plot.setLabelGap(0.02);
+			plot.setShadowPaint(null);
 			plot.setBackgroundPaint(Color.WHITE);
 			plot.setBaseSectionOutlinePaint(Color.WHITE);
-			plot.setSectionPaint("Fail", Color.RED);
-			plot.setSectionPaint("In Complete", Color.GRAY);
-			plot.setSectionPaint("Pass", Color.GREEN);
+			Color passColor = new Color(50, 205, 50);
+			plot.setSectionPaint("Pass", passColor);
+			Color failColor = new Color(255, 0, 0);
+			plot.setSectionPaint("Fail", failColor);
+			Color inCompleteColor = new Color(51, 137, 222);
+			plot.setSectionPaint("In Complete", inCompleteColor);
 			plot.setOutlinePaint(null);
-			plot.setExplodePercent("Pass", 0.05);
 
 			LegendTitle legend = chart.getLegend();
 			legend.setFrame(BlockBorder.NONE);
-
 			Graphics2D g2 = new PdfGraphics2D(contentByte, 1000, 600);
 			Rectangle2D r2D = new Rectangle2D.Double(400, -40, 600, 600);
 			chart.draw(g2, r2D);
