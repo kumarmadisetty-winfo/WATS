@@ -52,9 +52,13 @@ public class TestRunMigrationGetService {
 	@Transactional
 	@SuppressWarnings("unchecked")
 	public List<DomGenericResponseBean> centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
-
+		
 		List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
-
+		int count=0;
+		DomGenericResponseBean domGenericResponseBean = null;
+		String testrunName=null;
+		String description=null;
+		
 		for (TestRunMigrationDto testRunMigrateDto : listOfTestRunDto) {
 			Session session = entityManager.unwrap(Session.class);
 
@@ -66,7 +70,7 @@ public class TestRunMigrationGetService {
 			int checkTestRun = Integer.parseInt(checkTest.toString());
 
 			if (checkTestRun > 0 && !testRunMigrateDto.isTestRunExists()) {
-				DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
+				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatus(0);
 				domGenericResponseBean.setStatusMessage("Already Exists");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
@@ -81,7 +85,7 @@ public class TestRunMigrationGetService {
 						.getSingleResult();
 				customerId = Integer.parseInt(checkCustomer.toString());
 			} catch (Exception e) {
-				DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
+				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatusMessage("Customer Not Found");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
@@ -344,6 +348,7 @@ public class TestRunMigrationGetService {
 				testrundata.addTestRunScriptData(testSetLineData);
 			}
 			dao.insertTestRun(testrundata);
+			count++;
 			ExecuteStatus executeStatusObj = new ExecuteStatus();
 			ExecuteStatusPK executeStatusPK = new ExecuteStatusPK();
 			executeStatusPK.setExecutedBy(testrundata.getCreatedBy());
@@ -353,10 +358,32 @@ public class TestRunMigrationGetService {
 			executeStatusObj.setFlag('I');
 			executeStatusObj.setTestRunName(testrundata.getTestRunName());
 			copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
-			DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
+			if(count==1)
+			{
+				testrunName=testrundata.getTestRunName();
+				description="TestRun Migrated Successfully";
+			}
+			else
+			{
+				description=count + " " + "TestRuns Migrated Successfully";
+				
+			}			
+		}
+		if(count==1)
+		{
+			domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
-			domGenericResponseBean.setStatusMessage("Migrated Successfully");
-			domGenericResponseBean.setTestRunName(testrundata.getTestRunName());
+			domGenericResponseBean.setStatusMessage("SUCCESS");
+			domGenericResponseBean.setTestRunName(testrunName);
+			domGenericResponseBean.setDescription(description);
+			listOfResponseBean.add(domGenericResponseBean);
+		}
+		else if(count>1)
+		{
+			domGenericResponseBean = new DomGenericResponseBean();
+			domGenericResponseBean.setStatus(200);
+			domGenericResponseBean.setStatusMessage("SUCCESS");
+			domGenericResponseBean.setDescription(description);
 			listOfResponseBean.add(domGenericResponseBean);
 		}
 		return listOfResponseBean;
