@@ -361,7 +361,7 @@ public class TestRunMigrationGetService {
 			if(count==1)
 			{
 				testrunName=testrundata.getTestRunName();
-				description="TestRun Migrated Successfully";
+				description=testrunName + " " + "TestRun Migrated Successfully";
 			}
 			else
 			{
@@ -369,16 +369,7 @@ public class TestRunMigrationGetService {
 				
 			}			
 		}
-		if(count==1)
-		{
-			domGenericResponseBean = new DomGenericResponseBean();
-			domGenericResponseBean.setStatus(200);
-			domGenericResponseBean.setStatusMessage("SUCCESS");
-			domGenericResponseBean.setTestRunName(testrunName);
-			domGenericResponseBean.setDescription(description);
-			listOfResponseBean.add(domGenericResponseBean);
-		}
-		else if(count>1)
+		if(count>=1)
 		{
 			domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
