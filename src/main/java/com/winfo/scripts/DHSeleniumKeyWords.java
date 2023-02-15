@@ -16204,7 +16204,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (inputParam1.equalsIgnoreCase("Account Number")) {
 				Thread.sleep(5000);
-				WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1 + "']/following::input[1]"));
+				WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1 + "']/following::span[1]"));
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(webElement).build().perform();
