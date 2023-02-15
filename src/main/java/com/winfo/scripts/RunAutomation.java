@@ -1216,9 +1216,23 @@ public class RunAutomation {
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
 						case "clickFilter":
-							seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
+							try {
+								if (checkValidScript.equalsIgnoreCase("Yes")) {
+
+									xpathPerformance.clickFilter(driver, param1, param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								} else {
+
+									throw new Exception("ScriptNotValid");
+								}
+							} catch (Exception e) {
+
+								seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, param1, param2,
+										fetchMetadataVO, fetchConfigVO, customerDetails);
+								break;
+
+							}
 
 						case "switchToFrame":
 							try {
@@ -1269,9 +1283,23 @@ public class RunAutomation {
 									customerDetails);
 							break;
 						case "copynumber":
-							globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver,
-									param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
+							try {
+								if (checkValidScript.equalsIgnoreCase("Yes")) {
+
+									globalValueForSteps = xpathPerformance.copynumber(driver,
+											param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
+									break;
+								} else {
+
+									throw new Exception("ScriptNotValid");
+								}
+							} catch (Exception e) {
+
+								globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver,
+										param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+								break;
+							}
+							
 						case "copyy":
 							seleniumFactory.getInstanceObj(instanceName).copyy(driver,
 									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
