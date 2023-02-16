@@ -1030,8 +1030,7 @@ public abstract class AbstractSeleniumKeywords {
 			plot.setSectionPaint("Pass", passColor);
 			Color failColor = new Color(255, 0, 0);
 			plot.setSectionPaint("Fail", failColor);
-			Color inCompleteColor = new Color(51, 137, 222);
-			plot.setSectionPaint("In Complete", inCompleteColor);
+			plot.setSectionPaint("In Complete", Color.GRAY);
 			plot.setOutlinePaint(null);
 
 			LegendTitle legend = chart.getLegend();
