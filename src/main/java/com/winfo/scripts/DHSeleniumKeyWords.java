@@ -16208,7 +16208,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(webElement).build().perform();
-				String stringToSearch = webElement.getAttribute("value");
+				String stringToSearch = webElement.getText();
 				System.out.println(stringToSearch);
 //			value = copyValuesWithSpc(stringToSearch);
 // value = copyValuesWithSpc(webElement);
