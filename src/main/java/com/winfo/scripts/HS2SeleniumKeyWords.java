@@ -157,19 +157,19 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		navigateUrl(driver, fetchConfigVO, fetchMetadataVO, customerDetails);
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Company Single Sign-On']")));
-		WebElement waittill = driver.findElement(By.xpath("//button[text()='Company Single Sign-On']"));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()=\"Company Single Sign-On\"]")));
+		WebElement waittill = driver.findElement(By.xpath("//button[text()=\"Company Single Sign-On\"]"));
 		waittill.click();
 		Thread.sleep(7000);
 
 		String param4 = "User name or email";
 		String param5 = "password";
 		// String param6 = "Sign In";
-		WebElement iframe = driver.findElement(By.xpath("//iframe[@title='TrustArc Cookie Consent Manager']"));
+		WebElement iframe = driver.findElement(By.xpath("//iframe[@title=\"TrustArc Cookie Consent Manager\"]"));
 		Actions actions = new Actions(driver);
 		actions.moveToElement(iframe).build().perform();
 		driver.switchTo().frame(iframe);
-		WebElement Acceptall = driver.findElement(By.xpath("//a[text()='Accept all']"));
+		WebElement Acceptall = driver.findElement(By.xpath("//a[text()=\"Accept all\"]"));
 		Acceptall.click();
 		Thread.sleep(2000);
 		String xpath1 = oicLoginPage(driver, param4, keysToSend, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -234,8 +234,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,'UIScmil')])[1]")));
-			WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,'UIScmil')])[1]"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]")));
+			WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -243,13 +243,12 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String xpath = "(//a[contains(@id,'UIScmil')])[1]";
 
 			try {
-				if (driver.findElement(By.xpath("//div[contains(@id,'popup-container')]//a[text()='Sign Out']"))
+				if (driver.findElement(By.xpath("//div[contains(@id,\"popup-container\")]//a[text()=\"Sign Out\"]"))
 						.isDisplayed()) {
 					WebElement signout = driver
-							.findElement(By.xpath("//div[contains(@id,'popup-container')]//a[text()='Sign Out']"));
+							.findElement(By.xpath("//div[contains(@id,\"popup-container\")]//a[text()=\"Sign Out\"]"));
 					signout.click();
 					Thread.sleep(4000);
-					xpath = xpath + ";" + "//div[contains(@id,'popup-container')]//a[text()='Sign Out']";
 				}
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Logout is done " + scripNumber);
@@ -257,7 +256,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				Thread.sleep(4000);
 				WebElement signout = driver
-						.findElement(By.xpath("//div[contains(@id,'popup-container')]//a[text()='Sign Out']"));
+						.findElement(By.xpath("//div[contains(@id,\"popup-container\")]//a[text()=\"Sign Out\"]"));
 				signout.click();
 				Thread.sleep(4000);
 				xpath = xpath + ";" + "//div[contains(@id,'popup-container')]//a[text()='Sign Out']";
@@ -297,11 +296,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
-					.presenceOfElementLocated(By.xpath("//td[@data-afr-adfday='cm' and text()='" + param1 + "']")));
+					.presenceOfElementLocated(By.xpath("//td[@data-afr-adfday=\"cm\" and text()=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions
-					.elementToBeClickable(By.xpath("//td[@data-afr-adfday='cm' and text()='" + param1 + "']")));
+					.elementToBeClickable(By.xpath("//td[@data-afr-adfday=\"cm\" and text()=\"" + param1 + "\"]")));
 			WebElement waittext = driver
-					.findElement(By.xpath("//td[@data-afr-adfday='cm' and text()='" + param1 + "']"));
+					.findElement(By.xpath("//td[@data-afr-adfday=\"cm\" and text()=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
@@ -322,7 +321,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void selectMonth(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebElement waittext = driver.findElement(By.xpath("//*[text()='Create Time Card']/following::select[1]"));
+			WebElement waittext = driver.findElement(By.xpath("//*[text()=\"Create Time Card\"]/following::select[1]"));
 			selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String xpath = "//*[text()='Create Time Card']/following::select[1]";
@@ -341,14 +340,14 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void selectYear(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebElement wait = driver.findElement(By.xpath("//*[text()='Select Year']/preceding-sibling::input[1]"));
+			WebElement wait = driver.findElement(By.xpath("//*[text()=\"Select Year\"]/preceding-sibling::input[1]"));
 			String yearValue = wait.getAttribute("title");
 			int year = Integer.parseInt(yearValue);
 			System.out.println("The value of the year is: " + year);
 			String xpath = "//*[text()='Select Year']/preceding-sibling::input[1]";
 			if (year < Integer.parseInt(param1)) {
 				while (year != Integer.parseInt(param1)) {
-					WebElement increment = driver.findElement(By.xpath("//a[@title='increment']"));
+					WebElement increment = driver.findElement(By.xpath("//a[@title=\"increment\"]"));
 					increment.click();
 					year = year + 1;
 					System.out.println(year);
@@ -356,7 +355,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				xpath = xpath + ";" + "//a[@title='increment']";
 			} else if (year > Integer.parseInt(param1)) {
 				while (year != Integer.parseInt(param1)) {
-					WebElement decrement = driver.findElement(By.xpath("//a[@title='decrement']"));
+					WebElement decrement = driver.findElement(By.xpath("//a[@title=\"decrement\"]"));
 					decrement.click();
 					year = year - 1;
 					System.out.println(year);
@@ -411,9 +410,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (param1.equalsIgnoreCase("password")) {
 				String title1 = driver.getTitle();
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='" + param1 + "']")));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type=\"" + param1 + "\"]")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
+				jse.executeScript("document.getElementById('password').value = \"" + keysToSend + "\";");
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
@@ -439,13 +438,13 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
-					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,'" + param1 + "')]")));
-			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,'" + param1 + "')]"));
+					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]")));
+			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittill).build().perform();
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
-			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+			jse.executeScript("arguments[0].value=\"" + keysToSend + "\" ;", waittill);
 			// if("password".equalsIgnoreCase(param1))
 			// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
@@ -470,9 +469,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title='" + param1 + "']")));
-			WebElement waittext = driver.findElement(By.xpath("//a[@title='" + param1 + "']"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title=\"" + param1 + "\"]")));
+			WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
@@ -499,11 +498,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (param1.equalsIgnoreCase("Expenses")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
+						By.xpath("(//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]")));
 				wait.until(ExpectedConditions.elementToBeClickable(
-						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
+						By.xpath("(//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]")));
 				WebElement waittext = driver
-						.findElement(By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]"));
+						.findElement(By.xpath("(//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]"));
 				Actions actions = new Actions(driver);
 				Thread.sleep(3000);
 				actions.moveToElement(waittext).build().perform();
@@ -526,9 +525,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
 			/*
 			 * WebElement waittext = driver
 			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" +
@@ -538,16 +537,16 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			// ------------------------(New Change)-----------------------
 
 			WebElement waittext = driver.findElement(By.xpath(
-					"//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']//div[2]/a/*[name()='svg'][1]"));
+					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
 
 			WebElement showmore = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show More']"));
+					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(showmore).build().perform();
 			actions.moveToElement(showmore).click().build().perform();
 			Thread.sleep(15000);
 			WebElement showless = driver
-					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show Less']"));
+					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
 			actions.moveToElement(showless).build().perform();
 			actions.moveToElement(showless).click().build().perform();
 			Thread.sleep(15000);
@@ -583,8 +582,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			Thread.sleep(5000);
 			if (param1.equalsIgnoreCase("Fixed Assets") && param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(By.xpath(
-						"//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='"
-								+ param2 + "']"));
+						"//span[normalize-space(text())=\"Fixed Assets\"]/following::span[normalize-space(text())=\""
+								+ param2 + "\"]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
@@ -602,11 +601,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				// try {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+						"//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param2 + "\"]")));
 				wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-						"//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+						"//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By
-						.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']"));
+						.xpath("//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param2 + "\"]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
@@ -646,9 +645,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			Thread.sleep(7000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@title='" + param1 + "']")));
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@title='" + param1 + "']")));
-			WebElement waittext = driver.findElement(By.xpath("//img[@title='" + param1 + "']"));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@title=\"" + param1 + "\"]")));
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@title=\"" + param1 + "\"]")));
+			WebElement waittext = driver.findElement(By.xpath("//img[@title=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -678,11 +677,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			Thread.sleep(2000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//div[contains(@class,'AFVertical')]//a[normalize-space(text())='" + param1 + "']")));
+					By.xpath("//div[contains(@class,\"AFVertical\")]//a[normalize-space(text())=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//div[contains(@class,'AFVertical')]//a[normalize-space(text())='" + param1 + "']")));
+					By.xpath("//div[contains(@class,\"AFVertical\")]//a[normalize-space(text())=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(
-					By.xpath("//div[contains(@class,'AFVertical')]//a[normalize-space(text())='" + param1 + "']"));
+					By.xpath("//div[contains(@class,\"AFVertical\")]//a[normalize-space(text())=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -690,7 +689,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully open Task " + scripNumber);
-			xpath = "//div[contains(@class,'AFVertical')]//a[normalize-space(text())='param1']";
+			xpath = "//div[contains(@class,AFVertical')]//a[normalize-space(text())='param1']";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -1085,7 +1084,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			if (inputParam.equalsIgnoreCase("Search")) {
 				WebElement waittill = driver
-						.findElement(By.xpath("//*[text()='" + inputParam + "']/preceding::input[1]"));
+						.findElement(By.xpath("//*[text()=\"" + inputParam + "\"]/preceding::input[1]"));
 				// to get Dynamic copynumber
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
@@ -1110,11 +1109,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 				waittill.click();
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+				jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
-				String xpath = "//*[text()='inputParam']/preceding::input[1]";
+				String xpath = "//*[text()=\"inputParam\"]/preceding::input[1]";
 
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1137,7 +1136,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 				WebElement waittill = driver
 
-						.findElement(By.xpath("//span[text()='" + inputParam + "']/following::input[1]"));
+						.findElement(By.xpath("//span[text()=\"" + inputParam + "\"]/following::input[1]"));
 
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
@@ -1167,7 +1166,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+				jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
 
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1195,7 +1194,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				// to get Dynamic copynumber
 				Thread.sleep(5000);
 				WebElement waittill = driver
-						.findElement(By.xpath("//*[@title='" + inputParam + "']/following::input[1]"));
+						.findElement(By.xpath("//*[@title=\"" + inputParam + "\"]/following::input[1]"));
 
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
@@ -1219,7 +1218,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				Thread.sleep(2000);
 				waittill.click();
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+				jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
@@ -1242,7 +1241,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			if (inputParam.equalsIgnoreCase("Notifications")) {
 				WebElement waittill = driver.findElement(
-						By.xpath("//h1[text()='" + inputParam + "']/following::input[@placeholder='Search']"));
+						By.xpath("//h1[text()=\"" + inputParam + "\"]/following::input[@placeholder=\"Search\"]"));
 				// to get Dynamic copynumber
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
@@ -1267,11 +1266,11 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 				waittill.click();
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+				jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully paste is done " + scripNumber);
-				String xpath = "//h1[text()='inputParam']/following::input[@placeholder='Search']";
+				String xpath = "//h1[text()=\"inputParam\"]/following::input[@placeholder=\"Search\"]";
 
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1290,7 +1289,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 			WebElement waittill = driver
 
-					.findElement(By.xpath("//label[text()='" + inputParam + "']/following::input[1]"));
+					.findElement(By.xpath("//label[text()=\"" + inputParam + "\"]/following::input[1]"));
 
 			// to get Dynamic copynumber
 			String testParamId = fetchMetadataVO.getTestScriptParamId();
@@ -1319,7 +1318,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+			jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
 
 			/*
 			 * 
@@ -1352,7 +1351,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		try {
 
-			WebElement waittill = driver.findElement(By.xpath("//input[@placeholder='" + inputParam + "']"));
+			WebElement waittill = driver.findElement(By.xpath("//input[@placeholder=\"" + inputParam + "\"]"));
 
 			// to get Dynamic copynumber
 			String testParamId = fetchMetadataVO.getTestScriptParamId();
@@ -1376,7 +1375,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-			jse.executeScript("arguments[0].value='" + copynumberValue + "';", waittill);
+			jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
 
 			Thread.sleep(3000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1406,8 +1405,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			if (inputParam1.equals("Schedule New Process") && inputParam2.equals("Name")) {
 				Thread.sleep(4000);
-				WebElement waittill = driver.findElement(By.xpath("//div[text()='" + inputParam1
-						+ "']/following::label[text()='" + inputParam2 + "']/following::input[1]"));
+				WebElement waittill = driver.findElement(By.xpath("//div[text()=\"" + inputParam1
+						+ "\"]/following::label[text()=\"" + inputParam2 + "\"]/following::input[1]"));
 				clearMethod(driver, waittill);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Successfully Accounting Period Cleared" + scripNumber);
@@ -1425,8 +1424,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			if (inputParam1.equalsIgnoreCase("Lines")) {
 				WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + inputParam1
-						+ "\"]/following::label[normalize-space(text())='" + inputParam2
-						+ "']/preceding-sibling::input)[1]"));
+						+ "\"]/following::label[normalize-space(text())=\"" + inputParam2
+						+ "\"]/preceding-sibling::input)[1]"));
 				clearMethod(driver, waittill);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1726,9 +1725,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath(("//button[normalize-space(normalize-space(text())='" + param1 + "')]"))));
+					By.xpath(("//button[normalize-space(normalize-space(text())=\"" + param1 + "\")]"))));
 			WebElement waittext = driver
-					.findElement(By.xpath(("//button[normalize-space(normalize-space(text())='" + param1 + "')]")));
+					.findElement(By.xpath(("//button[normalize-space(normalize-space(text())=\"" + param1 + "\")]")));
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -15379,7 +15378,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			waittill.clear();
 			waittill.click();
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
-			jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+			jse.executeScript("arguments[0].value=\"" + keysToSend + "\";", waittill);
 			log.info("clear and typed the given Data");
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked typeIntoValidxpath" + scripNumber);
@@ -17404,13 +17403,13 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (param1.equalsIgnoreCase("Sign in")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath("//*[text()='" + param1 + "']/following::input[1]")));
-				WebElement waittill = driver.findElement(By.xpath("//*[text()='" + param1 + "']/following::input[1]"));
+						.presenceOfElementLocated(By.xpath("//*[text()=\"" + param1 + "\"]/following::input[1]")));
+				WebElement waittill = driver.findElement(By.xpath("//*[text()=\"" + param1 + "\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("arguments[0].value='" + keysToSend + "';", waittill);
+				jse.executeScript("arguments[0].value=\"" + keysToSend + "\";", waittill);
 				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				tab(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
