@@ -592,7 +592,6 @@ public class RunAutomation {
 												dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails,count);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -668,7 +667,6 @@ public class RunAutomation {
 												fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -700,7 +698,6 @@ public class RunAutomation {
 											fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -719,7 +716,6 @@ public class RunAutomation {
 											type1, type2, type3, param1, param2, param3, customerDetails,count,xpathlocation,totalXpaths);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -818,7 +814,6 @@ public class RunAutomation {
 												customerDetails, xpathlocation);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -839,7 +834,6 @@ public class RunAutomation {
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -863,7 +857,6 @@ public class RunAutomation {
 												customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -886,7 +879,6 @@ public class RunAutomation {
 												customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -908,7 +900,6 @@ public class RunAutomation {
 												customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -932,7 +923,6 @@ public class RunAutomation {
 												fetchMetadataVO, fetchConfigVO, count, customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -956,7 +946,6 @@ public class RunAutomation {
 												customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -1004,7 +993,6 @@ public class RunAutomation {
 											count, customerDetails);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1021,7 +1009,6 @@ public class RunAutomation {
 											count, customerDetails);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1037,7 +1024,6 @@ public class RunAutomation {
 											customerDetails,count);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1053,7 +1039,6 @@ public class RunAutomation {
 											count, customerDetails);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1071,7 +1056,6 @@ public class RunAutomation {
 											count, customerDetails);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1089,7 +1073,6 @@ public class RunAutomation {
 											customerDetails);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1107,7 +1090,6 @@ public class RunAutomation {
 											count, customerDetails);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1168,7 +1150,6 @@ public class RunAutomation {
 												customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -1250,7 +1231,6 @@ public class RunAutomation {
 											fetchMetadataVO, fetchConfigVO, customerDetails,count);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1269,7 +1249,6 @@ public class RunAutomation {
 											fetchMetadataVO, fetchConfigVO, count);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1290,7 +1269,6 @@ public class RunAutomation {
 												customerDetails);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -1317,7 +1295,6 @@ public class RunAutomation {
 											param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1345,7 +1322,6 @@ public class RunAutomation {
 											count);
 									break;
 								} else {
-
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
@@ -1398,7 +1374,6 @@ public class RunAutomation {
 												customerDetails,count);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
@@ -1439,7 +1414,6 @@ public class RunAutomation {
 												value1, value2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
 										break;
 									} else {
-
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
