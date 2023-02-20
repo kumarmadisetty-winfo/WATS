@@ -2503,7 +2503,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(2000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
-			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+		    //fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
