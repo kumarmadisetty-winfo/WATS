@@ -583,12 +583,26 @@ public class RunAutomation {
 							userName = fetchMetadataVO.getInputValue();
 							log.info("Navigating to Login into Application Action");
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue().equals("")) {
-								seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
-								userName = null;
-								break;
+								try {
+									if (checkValidScript.equalsIgnoreCase("Yes")) {
+										String xpathlocation=null;
+										xpathPerformance.loginApplication(driver, fetchConfigVO,
+												fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+												fetchMetadataVO.getInputValue(),
+												dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails,count);
+										break;
+									} else {
+
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
+											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+											fetchMetadataVO.getInputValue(),
+											dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
+									userName = null;
+									break;
+								}
 							} else {
 								break;
 							}
@@ -697,9 +711,22 @@ public class RunAutomation {
 							}
 
 						case "Logout":
-							seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO, fetchMetadataVO,
-									type1, type2, type3, param1, param2, param3, customerDetails);
-							break;
+							try {
+								if (checkValidScript.equalsIgnoreCase("Yes")) {
+									String xpathlocation=null;
+									int totalXpaths = 0;
+									xpathPerformance.logout(driver, fetchConfigVO, fetchMetadataVO,
+											type1, type2, type3, param1, param2, param3, customerDetails,count,xpathlocation,totalXpaths);
+									break;
+								} else {
+
+									throw new Exception("ScriptNotValid");
+								}
+							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO, fetchMetadataVO,
+										type1, type2, type3, param1, param2, param3, customerDetails);
+								break;
+							}
 
 						// XpathPerformance code for cases added
 
@@ -1220,7 +1247,7 @@ public class RunAutomation {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 									xpathPerformance.clickFilter(driver, param1, param2,
-											fetchMetadataVO, fetchConfigVO, customerDetails);
+											fetchMetadataVO, fetchConfigVO, customerDetails,count);
 									break;
 								} else {
 
