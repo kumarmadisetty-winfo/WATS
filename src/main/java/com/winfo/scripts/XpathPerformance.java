@@ -120,7 +120,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -198,7 +198,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -211,7 +211,7 @@ public class XpathPerformance {
 
 	
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, int count) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, int count,CustomerProjectDto customerDetails) throws Exception {
 
 //		int count=0;
 		String scriptID = fetchMetadataVO.getScriptId();
@@ -238,17 +238,17 @@ public class XpathPerformance {
 				if (count == 0) {
 					count = 1;
 					System.out.println(" The Count Value is : " + count);
-					textarea(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, count);
+					textarea(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, count,customerDetails);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
 					System.out.println(" The Count Value is : " + count);
-					textarea(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, count);
+					textarea(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, count,customerDetails);
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -260,7 +260,7 @@ public class XpathPerformance {
 	}
 
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
-			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, int count) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, int count,CustomerProjectDto customerDetails) throws Exception {
 //	         int count=0;
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
@@ -286,17 +286,17 @@ public class XpathPerformance {
 				if (count == 0) {
 					count = 1;
 					System.out.println(" The Count Value is : " + count);
-					tableSendKeys(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count);
+					tableSendKeys(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count,customerDetails);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
 					System.out.println(" The Count Value is : " + count);
-					tableSendKeys(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count);
+					tableSendKeys(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count,customerDetails);
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//						screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -348,7 +348,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -399,7 +399,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -449,7 +449,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -498,7 +498,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -510,70 +510,6 @@ public class XpathPerformance {
 
 	}
 
-	public String screenshotFail(WebDriver driver, String screenshotName, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		String image_dest = null;
-		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
-			String fileExtension = source.getName();
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-
-			String currenttime = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(Calendar.getInstance().getTime());
-			image_dest = (fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName() + "/" + fetchMetadataVO.getSeqNum() + "_"
-					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
-					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
-					+ fetchMetadataVO.getLineNumber() + "_Failed").concat(fileExtension);
-			File destination = new File(image_dest);
-
-			if (!destination.exists()) {
-
-				System.out.println("creating directory: " + destination.getName());
-
-				boolean result = false;
-
-				try {
-
-					destination.mkdirs();
-
-					result = true;
-
-				} catch (SecurityException se) {
-
-					// handle it
-
-					System.out.println(se.getMessage());
-
-				}
-
-			} else {
-
-				System.out.println("Folder exist");
-
-			}
-
-			// FileUtils.copyFile(source, destination);
-
-//			Files.copy(FileSystems.getDefault().getPath(source.getPath()), FileSystems.getDefault().getPath(destination.getPath()), StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-
-			Files.copy(source.toPath(),
-
-					destination.toPath(), StandardCopyOption.COPY_ATTRIBUTES,
-
-					StandardCopyOption.REPLACE_EXISTING);
-
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Successfully Failed Screenshot is Taken " + scripNumber);
-			return image_dest;
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during screenshotFail Action. " + scripNumber);
-			System.out.println("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
-		}
-	}
-
 	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
@@ -583,7 +519,7 @@ public class XpathPerformance {
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during refreshPage" + scripNumber);
-			screenshotFail(driver, "Failed during refreshPage Method", fetchMetadataVO, fetchConfigVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			System.out.println("can not refresh the page");
 			e.printStackTrace();
 			throw e;
@@ -630,7 +566,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -682,7 +618,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -729,7 +665,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -792,7 +728,7 @@ public class XpathPerformance {
 			System.out.println(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
-			screenshotFail(driver, "Failed during clickLink Method", fetchMetadataVO, fetchConfigVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -839,7 +775,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -900,7 +836,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -952,7 +888,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -1131,7 +1067,7 @@ public class XpathPerformance {
 			return;
 		} catch (Exception e) {
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 			throw e;
@@ -1151,7 +1087,7 @@ public class XpathPerformance {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  enter" + scripNumber);
 			System.out.println(e);
-			screenshotFail(driver, "Failed during Enter Method", fetchMetadataVO, fetchConfigVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1429,7 +1365,7 @@ public class XpathPerformance {
 			System.out.println(e);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1461,7 +1397,7 @@ public class XpathPerformance {
 							actions.moveToElement(waittext).click().build().perform();
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully dropdownValues step-"+i+" is done " + scripNumber);
+							log.info("XpathPerformance=> Successfully dropdownValues step-"+i+" is done " + scripNumber);
 							mainparams=ArrayUtils.removeElement(mainparams, mainparams[i]);
 							i--;
 				}
@@ -1479,7 +1415,7 @@ public class XpathPerformance {
 					xpathlocation=String.join(";", mainparams);
 					dropdownValues(driver, param1, param2, param3, keysToSend, fetchMetadataVO, fetchConfigVO, count,customerDetails,xpathlocation);
 				} else {
-					log.error("Failed During dropdownValues");
+					log.error("XpathPerformance=> Failed During dropdownValues");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -1528,7 +1464,7 @@ public class XpathPerformance {
 				} else {
 					System.out.println("Count value exceeds the limit");
 					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					System.out.println("Not able to SendValue to the :" + "" + param1);
 					throw e;
 				}
@@ -1554,7 +1490,7 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("param1", param1);
 			String param2r = param1r.replace("param2", param2);
 			String paramsr = param2r.replace("keysToSend", keysToSend);
-			System.out.println("It's working in Radiobutton..... ");
+			System.out.println("XpathPerformance=> It's working in Radiobutton..... ");
 			try {
 //			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 //			wait.until(ExpectedConditions
@@ -1578,10 +1514,8 @@ public class XpathPerformance {
 					System.out.println(" The Count Value is : " + count);
 					clickCheckbox(driver, param1, keysToSend, fetchMetadataVO, fetchConfigVO, count, customerDetails);
 				} else {
-					System.out.println("Count value exceeds the limit");
-					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + param1);
+					log.error("XpathPerformance=> Failed During SendValue");
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
 			}
@@ -1599,12 +1533,11 @@ public class XpathPerformance {
 			action.sendKeys(Keys.TAB).build().perform();
 			Thread.sleep(8000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Sucessfully Clicked tab" + scripNumber);
+			log.info("XpathPerformance=> Sucessfully Clicked tab" + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during  tab" + scripNumber);
-			screenshotFail(driver, "Failed during tab Method", fetchMetadataVO, fetchConfigVO, customerDetails);
-			System.out.println("Failed to do TAB Action");
+			log.error("XpathPerformance=> Failed during  tab" + scripNumber);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
 		}
@@ -1635,7 +1568,7 @@ public class XpathPerformance {
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-				System.out.println("It's working in SelectAvalue..... ");
+				System.out.println("XpathPerformance=> It's working in SelectAvalue..... ");
 			} catch (Exception e) {
 
 				if (count == 0) {
@@ -1651,10 +1584,8 @@ public class XpathPerformance {
 					selectAValue(driver, param1, param2, keysToSend, fetchMetadataVO, fetchConfigVO, count,
 							customerDetails);
 				} else {
-					System.out.println("Count value exceeds the limit");
-					log.error("Failed During SendValue");
-//					screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + param1);
+					log.error("XpathPerformance=> Failed During SendValue");
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
 			}
@@ -1695,7 +1626,7 @@ public class XpathPerformance {
 							actions.moveToElement(waittext).click().build().perform();
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully Navigation step-"+i+" is done " + scripNumber);
+							log.info("XpathPerformance=> Successfully Navigation step-"+i+" is done " + scripNumber);
 							mainparams=ArrayUtils.removeElement(mainparams, mainparams[i]);
 							i--;
 				}
@@ -1714,7 +1645,7 @@ public class XpathPerformance {
 					navigate(driver, fetchConfigVO,
 							fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 				} else {
-					log.error("Failed During Navigate");
+					log.error("XpathPerformance=> Failed During Navigate");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -1732,11 +1663,11 @@ public class XpathPerformance {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", waittext);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Sucessfully Clicked clickValidateXpath" + scripNumber);
+			log.info("XpathPerformance=> Sucessfully Clicked clickValidateXpath" + scripNumber);
 			// waittext.click();
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during  clickValidateXpath" + scripNumber);
+			log.error("XpathPerformance=> Failed during  clickValidateXpath" + scripNumber);
 			e.printStackTrace();
 		}
 	}
@@ -1759,9 +1690,8 @@ public class XpathPerformance {
 			return xpath;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during navigator " + scripNumber);
-			screenshotFail(driver, "Failed during navigateUrl Method", fetchMetadataVO, fetchConfigVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
+			log.error("XpathPerformance=> Failed during navigator " + scripNumber);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1788,7 +1718,7 @@ public class XpathPerformance {
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				log.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+				log.info("XpathPerformance=> Sucessfully clicked Element in clickmenu " + scripNumber);
 				return;
 
 			} catch (Exception e) {
@@ -1803,10 +1733,8 @@ public class XpathPerformance {
 					System.out.println(" The Count Value is : " + count);
 					clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO, count, customerDetails);
 				} else {
-					System.out.println("Count value exceeds the limit");
-					log.error("Failed During SendValue");
-//				screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + param1);
+					log.error("XpathPerformance=> Failed During SendValue");
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
 			}
@@ -1835,12 +1763,11 @@ public class XpathPerformance {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 //			String xpath="(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]";
 //					service.saveXpathParams(param1,param2,scripNumber,xpath);
-			log.info("Sucessfully Clicked mousehover" + scripNumber);
+			log.info("XpathPerformance=> Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during  mousehover" + scripNumber);
-			System.out.println(e);
+			log.error("XpathPerformance=> Failed during  mousehover" + scripNumber);
 		}
 		try {
 			Actions actions = new Actions(driver);
@@ -1848,17 +1775,15 @@ public class XpathPerformance {
 					"(//table[@role='presentation']/following::a[normalize-space(text())='" + param1 + "'])[1]"));
 			actions.moveToElement(waittill).build().perform();
 			Thread.sleep(5000);
-			System.out.print("Successfully executed Mousehover");
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 //			String xpath="(//table[@role='presentation']/following::a[normalize-space(text())='" + param1 + "'])[1]";
 //					service.saveXpathParams(param1,param2,scripNumber,xpath);
-			log.info("Sucessfully Clicked mousehover" + scripNumber);
+			log.info("XpathPerformance=> Sucessfully Clicked mousehover" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during  mousehover" + scripNumber);
-			System.out.println(e);
-			screenshotFail(driver, "Failed during MouseHover Method", fetchMetadataVO, fetchConfigVO, customerDetails);
+			log.error("XpathPerformance=> Failed during  mousehover" + scripNumber);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -1877,26 +1802,22 @@ public class XpathPerformance {
 				WebElement waittill = driver.findElement(By.xpath(param1r));
 				scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+				log.info("XpathPerformance=> Sucessfully Clicked scrollUsingElement" + scripNumber);
 				return;
 			} catch (Exception e) {
 				if (count == 0) {
 					count = 1;
-					System.out.println(" The Count Value is : " + count);
 					scrollUsingElement(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
 							count, customerDetails);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
-					System.out.println(" The Count Value is : " + count);
 					scrollUsingElement(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
 							count, customerDetails);
 				} else {
-					System.out.println("Count value exceeds the limit");
-					log.error("Failed During SendValue");
-//				screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + inputParam);
+					log.error("XpathPerformance=> Failed During SendValue");
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
 
@@ -1918,11 +1839,11 @@ public class XpathPerformance {
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
 		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 		String scripNumber = fetchMetadataVO.getScriptNumber();
-		log.info("Sucessfully Clicked scrollMethod" + scripNumber);
+		log.info("XpathPerformance=> Sucessfully Clicked scrollMethod" + scripNumber);
 	}
 
 	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, int count) throws Exception {
+			FetchConfigVO fetchConfigVO, int count,CustomerProjectDto customerDetails) throws Exception {
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
 		String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1941,19 +1862,15 @@ public class XpathPerformance {
 			} catch (Exception e) {
 				if (count == 0) {
 					count = 1;
-					System.out.println(" The Count Value is : " + count);
-					switchToFrame(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, count);
+					switchToFrame(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
-					System.out.println(" The Count Value is : " + count);
-					switchToFrame(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, count);
+					switchToFrame(driver, fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
 				} else {
-					System.out.println("Count value exceeds the limit");
-					log.error("Failed During SendValue");
-//				screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + inputParam);
+					log.error("XpathPerformance=> Failed During SendValue");
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
 			}
@@ -1964,7 +1881,7 @@ public class XpathPerformance {
 	}
 
 	public void clear(WebDriver driver, String inputParam1, String inputParam2, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, int count) throws Exception {
+			FetchConfigVO fetchConfigVO, int count,CustomerProjectDto customerDetails) throws Exception {
 
 		String scriptID = fetchMetadataVO.getScriptId();
 		String action = fetchMetadataVO.getAction();
@@ -1985,19 +1902,15 @@ public class XpathPerformance {
 			} catch (Exception e) {
 				if (count == 0) {
 					count = 1;
-					System.out.println(" The Count Value is : " + count);
-					clear(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO, count);
+					clear(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO, count,customerDetails);
 					Thread.sleep(2000);
 				} else if (count <= 2) {
 					count = count + 1;
 					Thread.sleep(2000);
-					System.out.println(" The Count Value is : " + count);
-					clear(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO, count);
+					clear(driver, inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO, count,customerDetails);
 				} else {
-					System.out.println("Count value exceeds the limit");
-					log.error("Failed During SendValue");
-//				screenshotFail(driver, "Failed during SendValue Method", fetchMetadataVO, fetchConfigVO);
-					System.out.println("Not able to SendValue to the :" + "" + inputParam1);
+					log.error("XpathPerformance=> Failed During SendValue");
+					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
 			}
@@ -2125,7 +2038,7 @@ public class XpathPerformance {
 							actions.moveToElement(waittext).click().build().perform();
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully click Expandorcollapse " + scripNumber);			
+							log.info("XpathPerformance=> Successfully click Expandorcollapse " + scripNumber);			
 				return;
 			} catch (Exception e) {
 				try {
@@ -2139,7 +2052,7 @@ public class XpathPerformance {
 					actions.moveToElement(waittext).click().build().perform();
 					fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					log.info("Successfully click Expandorcollapse" + scripNumber);
+					log.info("XpathPerformance=> Successfully click Expandorcollapse" + scripNumber);
 					return;
 				} catch (Exception ex) {
 					if (count == 0) {
@@ -2153,7 +2066,7 @@ public class XpathPerformance {
 								count);
 						Thread.sleep(2000);
 					} else {
-						log.error("Failed During click Expandorcollapse");
+						log.error("XpathPerformance=> Failed During click Expandorcollapse");
 						fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 						throw ex;
 					}
@@ -2185,7 +2098,7 @@ public class XpathPerformance {
 							actions.moveToElement(waittext).click().build().perform();
 //							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully clicked NotificationLink " + scripNumber);			
+							log.info("XpathPerformance=> Successfully clicked NotificationLink " + scripNumber);			
 				return;
 			} catch (Exception e) {
 				if (count == 0) {
@@ -2199,7 +2112,7 @@ public class XpathPerformance {
 							customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During clickNotificationLink");
+					log.error("XpathPerformance=> Failed During clickNotificationLink");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2230,7 +2143,7 @@ public class XpathPerformance {
 							actions.moveToElement(waittext).click().build().perform();
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully done clickNotification" + scripNumber);			
+							log.info("XpathPerformance=> Successfully done clickNotification" + scripNumber);			
 				return;
 			} catch (Exception e) {
 				if (count == 0) {
@@ -2244,7 +2157,7 @@ public class XpathPerformance {
 							customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During clickNotification");
+					log.error("XpathPerformance=> Failed During clickNotification");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2284,7 +2197,7 @@ public class XpathPerformance {
 							Thread.sleep(1000);
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully Navigation step-"+i+" is done " + scripNumber);
+							log.info("XpathPerformance=> Successfully Navigation step-"+i+" is done " + scripNumber);
 							mainparams=ArrayUtils.removeElement(mainparams, mainparams[i]);
 							i--;
 				}
@@ -2303,7 +2216,7 @@ public class XpathPerformance {
 					openTask(driver, fetchConfigVO,
 							fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
 				} else {
-					log.error("Failed During openTask");
+					log.error("XpathPerformance=> Failed During openTask");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2332,7 +2245,7 @@ public class XpathPerformance {
 							actions.moveToElement(waittext).build().perform();
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully  moveToElement" + scripNumber);			
+							log.info("XpathPerformance=> Successfully  moveToElement" + scripNumber);			
 				return;
 			} catch (Exception e) {
 				if (count == 0) {
@@ -2346,7 +2259,7 @@ public class XpathPerformance {
 							fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During Navigate");
+					log.error("XpathPerformance=> Failed During Navigate");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2401,7 +2314,7 @@ public class XpathPerformance {
 				actions.moveToElement(waittill).build().perform();
 				actions.moveToElement(waittill).click().build().perform();
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-				log.info("Successfully done datePicker action");		
+				log.info("XpathPerformance=> Successfully done datePicker action");		
 			} catch (Exception e) {
 				if (count == 0) {
 					count = 1;
@@ -2412,7 +2325,7 @@ public class XpathPerformance {
 					datePicker(driver, param1, param2,fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During datePicker");
+					log.error("XpathPerformance=> Failed During datePicker");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2442,7 +2355,7 @@ public class XpathPerformance {
 							typeIntoValidxpath(driver, value2, waittext, fetchConfigVO, fetchMetadataVO);
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
-							log.info("Successfully sent multipleSendKeys  " + scripNumber);			
+							log.info("XpathPerformance=> Successfully sent multipleSendKeys  " + scripNumber);			
 				return;
 			} catch (Exception e) {
 				if (count == 0) {
@@ -2454,7 +2367,7 @@ public class XpathPerformance {
 					multipleSendKeys(driver, param1, param2,value1, value2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During multipleSendKeys");
+					log.error("XpathPerformance=> Failed During multipleSendKeys");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2489,7 +2402,7 @@ public class XpathPerformance {
 				actions.moveToElement(waittill).build().perform();
 				actions.moveToElement(waittill).click().build().perform();
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-				log.info("Sucessfully Navigate");
+				log.info("XpathPerformance=> Sucessfully Navigate");
 			} catch (Exception e) {
 				if (count == 0) {
 					count = 1;
@@ -2500,7 +2413,7 @@ public class XpathPerformance {
 					datePicker(driver, param1, param2,fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During Navigate");
+					log.error("XpathPerformance=> Failed During Navigate");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2536,7 +2449,7 @@ public class XpathPerformance {
 						waittill.click();
 						Thread.sleep(500);
 						fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-						log.info("Sucessfully Clicked clickFilter");
+						log.info("XpathPerformance=> Sucessfully Clicked clickFilter");
 					}catch(Exception ele) {
 						if (count == 0) {
 							count = 1;
@@ -2547,7 +2460,7 @@ public class XpathPerformance {
 							clickFilter(driver, xpath1, xpath2,fetchMetadataVO, fetchConfigVO, customerDetails,count);
 							Thread.sleep(2000);
 						} else {
-							log.error("Failed During clickFilter");
+							log.error("XpathPerformance=> Failed During clickFilter");
 							fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 							throw e;
 						}
@@ -2584,7 +2497,7 @@ public class XpathPerformance {
 					String testParamId = fetchMetadataVO.getTestScriptParamId();
 					String testSetId = fetchMetadataVO.getTestSetLineId();
 					dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-					log.info("Sucessfully Clicked copynumber" + scripNumber);
+					log.info("XpathPerformance=> Sucessfully Clicked copynumber" + scripNumber);
 					return value;
 			} catch (Exception e) {
 				if (count == 0) {
@@ -2596,7 +2509,7 @@ public class XpathPerformance {
 					copynumber(driver,inputParam1, inputParam2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
 					Thread.sleep(2000);
 				} else {
-					log.error("Failed During copynumber");
+					log.error("XpathPerformance=> Failed During copynumber");
 					fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 					throw e;
 				}
@@ -2634,7 +2547,7 @@ public class XpathPerformance {
 				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 				throw new IOException("Failed during login page");
 			}
-			log.info("Succesfully login to application ");
+			log.info("XpathPerformance=> Succesfully login to application ");
 		} catch (Exception e) {
 			if (count == 0) {
 				count = 1;
@@ -2647,7 +2560,7 @@ public class XpathPerformance {
 						value, customerDetails,count);
 				Thread.sleep(2000);
 			} else {
-				log.error("Failed During copynumber");
+				log.error("XpathPerformance=> Failed During copynumber");
 				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 				throw e;
 			}
@@ -2666,19 +2579,19 @@ public class XpathPerformance {
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed to logout " + scripNumber);
+			log.error("XpathPerformance=> Failed to logout " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("failed to do navigate URl " + scripNumber);
+			log.error("XpathPerformance=> failed to do navigate URl " + scripNumber);
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 		}
 	}
 	public void deleteAllCookies(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 			driver.manage().deleteAllCookies();
-			log.info("Successfully Deleted All The Cookies.");
+			log.info("XpathPerformance=> Successfully Deleted All The Cookies.");
 		} catch (Exception e) {
-			log.error("Failed To Delete All The Cookies.");
+			log.error("XpathPerformance=> Failed To Delete All The Cookies.");
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2687,10 +2600,10 @@ public class XpathPerformance {
 		try {
 			driver.switchTo().activeElement();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Switched to Element Successfully" + scripNumber);
+			log.info("XpathPerformance=> Switched to Element Successfully" + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed During switchToActiveElement Action." + scripNumber);
+			log.error("XpathPerformance=> Failed During switchToActiveElement Action." + scripNumber);
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2708,7 +2621,7 @@ public class XpathPerformance {
 		} catch (Exception e) {
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed to enter "+param1+" "+ scripNumber);
+			log.error("XpathPerformance=> Failed to enter "+param1+" "+ scripNumber);
 		}
 	}
 	
@@ -2756,7 +2669,7 @@ public class XpathPerformance {
 				logout(driver, fetchConfigVO, fetchMetadataVO,type1, type2, type3, param1, param2, param3, customerDetails,count,xpathlocation,totalXpaths);
 				Thread.sleep(2000);
 			} else {
-				log.error("Failed During logout");
+				log.error("XpathPerformance=> Failed During logout");
 				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 				throw e;
 			}
@@ -2778,11 +2691,11 @@ public class XpathPerformance {
 			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO,customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Sucessfully clicked SingnInSignOut" + scripNumber);
+			log.info("XpathPerformance=> Sucessfully clicked SingnInSignOut" + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during SingnInSignOut " + scripNumber);
+			log.error("XpathPerformance=> Failed during SingnInSignOut " + scripNumber);
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}

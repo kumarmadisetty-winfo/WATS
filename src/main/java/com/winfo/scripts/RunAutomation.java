@@ -585,7 +585,6 @@ public class RunAutomation {
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue().equals("")) {
 								try {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
-										String xpathlocation=null;
 										xpathPerformance.loginApplication(driver, fetchConfigVO,
 												fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 												fetchMetadataVO.getInputValue(),
@@ -788,7 +787,7 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.textarea(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
@@ -831,7 +830,7 @@ public class RunAutomation {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 										xpathPerformance.tableSendKeys(driver, param1, param2, param3,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count);
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
@@ -1246,7 +1245,7 @@ public class RunAutomation {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 									xpathPerformance.switchToFrame(driver, fetchMetadataVO.getInputParameter(),
-											fetchMetadataVO, fetchConfigVO, count);
+											fetchMetadataVO, fetchConfigVO, count,customerDetails);
 									break;
 								} else {
 									throw new Exception("ScriptNotValid");
@@ -1319,7 +1318,7 @@ public class RunAutomation {
 								if (checkValidScript.equalsIgnoreCase("Yes")) {
 
 									xpathPerformance.clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											count);
+											count,customerDetails);
 									break;
 								} else {
 									throw new Exception("ScriptNotValid");
