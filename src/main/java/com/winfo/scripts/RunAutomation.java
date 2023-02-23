@@ -662,8 +662,9 @@ public class RunAutomation {
 								try {
 									if (checkValidScript.equalsIgnoreCase("Yes")) {
 										String xpathlocation=null;
+										int totalXpaths = 0;
 										xpathPerformance.navigate(driver, fetchConfigVO,
-												fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
+												fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation,totalXpaths);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
