@@ -28,6 +28,7 @@ import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
+import com.winfo.config.MessageUtil;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.utils.Constants;
@@ -85,7 +86,7 @@ public class HealthCheck {
 			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, "Yes, I am up");
+		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("HealthCheck.SanityCheckMessage"));
 	}
 
 	public SanityCheckVO sanityCheckForAdminMethod() {
