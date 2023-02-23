@@ -21,7 +21,7 @@ public class WatsApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WatsApplication.class, args);
-		
+
 	}
 
 }
