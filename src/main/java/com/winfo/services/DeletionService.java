@@ -34,6 +34,7 @@ import com.oracle.bmc.objectstorage.requests.DeleteObjectRequest;
 import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
+import com.winfo.config.MessageUtil;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.Customer;
 import com.winfo.model.TestSet;
@@ -87,7 +88,7 @@ public class DeletionService{
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to read object store config");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.ConfigFileIOException"));
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -104,10 +105,10 @@ public class DeletionService{
 			if (e instanceof WatsEBSCustomException) {
 				throw e;
 			} else {
-				return new ResponseDto(500, Constants.ERROR, "Not able to delete screenshot & pdf");
+				return new ResponseDto(500, Constants.ERROR, MessageUtil.getMessage("Deletion.Error.PdfAndScreenshotNotDeleted"));
 			}
 		}
-		return new ResponseDto(200, Constants.SUCCESS, "Screenshot & Pdf deleted successfully");
+		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("Deletion.Success.PdfAndScreenshotDeleted"));
 	}
 
 	public ResponseDto deleteScriptFromTestRun(DeleteEvidenceReportDto deleteReportDtoObj) {
@@ -115,7 +116,7 @@ public class DeletionService{
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to read object store config");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.ConfigFileIOException"));
 		}
 		
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(deleteReportDtoObj.getTestSetId());
@@ -151,7 +152,7 @@ public class DeletionService{
 			logger.error(e);
 		}
 		
-		return new ResponseDto(200, Constants.SUCCESS, "Screenshot & Pdf deleted successfully");
+		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("Deletion.Success.PdfAndScreenshotDeleted"));
 	}
 	
 	public void deleteScriptDtlsForObjStoreAndSharePoint(TestSetLine testSetLineObj, CustomerProjectDto customerDetails, AuthenticationDetailsProvider provider, FetchConfigVO fetchConfigVO, String testSetId) throws Exception {
@@ -205,13 +206,13 @@ public class DeletionService{
 				}
 			} else {
 				logger.info("Screenshot is not present");
-				return new ResponseDto(200, Constants.SUCCESS, "Screenshot is not present");
+				return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("Deletion.Success.ScreenshotNotPresent"));
 			}
 
 		} catch (Exception e1) {
-			throw new WatsEBSCustomException(500, "Not able to connect with object store");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.AccessDeniedException"));
 		}
-		return new ResponseDto(200, Constants.SUCCESS, "Screenshot deleted successfully");
+		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("Deletion.Success.ScreenshotDeleted"));
 	}
 
 	private ResponseDto deletePdf(TestSetLine testSetLine, CustomerProjectDto customerDetails,
@@ -253,13 +254,13 @@ public class DeletionService{
 				}
 			} else {
 				logger.info("Pdf is not present");
-				return new ResponseDto(200, Constants.SUCCESS, "Pdf is not present");
+				return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("Deletion.Success.PdfNotPresent"));
 			}
 		} catch (Exception e1) {
 
-			throw new WatsEBSCustomException(500, "Not able to connect with object store");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.AccessDeniedException"));
 		}
-		return new ResponseDto(200, Constants.SUCCESS, "Pdf deleted successfully");
+		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("Deletion.Success.PdfDeleted"));
 	}
 
 	public void deletePdfFromSharePoint(FetchConfigVO fetchConfigVO, String accessToken,

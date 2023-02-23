@@ -32,7 +32,6 @@ public final class MessageUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// Create a watch service to monitor the message file for changes
 		URL resource = MessageUtil.class.getClassLoader().getResource(MESSAGE_FILE);
 		Path path = null;
 		try {
@@ -49,9 +48,7 @@ public final class MessageUtil {
 					try {
 						WatchKey key = watchService.take();
 						for (WatchEvent<?> event : key.pollEvents()) {
-							System.out.println(event.context().toString());
-                            if (event.context().toString().equals(MESSAGE_FILE)) {
-//							if (MESSAGE_FILE.contains(event.context().toString())) {
+							if (event.context().toString().equals(MESSAGE_FILE)) {
 								reloadMessages();
 							}
 						}
@@ -76,7 +73,6 @@ public final class MessageUtil {
 				String value = properties.getProperty(key);
 				messageMap.put(key, value);
 			}
-			System.out.println("file updated : "+messageMap);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.winfo.config.MessageUtil;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
@@ -456,7 +457,7 @@ public class CopyTestRunService {
 				invalidTestRunName = existingProductVersion == null ? testSetObj.getTestRunName()
 						: existLineObj.getTestRun().getTestRunName();
 				return new ResponseDto(500, Constants.ERROR,
-						String.format(Constants.INVALID_PRODUCT_VERSION, invalidTestRunName));
+						MessageUtil.getMessage("CopyTestRunService.Error.InvalidProductVersion", invalidTestRunName));
 			} else if (!existingProductVersion.equalsIgnoreCase(newProductVersion)) {
 				Integer scriptIdFromMaster = copyTestrunDao.getScriptIdFromMaster(existLineObj.getScriptNumber(),
 						existingProductVersion);
@@ -574,16 +575,18 @@ public class CopyTestRunService {
 			copyTestrunDao.updatelinesRecord(testSetLineObj);
 		}
 		if(listOfTestSetLinesObj.isEmpty()) {
-			return new ResponseDto(500, Constants.ERROR, Constants.INVALID_SCRIPT_MSG);
+			return new ResponseDto(500, Constants.ERROR,
+					MessageUtil.getMessage("CopyTestRunService.Error.InvalidScript"));
 			
 		}
 		
 		if (listOfScriptNumberWrongProductVersion.isEmpty()) {
-			return new ResponseDto(200, Constants.SUCCESS, Constants.SCRIPT_UPDATE_MSG);
+			return new ResponseDto(200, Constants.SUCCESS,
+					MessageUtil.getMessage("CopyTestRunService.Success.ScriptAdded"));
 		} else {
 			String msg = listOfScriptNumberWrongProductVersion.toString().replace("[", "").replace("]", "");
-			return new ResponseDto(500, Constants.ERROR,
-					String.format(Constants.PRODUCT_VERSION_ERROR, existingProductVersion, msg));
+			return new ResponseDto(500, Constants.ERROR, MessageUtil
+					.getMessage("CopyTestRunService.Error.ProductVersionMissing", existingProductVersion, msg));
 		}
 
 	}
