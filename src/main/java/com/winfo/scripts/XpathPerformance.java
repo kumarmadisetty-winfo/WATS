@@ -2356,12 +2356,16 @@ public class XpathPerformance {
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("value1", value1);
 			try {
+							Thread.sleep(3000);		
 							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
+							Thread.sleep(1000);
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
 							WebElement waittext = driver.findElement(By.xpath(param1r));
 							Actions actions = new Actions(driver);
+							Thread.sleep(1000);
 							actions.moveToElement(waittext).build().perform();
+							Thread.sleep(1000);
 							typeIntoValidxpath(driver, value2, waittext, fetchConfigVO, fetchMetadataVO);
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
