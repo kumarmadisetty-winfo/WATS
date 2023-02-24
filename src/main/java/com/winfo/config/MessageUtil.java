@@ -79,6 +79,6 @@ public final class MessageUtil {
 	}
 
 	private MessageUtil() {
-		throw new IllegalStateException("Utility class");
+		throw new IllegalStateException("Can not initialize utility class");
 	}
 }
