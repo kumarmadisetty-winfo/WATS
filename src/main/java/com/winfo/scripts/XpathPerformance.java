@@ -2356,9 +2356,11 @@ public class XpathPerformance {
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("value1", value1);
 			try {
+							Thread.sleep(1000);
 							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
+							Thread.sleep(1000);
 							WebElement waittext = driver.findElement(By.xpath(param1r));
 							Actions actions = new Actions(driver);
 							actions.moveToElement(waittext).build().perform();
