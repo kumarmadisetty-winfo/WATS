@@ -584,7 +584,7 @@ public class RunAutomation {
 							log.info("Navigating to Login into Application Action");
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue().equals("")) {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										xpathPerformance.loginApplication(driver, fetchConfigVO,
 												fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 												fetchMetadataVO.getInputValue(),
@@ -660,7 +660,7 @@ public class RunAutomation {
 
 						case "Navigate":
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										String xpathlocation=null;
 										int totalXpaths = 0;
 										xpathPerformance.navigate(driver, fetchConfigVO,
@@ -692,7 +692,7 @@ public class RunAutomation {
 
 						case "openTask":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									String xpathlocation=null;
 									xpathPerformance.openTask(driver, fetchConfigVO,
 											fetchMetadataVO, type1, type2, param1, param2, count, customerDetails,xpathlocation);
@@ -709,7 +709,7 @@ public class RunAutomation {
 
 						case "Logout":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									String xpathlocation=null;
 									int totalXpaths = 0;
 									xpathPerformance.logout(driver, fetchConfigVO, fetchMetadataVO,
@@ -729,7 +729,7 @@ public class RunAutomation {
 						case "SendKeys":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.sendValue(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -761,7 +761,7 @@ public class RunAutomation {
 
 						case "clickExpandorcollapse":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									xpathPerformance.clickExpandorcollapse(driver, param1, param2,
 											fetchMetadataVO, fetchConfigVO, customerDetails,count);
 									break;
@@ -785,7 +785,7 @@ public class RunAutomation {
 						case "textarea":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.textarea(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
@@ -807,7 +807,7 @@ public class RunAutomation {
 						case "Dropdown Values":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										String xpathlocation = null;
 										xpathPerformance.dropdownValues(driver, param1, param2, param3,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -828,7 +828,7 @@ public class RunAutomation {
 						case "Table SendKeys":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.tableSendKeys(driver, param1, param2, param3,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,customerDetails);
@@ -850,7 +850,7 @@ public class RunAutomation {
 						case "multiplelinestableSendKeys":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.multiplelinestableSendKeys(driver, param1, param2, param3,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -872,7 +872,7 @@ public class RunAutomation {
 						case "Table Dropdown Values":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.tableDropdownValues(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -894,7 +894,7 @@ public class RunAutomation {
 						case "clickLinkAction":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										xpathPerformance.clickLinkAction(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
 												customerDetails);
@@ -918,7 +918,7 @@ public class RunAutomation {
 						case "clickCheckbox":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										xpathPerformance.clickCheckbox(driver, param1, fetchMetadataVO.getInputValue(),
 												fetchMetadataVO, fetchConfigVO, count, customerDetails);
 										break;
@@ -940,7 +940,7 @@ public class RunAutomation {
 						case "clickRadiobutton":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										xpathPerformance.clickRadiobutton(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
 												customerDetails);
@@ -963,7 +963,7 @@ public class RunAutomation {
 						case "selectAValue":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.selectAValue(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -987,7 +987,7 @@ public class RunAutomation {
 
 						case "clickTableLink":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											count, customerDetails);
@@ -1003,7 +1003,7 @@ public class RunAutomation {
               
 						case "clickLink":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											count, customerDetails);
@@ -1018,7 +1018,7 @@ public class RunAutomation {
 							}
 						case "clickNotificationLink":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickNotificationLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											customerDetails,count);
@@ -1034,7 +1034,7 @@ public class RunAutomation {
 
 						case "clickMenu":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									xpathPerformance.clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											count, customerDetails);
 									break;
@@ -1050,7 +1050,7 @@ public class RunAutomation {
 
 						case "clickImage":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											count, customerDetails);
@@ -1066,7 +1066,7 @@ public class RunAutomation {
 
 						case "clickTableImage":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickTableImage(driver, param1, param2,
 											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -1084,7 +1084,7 @@ public class RunAutomation {
 
 						case "clickButton":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											count, customerDetails);
@@ -1126,7 +1126,7 @@ public class RunAutomation {
 
 						case "tableRowSelect":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.tableRowSelect(driver, param1, param2, fetchMetadataVO,
 											fetchConfigVO, count, customerDetails);
@@ -1143,7 +1143,7 @@ public class RunAutomation {
 						case "clickButton Dropdown":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.clickButtonDropdown(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -1166,7 +1166,7 @@ public class RunAutomation {
 
 						case "mousehover":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									xpathPerformance.mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											customerDetails);
 									break;
@@ -1181,7 +1181,7 @@ public class RunAutomation {
 
 						case "scrollUsingElement":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									xpathPerformance.scrollUsingElement(driver, fetchMetadataVO.getInputParameter(),
 											fetchMetadataVO, fetchConfigVO, count, customerDetails);
 									break;
@@ -1197,7 +1197,7 @@ public class RunAutomation {
 
 						case "moveToElement":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 									xpathPerformance.moveToElement(driver,
 											fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,customerDetails,count);
 									break;
@@ -1225,7 +1225,7 @@ public class RunAutomation {
 							break;
 						case "clickFilter":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clickFilter(driver, param1, param2,
 											fetchMetadataVO, fetchConfigVO, customerDetails,count);
@@ -1243,7 +1243,7 @@ public class RunAutomation {
 
 						case "switchToFrame":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.switchToFrame(driver, fetchMetadataVO.getInputParameter(),
 											fetchMetadataVO, fetchConfigVO, count,customerDetails);
@@ -1262,7 +1262,7 @@ public class RunAutomation {
 						case "selectByText":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.selectByText(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
@@ -1289,7 +1289,7 @@ public class RunAutomation {
 							break;
 						case "copynumber":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									globalValueForSteps = xpathPerformance.copynumber(driver,
 											param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
@@ -1316,7 +1316,7 @@ public class RunAutomation {
 							break;
 						case "clear":
 							try {
-								if (checkValidScript.equalsIgnoreCase("Yes")) {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 									xpathPerformance.clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 											count,customerDetails);
@@ -1367,7 +1367,7 @@ public class RunAutomation {
 						case "DatePicker":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.datePicker(driver, param1, param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
@@ -1408,7 +1408,7 @@ public class RunAutomation {
 						case "multipleSendKeys":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
-									if (checkValidScript.equalsIgnoreCase("Yes")) {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
 										xpathPerformance.multipleSendKeys(driver, param1, param2,
 												value1, value2, fetchMetadataVO, fetchConfigVO, customerDetails,count);
