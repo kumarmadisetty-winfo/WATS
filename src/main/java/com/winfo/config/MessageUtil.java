@@ -22,16 +22,7 @@ public final class MessageUtil {
 	private static final Map<String, String> messageMap = new HashMap<>();
 
 	static {
-		try (InputStream input = MessageUtil.class.getClassLoader().getResourceAsStream(MESSAGE_FILE)) {
-			Properties properties = new Properties();
-			properties.load(input);
-			for (String key : properties.stringPropertyNames()) {
-				String value = properties.getProperty(key);
-				messageMap.put(key, value);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		reloadMessages();
 		URL resource = MessageUtil.class.getClassLoader().getResource(MESSAGE_FILE);
 		Path path = null;
 		try {
@@ -55,6 +46,7 @@ public final class MessageUtil {
 						key.reset();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
+						Thread.currentThread().interrupt();
 					}
 				}
 			});
