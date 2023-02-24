@@ -582,7 +582,7 @@ public class RunAutomation {
 						case "Login into Application":
 							userName = fetchMetadataVO.getInputValue();
 							log.info("Navigating to Login into Application Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue().equals("")) {
+							if (fetchMetadataVO.getInputValue() != null || "".equals(fetchMetadataVO.getInputValue())) {
 								try {
 									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										xpathPerformance.loginApplication(driver, fetchConfigVO,
