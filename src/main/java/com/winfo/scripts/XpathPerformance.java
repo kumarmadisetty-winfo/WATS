@@ -2355,19 +2355,25 @@ public class XpathPerformance {
 		String	xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("value1", value1);
-			try {
-							Thread.sleep(3000);		
+			String[] mainparams = param1r.split(";");
+			try {	
 							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
-							Thread.sleep(1000);
-							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
-							Thread.sleep(1000);
-							WebElement waittext = driver.findElement(By.xpath(param1r));
+//							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
+//							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparams[0])));
+//							WebElement waittext=driver.findElement(By.xpath(mainparams[0]));
+//							JavascriptExecutor js=(JavascriptExecutor) driver;
+//							js.executeScript("document.querySelector(waittext).scrollLeft=1000");
+							
+//							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
+//							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparams[0])));
+							WebElement waittext = driver.findElement(By.xpath(mainparams[0]));
 							Actions actions = new Actions(driver);
-							Thread.sleep(1000);
 							actions.moveToElement(waittext).build().perform();
-							Thread.sleep(1000);
-							typeIntoValidxpath(driver, value2, waittext, fetchConfigVO, fetchMetadataVO);
+							waittext.clear();
+//							waittext.sendKeys(value2);
+							JavascriptExecutor jse = (JavascriptExecutor) driver;
+							jse.executeScript("arguments[0].value='" + value2 + "';", waittext);
+//							typeIntoValidxpath(driver, value2, waittext, fetchConfigVO, fetchMetadataVO);
 							fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 							String scripNumber = fetchMetadataVO.getScriptNumber();
 							log.info("XpathPerformance=> Successfully sent multipleSendKeys  " + scripNumber);			
