@@ -1120,7 +1120,7 @@ public class RunAutomation {
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+//								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
