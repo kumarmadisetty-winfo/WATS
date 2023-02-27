@@ -61,7 +61,7 @@ public class DataBaseConfig {
 		SecretsClient secretsClient = null;
 		try {
 			secretsClient = SecretsClient.builder()
-					.build(new ConfigFileAuthenticationDetailsProvider("~/.oci/configwats", "WATS_WINFOERP"));
+					.build(new ConfigFileAuthenticationDetailsProvider(ociConfigPath, ociConfigName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,7 +79,7 @@ public class DataBaseConfig {
 		String vaultId = null;
 		AuthenticationDetailsProvider provider = null;
 		try {
-			provider = new ConfigFileAuthenticationDetailsProvider("~/.oci/configwats", "WATS_WINFOERP");
+			provider = new ConfigFileAuthenticationDetailsProvider(ociConfigPath, ociConfigName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
