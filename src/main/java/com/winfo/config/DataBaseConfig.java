@@ -38,19 +38,16 @@ public class DataBaseConfig {
 	@Value("${keyVault.compartmentId}")
 	private String compartmentId;
 
-	private String vaultId = getVaultId(compartmentId);
-
 	@Bean
 	@Primary
 	public DataSource getDataSource() {
-		return DataSourceBuilder.create()
-				.url(getOracleUrl("Hostname", "SID", "Port"))
-				.username(getSecreteFromVault("db_user", vaultId))
-				.password(getSecreteFromVault("db_password", vaultId))
+		final String vaultId = getVaultId(compartmentId);
+		return DataSourceBuilder.create().url(getOracleUrl("Hostname", "SID", "Port", vaultId))
+				.username(getSecreteFromVault("db_user", vaultId)).password(getSecreteFromVault("db_password", vaultId))
 				.build();
 	}
 
-	private String getOracleUrl(String hostNameKey, String sidKey, String portKey) {
+	private String getOracleUrl(String hostNameKey, String sidKey, String portKey, String vaultId) {
 		String url = "jdbc:oracle:thin:@" + getSecreteFromVault(hostNameKey, vaultId) + ":"
 				+ getSecreteFromVault(portKey, vaultId) + ":" + getSecreteFromVault(sidKey, vaultId);
 		return url;
@@ -82,12 +79,12 @@ public class DataBaseConfig {
 			provider = new ConfigFileAuthenticationDetailsProvider(ociConfigPath, ociConfigName);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 		KmsVaultClient kmsValueClient = KmsVaultClient.builder().build(provider);
 		ListVaultsRequest listRequest = ListVaultsRequest.builder().compartmentId(compartmentId).build();
 		ListVaultsResponse listResponse = kmsValueClient.listVaults(listRequest);
-		for(VaultSummary vault: listResponse.getItems()) {
-			if(vaultName.equals(vault.getDisplayName())) {
+		for (VaultSummary vault : listResponse.getItems()) {
+			if (vaultName.equals(vault.getDisplayName())) {
 				vaultId = vault.getId();
 				break;
 			}
