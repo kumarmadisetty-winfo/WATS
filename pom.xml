@@ -93,9 +93,9 @@
 			<artifactId>oci-java-sdk-keymanagement</artifactId>
 		</dependency>
 		<dependency>
-    <groupId>com.oracle.oci.sdk</groupId>
-    <artifactId>oci-java-sdk-identity</artifactId>
-</dependency>
+			<groupId>com.oracle.oci.sdk</groupId>
+			<artifactId>oci-java-sdk-identity</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>

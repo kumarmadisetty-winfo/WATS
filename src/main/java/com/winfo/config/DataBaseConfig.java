@@ -26,6 +26,7 @@ import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
 @Configuration
 @ConfigurationProperties(prefix = "spring.datasource")
 public class DataBaseConfig {
+	
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
 
@@ -42,18 +43,20 @@ public class DataBaseConfig {
 	@Primary
 	public DataSource getDataSource() {
 		final String vaultId = getVaultId(compartmentId);
-		return DataSourceBuilder.create().url(getOracleUrl("Hostname", "SID", "Port", vaultId))
-				.username(getSecreteFromVault("db_user", vaultId)).password(getSecreteFromVault("db_password", vaultId))
+		return DataSourceBuilder.create()
+				.url(getOracleUrl("Hostname", "SID", "Port", vaultId))
+				.username(getSecretFromVault("db_user", vaultId))
+				.password(getSecretFromVault("db_password", vaultId))
 				.build();
 	}
 
 	private String getOracleUrl(String hostNameKey, String sidKey, String portKey, String vaultId) {
-		String url = "jdbc:oracle:thin:@" + getSecreteFromVault(hostNameKey, vaultId) + ":"
-				+ getSecreteFromVault(portKey, vaultId) + ":" + getSecreteFromVault(sidKey, vaultId);
+		String url = "jdbc:oracle:thin:@" + getSecretFromVault(hostNameKey, vaultId) + ":"
+				+ getSecretFromVault(portKey, vaultId) + ":" + getSecretFromVault(sidKey, vaultId);
 		return url;
 	}
 
-	private String getSecreteFromVault(String secretName, String vaultId) {
+	private String getSecretFromVault(String secretName, String vaultId) {
 		GetSecretBundleByNameResponse getSecretBundleByNameResponse;
 		SecretsClient secretsClient = null;
 		try {
