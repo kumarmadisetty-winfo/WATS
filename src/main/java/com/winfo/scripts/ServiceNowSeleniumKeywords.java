@@ -18459,13 +18459,6 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	}
 
 	@Override
-	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void navigateInformaticaUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		// TODO Auto-generated method stub

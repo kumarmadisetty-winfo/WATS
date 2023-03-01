@@ -25,8 +25,6 @@ public class FetchConfigVO {
 	private String EBS_URL;
 	
 	private String SAP_CONCUR_URL;
-	
-	private String APPLICATION_USER_NAME;
 
 	private String CHROME_DRIVER_PATH;
 	
@@ -49,8 +47,6 @@ public class FetchConfigVO {
 	private String API_USERNAME;
 	
 	private String ENABLE_GET_MANAGER;
-	
-	private String METADATA_URL;
 	
 	private String MEDIUM_WAIT;
 	
@@ -76,15 +72,7 @@ public class FetchConfigVO {
 	
 	private String JIRA_ISSUE_URL;
 	
-//	@JsonProperty("BROWSER")
-	private String DB_HOST;
-	
-//	@JsonProperty("BROWSER")
-	private String DB_USERNAME;
-	
 	private String DB_PASSWORD;
-//	@JsonProperty("BROWSER")
-	private String SHAREPOINT_DRIVE_ID;
 	
 //	@JsonProperty("BROWSER")
 	private String SHAREPOINT_ITEM_ID;
@@ -99,26 +87,10 @@ public class FetchConfigVO {
 	private String TENANT_ID;
 	
 //	@JsonProperty("BROWSER")
-//changed the name from Enable_video to enable_video
-	private String ENABLE_VIDEO;
-	
-//	@JsonProperty("BROWSER")
 	private String INSTANCE_NAME;
 	
 //	@JsonProperty("BROWSER")
 	private int MAX_NUM_SCRIPTS;
-	
-//	@JsonProperty("BROWSER")
-	private String START_DATE;
-	
-	private String SHAREPOINT_PATH;
-	
-//	@JsonProperty("BROWSER")
-	private String END_DATE;
-	
-	private int LOOP_COUNT;
-	
-	private int SCRIPT_TO_WAIT;
 	
 //	@JsonProperty("BROWSER")
 	private String PASSWORD;
@@ -359,16 +331,6 @@ public class FetchConfigVO {
 		ENABLE_GET_MANAGER = eNABLE_GET_MANAGER;
 	}
 
-	public String getMETADATA_URL() {
-		return METADATA_URL;
-	}
-
-	public void setMETADATA_URL(String mETADATA_URL) {
-		METADATA_URL = mETADATA_URL;
-	}
-
-
-
 	public String getLong_WAIT() {
 		return long_WAIT;
 	}
@@ -412,59 +374,12 @@ public class FetchConfigVO {
 	}
 
 
-	public String getSHAREPOINT_PATH() {
-		return SHAREPOINT_PATH;
-	}
-
-	public void setSHAREPOINT_PATH(String sHAREPOINT_PATH) {
-		SHAREPOINT_PATH = sHAREPOINT_PATH;
-	}
-
-	public int getLOOP_COUNT() {
-		return LOOP_COUNT;
-	}
-
-	public void setLOOP_COUNT(int lOOP_COUNT) {
-		LOOP_COUNT = lOOP_COUNT;
-	}
-
-	public int getSCRIPT_TO_WAIT() {
-		return SCRIPT_TO_WAIT;
-	}
-
-	public void setSCRIPT_TO_WAIT(int sCRIPT_TO_WAIT) {
-		SCRIPT_TO_WAIT = sCRIPT_TO_WAIT;
-	}
-
-
-
 public int getMax_num_scripts() {
 		return MAX_NUM_SCRIPTS;
 	}
 
 	public void setMax_num_scripts(int max_num_scripts) {
 		this.MAX_NUM_SCRIPTS = max_num_scripts;
-	}
-
-	public String getStart_date() {
-		return START_DATE;
-	}
-
-	public void setStart_date(String start_date) {
-		this.START_DATE = start_date;
-	}
-
-	public String getEnd_date() {
-		return END_DATE;
-	}
-
-	public void setEnd_date(String end_date) {
-		this.END_DATE = end_date;
-	}
-
-	//New - change
-	public String getEnable_video() {
-		return ENABLE_VIDEO;
 	}
 
 	public String getInstance_name() {
@@ -474,15 +389,6 @@ public int getMax_num_scripts() {
 	public void setInstance_name(String instance_name) {
 		this.INSTANCE_NAME = instance_name;
 	}
-
-
-
-	public void setEnable_video(String enable_video) {
-		this.ENABLE_VIDEO = enable_video;
-	}
-
-
-
 
 	public String getErrormessage() {
 		return errormessage;
@@ -527,24 +433,7 @@ public int getMax_num_scripts() {
 	public void setStatus1(String status1) {
 		this.status1 = status1;
 	}
-	public String getDb_host() {
-		return DB_HOST;
-	}
-	public void setDb_host(String db_host) {
-		this.DB_HOST = db_host;
-	}
-	public String getDb_username() {
-		return DB_USERNAME;
-	}
-	public void setDb_username(String db_username) {
-		this.DB_USERNAME = db_username;
-	}
-	public String getSharepoint_drive_id() {
-		return SHAREPOINT_DRIVE_ID;
-	}
-	public void setSharepoint_drive_id(String sharepoint_drive_id) {
-		this.SHAREPOINT_DRIVE_ID = sharepoint_drive_id;
-	}
+
 	public String getSharepoint_item_id() {
 		return SHAREPOINT_ITEM_ID;
 	}
@@ -658,12 +547,6 @@ public int getMax_num_scripts() {
 		SAP_CONCUR_URL = sAP_CONCUR_URL;
 	}
 
-	public String getApplication_user_name() {
-		return APPLICATION_USER_NAME;
-	}
-	public void setApplication_user_name(String application_user_name) {
-		this.APPLICATION_USER_NAME = application_user_name;
-	}
 	public String getPassword() {
 		return PASSWORD;
 	}

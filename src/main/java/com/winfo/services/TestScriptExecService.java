@@ -624,7 +624,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
 						null, true, false);
 				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-						.uploadPDF(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
+						.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 			}
 		} catch (Exception e) {
 			if (args.getAutditTrial() != null) {
