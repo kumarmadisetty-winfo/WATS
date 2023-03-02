@@ -80,8 +80,8 @@ public class TestRunMigrationGetService {
 			int customerId = 0;
 			try {
 				BigDecimal checkCustomer = (BigDecimal) session
-						.createNativeQuery("select customer_id from win_ta_customers where customer_name ='"
-								+ testRunMigrateDto.getCustomer() + "'")
+						.createNativeQuery("select customer_id from win_ta_customers where UPPER(customer_name) ='"
+								+ testRunMigrateDto.getCustomer().toUpperCase() + "'")
 						.getSingleResult();
 				customerId = Integer.parseInt(checkCustomer.toString());
 			} catch (Exception e) {
