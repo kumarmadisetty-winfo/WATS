@@ -15347,7 +15347,13 @@ public class WATSSeleniumKeyWords extends AbstractSeleniumKeywords implements Se
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
-		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(Integer.parseInt(fetchMetadataVO.getInputValue()));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			logger.error(e);
+			Thread.currentThread().interrupt();
+		}
 
 	}
 

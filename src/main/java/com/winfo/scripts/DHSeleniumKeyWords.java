@@ -18789,7 +18789,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
-			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+			Thread.sleep(Integer.parseInt(fetchMetadataVO.getInputValue()));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

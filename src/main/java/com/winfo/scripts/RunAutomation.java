@@ -1307,6 +1307,8 @@ public class RunAutomation {
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
 						case "waitTillLoad":
+							Integer valueInMS = 1000 * Integer.parseInt(fetchMetadataVO.getInputParameter());
+							fetchMetadataVO.setInputParameter(valueInMS.toString());
 							seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO);
 							break;

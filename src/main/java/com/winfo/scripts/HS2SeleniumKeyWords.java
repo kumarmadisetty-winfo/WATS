@@ -18919,7 +18919,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			FetchConfigVO fetchConfigVO) {
 		// TODO Auto-generated method stub
 		try {
-			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+			Thread.sleep(Integer.parseInt(fetchMetadataVO.getInputValue()));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
