@@ -18401,7 +18401,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
-			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+			Thread.sleep(Integer.parseInt(fetchMetadataVO.getInputValue()));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -18454,13 +18454,6 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
 			String password, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) {
 		// TODO Auto-generated method stub
 		
 	}

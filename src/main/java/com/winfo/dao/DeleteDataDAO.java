@@ -13,7 +13,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.winfo.config.MessageUtil;
 import com.winfo.model.ScriptMaster;
+import com.winfo.utils.Constants;
 import com.winfo.vo.DeleteScriptsData;
 import com.winfo.vo.DomGenericResponseBean;
 
@@ -78,16 +80,16 @@ public class DeleteDataDAO {
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count == 1) {
 			response.setStatus(404);
-			response.setStatusMessage("ERROR");
-			response.setDescription("Script Not Found");
+			response.setStatusMessage(Constants.ERROR);
+			response.setDescription(MessageUtil.getMessage("DeleteDataDao.Error.ScriptNotFound"));
 			bean.add(response);
 		} else {
 			response.setStatus(200);
-			response.setStatusMessage("SUCCESS");
+			response.setStatusMessage(Constants.SUCCESS);
 			if (scriptIds.size() == 1) {
-				response.setDescription(scriptNumber + " Script Deleted Successfully");
+				response.setDescription(MessageUtil.getMessage("DeleteDataDao.Success.ScriptDeleted",scriptNumber));
 			} else {
-				response.setDescription(i + " Scripts Deleted Successfully");
+				response.setDescription(MessageUtil.getMessage("DeleteDataDao.Success.ScriptDeleted",i));
 			}
 			bean.add(response);
 		}

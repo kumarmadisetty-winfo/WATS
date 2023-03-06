@@ -194,27 +194,6 @@ public class RunAutomation {
 			Map<Integer, Status> scriptStatus = new HashMap<>();
 
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-			Date startDate = sdf.parse(fetchConfigVO.getStart_date());
-			Date endDate = sdf.parse(fetchConfigVO.getEnd_date());
-				if (date.after(endDate) || date.before(startDate)) {
-					executeTestrunVo.setStatusCode(404);
-					executeTestrunVo.setStatusMessage("ERROR");
-					if (date.after(endDate) || date.before(startDate)) {
-						executeTestrunVo.setStatusDescr(
-								"Your request could not be processed the Testrun, please check with the Start and End Date");
-
-					} else {
-						executeTestrunVo.setStatusDescr(
-								"Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
-
-					}
-					return executeTestrunVo;
-
-				}
-			
-
 			fetchConfigVO.setStarttime1(date);
 
 			log.info("Independent scripts # - {} ", metaDataMap.toString());
@@ -354,7 +333,7 @@ public class RunAutomation {
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-							.uploadPDF(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
+							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				executeTestrunVo.setStatusCode(200);
 				executeTestrunVo.setStatusMessage("SUCCESS");
@@ -1036,7 +1015,7 @@ public class RunAutomation {
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+//								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
@@ -1328,6 +1307,8 @@ public class RunAutomation {
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
 						case "waitTillLoad":
+							Integer valueInMS = 1000 * Integer.parseInt(fetchMetadataVO.getInputParameter());
+							fetchMetadataVO.setInputParameter(valueInMS.toString());
 							seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO);
 							break;
@@ -1422,7 +1403,7 @@ public class RunAutomation {
 
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-										.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
+										.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 							}
 							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){
 								fetchConfigVO.getJIRA_ISSUE_URL();
@@ -1479,7 +1460,7 @@ public class RunAutomation {
 								customerDetails);
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-									.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
+									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 						}
 					return;
 				}
