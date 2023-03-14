@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.winfo.services.TestScriptExecService;
@@ -101,7 +101,7 @@ public class TestScriptExecController {
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/getTestSetMode/{testSetId}")
+	@GetMapping(value = "/getTestSetMode/{testSetId}")
 	@ApiOperation( value="Get Copied Value",notes = "We should pass copyPath to get copied value present in the testrun input value")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Copied Succesfully")})
 	public String getTestSetMode(@PathVariable Long testSetId) {
