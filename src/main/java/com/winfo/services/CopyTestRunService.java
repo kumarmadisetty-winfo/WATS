@@ -490,6 +490,8 @@ public class CopyTestRunService {
 						newScriptParamObj.setLineErrorMessage(null);
 						newScriptParamObj.setDataTypes(scriptMetaDataObj.getDatatypes());
 						newScriptParamObj.setUniqueMandatory(scriptMetaDataObj.getUniqueMandatory());
+						newScriptParamObj.setValidationType(scriptMetaDataObj.getValidationType());
+						newScriptParamObj.setValidationName(scriptMetaDataObj.getValidationName());
 						newTestRunScriptParam.add(newScriptParamObj);
 					}
 					newLineObj.setScriptId(scriptIdFromMaster);
@@ -549,6 +551,8 @@ public class CopyTestRunService {
 					newScriptParamObj.setLineErrorMessage(null);
 					newScriptParamObj.setDataTypes(existScriptParamObj.getDataTypes());
 					newScriptParamObj.setUniqueMandatory(existScriptParamObj.getUniqueMandatory());
+					newScriptParamObj.setValidationType(existScriptParamObj.getValidationType());
+					newScriptParamObj.setValidationName(existScriptParamObj.getValidationName());
 					newTestRunScriptParam.add(newScriptParamObj);
 				}
 				newLineObj.setScriptId(existLineObj.getScriptId());
