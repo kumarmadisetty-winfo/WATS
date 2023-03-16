@@ -194,14 +194,10 @@ public class DataBaseEntryDao {
 
 	public void updatePassedScriptLineStatus(String testScriptParamId, String status) {
 		try {
-//			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status +"')
 			TestSetScriptParam testSetScriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));
 			testSetScriptParam.setUpdateDate(new Date());
 			testSetScriptParam.setLineExecutionStatus(status);
 			em.merge(testSetScriptParam);
-//			Query query = em.createNativeQuery("Update TestSetScriptParam set update_date = (select current_timestamp from dual), line_execution_status='" + status
-//					+ "' where test_script_param_id=" + "'" + testScriptParamId + "'");
-//			query.executeUpdate();
 		} catch (Exception e) {
 			logger.info("cant update passed script line status");
 			logger.error(e);
