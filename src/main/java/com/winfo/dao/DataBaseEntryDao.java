@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -195,9 +194,13 @@ public class DataBaseEntryDao {
 
 	public void updatePassedScriptLineStatus(String testScriptParamId, String status) {
 		try {
-			Query query = em.createNativeQuery("Update win_ta_test_set_script_param set update_date = (select current_timestamp from dual), line_execution_status='" + status
-					+ "' where test_script_param_id=" + "'" + testScriptParamId + "'");
-			query.executeUpdate();
+//			Query query = em.createQuery("Update TestSetScriptParam set line_execution_status='" + status +"')
+			TestSetScriptParam testSetScriptParam = em.find(TestSetScriptParam.class, testScriptParamId);
+			testSetScriptParam.setUpdateDate(new Date());
+			em.merge(testSetScriptParam);
+//			Query query = em.createNativeQuery("Update TestSetScriptParam set update_date = (select current_timestamp from dual), line_execution_status='" + status
+//					+ "' where test_script_param_id=" + "'" + testScriptParamId + "'");
+//			query.executeUpdate();
 		} catch (Exception e) {
 			logger.info("cant update passed script line status");
 			logger.error(e);
