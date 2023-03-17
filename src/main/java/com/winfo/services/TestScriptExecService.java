@@ -623,7 +623,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
 						null, true, false);
-				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 						.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 			}
 		} catch (Exception e) {
