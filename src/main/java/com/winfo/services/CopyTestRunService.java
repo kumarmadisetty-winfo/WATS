@@ -388,8 +388,22 @@ public class CopyTestRunService {
 				scriptParamObj.setInputValue(
 						inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 			} else {
+				String inputParam = testSetScriptParamObj.getInputParameter().toLowerCase();
+				if(inputParam.contains("date")){
+					if(inputValues.contains("-")) {
+					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy"); 
+					scriptParamObj.setInputValue(formatter.format(new Date()));
+					}
+					else{
+						SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy"); 
+						scriptParamObj.setInputValue(formatter.format(new Date()));
+					}
+				}
+				else {
 				scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 			}
+			
+		}
 		} else {
 			if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 				scriptParamObj.setInputValue(null);
@@ -407,7 +421,21 @@ public class CopyTestRunService {
 					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 				}
 			} else {
+				String inputParam = testSetScriptParamObj.getInputParameter().toLowerCase();
+				if(inputParam.contains("date")){
+					if(inputValues.contains("-")) {
+					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy"); 
+					scriptParamObj.setInputValue(formatter.format(new Date()));
+					}
+					else{
+						SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy"); 
+						scriptParamObj.setInputValue(formatter.format(new Date()));
+					}
+				}
+				else {
 				scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
+			     }
+			
 			}
 		}
 
