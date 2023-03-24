@@ -76,7 +76,7 @@ public class WatsPlugInRest {
 	
 	
 	@PostMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
-	@ApiOperation( value="Get Wats Script Assistance ZipFile",notes = "  We should pass target Environment and browser to download wats script assistance")
+	@ApiOperation( value="Get Wats Script Assistance ZipFile",notes = "  We should pass target Environment and browser to download WinfoTest script assistance")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistant(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
 
