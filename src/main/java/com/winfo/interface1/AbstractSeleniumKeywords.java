@@ -1,6 +1,5 @@
 package com.winfo.interface1;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -39,20 +38,17 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.block.LineBorder;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.ui.RectangleEdge;
+import org.jfree.data.general.PieDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.Log;
 import org.openqa.selenium.By;
+import org.jfree.util.UnitType;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,11 +64,13 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.assertthat.selenium_shutterbug.core.Capture;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.gson.Gson;
-import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -88,7 +86,6 @@ import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
@@ -118,9 +115,6 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
-import ru.yandex.qatools.ashot.AShot;
-import ru.yandex.qatools.ashot.Screenshot;
-import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -184,20 +178,19 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
-			String fileExtension = source.getName();
-
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-
 			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
+			
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-					.concat(fileExtension);
-
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed").concat(PNG_EXTENSION);
+			
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName+PNG_EXTENSION);
+	        ImageIO.write(bufferedImage,"PNG",file);
+	        
+	        uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 
 			logger.info("Successfully Screenshot is taken " + imageName);
 			return folderName + FORWARD_SLASH + imageName;
@@ -207,7 +200,6 @@ public abstract class AbstractSeleniumKeywords {
 			logger.error("Failed During Taking screenshot");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
-//			throw e;
 		}
 	}
 
@@ -216,19 +208,16 @@ public abstract class AbstractSeleniumKeywords {
 		String imageName = null;
 		String folderName = null;
 		try {
-			TakesScreenshot ts = (TakesScreenshot) driver;
-			File source = ts.getScreenshotAs(OutputType.FILE);
-
-			String fileExtension = source.getName();
-
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
 			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed")
-					.concat(fileExtension);
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed").concat(PNG_EXTENSION);
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
+	        ImageIO.write(bufferedImage,"PNG",file);
+			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
 			return folderName + FORWARD_SLASH + imageName;
@@ -253,10 +242,10 @@ public abstract class AbstractSeleniumKeywords {
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed").concat(PNG_EXTENSION);
 			
-			
-			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
 	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName+PNG_EXTENSION);
-	        ImageIO.write(s.getImage(),"PNG",file);
+	        ImageIO.write(bufferedImage,"PNG",file);
 	        
 	        uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 
@@ -281,9 +270,10 @@ public abstract class AbstractSeleniumKeywords {
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed").concat(PNG_EXTENSION);
-			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
+//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
 	        File file = new File(System.getProperty("java.io.tmpdir")+File.separator+imageName);
-	        ImageIO.write(s.getImage(),"PNG",file);
+	        ImageIO.write(bufferedImage,"PNG",file);
 			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
@@ -1014,53 +1004,60 @@ public abstract class AbstractSeleniumKeywords {
 		Paragraph p1 = new Paragraph(ch);
 		p1.setSpacingBefore(50);
 		document.add(p1);
+		
+		try {
+			chartAddition(writer,passCount,failCount,others);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void chartAddition(PdfWriter writer, int passCount, int failCount, int others) throws Exception {
+		try {
+			PdfContentByte contentByte = writer.getDirectContent();
+			JFreeChart chart = ChartFactory.createPieChart(null, createDataset(passCount, failCount, others), true,
+					true, false);
+			contentByte.saveState();
+			contentByte.stroke();
+			contentByte.restoreState();
+			PiePlot plot = (PiePlot) chart.getPlot();
+			plot.setLabelGenerator(
+					new StandardPieSectionLabelGenerator("{0} ({2})", new DecimalFormat("0"), new DecimalFormat("0%")));
+			plot.setLabelFont(new java.awt.Font("SansSerif", Font.BOLD, 12));
+			plot.setLabelBackgroundPaint(Color.WHITE);
+			plot.setLabelGap(0.02);
+			plot.setShadowPaint(null);
+			plot.setBackgroundPaint(Color.WHITE);
+			plot.setBaseSectionOutlinePaint(Color.WHITE);
+			Color passColor = new Color(50, 205, 50);
+			plot.setSectionPaint("Pass", passColor);
+			Color failColor = new Color(255, 0, 0);
+			plot.setSectionPaint("Fail", failColor);
+			plot.setSectionPaint("In Complete", Color.GRAY);
+			plot.setOutlinePaint(null);
 
-		JFreeChart chart = ChartFactory.createPieChart("", dataSet, true, true, false);
-		Color c1 = Color.GREEN;
-		Color c = Color.RED;
-		Color gray = Color.GRAY;
+			LegendTitle legend = chart.getLegend();
+			legend.setFrame(BlockBorder.NONE);
+			Graphics2D g2 = new PdfGraphics2D(contentByte, 1000, 600);
+			Rectangle2D r2D = new Rectangle2D.Double(400, -40, 600, 600);
+			chart.draw(g2, r2D);
+			chart.setBorderVisible(false);
+			g2.dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-		LegendTitle legend = chart.getLegend();
-		PiePlot piePlot = (PiePlot) chart.getPlot();
-		piePlot.setSectionPaint(PASS, c1);
-		piePlot.setSectionPaint(FAIL, c);
-		piePlot.setSectionPaint("In Complete", gray);
-
-		piePlot.setBackgroundPaint(Color.WHITE);
-		piePlot.setOutlinePaint(null);
-		piePlot.setLabelBackgroundPaint(null);
-		piePlot.setLabelOutlinePaint(null);
-		piePlot.setLabelGenerator(new StandardPieSectionLabelGenerator());
-		piePlot.setInsets(new RectangleInsets(10, 5.0, 5.0, 5.0));
-		piePlot.setLabelShadowPaint(null);
-		piePlot.setShadowXOffset(0.0D);
-		piePlot.setShadowYOffset(0.0D);
-		piePlot.setLabelGenerator(null);
-		piePlot.setBackgroundAlpha(0.4f);
-		piePlot.setExplodePercent(PASS, 0.05);
-		piePlot.setSimpleLabels(true);
-		piePlot.setSectionOutlinesVisible(false);
-		java.awt.Font f2 = new java.awt.Font("", java.awt.Font.PLAIN, 22);
-		piePlot.setLabelFont(f2);
-		PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{2}", new DecimalFormat("0"),
-				new DecimalFormat("0%"));
-		piePlot.setLabelGenerator(gen);
-		legend.setPosition(RectangleEdge.RIGHT);
-		legend.setVerticalAlignment(VerticalAlignment.CENTER);
-		piePlot.setInsets(new RectangleInsets(0.0, 5.0, 5.0, 5.0));
-		legend.setFrame(BlockBorder.NONE);
-		legend.setFrame(new LineBorder(Color.white, new BasicStroke(20f), new RectangleInsets(1.0, 1.0, 1.0, 1.0)));
-
-		java.awt.Font pass1 = new java.awt.Font("", Font.NORMAL, 22);
-		legend.setItemFont(pass1);
-		PdfContentByte contentByte = writer.getDirectContent();
-		PdfTemplate template = contentByte.createTemplate(1000, 900);
-		@SuppressWarnings("deprecation")
-		Graphics2D graphics2d = template.createGraphics(700, 400, new DefaultFontMapper());
-		Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, 600, 400);
-		chart.draw(graphics2d, rectangle2d);
-		graphics2d.dispose();
-		contentByte.addTemplate(template, 400, 100);
+	private static PieDataset createDataset(int passCount, int failCount, int others) {
+		List<Integer> values = new ArrayList<>();
+		values.add(passCount);
+		values.add(failCount);
+		values.add(others);
+		DefaultPieDataset dataset = new DefaultPieDataset();
+		dataset.setValue("Pass", values.get(0));
+		dataset.setValue("Fail", values.get(1));
+		dataset.setValue("In Complete", values.get(2));
+		return dataset;
 	}
 
 	public void addRestOfPagesToPDF(Document document, List<String> fileNameList, Image watsLogo,
@@ -1495,7 +1492,7 @@ public abstract class AbstractSeleniumKeywords {
 				}
 			}
 		} catch (Exception e1) {
-			Log.error("Not able to connect with object store");
+			logger.error("Not able to connect with object store");
 		}
 		logger.info("Script screenshot deleted successfully!!");
 	}
