@@ -3,6 +3,7 @@
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchConfigVO {
@@ -16,6 +17,8 @@ public class FetchConfigVO {
 	private String INFORMATICA_APPLICATION_URL;
 	
 	private String BROWSER;
+	
+	private Integer WAIT_TIME;
 	
 	private String APPLICATION_URL;
 	
@@ -514,6 +517,12 @@ public int getMax_num_scripts() {
 	}
 	public void setBrowser(String browser) {
 		this.BROWSER = browser;
+	}
+	public Integer getWait_time() {
+		return WAIT_TIME;
+	}
+	public void setWait_time(Integer wait_time) {
+		this.WAIT_TIME = wait_time;
 	}
 	public String getApplication_url() {
 		return APPLICATION_URL;
