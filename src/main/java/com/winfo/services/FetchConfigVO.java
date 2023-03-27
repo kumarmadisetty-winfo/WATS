@@ -3,7 +3,6 @@
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchConfigVO {
@@ -128,8 +127,6 @@ public class FetchConfigVO {
     private String PDF_LOCATION;
     
     private String OIC_JOB_SCHEDULER;
-    
-    private Integer ACTION_WAIT_TIME;
     
     @JsonProperty("SharePoint_URL")
     private String SharePoint_URL;
@@ -273,15 +270,7 @@ public class FetchConfigVO {
 	public void setDirectory_Name(String directory_Name) {
 		Directory_Name = directory_Name;
 	}
-
-	public Integer getACTION_WAIT_TIME() {
-		return ACTION_WAIT_TIME;
-	}
-
-	public void setACTION_WAIT_TIME(Integer aCTION_WAIT_TIME) {
-		ACTION_WAIT_TIME = aCTION_WAIT_TIME;
-	}
-
+	
 	public String getOIC_JOB_SCHEDULER() {
    		return OIC_JOB_SCHEDULER;
    	}
