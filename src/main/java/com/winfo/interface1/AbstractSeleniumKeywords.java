@@ -1126,15 +1126,14 @@ public abstract class AbstractSeleniumKeywords {
 			for (Entry<String, String> entry1 : str1.entrySet()) {
 				Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
 				click.setReference("#" + entry1.getKey());
-				Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
-				click1.setReference("#" + entry1.getValue());
 				Paragraph pr = new Paragraph();
 				Anchor ca1 = new Anchor(entry1.getKey(), bf15);
 				ca1.setReference("#" + entry1.getKey());
 				String compare = entry1.getValue();
 				if (!compare.equals("null")) {
+					Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
+					click1.setReference("#" + entry1.getKey());
 					pr.add(ca1);
-
 					pr.add(click1);
 					pr.add(dottedLine);
 					pr.add(click);
