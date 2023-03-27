@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -2278,7 +2279,9 @@ public class XpathPerformance {
 	}
 
 	public void clearMethod(WebDriver driver, WebElement waittill) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+//		WebDriverWait wait = new WebDriverWait(driver, 60);
+		Duration timeoutDuration = Duration.ofSeconds(60);
+		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		waittill.click();
 		waittill.clear();

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -112,7 +113,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -5283,7 +5284,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement waittill = driver.findElement(By.xpath(xpath1));
 			WebElement waittill1 = driver.findElement(By.xpath(xpath2));
 			if (waittill1.isDisplayed()) {
-				WebDriverWait wait = new WebDriverWait(driver, 10);
+				Duration timeoutDuration = Duration.ofSeconds(10);
+				WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
+//				WebDriverWait wait = new WebDriverWait(driver, 10);
 				WebElement element = wait.until(ExpectedConditions.elementToBeClickable(waittill));
 				element.click();
 				logger.info("Clicked Expand Succesfully.");
@@ -5294,7 +5297,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (StaleElementReferenceException e) {
 			logger.error("Falied During ClickExpand Action.");
 			WebElement waittill = driver.findElement(By.xpath(xpath1));
-			WebDriverWait wait = new WebDriverWait(driver, 60);
+			Duration timeoutDuration = Duration.ofSeconds(60);
+			WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
+//			WebDriverWait wait = new WebDriverWait(driver, 60);
 			wait.until(ExpectedConditions.elementToBeClickable(waittill));
 			waittill.click();
 		} catch (Exception e) {
@@ -5337,7 +5342,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void clearMethod(WebDriver driver, WebElement waittill) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+//		WebDriverWait wait = new WebDriverWait(driver, 60);
+		Duration timeoutDuration = Duration.ofSeconds(60);
+		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		waittill.clear();
 		logger.info("clear and typed the given Data");
