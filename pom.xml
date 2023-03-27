@@ -24,6 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
 		<java.version>11</java.version>
+		<selenium.version>4.4.0</selenium.version>
 	</properties>
 
 
@@ -300,6 +301,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>
@@ -310,23 +312,7 @@
 		    <artifactId>jfreechart</artifactId>
 		    <version>1.0.19</version>
 		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-server</artifactId>
-			<version>3.4.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>net.java.dev.jna</groupId>
-					<artifactId>jna</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.java.dev.jna</groupId>
-					<artifactId>jna-platform</artifactId>
-				</exclusion>
-
-			</exclusions>
-		</dependency>
-		<dependency>
+				<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
 			<version>5.0.0-BETA9</version>

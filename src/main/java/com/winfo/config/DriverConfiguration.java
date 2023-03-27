@@ -2,9 +2,9 @@ package com.winfo.config;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,8 +51,9 @@ public class DriverConfiguration {
 			Map<String, Object> prefs = new HashMap<>();
 			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
 			ChromeOptions options = new ChromeOptions();
-			DesiredCapabilities cap = DesiredCapabilities.chrome();
-			cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
+			DesiredCapabilities cap = new DesiredCapabilities();
+//			cap.setCapability("browserName", "chrome");
+			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getExcelDownloadFilePath());
 				logger.info("windows location");
@@ -73,7 +74,8 @@ public class DriverConfiguration {
 //			options.addArguments("--disable-popup-blocking");
 //			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", prefs);
-			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+//			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+			options.setAcceptInsecureCerts(true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			
 
@@ -111,8 +113,8 @@ public class DriverConfiguration {
 		if (driver != null) {
 			logger.info("Browser launched...");
 			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		}
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+	
 		return driver;
 	}
 }
