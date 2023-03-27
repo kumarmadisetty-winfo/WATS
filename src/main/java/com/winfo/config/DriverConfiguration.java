@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +16,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -51,19 +51,32 @@ public class DriverConfiguration {
 			Map<String, Object> prefs = new HashMap<>();
 			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
 			ChromeOptions options = new ChromeOptions();
+<<<<<<< Updated upstream
 			DesiredCapabilities cap = new DesiredCapabilities();
 //			cap.setCapability("browserName", "chrome");
+=======
+			MutableCapabilities cap = new MutableCapabilities();
+//			MutableCapabilities cap = new MutableCapabilities().merge(options);
+//			MutableCapabilities cap = new MutableCapabilities();
+//			cap.setCapability(os, null);
+//			cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
+>>>>>>> Stashed changes
 			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getExcelDownloadFilePath());
 				logger.info("windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
-				cap.setPlatform(Platform.WINDOWS);
+//				cap.setPlatform(Platform.WINDOWS);
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
+				cap.merge(options);
+
 			} else {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
-				cap.setPlatform(Platform.LINUX);
+//				cap.setPlatform(Platform.LINUX);
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
+				cap.merge(options);
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
 //			options.addArguments("--headless");
@@ -75,10 +88,15 @@ public class DriverConfiguration {
 //			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", prefs);
 //			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+<<<<<<< Updated upstream
 			options.setAcceptInsecureCerts(true);
+=======
+>>>>>>> Stashed changes
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
+			options.setAcceptInsecureCerts(true);
+//			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			
-
+			cap.merge(options);
 //			 driver = new ChromeDriver(cap);
 			driver = new RemoteWebDriver(new URL(configUrl), cap);
 		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
@@ -114,7 +132,11 @@ public class DriverConfiguration {
 			logger.info("Browser launched...");
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+<<<<<<< Updated upstream
 	
+=======
+		}
+>>>>>>> Stashed changes
 		return driver;
 	}
 }

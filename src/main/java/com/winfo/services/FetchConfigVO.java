@@ -1,9 +1,9 @@
-			package com.winfo.services;
+package com.winfo.services;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FetchConfigVO {
@@ -19,7 +19,7 @@ public class FetchConfigVO {
 	private String BROWSER;
 	
 	private Integer WAIT_TIME;
-	
+
 	private String APPLICATION_URL;
 	
 	private String EBS_URL;
@@ -518,14 +518,11 @@ public int getMax_num_scripts() {
 	public void setBrowser(String browser) {
 		this.BROWSER = browser;
 	}
-	public Integer getWait_time() {
-		return WAIT_TIME;
+	public Duration getWait_time() {
+	    return Duration.ofSeconds(WAIT_TIME);
 	}
-	public void setWait_time(Integer wait_time) {
-		this.WAIT_TIME = wait_time;
-	}
-	public String getApplication_url() {
-		return APPLICATION_URL;
+	public void setWait_time(Duration wait_time) {
+	    this.WAIT_TIME = (int) wait_time.getSeconds();
 	}
 	public void setApplication_url(String application_url) {
 		this.APPLICATION_URL = application_url;
@@ -638,6 +635,14 @@ public int getMax_num_scripts() {
 
 	public void setSF_APPLICATION_URL(String sF_APPLICATION_URL) {
 		SF_APPLICATION_URL = sF_APPLICATION_URL;
+	}
+	
+	public String getAPPLICATION_URL() {
+		return APPLICATION_URL;
+	}
+
+	public void setAPPLICATION_URL(String aPPLICATION_URL) {
+		APPLICATION_URL = aPPLICATION_URL;
 	}
 	
 }

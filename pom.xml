@@ -277,11 +277,6 @@
 			<artifactId>jna</artifactId>
 			<version>5.4.0</version>
 		</dependency>
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-platform</artifactId>
-			<version>5.4.0</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.lept4j/lept4j -->
 		<dependency>
 			<groupId>net.sourceforge.lept4j</groupId>
