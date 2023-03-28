@@ -189,12 +189,13 @@ public class CopyTestRunDao {
 		log.info("setTestrundata.getTestsetid() 1:" + executeStatus.getTestRunName());
 	}
 
-//	public String getTargetCodeUsingValidationName(String validationName) {
-//		Session session = entityManager.unwrap(Session.class);
-//		String sql = "select targetCode from LookUpCode where MEANING=:validationName";
-//		Query query = session.createQuery(sql);
-//		query.setParameter("validationName", validationName);
-//		return (String) query.getSingleResult();
-//	}
+	public String getMeaningUsingValidationName(String validationName) {
+		Session session = entityManager.unwrap(Session.class);
+		String sql = "select meaning from LookUpCode where LOOKUP_CODE=:validationName";
+		Query query = session.createQuery(sql);
+		query.setParameter("validationName", validationName);
+		return (String) query.getSingleResult();
+	}
+
 
 }
