@@ -187,7 +187,14 @@ public class CopyTestRunDao {
 	public void updateExecuteStatusDtls(ExecuteStatus executeStatus) {
 		entityManager.persist(executeStatus);
 		log.info("setTestrundata.getTestsetid() 1:" + executeStatus.getTestRunName());
-
 	}
+
+//	public String getTargetCodeUsingValidationName(String validationName) {
+//		Session session = entityManager.unwrap(Session.class);
+//		String sql = "select targetCode from LookUpCode where MEANING=:validationName";
+//		Query query = session.createQuery(sql);
+//		query.setParameter("validationName", validationName);
+//		return (String) query.getSingleResult();
+//	}
 
 }
