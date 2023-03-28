@@ -390,11 +390,7 @@ public class CopyTestRunService {
 				scriptParamObj.setInputValue(
 						inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 			} else {
-//				String inputParam = testSetScriptParamObj.getInputParameter().toLowerCase();
 				if("Date".equalsIgnoreCase(scriptParamObj.getDataTypes()) && "REGULAR_EXPR".equalsIgnoreCase(scriptParamObj.getValidationType()) ){
-//				if("Date".equalsIgnoreCase("Date") && "REGULAR_EXPR".equalsIgnoreCase(scriptParamObj.getValidationType()) ){
-					String DateFormat=scriptParamObj.getValidationName();
-//					 ValidationName="MM/dd/yy";
 					String dateFormat=copyTestrunDao.getMeaningUsingValidationName(scriptParamObj.getValidationName());
 					SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 					scriptParamObj.setInputValue(formatter.format(new Date()));
