@@ -103,4 +103,7 @@ public class Constants {
 	public static final String INVALID_SCRIPT_MSG = "Script could not be added. Please contact wats support team.";
 	public static final String PASSED = "passed";
 	public static final String GENERATING = "generating";
+	public static final String VALIDATION_TYPE_REGULAR_EXPR="REGULAR_EXPR";
+	public static final String VALIDATION_DATATYPE_DATE="Date";
+	
 }
