@@ -92,7 +92,7 @@ public class DriverConfiguration {
 			
 			cap.merge(options);
 //			 driver = new ChromeDriver(cap);
-			driver = new RemoteWebDriver(new URL(configUrl), cap);
+			driver = new RemoteWebDriver(new URL("http://watsdev01.winfosolutions.com:7777/wd/hub"), cap);
 		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
 //					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
