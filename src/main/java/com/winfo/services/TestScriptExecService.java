@@ -232,7 +232,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				} else if (targetApplication.contains(Constants.SAP_CONCUR)) {
 					dto.setEbsApplicationUrl(fetchConfigVO.getSAP_CONCUR_URL());
 				} else {
-					dto.setEbsApplicationUrl(fetchConfigVO.getAPPLICATION_URL());
+					dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
 				}
 				dto.setScriptFileName(
 						fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase()

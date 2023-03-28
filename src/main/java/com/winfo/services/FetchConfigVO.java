@@ -524,6 +524,9 @@ public int getMax_num_scripts() {
 	public void setWait_time(Duration wait_time) {
 	    this.WAIT_TIME = (int) wait_time.getSeconds();
 	}
+	public String getApplication_url() {
+		return APPLICATION_URL;
+	}
 	public void setApplication_url(String application_url) {
 		this.APPLICATION_URL = application_url;
 	}
@@ -635,14 +638,6 @@ public int getMax_num_scripts() {
 
 	public void setSF_APPLICATION_URL(String sF_APPLICATION_URL) {
 		SF_APPLICATION_URL = sF_APPLICATION_URL;
-	}
-	
-	public String getAPPLICATION_URL() {
-		return APPLICATION_URL;
-	}
-
-	public void setAPPLICATION_URL(String aPPLICATION_URL) {
-		APPLICATION_URL = aPPLICATION_URL;
 	}
 	
 }
