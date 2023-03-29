@@ -1402,7 +1402,7 @@ public class RunAutomation {
 									customerDetails);
 
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+								seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 										.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 							}
 							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){
@@ -1459,7 +1459,7 @@ public class RunAutomation {
 								seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf",
 								customerDetails);
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 						}
 					return;
