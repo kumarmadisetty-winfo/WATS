@@ -4,19 +4,15 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "all_directories")
+@Data
 public class AllDirectories {
 
 	@EmbeddedId
 	protected AllDirectoriesEmbeddedPK allDirectoriesEmbeddedPK;
 
-	public AllDirectoriesEmbeddedPK getAllDirectoriesEmbeddedPK() {
-		return allDirectoriesEmbeddedPK;
-	}
-
-	public void setAllDirectoriesEmbeddedPK(AllDirectoriesEmbeddedPK allDirectoriesEmbeddedPK) {
-		this.allDirectoriesEmbeddedPK = allDirectoriesEmbeddedPK;
-	}
 
 }

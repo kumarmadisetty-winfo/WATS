@@ -4,29 +4,20 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "audit_stage_lookup")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuditStageLookup {
 
 	@Id
 	private Integer stageId;
 	private String stageName;
-	
-	public Integer getStageId() {
-		return stageId;
-	}
-
-	public void setStageId(Integer stageId) {
-		this.stageId = stageId;
-	}
-
-	public String getStageName() {
-		return stageName;
-	}
-
-	public void setStageName(String stageName) {
-		this.stageName = stageName;
-	}
 
 	public static class Builder {
 

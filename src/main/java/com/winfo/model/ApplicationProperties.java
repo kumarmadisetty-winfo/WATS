@@ -5,8 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "APPLICATION_PROPERTIES")
+@Data
 public class ApplicationProperties {
 
 	@Id 
@@ -16,20 +19,5 @@ public class ApplicationProperties {
 	@Column(name = "VALUE_NAME")
 	private String valueName;
 
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
-
-	public String getValueName() {
-		return valueName;
-	}
-
-	public void setValueName(String valueName) {
-		this.valueName = valueName;
-	}
 
 }

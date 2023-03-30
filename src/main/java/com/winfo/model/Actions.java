@@ -6,34 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Data;
+
+
 @Entity
 @Table(name = "actions")
+@Data
 public class Actions {
-private long id; 
-private String actionName;
-private String actionType;
-@Id
-@Column(name = "id")
-@GeneratedValue(strategy = GenerationType.AUTO)
-public long getId() {
-	return id;
-}
-public void setId(long id) {
-	this.id = id;
-}
-@Column(name = "action_name")
-public String getActionName() {
-	return actionName;
-}
-public void setActionName(String actionName) {
-	this.actionName = actionName;
-}
-@Column(name = "action_type")
-public String getActionType() {
-	return actionType;
-}
-public void setActionType(String actionType) {
-	this.actionType = actionType;
-}
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	@Column(name = "action_name")
+	private String actionName;
+	@Column(name = "action_type")
+	private String actionType;
 
 }

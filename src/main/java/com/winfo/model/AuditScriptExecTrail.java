@@ -8,10 +8,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "audit_script_execution_trail")
-public class AuditScriptExecTrail implements Serializable{
-	
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuditScriptExecTrail implements Serializable {
+
 	private static final long serialVersionUID = 6915558297579903655L;
 	@Id
 	@GeneratedValue
@@ -22,57 +29,6 @@ public class AuditScriptExecTrail implements Serializable{
 	private Date eventTime;
 	private String triggeredBy;
 	private String message;
-
-	public String getCorrelationId() {
-		return correlationId;
-	}
-
-	public void setCorrelationId(String correlationId) {
-		this.correlationId = correlationId;
-	}
-
-	public Integer getTestSetLineId() {
-		return testSetLineId;
-	}
-
-	public void setTestSetLineId(Integer testSetLineId) {
-		this.testSetLineId = testSetLineId;
-	}
-
-	public Integer getStageId() {
-		return stageId;
-	}
-
-	public void setStageId(Integer stageId) {
-		this.stageId = stageId;
-	}
-
-	public Date getEventTime() {
-		return eventTime;
-	}
-
-	public void setEventTime(Date eventTime) {
-		this.eventTime = eventTime;
-	}
-
-	public String getTriggeredBy() {
-		return triggeredBy;
-	}
-
-	public void setTriggeredBy(String triggeredBy) {
-		this.triggeredBy = triggeredBy;
-	}
-	
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-
 
 	public static class Builder {
 
@@ -130,9 +86,6 @@ public class AuditScriptExecTrail implements Serializable{
 		this.stageId = builder.stageId;
 		this.eventTime = builder.eventTime;
 		this.triggeredBy = builder.triggeredBy;
-	}
-
-	public AuditScriptExecTrail() {
 	}
 
 	public static Builder builder() {

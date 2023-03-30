@@ -7,8 +7,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.winfo.model.TestSetLine;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TestSetLineDto {
-	// #################TestSetLinesAndParaData
 
 	@JsonProperty("testSetLineId")
 	private String testSetLineId;
@@ -47,10 +53,7 @@ public class TestSetLineDto {
 	private String status;
 	@JsonProperty("scriptParam")
 	private List<WatsTestSetParamVO> scriptParam = new ArrayList<>();
-
-	public TestSetLineDto() {
-	}
-
+	
 	public TestSetLineDto(TestSetLine scriptData) {
 		this.scriptId = scriptData.getScriptId();
 		this.scriptnumber = scriptData.getScriptNumber();
@@ -66,142 +69,6 @@ public class TestSetLineDto {
 		this.updateddate = null;
 		this.executionendtime = null;
 		this.executionstarttime = null;
-	}
-
-	public String getExecutedby() {
-		return executedby;
-	}
-
-	public void setExecutedby(String executedby) {
-		this.executedby = executedby;
-	}
-
-	public Date getCreationdate() {
-		return creationdate;
-	}
-
-	public void setCreationdate(Date creationdate) {
-		this.creationdate = creationdate;
-	}
-
-	public Date getExecutionendtime() {
-		return executionendtime;
-	}
-
-	public void setExecutionendtime(Date executionendtime) {
-		this.executionendtime = executionendtime;
-	}
-
-	public int getSeqnum() {
-		return seqnum;
-	}
-
-	public void setSeqnum(int seqnum) {
-		this.seqnum = seqnum;
-	}
-
-	public String getScriptnumber() {
-		return scriptnumber;
-	}
-
-	public void setScriptnumber(String scriptnumber) {
-		this.scriptnumber = scriptnumber;
-	}
-
-	public String getTestsstlinescriptpath() {
-		return testsstlinescriptpath;
-	}
-
-	public void setTestsstlinescriptpath(String testsstlinescriptpath) {
-		this.testsstlinescriptpath = testsstlinescriptpath;
-	}
-
-	public String getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(String enabled) {
-		this.enabled = enabled;
-	}
-
-	public String getCreatedby() {
-		return createdby;
-	}
-
-	public void setCreatedby(String createdby) {
-		this.createdby = createdby;
-	}
-
-	public String getScriptUpadated() {
-		return scriptUpadated;
-	}
-
-	public void setScriptUpadated(String scriptUpadated) {
-		this.scriptUpadated = scriptUpadated;
-	}
-
-	public String getLastupdatedby() {
-		return lastupdatedby;
-	}
-
-	public void setLastupdatedby(String lastupdatedby) {
-		this.lastupdatedby = lastupdatedby;
-	}
-
-	public Date getUpdateddate() {
-		return updateddate;
-	}
-
-	public void setUpdateddate(Date updateddate) {
-		this.updateddate = updateddate;
-	}
-
-	public Date getExecutionstarttime() {
-		return executionstarttime;
-	}
-
-	public void setExecutionstarttime(Date executionstarttime) {
-		this.executionstarttime = executionstarttime;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<WatsTestSetParamVO> getScriptParam() {
-		return scriptParam;
-	}
-
-	public void setScriptParam(List<WatsTestSetParamVO> scriptParam) {
-		this.scriptParam = scriptParam;
-	}
-
-	public String getTestSetLineId() {
-		return testSetLineId;
-	}
-
-	public void setTestSetLineId(String testSetLineId) {
-		this.testSetLineId = testSetLineId;
-	}
-
-	public String getTestSetId() {
-		return testSetId;
-	}
-
-	public void setTestSetId(String testSetId) {
-		this.testSetId = testSetId;
-	}
-
-	public int getScriptId() {
-		return scriptId;
-	}
-
-	public void setScriptId(int scriptId) {
-		this.scriptId = scriptId;
 	}
 
 }

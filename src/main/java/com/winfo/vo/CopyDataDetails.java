@@ -1,28 +1,12 @@
 package com.winfo.vo;
 
+import lombok.Data;
+
+@Data
 public class CopyDataDetails {
 
 	private String productVersionNew;
-	
-    private String productVersionOld;
 
-	public String getProductVersionNew() {
-		return productVersionNew;
-	}
+	private String productVersionOld;
 
-	public void setProductVersionNew(String productVersionNew) {
-		this.productVersionNew = productVersionNew;
-	}
-
-	public String getProductVersionOld() {
-		return productVersionOld;
-	}
-
-	public void setProductVersionOld(String productVersionOld) {
-		this.productVersionOld = productVersionOld;
-	}
-
-	
-	
-	
 }

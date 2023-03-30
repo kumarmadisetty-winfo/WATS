@@ -5,7 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.Data;
+
 @Embeddable
+@Data
 public class TestSetAttributePK implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

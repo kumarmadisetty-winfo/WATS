@@ -17,274 +17,95 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
+import lombok.Data;
 
 @Entity
 @Table(name = "WIN_TA_TEST_SET")
-
+@Data
 public class TestSet {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRun_generator")
 	@SequenceGenerator(name = "testRun_generator", sequenceName = "WIN_TA_TEST_SET_ID_SEQ", allocationSize = 1)
 	@Id
 	@Column(name = "TEST_SET_ID", nullable = false)
 	private Integer testRunId;
-	
-	@NotEmpty(message="Test_SET_Name can not be null")
+
+	@NotEmpty(message = "Test_SET_Name can not be null")
 	@Column(name = "TEST_SET_NAME")
-	private String  testRunName;
+	private String testRunName;
 
 	@Column(name = "TEST_SET_DESC")
-	private String  testRunDesc;
-	
+	private String testRunDesc;
+
 	@Column(name = "TEST_SET_COMMENTS")
-	private String  testRunComments;
-	
+	private String testRunComments;
+
 	@Column(name = "ENABLED")
-	private String  enabled;
-	
+	private String enabled;
+
 	@Column(name = "DESCRIPTION")
-	private String  description;
-	
+	private String description;
+
 	@Column(name = "EFFECTIVE_FROM")
 	@Temporal(TemporalType.DATE)
-	private Date  effectiveFrom;
-	
+	private Date effectiveFrom;
+
 	@Column(name = "EFFECTIVE_TO")
 	@Temporal(TemporalType.DATE)
-	private Date  effectiveTo;
-	
+	private Date effectiveTo;
+
 	@Column(name = "PROJECT_ID")
-	private Integer  projectId;
-	
+	private Integer projectId;
+
 	@Column(name = "CONFIGURATION_ID")
-	private Integer  configurationId;
-	
+	private Integer configurationId;
+
 	@Column(name = "CREATED_BY")
-	private String  createdBy;
+	private String createdBy;
 
 	@Column(name = "LAST_UPDATED_BY")
-	private String  lastUpdatedBy;
-	
+	private String lastUpdatedBy;
+
 	@Column(name = "CREATION_DATE")
 	@Temporal(TemporalType.DATE)
-	private Date  creationDate;
-	
+	private Date creationDate;
+
 	@Column(name = "UPDATE_DATE")
 	@Temporal(TemporalType.DATE)
-	private Date  updateDate;
-	
+	private Date updateDate;
+
 	@Column(name = "LAST_EXECUTED_BY")
 	@Temporal(TemporalType.DATE)
-	private Date  lastExecutBy;
-	
+	private Date lastExecutBy;
+
 	@Column(name = "TS_COMPLETE_FLAG")
-	private String  tsCompleteFlag;
-	
+	private String tsCompleteFlag;
+
 	@Column(name = "PASS_PATH")
-	private String  passPath;
-	
+	private String passPath;
+
 	@Column(name = "FAIL_PATH")
-	private String  failPath;
-	
+	private String failPath;
+
 	@Column(name = "EXCEPTION_PATH")
-	private String  exceptionPath;
-	
+	private String exceptionPath;
+
 	@Column(name = "TR_MODE")
-	private String  testRunMode;
-	
+	private String testRunMode;
+
 	@Column(name = "START_TIME")
 	private Date startTime;
-	
+
 	@Column(name = "END_TIME")
 	private Date endTime;
-	
-	
+
 	@Column(name = "PDF_GENERATION")
 	private String pdfGenerationEnabled;
-	
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 	private List<TestSetLine> testRunScriptDatalist = new ArrayList<>();
-	
-
-	public String getPdfGenerationEnabled() {
-		return pdfGenerationEnabled;
-	}
-
-	public void setPdfGenerationEnabled(String pdfGenerationEnabled) {
-		this.pdfGenerationEnabled = pdfGenerationEnabled;
-	}
-	
-	public List<TestSetLine> getTestRunScriptDatalist() {
-		return testRunScriptDatalist;
-	}
-
-	public void setTestRunScriptDatalist(List<TestSetLine> testRunScriptDatalist) {
-		this.testRunScriptDatalist = testRunScriptDatalist;
-	}
 
 	public void addTestRunScriptData(TestSetLine testRunScript) {
 		testRunScriptDatalist.add(testRunScript);
 		testRunScript.setTestRun(this);
 	}
-
-	public Integer getTestRunId() {
-		return testRunId;
-	}
-
-	public void setTestRunId(Integer testRunId) {
-		this.testRunId = testRunId;
-	}
-
-	public String getTestRunName() {
-		return testRunName;
-	}
-
-	public void setTestRunName(String testRunName) {
-		this.testRunName = testRunName;
-	}
-
-	public String getTestRunDesc() {
-		return testRunDesc;
-	}
-
-	public void setTestRunDesc(String testRunDesc) {
-		this.testRunDesc = testRunDesc;
-	}
-
-	public String getTestRunComments() {
-		return testRunComments;
-	}
-
-	public void setTestRunComments(String testRunComments) {
-		this.testRunComments = testRunComments;
-	}
-
-	public String getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(String enabled) {
-		this.enabled = enabled;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Date getEffectiveFrom() {
-		return effectiveFrom;
-	}
-
-	public void setEffectiveFrom(Date effectiveFrom) {
-		this.effectiveFrom = effectiveFrom;
-	}
-
-	public Date getEffectiveTo() {
-		return effectiveTo;
-	}
-
-	public void setEffectiveTo(Date effectiveTo) {
-		this.effectiveTo = effectiveTo;
-	}
-
-	public Integer getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
-
-	public Integer getConfigurationId() {
-		return configurationId;
-	}
-
-	public void setConfigurationId(Integer configurationId) {
-		this.configurationId = configurationId;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(String lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public Date getLastExecutBy() {
-		return lastExecutBy;
-	}
-
-	public void setLastExecutBy(Date lastExecutBy) {
-		this.lastExecutBy = lastExecutBy;
-	}
-
-	public String getTsCompleteFlag() {
-		return tsCompleteFlag;
-	}
-
-	public void setTsCompleteFlag(String tsCompleteFlag) {
-		this.tsCompleteFlag = tsCompleteFlag;
-	}
-
-	public String getPassPath() {
-		return passPath;
-	}
-
-	public void setPassPath(String passPath) {
-		this.passPath = passPath;
-	}
-
-	public String getFailPath() {
-		return failPath;
-	}
-
-	public void setFailPath(String failPath) {
-		this.failPath = failPath;
-	}
-
-	public String getExceptionPath() {
-		return exceptionPath;
-	}
-
-	public void setExceptionPath(String exceptionPath) {
-		this.exceptionPath = exceptionPath;
-	}
-
-	public String getTestRunMode() {
-		return testRunMode;
-	}
-
-	public void setTestRunMode(String testRunMode) {
-		this.testRunMode = testRunMode;
-	}
-
 }

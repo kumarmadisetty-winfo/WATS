@@ -29,6 +29,7 @@ import com.winfo.config.MessageUtil;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
+import com.winfo.model.ExecutionAudit;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -53,7 +54,6 @@ public class CopyTestRunService {
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());	
 		TestSet newTestSetObj = new TestSet();
-		
 		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
 		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
 		newTestSetObj.setEnabled("Y");
@@ -73,7 +73,7 @@ public class CopyTestRunService {
 		newTestSetObj.setExceptionPath(testSetObj.getExceptionPath());
 		newTestSetObj.setTestRunMode("ACTIVE");
 		newTestSetObj.setLastExecutBy(null);
-
+		
 		String productVersion = copyTestrunDao.getProductVersion(newTestSetObj.getProjectId());
 		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<>();
 
@@ -470,7 +470,7 @@ public class CopyTestRunService {
 					TestSetLine newLineObj = new TestSetLine();
 					for (ScriptMetaData scriptMetaDataObj : scriptMetaDataList) {
 						TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
-						newScriptParamObj.setTestRunScripts(newLineObj);
+						newScriptParamObj.setTestSetLine(newLineObj);
 						newScriptParamObj.setInputParameter(scriptMetaDataObj.getInputParameter());
 						newScriptParamObj
 								.setInputValue(inputParamAndInputValueMap.get(scriptMetaDataObj.getInputParameter()));
@@ -530,7 +530,7 @@ public class CopyTestRunService {
 				for (TestSetScriptParam existScriptParamObj : existLineObj.getTestRunScriptParam()) {
 
 					TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
-					newScriptParamObj.setTestRunScripts(newLineObj);
+					newScriptParamObj.setTestSetLine(newLineObj);
 					newScriptParamObj.setInputParameter(existScriptParamObj.getInputParameter());
 					newScriptParamObj.setInputValue(existScriptParamObj.getInputValue());
 					newScriptParamObj.setScriptId(existScriptParamObj.getScriptId());
