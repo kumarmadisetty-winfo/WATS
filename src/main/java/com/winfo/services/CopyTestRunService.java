@@ -404,9 +404,7 @@ public class CopyTestRunService {
 						throw new WatsEBSCustomException(500, "Exception occured while converting date Format", e);
 					}
 
-				} else if ((Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
-						&& scriptParamObj.getValidationType() == null)
-						|| ((Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes()) && "NA".equalsIgnoreCase(scriptParamObj.getValidationType())))) {
+				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes()) && (scriptParamObj.getValidationType() == null || "NA".equalsIgnoreCase(scriptParamObj.getValidationType()))) {
 					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
 					scriptParamObj.setInputValue(formatter.format(new Date()));
 				} else {
