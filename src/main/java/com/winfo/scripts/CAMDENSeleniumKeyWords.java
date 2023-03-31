@@ -486,10 +486,6 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
-			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
 			/*
 			 * WebElement waittext = driver
 			 * .findElement(By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" +
@@ -497,16 +493,21 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			 */
 
 			// ------------------------(New Change)-----------------------
-
-			WebElement waittext = driver.findElement(By.xpath(
-					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
-
 			WebElement showmore = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(showmore).build().perform();
 			actions.moveToElement(showmore).click().build().perform();
 			Thread.sleep(15000);
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
+
+			
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
 			actions.moveToElement(showless).build().perform();
