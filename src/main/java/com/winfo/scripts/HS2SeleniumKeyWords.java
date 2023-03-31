@@ -502,7 +502,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				wait.until(ExpectedConditions.elementToBeClickable(
 						By.xpath("(//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]")));
 				WebElement waittext = driver
-						.findElement(By.xpath("(//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]"));
+						.findElement(By.xpath("("
+								+ "//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]"));
 				Actions actions = new Actions(driver);
 				Thread.sleep(3000);
 				actions.moveToElement(waittext).build().perform();
@@ -524,10 +525,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
-			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			
 			/*
 			 * WebElement waittext = driver
 			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title=\"" +
@@ -536,9 +534,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 			// ------------------------(New Change)-----------------------
 
-			WebElement waittext = driver.findElement(By.xpath(
-					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
-
+			
 			WebElement showmore = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
@@ -550,6 +546,13 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			actions.moveToElement(showless).build().perform();
 			actions.moveToElement(showless).click().build().perform();
 			Thread.sleep(15000);
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
+
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			screenshot(driver, fetchMetadataVO, customerDetails);
