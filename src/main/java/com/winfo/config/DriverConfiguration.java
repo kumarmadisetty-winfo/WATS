@@ -93,7 +93,8 @@ public class DriverConfiguration {
 			cap.merge(options);
 //			 driver = new ChromeDriver(cap);
 			try {
-				driver = new RemoteWebDriver(new URL("http://watsdev01.winfosolutions.com:7777/wd/hub"), cap);
+				String url = "http://watsdev01.winfosolutions.com:7777/wd/hub";
+				driver = new RemoteWebDriver(new URL(url), cap);
 			} catch (Exception e) {
 				System.out.println(e);
 			}
