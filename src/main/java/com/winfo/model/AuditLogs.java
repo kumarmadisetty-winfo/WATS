@@ -7,25 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "WIN_AUDIT_LOGS")
+@Data
 public class AuditLogs {
 	@Id
 	@Column(name = "ID")
 	private int id;
 	@Column(name="TIME")
 	private Timestamp date;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public Timestamp getDate() {
-		return date;
-	}
-	public void setDate(Timestamp date) {
-		this.date = date;
-	}
 	
 }

@@ -5,8 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "WIN_TA_CUSTOMERS")
+@Data
 public class Customer {
 
 	@Id
@@ -21,37 +24,5 @@ public class Customer {
 
 	@Column(name = "CUSTOMER_NUMBER")
 	private Integer customerNumber;
-
-	public Integer getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(Integer customerId) {
-		this.customerId = customerId;
-	}
-
-	public String getCustomerName() {
-		return customerName;
-	}
-
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
-
-	public String getCustomerUri() {
-		return customerUri;
-	}
-
-	public void setCustomerUri(String customerUri) {
-		this.customerUri = customerUri;
-	}
-
-	public Integer getCustomerNumber() {
-		return customerNumber;
-	}
-
-	public void setCustomerNumber(Integer customerNumber) {
-		this.customerNumber = customerNumber;
-	}
 
 }

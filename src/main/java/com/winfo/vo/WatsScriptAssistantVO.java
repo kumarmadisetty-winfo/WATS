@@ -6,37 +6,17 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import lombok.Data;
+
+@Data
 public class WatsScriptAssistantVO {
-	
+
 	@JsonInclude(Include.NON_NULL)
 	private String targetEnvironment;
-	
+
 	@JsonInclude(Include.NON_NULL)
 	private String browser;
-	
-	private List<Map<String,String>> groups;
 
-	public String getTargetEnvironment() {
-		return targetEnvironment;
-	}
+	private List<Map<String, String>> groups;
 
-	public void setTargetEnvironment(String targetEnvironment) {
-		this.targetEnvironment = targetEnvironment;
-	}
-
-	public String getBrowser() {
-		return browser;
-	}
-
-	public void setBrowser(String browser) {
-		this.browser = browser;
-	}
-
-	public List<Map<String, String>> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(List<Map<String, String>> groups) {
-		this.groups = groups;
-	}
 }
