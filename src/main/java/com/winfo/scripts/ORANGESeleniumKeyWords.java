@@ -18142,7 +18142,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			String testSetId = fetchMetadataVO.getTestSetLineId();
 			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 //			return response.statusCode();
-			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
+			createPassedScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
 			
 			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"

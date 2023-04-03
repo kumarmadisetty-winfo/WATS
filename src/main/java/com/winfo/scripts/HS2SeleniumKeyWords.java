@@ -18907,7 +18907,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during compare value " + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+//			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
 		}

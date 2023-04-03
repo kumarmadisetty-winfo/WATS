@@ -1314,11 +1314,19 @@ public class RunAutomation {
 							break;
 
 						case "compareValue":
-							seleniumFactory.getInstanceObj(instanceName).compareValue(driver,
-									fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
-									globalValueForSteps, customerDetails);
-							break;
-
+							try {
+								seleniumFactory.getInstanceObj(instanceName).compareValue(driver,
+										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+										globalValueForSteps, customerDetails);
+								seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createPassedScreenShot(
+										fetchMetadataVO, fetchConfigVO, "Matched", customerDetails);
+								break;
+							} catch (Exception e) {
+								seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createFailedScreenShot(
+										fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails);
+								throw new Exception("Failed at campare Value");
+							}
+							
 						case "apiAccessToken":
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).apiAccessToken(fetchMetadataVO,
 									accessTokenStorage, customerDetails);
