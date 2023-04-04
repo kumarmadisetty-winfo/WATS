@@ -61,9 +61,9 @@ public class DriverConfiguration {
 			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			
 //				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
-				options.setBinary("/usr/bin/google-chrome");
+//				options.setBinary("/usr/bin/google-chrome");
 //				cap.setPlatform(Platform.LINUX);
-				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
 				cap.merge(options);
 			
 //			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
