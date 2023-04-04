@@ -1324,7 +1324,7 @@ public class RunAutomation {
 							} catch (Exception e) {
 								seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createFailedScreenShot(
 										fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails);
-								throw new Exception("Failed at campare Value");
+								throw new WatsEBSCustomException(500,"Failed at campare Value");
 							}
 							
 						case "apiAccessToken":

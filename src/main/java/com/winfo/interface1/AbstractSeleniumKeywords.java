@@ -1540,18 +1540,17 @@ public abstract class AbstractSeleniumKeywords {
 			CustomerProjectDto customerDetails) throws Exception {
 		try {
 			File file = new ClassPathResource(whiteimage).getFile();
-
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
-			Graphics g1 = image1.getGraphics();
-			g1.setColor(Color.GREEN);
-			java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-			g1.setFont(font1);
-			g1.drawString(message, 500, 360);
-			g1.dispose();
+			BufferedImage bufferedImage = null;
+			bufferedImage = ImageIO.read(file);
+			Graphics graphics = bufferedImage.getGraphics();
+			graphics.setColor(Color.GREEN);
+			java.awt.Font font = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+			graphics.setFont(font);
+			graphics.drawString(message, 500, 360);
+			graphics.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image1, "png", baos);
+			ImageIO.write(bufferedImage, "png", baos);
 
 			String imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
@@ -1562,16 +1561,17 @@ public abstract class AbstractSeleniumKeywords {
 					+ FORWARD_SLASH + customerDetails.getTestSetName());
 
 			if (!imagePath.exists()) {
-				logger.error("creating directory: " + imagePath.getName());
+				logger.info("creating directory: " + imagePath.getName());
 				try {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
-					logger.error(se);
+					se.printStackTrace();
+					throw new WatsEBSCustomException(500, se.getMessage());
 				}
 			} else {
-				logger.error("Folder exist");
+				logger.info("Folder exist");
 			}
-			logger.error(imagePath.getName().toString());
+			logger.info(imagePath.getName().toString());
 			FileOutputStream fileOutputStream = new FileOutputStream(imagePath + File.separator + imageName);
 			baos.writeTo(fileOutputStream);
 			baos.close();
@@ -1586,17 +1586,16 @@ public abstract class AbstractSeleniumKeywords {
 
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
 			Files.delete(Paths.get(source.getPath()));
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			throw new WatsEBSCustomException(500, ex.getMessage());
 		}
 	}
 
 	public void createFailedScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
-			CustomerProjectDto customerDetails) throws Exception {
+			CustomerProjectDto customerDetails) {
 		try {
 			File file = new ClassPathResource(whiteimage).getFile();
-
 			BufferedImage bufferedImage = null;
 			bufferedImage = ImageIO.read(file);
 			Graphics graphics = bufferedImage.getGraphics();
@@ -1622,12 +1621,13 @@ public abstract class AbstractSeleniumKeywords {
 				try {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
-					logger.error(se);
+					se.printStackTrace();
+					throw new WatsEBSCustomException(500, se.getMessage());
 				}
 			} else {
-				logger.error("Folder exist");
+				logger.info("Folder exist");
 			}
-			logger.error(imagePath.getName().toString());
+			logger.info(imagePath.getName().toString());
 			FileOutputStream fileOutputStream = new FileOutputStream(imagePath + File.separator + imageName);
 			baos.writeTo(fileOutputStream);
 			baos.close();
@@ -1642,9 +1642,9 @@ public abstract class AbstractSeleniumKeywords {
 
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
 			Files.delete(Paths.get(source.getPath()));
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			throw new WatsEBSCustomException(500, ex.getMessage());
 		}
 	}
 
