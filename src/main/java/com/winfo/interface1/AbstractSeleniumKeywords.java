@@ -1597,17 +1597,17 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			File file = new ClassPathResource(whiteimage).getFile();
 
-			BufferedImage image1 = null;
-			image1 = ImageIO.read(file);
-			Graphics g1 = image1.getGraphics();
-			g1.setColor(Color.RED);
-			java.awt.Font font1 = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-			g1.setFont(font1);
-			g1.drawString(message, 500, 360);
-			g1.dispose();
+			BufferedImage bufferedImage = null;
+			bufferedImage = ImageIO.read(file);
+			Graphics graphics = bufferedImage.getGraphics();
+			graphics.setColor(Color.RED);
+			java.awt.Font font = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+			graphics.setFont(font);
+			graphics.drawString(message, 500, 360);
+			graphics.dispose();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image1, "png", baos);
+			ImageIO.write(bufferedImage, "png", baos);
 
 			String imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
@@ -1618,7 +1618,7 @@ public abstract class AbstractSeleniumKeywords {
 					+ FORWARD_SLASH + customerDetails.getTestSetName());
 
 			if (!imagePath.exists()) {
-				logger.error("creating directory: " + imagePath.getName());
+				logger.info("creating directory: " + imagePath.getName());
 				try {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
