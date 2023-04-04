@@ -85,7 +85,7 @@ public class DriverConfiguration {
 			try {
 				String url = "http://watsdev01.winfosolutions.com:7777";
 				driver = new RemoteWebDriver(new URL(url), cap);
-				driver.get("http://watsdev01.winfosolutions.com:7777");
+				driver.get("https://www.google.com");
 			} catch (Exception e) {
 				System.out.println(e);
 			}
