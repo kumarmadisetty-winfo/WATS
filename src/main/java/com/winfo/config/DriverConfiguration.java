@@ -43,7 +43,7 @@ public class DriverConfiguration {
 
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
 //		logger.info("Start of get web driver method");
-		WebDriver driver = null;
+		RemoteWebDriver driver = null;
 //		String os = System.getProperty("os.name").toLowerCase();
 //		os = operatingSystem == null ? os : operatingSystem;
 //			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
