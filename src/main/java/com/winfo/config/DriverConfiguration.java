@@ -63,7 +63,7 @@ public class DriverConfiguration {
 //				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 //				options.setBinary("/usr/bin/google-chrome");
 //				cap.setPlatform(Platform.LINUX);
-				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 				cap.merge(options);
 			
 //			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
