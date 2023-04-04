@@ -47,10 +47,10 @@ public class DriverConfiguration {
 		String os = System.getProperty("os.name").toLowerCase();
 		os = operatingSystem == null ? os : operatingSystem;
 		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
-			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
+//			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
+//			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			Map<String, Object> prefs = new HashMap<>();
-			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
+//			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
 			ChromeOptions options = new ChromeOptions();
 //			DesiredCapabilities cap = new DesiredCapabilities();
 //			cap.setCapability("browserName", "chrome");
@@ -69,19 +69,19 @@ public class DriverConfiguration {
 				cap.merge(options);
 
 			} else {
-				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
+//				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
 //				cap.setPlatform(Platform.LINUX);
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 				cap.merge(options);
 			}
-			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
+//			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
 //			options.addArguments("--headless");
-			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
-			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
-			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
-			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
+//			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
+//			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
+//			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
+//			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
 //			options.addArguments("--disable-popup-blocking");
 //			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", prefs);
@@ -93,8 +93,9 @@ public class DriverConfiguration {
 			cap.merge(options);
 //			 driver = new ChromeDriver(cap);
 			try {
-				String url = "http://watsdev01.winfosolutions.com:7777/wd/hub";
+				String url = "http://watsdev01.winfosolutions.com:7777";
 				driver = new RemoteWebDriver(new URL(url), cap);
+				driver.get("http://watsdev01.winfosolutions.com:7777");
 			} catch (Exception e) {
 				System.out.println(e);
 			}
