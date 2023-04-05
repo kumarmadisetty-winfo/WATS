@@ -36,6 +36,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.http.HttpStatus;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
@@ -44,8 +45,6 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.util.UnitType;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1553,9 +1552,12 @@ public abstract class AbstractSeleniumKeywords {
 			ImageIO.write(bufferedImage, "png", baos);
 
 			StringBuffer imageName = new StringBuffer();
-			imageName.append(fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
-					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber());
+
+			imageName.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
+					.append("_").append(fetchMetadataVO.getScenarioName()).append("_")
+					.append(fetchMetadataVO.getScriptNumber()).append("_").append(customerDetails.getTestSetName())
+					.append("_").append(fetchMetadataVO.getLineNumber());
+
 			imageName = isPassed ? imageName.append("_Passed".concat(PNG_EXTENSION))
 					: imageName.append("_Failed".concat(PNG_EXTENSION));
 
@@ -1563,15 +1565,16 @@ public abstract class AbstractSeleniumKeywords {
 					+ FORWARD_SLASH + customerDetails.getTestSetName());
 
 			if (!imagePath.exists()) {
-				logger.info("creating directory: " + imagePath.getName());
+				logger.info(String.format("creating directory: {}", imagePath.getName()));
 				try {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
 					logger.error(se);
-					throw new WatsEBSCustomException(500, "Not able to create the directory");
+					throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR_500,
+							"Not able to create the directory");
 				}
 			} else {
-				logger.info("Folder exist");
+				logger.info(String.format("Folder exist: {}", imagePath.getName()));
 			}
 			FileOutputStream fileOutputStream = new FileOutputStream(imagePath + File.separator + imageName);
 			baos.writeTo(fileOutputStream);
@@ -1585,7 +1588,8 @@ public abstract class AbstractSeleniumKeywords {
 			Files.delete(Paths.get(source.getPath()));
 		} catch (IOException ex) {
 			logger.error(ex);
-			throw new WatsEBSCustomException(500, "Failed to create the custom screenshot");
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR_500,
+					"Failed to create the custom screenshot");
 		}
 	}
 
