@@ -1318,11 +1318,11 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).compareValue(driver,
 										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
 										globalValueForSteps, customerDetails);
-								seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createScreenShot(
+								seleniumFactory.getInstanceObj(instanceName).createScreenShot(
 										fetchMetadataVO, fetchConfigVO, "Matched", customerDetails,true);
 								break;
 							} catch (Exception e) {
-								seleniumFactory.getInstanceObjFromAbstractClass(instanceName).createScreenShot(
+								seleniumFactory.getInstanceObj(instanceName).createScreenShot(
 										fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails,false);
 								throw new WatsEBSCustomException(500,"Failed at campare Value");
 							}
