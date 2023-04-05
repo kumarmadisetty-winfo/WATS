@@ -1536,15 +1536,15 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
-	public void createPassedScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
-			CustomerProjectDto customerDetails) throws Exception {
+	public void createScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
+			CustomerProjectDto customerDetails, boolean isPassed) throws Exception {
 		try {
 			File file = new ClassPathResource(whiteimage).getFile();
-			BufferedImage bufferedImage = null;
-			bufferedImage = ImageIO.read(file);
+			BufferedImage bufferedImage = ImageIO.read(file);
 			Graphics graphics = bufferedImage.getGraphics();
-			graphics.setColor(Color.GREEN);
-			java.awt.Font font = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
+			Color color = isPassed ? Color.GREEN : Color.RED;
+			graphics.setColor(color);
+			java.awt.Font font = new java.awt.Font("Calibri", java.awt.Font.PLAIN, 36);
 			graphics.setFont(font);
 			graphics.drawString(message, 500, 360);
 			graphics.dispose();
@@ -1552,10 +1552,12 @@ public abstract class AbstractSeleniumKeywords {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bufferedImage, "png", baos);
 
-			String imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+			StringBuffer imageName = new StringBuffer();
+			imageName.append(fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-					.concat(PNG_EXTENSION);
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber());
+			imageName = isPassed ? imageName.append("_Passed".concat(PNG_EXTENSION))
+					: imageName.append("_Failed".concat(PNG_EXTENSION));
 
 			File imagePath = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
 					+ FORWARD_SLASH + customerDetails.getTestSetName());
@@ -1565,85 +1567,24 @@ public abstract class AbstractSeleniumKeywords {
 				try {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
-					se.printStackTrace();
+					logger.error(se);
 					throw new WatsEBSCustomException(500, se.getMessage());
 				}
 			} else {
 				logger.info("Folder exist");
 			}
-			logger.info(imagePath.getName().toString());
 			FileOutputStream fileOutputStream = new FileOutputStream(imagePath + File.separator + imageName);
 			baos.writeTo(fileOutputStream);
 			baos.close();
 			fileOutputStream.close();
 			File source = new File(imagePath + File.separator + imageName);
-			String fileExtension = source.getName();
-
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-
 			String folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
 
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName.toString());
 			Files.delete(Paths.get(source.getPath()));
 		} catch (IOException ex) {
-			ex.printStackTrace();
-			throw new WatsEBSCustomException(500, ex.getMessage());
-		}
-	}
-
-	public void createFailedScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
-			CustomerProjectDto customerDetails) {
-		try {
-			File file = new ClassPathResource(whiteimage).getFile();
-			BufferedImage bufferedImage = null;
-			bufferedImage = ImageIO.read(file);
-			Graphics graphics = bufferedImage.getGraphics();
-			graphics.setColor(Color.RED);
-			java.awt.Font font = new java.awt.Font("Calibir", java.awt.Font.PLAIN, 36);
-			graphics.setFont(font);
-			graphics.drawString(message, 500, 360);
-			graphics.dispose();
-
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bufferedImage, "png", baos);
-
-			String imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
-					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Failed")
-					.concat(PNG_EXTENSION);
-
-			File imagePath = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-					+ FORWARD_SLASH + customerDetails.getTestSetName());
-
-			if (!imagePath.exists()) {
-				logger.info("creating directory: " + imagePath.getName());
-				try {
-					imagePath.mkdirs();
-				} catch (SecurityException se) {
-					se.printStackTrace();
-					throw new WatsEBSCustomException(500, se.getMessage());
-				}
-			} else {
-				logger.info("Folder exist");
-			}
-			logger.info(imagePath.getName().toString());
-			FileOutputStream fileOutputStream = new FileOutputStream(imagePath + File.separator + imageName);
-			baos.writeTo(fileOutputStream);
-			baos.close();
-			fileOutputStream.close();
-			File source = new File(imagePath + File.separator + imageName);
-			String fileExtension = source.getName();
-
-			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-
-			String folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
-					+ customerDetails.getTestSetName();
-
-			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
-			Files.delete(Paths.get(source.getPath()));
-		} catch (IOException ex) {
-			ex.printStackTrace();
+			logger.error(ex);
 			throw new WatsEBSCustomException(500, ex.getMessage());
 		}
 	}
@@ -1964,7 +1905,7 @@ public abstract class AbstractSeleniumKeywords {
 			String testSetId = fetchMetadataVO.getTestSetLineId();
 			dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
 //			return response.statusCode();
-			createPassedScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails);
+			createScreenShot(fetchMetadataVO,fetchConfigVO,"Response : "+api.getResponseCode(),customerDetails,true);
 			
 			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName()+"/"+fetchMetadataVO.getSeqNum() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
