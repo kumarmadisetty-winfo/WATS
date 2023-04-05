@@ -1568,7 +1568,7 @@ public abstract class AbstractSeleniumKeywords {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
 					logger.error(se);
-					throw new WatsEBSCustomException(500, se.getMessage());
+					throw new WatsEBSCustomException(500, "Not able to create the directory");
 				}
 			} else {
 				logger.info("Folder exist");
@@ -1585,7 +1585,7 @@ public abstract class AbstractSeleniumKeywords {
 			Files.delete(Paths.get(source.getPath()));
 		} catch (IOException ex) {
 			logger.error(ex);
-			throw new WatsEBSCustomException(500, ex.getMessage());
+			throw new WatsEBSCustomException(500, "Failed to create the custom screenshot");
 		}
 	}
 
