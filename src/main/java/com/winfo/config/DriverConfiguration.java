@@ -63,7 +63,7 @@ public class DriverConfiguration {
 //				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 //				options.setBinary("/usr/bin/google-chrome");
 //				cap.setPlatform(Platform.LINUX);
-				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
 				cap.merge(options);
 			
 //			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
@@ -85,9 +85,9 @@ public class DriverConfiguration {
 			try {
 				String url = "http://watsdev01.winfosolutions.com:7777";
 				driver = new RemoteWebDriver(new URL(url), cap);
-				driver.get("https://www.google.com");
 			} catch (Exception e) {
-				System.out.println(e);
+				e.printStackTrace();
+//				System.out.println(e);
 			}
 		if (driver != null) {
 			driver.manage().window().maximize();
