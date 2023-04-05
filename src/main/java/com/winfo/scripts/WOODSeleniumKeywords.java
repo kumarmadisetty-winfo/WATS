@@ -289,7 +289,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		WebElement Signout = driver.findElement(By.xpath(("//a[text()=\"Sign Out\"]")));
 		actions.moveToElement(Signout).build().perform();
 		highlightElement(driver, fetchMetadataVO, Signout, fetchConfigVO);
-		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+//		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 		Signout.click();
 		Thread.sleep(3000);
 		WebElement confirm = driver.findElement(By.xpath(("//button[text()=\" Confirm\"]")));
