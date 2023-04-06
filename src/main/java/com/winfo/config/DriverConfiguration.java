@@ -43,7 +43,7 @@ public class DriverConfiguration {
 
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
 //		logger.info("Start of get web driver method");
-		RemoteWebDriver driver = null;
+		WebDriver driver = null;
 //		String os = System.getProperty("os.name").toLowerCase();
 //		os = operatingSystem == null ? os : operatingSystem;
 //			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
@@ -63,7 +63,7 @@ public class DriverConfiguration {
 //				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 //				options.setBinary("/usr/bin/google-chrome");
 //				cap.setPlatform(Platform.LINUX);
-				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 				cap.merge(options);
 			
 //			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
@@ -83,11 +83,13 @@ public class DriverConfiguration {
 			cap.merge(options);
 //			 driver = new ChromeDriver(cap);
 			try {
-				String url = "http://watsdev01.winfosolutions.com:7777";
+				String url = "http://watsdev01.winfosolutions.com:4444";
 				driver = new RemoteWebDriver(new URL(url), cap);
+//				driver.get("http://watsdev01.winfosolutions.com:7777/ui");
+				logger.info("opened url");
 			} catch (Exception e) {
 				e.printStackTrace();
-//				System.out.println(e);
+				System.out.println(e);
 			}
 		if (driver != null) {
 			driver.manage().window().maximize();
