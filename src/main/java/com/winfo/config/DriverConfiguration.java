@@ -55,10 +55,9 @@ public class DriverConfiguration {
 			MutableCapabilities cap = new MutableCapabilities();
 //			cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
-			if (!os.contains("win")) {
+			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
-				options.setBinary("/usr/bin/google-chrome");
-//				options.setCapability("platformName", "Linux");
+				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
 				cap.merge(options);
 			} else  {
