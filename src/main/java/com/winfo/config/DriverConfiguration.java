@@ -42,55 +42,79 @@ public class DriverConfiguration {
 	 */
 
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
-//		logger.info("Start of get web driver method");
+		logger.info("Start of get web driver method");
 		WebDriver driver = null;
-//		String os = System.getProperty("os.name").toLowerCase();
-//		os = operatingSystem == null ? os : operatingSystem;
-//			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
-//			System.setProperty("headless", "false");
+		String os = System.getProperty("os.name").toLowerCase();
+		os = operatingSystem == null ? os : operatingSystem;
+		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
+			System.setProperty("headless", "false");
 			Map<String, Object> prefs = new HashMap<>();
-//			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
+			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
 			ChromeOptions options = new ChromeOptions();
-//			DesiredCapabilities cap = new DesiredCapabilities();
-//			cap.setCapability("browserName", "chrome");
 			MutableCapabilities cap = new MutableCapabilities();
-//			MutableCapabilities cap = new MutableCapabilities().merge(options);
-//			MutableCapabilities cap = new MutableCapabilities();
-//			cap.setCapability(os, null);
 //			cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
-			
-//				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
-//				options.setBinary("/usr/bin/google-chrome");
-//				cap.setPlatform(Platform.LINUX);
+			if (!os.contains("win")) {
+				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
+				options.setBinary("/usr/bin/google-chrome");
+//				options.setCapability("platformName", "Linux");
+				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
+				cap.merge(options);
+			} else  {
+				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
+				logger.info("linux location");
+				options.setBinary("/usr/bin/google-chrome");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 				cap.merge(options);
-			
-//			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
-//			options.addArguments("--headless");
-//			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
-//			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
-//			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
-//			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
-//			options.addArguments("--disable-popup-blocking");
-//			options.addArguments("chrome.switches","--disable-extensions");
+			}
+			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
+			options.addArguments("--headless");
+			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
+			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
+			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
+			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
+			options.addArguments("--disable-popup-blocking");
+			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", prefs);
-//			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			options.setAcceptInsecureCerts(true);
-//			cap.setCapability(ChromeOptions.CAPABILITY, options);
-			
-			cap.merge(options);
-//			 driver = new ChromeDriver(cap);
 			try {
 				String url = "http://watsdev01.winfosolutions.com:4444";
 				driver = new RemoteWebDriver(new URL(url), cap);
-//				driver.get("http://watsdev01.winfosolutions.com:7777/ui");
-				logger.info("opened url");
+				logger.info("driver init success");
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println(e);
 			}
+		}else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
+//			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
+//			"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
+			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(), fetchConfigVO.getFirefox_driver_path());
+			FirefoxProfile profile = new FirefoxProfile();
+			
+		//	profile.setPreference("browser.download.folderList", 2);
+		//	profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
+		//	profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf;text/plain;application/text;text/xml;application/xml");
+		//	profile.setPreference("pdfjs.disabled", true);
+		
+			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
+			FirefoxOptions options = new FirefoxOptions();
+			if (os.contains("win")) {
+				options.setBinary("/Program Files/Mozilla Firefox/firefox.exe");
+			} else {
+				logger.info("linux location");
+				options.setBinary("/usr/bin/firefox");
+			}
+		//	options.addArguments("--headless");
+			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
+			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
+			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
+			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
+			options.setProfile(profile);
+			// driver = new FirefoxDriver(options);
+			driver = new RemoteWebDriver(new URL(configUrl), options);
+		}
 		if (driver != null) {
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
