@@ -176,11 +176,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public String navigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			Thread.sleep(4000);
+			
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
+			Thread.sleep(4000);
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
@@ -279,11 +280,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		String xpath = null;
 		try {
-			Thread.sleep(5000);
+			
 			if (param2.equalsIgnoreCase("Assets")) {
 				WebElement asset = driver.findElement(By.xpath(
 						"//span[normalize-space(text())=\"Fixed Assets\"]/following::span[normalize-space(text())=\""
 								+ param2 + "\"]"));
+				Thread.sleep(5000);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
@@ -345,42 +347,53 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	}
 
+
+	
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
 			throws Exception {
-
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		Thread.sleep(2000);
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//img[@title=\"Settings and Actions\"]"))));
-		// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"ne\"]"),
-		// "ne"));
-		WebElement waittext = driver.findElement(By.xpath(("//img[@title=\"Settings and Actions\"]")));
-		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		// fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-		Thread.sleep(3000);
-		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-		WebElement Signout = driver.findElement(By.xpath(("//a[text()=\"Sign Out\"]")));
-		actions.moveToElement(Signout).build().perform();
-//		highlightElement(driver, fetchMetadataVO, Signout, fetchConfigVO);
-//		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-		Signout.click();
-		Thread.sleep(3000);
-		WebElement confirm = driver.findElement(By.xpath(("//button[text()=\" Confirm\"]")));
-		actions.moveToElement(confirm).build().perform();
-		highlightElement(driver, fetchMetadataVO, confirm, fetchConfigVO);
-		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-		confirm.click();
-//		String param4 = "UIScmil1u";
-//		String param5 = "Sign Out";
-//		String param6 = "Confirm";
-//		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
-//		clickLink(driver, param5, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
-//		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
+		
+		String param4 = "Settings and Actions";
+		String param5 = "Sign Out";
+		String param6 = "Confirm";
+		clickLogoutDropdown(driver, param4, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickSignout(driver, param5, fetchMetadataVO, fetchConfigVO, customerDetails);
+		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
+	
+	private void clickLogoutDropdown(WebDriver driver, String param4, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath(("//img[@title=\""+ param4 + "\"]"))));
+			WebElement waittext = driver.findElement(By.xpath(("//img[@title=\""+ param4 + "\"]")));
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		} catch (Exception e) {
+			logger.error("Failed During Logout");
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+		}
+	}
+	
+	private void clickSignout(WebDriver driver, String param5, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		try {
+
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath(("//a[text()=\"" + param5 + "\"]"))));
+			WebElement waittext = driver.findElement(By.xpath(("//a[text()=\"" + param5 + "\"]")));
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		} catch (Exception e) {
+			logger.error("Failed During Logout");
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+		}
+		
+	}
+
+	
 
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
@@ -1825,10 +1838,11 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			Thread.sleep(3000);
+			
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//img[@title=\"" + param1 + "\"]"));
+			Thread.sleep(3000);
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
