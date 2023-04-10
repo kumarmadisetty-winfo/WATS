@@ -5286,7 +5286,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			if (waittill1.isDisplayed()) {
 				Duration timeoutDuration = Duration.ofSeconds(10);
 				WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
-//				WebDriverWait wait = new WebDriverWait(driver, 10);
 				WebElement element = wait.until(ExpectedConditions.elementToBeClickable(waittill));
 				element.click();
 				logger.info("Clicked Expand Succesfully.");
@@ -5331,7 +5330,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void typeIntoValidxpath(WebDriver driver, String keysToSend, WebElement waittill,
 			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
-			driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
+			driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
 			waittill.clear();
 			waittill.sendKeys(keysToSend);
 			logger.info("clear and typed the given Data");
@@ -5342,7 +5341,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void clearMethod(WebDriver driver, WebElement waittill) {
-//		WebDriverWait wait = new WebDriverWait(driver, 60);
 		Duration timeoutDuration = Duration.ofSeconds(60);
 		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));

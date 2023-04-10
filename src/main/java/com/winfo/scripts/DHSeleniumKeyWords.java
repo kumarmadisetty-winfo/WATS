@@ -15301,7 +15301,6 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void clearMethod(WebDriver driver, WebElement waittill) {
 		Duration timeoutDuration = Duration.ofSeconds(60);
 		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
-//		WebDriverWait wait = new WebDriverWait(driver, 60);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		waittill.click();
 		waittill.clear();

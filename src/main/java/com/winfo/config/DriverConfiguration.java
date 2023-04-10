@@ -52,18 +52,16 @@ public class DriverConfiguration {
 			Map<String, Object> prefs = new HashMap<>();
 			ChromeOptions options = new ChromeOptions();
 			MutableCapabilities cap = new MutableCapabilities();
-//			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
+				logger.info("Windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
-				cap.merge(options);
 			} else  {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 				logger.info("linux location");
 				options.setBinary("/usr/bin/google-chrome");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
-				cap.merge(options);
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
 //			options.addArguments("--headless");
@@ -71,25 +69,22 @@ public class DriverConfiguration {
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
 			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
-			options.addArguments("--disable-popup-blocking");
-			options.addArguments("chrome.switches","--disable-extensions");
-//			options.addArguments("--acceptInsecureCerts");
+//			options.addArguments("--disable-popup-blocking");
+//			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", 
 			         ImmutableMap.of("profile.default_content_setting_values.notifications", 0));
 			options.setExperimentalOption("prefs", prefs);
 			options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
 			options.setAcceptInsecureCerts(true);
-//			options.setHeadless(false);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
-			try {
-				String url = "http://watsdev01.winfosolutions.com:7777";
-//				String url = "http://localhost:4444";
-				driver = new RemoteWebDriver(new URL(url), cap);
-				logger.info("driver init success");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println(e);
-			}
+			cap.merge(options);
+//			String url = "http://watsdev01.winfosolutions.com:4444"; 
+//			driver = new RemoteWebDriver(new URL(url), cap);
+//			driver = new ChromeDriver(cap);
+			
+			driver = new RemoteWebDriver(new URL(configUrl), cap);
+			logger.info("driver init success");
+			
 		}else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
 //			"/Github/EBS-Automation-POC/Driver/geckodriver.exe");

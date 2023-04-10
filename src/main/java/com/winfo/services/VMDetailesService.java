@@ -148,7 +148,6 @@ public class VMDetailesService {
 			prefs.put("profile.default_content_settings.popups", 0);
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
-//			DesiredCapabilities cap = DesiredCapabilities.chrome();
 			
 			if (os.contains("win")) {
 				System.out.println("windows location");
@@ -169,9 +168,7 @@ public class VMDetailesService {
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
 			options.setExperimentalOption("prefs", prefs);
-			options.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
-//			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-//			cap.setCapability(ChromeOptions.CAPABILITY, options);
+			options.setAcceptInsecureCerts(true);
 			MutableCapabilities cap = new MutableCapabilities().merge(options);
 			
 
