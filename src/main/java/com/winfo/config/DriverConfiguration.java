@@ -82,7 +82,7 @@ public class DriverConfiguration {
 //			options.setHeadless(false);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			try {
-				String url = "http://watsdev01.winfosolutions.com:4444";
+				String url = "http://watsdev01.winfosolutions.com:7777";
 //				String url = "http://localhost:4444";
 				driver = new RemoteWebDriver(new URL(url), cap);
 				logger.info("driver init success");
