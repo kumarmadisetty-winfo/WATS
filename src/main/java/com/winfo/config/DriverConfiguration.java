@@ -49,14 +49,11 @@ public class DriverConfiguration {
 		os = operatingSystem == null ? os : operatingSystem;
 		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
-//			System.setProperty("headless", "false");
 			Map<String, Object> prefs = new HashMap<>();
-//			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
-			
 			ChromeOptions options = new ChromeOptions();
 			MutableCapabilities cap = new MutableCapabilities();
 //			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
-			if (!os.contains("win")) {
+			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
@@ -77,16 +74,16 @@ public class DriverConfiguration {
 			options.addArguments("--disable-popup-blocking");
 			options.addArguments("chrome.switches","--disable-extensions");
 //			options.addArguments("--acceptInsecureCerts");
+			options.setExperimentalOption("prefs", 
+			         ImmutableMap.of("profile.default_content_setting_values.notifications", 0));
 			options.setExperimentalOption("prefs", prefs);
 			options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
 			options.setAcceptInsecureCerts(true);
 //			options.setHeadless(false);
-			options.setExperimentalOption("prefs", 
-			         ImmutableMap.of("profile.default_content_setting_values.notifications", 0));
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			try {
-//				String url = "http://watsdev01.winfosolutions.com:4444";
-				String url = "http://localhost:4444";
+				String url = "http://watsdev01.winfosolutions.com:4444";
+//				String url = "http://localhost:4444";
 				driver = new RemoteWebDriver(new URL(url), cap);
 				logger.info("driver init success");
 			} catch (Exception e) {
