@@ -21,6 +21,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
+import com.google.common.collect.ImmutableMap;
 
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
@@ -50,7 +51,8 @@ public class DriverConfiguration {
 			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
 //			System.setProperty("headless", "false");
 			Map<String, Object> prefs = new HashMap<>();
-			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
+//			prefs.put(BrowserConstants.PROFILE_DEFAULT_CONTENT_SETTING.getValue(), 0);
+			
 			ChromeOptions options = new ChromeOptions();
 			MutableCapabilities cap = new MutableCapabilities();
 //			cap.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
@@ -67,7 +69,7 @@ public class DriverConfiguration {
 				cap.merge(options);
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
-			options.addArguments("--headless");
+//			options.addArguments("--headless");
 			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
 			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
@@ -78,7 +80,9 @@ public class DriverConfiguration {
 			options.setExperimentalOption("prefs", prefs);
 			options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
 			options.setAcceptInsecureCerts(true);
-			options.setHeadless(false);
+//			options.setHeadless(false);
+			options.setExperimentalOption("prefs", 
+			         ImmutableMap.of("profile.default_content_setting_values.notifications", 0));
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			try {
 //				String url = "http://watsdev01.winfosolutions.com:4444";
