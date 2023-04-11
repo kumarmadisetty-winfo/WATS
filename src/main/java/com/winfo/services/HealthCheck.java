@@ -143,7 +143,6 @@ public class HealthCheck {
 
 	public ResponseDto seleniumGridCheck() {
 		try {
-			JSONParser jsonParser = new JSONParser();
 			RestTemplate restTemplate = new RestTemplate();
 			String url = watsHubUrl.concat("status");
 			String result = restTemplate.getForObject(url, String.class);
