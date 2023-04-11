@@ -478,7 +478,7 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			takeScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully navigator is done " + scripNumber);
 			String xpath = "//a[@title=\"param1\"]";
