@@ -15409,11 +15409,6 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	}
 
 
-	@Override
-	public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2, String param3) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,

@@ -3,8 +3,6 @@ package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -12,30 +10,16 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.IIOImage;
@@ -73,26 +57,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.DocumentException;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
@@ -113,7 +82,6 @@ import com.winfo.services.FetchConfigVO;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.services.TestScriptExecService;
-import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -12547,14 +12515,14 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				File file = new File(fileLocation+param3);
 				System.out.println("Is file Present*** "+file.isFile());
 				uploadZip.sendKeys(file.getAbsolutePath());
-				log.info("Successfully Uploaded The File");
+				logger.info("Successfully Uploaded The File");
 				screenshot(webDriver, scriptDetailsDto, customerProjectDto);
 				return;
 			}
 		} catch (Exception e) {
-			log.error("Failed During uploadFileAutoIT Action.");
+			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			log.error(fileLocation);
+			logger.error(fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -12566,14 +12534,14 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			File file = new File(fileLocation+param3);
 			System.out.println("Is file Present*** "+file.isFile());
 			uploadZip.sendKeys(file.getAbsolutePath());
-			log.info("Successfully Uploaded The File");
+			logger.info("Successfully Uploaded The File");
 			screenshot(webDriver, scriptDetailsDto, customerProjectDto);
 			return;
 			}
 		} catch (Exception e) {
-			log.error("Failed During uploadFileAutoIT Action.");
+			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			log.error(fileLocation);
+			logger.error(fileLocation);
 			e.printStackTrace();
 			throw e;
 		}
