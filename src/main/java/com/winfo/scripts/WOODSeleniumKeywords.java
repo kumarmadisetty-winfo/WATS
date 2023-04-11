@@ -5520,7 +5520,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void typeIntoValidxpath(WebDriver driver, String keysToSend, WebElement waittill,
 			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
-			driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
+			driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
 			waittill.clear();
 			waittill.sendKeys(keysToSend);
 			logger.info("clear and typed the given Data");
