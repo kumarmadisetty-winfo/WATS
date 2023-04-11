@@ -18901,11 +18901,4 @@ public class BennettSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
-
-	@Override
-	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3,ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 }
