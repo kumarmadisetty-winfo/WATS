@@ -988,6 +988,7 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
@@ -1015,7 +1016,7 @@ public class RunAutomation {
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-//								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+								
 								break;
 							}
 
