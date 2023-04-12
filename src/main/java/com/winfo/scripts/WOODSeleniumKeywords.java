@@ -61,7 +61,7 @@ import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
-@Service("WOOD")
+//@Service("WOOD")
 public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public static final Logger log = Logger.getLogger("Logger");
