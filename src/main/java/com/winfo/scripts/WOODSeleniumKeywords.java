@@ -2,59 +2,67 @@ package com.winfo.scripts;
 
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
+
+//import blank.FFmpegFrameRecorder;
+//import blank.IplImage;
+//import blank.OpenCVFrameConverter;
 
 import org.apache.log4j.Logger;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+//import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+//import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
+import com.winfo.services.DataBaseEntry;
+import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
+import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
@@ -63,10 +71,37 @@ import com.winfo.vo.ScriptDetailsDto;
 
 @Service("WOOD")
 public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
-	public static final Logger log = Logger.getLogger("Logger");
-
+	@Autowired
+	private DataBaseEntry databaseentry;
 	@Autowired
 	ScriptXpathService service;
+	@Autowired
+	DynamicRequisitionNumber dynamicnumber;
+	@Autowired
+	LimitScriptExecutionService limitScriptExecutionService;
+
+	@Value("${configvO.watsdhlogo}")
+	private String watslogo;
+
+	@Value("${configvO.watsvediologo}")
+	private String watsvediologo;
+
+	@Value("${configvO.whiteimage}")
+	private String whiteimage;
+
+//	public static log log = LogManager.getlog(SeleniumKeyWords.class);
+	/*
+	 * private Integer ElementWait = Integer
+	 * .valueOf(PropertyReader.getPropertyValue(PropertyConstants.EXECUTION_TIME.
+	 * value)); public int WaitElementSeconds = new Integer(ElementWait);
+	 */
+	Logger log = Logger.getLogger("Logger");
+
+	public String Main_Window = "";
+	public WebElement fromElement;
+	public WebElement toElement;
+
+	private static final DecimalFormat df = new DecimalFormat("00");
 
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
