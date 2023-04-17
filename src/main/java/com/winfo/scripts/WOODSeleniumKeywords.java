@@ -3445,7 +3445,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 
 		// DH 31
-
+		//HCM.ADM.111465 (Search)
 		try {
 
 			if (param1.equalsIgnoreCase("Search")) {
@@ -5422,6 +5422,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
+		//
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -5475,6 +5476,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
+		
+		// HCM.ADM.022 (search)
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -9299,7 +9302,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			System.out.println(e);
 		}
 		try {
-			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("Person Name")) {
+ 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("Person Name")) {
 				Thread.sleep(4000);
 
 				WebElement waittill = driver.findElement(By.xpath("//div[text()=\"" + param1
@@ -9709,6 +9712,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
+		// HCM.ADM.111465 (Name)
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
@@ -12525,6 +12529,41 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
+			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
+					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) || (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action Reason"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
+
+				WebElement waittext = driver.findElement(By.xpath(
+						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
+
+				WebElement selectvalue = driver.findElement(By.xpath("//li[text()=\"" + keysToSend + "\"]"));
+				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+				selectvalue.click();
+
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
+				String xpath2 = "//li[text()=\"keysToSend\"]";
+				String xpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
+
+		try {
 			if ((param1.equalsIgnoreCase("Offer Team") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -13044,41 +13083,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 
 		// DH 48
-		try {
-			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
-					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
-
-				WebElement waittext = driver.findElement(By.xpath(
-						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				waittext.click();
-				Thread.sleep(3000);
-
-				WebElement selectvalue = driver.findElement(By.xpath("//li[text()=\"" + keysToSend + "\"]"));
-				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-				selectvalue.click();
-
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
-				String xpath2 = "//li[text()=\"keysToSend\"]";
-				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScriptId();
-				String lineNumber = fetchMetadataVO.getLineNumber();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-				return;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
-		}
-
+		
 		// DH 32
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
