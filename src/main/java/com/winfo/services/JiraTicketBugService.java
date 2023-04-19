@@ -36,7 +36,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonParser;
+import com.winfo.config.MessageUtil;
 import com.winfo.dao.JiraTicketBugDao;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DomGenericResponseBean;
@@ -127,7 +129,7 @@ public class JiraTicketBugService {
 
 	@Transactional
 	public List<DomGenericResponseBean> createJiraTicket(BugDetails bugdetails) throws ParseException {
-
+		try {
 		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
 		Integer testsetid = bugdetails.getTest_set_id();
 		int testSetLineId = bugdetails.getTestSetLineId();
@@ -312,6 +314,9 @@ public class JiraTicketBugService {
 
 		}
 		return bean;
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
+		}
 
 	}
 	
