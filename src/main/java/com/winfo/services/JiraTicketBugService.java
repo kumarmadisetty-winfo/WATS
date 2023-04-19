@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -32,10 +31,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonParser;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.JiraTicketBugDao;
 import com.winfo.exception.WatsEBSCustomException;
@@ -129,8 +126,8 @@ public class JiraTicketBugService {
 
 	@Transactional
 	public List<DomGenericResponseBean> createJiraTicket(BugDetails bugdetails) throws ParseException {
-		try {
 		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
+		try {
 		Integer testsetid = bugdetails.getTest_set_id();
 		int testSetLineId = bugdetails.getTestSetLineId();
 		List<Integer> scriptIds = bugdetails.getScript_id();
@@ -313,10 +310,15 @@ public class JiraTicketBugService {
 			bean.add(response);
 
 		}
-		return bean;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
+			DomGenericResponseBean response = new DomGenericResponseBean();
+			response.setStatus(400);
+			response.setStatusMessage("ERROR");
+			response.setDescription(MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
+			bean.add(response);
+//			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 		}
+		return bean;
 
 	}
 	
