@@ -107,7 +107,6 @@ public class DriverConfiguration {
 			options.setProfile(profile);
 			// driver = new FirefoxDriver(options);
 			driver = new RemoteWebDriver(new URL(hubUrl), options);
-			logger.info("driver init success");
 		}
 		if (driver != null) {
 			logger.info("Browser launched...");
