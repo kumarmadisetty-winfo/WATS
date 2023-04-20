@@ -31,8 +31,8 @@ public class DriverConfiguration {
 
 	public final Logger logger = LogManager.getLogger(DriverConfiguration.class);
 
-	@Value("${configvO.config_url}")
-	private String configUrl;
+	@Value("${hubUrl}")
+	private String hubUrl;
 	
 	
 	/*
@@ -78,7 +78,7 @@ public class DriverConfiguration {
 			
 
 //			 driver = new ChromeDriver(cap);
-			driver = new RemoteWebDriver(new URL(configUrl), cap);
+			driver = new RemoteWebDriver(new URL(hubUrl), cap);
 		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
 //			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
 //					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
@@ -106,7 +106,7 @@ public class DriverConfiguration {
 			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
 			options.setProfile(profile);
 			// driver = new FirefoxDriver(options);
-			driver = new RemoteWebDriver(new URL(configUrl), options);
+			driver = new RemoteWebDriver(new URL(hubUrl), options);
 		}
 		if (driver != null) {
 			logger.info("Browser launched...");

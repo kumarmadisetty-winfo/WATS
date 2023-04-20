@@ -44,7 +44,7 @@ public class HealthCheck {
 	@Autowired
 	DataBaseEntryDao dao;
 
-	@Value("${configvO.config_url}")
+	@Value("${hubUrl}")
 	private String watsHubUrl;
 
 	@Value("${oci.config.name}")
