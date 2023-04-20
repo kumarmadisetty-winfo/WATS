@@ -3445,7 +3445,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 
 		// DH 31
-
+		//HCM.ADM.111465 (Search)
 		try {
 
 			if (param1.equalsIgnoreCase("Search")) {
@@ -3487,7 +3487,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 
 		// New code for PTP.PO.511
-		// DH 29
+		// DH 29 // HCM.ADM.022 (Submit)
 		try {
 			if (param1.equalsIgnoreCase("Submit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3750,7 +3750,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 
 		// Action: Click Button
-
+		// HCM.ADM.022
 		try {
 
 			if (param2.equalsIgnoreCase("OK")) {
@@ -4836,7 +4836,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
-			} else if (param1.equalsIgnoreCase("Close")) {
+			} //HCM.ADM.022
+			else if (param1.equalsIgnoreCase("Close")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()=\"Cl\"]"))));
 				Thread.sleep(5000);
@@ -5422,6 +5423,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during Republish clickButton" + scripNumber);
 			System.out.println(e);
 		}
+		//HCM.ADM.022 (Edit) (Review)
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -5475,6 +5477,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during clickButton" + scripNumber);
 			System.out.println(e);
 		}
+		
+		// HCM.ADM.022 (search)
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -5554,6 +5558,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 		}
+		//HCM.ADM.022 (update)
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -6045,6 +6050,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
 			System.out.println(e);
 		}
+			//HCM.ADM.022 (Search Results)
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
@@ -8872,7 +8878,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			System.out.println(e);
 		}
 
-		// DH 32
+		// DH 32 // HCM.ADM.022 (date)
+		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By
@@ -9299,7 +9306,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			System.out.println(e);
 		}
 		try {
-			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("Person Name")) {
+ 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("Person Name")) {
 				Thread.sleep(4000);
 
 				WebElement waittill = driver.findElement(By.xpath("//div[text()=\"" + param1
@@ -9709,6 +9716,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during sendValue" + scripNumber);
 			System.out.println(e);
 		}
+		// HCM.ADM.111465 (Name) HCM.ADM.024 (Person Number)
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
@@ -12524,6 +12532,43 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
+		
+		//	HCM.ADM.022 (Action & Action Reason)
+		try {
+			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
+					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) || (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action Reason"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
+
+				WebElement waittext = driver.findElement(By.xpath(
+						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
+
+				WebElement selectvalue = driver.findElement(By.xpath("//li[text()=\"" + keysToSend + "\"]"));
+				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+				selectvalue.click();
+
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
+				String xpath2 = "//li[text()=\"keysToSend\"]";
+				String xpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
+
 		try {
 			if ((param1.equalsIgnoreCase("Offer Team") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
@@ -13044,41 +13089,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 
 		// DH 48
-		try {
-			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
-					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
-
-				WebElement waittext = driver.findElement(By.xpath(
-						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				waittext.click();
-				Thread.sleep(3000);
-
-				WebElement selectvalue = driver.findElement(By.xpath("//li[text()=\"" + keysToSend + "\"]"));
-				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-				selectvalue.click();
-
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
-				String xpath2 = "//li[text()=\"keysToSend\"]";
-				String xpath = xpath1 + ";" + xpath2;
-				String scriptID = fetchMetadataVO.getScriptId();
-				String lineNumber = fetchMetadataVO.getLineNumber();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
-				return;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
-		}
-
+		
 		// DH 32
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14856,7 +14867,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			} catch (Exception ex) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during  dropdownValues" + scripNumber);
-
+				
+               //HCM.ADM.024 (Start time Am/PM)
 				try {
 					try {
 						WebElement popup1 = driver.findElement(By.xpath("//div[@class=\"AFDetectExpansion\"]"));
@@ -15099,15 +15111,17 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
+		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\"Name\"]/following::input[1]")));
 			WebElement searchResult = driver.findElement(By.xpath(
 					"//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\"Name\"]/following::input[1]"));
+
 			typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 			enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
-			Thread.sleep(5000);
+		    Thread.sleep(5000);
 			WebElement text = driver.findElement(By.xpath("//span[normalize-space(text())=\"" + keysToSend + "\"]"));
 			text.click();
 			Thread.sleep(1000);
@@ -15129,6 +15143,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during  dropdownValues" + scripNumber);
 			System.out.println(e);
 		}
+		
 		try {
 			WebElement button = driver.findElement(
 					By.xpath("//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\"" + param2
