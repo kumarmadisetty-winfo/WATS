@@ -75,7 +75,7 @@ public class DriverConfiguration {
 			         ImmutableMap.of("profile.default_content_setting_values.notifications", 0));
 			options.setExperimentalOption("prefs", prefs);
 			options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
-			options.setAcceptInsecureCerts(true);
+//			options.setAcceptInsecureCerts(true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			cap.merge(options);
 //			String url = "http://watsdev01.winfosolutions.com:4444"; 
