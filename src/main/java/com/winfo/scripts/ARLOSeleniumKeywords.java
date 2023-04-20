@@ -6231,7 +6231,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			// String autoitscriptpath = System.getProperty("user.dir") + File.separator +
 			// "File_upload_selenium_webdriver.au3";
@@ -6243,7 +6243,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Uploaded The File");
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.info(filelocation);
+			log.error("FileLocation : " + filelocation);
 			e.printStackTrace();
 			throw e;
 		}

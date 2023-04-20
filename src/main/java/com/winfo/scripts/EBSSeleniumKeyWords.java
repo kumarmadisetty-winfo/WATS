@@ -12525,7 +12525,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -12534,7 +12534,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 //			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			logger.info(filelocation);
+			logger.error("File Location : " + filelocation);
 			e.printStackTrace();
 			throw e;
 

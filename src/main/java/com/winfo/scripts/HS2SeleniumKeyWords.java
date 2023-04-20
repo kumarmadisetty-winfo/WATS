@@ -17048,7 +17048,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -17057,7 +17057,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
 //			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			System.out.println(filelocation);
+			log.error("File Location : "  + filelocation);
 			e.printStackTrace();
 			throw e;
 
