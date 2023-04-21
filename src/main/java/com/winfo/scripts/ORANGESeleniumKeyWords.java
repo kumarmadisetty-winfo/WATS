@@ -16241,7 +16241,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver webDriver, String filelocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver webDriver, String filelocation, String param1, String param2, String param3,  ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			
 			WebElement uploadZip = webDriver.findElement(By.xpath("//div[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/preceding::input[1]"));

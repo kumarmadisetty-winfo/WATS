@@ -6243,7 +6243,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Uploaded The File");
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			log.error("FileLocation : " + filelocation);
+			log.error("FileLocation : " + fileLocation);
 			e.printStackTrace();
 			throw e;
 		}

@@ -19491,7 +19491,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -19500,7 +19500,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
 //			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			System.out.println(fileLocation);
+			log.error(fileLocation);
 			e.printStackTrace();
 			throw e;
 

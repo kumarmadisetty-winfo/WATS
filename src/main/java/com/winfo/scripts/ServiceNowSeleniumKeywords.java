@@ -16461,7 +16461,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 			try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -16470,7 +16470,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
 //			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(filelocation);
+			log.error(filelocation);
 			e.printStackTrace();
 			throw e;
 

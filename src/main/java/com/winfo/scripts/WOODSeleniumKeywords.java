@@ -17148,7 +17148,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2,
-			String param3) throws Exception {
+			String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -17157,7 +17157,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
 //				screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			System.out.println(filelocation);
+			log.error(filelocation);
 			e.printStackTrace();
 			throw e;
 

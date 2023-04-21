@@ -14331,8 +14331,8 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		}
 	}
 
-	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO,
-			CustomerProjectDto customerDetails) throws Exception {
+	public void uploadFileAutoIT(WebDriver webDriver, String filelocation, String param1, String param2, String param3,
+			ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 		try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -14341,7 +14341,7 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
 //			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
-			System.out.println(filelocation);
+			log.error(filelocation);
 			e.printStackTrace();
 			throw e;
 
@@ -15362,13 +15362,6 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public void compareValue(WebDriver driver, String input_parameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails)
 			throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	@Override
-	public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2, String param3) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
