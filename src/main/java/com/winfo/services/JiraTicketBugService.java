@@ -316,6 +316,7 @@ public class JiraTicketBugService {
 			response.setStatusMessage("ERROR");
 			response.setDescription(MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 			bean.add(response);
+			log.error(e);
 //			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 		}
 		return bean;
