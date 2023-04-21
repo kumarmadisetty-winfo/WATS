@@ -21,8 +21,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
-import com.google.common.collect.ImmutableMap;
 
+import com.google.common.collect.ImmutableMap;
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
 import com.winfo.services.FetchConfigVO;
@@ -64,47 +64,23 @@ public class DriverConfiguration {
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 			}
 			options.addArguments(BrowserConstants.START_MAXIMIZED.getValue());
-//			options.addArguments("--headless");
 			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
 			options.addArguments(BrowserConstants.TEST_TYPE.getValue());
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
-//			options.addArguments("--disable-popup-blocking");
-//			options.addArguments("chrome.switches","--disable-extensions");
 			options.setExperimentalOption("prefs", 
 			         ImmutableMap.of("profile.default_content_setting_values.notifications", 0));
 			options.setExperimentalOption("prefs", prefs);
 			options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
-//			options.setAcceptInsecureCerts(true);
 			cap.setCapability(ChromeOptions.CAPABILITY, options);
 			cap.merge(options);
-//			String url = "http://watsdev01.winfosolutions.com:4444"; 
-//			driver = new RemoteWebDriver(new URL(url), cap);
-//			driver = new ChromeDriver(cap);
 			
 
 			driver = new RemoteWebDriver(new URL(hubUrl), cap);
 			logger.info("driver init success");
-
-
-//			 driver = new ChromeDriver(cap);
-
-		} else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-//			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
-//					"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
-
-			
 		}else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-//			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(),
-//			"/Github/EBS-Automation-POC/Driver/geckodriver.exe");
 			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(), fetchConfigVO.getFirefox_driver_path());
 			FirefoxProfile profile = new FirefoxProfile();
-			
-		//	profile.setPreference("browser.download.folderList", 2);
-		//	profile.setPreference("browser.download.dir", fetchConfigVO.getDownlod_file_path());
-		//	profile.setPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf;text/plain;application/text;text/xml;application/xml");
-		//	profile.setPreference("pdfjs.disabled", true);
-		
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			FirefoxOptions options = new FirefoxOptions();
 			if (os.contains("win")) {
@@ -113,14 +89,15 @@ public class DriverConfiguration {
 				logger.info("linux location");
 				options.setBinary("/usr/bin/firefox");
 			}
-		//	options.addArguments("--headless");
 			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
 			options.addArguments(BrowserConstants.ENABLE_AUTOMATION.getValue());
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
 			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
 			options.setProfile(profile);
-			// driver = new FirefoxDriver(options);
+			
+			
 			driver = new RemoteWebDriver(new URL(hubUrl), options);
+			logger.info("driver init success");
 		}
 		if (driver != null) {
 			driver.manage().window().maximize();
