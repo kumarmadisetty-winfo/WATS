@@ -19,11 +19,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import lombok.Data;
 
 
 @Entity
 @Table(name = "WIN_TA_TEST_SET_LINES")
-
+@Data
 public class TestSetLine {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testRunScript_generator")
@@ -88,13 +89,6 @@ public class TestSetLine {
 	@Column(name = "DEPENDENCY_TR")
 	private Integer dependencyTr;
 	
-    public Integer getDependencyTr() {
-		return dependencyTr;
-	}
-	public void setDependencyTr(Integer dependencyTr) {
-		this.dependencyTr = dependencyTr;
-	}
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
 	private TestSet testRun;
@@ -102,165 +96,12 @@ public class TestSetLine {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
 	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<>();
 	
-	public List<TestSetScriptParam> getTestRunScriptParam() {
-		return testRunScriptParam;
-	}
-	public void setTestRunScriptParam(List<TestSetScriptParam> testRunScriptParam) {
-		this.testRunScriptParam = testRunScriptParam;
-	}
+	
 	public void addTestScriptParam(TestSetScriptParam scriptParam) {
 		testRunScriptParam.add(scriptParam);
-		scriptParam.setTestRunScripts(this);
+		scriptParam.setTestSetLine(this);
 	}
 
-	public Integer getTestRunScriptId() {
-		return testRunScriptId;
-	}
 
-	public void setTestRunScriptId(Integer testRunScriptId) {
-		this.testRunScriptId = testRunScriptId;
-	}
-
-	public Integer getScriptId() {
-		return scriptId;
-	}
-
-	public void setScriptId(Integer scriptId) {
-		this.scriptId = scriptId;
-	}
-
-	public String getScriptNumber() {
-		return scriptNumber;
-	}
-
-	public void setScriptNumber(String scriptNumber) {
-		this.scriptNumber = scriptNumber;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(String enabled) {
-		this.enabled = enabled;
-	}
-
-	public Integer getSeqNum() {
-		return seqNum;
-	}
-
-	public void setSeqNum(Integer seqNum) {
-		this.seqNum = seqNum;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(String lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getTestRunScriptPath() {
-		return testRunScriptPath;
-	}
-
-	public void setTestRunScriptPath(String testRunScriptPath) {
-		this.testRunScriptPath = testRunScriptPath;
-	}
-
-	public String getExecutedBy() {
-		return executedBy;
-	}
-
-	public void setExecutedBy(String executedBy) {
-		this.executedBy = executedBy;
-	}
-
-	public Date getExecutionStartTime() {
-		return executionStartTime;
-	}
-
-	public void setExecutionStartTime(Date executionStartTime) {
-		this.executionStartTime = executionStartTime;
-	}
-
-	public Date getExecutionEndTime() {
-		return executionEndTime;
-	}
-
-	public void setExecutionEndTime(Date executionEndTime) {
-		this.executionEndTime = executionEndTime;
-	}
-
-	public String getIssueKey() {
-		return issueKey;
-	}
-
-	public void setIssueKey(String issueKey) {
-		this.issueKey = issueKey;
-	}
-
-	public TestSet getTestRun() {
-		return testRun;
-	}
-
-	public void setTestRun(TestSet testRun) {
-		this.testRun = testRun;
-	}
-
-	/*
-	 * public List<TestSetScriptParam> getTestRunScriptParam() { return
-	 * testRunScriptParam; }
-	 * 
-	 * public void setTestRunScriptParam(List<TestSetScriptParam>
-	 * testRunScriptParam) { this.testRunScriptParam = testRunScriptParam; }
-	 */
-	public Integer getRunCount() {
-		return runCount;
-	}
-
-	public void setRunCount(Integer runCount) {
-		this.runCount = runCount;
-	}
-
-	public String getScriptUpadated() {
-		return scriptUpadated;
-	}
-	public void setScriptUpadated(String scriptUpadated) {
-		this.scriptUpadated = scriptUpadated;
-	}
-
+	
 }

@@ -5,25 +5,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
+@Data
 public class WatsMasterDataVOList {
-	
+
 	@JsonProperty("data")
-	private List<ScriptMasterDto> data= new ArrayList<>();
-
-	public List<ScriptMasterDto> getData() {
-		return data;
-	}
-
-	public void setData(List<ScriptMasterDto> data) {
-		this.data = data;
-	}
-	
+	private List<ScriptMasterDto> data = new ArrayList<>();
 
 }
-	
-	
-	
-	
-	
-		
-	

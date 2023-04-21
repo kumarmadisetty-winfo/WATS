@@ -4,6 +4,9 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
+@Data
 public class FetchDataMetadata {
 
 	@JsonProperty("line_number")
@@ -56,141 +59,5 @@ public class FetchDataMetadata {
 
 	@JsonProperty("script_number")
 	private String scriptNumber;
-
-	public Integer getLineNumber() {
-		return lineNumber;
-	}
-
-	public void setLineNumber(Integer lineNumber) {
-		this.lineNumber = lineNumber;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	public String getInputParameter() {
-		return inputParameter;
-	}
-
-	public String getDatatypes() {
-		return datatypes;
-	}
-
-	public void setDatatypes(String datatypes) {
-		this.datatypes = datatypes;
-	}
-
-	public String getUniqueMandatory() {
-		return uniqueMandatory;
-	}
-
-	public void setUniqueMandatory(String uniqueMandatory) {
-		this.uniqueMandatory = uniqueMandatory;
-	}
-
-	public String getValidationType() {
-		return validationType;
-	}
-
-	public void setValidationType(String validationType) {
-		this.validationType = validationType;
-	}
-
-	public String getValidationName() {
-		return validationName;
-	}
-
-	public void setValidationName(String validationName) {
-		this.validationName = validationName;
-	}
-
-	public String getScriptNumber() {
-		return scriptNumber;
-	}
-
-	public void setScriptNumber(String scriptNumber) {
-		this.scriptNumber = scriptNumber;
-	}
-
-	public void setInputParameter(String inputParameter) {
-		this.inputParameter = inputParameter;
-	}
-
-	public String getXpathLocation() {
-		return xpathLocation;
-	}
-
-	public void setXpathLocation(String xpathLocation) {
-		this.xpathLocation = xpathLocation;
-	}
-
-	public String getXpathLocation1() {
-		return xpathLocation1;
-	}
-
-	public void setXpathLocation1(String xpathLocation1) {
-		this.xpathLocation1 = xpathLocation1;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getStepDesc() {
-		return stepDesc;
-	}
-
-	public void setStepDesc(String stepDesc) {
-		this.stepDesc = stepDesc;
-	}
-
-	public String getFieldType() {
-		return fieldType;
-	}
-
-	public void setFieldType(String fieldType) {
-		this.fieldType = fieldType;
-	}
-
-	public String getHint() {
-		return hint;
-	}
-
-	public void setHint(String hint) {
-		this.hint = hint;
-	}
 
 }

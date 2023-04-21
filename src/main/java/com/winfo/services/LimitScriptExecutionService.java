@@ -1,14 +1,11 @@
 package com.winfo.services;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import javax.mail.Message;
 import javax.mail.Session;
@@ -28,6 +25,7 @@ import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecutionAudit;
+import com.winfo.model.LookUp;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
@@ -63,12 +61,13 @@ public class LimitScriptExecutionService {
 			String scriptId, String scriptNumber, String status, Date startDate, Date endDate, CustomerProjectDto customerDetails) {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
+			
 			String testSetId = customerDetails.getTestSetId();
-			executionAudit.setTestsetid(testSetId);
-			executionAudit.setScriptid(scriptId);
-			executionAudit.setScriptnumber(scriptNumber);
-			executionAudit.setExecutionstarttime(startDate);
-			executionAudit.setExecutionendtime(endDate);
+			executionAudit.setTestSetId(testSetId);
+			executionAudit.setScriptId(scriptId);
+			executionAudit.setScriptNumber(scriptNumber);
+			executionAudit.setExecutionStartTime(startDate);
+			executionAudit.setExecutionEndTime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
 			System.out.println("data added successfully");
@@ -198,11 +197,11 @@ public class LimitScriptExecutionService {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
 			String testSetId = testRunId;
-			executionAudit.setTestsetid(testSetId);
-			executionAudit.setScriptid(scriptId);
-			executionAudit.setScriptnumber(scriptNumber);
-			executionAudit.setExecutionstarttime(startDate);
-			executionAudit.setExecutionendtime(endDate);
+			executionAudit.setTestSetId(testSetId);
+			executionAudit.setScriptId(scriptId);
+			executionAudit.setScriptNumber(scriptNumber);
+			executionAudit.setExecutionStartTime(startDate);
+			executionAudit.setExecutionEndTime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
 			log.info("data added successfully");
@@ -211,7 +210,7 @@ public class LimitScriptExecutionService {
 			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
 		}
 	}
-
+	
 	@Transactional
 	public int getFailScriptRunCount(String testSetLineId, String testSetId) {
 		return limitScriptExecutionDao.getFailScriptRunCount(testSetLineId, testSetId);
@@ -228,10 +227,10 @@ public class LimitScriptExecutionService {
 		try {
 			ExecutionAudit executionAudit = new ExecutionAudit();
 			String testSetId = testRunId;
-			executionAudit.setTestsetid(testSetId);
-			executionAudit.setScriptid(scriptId);
-			executionAudit.setScriptnumber(scriptNumber);
-			executionAudit.setExecutionstarttime(fetchConfigVO.getStarttime());
+			executionAudit.setTestSetId(testSetId);
+			executionAudit.setScriptId(scriptId);
+			executionAudit.setScriptNumber(scriptNumber);
+			executionAudit.setExecutionStartTime(fetchConfigVO.getStarttime());
 			executionAudit.setStatus(status);
 			if (limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit) != null
 					&& limitScriptExecutionDao.findCountsOfExecAuditRecords(executionAudit).longValue() == 0) {

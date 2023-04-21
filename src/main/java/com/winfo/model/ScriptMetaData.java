@@ -17,9 +17,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "WIN_TA_SCRIPT_METADATA")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "scriptMetaDataId")
+@Data
 public class ScriptMetaData {
 
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metadata_generator")
@@ -79,149 +82,5 @@ public class ScriptMetaData {
 	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "SCRIPT_ID")
 	private ScriptMaster scriptMaster;
-
-	public ScriptMaster getScriptMaster() {
-		return scriptMaster;
-	}
-
-	public void setScriptMaster(ScriptMaster scriptMaster) {
-		this.scriptMaster = scriptMaster;
-	}
-
-	public String getMetadataInputvalue() {
-		return metadataInputvalue;
-	}
-
-	public void setMetadataInputvalue(String metadataInputvalue) {
-		this.metadataInputvalue = metadataInputvalue;
-	}
-
-	public Integer getScriptMetaDataId() {
-		return scriptMetaDataId;
-	}
-
-	public void setScriptMetaDataId(Integer scriptMetaDataId) {
-		this.scriptMetaDataId = scriptMetaDataId;
-	}
-
-	public String getScriptNumber() {
-		return scriptNumber;
-	}
-
-	public String getDatatypes() {
-		return datatypes;
-	}
-
-	public void setDatatypes(String datatypes) {
-		this.datatypes = datatypes;
-	}
-
-	public String getUniqueMandatory() {
-		return uniqueMandatory;
-	}
-
-	public void setUniqueMandatory(String uniqueMandatory) {
-		this.uniqueMandatory = uniqueMandatory;
-	}
-
-	public String getValidationType() {
-		return validationType;
-	}
-
-	public void setValidationType(String validationType) {
-		this.validationType = validationType;
-	}
-
-	public String getValidationName() {
-		return validationName;
-	}
-
-	public void setValidationName(String validationName) {
-		this.validationName = validationName;
-	}
-
-	public void setScriptNumber(String scriptNumber) {
-		this.scriptNumber = scriptNumber;
-	}
-
-	public Integer getLineNumber() {
-		return lineNumber;
-	}
-
-	public void setLineNumber(Integer lineNumber) {
-		this.lineNumber = lineNumber;
-	}
-
-	public String getInputParameter() {
-		return inputParameter;
-	}
-
-	public void setInputParameter(String inputParameter) {
-		this.inputParameter = inputParameter;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getStepDesc() {
-		return stepDesc;
-	}
-
-	public void setStepDesc(String stepDesc) {
-		this.stepDesc = stepDesc;
-	}
-
-	public String getFieldType() {
-		return fieldType;
-	}
-
-	public void setFieldType(String fieldType) {
-		this.fieldType = fieldType;
-	}
-
-	public String getHint() {
-		return hint;
-	}
-
-	public void setHint(String hint) {
-		this.hint = hint;
-	}
 
 }

@@ -7,8 +7,11 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "EXECUTE_STATUS")
+@Data
 public class ExecuteStatus {
 	
 	@EmbeddedId
@@ -27,44 +30,6 @@ public class ExecuteStatus {
 	@Column(name = "EXECUTE_STATUS")
 	private Integer executionStatus;
 	
-	public ExecuteStatusPK getExecuteStatusPK() {
-		return executeStatusPK;
-	}
-
-	public void setExecuteStatusPK(ExecuteStatusPK executeStatusPK) {
-		this.executeStatusPK = executeStatusPK;
-	}
-
-	public String getTestRunName() {
-		return testRunName;
-	}
-
-	public void setTestRunName(String testRunName) {
-		this.testRunName = testRunName;
-	}
-
-	public Character getFlag() {
-		return flag;
-	}
-
-	public void setFlag(Character flag) {
-		this.flag = flag;
-	}
-
-	public Date getExecutionDate() {
-		return executionDate;
-	}
-
-	public void setExecutionDate(Date executionDate) {
-		this.executionDate = executionDate;
-	}
-
-	public Integer getExecutionStatus() {
-		return executionStatus;
-	}
-
-	public void setExecutionStatus(Integer executionStatus) {
-		this.executionStatus = executionStatus;
-	}
+	
 	
 }

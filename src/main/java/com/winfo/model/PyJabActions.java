@@ -7,54 +7,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "pyjab_actions")
+@Data
 public class PyJabActions {
-	private long id;
-
-	private String actionName;
-
-	private String paramValues;
-	
-	private String methodName;
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
+	private long id;
 
 	@Column(name = "action_name")
-	public String getActionName() {
-		return actionName;
-	}
-
-	public void setActionName(String actionName) {
-		this.actionName = actionName;
-	}
+	private String actionName;
 
 	@Column(name = "param_values")
-	public String getParamValues() {
-		return paramValues;
-	}
-
-	public void setParamValues(String paramValues) {
-		this.paramValues = paramValues;
-	}
+	private String paramValues;
 
 	@Column(name = "method_name")
-	public String getMethodName() {
-		return methodName;
-	}
+	private String methodName;
 
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
-	}
-
-	
 }

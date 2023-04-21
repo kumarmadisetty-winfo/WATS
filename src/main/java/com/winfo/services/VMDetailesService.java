@@ -45,8 +45,8 @@ public class VMDetailesService {
 	@Autowired
 	private VmInstanceDAO vmInstanceDao;
 
-	@Value("${configvO.config_url}")
-	private String config_url;
+	@Value("${hubUrl}")
+	private String hubUrl;
 
 	@Autowired
 	TestCaseDataService dataService;
@@ -173,7 +173,7 @@ public class VMDetailesService {
 			
 
 			try {
-				driver = new RemoteWebDriver(new URL(config_url), cap);
+				driver = new RemoteWebDriver(new URL(hubUrl), cap);
 
 				driver.quit();
 			} catch (Exception e) {
