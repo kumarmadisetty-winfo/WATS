@@ -3,8 +3,6 @@ package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -12,27 +10,15 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,16 +53,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
@@ -13202,7 +13179,9 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	}
 
 	public void clearMethod(WebDriver driver, WebElement waittill) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+//		WebDriverWait wait = new WebDriverWait(driver, 60);
+		Duration timeoutDuration = Duration.ofSeconds(60);
+		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		waittill.click();
 		waittill.clear();

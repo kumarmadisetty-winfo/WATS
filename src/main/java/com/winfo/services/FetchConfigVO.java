@@ -1,5 +1,6 @@
-			package com.winfo.services;
+package com.winfo.services;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class FetchConfigVO {
 	private String BROWSER;
 	
 	private Integer WAIT_TIME;
-	
+
 	private String APPLICATION_URL;
 	
 	private String EBS_URL;
@@ -507,11 +508,11 @@ public int getMax_num_scripts() {
 	public void setBrowser(String browser) {
 		this.BROWSER = browser;
 	}
-	public Integer getWait_time() {
-		return WAIT_TIME;
+	public Duration getWait_time() {
+	    return Duration.ofSeconds(WAIT_TIME);
 	}
-	public void setWait_time(Integer wait_time) {
-		this.WAIT_TIME = wait_time;
+	public void setWait_time(Duration wait_time) {
+	    this.WAIT_TIME = (int) wait_time.getSeconds();
 	}
 	public String getApplication_url() {
 		return APPLICATION_URL;

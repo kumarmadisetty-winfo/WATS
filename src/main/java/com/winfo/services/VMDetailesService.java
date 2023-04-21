@@ -1,37 +1,18 @@
 package com.winfo.services;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
 
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
-import com.oracle.bmc.Region;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,35 +20,22 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.ConfigFileReader.ConfigFile;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
-import com.oracle.bmc.core.ComputeClient;
 import com.oracle.bmc.core.ComputeManagementClient;
-import com.oracle.bmc.core.ComputeWaiters;
-import com.oracle.bmc.core.model.Instance;
 import com.oracle.bmc.core.model.InstancePoolSummary;
 import com.oracle.bmc.core.model.InstanceSummary;
 import com.oracle.bmc.core.model.UpdateInstancePoolDetails;
-import com.oracle.bmc.core.requests.GetInstancePoolRequest;
-import com.oracle.bmc.core.requests.GetInstanceRequest;
-import com.oracle.bmc.core.requests.InstanceActionRequest;
 import com.oracle.bmc.core.requests.ListInstancePoolInstancesRequest;
 import com.oracle.bmc.core.requests.ListInstancePoolsRequest;
 import com.oracle.bmc.core.requests.UpdateInstancePoolRequest;
-import com.oracle.bmc.core.responses.GetInstancePoolResponse;
-import com.oracle.bmc.core.responses.GetInstanceResponse;
-import com.oracle.bmc.core.responses.InstanceActionResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolInstancesResponse;
 import com.oracle.bmc.core.responses.ListInstancePoolsResponse;
 import com.oracle.bmc.core.responses.UpdateInstancePoolResponse;
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
-import com.winfo.dao.AuditLogsDao;
 import com.winfo.dao.VmInstanceDAO;
-import com.winfo.vo.TestScriptDto;
 
 @Service
 @RefreshScope
@@ -180,7 +148,7 @@ public class VMDetailesService {
 			prefs.put("profile.default_content_settings.popups", 0);
 			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
 			ChromeOptions options = new ChromeOptions();
-			DesiredCapabilities cap = DesiredCapabilities.chrome();
+			
 			if (os.contains("win")) {
 				System.out.println("windows location");
 				options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
@@ -200,9 +168,9 @@ public class VMDetailesService {
 			options.addArguments("test-type=browser");
 			options.addArguments("disable-infobars");
 			options.setExperimentalOption("prefs", prefs);
-
-			cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			cap.setCapability(ChromeOptions.CAPABILITY, options);
+			options.setAcceptInsecureCerts(true);
+			MutableCapabilities cap = new MutableCapabilities().merge(options);
+			
 
 			try {
 				driver = new RemoteWebDriver(new URL(hubUrl), cap);

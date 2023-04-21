@@ -1,49 +1,21 @@
 package com.winfo.scripts;
 
-import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
-
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -52,10 +24,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 //import blank.OpenCVFrameConverter;
 
 import org.apache.log4j.Logger;
-import org.bytedeco.javacpp.avcodec;
-import org.bytedeco.javacpp.opencv_core.IplImage;
-import org.bytedeco.javacv.FFmpegFrameRecorder;
-import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -70,7 +38,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -88,11 +55,6 @@ import com.aspose.cells.LookAtType;
 import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.lowagie.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.interface1.SeleniumKeyWordsInterface;
@@ -14748,7 +14710,9 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	}
 
 	public void clearMethod(WebDriver driver, WebElement waittill) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+//		WebDriverWait wait = new WebDriverWait(driver, 60);
+		Duration timeoutDuration = Duration.ofSeconds(60);
+		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		waittill.click();
 		waittill.clear();
