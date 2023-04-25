@@ -36,7 +36,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.http.HttpStatus;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
@@ -53,6 +52,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -1570,7 +1570,7 @@ public abstract class AbstractSeleniumKeywords {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
 					logger.error(se);
-					throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR_500,
+					throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 							"Not able to create the directory");
 				}
 			} else {
@@ -1588,7 +1588,7 @@ public abstract class AbstractSeleniumKeywords {
 			Files.delete(Paths.get(source.getPath()));
 		} catch (IOException ex) {
 			logger.error(ex);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR_500,
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Failed to create the custom screenshot");
 		}
 	}
