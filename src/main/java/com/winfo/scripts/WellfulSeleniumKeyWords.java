@@ -10934,6 +10934,29 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			throws Exception {
 		
 		try {
+			if (param1.equalsIgnoreCase("ABC Classes") && param2.equalsIgnoreCase("Sequence")) {
+				WebElement waittill = driver
+						.findElement(By.xpath("//*[text()=\"" + param1 + "\"]/following::label[text()= \"" + param2 + "\"]/preceding::input[1]"));
+				Thread.sleep(1000);
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				String xpath = "//*[text()='ABC Classes']/following::label[text()='Sequence']/preceding::input[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during  tableSendKeys" + scripNumber);
+			log.error(e.getMessage());
+		}
+	
+		try {
 			if ((param1.equalsIgnoreCase("Create Cost Scenario ") && (param2.equalsIgnoreCase("Cost Book")
 					|| param2.equalsIgnoreCase("Effective Date") || param2.equalsIgnoreCase("Cost Organization")))) {
 				WebElement waittill = driver
