@@ -1015,7 +1015,7 @@ public class RunAutomation {
 									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
-								}
+								}0
 								break;
 							}
 
