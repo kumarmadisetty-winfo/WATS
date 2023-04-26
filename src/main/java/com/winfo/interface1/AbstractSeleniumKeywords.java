@@ -46,10 +46,12 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.util.UnitType;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -197,7 +199,6 @@ public abstract class AbstractSeleniumKeywords {
 					.concat(fileExtension);
 
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
-
 			logger.info("Successfully Screenshot is taken " + imageName);
 			return folderName + FORWARD_SLASH + imageName;
 
@@ -208,6 +209,7 @@ public abstract class AbstractSeleniumKeywords {
 			return e.getMessage();
 		}
 	}
+  
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
@@ -2248,6 +2250,6 @@ public abstract class AbstractSeleniumKeywords {
 		System.out.println(acessToken);
 		return acessToken;
 	}
-
+	
 
 }

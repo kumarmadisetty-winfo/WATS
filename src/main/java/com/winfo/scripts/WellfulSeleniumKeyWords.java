@@ -85,7 +85,7 @@ import com.winfo.vo.ScriptDetailsDto;
 @RefreshScope
 public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 //New-changes - added annotation for DatabaseEntry
-	
+
 	@Autowired
 	private DataBaseEntry databaseentry;
 	@Autowired
@@ -1529,6 +1529,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		// placeholder changed from \"Enter Search Terms to Search\" in Fusion Instance
+
 		
 		try {
 			if (param1.equalsIgnoreCase("Action Required:")) {
@@ -2581,6 +2582,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	public void clickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+
 		try {
 			if (param1.equalsIgnoreCase("Life Cycle")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3280,6 +3282,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+
 		
 		try {
 			if (param1.equalsIgnoreCase("D")) {
@@ -8558,7 +8561,6 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-		
 		try {
 			if (param1.equalsIgnoreCase("m/d/yy")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8581,7 +8583,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Date sendValue" + scripNumber);
 		}
-		
+    
 		try {
 			if (param1.equalsIgnoreCase("Create Interview") && param2.equalsIgnoreCase("Interviewers")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10932,7 +10934,6 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 	public void tableSendKeys(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-		
 		try {
 			if (param1.equalsIgnoreCase("ABC Classes") && param2.equalsIgnoreCase("Sequence")) {
 				WebElement waittill = driver
@@ -11021,7 +11022,6 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			log.error("Failed during tableSendKeys" + scripNumber);
 			log.error(e.getMessage());
 		}
-		
 		try {
 			if ((param1.equalsIgnoreCase("Create Job Requisition") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
@@ -15912,7 +15912,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 	public void selectByText(WebDriver driver, String param1, String param2, String inputData,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		
+
 		try {
 			if (param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Book")) {
 				Thread.sleep(5000);
@@ -15966,7 +15966,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Release selectByText" + scripNumber);
 		}
-		
+    
 		try {
 			if (param1.equalsIgnoreCase("Address Purposes")) {
 				Thread.sleep(2000);
@@ -19176,6 +19176,4 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
-
-	
 }
