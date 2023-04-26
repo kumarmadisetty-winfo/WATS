@@ -199,7 +199,7 @@ public abstract class AbstractSeleniumKeywords {
 					.concat(fileExtension);
 
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
-
+			
 			logger.info("Successfully Screenshot is taken " + imageName);
 			return folderName + FORWARD_SLASH + imageName;
 
@@ -210,7 +210,6 @@ public abstract class AbstractSeleniumKeywords {
 			return e.getMessage();
 		}
 	}
-	
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;

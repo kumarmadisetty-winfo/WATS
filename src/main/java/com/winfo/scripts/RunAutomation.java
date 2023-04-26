@@ -1016,7 +1016,6 @@ public class RunAutomation {
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								
 								break;
 							}
 

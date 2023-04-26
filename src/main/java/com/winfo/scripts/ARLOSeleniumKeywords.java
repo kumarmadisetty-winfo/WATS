@@ -6229,6 +6229,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 	}
 
+
 	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 //		try {
 //			// String autoitscriptpath = System.getProperty("user.dir") + File.separator +
@@ -6263,7 +6264,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error(fileLocation);
 			e.printStackTrace();
 		}
-		
+    
 		try {
 			if(param1.equalsIgnoreCase("Add") && param2.equalsIgnoreCase("File")) {
 			String uploadXPath = "//*[text()='"+param1+" "+param2+"']";
