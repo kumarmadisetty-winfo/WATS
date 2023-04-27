@@ -34,6 +34,9 @@ public class CentralToCustomerPostService {
 		List<DomGenericResponseBean> bean = new ArrayList<>();
 
 		for (ScriptMasterDto masterdata : mastervolist.getData()) {
+			List<String> result = dao.getExistScriptDetailsByScriptNumberAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
+			DomGenericResponseBean response = new DomGenericResponseBean();
+			if(result.isEmpty()){
 			ScriptMaster master = new ScriptMaster();
 			master.setModule(masterdata.getModule());
 			master.setScenarioName(masterdata.getScenarioName());
@@ -76,8 +79,6 @@ public class CentralToCustomerPostService {
 				metadata.setLineNumber(metadatavo.getLineNumber());
 				metadata.setInputParameter(metadatavo.getInputParameter());
 				metadata.setScriptNumber(masterdata.getScriptNumber());
-				metadata.setXpathLocation(metadatavo.getXpathLocation());
-				metadata.setXpathLocation1(metadatavo.getXpathLocation1());
 				metadata.setCreatedBy(metadatavo.getCreatedBy());
 				metadata.setCreationDate(metadatavo.getCreationDate());
 				metadata.setUpdatedBy(metadatavo.getUpdatedBy());
@@ -144,9 +145,17 @@ public class CentralToCustomerPostService {
 
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
 		}
+		else
+		{
+			response.setStatus(400);
+			response.setStatusMessage("ERROR");
+			response.setDescription("Script Number Already exists");
+			response.setFailed_Script(masterdata.getScriptNumber());
+			bean.add(response);	
+		}
 
-		return bean;
 
 	}
-
+		return bean;
+	}
 }

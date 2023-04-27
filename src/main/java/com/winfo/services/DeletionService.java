@@ -39,6 +39,7 @@ import com.winfo.model.Customer;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants;
+import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.DeleteEvidenceReportDto;
@@ -70,6 +71,9 @@ public class DeletionService{
 	@Autowired
 	TestScriptExecService testScriptExecService;
 	
+	@Autowired
+	ScriptDeletionService scriptDeletionService;
+	
 //	@Autowired
 //	AbstractSeleniumKeywords abstractSeleniumKeywords;
 
@@ -78,10 +82,7 @@ public class DeletionService{
 
 	public ResponseDto deleteAllScriptFromTestRun(DeleteEvidenceReportDto testScriptDto) throws Exception {
 		String testSetId = testScriptDto.getTestSetId();
-		Customer customer = dataBaseEntry.getCustomer(testSetId);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		CustomerProjectDto customerDetails = mapper.convertValue(customer, CustomerProjectDto.class);
+		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		ConfigFileReader.ConfigFile configFile = null;
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
@@ -133,9 +134,11 @@ public class DeletionService{
 				executor.execute(() -> {
 					logger.info("deletion of script number {}", testSetLineObj.getScriptNumber());
 					try {
-						
-						deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
+						if(!TEST_SET_LINE_ID_STATUS.NEW.getLabel().equalsIgnoreCase(testSetLineObj.getStatus())){
+							deleteScriptDtlsForObjStoreAndSharePoint(testSetLineObj, customerDetails, provider, fetchConfigVO, deleteReportDtoObj.getTestSetId());
+						}
 						dataBaseEntry.getTestRunLinesDataByTestSetLineId(testSetLineObj);
+//						scriptDeletionService.deleteScriptFromTestRun(Integer.parseInt(lineId));
 					} catch (Exception e) {
 						logger.error(e);
 						e.printStackTrace();

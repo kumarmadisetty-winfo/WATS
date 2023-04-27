@@ -318,7 +318,7 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true);
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -407,8 +407,7 @@ public class RunAutomation {
 				.correlationId(UUID.randomUUID().toString()).build(), AUDIT_TRAIL_STAGES.RR, null);
 		try {
 			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
-			boolean actionContainsSF = dataBaseEntry.doesActionContainsSfApplication(fetchMetadataListsVO.get(0).getScriptId());
-			String operatingSystem = actionContainsExcel || actionContainsSF ? "windows" : null;
+			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
@@ -438,11 +437,12 @@ public class RunAutomation {
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
-						customerDetails.getTestSetName());
+						customerDetails.getTestSetName(),false);
 
 				failList.add(scriptId);
 			}
 		} finally {
+			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			log.info("Execution is completed for script  - {}", fetchMetadataListsVO.get(0).getScriptNumber());
 			if (driver != null) {
 				driver.close();
@@ -1058,11 +1058,11 @@ public class RunAutomation {
 										&& !message.startsWith("Course Title")) {
 
 									fetchConfigVO.setErrormessage(message);
-									seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, fetchMetadataVO,
+									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, fetchMetadataVO, customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
@@ -1254,9 +1254,18 @@ public class RunAutomation {
 									globalValueForSteps, customerDetails);
 							break;
 						case "uploadFileAutoIT":
-							seleniumFactory.getInstanceObj(instanceName)
-									.uploadFileAutoIT(driver, fetchConfigVO.getUpload_file_path(), param1, param2, param3);
-							break;
+							try {
+								seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,
+										fetchConfigVO.getUpload_file_path(), param1, param2, param3);
+								seleniumFactory.getInstanceObj(instanceName).screenshot(driver, fetchMetadataVO,
+										customerDetails);
+								break;
+							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).screenshotFail(driver, fetchMetadataVO,
+										customerDetails);
+								throw e;
+							}
+							
 						case "windowclose":
 							seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
 									fetchConfigVO, customerDetails);
@@ -1435,7 +1444,7 @@ public class RunAutomation {
 
 								dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 								dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-										fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+										fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false);
 
 								dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 							} catch (Exception e) {
@@ -1501,7 +1510,7 @@ public class RunAutomation {
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-								fetchConfigVO.getStarttime(), customerDetails.getTestSetName());
+								fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false);
 
 						dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 

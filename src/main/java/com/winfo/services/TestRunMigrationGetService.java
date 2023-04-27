@@ -2,6 +2,7 @@ package com.winfo.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.TestRunMigrationGetDao;
+import com.winfo.model.ExecuteStatus;
+import com.winfo.model.ExecuteStatusPK;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -157,6 +160,7 @@ public class TestRunMigrationGetService {
 				ScriptMaster master = new ScriptMaster();
 				master.setScriptId(masterdata.getScriptId());
 				master.setModule(masterdata.getModule());
+				master.setTargetApplication(masterdata.getTargetApplication());
 				master.setScenarioName(masterdata.getScenarioName());
 				master.setScenarioDescription(masterdata.getScenarioDescription());
 				master.setProductVersion(masterdata.getProductVersion());
@@ -179,7 +183,6 @@ public class TestRunMigrationGetService {
 				master.setUpdatedBy(masterdata.getUpdatedBy());
 				master.setUpdateDate(masterdata.getUpdateDate());
 				master.setCustomisationReference(masterdata.getCustomisationReference());
-//				master.setAttribute1(masterdata.getAttribute1());
 				master.setAttribute2(masterdata.getAttribute2());
 				master.setAttribute3(masterdata.getAttribute3());
 				master.setAttribute4(masterdata.getAttribute4());
@@ -190,15 +193,13 @@ public class TestRunMigrationGetService {
 				master.setAttribute9(masterdata.getAttribute9());
 				master.setAttribute10(masterdata.getAttribute10());
 				master.setScriptMetaDatalist(new ArrayList<>());
-
+				
 				for (ScriptMetaDataDto metadatavo : masterdata.getMetaDataList()) {
 					ScriptMetaData metadata = new ScriptMetaData();
 					metadata.setAction(metadatavo.getAction());
 					metadata.setLineNumber(metadatavo.getLineNumber());
 					metadata.setInputParameter(metadatavo.getInputParameter());
 					metadata.setScriptNumber(masterdata.getScriptNumber());
-					metadata.setXpathLocation(metadatavo.getXpathLocation());
-					metadata.setXpathLocation1(metadatavo.getXpathLocation1());
 					metadata.setCreatedBy(metadatavo.getCreatedBy());
 					metadata.setCreationDate(metadatavo.getCreationDate());
 					metadata.setUpdatedBy(metadatavo.getUpdatedBy());
@@ -252,13 +253,11 @@ public class TestRunMigrationGetService {
 
 			TestSet testrundata = new TestSet();
 			System.out.println("checkTestRun " + checkTestRun);
-			int testrunid = copyTestrunDao.getIds();
 			if (checkTestRun > 0) {
-				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + testrunid);
+				testrundata.setTestRunName(testRunMigrateDto.getTestSetName() + "-" + Math.random());
 			} else {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
-			testrundata.setTestRunId(testrunid);
 			testrundata.setConfigurationId(configurationId);
 
 			BigDecimal project = (BigDecimal) session
@@ -281,8 +280,6 @@ public class TestRunMigrationGetService {
 
 			for (TestSetLineDto lineVo : testRunMigrateDto.getTestSetLinesAndParaData()) {
 				TestSetLine testSetLineData = new TestSetLine();
-				int sectiptid = copyTestrunDao.getscrtiptIds();
-				testSetLineData.setTestRunScriptId(sectiptid);
 				testSetLineData.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 				testSetLineData.setCreatedBy(lineVo.getCreatedby());
 				testSetLineData.setCreationDate(lineVo.getCreationdate());
@@ -297,11 +294,10 @@ public class TestRunMigrationGetService {
 				testSetLineData.setStatus(lineVo.getStatus());
 				testSetLineData.setTestRunScriptPath(lineVo.getTestsstlinescriptpath());
 				testSetLineData.setUpdateDate(lineVo.getUpdateddate());
+				
 
 				for (WatsTestSetParamVO paramVo : lineVo.getScriptParam()) {
 					TestSetScriptParam testSetParam = new TestSetScriptParam();
-					int sectiptlineid = copyTestrunDao.getscrtiptlineIds();
-					testSetParam.setTestRunScriptParamId(sectiptlineid);
 					testSetParam.setScriptId(mapOfScriptIdsOldToNew.get(lineVo.getScriptId()));
 					testSetParam.setAction(paramVo.getAction());
 					testSetParam.setLineNumber(paramVo.getLineNumber());
@@ -313,10 +309,8 @@ public class TestRunMigrationGetService {
 					testSetParam.setCreatedBy(paramVo.getCreatedBy());
 					testSetParam.setCreationDate(paramVo.getCreationDate());
 					testSetParam.setInputValue(paramVo.getInputValue());
-					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());
-					testSetParam.setLineErrorMessage(paramVo.getLineErrorMessage());
-					testSetParam.setLineExecutionStatus(paramVo.getLineExecutionStatus());
-//				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
+					testSetParam.setLastUpdatedBy(paramVo.getLastUpdatedBy());			
+					//				testSetParam.setMetadata_id(mapOfMetaDataScriptIdsOldToNew.get(Integer.parseInt(paramVo.getScript_meta_data_id())));
 //				testSetParam.setScript_id();
 					testSetParam.setScriptNumber(paramVo.getScriptNumber());
 //				testSetParam.setScriptsdata(paramVo.getT);
@@ -329,11 +323,20 @@ public class TestRunMigrationGetService {
 					testSetParam.setXpathLocation1(paramVo.getXpathLocation1());
 //				testSetLineData.addMetadata(metadata);
 					testSetLineData.addTestScriptParam(testSetParam);
-
+    
 				}
 				testrundata.addTestRunScriptData(testSetLineData);
 			}
 			dao.insertTestRun(testrundata);
+			ExecuteStatus executeStatusObj = new ExecuteStatus();
+			ExecuteStatusPK executeStatusPK = new ExecuteStatusPK();
+			executeStatusPK.setExecutedBy(testrundata.getCreatedBy());
+			executeStatusPK.setTestSetId(testrundata.getTestRunId());
+			executeStatusObj.setExecuteStatusPK(executeStatusPK);
+			executeStatusObj.setExecutionDate(new Date());
+			executeStatusObj.setFlag('I');
+			executeStatusObj.setTestRunName(testrundata.getTestRunName());
+			copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
 			DomGenericResponseBean domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
 			domGenericResponseBean.setStatusMessage("Migrated Successfully");
@@ -410,7 +413,7 @@ public class TestRunMigrationGetService {
 					scriptMaster.setScriptId(null);
 					int id = dao.insertScriptMaster(scriptMaster);
 					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-						int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
+						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 						scriptMetaData.setScriptMaster(scriptMaster);
 						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);

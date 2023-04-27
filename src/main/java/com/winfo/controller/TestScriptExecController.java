@@ -97,5 +97,11 @@ public class TestScriptExecController {
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
 		return testScriptExecService.generateTestRunPdf(testSetId);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/excelRunStatusUpdation/{testsetlineid}")
+	public ResponseDto excelStatus(@PathVariable("testsetlineid") Integer testsetlineid) {
+		return testScriptExecService.excelStatusCheck(testsetlineid);
+	}
 
 }

@@ -116,8 +116,7 @@ public class TestSetScriptParam {
 	@Column(name = "SCREENSHOT")
     private byte[] screenshot;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-
+	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_LINE_ID" ,nullable = false)
 	private TestSetLine testSetLine;
 

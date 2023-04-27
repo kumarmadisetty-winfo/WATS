@@ -26,27 +26,25 @@ public class CentralToCustomerPostDao {
 	public DomGenericResponseBean centralRepoData(ScriptMaster master, String scriptnumber, String productversion) {
 		Session session = entityManager.unwrap(Session.class);
 		DomGenericResponseBean response = new DomGenericResponseBean();
-		Query query = session
-				.createQuery("select productVersion from ScriptMaster where scriptNumber='" + scriptnumber + "' and productVersion='" + productversion + "'");
-		List<String> result2 = query.list();
-		if (result2.isEmpty()) {
+		List<String> result = getExistScriptDetailsByScriptNumberAndProductVersion(scriptnumber, productversion);
+		if (result.isEmpty()) {
 			session.merge(master);
 			response.setStatus(200);
 			response.setStatusMessage("SUCCESS");
 			response.setDescription("Script Copied Successfully");
 
 		} 
-		else
-		{
-			response.setStatus(400);
-			response.setStatusMessage("ERROR");
-			response.setDescription("Script Number Already exists");
-			response.setFailed_Script(scriptnumber);
-		}
-
+        
 		return response;
 	}
-
+	public List<String> getExistScriptDetailsByScriptNumberAndProductVersion(String scriptnumber,
+			String productversion) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session
+				.createQuery("from ScriptMaster where scriptNumber=:scriptnumber and productVersion=:productversion").setParameter("scriptnumber", scriptnumber).setParameter("productversion",productversion);
+		List<String> result  = query.list();
+		return result;
+	}
 	public void insertLookUpObj(LookUp lookUpObj) {
 		entityManager.persist(lookUpObj);
 	}

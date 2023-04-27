@@ -2434,6 +2434,56 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 
+			if (param1.equalsIgnoreCase("Search Setup")){
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@title='"+param1+"']/following::div[text()='"+keysToSend+"'][1]")));
+				WebElement waittext = driver.findElement(By.xpath("//input[@title='"+param1+"']/following::div[text()='"+keysToSend+"'][1]"));
+				Thread.sleep(2000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(5000);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked selectAValue" + scripNumber);
+				String xpath = "//input[@title='param1']/following::div[text()='keysToSend'][1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during selectAValue" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+
+			if (param1.equalsIgnoreCase("Project Details")||(param1.equalsIgnoreCase("Opportunity Details"))){
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[text()='"+param2+"']/following::*[contains(@title,'"+keysToSend+"')]")));
+				WebElement waittext = driver.findElement(By.xpath("//label[text()='"+param2+"']/following::*[contains(@title,'"+keysToSend+"')]"));
+				Thread.sleep(2000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(5000);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked selectAValue" + scripNumber);
+				String xpath = "//label[text()='param2']/following::*[contains(@title,'keysToSend')]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during selectAValue" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+
 			if (param1.equalsIgnoreCase("Mon")) {
 				Thread.sleep(5000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3653,6 +3703,31 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("New Project")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath("//*[text()='New Project']/following::*[text()='Next']")));
+				WebElement waittext = driver.findElement(
+						By.xpath("//*[text()='New Project']/following::*[text()='Next']"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(6000);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+				String xpath = "//*[text()='New Project']/following::*[text()='Next']";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Republish clickButton" + scripNumber);
+			System.out.println(e);
+		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7189,9 +7264,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Edit Project Name")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"(//span[text()='Veidehi Patel'])[2]/following::span[2]")));
+						"//*[text()='Project Manager'][1]/following::*[text()='Edit Project Manager']/preceding::span[1]")));
+				//(//span[text()='Veidehi Patel'])[2]/following::span[2]
 				WebElement waittext = driver.findElement(By
-						.xpath("(//span[text()='Veidehi Patel'])[2]/following::span[2]"));
+						.xpath("//*[text()='Project Manager'][1]/following::*[text()='Edit Project Manager']/preceding::span[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -7199,7 +7275,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
-				String xpath = "(//span[text()='Veidehi Patel'])[2]/following::span[2]";
+				String xpath = "//*[text()='Project Manager'][1]/following::*[text()='Edit Project Manager']/preceding::span[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -7265,9 +7341,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Projects")&&(param2.equalsIgnoreCase("Recently Viewed"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"(//span[text()='"+param1+"']/following::span[text()='"+param2+"'])[2]")));
+						"//*[text()='Recently Viewed']/following::div[1]")));
+				//(//span[text()='"+param1+"']/following::span[text()='"+param2+"'])[2]
 				WebElement waittext = driver.findElement(By
-						.xpath("(//span[text()='"+param1+"']/following::span[text()='"+param2+"'])[2]"));
+						.xpath("//*[text()='Recently Viewed']/following::div[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -7275,7 +7352,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked  clickButton" + scripNumber);
-				String xpath = "(//span[text()='param1']/following::span[text()='param2'])[2]";
+				String xpath = "//*[text()='Recently Viewed']/following::div[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -9858,6 +9935,62 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("Opportunity Details")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver.findElement(
+						By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
+						waittext.sendKeys(keysToSend);
+						Thread.sleep(1000);
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
+			//	WebElement select = driver
+			//			.findElement(By.xpath("//label[text()='"+param2+"']/following::*[@title='"+keysToSend+"']"));
+				//clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				
+				//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]
+				
+				
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				String xpath = "//*[text()='param1']/following::*[text()='param2']/following::input[1]"
+						+ ";" + "//label[text()='param2']/following::*[@title='keysToSend']" ;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+		try {
+			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Office Location (Test)"))||(param2.equalsIgnoreCase("Legal Entity"))||(param2.equalsIgnoreCase("Cost Centre"))||(param2.equalsIgnoreCase("Project Manager"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebElement waittext = driver.findElement(
+						By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
+						waittext.sendKeys(keysToSend);
+						Thread.sleep(1000);
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
+
+				
+				
+				
+				
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				String xpath = "//*[text()='param1']/following::*[text()='param2']/following::input[1]"
+						+ ";" + "//label[text()='param2']/following::*[@title='keysToSend']" ;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Close Date sendValue" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 			if (param1.equalsIgnoreCase("Financials")){
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::input[1]")));
@@ -10052,9 +10185,11 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::input[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittill).build().perform();
-				waittill.sendKeys(keysToSend);
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
+			 fetchMetadataVO);
+				//Actions actions = new Actions(driver);
+				//actions.moveToElement(waittill).build().perform();
+				//waittill.sendKeys(keysToSend);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
@@ -10359,16 +10494,24 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittill).build().perform();
-				waittill.sendKeys(keysToSend);
-			
+				//Actions actions = new Actions(driver);
+				//actions.moveToElement(waittill).build().perform();
+				//waittill.sendKeys(keysToSend);
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				// fetchMetadataVO);
 				Thread.sleep(6000);
 				enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 				Thread.sleep(1000);
-				WebElement select = driver
-						.findElement(By.xpath("//table[@data-aura-class='uiVirtualDataGrid--default uiVirtualDataGrid']//a[text()='"+keysToSend+"']"));
-				 select.click();
+				
+				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				//Thread.sleep(4000);
+				//WebElement select = driver
+				//		.findElement(By.xpath("//table[@data-aura-class='uiVirtualDataGrid--default uiVirtualDataGrid']//a[text()='"+keysToSend+"']"));
+				 //select.click();
+			//	clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+			//			.findElement(By.xpath("//table[@data-aura-class='uiVirtualDataGrid--default uiVirtualDataGrid']//a[text()='"+keysToSend+"']"));
+			//	clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				Thread.sleep(1000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10394,19 +10537,19 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
-				Thread.sleep(3000);
-				WebElement select = driver//div[text()='"+keysToSend+"'][1]
+				//Thread.sleep(3000);
+				//WebElement select = driver//div[text()='"+keysToSend+"'][1]
 						
-						.findElement(By.xpath("//div[text()='"+keysToSend+"'][1]"));
-				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				Thread.sleep(2000);
+				//		.findElement(By.xpath("//div[text()='"+keysToSend+"'][1]"));
+				//clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				//Thread.sleep(2000);
 				//screenshotFail(driver, fetchMetadataVO, customerDetails);
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//screenshotFail(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//input[@placeholder='Search Setup']"
-						+ ";" + "//div[text()='keysToSend'][1]" ;
+						;
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -19347,6 +19490,9 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,'Error')]")).getText();
+			if(text.isEmpty()) {
+				text = null;
+			}
 			return text;
 		} catch (Exception e) {
 			System.out.println(e);

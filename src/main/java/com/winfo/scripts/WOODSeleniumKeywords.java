@@ -61,8 +61,8 @@ import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
-@Service("ARLO")
-public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
+@Service("WOOD")
+public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 
 	public static final Logger log = Logger.getLogger("Logger");
 
@@ -81,11 +81,183 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
-	public void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String param1, String param2, String param3, int count, CustomerProjectDto customerDetails) throws Exception {
+	public synchronized void navigate(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String param1, String param2, String param3, int count, CustomerProjectDto customerDetails)
+			throws Exception {
 		String param = "Navigator";
-		clickLink(driver, param, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
-		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath = navigator(driver, param, fetchMetadataVO, fetchConfigVO, customerDetails);
+		String xpath1 = menuNavigation(driver, param1, fetchMetadataVO, fetchConfigVO, customerDetails);
+
+		String xpath2 = menuNavigationButton(driver, fetchMetadataVO, fetchConfigVO, type1, type2, param1, param2,
+				count, customerDetails);
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		String xpaths = xpath + ">" + xpath1 + ">" + xpath2;
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
+//		clickLink(driver, param3, param2, fetchMetadataVO, fetchConfigVO);
+//		clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO);
+//		clickButton(driver, param2, param2, fetchMetadataVO, fetchConfigVO);
+	}
+
+	public String navigator(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		try {
+			Thread.sleep(4000);
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title='" + param1 + "']")));
+			WebElement waittext = driver.findElement(By.xpath("//a[@title='" + param1 + "']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			actions.moveToElement(waittext).click().build().perform();
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Successfully navigator is done " + scripNumber);
+			String xpath = "//a[@title='param1']";
+			return xpath;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during navigator " + scripNumber);
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
+			System.out.println("Not able to navitage to the Url");
+			throw e;
+		}
+	}
+
+	public String menuNavigation(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("Expenses")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
+				wait.until(ExpectedConditions.elementToBeClickable(
+						By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]")));
+				WebElement waittext = driver
+						.findElement(By.xpath("(//*[contains(@id,'popup-container')]//*[@title='" + param1 + "'])[2]"));
+				Actions actions = new Actions(driver);
+				Thread.sleep(3000);
+				actions.moveToElement(waittext).build().perform();
+				actions.moveToElement(waittext).click().build().perform();
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Successfully MenuNavigation is done " + scripNumber);
+				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='param1'])[2]";
+
+				return xpath;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during MenuNavigation " + scripNumber);
+			// TODO: handle exception
+		}
+
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath("//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']")));
+			/*
+			 * WebElement waittext = driver
+			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title='" +
+			 * param1 + "']"));
+			 */
+
+			// ------------------------(New Change)-----------------------
+
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[contains(@id,'popup-container')]//*[@title='" + param1 + "']//div[2]/a/*[name()='svg'][1]"));
+
+			WebElement showmore = driver
+					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show More']"));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(showmore).build().perform();
+			actions.moveToElement(showmore).click().build().perform();
+			Thread.sleep(15000);
+			WebElement showless = driver
+					.findElement(By.xpath("//*[contains(@id,'popup-container')]//a[text()='Show Less']"));
+			actions.moveToElement(showless).build().perform();
+			actions.moveToElement(showless).click().build().perform();
+			Thread.sleep(15000);
+			actions.moveToElement(waittext).build().perform();
+			actions.moveToElement(waittext).click().build().perform();
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Successfully menunavigation is clicked " + scripNumber);
+			String xpath = "//*[contains(@id,'popup-container')]//a[text()='Show More']" + ">"
+					+ "//*[contains(@id,'popup-container')]//a[text()='Show Less']";
+			log.info("Successfully menunavigation is clicked " + scripNumber);
+			return xpath;
+
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Menunavigation " + scripNumber);
+
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
+			System.out.println("Not able to navitage to the :" + "" + param1);
+			throw e;
+		}
+	}
+	public String menuNavigationButton(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+			String type1, String type2, String param1, String param2, int count, CustomerProjectDto customerDetails)
+			throws Exception {
+		String xpath = null;
+		try {
+			Thread.sleep(5000);
+			if (param2.equalsIgnoreCase("Assets")) {
+				WebElement asset = driver.findElement(By.xpath(
+						"//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='"
+								+ param2 + "']"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(asset).build().perform();
+				actions.moveToElement(asset).click().build().perform();
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Successfully menuNavigationButton is done " + scripNumber);
+				xpath = "//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param2']";
+				log.info("Successfully menuNavigationButton is done " + scripNumber);
+				return xpath;
+
+			} else {
+				// try {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+				wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+						"//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']")));
+				WebElement waittext = driver.findElement(By
+						.xpath("//div[@style='visibility: visible;']//span[normalize-space(text())='" + param2 + "']"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				actions.moveToElement(waittext).click().build().perform();
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Successfully menuNavigationButton is done " + scripNumber);
+				xpath = "//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']";
+				log.info("Successfully menuNavigationButton is done " + scripNumber);
+				return xpath;
+			}
+		} catch (Exception e) {
+			if (count == 0) {
+				count = 1;
+				System.out.println(" The Count Value is : " + count);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
+			} else if (count <= 10) {
+				count = count + 1;
+				System.out.println(" The Count Value is : " + count);
+				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
+			} else {
+				System.out.println("Count value exceeds the limit");
+				log.error("Failed During Navigation");
+				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
+				System.out.println("Not able to navitage to the :" + "" + param1);
+				throw e;
+			}
+
+		}
+		return xpath;
 	}
 
 	public void openTask(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
@@ -100,12 +272,36 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
 			throws Exception {
-		String param4 = "UIScmil1u";
-		String param5 = "Sign Out";
-		String param6 = "Confirm";
-		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
-		clickLink(driver, param5, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
-		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
+		
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//img[@title='Settings and Actions']"))));
+	//	wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()='ne']"), "ne"));
+		WebElement waittext = driver.findElement(By.xpath(("//img[@title='Settings and Actions']")));
+		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+		Actions actions = new Actions(driver);
+		actions.moveToElement(waittext).build().perform();
+		highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+	//	fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+		Thread.sleep(3000);
+		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+		WebElement Signout = driver.findElement(By.xpath(("//a[text()='Sign Out']")));
+		actions.moveToElement(Signout).build().perform();
+		highlightElement(driver, fetchMetadataVO, Signout, fetchConfigVO);
+		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+		Signout.click();
+		Thread.sleep(3000);
+		WebElement confirm = driver.findElement(By.xpath(("//button[text()=' Confirm']")));
+		actions.moveToElement(confirm).build().perform();
+		highlightElement(driver, fetchMetadataVO, confirm, fetchConfigVO);
+		fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+		confirm.click();
+//		String param4 = "UIScmil1u";
+//		String param5 = "Sign Out";
+//		String param6 = "Confirm";
+//		clickLink(driver, param4, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+//		clickLink(driver, param5, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
+//		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 
@@ -741,18 +937,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			String title1 = driver.getTitle();
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//button[normalize-space(text())='" + param1 + "']"))));
 			WebElement waittext = driver.findElement(By.xpath(("//button[normalize-space(text())='" + param1 + "']")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-			Thread.sleep(5000);
-			String title2 = driver.getTitle();
-			if (title1.equalsIgnoreCase(title2)) {
-				screenshotFail(driver, fetchMetadataVO, customerDetails);
-				throw new IOException("Failed during login page");
-			}
 			String xpath = "//button[normalize-space(text())='param1']";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6172,23 +6361,39 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			// String autoitscriptpath = System.getProperty("user.dir") + File.separator +
-			// "File_upload_selenium_webdriver.au3";
-//			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fetchConfigVO.getUpload_file_path()+File.separator+filelocation + "\"");
-			Runtime.getRuntime()
-					.exec("C:\\Selenium\\Spring\\WinfoAutomation_MultiThread\\File_upload_selenium_webdriver.exe");
-			// Runtime.getRuntime().exec("E:\\AutoIT\\FileUpload.exe");
-			Thread.sleep(5000);
-			logger.info("Successfully Uploaded The File");
+			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+
+			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
+			log.info("Successfully Uploaded The File");
 		} catch (Exception e) {
-			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.info(filelocation);
+			log.error("Failed During uploadFileAutoIT Action.");
+//			fullPageFailedScreenshot(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+			System.out.println(filelocation);
 			e.printStackTrace();
 			throw e;
+
 		}
 	}
+//	@Override
+//	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+//		try {
+//			// String autoitscriptpath = System.getProperty("user.dir") + File.separator +
+//			// "File_upload_selenium_webdriver.au3";
+////			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fetchConfigVO.getUpload_file_path()+File.separator+filelocation + "\"");
+//			Runtime.getRuntime()
+//					.exec("C:\\Selenium\\Spring\\WinfoAutomation_MultiThread\\File_upload_selenium_webdriver.exe");
+//			// Runtime.getRuntime().exec("E:\\AutoIT\\FileUpload.exe");
+//			Thread.sleep(5000);
+//			logger.info("Successfully Uploaded The File");
+//		} catch (Exception e) {
+//			logger.error("Failed During uploadFileAutoIT Action.");
+//			logger.info(filelocation);
+//			e.printStackTrace();
+//			throw e;
+//		}
+//	}
 
 	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
@@ -6528,11 +6733,17 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	@Override
-	public void loginSNApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
-			String password, CustomerProjectDto customerDetails) throws Exception {
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
+			throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
+//	@Override
+//	public void loginSNApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+//			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
+//			String password, CustomerProjectDto customerDetails) throws Exception {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }

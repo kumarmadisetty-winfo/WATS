@@ -241,6 +241,11 @@ public class DataBaseEntry {
 
 	public String getScriptStatus(String testSetLineId) {
 		List<String> result = dao.getStepsStatusByScriptId(Integer.valueOf(testSetLineId));
+		TestSetLine testSetLine =dao.getScriptDataByLineID(Integer.valueOf(testSetLineId));
+		if(testSetLine.getStatus() != null && (!"".equalsIgnoreCase(testSetLine.getStatus())) 
+				&& testSetLine.getStatus().equalsIgnoreCase(UPDATE_STATUS.PASS.getLabel())) {
+			return UPDATE_STATUS.PASS.getLabel();
+		}
 		if (result.stream().allMatch(SCRIPT_PARAM_STATUS.NEW.getLabel()::equalsIgnoreCase)) {
 			appContext.getBean(this.getClass()).updateDefaultMessageForFailedScriptInFirstStep(testSetLineId,
 					Constants.ERR_MSG_FOR_SCRIPT_RUN);
@@ -313,11 +318,13 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testRunName);
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
-		appContext.getBean(this.getClass()).updateSubscription();
+		if (!isDependentFailBecauseOfIndependent) {
+			appContext.getBean(this.getClass()).updateSubscription();
+		}
 		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
 
@@ -506,11 +513,6 @@ public class DataBaseEntry {
 	public boolean doesActionContainsExcel(String scriptId) {
 		return dao.doesActionContainsExcel(scriptId);
 	}
-
-	public boolean doesActionContainsSfApplication(String scriptId) {
-		
-		return dao.doesActionContainsSfApplication(scriptId);
-	}
 	
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
 		return dao.getApiValueBySetIdAndAPIKey(testSetId, apiKey);
@@ -559,6 +561,7 @@ public class DataBaseEntry {
 		return dao.getAllModules();
 	}
 	
+	@Transactional
 	public void getTestRunLinesDataByTestSetLineId(TestSetLine testSetLineObj) {
 	
 		TestSetLine newTestSetLineObj = dao.getTestSetLine(testSetLineObj.getTestRunScriptId().toString());
@@ -566,7 +569,6 @@ public class DataBaseEntry {
 		appContext.getBean(this.getClass()).deleteScriptFromTestRun(newTestSetLineObj);
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteScriptFromTestRun(TestSetLine testSetLineObj) {
 		dao.deleteTestSetScriptParamRecordsByTestSetLineId(testSetLineObj);
 		dao.deleteTestSetLinesRecordsByTestSetLineId(testSetLineObj);
@@ -574,6 +576,18 @@ public class DataBaseEntry {
 	
 	public TestSetLine getTestSetLineRecordsByTestSetLineId(String testSetLineId) {
 		return dao.getTestSetLine(testSetLineId);
+	}
+
+	public void updateStatusOfPdfGeneration(String testSetId, String status) {
+		dao.updateStatusOfPdfGeneration(testSetId,status);
+	}
+	
+	public List<TestSetScriptParam> getTestSetScriptParamContainsExcel(Integer testsetlineid) {
+		return dao.getTestSetScriptParamContainsExcel(testsetlineid);
+	}
+	
+	public void UpdateTestSetScriptParamContainsExcel(Integer testscriptparamid) {
+		dao.UpdateTestSetScriptParamContainsExcel(testscriptparamid);
 	}
 	
 }

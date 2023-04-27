@@ -23,6 +23,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -74,9 +75,9 @@ public class DataBaseEntryDao {
 
 	private static final String CUSTOMER_DLT_QRY = "SELECT DISTINCT wtp.customer_id,\r\n" + " wtc.customer_number,\r\n"
 			+ "  wtc.customer_name,\r\n" + " wtts.project_id,\r\n" + " wtp.project_name,\r\n"
-			+ "  wttsl.test_set_id,\r\n" + " wtts.TEST_SET_NAME test_run_name\r\n" + " from\r\n"
+			+ "  wtts.test_set_id,\r\n" + " wtts.TEST_SET_NAME test_run_name\r\n" + " from\r\n"
 			+ " win_ta_test_set wtts,\r\n" + " win_ta_test_set_lines  wttsl,\r\n" + " win_ta_projects wtp,\r\n"
-			+ " win_ta_customers wtc\r\n" + " WHERE 1=1\r\n" + " AND wttsl.test_set_id = wtts.test_set_id\r\n"
+			+ " win_ta_customers wtc\r\n" + " WHERE 1=1\r\n" //+ " AND wttsl.test_set_id = wtts.test_set_id\r\n"
 			+ " AND wtts.project_id = wtp.project_id\r\n" + " AND wtp.customer_id = wtc.customer_id\r\n"
 			+ " AND wtts.test_set_id=";
 
@@ -1529,19 +1530,6 @@ public class DataBaseEntryDao {
 		Session session = em.unwrap(Session.class);
 		session.persist(lookUpCodes);
 	}
-  
-	public boolean doesActionContainsSfApplication(String scriptId) {
-		Object count = null;
-		String updateQry = "select count(*) from win_ta_test_set_script_param where script_id = :script_id and action = 'Login into SFApplication'";
-		try {
-			Session session = em.unwrap(Session.class);
-			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
-		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
-					"Exception occured while Checking if actions contains Login into SFApplication or not.", e);
-		}
-		return Integer.parseInt(count.toString())>0;
-	}
 
 	public TestSetAttribute getApiValueBySetIdAndAPIKey(String testSetId, String apiKey) {
 
@@ -1621,7 +1609,7 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Not able to fetch the module", e);
 		}
 	}
-	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
 			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
@@ -1633,7 +1621,7 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteTestSetScriptParamRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
 			Integer testRunScriptId = testSetLine.getTestRunScriptId();
@@ -1646,6 +1634,43 @@ public class DataBaseEntryDao {
 			e.printStackTrace();
 		}
 	}
+
+	public void updateStatusOfPdfGeneration(String testSetId, String status) {
+		Session session = em.unwrap(Session.class);
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaUpdate<TestSet> cq = cb.createCriteriaUpdate(TestSet.class);
+		Root<TestSet> from = cq.from(TestSet.class);
+		cq.set("pdfGenerationEnabled", status);
+		Predicate condition = cb.equal(from.get(TEST_SET_ID), testSetId);
+		cq.where(condition);
+		Query query = session.createQuery(cq);
+		query.executeUpdate();
+	}
+	
+	public List<TestSetScriptParam> getTestSetScriptParamContainsExcel(Integer testsetlineid) {
+		List<TestSetScriptParam> testscriptparam = null;
+		String qry = "SELECT e FROM TestSetScriptParam e WHERE e.testSetLine.testRunScriptId=:testsetlineid AND e.action LIKE '%excel%' ORDER BY e.lineNumber";
+		try {
+			TypedQuery<TestSetScriptParam > query = em.createQuery(qry, TestSetScriptParam .class);
+			query.setParameter("testsetlineid", testsetlineid);
+			testscriptparam = query.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return testscriptparam;
+	}
+	
+	public void UpdateTestSetScriptParamContainsExcel(Integer testscriptparamid) {
+		String updateQry = "UPDATE WATS_PROD.win_ta_test_set_script_param SET LINE_EXECUTION_STATUS = 'Fail' where TEST_SCRIPT_PARAM_ID = " + testscriptparamid;
+		try {
+			Session session = em.unwrap(Session.class);
+			session.createSQLQuery(updateQry).executeUpdate();
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
+		}
+	}
+	
 	
 }
 	

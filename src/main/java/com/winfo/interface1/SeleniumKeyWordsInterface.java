@@ -336,4 +336,11 @@ public interface SeleniumKeyWordsInterface {
 			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
 			String password, CustomerProjectDto customerDetails)throws Exception;
 
+	public String fullPagePassedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails);
+
+	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails);
+
+
 }

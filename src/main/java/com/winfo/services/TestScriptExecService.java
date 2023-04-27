@@ -54,6 +54,7 @@ import com.winfo.interface1.AbstractSeleniumKeywords;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
+import com.winfo.model.TestSetScriptParam;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -254,6 +255,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 								+ screenShotFolderPath);
 				this.kafkaTemp.send(testScriptRunTopicName,
 						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+				
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 			} catch (Exception e) {
 				// suppressing error so that other scripts run if there data has no issue
@@ -539,20 +541,15 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + "Passed_Report.pdf" + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "b/"
-					+ customerDetails.getTestSetName() + File.separator + "Failed_Report.pdf" + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + "Detailed_Report.pdf" + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + File.separator
-					+ customerDetails.getTestSetName() + File.separator + testLinesDetails.get(0).getSeqNum() + "_"
-					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION + "AAAparent="
-					+ fetchConfigVO.getImg_url();
-
+			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
+					+ customerDetails.getTestSetName() + "/Passed_Report.pdf";
+			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
+					+ customerDetails.getTestSetName() + "/Failed_Report.pdf" ;
+			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
+					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
+			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
+					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION;
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
@@ -578,21 +575,27 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						+ PDF_EXTENSION;
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
-			} else {
+				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+			} 
+			else {
 				fetchConfigVO.setErrormessage("Execution Failed");
 				fetchConfigVO.setStatus1(FAIL);
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + PDF_EXTENSION;
+				 scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+							+ customerDetails.getTestSetName() + "/" + pdfName;
+				post.setP_test_set_line_path(scripturl);
+				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			}
-			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
+//			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 //			dataService.updateTestCaseStatus(post, args.getTestSetId(), fetchConfigVO);
 
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName());
+						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false);
 				if (fetchConfigVO.getStatus1().equals(FAIL)) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
@@ -616,6 +619,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO);
 					}
 				}
+			}
+			if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
+				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
+						null, true, false);
+				seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+						.uploadPDF(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 			}
 		} catch (Exception e) {
 			if (args.getAutditTrial() != null) {
@@ -800,6 +809,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 	public ResponseDto generateTestRunPdf(String testSetId) {
+		dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.GENERATING);
+		ResponseDto response;
 		boolean runFinalPdf = dataBaseEntry.checkIfAllTestSetLinesCompleted(Long.valueOf(testSetId), null);
 		if (runFinalPdf) {
 			try {
@@ -808,18 +819,17 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setEndtime(endDate);
-				fetchConfigVO.setWINDOWS_SCREENSHOT_LOCATION(
-						System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.SCREENSHOT);
-				fetchConfigVO.setWINDOWS_PDF_LOCATION(System.getProperty(Constants.SYS_USER_HOME_PATH) + Constants.PDF);
 				testRunPdfGeneration(testSetId, fetchConfigVO);
-				return new ResponseDto(200, Constants.SUCCESS, null);
+				response = new ResponseDto(200, Constants.SUCCESS, null);
 			} catch (Exception e) {
 				e.printStackTrace();
-				return new ResponseDto(500, Constants.ERROR, e.getMessage());
+				response = new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		} else {
-			return new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
+			response = new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
+		dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
+		return response;
 	}
 
 
@@ -866,6 +876,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		dto.setOciConfigName(ociConfigName);
 		dto.setBuckerName(ociBucketName);
 		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path().replace("\\", "\\\\"));
+		dto.setExcelDownloadFilePath(fetchConfigVO.getExcelDownloadFilePath().replace("\\", "\\\\"));
 
 		final Context ctx = new Context();
 		ctx.setVariable("dto", dto);
@@ -886,6 +897,29 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 
+	}
+	
+	public ResponseDto excelStatusCheck(Integer testsetlineid) {
+		ResponseDto response = new ResponseDto();
+
+		List<TestSetScriptParam> testsetscripts = dataBaseEntry.getTestSetScriptParamContainsExcel(testsetlineid);
+		for (TestSetScriptParam testscript : testsetscripts) {
+			if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+				continue;
+			} else if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.FAIL.getLabel())) {
+				break;
+			} else if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+				dataBaseEntry.UpdateTestSetScriptParamContainsExcel(testscript.getTestRunScriptParamId());
+				break;
+			} else if (testscript.getLineExecutionStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.NEW.getLabel())) {
+				dataBaseEntry.UpdateTestSetScriptParamContainsExcel(testscript.getTestRunScriptParamId());
+				break;
+			}
+		}
+		response.setStatusCode(200);
+		response.setStatusDescr("Updated Successfully");
+		response.setStatusMessage(Constants.SUCCESS);
+		return response;
 	}
 
 }

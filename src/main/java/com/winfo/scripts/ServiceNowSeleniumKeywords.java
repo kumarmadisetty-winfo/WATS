@@ -169,7 +169,6 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 //		clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
 	}
 	
-	
 	public void loginSNApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception{
@@ -261,11 +260,9 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		return xpath;
 	}
 
-
 	public void loginSSOApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-
 		navigateUrl(driver, fetchConfigVO, fetchMetadataVO, customerDetails);
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Company Single Sign-On']")));
@@ -330,28 +327,15 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	}
 
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
-			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
-			throws Exception {
+			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails) throws Exception {
 
-		try {
-			Thread.sleep(3000);
-			JavascriptExecutor jse = (JavascriptExecutor) driver;
-			String str = "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('nav > div > div.ending-header-zone > div.polaris-header-controls > div.utility-menu.can-animate > div > now-avatar').shadowRoot.querySelector('span > span > img')";
-			WebElement logoutDropdown = (WebElement) jse.executeScript(str);
-			logoutDropdown.click();
-			String str1 = "return document.querySelector('body > macroponent-f51912f4c700201072b211d4d8c26010').shadowRoot.querySelector('div > sn-canvas-appshell-root > sn-canvas-appshell-layout > sn-polaris-layout').shadowRoot.querySelector('div.sn-polaris-layout.polaris-enabled > div.layout-main > div.header-bar > sn-polaris-header').shadowRoot.querySelector('#userMenu > span > span:nth-child(2) > div > div.user-menu-footer > button > div > now-icon')";
-			WebElement logout = (WebElement) jse.executeScript(str1);
-			logout.click();
-			screenshot(driver, fetchMetadataVO, customerDetails);
-			return;
+	
+		String param4 = "UIScmil1u";
+		String param5 = "Sign Out";
+		String param6 = " Confirm";
+		logoutDropdown(driver, fetchConfigVO, fetchMetadataVO, param1, customerDetails);
+		clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO, customerDetails);
 		}
-
-		catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
-		}
-	}
 
 	public void logoutDropdown(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String param1, CustomerProjectDto customerDetails) throws Exception {
@@ -535,15 +519,9 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			if (param1.equalsIgnoreCase("password")) {
 				String title1 = driver.getTitle();
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-//				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='" + param1 + "']")));
-//				JavascriptExecutor jse = (JavascriptExecutor) driver;        
-//				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
-				xpath="//*[text()='" + param1 + "']/following::input[1]";
-				System.out.println(xpath);
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='" + param1 + "']")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;        
 				jse.executeScript("document.getElementById('password').value = '" + keysToSend + "';");
-				
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
@@ -556,7 +534,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				}
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Succesfully password is entered " + scripNumber);
-				xpath = "//*[text()='param1']/following::input[1]";
+				xpath = "//*[text()='Password']/following::input[1]";
 				return xpath;
 			}
 		} catch (Exception e) {
@@ -585,7 +563,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			// screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			xpath = "//*[text()='param1']/following::input[1]";
+			xpath = "//*[text()='User name']/following::input[1]";
 			log.info("Successfully entered data " + scripNumber);
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3251,9 +3229,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		
-		
-				
+
 		try {
 			if (param1.equalsIgnoreCase("Change Request") && param2.equalsIgnoreCase("Submit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3275,6 +3251,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickButton" + scripNumber);
+
 			System.out.println(e);
 		}
 		try {
@@ -8259,6 +8236,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public String textarea(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+
 		try {
             if(param2.equalsIgnoreCase("Work notes")) {
             JavascriptExecutor jse= (JavascriptExecutor) driver;
@@ -8418,6 +8396,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public String sendValue(WebDriver driver, String param1, String param2, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+
 		try {
 			if (param2.equalsIgnoreCase("Caller") || param2.equalsIgnoreCase("Service")
 					|| param2.equalsIgnoreCase("Service offering") || param2.equalsIgnoreCase("Configuration item")
@@ -15611,11 +15590,20 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
 				String xpath = "//div[text()='" + param1 + "']/following::*[text()='" + param2 +"']/following::select[1]";
+			if (param1.equalsIgnoreCase("Address Purposes")) {
+				Thread.sleep(2000);
+				waittext = driver.findElement(
+						By.xpath(("//*[normalize-space(text())='" + param1 + "']/following::*[normalize-space(text())='"
+								+ param2 + "']/following::select[not (@title)]")));
+				selectMethod(driver, param1, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+				scripNumber = fetchMetadataVO.getScriptNumber();
+				xpath = "//*[normalize-space(text())='param1']/following::*[normalize-space(text())='param2']/following::select[not (@title)]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				log.info("Sucessfully Clicked selectByText" + scripNumber);
 				return;
+			}
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16861,6 +16849,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 
 	public void switchToFrame(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+
 		try {
 			if(inputParam.equalsIgnoreCase("Incident"))
 			{
@@ -16924,6 +16913,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		{
 			System.out.println(e);
 		}
+		
 		try {
 			Thread.sleep(5000);
 			WebElement waittext = driver
@@ -16992,8 +16982,9 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 			throw e;
 		}
 	}
+	
+	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerDetails) throws Exception {
 			try {
 			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
@@ -18982,6 +18973,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
@@ -19005,6 +18997,7 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	}
 
 
+
 	@Override
 	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
@@ -19014,14 +19007,5 @@ public class ServiceNowSeleniumKeywords extends AbstractSeleniumKeywords impleme
 	}
 
 
-	@Override
-	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
-
-
-	
 }

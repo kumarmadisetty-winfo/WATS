@@ -52,7 +52,7 @@ public class CopyTestRunService {
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());	
 		TestSet newTestSetObj = new TestSet();
-
+		
 		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
 		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
 		newTestSetObj.setEnabled("Y");
@@ -135,8 +135,8 @@ public class CopyTestRunService {
 					setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 					setScriptlinedata.setHint(metadata.getHint());
 					setScriptlinedata.setFieldType(metadata.getFieldType());
-					setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
-					setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
+					setScriptlinedata.setXpathLocation(getScriptlinedata.getXpathLocation());
+					setScriptlinedata.setXpathLocation1(getScriptlinedata.getXpathLocation1());
 					setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 					setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 					setScriptlinedata.setUpdateDate(null);
@@ -184,8 +184,6 @@ public class CopyTestRunService {
 				setScriptlinedata.setMetadataId(metadata.getScriptMetaDataId());
 				setScriptlinedata.setHint(metadata.getHint());
 				setScriptlinedata.setFieldType(metadata.getFieldType());
-				setScriptlinedata.setXpathLocation(metadata.getXpathLocation());
-				setScriptlinedata.setXpathLocation1(metadata.getXpathLocation1());
 				setScriptlinedata.setCreatedBy(copyTestrunvo.getCreatedBy());
 				setScriptlinedata.setCreationDate(copyTestrunvo.getCreationDate());
 				setScriptlinedata.setUpdateDate(null);
@@ -483,8 +481,6 @@ public class CopyTestRunService {
 						newScriptParamObj.setMetadataId(scriptMetaDataObj.getScriptMetaDataId());
 						newScriptParamObj.setHint(scriptMetaDataObj.getHint());
 						newScriptParamObj.setFieldType(scriptMetaDataObj.getFieldType());
-						newScriptParamObj.setXpathLocation(scriptMetaDataObj.getXpathLocation());
-						newScriptParamObj.setXpathLocation1(scriptMetaDataObj.getXpathLocation1());
 						newScriptParamObj.setCreatedBy(scriptMetaDataObj.getCreatedBy());
 						newScriptParamObj.setCreationDate(scriptMetaDataObj.getCreationDate());
 						newScriptParamObj.setUpdateDate(null);
