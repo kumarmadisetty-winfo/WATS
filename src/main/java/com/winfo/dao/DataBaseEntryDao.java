@@ -1677,6 +1677,30 @@ public class DataBaseEntryDao {
 		}
 	}
 	
+	public List<String> lookUpCodes(String lookUpCodeName) {
+		try {
+			return em
+					.createQuery("select lc.meaning from LookUpCode lc where lc.lookUpName = :lookUpCodeName")
+					.setParameter("lookUpCodeName", lookUpCodeName).getResultList();
+
+		} catch (Exception e) {
+			logger.error(e);
+			throw new WatsEBSCustomException(500, "Exception occured while getting lookup codes.", e);
+		}
+	}
+	
+	public List<String> getActionByTargetApplication(String targetApplication) {
+		try {
+			return em
+					.createQuery("select lc.meaning from LookUpCode lc where lc.lookUpName = 'ACTION' and lc.targetApplication = :targetApplication")
+					.setParameter("targetApplication", targetApplication).getResultList();
+
+		} catch (Exception e) {
+			logger.error(e);
+			throw new WatsEBSCustomException(500, "Exception occured while getting target application from lookup codes.", e);
+		}
+	}
+	
 	public String getActionMeaningScriptIdAndLineNumber(Integer scriptId, Integer scriptMetaDataId) {
 		try {
 			return em.createQuery(
