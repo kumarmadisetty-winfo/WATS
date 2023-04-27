@@ -618,19 +618,6 @@ public class RunAutomation {
 							} else {
 								break;
 							}
-						case "Login into SNApplication":
-							userName = fetchMetadataVO.getInputValue();
-							log.info("Navigating to Login into SNApplication Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).loginSNApplication(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO),customerDetails);
-								userName = null;
-								break;
-							} else {
-								break;
-							}
 						case "Login into SSOApplication":
 							userName = fetchMetadataVO.getInputValue();
 							log.info("Navigating to Login into Application Action");

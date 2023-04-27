@@ -6738,20 +6738,4 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void loginSNApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
-			String password, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-//	@Override
-//	public void loginSNApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
-//			String type1, String type2, String type3, String param1, String param2, String param3, String inputValue,
-//			String password, CustomerProjectDto customerDetails) throws Exception {
-//		// TODO Auto-generated method stub
-//		
-//	}
 }
