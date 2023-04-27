@@ -3,8 +3,10 @@ package com.winfo.scripts;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +43,7 @@ import com.winfo.services.ErrorMessagesHandler;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.services.FetchMetadataVO;
 import com.winfo.services.FetchScriptVO;
+import com.winfo.services.GraphQLService;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
 import com.winfo.services.TestCaseDataService;
@@ -90,6 +93,8 @@ public class RunAutomation {
 	PyJabActionRepo actionRepo;
 	@Autowired
 	CodeLinesRepository codeLineRepo;
+	@Autowired
+	GraphQLService graphQLService;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -179,9 +184,11 @@ public class RunAutomation {
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
-
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-
+			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
+				String key = graphQLService.createTestRunInJiraXrayCloud(customerDetails);
+				fetchConfigVO.setTestRunIssueId(key);
+			}
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId, null, false,
 					true);
 
@@ -362,6 +369,7 @@ public class RunAutomation {
 				Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("Error in Cloud test run method " + e.getMessage());
 			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
 		}
@@ -509,6 +517,13 @@ public class RunAutomation {
 			Boolean validationFlag = null;
 			Map<String, String> accessTokenStorage = new HashMap<>();
 			ApiValidationVO api = new ApiValidationVO();
+			String scriptIssueId = null;
+			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
+				scriptIssueId = graphQLService.createScriptInJiraXrayCloud(fetchMetadataListVO);
+//				fetchConfigVO.setScriptIssueId(key);
+				graphQLService.associateScriptToTestRun(fetchConfigVO,scriptIssueId);
+			}
+			
 			for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
 				actionName = fetchMetadataVO.getAction();
@@ -1375,6 +1390,11 @@ public class RunAutomation {
 					}
 
 					if (fetchMetadataListVO.size() == i && !isError) {
+						String passScriptKey = null;
+						if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
+							passScriptKey = graphQLService.getScriptId(fetchConfigVO,scriptIssueId);
+							graphQLService.changeStatusOfScriptInJiraXrayCloud(passScriptKey, "PASSED");
+						}
 							FetchScriptVO post = new FetchScriptVO();
 							post.setP_test_set_id(testSetId);
 							post.setP_status("Pass");
@@ -1425,7 +1445,14 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
 									fetchMetadataListVO, fetchConfigVO, seqNum + "_" + scriptNumber + ".pdf",
 									customerDetails);
-
+							if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
+								String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+								+ File.separator + customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber + ".pdf";
+								File file = new File(sourceFilePath);
+								byte [] bytes = Files.readAllBytes(file.toPath());
+							     String b64 = Base64.getEncoder().encodeToString(bytes);
+								graphQLService.addAttachmentToScript(passScriptKey,b64,file.getName());
+							}
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 										.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
@@ -1446,6 +1473,12 @@ public class RunAutomation {
 					isError = true;
 				}
 				if (isError) {
+					String failScriptKey = null;
+					if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
+						failScriptKey = graphQLService.getScriptId(fetchConfigVO,scriptIssueId);
+//						fetchConfigVO.setSctiptId(key);
+						graphQLService.changeStatusOfScriptInJiraXrayCloud(failScriptKey, "FAILED");
+					}
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(testSetId);
 						post.setP_status("Fail");
@@ -1479,6 +1512,14 @@ public class RunAutomation {
 								fetchMetadataListVO, fetchConfigVO,
 								seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf",
 								customerDetails);
+						if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
+							String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+							+ File.separator + customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf";
+							File file = new File(sourceFilePath);
+							byte [] bytes = Files.readAllBytes(file.toPath());
+						     String b64 = Base64.getEncoder().encodeToString(bytes);
+							graphQLService.addAttachmentToScript(failScriptKey,b64,file.getName());
+						}
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
 									.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);

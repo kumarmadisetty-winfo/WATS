@@ -112,6 +112,9 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -322,7 +325,6 @@ public abstract class AbstractSeleniumKeywords {
 			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
-
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
