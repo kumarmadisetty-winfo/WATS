@@ -590,4 +590,11 @@ public class DataBaseEntry {
 		dao.UpdateTestSetScriptParamContainsExcel(testscriptparamid);
 	}
 	
+	public String getActionMeaningScriptIdAndLineNumber(Integer scriptId, Integer scriptMetaDataId) {
+		return dao.getActionMeaningScriptIdAndLineNumber(scriptId,scriptMetaDataId);
+	}
+	
+	public String getMeaningByTargetCode(String lookUpCode, String lookUpName) {
+		return dao.getMeaningByTargetCode(lookUpCode,lookUpName);
+	}
 }

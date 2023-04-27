@@ -1677,6 +1677,31 @@ public class DataBaseEntryDao {
 		}
 	}
 	
+	public String getActionMeaningScriptIdAndLineNumber(Integer scriptId, Integer scriptMetaDataId) {
+		try {
+			return em.createQuery(
+					"SELECT t2.meaning FROM ScriptMetaData t1 INNER JOIN LookUpCode t2 ON t1.action = t2.lookUpCode where t1.scriptMaster.scriptId = :scriptId and t1.scriptMetaDataId = :scriptMetaDataId")
+					.setParameter("scriptId", scriptId).setParameter("scriptMetaDataId", scriptMetaDataId).getSingleResult()
+					.toString();
+
+		} catch (Exception e) {
+			logger.error(e);
+			throw new WatsEBSCustomException(500, "Exception occured while getting action meaning from lookup codes.",
+					e);
+		}
+	}
+	
+	public String getMeaningByTargetCode(String lookUpCode, String lookUpName) {
+		try {
+			String query = "SELECT lc.meaning from LookUpCode lc where lc.lookUpCode = :lookUpCode and lc.lookUpName = :lookUpName";
+			return em.createQuery(query).setParameter("lookUpCode", lookUpCode).setParameter("lookUpName", lookUpName).getSingleResult().toString();
+
+		} catch (Exception e) {
+			logger.error(e);
+			throw new WatsEBSCustomException(500, "Exception occured while getting action meaning from lookup codes.",
+					e);
+		}
+	}
 	
 }
 	

@@ -1,8 +1,11 @@
 package com.winfo.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -18,11 +21,11 @@ public class TemplateDownloadController {
 	@Autowired
 	private TemplateDownloadService templateDownloaderService;
 	
-	@GetMapping(value="/downloadTemplate")
+	@GetMapping(value={"/downloadTemplate","/downloadTemplate/{scriptId}"})
 	@ApiOperation( value="Download Template ",notes = " Download Template ")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
-	public ResponseEntity<StreamingResponseBody> test() throws Exception {
-		return templateDownloaderService.generateTemplate();
+	public ResponseEntity<StreamingResponseBody> generateTemplete(@PathVariable Optional<Integer> scriptId) throws Exception {
+		return templateDownloaderService.generateTemplate(scriptId);
 	}
 	
 }
