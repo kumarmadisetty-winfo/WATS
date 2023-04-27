@@ -338,5 +338,4 @@ public interface SeleniumKeyWordsInterface {
 	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails);
 
-
 }
