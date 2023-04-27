@@ -48,6 +48,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -200,7 +201,6 @@ public abstract class AbstractSeleniumKeywords {
 			return e.getMessage(); // throw e; }
 		}
 	}
-
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
@@ -2242,6 +2242,6 @@ public abstract class AbstractSeleniumKeywords {
 		System.out.println(acessToken);
 		return acessToken;
 	}
-
+	
 
 }
