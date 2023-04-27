@@ -10021,7 +10021,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-
 				Thread.sleep(3000);
 				WebElement select = driver
 						.findElement(By.xpath("//label[text()='"+param2+"']/following::*[@title='"+keysToSend+"']"));
