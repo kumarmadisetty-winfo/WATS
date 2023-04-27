@@ -10236,7 +10236,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						waittill.clear();
 						waittill.sendKeys(keysToSend);
 						Thread.sleep(2000);
-					
 						tab(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 						screenshot(driver, fetchMetadataVO, customerDetails);
 						String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10393,9 +10392,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 						Thread.sleep(4000);
 						
-						Thread.sleep(10000);
-						
-						screenshot(driver, fetchMetadataVO, customerDetails);
+						Thread.sleep(10000)screenshot(driver, fetchMetadataVO, customerDetails);
 						tab(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 						String scripNumber = fetchMetadataVO.getScriptNumber();
 						log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
