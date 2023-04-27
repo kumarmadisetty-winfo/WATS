@@ -184,7 +184,6 @@ public class RunAutomation {
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
-			
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 				String key = graphQLService.createTestRunInJiraXrayCloud(customerDetails);
@@ -604,7 +603,7 @@ public class RunAutomation {
 								break;
 							} else {
 								break;
-							}	
+							}
 						case "Login into SFApplication":
 							userName = fetchMetadataVO.getInputValue();
 							log.info("Navigating to Login into SFApplication Action");
