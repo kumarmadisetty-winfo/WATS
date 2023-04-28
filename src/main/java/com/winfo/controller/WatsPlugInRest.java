@@ -19,6 +19,11 @@ import com.winfo.services.PluginTestrunService;
 import com.winfo.services.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsScriptAssistantVO;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 import com.winfo.vo.WatsLoginVO;
 import com.winfo.vo.WatsPluginMasterVO;
 
@@ -34,17 +39,23 @@ public class WatsPlugInRest {
 	PluginTestrunService testrunservice;
 
 	@PostMapping("/pluginData")
+	@ApiOperation( value="Plugin Data",notes = " We should pass all the WatsPluginMasterVO fields to create the script using plugin")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Script created successfully")})
 	public DomGenericResponseBean pluginData(@RequestBody WatsPluginMasterVO mastervo) {
 		return service.pluginData(mastervo);
 
 	}
 
 	@PostMapping("/login")
+	@ApiOperation( value="Wats Login",notes = " We should pass username and password to wats login")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Login Successfully")})
 	public DomGenericResponseBean watsLogin(@RequestBody WatsLoginVO loginvo) {
 		return service.watslogin(loginvo);
 	}
 
 	@GetMapping("/testrunNames/{productverson}")
+	@ApiOperation( value="Wats Login",notes = " We should pass productVersion to get testRun names")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public List<String> getTestrunData(@PathVariable String productverson) {
 		log.info(productverson);
 		log.info(service.getTestrunDataPVerson(productverson));
@@ -52,6 +63,8 @@ public class WatsPlugInRest {
 	}
 
 	@PostMapping("/testrunData")
+	@ApiOperation( value="Update test run Data",notes = "  We should pass all the WatsPluginMasterVO fields to update the test run data")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public DomGenericResponseBean updateTestrun(@RequestBody WatsPluginMasterVO mastervo) {
 		if (mastervo.getTestRunName().equals("")) {
 			return service.pluginData(mastervo);
@@ -61,7 +74,10 @@ public class WatsPlugInRest {
 		}
 	}
 	
+	
 	@PostMapping(value = {"/getPluginZipFile/{targetEnvironment}/{browser}","/getPluginZipFile/{targetEnvironment}"} , produces = "application/zip")
+	@ApiOperation( value="Get Wats Script Assistance ZipFile",notes = "  We should pass target Environment and browser to download wats script assistance")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistant(@PathVariable String targetEnvironment,@PathVariable Optional<String> browser) throws Exception {
 
 		if (targetEnvironment != null && (!"".equalsIgnoreCase(targetEnvironment))) {

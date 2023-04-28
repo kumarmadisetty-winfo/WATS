@@ -787,7 +787,9 @@ public class DataBaseEntryDao {
 				+ ",wtsmdata.LINE_EXECUTION_STATUS\r\n, wtsmdata.TEST_SCRIPT_PARAM_ID\r\n"
 				+ ", wtsmdata.Line_ERROR_MESSAGE\r\n,  wtsmdata.test_run_param_desc\r\n"
 				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION\r\n"
-				+ " ,wttsl.dependency_tr\r\n" + "      from\r\n" + "      execute_status ex_st,\r\n"
+				+ " ,wttsl.dependency_tr\r\n" 
+				+ "          , wttsl.ISSUE_KEY\r\n"
+				+ "      from\r\n" + "      execute_status ex_st,\r\n"
 				+ "      win_ta_test_set        wtts,\r\n" + "    win_ta_script_master ma,\r\n"
 				+ "           win_ta_test_set_lines  wttsl,\r\n"
 				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
@@ -864,6 +866,9 @@ public class DataBaseEntryDao {
 
 				scriptDetailsDto.setDependencyScriptNumber(
 						NULL_STRING.equals(String.valueOf(obj[20])) ? null : Integer.valueOf((String) obj[20]));
+				
+				scriptDetailsDto.setIssueKey(
+						NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
 
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}

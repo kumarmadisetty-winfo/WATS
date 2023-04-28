@@ -44,6 +44,9 @@ import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
+import org.jfree.util.Log;
+import org.openqa.selenium.By;
 import org.jfree.util.UnitType;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -645,7 +648,7 @@ public abstract class AbstractSeleniumKeywords {
 			logger.info("before enter Images/wats_icon.png1");
 			Image watsLogo = Image.getInstance(watslogo);
 			logger.info("after enter Images/wats_icon.png1");
-			watsLogo.scalePercent(65, 68);
+			watsLogo.scalePercent(13, 13);
 			watsLogo.setAlignment(Image.ALIGN_RIGHT);
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss aa");
 			String testRunName1 = customerDetails.getTestSetName();
@@ -825,7 +828,7 @@ public abstract class AbstractSeleniumKeywords {
 				document.newPage();
 				String s = "Status: " + status;
 				String scenarios = SCENARIO_NAME + " :" + scenario;
-				watsLogo.scalePercent(65, 65);
+				watsLogo.scalePercent(13, 13);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				document.add(watsLogo);
 				document.add(new Paragraph(s, fnt12));
@@ -902,7 +905,7 @@ public abstract class AbstractSeleniumKeywords {
 		for (int k = 0; k < cells1.length; k++) {
 			cells1[k].setBackgroundColor(new BaseColor(161, 190, 212));
 		}
-		String[] strArr = { "Status", df1.format(passCount), df2.format(pass) + "%" };
+		String[] strArr = { PASSED, df1.format(passCount), df2.format(pass) + "%" };
 		for (String str : strArr) {
 			insertCell(table, str, Element.ALIGN_CENTER, 1, font23);
 		}
@@ -1020,23 +1023,23 @@ public abstract class AbstractSeleniumKeywords {
 			contentByte.stroke();
 			contentByte.restoreState();
 			PiePlot plot = (PiePlot) chart.getPlot();
-			plot.setShadowPaint(Color.LIGHT_GRAY);
 			plot.setLabelGenerator(
 					new StandardPieSectionLabelGenerator("{0} ({2})", new DecimalFormat("0"), new DecimalFormat("0%")));
 			plot.setLabelFont(new java.awt.Font("SansSerif", Font.BOLD, 12));
 			plot.setLabelBackgroundPaint(Color.WHITE);
 			plot.setLabelGap(0.02);
+			plot.setShadowPaint(null);
 			plot.setBackgroundPaint(Color.WHITE);
 			plot.setBaseSectionOutlinePaint(Color.WHITE);
-			plot.setSectionPaint("Fail", Color.RED);
+			Color passColor = new Color(50, 205, 50);
+			plot.setSectionPaint("Pass", passColor);
+			Color failColor = new Color(255, 0, 0);
+			plot.setSectionPaint("Fail", failColor);
 			plot.setSectionPaint("In Complete", Color.GRAY);
-			plot.setSectionPaint("Pass", Color.GREEN);
 			plot.setOutlinePaint(null);
-			plot.setExplodePercent("Pass", 0.05);
 
 			LegendTitle legend = chart.getLegend();
 			legend.setFrame(BlockBorder.NONE);
-
 			Graphics2D g2 = new PdfGraphics2D(contentByte, 1000, 600);
 			Rectangle2D r2D = new Rectangle2D.Double(400, -40, 600, 600);
 			chart.draw(g2, r2D);
@@ -1227,7 +1230,7 @@ public abstract class AbstractSeleniumKeywords {
 				String scenarios = SCENARIO_NAME + " :" + scenario;
 
 				String sndo = image.split("_")[0];
-				watsLogo.scalePercent(65, 68);
+				watsLogo.scalePercent(13, 13);
 				Rectangle one1 = new Rectangle(1360, 1000);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
@@ -2060,6 +2063,39 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Exception occured while creating folder in Object Storage..", e);
 		}
+	}
+	
+	
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
+			throws Exception {
+
+		try {
+			if ((param2 == null && param3 == null) || (param2.equalsIgnoreCase("") && param3.equalsIgnoreCase(""))) {
+				logger.info("Started Upload file");
+				Thread.sleep(4000);
+				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
+				Thread.sleep(3000);
+				logger.info("Successfully Uploaded The File");
+				return;
+			}
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			logger.error(fileLocation);
+			e.printStackTrace();
+		}
+		try {
+			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fileLocation + "\"");
+			logger.info("Successfully Uploaded The File");
+			return;
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			System.out.println(fileLocation);
+			e.printStackTrace();
+			throw e;
+
+		}
+
 	}
 
 }
