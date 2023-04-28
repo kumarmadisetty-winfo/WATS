@@ -43,11 +43,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.VerticalAlignment;
-import org.jfree.util.Log;
 import org.openqa.selenium.By;
-import org.jfree.util.UnitType;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,9 +111,6 @@ import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
-import ru.yandex.qatools.ashot.AShot;
-import ru.yandex.qatools.ashot.Screenshot;
-import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -328,6 +321,7 @@ public abstract class AbstractSeleniumKeywords {
 			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
+
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
