@@ -325,7 +325,7 @@ public abstract class AbstractSeleniumKeywords {
 			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
-	
+
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
 		ConfigFileReader.ConfigFile configFile = null;
