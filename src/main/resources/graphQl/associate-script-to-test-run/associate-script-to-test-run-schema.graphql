@@ -1,0 +1,9 @@
+mutation($testRunIssueId : String!,$scriptIssueId : String!) {
+    addTestsToTestExecution(
+        issueId: $testRunIssueId,
+        testIssueIds: [$scriptIssueId]
+    ) {
+        addedTests
+        warning
+    }
+}
