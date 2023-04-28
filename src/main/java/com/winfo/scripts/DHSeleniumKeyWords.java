@@ -2503,7 +2503,7 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			Thread.sleep(2000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
-			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+		    //fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),'param1')]/following::*[normalize-space(text())='keysToSend'][1]";
@@ -16204,11 +16204,11 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (inputParam1.equalsIgnoreCase("Account Number")) {
 				Thread.sleep(5000);
-				WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1 + "']/following::input[1]"));
+				WebElement webElement = driver.findElement(By.xpath("//*[text()='" + inputParam1 + "']/following::span[1]"));
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(webElement).build().perform();
-				String stringToSearch = webElement.getAttribute("value");
+				String stringToSearch = webElement.getText();
 				System.out.println(stringToSearch);
 //			value = copyValuesWithSpc(stringToSearch);
 // value = copyValuesWithSpc(webElement);
