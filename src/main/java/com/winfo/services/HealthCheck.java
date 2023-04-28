@@ -28,6 +28,7 @@ import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
+import com.winfo.config.MessageUtil;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.utils.Constants;
@@ -85,7 +86,7 @@ public class HealthCheck {
 			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, "Yes, I am up");
+		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("HealthCheck.Success.SanityCheckMessage"));
 	}
 
 	public SanityCheckVO sanityCheckForAdminMethod() {
@@ -133,7 +134,7 @@ public class HealthCheck {
 		try {
 			dao.dbAccessibilityCheck();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Database connection is down");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.DbAccessibilityMessage"));
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
@@ -150,10 +151,10 @@ public class HealthCheck {
 			if (total > 0) {
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} else {
-				throw new WatsEBSCustomException(500, "Grid is down");
+				throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.SeleniumGridMessage"));
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Grid is down");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.SeleniumGridMessage"));
 		}
 	}
 
@@ -171,7 +172,7 @@ public class HealthCheck {
 			File file = new File(ociConfigPath);
 			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to connect with object store");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.ConfigFileIOException"));
 		}
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
@@ -197,18 +198,18 @@ public class HealthCheck {
 			if (testSetId != null) {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
 						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
+					throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.ObjectStoreAccess"));
 				}
 			} else {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, "Please check PDF & Screenshot path.");
+					throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.ObjectStoreAccess"));
 				}
 			}
 		} catch (Exception e1) {
 			if (e1 instanceof WatsEBSCustomException) {
 				throw e1;
 			} else {
-				throw new WatsEBSCustomException(500, "Not able to fetch the details from object store");
+				throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.AccessDeniedException"));
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
@@ -235,7 +236,7 @@ public class HealthCheck {
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "SharePoint access denied.");
+			throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.SharePointAccess"));
 		}
 		return acessToken;
 	}

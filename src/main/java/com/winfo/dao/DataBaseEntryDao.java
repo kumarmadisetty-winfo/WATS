@@ -1176,7 +1176,7 @@ public class DataBaseEntryDao {
 				+ "        from wats_subscription WS,WIN_TA_CUSTOMERS WTC\r\n"
 				+ "        where uom = 'Script' and status = 'Active'\r\n"
 				+ "        and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date\r\n"
-				+ "        and WTC.CUSTOMER_NAME= WS.CUSTOMER_NAME and WS.subscription_id = " + subscriptionId;
+				+ "        and UPPER(WTC.CUSTOMER_NAME)=UPPER(WS.CUSTOMER_NAME) and WS.subscription_id = " + subscriptionId;
 
 		try {
 			Session session = em.unwrap(Session.class);

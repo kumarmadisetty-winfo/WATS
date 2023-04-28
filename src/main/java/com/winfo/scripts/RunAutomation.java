@@ -201,27 +201,6 @@ public class RunAutomation {
 			Map<Integer, Status> scriptStatus = new HashMap<>();
 
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-			Date startDate = sdf.parse(fetchConfigVO.getStart_date());
-			Date endDate = sdf.parse(fetchConfigVO.getEnd_date());
-				if (date.after(endDate) || date.before(startDate)) {
-					executeTestrunVo.setStatusCode(404);
-					executeTestrunVo.setStatusMessage("ERROR");
-					if (date.after(endDate) || date.before(startDate)) {
-						executeTestrunVo.setStatusDescr(
-								"Your request could not be processed the Testrun, please check with the Start and End Date");
-
-					} else {
-						executeTestrunVo.setStatusDescr(
-								"Your request could not be processed as you have reached the scripts execution threshold. Reach out to the WATS support team to enhance the limit..");
-
-					}
-					return executeTestrunVo;
-
-				}
-			
-
 			fetchConfigVO.setStarttime1(date);
 
 			log.info("Independent scripts # - {} ", metaDataMap.toString());
@@ -361,7 +340,7 @@ public class RunAutomation {
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-							.uploadPDF(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
+							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				executeTestrunVo.setStatusCode(200);
 				executeTestrunVo.setStatusMessage("SUCCESS");
@@ -1107,6 +1086,7 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
@@ -1134,7 +1114,6 @@ public class RunAutomation {
 											customerDetails);
 									throw new IllegalArgumentException("Error occured");
 								}
-//								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 								break;
 							}
 
@@ -1359,8 +1338,7 @@ public class RunAutomation {
 									globalValueForSteps, customerDetails);
 							break;
 						case "uploadFileAutoIT":
-								seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,
-										fetchConfigVO.getUpload_file_path(), param1, param2, param3);
+								seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,fetchConfigVO.getUpload_file_path(), param1, param2, param3, fetchMetadataVO, customerDetails);
 							break;
 						case "windowclose":
 							seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
@@ -1486,6 +1464,8 @@ public class RunAutomation {
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
 						case "waitTillLoad":
+							Integer valueInMS = 1000 * Integer.parseInt(fetchMetadataVO.getInputValue());
+							fetchMetadataVO.setInputValue(valueInMS.toString());
 							seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO);
 							break;
@@ -1591,8 +1571,8 @@ public class RunAutomation {
 								graphQLService.addAttachmentToScript(passScriptKey,b64,file.getName());
 							}
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-								seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-										.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
+								seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+										.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 							}
 							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){
 								fetchConfigVO.getJIRA_ISSUE_URL();
@@ -1662,8 +1642,8 @@ public class RunAutomation {
 							graphQLService.addAttachmentToScript(failScriptKey,b64,file.getName());
 						}
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-							seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
-									.uploadPDF(fetchMetadataListVO, fetchConfigVO, customerDetails);
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 						}
 					return;
 				}

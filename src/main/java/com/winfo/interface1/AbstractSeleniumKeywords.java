@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -48,18 +49,25 @@ import org.jfree.ui.VerticalAlignment;
 import org.jfree.util.Log;
 import org.openqa.selenium.By;
 import org.jfree.util.UnitType;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -110,6 +118,7 @@ import com.winfo.services.DynamicRequisitionNumber;
 import com.winfo.services.FetchConfigVO;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.ScriptDetailsDto;
@@ -173,7 +182,38 @@ public abstract class AbstractSeleniumKeywords {
 
 	@Autowired
 	DynamicRequisitionNumber dynamicnumber;
+	
+	public String takeScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
+		String imageName = null;
+		String folderName = null;
+		try {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			String fileExtension = source.getName();
 
+			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
+
+			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
+					+ customerDetails.getTestSetName();
+			
+			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
+					.concat(fileExtension);
+
+			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+
+			logger.info("Successfully Screenshot is taken " + imageName);
+			return folderName + FORWARD_SLASH + imageName;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Failed During Taking screenshot");
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			return e.getMessage();
+		}
+	}
+	
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
@@ -1124,15 +1164,14 @@ public abstract class AbstractSeleniumKeywords {
 			for (Entry<String, String> entry1 : str1.entrySet()) {
 				Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
 				click.setReference("#" + entry1.getKey());
-				Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
-				click1.setReference("#" + entry1.getValue());
 				Paragraph pr = new Paragraph();
 				Anchor ca1 = new Anchor(entry1.getKey(), bf15);
 				ca1.setReference("#" + entry1.getKey());
 				String compare = entry1.getValue();
 				if (!compare.equals("null")) {
+					Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
+					click1.setReference("#" + entry1.getKey());
 					pr.add(ca1);
-
 					pr.add(click1);
 					pr.add(dottedLine);
 					pr.add(click);
@@ -2063,7 +2102,6 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 	
-	
 	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
 			throws Exception {
 
@@ -2096,4 +2134,156 @@ public abstract class AbstractSeleniumKeywords {
 
 	}
 
+	public void uploadPdfToSharepoint(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+			CustomerProjectDto customerDetails) {
+		try {
+			String accessToken = getSharepointAccessTokenPdf(fetchConfigVO);
+			List imageUrlList = new ArrayList();
+			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+					+ customerDetails.getTestSetName() + "/");
+			System.out.println(imageDir);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			// Outer header
+			HttpHeaders uploadSessionHeader = new HttpHeaders();
+			// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
+			uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
+			HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
+
+			// SITE-ID
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"
+					+ fetchConfigVO.getSharePoint_URL() + ":/sites/" + fetchConfigVO.getSite_Name(), HttpMethod.GET,
+					uploadSessionRequest, Object.class);
+
+			Map<String, Object> siteDetailsMap = siteDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) siteDetailsResponse.getBody()
+					: null;
+			String siteId = siteDetailsMap != null
+					? StringUtils.convertToString(siteDetailsMap.get("id").toString().split(",")[1])
+					: null;
+
+			// DRIVE-ID
+			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange(
+					"https://graph.microsoft.com/v1.0/sites/" + siteId + "/drives", HttpMethod.GET,
+					uploadSessionRequest, Object.class);
+
+			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) driveDetailsResponse.getBody()
+					: null;
+
+			List<Map<String, String>> list = (List<Map<String, String>>) driveDetailsMap.get("value");
+
+			String driveId = null;
+			for (Map<String, String> map : list) {
+				if (fetchConfigVO.getSharePoint_Library_Name() != null) {
+					if (fetchConfigVO.getSharePoint_Library_Name().equalsIgnoreCase(map.get("name"))) {
+						driveId = map.get("id");
+						break;
+					}
+				} else {
+					if ("Documents".equalsIgnoreCase(map.get("name"))) {
+						driveId = map.get("id");
+						break;
+					}
+				}
+			}
+
+//			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
+
+			// SITE-ID
+			ResponseEntity<Object> itemDetailsResponse = restTemplate
+					.exchange(
+							"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
+									+ fetchConfigVO.getDirectory_Name(),
+							HttpMethod.GET, uploadSessionRequest, Object.class);
+
+			Map<String, Object> itemDetailsMap = itemDetailsResponse.getBody() != null
+					? (LinkedHashMap<String, Object>) itemDetailsResponse.getBody()
+					: null;
+
+			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
+			for (File imageFile : imageDir.listFiles()) {
+				String imageFileName = imageFile.getName();
+				System.out.println(imageFileName);
+				imageUrlList.add(imageFileName);
+				File pdfFile = new File(imageDir + "/" + imageFileName);
+				System.out.println(pdfFile);
+				FileInputStream input = new FileInputStream(pdfFile);
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				byte[] buffer = new byte[99999999];
+				int l;
+				while ((l = input.read(buffer)) > 0) {
+					bos.write(buffer, 0, l);
+				}
+				input.close();
+				byte[] data = bos.toByteArray();
+				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
+				bodyMap.add("user-file", data);
+
+				ResponseEntity<Object> response = restTemplate.exchange(
+						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/items/" + itemId + ":/"
+								+ customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
+								+ customerDetails.getTestSetName() + "/" + imageFileName + ":/createUploadSession",
+						HttpMethod.POST, uploadSessionRequest, Object.class);
+
+//				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+//						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
+//						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
+//						HttpMethod.POST, uploadSessionRequest, Object.class);
+
+				System.out.println(response);
+				Map<String, Object> linkedMap = response.getBody() != null
+						? (LinkedHashMap<String, Object>) response.getBody()
+						: null;
+				String uploadUrl = linkedMap != null ? StringUtils.convertToString(linkedMap.get("uploadUrl")) : null;
+
+				HttpHeaders uploadingFileHeader = new HttpHeaders();
+				uploadingFileHeader.setContentLength(data.length);
+				uploadingFileHeader.add("Content-Range", "bytes " + 0 + "-" + (data.length - 1) + "/" + data.length);
+				uploadingFileHeader.setContentType(MediaType.parseMediaType("application/pdf"));
+
+				HttpEntity<byte[]> uploadingFileRequest = new HttpEntity<>(data, uploadingFileHeader);
+				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
+						uploadingFileRequest, byte[].class);
+
+				System.out.println(putResponse);
+				System.out.println("response status: " + response.getStatusCode());
+				System.out.println("response body: " + response.getBody());
+				System.out.println("response : " + response);
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public String getSharepointAccessTokenPdf(FetchConfigVO fetchConfigVO) {
+		String acessToken = null;
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+			map.add("grant_type", "client_credentials");
+			map.add("client_id", fetchConfigVO.getClient_id());
+			map.add("client_secret", fetchConfigVO.getClient_secret());
+			map.add("scope", "https://graph.microsoft.com/.default");
+
+			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+			ResponseEntity<Object> response = restTemplate.exchange(
+					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
+					HttpMethod.POST, entity, Object.class);
+			System.out.println(response);
+
+			@SuppressWarnings("unchecked")
+			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
+					: null;
+			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		System.out.println(acessToken);
+		return acessToken;
+	}
 }

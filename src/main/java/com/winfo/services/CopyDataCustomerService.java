@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.winfo.config.MessageUtil;
 import com.winfo.dao.CopyDataCustomerDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.utils.Constants;
 import com.winfo.vo.CopyDataDetails;
 import com.winfo.vo.DomGenericResponseBean;
 
@@ -70,8 +72,8 @@ public class CopyDataCustomerService {
 			}
 		}
 
-		return new DomGenericResponseBean(200, "success",
-				count + " Script'(s) Copied" + " to " + copyDataDetails.getProductVersionNew() + " Successfully");
+		return new DomGenericResponseBean(200, Constants.SUCCESS, MessageUtil
+				.getMessage("CopyDataCustomerService.Success.CopyData", count, copyDataDetails.getProductVersionNew()));
 
 	}
 

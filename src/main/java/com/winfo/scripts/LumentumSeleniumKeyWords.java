@@ -3,8 +3,6 @@ package com.winfo.scripts;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -12,27 +10,18 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,16 +56,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import com.itextpdf.text.DocumentException;
 import com.winfo.interface1.AbstractSeleniumKeywords;
@@ -820,110 +800,6 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		return resizedImage;
-	}
-
-	public void uploadPDF(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		try {
-			String accessToken = getAccessTokenPdf(fetchConfigVO);
-			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName() + "/");
-			System.out.println(imageDir);
-			for (File imageFile : imageDir.listFiles()) {
-				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
-				imageUrlList.add(imageFileName);
-				File pdfFile = new File(imageDir + "/" + imageFileName);
-				System.out.println(pdfFile);
-				FileInputStream input = new FileInputStream(pdfFile);
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				byte[] buffer = new byte[99999999];
-				int l;
-				while ((l = input.read(buffer)) > 0) {
-					bos.write(buffer, 0, l);
-				}
-				input.close();
-				byte[] data = bos.toByteArray();
-				RestTemplate restTemplate = new RestTemplate();
-				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
-				bodyMap.add("user-file", data);
-				// Outer header
-				HttpHeaders uploadSessionHeader = new HttpHeaders();
-				// uploadSessionHeader.setContentType(MediaType.APPLICATION_JSON);
-				uploadSessionHeader.add("Authorization", "Bearer " + accessToken);
-				System.out.println(fetchConfigVO.getSHAREPOINT_SITE_ID());
-				System.out.println(fetchConfigVO.getSharepoint_item_id());
-
-				// HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null,
-				// uploadSessionHeader);
-				// ResponseEntity<Object> response =
-				// restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
-				// + fetchConfigVO.getSharepoint_drive_id() + "/items/" +
-				// fetchConfigVO.getSharepoint_item_id()
-				// + ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomerName() + "/"
-				// + fetchMetadataListVO.get(0).getTestSetName() + "/" + imageFileName +
-				// ":/createUploadSession",
-				// HttpMethod.POST, uploadSessionRequest, Object.class);
-
-				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
-				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"
-						+ fetchConfigVO.getSHAREPOINT_SITE_ID() + "/drive/items/"
-						+ fetchConfigVO.getSharepoint_item_id() + ":/" +  customerDetails.getCustomerName()
-						+ "/" +  customerDetails.getTestSetName() + "/" + imageFileName
-						+ ":/createUploadSession", HttpMethod.POST, uploadSessionRequest, Object.class);
-
-				System.out.println(response);
-				Map<String, Object> linkedMap = response.getBody() != null
-						? (LinkedHashMap<String, Object>) response.getBody()
-						: null;
-				String uploadUrl = linkedMap != null ? StringUtils.convertToString(linkedMap.get("uploadUrl")) : null;
-
-				HttpHeaders uploadingFileHeader = new HttpHeaders();
-				uploadingFileHeader.setContentLength(data.length);
-				uploadingFileHeader.add("Content-Range", "bytes " + 0 + "-" + (data.length - 1) + "/" + data.length);
-				uploadingFileHeader.setContentType(MediaType.parseMediaType("application/pdf"));
-
-				HttpEntity<byte[]> uploadingFileRequest = new HttpEntity<>(data, uploadingFileHeader);
-				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
-						uploadingFileRequest, byte[].class);
-
-				System.out.println(putResponse);
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	public String getAccessTokenPdf(FetchConfigVO fetchConfigVO) {
-		String acessToken = null;
-		try {
-			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-			map.add("grant_type", "client_credentials");
-			map.add("client_id", fetchConfigVO.getClient_id());
-			map.add("client_secret", fetchConfigVO.getClient_secret());
-			map.add("scope", "https://graph.microsoft.com/.default");
-
-			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-			ResponseEntity<Object> response = restTemplate.exchange(
-					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
-					HttpMethod.POST, entity, Object.class);
-			System.out.println(response);
-
-			@SuppressWarnings("unchecked")
-			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
-					: null;
-			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		System.out.println(acessToken);
-		return acessToken;
 	}
 
 	public void copy(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
@@ -14473,20 +14349,73 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void uploadFileAutoIT(WebDriver filelocation, String fileLocation, String param1, String param2, String param3) throws Exception {
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
+//		try {
+//			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+//
+//			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
+//			log.info("Successfully Uploaded The File");
+//		} catch (Exception e) {
+//			log.error("Failed During uploadFileAutoIT Action.");
+////			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
+//			System.out.println(filelocation);
+//			e.printStackTrace();
+//			throw e;
+//
+//		}
 		try {
-			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
-
-			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
-			log.info("Successfully Uploaded The File");
+			if(param1.equalsIgnoreCase("file")) {
+				String uploadXPath = "//*[@type='"+param1+"']";
+				WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
+				Thread.sleep(5000);
+				File file = new File(fileLocation+param3);
+				System.out.println("Is file Present*** "+file.isFile());
+				uploadZip.sendKeys(file.getAbsolutePath());
+				log.info("Successfully Uploaded The File");
+				screenshot(webDriver, scriptDetailsDto, customerProjectDto);
+				return;
+			}
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
-//			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-			System.out.println(filelocation);
+			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
+			log.error(fileLocation);
+			e.printStackTrace();
+		}
+		
+		try {
+			if(param1.equalsIgnoreCase("Add") && param2.equalsIgnoreCase("File")) {
+			String uploadXPath = "//*[text()='"+param1+" "+param2+"']";
+			WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
+			Thread.sleep(5000);
+			File file = new File(fileLocation+param3);
+			System.out.println("Is file Present*** "+file.isFile());
+			uploadZip.sendKeys(file.getAbsolutePath());
+			log.info("Successfully Uploaded The File");
+			screenshot(webDriver, scriptDetailsDto, customerProjectDto);
+			return;
+			}
+		} catch (Exception e) {
+			log.error("Failed During uploadFileAutoIT Action.");
+			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
+			log.error(fileLocation);
 			e.printStackTrace();
 			throw e;
-
 		}
+		try {
+			if ((param2 == null && param3 == null) || (param2.equalsIgnoreCase("") && param3.equalsIgnoreCase(""))) {
+				logger.info("Started Upload file");
+				Thread.sleep(4000);
+				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
+				Thread.sleep(3000);
+				logger.info("Successfully Uploaded The File");
+				return;
+			}
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			logger.error(fileLocation);
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
@@ -15091,7 +15020,7 @@ public class LumentumSeleniumKeyWords extends AbstractSeleniumKeywords implement
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO) {
 		try {
-			Thread.sleep(fetchConfigVO.getACTION_WAIT_TIME());
+			Thread.sleep(Integer.parseInt(fetchMetadataVO.getInputValue()));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

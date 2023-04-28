@@ -234,45 +234,4 @@ public class TestCaseDataService {
 		System.out.println(lastName);
 		map.put(firstName, lastName);
 	}
-
-	public void updateTestCaseStatus(FetchScriptVO request, String parameter, FetchConfigVO fetchConfigVO) {
-
-		try {
-
-			final String uri = fetchConfigVO.getMETADATA_URL() + parameter + "?p_script_id=" + request.getP_script_id()
-					+ "&p_status=" + request.getP_status() + "&p_test_set_id=" + request.getP_test_set_id()
-					+ "&p_test_set_line_id=" + request.getP_test_set_line_id() + "&p_pass_path="
-					+ request.getP_pass_path() + "&p_fail_path=" + request.getP_fail_path() + "&p_exception_path="
-					+ request.getP_exception_path() + "&p_test_set_line_path=" + request.getP_test_set_line_path();
-
-			System.out.println(uri);
-
-			RestTemplate restTemplate = new RestTemplate();
-
-			HttpHeaders headers = new HttpHeaders();
-
-			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-			restTemplate.postForLocation(uri, headers);
-
-			logger.debug(uri, parameter, "Updated the Passed Status");
-
-		} catch (Exception e) {
-
-			System.out.println("Not Updating the values");
-
-			logger.debug(parameter, "Updated the Failed Status");
-
-			throw e;
-
-		}
-
-		// postForLocation(uri, reqString);
-
-//                           System.out.println("If they return object" + result);
-
-//                           return null;
-
-	}
-
 }
