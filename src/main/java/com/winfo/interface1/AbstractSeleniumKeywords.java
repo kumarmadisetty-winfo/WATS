@@ -44,17 +44,11 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.VerticalAlignment;
-import org.jfree.util.Log;
-import org.openqa.selenium.By;
-import org.jfree.util.UnitType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -190,30 +184,22 @@ public abstract class AbstractSeleniumKeywords {
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
 			String fileExtension = source.getName();
-
 			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
-
 			folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
 					+ customerDetails.getTestSetName();
-			
 			imageName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
 					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
 					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-					.concat(fileExtension);
-
+							.concat(fileExtension);
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
-
 			logger.info("Successfully Screenshot is taken " + imageName);
 			return folderName + FORWARD_SLASH + imageName;
-
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed During Taking screenshot");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
+			return "Failed during taking Screenshot";
 		}
 	}
-	
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		String imageName = null;
 		String folderName = null;
@@ -242,6 +228,7 @@ public abstract class AbstractSeleniumKeywords {
 			return e.getMessage();
 		}
 	}
+	
 
 	public String screenshotFail(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {

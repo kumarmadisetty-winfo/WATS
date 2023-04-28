@@ -14321,6 +14321,7 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		}
 	}
 
+
 	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
 //		try {
 //			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
@@ -15407,8 +15408,6 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 	@Override
 	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
