@@ -196,9 +196,8 @@ public abstract class AbstractSeleniumKeywords {
 			return folderName + FORWARD_SLASH + imageName;
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed During Taking screenshot");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage(); // throw e; }
+			return "Failed during taking Screenshot";
 		}
 	}
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
