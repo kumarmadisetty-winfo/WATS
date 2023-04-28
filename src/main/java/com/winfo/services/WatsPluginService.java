@@ -180,12 +180,12 @@ public class WatsPluginService {
 		}
 		String customerUri = dataBaseEntry.getCentralRepoUrl("PUBLIC_URL");
 		String directoryPath = dao.getDirectoryPath();
-		downloadObjectFromObjectStore(directoryPath+"/temp/plugin/WATS Script Assistant.zip", "WATS Script Assistant/"+watsScriptAssistantVO.getBrowser(), "WATS Script Assistant.zip");
+		downloadObjectFromObjectStore(directoryPath+"/temp/plugin/WinfoTest Script Assistant.zip", "WinfoTest Script Assistant/"+watsScriptAssistantVO.getBrowser(), "WinfoTest Script Assistant.zip");
 		unZipFolder(directoryPath+"/temp/plugin");
 		writePropertiesFile(directoryPath+"/temp/plugin",customerUri,watsScriptAssistantVO.getTargetEnvironment());
-		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WATS Script Assistant - "+StringUtils.capitalize(watsScriptAssistantVO.getBrowser())+".zip\"")
+		return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"WinfoTest Script Assistant - "+StringUtils.capitalize(watsScriptAssistantVO.getBrowser())+".zip\"")
 				.body(out -> {
-					String sourceFile = directoryPath+"/temp/plugin/WATS-Auto-Recording";
+					String sourceFile = directoryPath+"/temp/plugin/WinfoTest-Auto-Recording";
 					ZipOutputStream zipOut = new ZipOutputStream(out);
 					File fileToZip = new File(sourceFile);
 					zipFile(fileToZip, fileToZip.getName(), zipOut);
@@ -223,7 +223,7 @@ public class WatsPluginService {
 	}
 
 	public void unZipFolder(String directoryPath) throws IOException {
-		String fileZip = directoryPath+"/WATS Script Assistant.zip";
+		String fileZip = directoryPath+"/WinfoTest Script Assistant.zip";
 		File destDir = new File(directoryPath);
 		byte[] buffer = new byte[1024];
 		ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
@@ -279,7 +279,7 @@ public class WatsPluginService {
 		root.setGroups(listOfGroups);
 
 		// Write into the file
-		try (FileWriter file = new FileWriter(directoryPath+"/WATS-Auto-Recording/properties.json")) {
+		try (FileWriter file = new FileWriter(directoryPath+"/WinfoTest-Auto-Recording/properties.json")) {
 			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root));
 			log.info("Successfully updated json object to file...!!");
 		}

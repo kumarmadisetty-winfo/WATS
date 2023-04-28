@@ -167,7 +167,7 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String TEST_PARAM = "Test Parameter : ";
 	private static final String TEST_VALUE = "Test Value : ";
 	private static final String SCENARIO_NAME = "Test Case Name";
-	private static final String STEP_NO = "Step No : ";
+	private static final String LINE_NUMBER = "Line Number : ";
 	private static final String SCREENSHOT = "Screenshot";
 	private static final String ELAPSED_TIME = "Elapsed Time";
 
@@ -858,7 +858,7 @@ public abstract class AbstractSeleniumKeywords {
 				document.add(watsLogo);
 				document.add(new Paragraph(s, fnt12));
 				document.add(new Paragraph(scenarios, fnt12));
-				String step = status.equals(FAILED) ? "Failed at Line Number:" + "" + steps : "Step No :" + "" + steps;
+				String step = status.equals(FAILED) ? "Failed at Line Number:" + "" + steps : "Line Number :" + "" + steps;
 				String failMsg = status.equals(FAILED) ? "Failed Message:" + "" + metaDataVO.getLineErrorMsg() : null;
 				document.add(new Paragraph(step, fnt12));
 				if (failMsg != null) {
@@ -1268,7 +1268,7 @@ public abstract class AbstractSeleniumKeywords {
 				document.add(watsLogo);
 				document.add(new Paragraph(scenarios, fnt12));
 				String reason = image.split("_")[5];
-				String step = STEP_NO + "" + reason;
+				String step = LINE_NUMBER + "" + reason;
 
 				String stepDescription = metaDataVO.getTestRunParamDesc();
 

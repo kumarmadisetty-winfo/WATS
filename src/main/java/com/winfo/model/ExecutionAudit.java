@@ -11,8 +11,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "WIN_TA_EXECUTION_AUDIT")
+@Data
 public class ExecutionAudit {
 	@Id
 	@Column(name = "EXECUTION_AUDIT_ID")
@@ -39,60 +42,5 @@ public class ExecutionAudit {
 	@Column(name = "STATUS")
 	private String status;
 
-	public int getExecutionAuditId() {
-		return executionAuditId;
-	}
-
-	public void setExecutionAuditId(int executionAuditId) {
-		this.executionAuditId = executionAuditId;
-	}
-
-	public String getTestsetid() {
-		return testSetId;
-	}
-
-	public void setTestsetid(String testsetid) {
-		this.testSetId = testsetid;
-	}
-
-	public String getScriptid() {
-		return scriptId;
-	}
-
-	public void setScriptid(String scriptid) {
-		this.scriptId = scriptid;
-	}
-
-	public String getScriptnumber() {
-		return scriptNumber;
-	}
-
-	public void setScriptnumber(String scriptnumber) {
-		this.scriptNumber = scriptnumber;
-	}
-
-	public Date getExecutionstarttime() {
-		return executionStartTime;
-	}
-
-	public void setExecutionstarttime(Date executionstarttime) {
-		this.executionStartTime = executionstarttime;
-	}
-
-	public Date getExecutionendtime() {
-		return executionEndTime;
-	}
-
-	public void setExecutionendtime(Date executionendtime) {
-		this.executionEndTime = executionendtime;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
 
 }

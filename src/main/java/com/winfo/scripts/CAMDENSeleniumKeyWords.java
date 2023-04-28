@@ -493,7 +493,6 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			 */
 
 			// ------------------------(New Change)-----------------------
-			
 			WebElement showmore = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
@@ -507,7 +506,6 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			
 			WebElement waittext = driver.findElement(By.xpath(
 					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
-
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
 			actions.moveToElement(showless).build().perform();

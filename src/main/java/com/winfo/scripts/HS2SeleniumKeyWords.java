@@ -525,7 +525,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			
 			/*
 			 * WebElement waittext = driver
 			 * .findElement(By.xpath("//*[contains(@id,'popup-container')]//*[@title=\"" +
@@ -533,14 +532,19 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			 */
 
 			// ------------------------(New Change)-----------------------
-
-			
-			WebElement showmore = driver
-					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
+			WebElement showmore = driver.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(showmore).build().perform();
 			actions.moveToElement(showmore).click().build().perform();
 			Thread.sleep(15000);
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
+
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
 			actions.moveToElement(showless).build().perform();
@@ -550,7 +554,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(
 					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
-			WebElement waittext = driver.findElement(By.xpath(
+			waittext = driver.findElement(By.xpath(
 					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
 
 			actions.moveToElement(waittext).build().perform();

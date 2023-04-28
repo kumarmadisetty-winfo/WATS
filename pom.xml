@@ -23,6 +23,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+		<java.version>11</java.version>
 	</properties>
 
 
@@ -44,17 +45,24 @@
 	</repositories>
 
 	<dependencies>
-	
-	<dependency>
-	<groupId>io.springfox</groupId>
-	<artifactId>springfox-swagger2</artifactId>
-	<version>2.9.2</version>
-</dependency>
-	<dependency>
-		<groupId>io.springfox</groupId>
-		<artifactId>springfox-swagger-ui</artifactId>
-		<version>2.9.2</version>
-	</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.26</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-filestorage</artifactId>
@@ -82,9 +90,9 @@
 
 		<!-- https://mvnrepository.com/artifact/com.assertthat/selenium-shutterbug -->
 		<dependency>
-		    <groupId>com.assertthat</groupId>
-		    <artifactId>selenium-shutterbug</artifactId>
-		    <version>1.6</version>
+			<groupId>com.assertthat</groupId>
+			<artifactId>selenium-shutterbug</artifactId>
+			<version>1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -304,9 +312,9 @@
 			<artifactId>xml-apis</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.jfree</groupId>
-		    <artifactId>jfreechart</artifactId>
-		    <version>1.0.19</version>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.19</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -466,9 +474,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot -->
 		<dependency>
-		    <groupId>ru.yandex.qatools.ashot</groupId>
-		    <artifactId>ashot</artifactId>
-		    <version>1.5.4</version>
+			<groupId>ru.yandex.qatools.ashot</groupId>
+			<artifactId>ashot</artifactId>
+			<version>1.5.4</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>

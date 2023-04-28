@@ -181,25 +181,25 @@ public class LimitScriptExecutionDao {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 		Root<ExecutionAudit> from = cq.from(ExecutionAudit.class);
-		Predicate condition1 = cb.equal(from.get("testSetId"), executionAudit.getTestsetid());
-		Predicate condition2 = cb.equal(from.get("scriptId"), executionAudit.getScriptid());
-		Predicate condition3 = cb.equal(from.get("scriptNumber"), executionAudit.getScriptnumber());
-		Predicate condition4 = cb.equal(from.get("executionStartTime"), executionAudit.getExecutionstarttime());
+		Predicate condition1 = cb.equal(from.get("testSetId"), executionAudit.getTestSetId());
+		Predicate condition2 = cb.equal(from.get("scriptId"), executionAudit.getScriptId());
+		Predicate condition3 = cb.equal(from.get("scriptNumber"), executionAudit.getScriptNumber());
+		Predicate condition4 = cb.equal(from.get("executionStartTime"), executionAudit.getExecutionStartTime());
 		Predicate condition = cb.and(condition1, condition2, condition3, condition4);
 		cq.select(cb.count(from)).where(condition);
 		return entityManager.createQuery(cq).getSingleResult();
 
 	}
-
+	
 	public BigDecimal findCountsOfExecAuditRecords(ExecutionAudit executionAudit) {
 		BigDecimal count = null;
 		Format sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String startExecTime = sdf.format(executionAudit.getExecutionstarttime());
+		String startExecTime = sdf.format(executionAudit.getExecutionStartTime());
 		try {
 			Session session = entityManager.unwrap(Session.class);
 			String sql1 = "select count(*) from WIN_TA_EXECUTION_AUDIT where test_set_id = "
-					+ executionAudit.getTestsetid() + " AND SCRIPT_ID = " + executionAudit.getScriptid()
-					+ " AND SCRIPT_NUMBER = '" + executionAudit.getScriptnumber()
+					+ executionAudit.getTestSetId() + " AND SCRIPT_ID = " + executionAudit.getScriptId()
+					+ " AND SCRIPT_NUMBER = '" + executionAudit.getScriptNumber()
 					+ "' AND to_char(EXECUTION_START_TIME,'YYYY-MM-DD HH24:MI:SS') = '" + startExecTime + "'";
 
 			Query query = session.createSQLQuery(sql1);

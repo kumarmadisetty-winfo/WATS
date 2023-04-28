@@ -94,12 +94,14 @@ public class DeletionService{
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 			TestSet testSet = dataBaseEntry.getTestRunDetails(testSetId);
-			deleteScreenShot(null, customerDetails, provider, testScriptDto.getIsTestRunDelete(), testSet);
-			deletePdf(null, customerDetails, provider, testScriptDto.getIsTestRunDelete(), testSet);
+			deleteScreenShot(null, customerDetails, provider, testScriptDto.isTestRunDelete(), testSet);
+			deletePdf(null, customerDetails, provider, testScriptDto.isTestRunDelete(), testSet);
 			if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 				String access = healthCheck.getSharePointAccess(fetchConfigVO);
-				deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, null, testScriptDto.getIsTestRunDelete(),
+				deletePdfFromSharePoint(fetchConfigVO, access, customerDetails, null, testScriptDto.isTestRunDelete(),
 						testSet);
+				
+				
 			}
 		} catch (Exception e) {
 			if (e instanceof WatsEBSCustomException) {

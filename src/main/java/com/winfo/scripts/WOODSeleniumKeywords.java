@@ -242,6 +242,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			 */
 
 			// ------------------------(New Change)-----------------------
+			
 			WebElement showmore = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
@@ -252,9 +253,9 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(
 					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
-
-			WebElement waittext = driver.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\""
-					+ param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
+			
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
 
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
@@ -364,7 +365,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void logout(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, String type1,
 			String type2, String type3, String param1, String param2, String param3, CustomerProjectDto customerDetails)
 			throws Exception {
-
+		
 		String param4 = "UIScmil1u";
 		String param5 = "Sign Out";
 		String param6 = " Confirm";
@@ -540,6 +541,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 		// clickSignInSignOut(driver, param6, fetchMetadataVO, fetchConfigVO);
 //			clickButton(driver, param6, param2, fetchMetadataVO, fetchConfigVO);
+
 	}
 
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,

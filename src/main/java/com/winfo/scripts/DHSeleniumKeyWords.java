@@ -543,7 +543,6 @@ public class DHSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			
 			WebElement waittext = driver.findElement(By.xpath(
 					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
-			
 			WebElement showless = driver
 					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
 			actions.moveToElement(showless).build().perform();

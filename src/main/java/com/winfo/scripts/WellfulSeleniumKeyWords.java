@@ -529,23 +529,29 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//div[contains(@id,\"popup-container\")]//span[text()=\""+param1+"\"]/following::a[text()=\""+param2+"\"]")));
-			wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//div[contains(@id,\"popup-container\")]//span[text()=\""+param1+"\"]/following::a[text()=\""+param2+"\"]")));
-			/*
-			 * WebElement waittext = driver
-			 * .findElement(By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" +
-			 * param1 + "\"]"));
-			 */
-
-			// ------------------------(New Change)-----------------------
-
-			WebElement waittext = driver.findElement(By.xpath(
-					"//div[contains(@id,\"popup-container\")]//span[text()=\""+param1+"\"]/following::a[text()=\""+param2+"\"]"));
 			
+			// ------------------------(New Change)-----------------------
+			
+			WebElement showmore = driver
+					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]"));
 			Actions actions = new Actions(driver);
-		//	actions.moveToElement(waittext).build().perform();
+			actions.moveToElement(showmore).build().perform();
+			actions.moveToElement(showmore).click().build().perform();
+			Thread.sleep(15000);
+			wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
+		
+			WebElement waittext = driver.findElement(By.xpath(
+					"//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]//div[2]/a/*[name()=\"svg\"][1]"));
+
+			WebElement showless = driver
+					.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]"));
+			actions.moveToElement(showless).build().perform();
+			actions.moveToElement(showless).click().build().perform();
+			Thread.sleep(15000);
+			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
 			Thread.sleep(15000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();

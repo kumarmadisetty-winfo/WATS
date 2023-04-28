@@ -27,8 +27,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.CopyTestRunDao;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
+import com.winfo.model.ExecutionAudit;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -53,7 +55,6 @@ public class CopyTestRunService {
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());	
 		TestSet newTestSetObj = new TestSet();
-		
 		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
 		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
 		newTestSetObj.setEnabled("Y");
@@ -73,7 +74,7 @@ public class CopyTestRunService {
 		newTestSetObj.setExceptionPath(testSetObj.getExceptionPath());
 		newTestSetObj.setTestRunMode("ACTIVE");
 		newTestSetObj.setLastExecutBy(null);
-
+		
 		String productVersion = copyTestrunDao.getProductVersion(newTestSetObj.getProjectId());
 		Map<Integer, Integer> mapOfTestRunDependencyOldToNewId = new HashMap<>();
 
@@ -146,6 +147,8 @@ public class CopyTestRunService {
 					setScriptlinedata.setLineErrorMessage(null);
 					setScriptlinedata.setDataTypes(metadata.getDatatypes());
 					setScriptlinedata.setUniqueMandatory(metadata.getUniqueMandatory());
+					setScriptlinedata.setValidationType(metadata.getValidationType());
+					setScriptlinedata.setValidationName(metadata.getValidationName());
 					check = newScriptParamSeq.intValue();
 				}
 				if (setScriptlinedata.getInputParameter() != null && getScriptlinedata.getInputParameter() != null) {
@@ -388,7 +391,26 @@ public class CopyTestRunService {
 				scriptParamObj.setInputValue(
 						inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
 			} else {
-				scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
+				if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
+						&& Constants.VALIDATION_TYPE_REGULAR_EXPR
+								.equalsIgnoreCase(scriptParamObj.getValidationType())) {
+					try {
+						String dateFormat = copyTestrunDao
+								.getMeaningUsingValidationName(scriptParamObj.getValidationName());
+						SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+						scriptParamObj.setInputValue(formatter.format(new Date()));
+					} catch (Exception e) {
+						log.info("Exception occured while converting date Format");
+						throw new WatsEBSCustomException(500, "Exception occured while converting date Format", e);
+					}
+
+				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes()) && (scriptParamObj.getValidationType() == null || "NA".equalsIgnoreCase(scriptParamObj.getValidationType()))) {
+					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+					scriptParamObj.setInputValue(formatter.format(new Date()));
+				} else {
+					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
+				}
+
 			}
 		} else {
 			if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
@@ -407,8 +429,9 @@ public class CopyTestRunService {
 					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 				}
 			} else {
+				
 				scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
-			}
+			     }
 		}
 
 	}
@@ -470,7 +493,7 @@ public class CopyTestRunService {
 					TestSetLine newLineObj = new TestSetLine();
 					for (ScriptMetaData scriptMetaDataObj : scriptMetaDataList) {
 						TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
-						newScriptParamObj.setTestRunScripts(newLineObj);
+						newScriptParamObj.setTestSetLine(newLineObj);
 						newScriptParamObj.setInputParameter(scriptMetaDataObj.getInputParameter());
 						newScriptParamObj
 								.setInputValue(inputParamAndInputValueMap.get(scriptMetaDataObj.getInputParameter()));
@@ -490,6 +513,8 @@ public class CopyTestRunService {
 						newScriptParamObj.setLineErrorMessage(null);
 						newScriptParamObj.setDataTypes(scriptMetaDataObj.getDatatypes());
 						newScriptParamObj.setUniqueMandatory(scriptMetaDataObj.getUniqueMandatory());
+						newScriptParamObj.setValidationType(scriptMetaDataObj.getValidationType());
+						newScriptParamObj.setValidationName(scriptMetaDataObj.getValidationName());
 						newTestRunScriptParam.add(newScriptParamObj);
 					}
 					newLineObj.setScriptId(scriptIdFromMaster);
@@ -528,7 +553,7 @@ public class CopyTestRunService {
 				for (TestSetScriptParam existScriptParamObj : existLineObj.getTestRunScriptParam()) {
 
 					TestSetScriptParam newScriptParamObj = new TestSetScriptParam();
-					newScriptParamObj.setTestRunScripts(newLineObj);
+					newScriptParamObj.setTestSetLine(newLineObj);
 					newScriptParamObj.setInputParameter(existScriptParamObj.getInputParameter());
 					newScriptParamObj.setInputValue(existScriptParamObj.getInputValue());
 					newScriptParamObj.setScriptId(existScriptParamObj.getScriptId());
@@ -549,6 +574,8 @@ public class CopyTestRunService {
 					newScriptParamObj.setLineErrorMessage(null);
 					newScriptParamObj.setDataTypes(existScriptParamObj.getDataTypes());
 					newScriptParamObj.setUniqueMandatory(existScriptParamObj.getUniqueMandatory());
+					newScriptParamObj.setValidationType(existScriptParamObj.getValidationType());
+					newScriptParamObj.setValidationName(existScriptParamObj.getValidationName());
 					newTestRunScriptParam.add(newScriptParamObj);
 				}
 				newLineObj.setScriptId(existLineObj.getScriptId());

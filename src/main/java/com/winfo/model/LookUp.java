@@ -12,8 +12,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "WIN_TA_LOOKUPS")
+@Data
 public class LookUp {
 
 	@Id
@@ -42,59 +45,4 @@ public class LookUp {
 	@Temporal(TemporalType.DATE)
 	private Date updatedDate;
 
-	public Integer getLookUpId() {
-		return lookUpId;
-	}
-
-	public void setLookUpId(Integer lookUpId) {
-		this.lookUpId = lookUpId;
-	}
-	
-	public String getLookUpName() {
-		return lookUpName;
-	}
-
-	public void setLookUpName(String lookUpName) {
-		this.lookUpName = lookUpName;
-	}
-
-	public String getLookUpDesc() {
-		return lookUpDesc;
-	}
-
-	public void setLookUpDesc(String lookUpDesc) {
-		this.lookUpDesc = lookUpDesc;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(String lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
-	}
 }

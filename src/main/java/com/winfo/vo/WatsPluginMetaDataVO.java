@@ -4,6 +4,9 @@ import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+
+@Data
 public class WatsPluginMetaDataVO {
 
 	@JsonProperty("SCRIPT META DATA ID")
@@ -50,125 +53,5 @@ public class WatsPluginMetaDataVO {
 
 	@JsonProperty("INPUT VALUE")
 	private String inputValue;
-
-	public String getInputValue() {
-		return inputValue;
-	}
-
-	public void setInputValue(String inputValue) {
-		this.inputValue = inputValue;
-	}
-
-	public Integer getScriptMetaDataId() {
-		return scriptMetaDataId;
-	}
-
-	public void setScriptMetaDataId(Integer scriptMetaDataId) {
-		this.scriptMetaDataId = scriptMetaDataId;
-	}
-
-	public String getScriptNumber() {
-		return scriptNumber;
-	}
-
-	public void setScriptNumber(String scriptNumber) {
-		this.scriptNumber = scriptNumber;
-	}
-
-	public Integer getLineNumber() {
-		return lineNumber;
-	}
-
-	public void setLineNumber(Integer lineNumber) {
-		this.lineNumber = lineNumber;
-	}
-
-	public String getInputParameter() {
-		return inputParameter;
-	}
-
-	public void setInputParameter(String inputParameter) {
-		this.inputParameter = inputParameter;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	public String getXpathLocation() {
-		return xpathLocation;
-	}
-
-	public void setXpathLocation(String xpathLocation) {
-		this.xpathLocation = xpathLocation;
-	}
-
-	public String getXpathLocation1() {
-		return xpathLocation1;
-	}
-
-	public void setXpathLocation1(String xpathLocation1) {
-		this.xpathLocation1 = xpathLocation1;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(String creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getStepDesc() {
-		return stepDesc;
-	}
-
-	public void setStepDesc(String stepDesc) {
-		this.stepDesc = stepDesc;
-	}
-
-	public String getFieldType() {
-		return fieldType;
-	}
-
-	public void setFieldType(String fieldType) {
-		this.fieldType = fieldType;
-	}
-
-	public String getHint() {
-		return hint;
-	}
-
-	public void setHint(String hint) {
-		this.hint = hint;
-	}
 
 }

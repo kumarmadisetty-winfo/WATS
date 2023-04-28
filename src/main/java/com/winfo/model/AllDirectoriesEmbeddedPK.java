@@ -5,7 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.Data;
+
 @Embeddable
+@Data
 public class AllDirectoriesEmbeddedPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -18,36 +21,6 @@ public class AllDirectoriesEmbeddedPK implements Serializable {
 	@Column(name = "ORIGIN_CON_ID")
 	protected int originConId;
 
-	public String getOwner() {
-		return owner;
-	}
 
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
-
-	public String getDirectoryName() {
-		return directoryName;
-	}
-
-	public void setDirectoryName(String directoryName) {
-		this.directoryName = directoryName;
-	}
-
-	public String getDirectoryPath() {
-		return directoryPath;
-	}
-
-	public void setDirectoryPath(String directoryPath) {
-		this.directoryPath = directoryPath;
-	}
-
-	public int getOriginConId() {
-		return originConId;
-	}
-
-	public void setOriginConId(int originConId) {
-		this.originConId = originConId;
-	}
 
 }
