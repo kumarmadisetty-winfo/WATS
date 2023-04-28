@@ -3688,13 +3688,11 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Warning") && param2.equalsIgnoreCase("Yes")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions
-						.presenceOfElementLocated(By.xpath(("//table[contains(@id,\"warningPopup\")]//*[text()=\"" + param1
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//table[contains(@id,\"warningPopup\")]//*[text()=\"" + param1
 								+ "\"]/following::*[text()=\"" + param2 + "\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//table[contains(@id,\"warningPopup\")]//*[text()=\""
 						+ param1 + "\"]/following::*[text()=\"" + param2 + "\"]")));
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -9932,8 +9930,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				// fetchMetadataVO);
 				Thread.sleep(3000);
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
@@ -9950,10 +9946,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement select = driver
 						.findElement(By.xpath("//label[text()=\""+param2+"\"]/following::*[@title=\""+keysToSend+"\"]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				
-				
-				
-				
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input[1]"
@@ -9977,8 +9969,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				clearMethod(driver, waittill);
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10003,8 +9993,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				clearMethod(driver, waittill);
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10168,8 +10156,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						actions.moveToElement(waittill).build().perform();
 						waittill.clear();
 						waittill.sendKeys(keysToSend);
-						//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-						// fetchMetadataVO);
 						Thread.sleep(2000);
 						//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 						//enter(driver, fetchMetadataVO, fetchConfigVO);
@@ -10190,8 +10176,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 						//screenshotFail(driver, fetchMetadataVO, customerDetails);
 						tab(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
-						
-						
 						screenshot(driver, fetchMetadataVO, customerDetails);
 						String scripNumber = fetchMetadataVO.getScriptNumber();
 						log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
@@ -10214,8 +10198,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				// fetchMetadataVO);
 				Thread.sleep(3000);
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
@@ -10232,10 +10214,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement select = driver
 						.findElement(By.xpath("//label[text()=\""+param2+"\"]/following::*[@title=\""+keysToSend+"\"]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-				
-				
-				
-				
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input[1]"
@@ -10259,8 +10237,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				clearMethod(driver, waittill);
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10284,8 +10260,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				 //typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10309,8 +10283,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10334,8 +10306,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10371,9 +10341,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement select = driver
 						.findElement(By.xpath("//a[text()=\"Name\"]/following::a[3]"));
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
-						//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-						// fetchMetadataVO);
-						Thread.sleep(4000);
+				Thread.sleep(4000);
 						//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 						//enter(driver, fetchMetadataVO, fetchConfigVO);
 						
@@ -10414,8 +10382,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					Actions actions = new Actions(driver);
 					actions.moveToElement(waittill).build().perform();
 					waittill.sendKeys(keysToSend);
-					//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-					// fetchMetadataVO);
+					
 					Thread.sleep(1000);
 					//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					//enter(driver, fetchMetadataVO, fetchConfigVO);
@@ -10435,8 +10402,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					//Thread.sleep(10000);
 					//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					//screenshotFail(driver, fetchMetadataVO, customerDetails);
-					
-					
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
@@ -10459,13 +10424,8 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				// fetchMetadataVO);
 				Thread.sleep(4000);
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
-				
-				
 				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				//Thread.sleep(4000);
@@ -10504,11 +10464,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				//waittill.sendKeys(keysToSend);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				// fetchMetadataVO);
-				//screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
-				
-				
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
@@ -10534,7 +10489,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				// fetchMetadataVO);
 				Thread.sleep(6000);
-			//	typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				enter(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 				Thread.sleep(1000);
 				
@@ -10548,7 +10502,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			//			.findElement(By.xpath("//table[@data-aura-class=\"uiVirtualDataGrid--default uiVirtualDataGrid\"]//a[text()=\""+keysToSend+"\"]"));
 			//	clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
 				Thread.sleep(1000);
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
@@ -10571,9 +10524,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebElement waittill = driver.findElement(By.xpath("//input[@placeholder=\"Search Setup\"]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
-				//waittill.sendKeys(keysToSend);
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				//Thread.sleep(3000);
 				//WebElement select = driver//div[text()=\""+keysToSend+"\"][1]
@@ -10607,8 +10558,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10635,8 +10584,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -10690,8 +10637,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				waittill.sendKeys(keysToSend);
-				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
-				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -21481,5 +21426,4 @@ public void apiValidationResponse(ScriptDetailsDto fetchMetadataVO, Map<String, 
 	// TODO Auto-generated method stub
 	
 }
-
 }

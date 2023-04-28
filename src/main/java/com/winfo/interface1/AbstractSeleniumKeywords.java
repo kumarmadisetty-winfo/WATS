@@ -45,6 +45,9 @@ import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.VerticalAlignment;
+import org.jfree.util.Log;
+import org.openqa.selenium.By;
 import org.jfree.util.UnitType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -2099,6 +2102,38 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 	
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3)
+			throws Exception {
+
+		try {
+			if ((param2 == null && param3 == null) || (param2.equalsIgnoreCase("") && param3.equalsIgnoreCase(""))) {
+				logger.info("Started Upload file");
+				Thread.sleep(4000);
+				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
+				Thread.sleep(3000);
+				logger.info("Successfully Uploaded The File");
+				return;
+			}
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			logger.error(fileLocation);
+			e.printStackTrace();
+		}
+		try {
+			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
+			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + fileLocation + "\"");
+			logger.info("Successfully Uploaded The File");
+			return;
+		} catch (Exception e) {
+			logger.error("Failed During uploadFileAutoIT Action.");
+			System.out.println(fileLocation);
+			e.printStackTrace();
+			throw e;
+
+		}
+
+	}
+
 	public void uploadPdfToSharepoint(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
@@ -2251,6 +2286,4 @@ public abstract class AbstractSeleniumKeywords {
 		System.out.println(acessToken);
 		return acessToken;
 	}
-	
-
 }

@@ -1,0 +1,5 @@
+{
+    "status" : "newStatus",
+    "testRunId": "testRunIdToChangeStatus",
+    "stepId":"stepIdToChangeStatus"
+}
