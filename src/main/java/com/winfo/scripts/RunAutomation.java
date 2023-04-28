@@ -535,7 +535,6 @@ public class RunAutomation {
 				scriptId1 = fetchMetadataVO.getScriptId();
 				scriptNumber = fetchMetadataVO.getScriptNumber();
 				seqNum = fetchMetadataVO.getSeqNum();
-				
 				String screenParameter = fetchMetadataVO.getInputParameter();
 				testScriptParamId = fetchMetadataVO.getTestScriptParamId();
 				if (i == 0) {
