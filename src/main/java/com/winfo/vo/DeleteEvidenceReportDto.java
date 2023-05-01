@@ -11,6 +11,7 @@ public class DeleteEvidenceReportDto {
 
 	private String testSetId;
 	private List<String> testSetLineId;
+	
 	@JsonProperty("isTestRunDelete")
 	private boolean isTestRunDelete;
 
