@@ -14370,74 +14370,21 @@ public class WATS02SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		}
 	}
 
+	public void uploadFileAutoIT(String filelocation, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) throws Exception {
+		try {
+			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
 
-	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception {
-//		try {
-//			String autoitscriptpath = System.getProperty("user.dir") + "/" + "File_upload_selenium_webdriver.au3";
-//
-//			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
-//			log.info("Successfully Uploaded The File");
-//		} catch (Exception e) {
-//			log.error("Failed During uploadFileAutoIT Action.");
-////			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
-//			System.out.println(filelocation);
-//			e.printStackTrace();
-//			throw e;
-//
-//		}
-		try {
-			if(param1.equalsIgnoreCase("file")) {
-				String uploadXPath = "//*[@type='"+param1+"']";
-				WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
-				Thread.sleep(5000);
-				File file = new File(fileLocation+param3);
-				System.out.println("Is file Present*** "+file.isFile());
-				uploadZip.sendKeys(file.getAbsolutePath());
-				log.info("Successfully Uploaded The File");
-				screenshot(webDriver, scriptDetailsDto, customerProjectDto);
-				return;
-			}
-		} catch (Exception e) {
-			log.error("Failed During uploadFileAutoIT Action.");
-			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			log.error(fileLocation);
-			e.printStackTrace();
-		}
-		
-		try {
-			if(param1.equalsIgnoreCase("Add") && param2.equalsIgnoreCase("File")) {
-			String uploadXPath = "//*[text()='"+param1+" "+param2+"']";
-			WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
-			Thread.sleep(5000);
-			File file = new File(fileLocation+param3);
-			System.out.println("Is file Present*** "+file.isFile());
-			uploadZip.sendKeys(file.getAbsolutePath());
+			Runtime.getRuntime().exec("cmd.exe /c Start AutoIt3.exe " + autoitscriptpath + " \"" + filelocation + "\"");
 			log.info("Successfully Uploaded The File");
-			screenshot(webDriver, scriptDetailsDto, customerProjectDto);
-			return;
-			}
 		} catch (Exception e) {
 			log.error("Failed During uploadFileAutoIT Action.");
-			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			log.error(fileLocation);
+//			screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO, customerDetails);
+			System.out.println(filelocation);
 			e.printStackTrace();
 			throw e;
+
 		}
-		try {
-			if ((param2 == null && param3 == null) || (param2.equalsIgnoreCase("") && param3.equalsIgnoreCase(""))) {
-				logger.info("Started Upload file");
-				Thread.sleep(4000);
-				webDriver.findElement(By.xpath("//*[@type='file']")).sendKeys(param1);
-				Thread.sleep(3000);
-				logger.info("Successfully Uploaded The File");
-				return;
-			}
-		} catch (Exception e) {
-			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
-			e.printStackTrace();
-		}
-		
 	}
 
 	public void refreshPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
@@ -15478,7 +15425,13 @@ public class WATS02SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		// TODO Auto-generated method stub
 		return false;
 	}
-  
+
+	@Override
+	public void uploadFileAutoIT(WebDriver field_type, String fileLocation, String param1, String param2, String param3) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void navigateToBackPage(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {

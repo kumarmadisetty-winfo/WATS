@@ -1,9 +1,0 @@
-mutation($status : String!,$stepId : String!,$testRunId : String!) {
-    updateTestRunStepStatus(
-        testRunId: $testRunId,
-        stepId: $stepId,
-        status: $status
-    ) {
-        warnings
-    }
-}

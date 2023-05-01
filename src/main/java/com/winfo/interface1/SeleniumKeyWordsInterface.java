@@ -149,7 +149,7 @@ public interface SeleniumKeyWordsInterface {
 	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws Exception;
 
-	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3, ScriptDetailsDto scriptDetailsDto, CustomerProjectDto customerProjectDto) throws Exception;
+	public void uploadFileAutoIT(WebDriver webDriver, String fileLocation, String param1, String param2, String param3) throws Exception;
 
 	public void paste(WebDriver driver, String inputParameter, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps2, CustomerProjectDto customerDetails)

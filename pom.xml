@@ -95,6 +95,7 @@
 			<artifactId>selenium-shutterbug</artifactId>
 			<version>1.6</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
@@ -522,10 +523,6 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
 										</resource>
 										<resource>
 											<directory>src/main/resources/</directory>
@@ -559,77 +556,6 @@
 				<instance>dev</instance>
 			</properties>
 		</profile>
-
-		<profile>
-			<id>wellful</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<finalName>wats</finalName>
-				<plugins>
-					<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> 
-						<version>3.0.6-SNAPSHOT</version> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-						<artifactId>maven-pmd-plugin</artifactId> <version>3.10.0</version> </plugin> -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>default-resources</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
-									<useDefaultDelimiters>false</useDefaultDelimiters>
-									<delimiters>
-										<delimiter>#</delimiter>
-									</delimiters>
-									<resources>
-										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
-											<includes>
-												<include>*.properties</include>
-												<include>oci/</include>
-											</includes>
-										</resource>
-										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
-											<includes>
-												<include>*.properties</include>
-												<include>Images/</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.18.1</version>
-						<configuration>
-							<suiteXmlFiles>
-								<suiteXmlFile>testng.xml</suiteXmlFile>
-							</suiteXmlFiles>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
-				<profiles>default,wellful</profiles>
-				<instance>wellful</instance>
-			</properties>
-		</profile>
-
 
 		<profile>
 			<id>orange</id>
@@ -675,10 +601,6 @@
 											<includes>
 												<include>*.properties</include>
 												<include>oci/</include>
-											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -762,10 +684,6 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
 										</resource>
 
 									</resources>
@@ -848,12 +766,8 @@
 											<includes>
 												<include>*.properties</include>
 												<include>oci/</include>
-												
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -943,10 +857,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1035,10 +946,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1126,10 +1034,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1212,10 +1117,6 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
 										</resource>
 										<resource>
 											<directory>src/main/resources/</directory>
@@ -1297,10 +1198,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1388,10 +1286,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1479,10 +1374,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1570,10 +1462,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1661,10 +1550,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1752,10 +1638,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 
 										</resource>
 									</resources>
@@ -1862,10 +1745,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -1948,10 +1828,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -2034,10 +1911,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -2122,10 +1996,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -2209,10 +2080,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -2296,10 +2164,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -2383,10 +2248,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
@@ -2470,10 +2332,7 @@
 												<include>*.properties</include>
 												<include>oci/</include>
 											</includes>
-											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
-											</includes>
+
 										</resource>
 									</resources>
 								</configuration>
