@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class ApiValidationDto {
 
 	private List<LookUpCodeVO> lookupCodes = new ArrayList<>();
+	@JsonProperty("flag")
 	private boolean flag;
 
 }
