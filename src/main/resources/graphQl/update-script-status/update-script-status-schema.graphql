@@ -1,0 +1,6 @@
+mutation($scriptId : String!,$status : String!) {
+    updateTestRunStatus( 
+            id: $scriptId,
+            status: $status
+        ) 
+}
