@@ -17,6 +17,7 @@ public class DeleteScriptsData {
 
 	private String prod_ver;
 
+	@JsonProperty("deleteAll")
 	private boolean deleteAll;
 
 }

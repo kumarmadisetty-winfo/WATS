@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 
@@ -34,6 +35,8 @@ public class MessageQueueDto implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	
 	private Date startDate;
+	
+	@JsonProperty("manualTrigger")
 	private boolean manualTrigger;
 	private AuditScriptExecTrail autditTrial;
 	private AUDIT_TRAIL_STAGES stage;
