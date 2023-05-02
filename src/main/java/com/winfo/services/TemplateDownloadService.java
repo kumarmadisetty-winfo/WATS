@@ -152,7 +152,19 @@ public class TemplateDownloadService {
 		RegionUtil.setBorderLeft(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
 		RegionUtil.setBorderRight(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
 	}
-
+	
+	private List<String[]> createScriptColumnNames() {
+	    List<String[]> listOfScriptColumnName = new ArrayList<>();
+	    listOfScriptColumnName.add(new String[] { "SCRIPT NUMBER", "TEST CASE NAME", "TARGET APPLICATION", "PRODUCT VERSION",
+	            "PROCESS AREA", "MODULE", "SUB PROCESS AREA" });
+	    listOfScriptColumnName.add(new String[] { "ROLE", "TEST SCRIPT STATUS", "TEST CASE DESCRIPTION", "EXPECTED RESULT",
+	            "PRIORITY", "DEPENDENCY", "STANDARD CUSTOM" });
+	    listOfScriptColumnName.add(new String[] { "CUSTOMER ID", "CUSTOMISATION REFERENCE", "ATTRIBUTE1", "ATTRIBUTE2", "ATTRIBUTE3",
+	            "ATTRIBUTE4", "ATTRIBUTE5" });
+	    listOfScriptColumnName.add(new String[] { "ATTRIBUTE6", "ATTRIBUTE7", "ATTRIBUTE8", "ATTRIBUTE9", "ATTRIBUTE10", "", "" });
+	    return listOfScriptColumnName;
+	}
+	
 	public ResponseEntity<StreamingResponseBody> generateTemplate(Optional<Integer> scriptId) {
 		try {
 			ScriptMaster scriptMasterData = scriptId.isPresent() ? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get()) : null;
@@ -170,14 +182,7 @@ public class TemplateDownloadService {
 
 			Workbook workbook = new XSSFWorkbook();
 
-			List<String[]> listOfScriptColumnName = new ArrayList<>();
-			listOfScriptColumnName.add(new String[] { "SCRIPT NUMBER", "TEST CASE NAME", "TARGET APPLICATION", "PRODUCT VERSION",
-					"PROCESS AREA", "MODULE", "SUB PROCESS AREA" });
-			listOfScriptColumnName.add(new String[] { "ROLE", "TEST SCRIPT STATUS", "TEST CASE DESCRIPTION", "EXPECTED RESULT",
-					"PRIORITY", "DEPENDENCY", "STANDARD CUSTOM" });
-			listOfScriptColumnName.add(new String[] { "CUSTOMER ID", "CUSTOMISATION REFERENCE", "ATTRIBUTE1", "ATTRIBUTE2", "ATTRIBUTE3",
-					"ATTRIBUTE4", "ATTRIBUTE5" });
-			listOfScriptColumnName.add(new String[] { "ATTRIBUTE6", "ATTRIBUTE7", "ATTRIBUTE8", "ATTRIBUTE9", "ATTRIBUTE10", "", "" });
+			List<String[]> listOfScriptColumnName = createScriptColumnNames();
 
 			List<String> scriptLineHeaders = Arrays.asList("LINE NUMBER", "STEP DESCRIPTION", "INPUT PARAMETER",
 					"ACTION", "UNIQUE/MANDATORY", "DATATYPES");
