@@ -170,14 +170,14 @@ public class TemplateDownloadService {
 
 			Workbook workbook = new XSSFWorkbook();
 
-			List<String[]> list = new ArrayList<>();
-			list.add(new String[] { "SCRIPT NUMBER", "TEST CASE NAME", "TARGET APPLICATION", "PRODUCT VERSION",
+			List<String[]> listOfScriptColumnName = new ArrayList<>();
+			listOfScriptColumnName.add(new String[] { "SCRIPT NUMBER", "TEST CASE NAME", "TARGET APPLICATION", "PRODUCT VERSION",
 					"PROCESS AREA", "MODULE", "SUB PROCESS AREA" });
-			list.add(new String[] { "ROLE", "TEST SCRIPT STATUS", "TEST CASE DESCRIPTION", "EXPECTED RESULT",
+			listOfScriptColumnName.add(new String[] { "ROLE", "TEST SCRIPT STATUS", "TEST CASE DESCRIPTION", "EXPECTED RESULT",
 					"PRIORITY", "DEPENDENCY", "STANDARD CUSTOM" });
-			list.add(new String[] { "CUSTOMER ID", "CUSTOMISATION REFERENCE", "ATTRIBUTE1", "ATTRIBUTE2", "ATTRIBUTE3",
+			listOfScriptColumnName.add(new String[] { "CUSTOMER ID", "CUSTOMISATION REFERENCE", "ATTRIBUTE1", "ATTRIBUTE2", "ATTRIBUTE3",
 					"ATTRIBUTE4", "ATTRIBUTE5" });
-			list.add(new String[] { "ATTRIBUTE6", "ATTRIBUTE7", "ATTRIBUTE8", "ATTRIBUTE9", "ATTRIBUTE10", "", "" });
+			listOfScriptColumnName.add(new String[] { "ATTRIBUTE6", "ATTRIBUTE7", "ATTRIBUTE8", "ATTRIBUTE9", "ATTRIBUTE10", "", "" });
 
 			List<String> scriptLineHeaders = Arrays.asList("LINE NUMBER", "STEP DESCRIPTION", "INPUT PARAMETER",
 					"ACTION", "UNIQUE/MANDATORY", "DATATYPES");
@@ -244,7 +244,7 @@ public class TemplateDownloadService {
 			Map<String, String> map = new LinkedHashMap<>();
 
 			int column = 0;
-			for (String[] row : list) {
+			for (String[] row : listOfScriptColumnName) {
 				for (int i = 1; i <= row.length; i++) {
 					Cell keyCell = automationSheet.getRow(i).createCell(column);
 					setCellStyle(keyCell, font, FillPatternType.SOLID_FOREGROUND, IndexedColors.LEMON_CHIFFON, BorderStyle.THIN);
