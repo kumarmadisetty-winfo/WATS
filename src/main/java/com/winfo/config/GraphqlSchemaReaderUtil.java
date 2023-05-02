@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 public class GraphqlSchemaReaderUtil {
 
 	public static String getSchemaFromFileName(final String filename) throws IOException {
-		return new String(
-				GraphqlSchemaReaderUtil.class.getResourceAsStream("/graphQl/" + filename + ".graphql").readAllBytes());
+		
+//		return new String(
+//				GraphqlSchemaReaderUtil.class.getResourceAsStream("/graphQl/" + filename + ".graphql").readAllBytes());
+		return "";
 	}
 
 }
