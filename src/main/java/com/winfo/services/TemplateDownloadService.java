@@ -1,5 +1,6 @@
 package com.winfo.services;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -36,6 +38,7 @@ import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -60,26 +63,23 @@ public class TemplateDownloadService {
 	}
 
 	private void insertScriptMetaData(ScriptMaster scriptMaster, Sheet sheet) {
-		int row = 11;
 		List<ScriptMetaData> sortedList = scriptMaster.getScriptMetaDatalist().stream()
 				.sorted(Comparator.comparingInt(ScriptMetaData::getLineNumber)).collect(Collectors.toList());
-		for (ScriptMetaData scriptMetaData : sortedList) {
+		IntStream.range(0, sortedList.size()).forEach(index -> {
+			ScriptMetaData scriptMetaData = sortedList.get(index);
 			String actionMeaning = dataBaseEntry.getActionMeaningScriptIdAndLineNumber(
 					scriptMetaData.getScriptMaster().getScriptId(), scriptMetaData.getScriptMetaDataId());
-			setCellValues(sheet, row, scriptMetaData.getLineNumber(), scriptMetaData.getStepDesc(),
+			setCellValues(sheet, 11 + index, scriptMetaData.getLineNumber(), scriptMetaData.getStepDesc(),
 					scriptMetaData.getInputParameter(), actionMeaning, scriptMetaData.getUniqueMandatory(),
 					scriptMetaData.getDatatypes());
-			row++;
-		}
+		});
 	}
 
 	private void setCellValues(Sheet sheet, int row, Object... values) {
-		for (int i = 0; i < values.length; i++) {
-			Cell cell = sheet.getRow(row).getCell(i);
-			if (values[i] != null) {
-				cell.setCellValue(values[i].toString());
-			}
-		}
+		IntStream.range(0, values.length).forEach(index -> {
+			Cell cell = sheet.getRow(row).getCell(index);
+			Optional.ofNullable(values[index]).map(Object::toString).ifPresent(cell::setCellValue);
+		});
 	}
 
 	private List<String> getCodes(String codeType) {
@@ -87,22 +87,17 @@ public class TemplateDownloadService {
 	}
 
 	private List<List<String>> getScriptDetailsColumns(String... codeTypes) {
-		List<List<String>> columns = new ArrayList<>();
-		for (String codeType : codeTypes) {
-			columns.add(getCodes(codeType));
-		}
-		return columns;
+		return Arrays.stream(codeTypes).map(this::getCodes).collect(Collectors.toList());
 	}
 
-	private void setCellStyle(Cell cell, Font font, FillPatternType fillPatternType, IndexedColors fillColor,
-			BorderStyle borderBottom, BorderStyle borderLeft, BorderStyle borderRight, BorderStyle borderTop) {
+	private void setCellStyle(Cell cell, Font font, FillPatternType fillPatternType, IndexedColors fillColor, BorderStyle border) {
 		Map<String, Object> properties = new HashMap<>();
 		properties.put(CellUtil.FILL_PATTERN, fillPatternType);
 		properties.put(CellUtil.FILL_FOREGROUND_COLOR, fillColor.getIndex());
-		properties.put(CellUtil.BORDER_BOTTOM, borderBottom);
-		properties.put(CellUtil.BORDER_LEFT, borderLeft);
-		properties.put(CellUtil.BORDER_RIGHT, borderRight);
-		properties.put(CellUtil.BORDER_TOP, borderTop);
+		properties.put(CellUtil.BORDER_BOTTOM, border);
+		properties.put(CellUtil.BORDER_LEFT, border);
+		properties.put(CellUtil.BORDER_RIGHT, border);
+		properties.put(CellUtil.BORDER_TOP, border);
 		properties.put(CellUtil.FONT, font);
 		CellUtil.setCellStyleProperties(cell, properties);
 	}
@@ -125,48 +120,42 @@ public class TemplateDownloadService {
 		return style;
 	}
 
-	private Sheet createListSheet(Workbook workbook, Map<String, String[]> targetApplicationActions) {
+	private Sheet createListSheet(Workbook workbook, Map<String, String[]> targetApplicationActions) throws IOException {
 		Sheet sheet = workbook.createSheet("ListSheet");
 
-		int columnIndex = 0;
-		for (String key : targetApplicationActions.keySet()) {
-			int rowIndex = 0;
-			Row targetApplicationRow = sheet.getRow(rowIndex);
-			if (targetApplicationRow == null) {
-				targetApplicationRow = sheet.createRow(rowIndex);
-			}
-			rowIndex++;
-			targetApplicationRow.createCell(columnIndex).setCellValue(key);
-			String[] items = targetApplicationActions.get(key);
-			for (String item : items) {
-				Row row = sheet.getRow(rowIndex);
-				if (row == null) {
-					row = sheet.createRow(rowIndex);
-				}
-				rowIndex++;
-				row.createCell(columnIndex).setCellValue(item);
-			}
-			String colLetter = CellReference.convertNumToColString(columnIndex);
+		AtomicInteger columnIndex = new AtomicInteger(0);
+		targetApplicationActions.forEach((key, items) -> {
+			AtomicInteger rowIndex = new AtomicInteger(0);
+			Row targetApplicationRow = sheet.getRow(rowIndex.get()) == null ? sheet.createRow(rowIndex.getAndIncrement()) : sheet.getRow(rowIndex.getAndIncrement());
+			targetApplicationRow.createCell(columnIndex.get()).setCellValue(key);
+			Arrays.stream(items).forEach(item -> {
+				Row row = sheet.getRow(rowIndex.get()) == null ? sheet.createRow(rowIndex.getAndIncrement()) : sheet.getRow(rowIndex.getAndIncrement());
+				row.createCell(columnIndex.get()).setCellValue(item);
+			});
+			String colLetter = CellReference.convertNumToColString(columnIndex.get());
 			Name namedRange = workbook.createName();
 			namedRange.setNameName(key.replace(" ", "_"));
-			namedRange.setRefersToFormula("ListSheet!$" + colLetter + "$2:$" + colLetter + "$" + rowIndex);
-			columnIndex++;
-		}
+			namedRange.setRefersToFormula("ListSheet!$" + colLetter + "$2:$" + colLetter + "$" + rowIndex.get());
+			columnIndex.getAndIncrement();
+		});
 
-		String colLetter = CellReference.convertNumToColString(columnIndex - 1);
+		String colLetter = CellReference.convertNumToColString(columnIndex.get() - 1);
 		Name namedRange = workbook.createName();
 		namedRange.setNameName("Categories1");
 		namedRange.setRefersToFormula("ListSheet!$A$1:$" + colLetter + "$1");
-
 		return sheet;
+	}
+
+	private void setBorder(BorderStyle borderStyle, int firstRow, int lastRow, int firstCol, int lastCol, Sheet sheet) {
+		RegionUtil.setBorderTop(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
+		RegionUtil.setBorderBottom(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
+		RegionUtil.setBorderLeft(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
+		RegionUtil.setBorderRight(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
 	}
 
 	public ResponseEntity<StreamingResponseBody> generateTemplate(Optional<Integer> scriptId) {
 		try {
-			ScriptMaster scriptMasterData = null;
-			if (scriptId.isPresent()) {
-				scriptMasterData = dataBaseEntry.getScriptDetailsByScriptId(scriptId.get());
-			}
+			ScriptMaster scriptMasterData = scriptId.isPresent() ? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get()) : null;
 
 			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns("PRODUCT_VERSION", "PROCESS",
 					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD");
@@ -196,48 +185,44 @@ public class TemplateDownloadService {
 			List<String> listOfDropdownKeys = Arrays.asList("PRODUCT VERSION", "PROCESS AREA", "MODULE", "ROLE",
 					"TEST SCRIPT STATUS", "PRIORITY", "STANDARD CUSTOM");
 
-			Sheet sheet = createListSheet(workbook, mapOfTargetApplicationAndAction);
+			Sheet valueSheet = createListSheet(workbook, mapOfTargetApplicationAndAction);
 
-			List<Name> listOfFormula = new ArrayList<>();
-
-			for (int i = 0; i < listOfScriptDetailsColumn.size(); i++) {
+			IntStream.range(0, listOfScriptDetailsColumn.size()).mapToObj(i -> {
 				List<String> listOfScriptDetails = listOfScriptDetailsColumn.get(i);
 				String dropdownKey = listOfDropdownKeys.get(i).replace(" ", "_");
 				Name newNameRange = workbook.createName();
 				newNameRange.setNameName(dropdownKey);
 
-				int rowIndex = 0;
-				for (String scriptDetail : listOfScriptDetails) {
-					Row row = sheet.getRow(rowIndex);
+				IntStream.range(0, listOfScriptDetails.size()).forEach(rowIndex -> {
+					Row row = valueSheet.getRow(rowIndex);
 					if (row == null) {
-						row = sheet.createRow(rowIndex);
+						row = valueSheet.createRow(rowIndex);
 					}
-					row.createCell(i + mapOfTargetApplicationAndAction.size()).setCellValue(scriptDetail);
-					rowIndex++;
-				}
+					int cellIndex = i + mapOfTargetApplicationAndAction.size();
+					row.createCell(cellIndex).setCellValue(listOfScriptDetails.get(rowIndex));
+				});
 
 				String colLetter = CellReference.convertNumToColString(i + mapOfTargetApplicationAndAction.size());
-				String reference = "ListSheet!$" + colLetter + "$1:$" + colLetter + "$" + rowIndex;
+				String reference = "ListSheet!$" + colLetter + "$1:$" + colLetter + "$" + listOfScriptDetails.size();
 				newNameRange.setRefersToFormula(reference);
 
-				listOfFormula.add(newNameRange);
-			}
+				return newNameRange;
+			}).collect(Collectors.toList());
 
-			sheet.protectSheet("Winfo@123");
+			valueSheet.protectSheet("Winfo@123");
 			// unselect that sheet because we will hide it later
-			sheet.setSelected(false);
+			valueSheet.setSelected(false);
 
 			// visible data sheet
-			sheet = workbook.createSheet("Winfo Test Automation Metadata");
+			Sheet automationSheet = workbook.createSheet("Winfo Test Automation Metadata");
 
 			Font font = workbook.createFont();
 			font.setFontHeightInPoints((short) 9);
 			font.setFontName("Arial");
 			font.setBold(true);
 
-			CellStyle styleForScriptDetails = createCellStyle(workbook, font, BorderStyle.THIN,
-					IndexedColors.SKY_BLUE, IndexedColors.SKY_BLUE, FillPatternType.FINE_DOTS,
-					HorizontalAlignment.CENTER);
+			CellStyle styleForScriptDetails = createCellStyle(workbook, font, BorderStyle.THIN, IndexedColors.SKY_BLUE,
+					IndexedColors.SKY_BLUE, FillPatternType.FINE_DOTS, HorizontalAlignment.CENTER);
 
 			CellStyle styleForScriptMetaData = createCellStyle(workbook, null, BorderStyle.THIN, null, null, null,
 					null);
@@ -245,32 +230,28 @@ public class TemplateDownloadService {
 			CellStyle styleForHeaders = createCellStyle(workbook, font, BorderStyle.THIN, IndexedColors.SKY_BLUE,
 					IndexedColors.SKY_BLUE, FillPatternType.FINE_DOTS, null);
 
-			for (int index = 0; index < 511; index++) {
-				sheet.createRow(index);
-				for (int j = 0; j < scriptLineHeaders.size(); j++) {
-					if (index >= 11) {
-						Cell cell = sheet.getRow(index).createCell(j);
-						cell.setCellStyle(styleForScriptMetaData);
-					}
+			IntStream.range(0, 511).forEach(index -> {
+				automationSheet.createRow(index);
+				if (index >= 11) {
+					IntStream.range(0, scriptLineHeaders.size())
+							.mapToObj(j -> automationSheet.getRow(index).createCell(j))
+							.forEach(cell -> cell.setCellStyle(styleForScriptMetaData));
 				}
-			}
+			});
 
-			if (scriptId.isPresent()) {
-				insertScriptMetaData(scriptMasterData, sheet);
-			}
+			scriptId.ifPresent(id -> insertScriptMetaData(scriptMasterData, automationSheet));
 
 			Map<String, String> map = new LinkedHashMap<>();
 
 			int column = 0;
 			for (String[] row : list) {
 				for (int i = 1; i <= row.length; i++) {
-					Cell keyCell = sheet.getRow(i).createCell(column);
-					setCellStyle(keyCell, font, FillPatternType.SOLID_FOREGROUND, IndexedColors.LEMON_CHIFFON,
-							BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
+					Cell keyCell = automationSheet.getRow(i).createCell(column);
+					setCellStyle(keyCell, font, FillPatternType.SOLID_FOREGROUND, IndexedColors.LEMON_CHIFFON, BorderStyle.THIN);
 					keyCell.setCellValue(row[i - 1]);
 					column++;
 
-					Cell valueCell = sheet.getRow(i).createCell(column);
+					Cell valueCell = automationSheet.getRow(i).createCell(column);
 					valueCell.setCellStyle(styleForScriptMetaData);
 
 					String value = "";
@@ -294,45 +275,39 @@ public class TemplateDownloadService {
 					}
 
 					column--;
-					sheet.autoSizeColumn(i);
-					sheet.setColumnWidth(column, Math.max(sheet.getColumnWidth(column), 20));
+					automationSheet.autoSizeColumn(i);
+					automationSheet.setColumnWidth(column, Math.max(automationSheet.getColumnWidth(column), 20));
 
 				}
 				column += 2;
 			}
-			sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));
-			sheet.addMergedRegion(new CellRangeAddress(0, 0, 4, 7));
-			Cell cellKey1 = sheet.getRow(0).createCell(0);
-			font.setFontHeightInPoints((short) 14);
-			styleForScriptDetails.setFont(font);
-			cellKey1.setCellStyle(styleForScriptDetails);
-			cellKey1.setCellValue("Test Script Details");
-			Cell cellEmpty1 = sheet.getRow(0).createCell(4);
-			cellEmpty1.setCellStyle(styleForScriptDetails);
-			cellEmpty1.setCellValue("Customization Details");
+			automationSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));
+			automationSheet.addMergedRegion(new CellRangeAddress(0, 0, 4, 7));
 
-			RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 3), sheet);
-			RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 3), sheet);
-			RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 3), sheet);
-			RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 3), sheet);
+			IntStream.of(0, 4).forEach(index -> {
+				Cell cell = automationSheet.getRow(0).createCell(index);
+				font.setFontHeightInPoints((short) 14);
+				styleForScriptDetails.setFont(font);
+				cell.setCellStyle(styleForScriptDetails);
+				cell.setCellValue(index == 0 ? "Test Script Details" : "Customization Details");
+			});
 
-			RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(0, 0, 4, 7), sheet);
-			RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(0, 0, 4, 7), sheet);
-			RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(0, 0, 4, 7), sheet);
-			RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(0, 0, 4, 7), sheet);
-			int headingValue = 0;
-			for (String heading : scriptLineHeaders) {
-				Cell cellKey = sheet.getRow(10).createCell(headingValue++);
+			setBorder(BorderStyle.THIN, 0, 0, 0, 3, automationSheet);
+			setBorder(BorderStyle.THIN, 0, 0, 4, 7, automationSheet);
+
+			IntStream.range(0, scriptLineHeaders.size()).forEach(index -> {
+				Cell cellKey = automationSheet.getRow(10).createCell(index);
 				cellKey.setCellStyle(styleForHeaders);
-				cellKey.setCellValue(heading);
-			}
-			sheet.setColumnWidth(4, 100 * 256);
+				cellKey.setCellValue(scriptLineHeaders.get(index));
+			});
 
-			for (Map.Entry<String, String> entry : map.entrySet()) {
-				DataValidationHelper dvHelper = sheet.getDataValidationHelper();
-				DataValidationConstraint dvConstraint = dvHelper.createFormulaListConstraint(entry.getKey());
+			automationSheet.setColumnWidth(4, 100 * 256);
+
+			map.forEach((key, value) -> {
+				DataValidationHelper dvHelper = automationSheet.getDataValidationHelper();
+				DataValidationConstraint dvConstraint = dvHelper.createFormulaListConstraint(key);
 				CellRangeAddressList addressList = new CellRangeAddressList();
-				String[] arr = entry.getValue().split(",");
+				String[] arr = value.split(",");
 				int rowRange = Integer.parseInt(arr[0]);
 				int columnRange = Integer.parseInt(arr[1]);
 				addressList.addCellRangeAddress(rowRange, columnRange, rowRange, columnRange);
@@ -341,31 +316,36 @@ public class TemplateDownloadService {
 				validation.setEmptyCellAllowed(false);
 				validation.createErrorBox("Invalid Value", "Please select a value from the dropdown list.");
 				validation.setSuppressDropDownArrow(true);
-				sheet.addValidationData(validation);
-			}
+				automationSheet.addValidationData(validation);
+			});
 
-			DataValidationHelper dvHelper1 = sheet.getDataValidationHelper();
+			DataValidationHelper dvHelper = automationSheet.getDataValidationHelper();
+
 			// data validation for categories in A2:
-			DataValidationConstraint dvConstraint1 = dvHelper1.createFormulaListConstraint("Categories1");
-			CellRangeAddressList addressList1 = new CellRangeAddressList(3, 3, 1, 1);
-			DataValidation validation1 = dvHelper1.createValidation(dvConstraint1, addressList1);
-			validation1.setShowErrorBox(true);
-			validation1.setEmptyCellAllowed(false);
-			validation1.createErrorBox("Invalid Value", "Please select a value from the dropdown list.");
-			validation1.setSuppressDropDownArrow(true);
-			sheet.addValidationData(validation1);
+			DataValidationConstraint dvConstraint = dvHelper.createFormulaListConstraint("Categories1");
+			CellRangeAddressList addressList = new CellRangeAddressList(3, 3, 1, 1);
+			DataValidation validation = dvHelper.createValidation(dvConstraint, addressList);
+			validation.setShowErrorBox(true);
+			validation.setEmptyCellAllowed(false);
+			validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
+			validation.createErrorBox("Invalid Value", "Please select a value from the dropdown list.");
+			validation.setSuppressDropDownArrow(true);
+			automationSheet.addValidationData(validation);
 
 			// data validation for items of the selected category in B2:
-			dvConstraint1 = dvHelper1.createFormulaListConstraint("INDIRECT(SUBSTITUTE($B$4,\" \",\"_\"))");
-			addressList1 = new CellRangeAddressList(11, 511, 3, 3);
-			validation1 = dvHelper1.createValidation(dvConstraint1, addressList1);
-			validation1.setShowErrorBox(true);
-			validation1.setEmptyCellAllowed(false);
-			validation1.createErrorBox("Invalid Value", "Please select a value from the dropdown list.");
-			validation1.setSuppressDropDownArrow(true);
-			sheet.addValidationData(validation1);
+			dvConstraint = dvHelper.createFormulaListConstraint("INDIRECT(SUBSTITUTE($B$4,\" \",\"_\"))");
+			addressList = new CellRangeAddressList(11, 511, 3, 3);
+			validation = dvHelper.createValidation(dvConstraint, addressList);
+			validation.setShowErrorBox(true);
+			validation.setEmptyCellAllowed(false);
+			validation.setErrorStyle(DataValidation.ErrorStyle.STOP);
+			validation.createErrorBox("Invalid Value", "Please select a value from the dropdown list.");
+			validation.setSuppressDropDownArrow(true);
+			automationSheet.addValidationData(validation);
 
-			IntStream.range(0, scriptLineHeaders.size()).forEach(sheet::autoSizeColumn);
+			automationSheet.getDataValidations().forEach(automationSheet::addValidationData);
+
+			IntStream.range(0, scriptLineHeaders.size()).forEach(automationSheet::autoSizeColumn);
 			// hide the ListSheet
 			workbook.setSheetHidden(0, true);
 			// set Winfo Test sheet active
@@ -380,7 +360,8 @@ public class TemplateDownloadService {
 					});
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Not able to generate excel templete", e);
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					"Not able to generate excel templete", e);
 		}
 	}
 }

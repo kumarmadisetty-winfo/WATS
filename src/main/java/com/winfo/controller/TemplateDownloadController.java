@@ -17,15 +17,18 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 public class TemplateDownloadController {
-	
+
 	@Autowired
 	private TemplateDownloadService templateDownloaderService;
-	
-	@GetMapping(value={"/downloadTemplate","/downloadTemplate/{scriptId}"})
-	@ApiOperation( value="Download Template ",notes = " Download Template ")
-	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
-	public ResponseEntity<StreamingResponseBody> generateTemplete(@PathVariable Optional<Integer> scriptId) throws Exception {
+
+	@GetMapping(value = { "/downloadTemplate", "/downloadTemplate/{scriptId}" })
+	@ApiOperation(value = "Download Template ", notes = " Download Template ")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 404, message = "Not Found"), @ApiResponse(code = 400, message = "Bad Request Body"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
+	public ResponseEntity<StreamingResponseBody> generateTemplete(@PathVariable Optional<Integer> scriptId)
+			throws Exception {
 		return templateDownloaderService.generateTemplate(scriptId);
 	}
-	
+
 }

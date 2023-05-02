@@ -34,6 +34,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -1685,7 +1686,7 @@ public class DataBaseEntryDao {
 
 		} catch (Exception e) {
 			logger.error(e);
-			throw new WatsEBSCustomException(500, "Exception occured while getting lookup codes.", e);
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting lookup codes.", e);
 		}
 	}
 	
@@ -1697,7 +1698,7 @@ public class DataBaseEntryDao {
 
 		} catch (Exception e) {
 			logger.error(e);
-			throw new WatsEBSCustomException(500, "Exception occured while getting target application from lookup codes.", e);
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting target application from lookup codes.", e);
 		}
 	}
 	
@@ -1710,7 +1711,7 @@ public class DataBaseEntryDao {
 
 		} catch (Exception e) {
 			logger.error(e);
-			throw new WatsEBSCustomException(500, "Exception occured while getting action meaning from lookup codes.",
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting action meaning from lookup codes.",
 					e);
 		}
 	}
@@ -1722,7 +1723,7 @@ public class DataBaseEntryDao {
 
 		} catch (Exception e) {
 			logger.error(e);
-			throw new WatsEBSCustomException(500, "Exception occured while getting action meaning from lookup codes.",
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting action meaning from lookup codes.",
 					e);
 		}
 	}
