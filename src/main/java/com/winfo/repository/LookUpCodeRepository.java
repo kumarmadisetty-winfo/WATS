@@ -16,7 +16,7 @@ public interface LookUpCodeRepository extends JpaRepository<LookUpCode, Integer>
 	List<String> lookUpCodes(@Param("lookUpCodeName") String lookUpCodeName);
 
 	@Query("select lc.meaning from LookUpCode lc where lc.lookUpName = 'ACTION' and lc.targetApplication = :targetApplication")
-	List<String> getActionByTargetApplication(@Param("lookUpCodeName") String targetApplication);
+	List<String> getActionByTargetApplication(@Param("targetApplication") String targetApplication);
 
 	@Query("SELECT t2.meaning FROM ScriptMetaData t1 INNER JOIN LookUpCode t2 ON t1.action = t2.lookUpCode where t1.scriptMaster.scriptId = :scriptId and t1.scriptMetaDataId = :scriptMetaDataId")
 	String getActionMeaningScriptIdAndLineNumber(@Param("scriptId") Integer scriptId,
