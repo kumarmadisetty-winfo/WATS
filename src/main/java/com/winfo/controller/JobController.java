@@ -8,10 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winfo.config.MessageUtil;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.services.HealthCheck;
 import com.winfo.vo.ResponseDto;
@@ -29,6 +29,9 @@ public class JobController {
 
 	@Autowired
 	RunAutomation runAutomation;
+	
+	@Autowired
+	private MessageUtil messageUtil;
 
 	@Autowired
 	HealthCheck healthCheck;

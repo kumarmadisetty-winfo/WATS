@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
 //import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -69,6 +69,9 @@ public class HealthCheck {
 
 	@Autowired
 	TestScriptExecService testScriptExecService;
+	
+	@Autowired
+	private MessageUtil messageUtil;
 
 	public static final String FORWARD_SLASH = "/";
 	private static final String SCREENSHOT = "Screenshot";
@@ -88,7 +91,7 @@ public class HealthCheck {
 			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, MessageUtil.getMessage("HealthCheck.Success.SanityCheckMessage"));
+		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getHealthCheck().getSuccess().getSanityCheckMessage());
 	}
 
 	public SanityCheckVO sanityCheckForAdminMethod() {
@@ -136,7 +139,7 @@ public class HealthCheck {
 		try {
 			dao.dbAccessibilityCheck();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.DbAccessibilityMessage"));
+			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
@@ -154,10 +157,10 @@ public class HealthCheck {
 			if (total > 0) {
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} else {
-				throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.SeleniumGridMessage"));
+				throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.SeleniumGridMessage"));
+			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 		}
 	}
 
@@ -175,7 +178,7 @@ public class HealthCheck {
 			File file = new File(ociConfigPath);
 			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.ConfigFileIOException"));
+			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
@@ -201,18 +204,18 @@ public class HealthCheck {
 			if (testSetId != null) {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
 						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.ObjectStoreAccess"));
+					throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			} else {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.ObjectStoreAccess"));
+					throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			}
 		} catch (Exception e1) {
 			if (e1 instanceof WatsEBSCustomException) {
 				throw e1;
 			} else {
-				throw new WatsEBSCustomException(500, MessageUtil.getMessage("ObjectStore.AccessDeniedException"));
+				throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getAccessDeniedException());
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
@@ -239,7 +242,7 @@ public class HealthCheck {
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, MessageUtil.getMessage("HealthCheck.Error.SharePointAccess"));
+			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
 		}
 		return acessToken;
 	}
