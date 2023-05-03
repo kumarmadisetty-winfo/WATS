@@ -43,7 +43,7 @@ public class CommonObjectStoreUtils {
 	@Autowired
 	WatsPluginDao dao;
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 	
 	public ResponseEntity<StreamingResponseBody> getFileFromCommonObjectStore(String filePath,String fileName,MediaType mediaType) throws IOException {
 

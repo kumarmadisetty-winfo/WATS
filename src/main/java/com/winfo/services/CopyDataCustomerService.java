@@ -25,7 +25,7 @@ public class CopyDataCustomerService {
 	@Autowired
 	CopyDataCustomerDao dao;
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 	
 	@Transactional
 	public DomGenericResponseBean copyData(CopyDataDetails copyDataDetails) {

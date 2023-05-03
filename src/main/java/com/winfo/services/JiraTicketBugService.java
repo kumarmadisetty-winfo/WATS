@@ -57,7 +57,7 @@ public class JiraTicketBugService {
 	private WebClient.Builder webClientBuilder;
 	
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 	
 	@Value("${jira.username}")
 	private String userName;

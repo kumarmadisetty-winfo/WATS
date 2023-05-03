@@ -76,7 +76,7 @@ public class DeletionService{
 	ScriptDeletionService scriptDeletionService;
 	
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 	
 //	@Autowired
 //	AbstractSeleniumKeywords abstractSeleniumKeywords;

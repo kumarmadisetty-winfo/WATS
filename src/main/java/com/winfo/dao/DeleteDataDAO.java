@@ -29,7 +29,7 @@ public class DeleteDataDAO {
 	ApplicationContext appContext;
 	
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 
 	public List<DomGenericResponseBean> deleteData(@RequestBody DeleteScriptsData deletescriptsdata) {
 		Session session = entityManager.unwrap(Session.class);

@@ -71,7 +71,7 @@ public class HealthCheck {
 	TestScriptExecService testScriptExecService;
 	
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 
 	public static final String FORWARD_SLASH = "/";
 	private static final String SCREENSHOT = "Screenshot";

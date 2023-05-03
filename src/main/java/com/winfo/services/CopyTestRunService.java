@@ -52,7 +52,7 @@ public class CopyTestRunService {
 	CopyTestRunDao copyTestrunDao;
 	
 	@Autowired
-	private MessageUtil messageUtil;
+	MessageUtil messageUtil;
 
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
