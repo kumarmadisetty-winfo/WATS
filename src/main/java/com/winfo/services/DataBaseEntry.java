@@ -592,8 +592,8 @@ public class DataBaseEntry {
 		dao.UpdateTestSetScriptParamContainsExcel(testscriptparamid);
 	}
 	
-	public List<String> lookUpCodes(String lookUpName) {
-		return lookUpCodeJpaRepository.lookUpCodes(lookUpName);
+	public List<String> findLookUpCodesUsingLookUpName(String lookUpName) {
+		return lookUpCodeJpaRepository.findLookUpCodesUsingLookUpName(lookUpName);
 	}
 	
 	public List<String> getActionByTargetApplication(String targetApplication) {

@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,9 +38,7 @@ import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
@@ -83,7 +80,7 @@ public class TemplateDownloadService {
 	}
 
 	private List<String> getCodes(String codeType) {
-		return dataBaseEntry.lookUpCodes(codeType);
+		return dataBaseEntry.findLookUpCodesUsingLookUpName(codeType);
 	}
 
 	private List<List<String>> getScriptDetailsColumns(String... codeTypes) {
