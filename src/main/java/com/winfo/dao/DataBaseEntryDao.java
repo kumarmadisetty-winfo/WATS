@@ -1678,56 +1678,6 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-	public List<String> lookUpCodes(String lookUpCodeName) {
-		try {
-			return em
-					.createQuery("select lc.meaning from LookUpCode lc where lc.lookUpName = :lookUpCodeName")
-					.setParameter("lookUpCodeName", lookUpCodeName).getResultList();
-
-		} catch (Exception e) {
-			logger.error(e);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting lookup codes.", e);
-		}
-	}
-	
-	public List<String> getActionByTargetApplication(String targetApplication) {
-		try {
-			return em
-					.createQuery("select lc.meaning from LookUpCode lc where lc.lookUpName = 'ACTION' and lc.targetApplication = :targetApplication")
-					.setParameter("targetApplication", targetApplication).getResultList();
-
-		} catch (Exception e) {
-			logger.error(e);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting target application from lookup codes.", e);
-		}
-	}
-	
-	public String getActionMeaningScriptIdAndLineNumber(Integer scriptId, Integer scriptMetaDataId) {
-		try {
-			return em.createQuery(
-					"SELECT t2.meaning FROM ScriptMetaData t1 INNER JOIN LookUpCode t2 ON t1.action = t2.lookUpCode where t1.scriptMaster.scriptId = :scriptId and t1.scriptMetaDataId = :scriptMetaDataId")
-					.setParameter("scriptId", scriptId).setParameter("scriptMetaDataId", scriptMetaDataId).getSingleResult()
-					.toString();
-
-		} catch (Exception e) {
-			logger.error(e);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting action meaning from lookup codes.",
-					e);
-		}
-	}
-	
-	public String getMeaningByTargetCode(String lookUpCode, String lookUpName) {
-		try {
-			String query = "SELECT lc.meaning from LookUpCode lc where lc.lookUpCode = :lookUpCode and lc.lookUpName = :lookUpName";
-			return em.createQuery(query).setParameter("lookUpCode", lookUpCode).setParameter("lookUpName", lookUpName).getSingleResult().toString();
-
-		} catch (Exception e) {
-			logger.error(e);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while getting action meaning from lookup codes.",
-					e);
-		}
-	}
-	
 }
 	
 	
