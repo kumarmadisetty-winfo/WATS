@@ -18,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.winfo.config.repository.LookUpCodeRepository;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
@@ -56,6 +56,8 @@ public class DataBaseEntry {
 	ApplicationContext appContext;
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
 
 	
 	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
@@ -591,18 +593,18 @@ public class DataBaseEntry {
 	}
 	
 	public List<String> lookUpCodes(String lookUpName) {
-		return dao.lookUpCodes(lookUpName);
+		return lookUpCodeJpaRepository.lookUpCodes(lookUpName);
 	}
 	
 	public List<String> getActionByTargetApplication(String targetApplication) {
-		return dao.getActionByTargetApplication(targetApplication);
+		return lookUpCodeJpaRepository.getActionByTargetApplication(targetApplication);
 	}
 	
 	public String getActionMeaningScriptIdAndLineNumber(Integer scriptId, Integer scriptMetaDataId) {
-		return dao.getActionMeaningScriptIdAndLineNumber(scriptId,scriptMetaDataId);
+		return lookUpCodeJpaRepository.getActionMeaningScriptIdAndLineNumber(scriptId,scriptMetaDataId);
 	}
 	
 	public String getMeaningByTargetCode(String lookUpCode, String lookUpName) {
-		return dao.getMeaningByTargetCode(lookUpCode,lookUpName);
+		return lookUpCodeJpaRepository.getMeaningByTargetCode(lookUpCode,lookUpName);
 	}
 }
