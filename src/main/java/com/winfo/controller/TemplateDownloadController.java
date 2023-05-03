@@ -1,5 +1,6 @@
 package com.winfo.controller;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,14 @@ public class TemplateDownloadController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<StreamingResponseBody> generateTemplete(@PathVariable Optional<Integer> scriptId)
 			throws Exception {
-		return templateDownloaderService.generateTemplate(scriptId);
+		StreamingResponseBody stream = out -> {
+			templateDownloaderService.generateTemplate(scriptId).write(out);
+		};
+
+		return ResponseEntity.ok()
+				.header("Content-Disposition",
+						"attachment; filename=\"Winfo Test Automation Metadata Template_" + new Date() + ".xlsx\"")
+				.body(stream);
 	}
 
 }
