@@ -121,7 +121,7 @@ public class TemplateDownloadService {
 		return style;
 	}
 
-	private Sheet createListSheet(Workbook workbook, Map<String, String[]> targetApplicationActions)
+	private Sheet createListSheet(Workbook workbook, Map<String, List<String>> targetApplicationActions)
 			throws IOException {
 		Sheet sheet = workbook.createSheet("ListSheet");
 
@@ -132,7 +132,7 @@ public class TemplateDownloadService {
 					? sheet.createRow(rowIndex.getAndIncrement())
 					: sheet.getRow(rowIndex.getAndIncrement());
 			targetApplicationRow.createCell(columnIndex.get()).setCellValue(key);
-			Arrays.stream(items).forEach(item -> {
+			items.forEach(item -> {
 				Row row = sheet.getRow(rowIndex.get()) == null ? sheet.createRow(rowIndex.getAndIncrement())
 						: sheet.getRow(rowIndex.getAndIncrement());
 				row.createCell(columnIndex.get()).setCellValue(item);
@@ -182,10 +182,9 @@ public class TemplateDownloadService {
 
 			List<String> listOfTargetApplication = getCodes("TARGET_APPLICATION");
 
-			Map<String, String[]> mapOfTargetApplicationAndAction = listOfTargetApplication.stream()
+			Map<String, List<String>> mapOfTargetApplicationAndAction = listOfTargetApplication.stream()
 					.collect(Collectors.toMap(targetApplication -> targetApplication,
-							targetApplication -> dataBaseEntry.getActionByTargetApplication(targetApplication)
-									.toArray(String[]::new),
+							targetApplication -> dataBaseEntry.getActionByTargetApplication(targetApplication),
 							(existingValue, newValue) -> newValue, LinkedHashMap::new));
 
 			Workbook workbook = new XSSFWorkbook();
