@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.winfo.model.LookUpCode;
 
-@Repository
+
 public interface LookUpCodeRepository extends JpaRepository<LookUpCode, Integer> {
 
 	@Query("select lc.meaning from LookUpCode lc where lc.lookUpName = :lookUpCodeName")

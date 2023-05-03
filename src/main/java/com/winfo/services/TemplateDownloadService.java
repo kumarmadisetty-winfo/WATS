@@ -171,7 +171,7 @@ public class TemplateDownloadService {
 		return listOfScriptColumnName;
 	}
 
-	public ResponseEntity<StreamingResponseBody> generateTemplate(Optional<Integer> scriptId) {
+	public Workbook generateTemplate(Optional<Integer> scriptId) {
 		try {
 			ScriptMaster scriptMasterData = scriptId.isPresent()
 					? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get())
@@ -364,13 +364,7 @@ public class TemplateDownloadService {
 			// set Winfo Test sheet active
 			workbook.setActiveSheet(1);
 
-			return ResponseEntity.ok()
-					.header("Content-Disposition",
-							"attachment; filename=\"Winfo Test Automation Metadata Template_" + new Date() + ".xlsx\"")
-					.body(out -> {
-						workbook.write(out);
-						workbook.close();
-					});
+			return workbook;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
