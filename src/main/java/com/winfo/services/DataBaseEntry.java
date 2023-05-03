@@ -20,7 +20,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.winfo.config.repository.LookUpCodeRepository;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
@@ -30,6 +29,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;

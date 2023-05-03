@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableJpaRepositories(basePackages = "com.winfo.dao")
 @EntityScan("com.winfo.model")
-@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;com.winfo.exception;com.winfo.utils")
+@ComponentScan("com.winfo.controller;com.winfo.config;com.winfo.scripts;com.winfo.services;com.winfo.dao;com.winfo.Factory;com.winfo.interceptor;com.winfo.exception;com.winfo.utils,com.winfo.repository")
 
 public class WatsApplication extends SpringBootServletInitializer {
 

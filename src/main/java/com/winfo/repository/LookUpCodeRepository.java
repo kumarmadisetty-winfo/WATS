@@ -1,4 +1,4 @@
-package com.winfo.config.repository;
+package com.winfo.repository;
 
 import java.util.List;
 
