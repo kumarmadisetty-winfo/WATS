@@ -90,7 +90,8 @@ public class TemplateDownloadService {
 		return Arrays.stream(codeTypes).map(this::getCodes).collect(Collectors.toList());
 	}
 
-	private void setCellStyle(Cell cell, Font font, FillPatternType fillPatternType, IndexedColors fillColor, BorderStyle border) {
+	private void setCellStyle(Cell cell, Font font, FillPatternType fillPatternType, IndexedColors fillColor,
+			BorderStyle border) {
 		Map<String, Object> properties = new HashMap<>();
 		properties.put(CellUtil.FILL_PATTERN, fillPatternType);
 		properties.put(CellUtil.FILL_FOREGROUND_COLOR, fillColor.getIndex());
@@ -120,16 +121,20 @@ public class TemplateDownloadService {
 		return style;
 	}
 
-	private Sheet createListSheet(Workbook workbook, Map<String, String[]> targetApplicationActions) throws IOException {
+	private Sheet createListSheet(Workbook workbook, Map<String, String[]> targetApplicationActions)
+			throws IOException {
 		Sheet sheet = workbook.createSheet("ListSheet");
 
 		AtomicInteger columnIndex = new AtomicInteger(0);
 		targetApplicationActions.forEach((key, items) -> {
 			AtomicInteger rowIndex = new AtomicInteger(0);
-			Row targetApplicationRow = sheet.getRow(rowIndex.get()) == null ? sheet.createRow(rowIndex.getAndIncrement()) : sheet.getRow(rowIndex.getAndIncrement());
+			Row targetApplicationRow = sheet.getRow(rowIndex.get()) == null
+					? sheet.createRow(rowIndex.getAndIncrement())
+					: sheet.getRow(rowIndex.getAndIncrement());
 			targetApplicationRow.createCell(columnIndex.get()).setCellValue(key);
 			Arrays.stream(items).forEach(item -> {
-				Row row = sheet.getRow(rowIndex.get()) == null ? sheet.createRow(rowIndex.getAndIncrement()) : sheet.getRow(rowIndex.getAndIncrement());
+				Row row = sheet.getRow(rowIndex.get()) == null ? sheet.createRow(rowIndex.getAndIncrement())
+						: sheet.getRow(rowIndex.getAndIncrement());
 				row.createCell(columnIndex.get()).setCellValue(item);
 			});
 			String colLetter = CellReference.convertNumToColString(columnIndex.get());
@@ -152,22 +157,25 @@ public class TemplateDownloadService {
 		RegionUtil.setBorderLeft(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
 		RegionUtil.setBorderRight(borderStyle, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
 	}
-	
+
 	private List<String[]> createScriptColumnNames() {
-	    List<String[]> listOfScriptColumnName = new ArrayList<>();
-	    listOfScriptColumnName.add(new String[] { "SCRIPT NUMBER", "TEST CASE NAME", "TARGET APPLICATION", "PRODUCT VERSION",
-	            "PROCESS AREA", "MODULE", "SUB PROCESS AREA" });
-	    listOfScriptColumnName.add(new String[] { "ROLE", "TEST SCRIPT STATUS", "TEST CASE DESCRIPTION", "EXPECTED RESULT",
-	            "PRIORITY", "DEPENDENCY", "STANDARD CUSTOM" });
-	    listOfScriptColumnName.add(new String[] { "CUSTOMER ID", "CUSTOMISATION REFERENCE", "ATTRIBUTE1", "ATTRIBUTE2", "ATTRIBUTE3",
-	            "ATTRIBUTE4", "ATTRIBUTE5" });
-	    listOfScriptColumnName.add(new String[] { "ATTRIBUTE6", "ATTRIBUTE7", "ATTRIBUTE8", "ATTRIBUTE9", "ATTRIBUTE10", "", "" });
-	    return listOfScriptColumnName;
+		List<String[]> listOfScriptColumnName = new ArrayList<>();
+		listOfScriptColumnName.add(new String[] { "SCRIPT NUMBER", "TEST CASE NAME", "TARGET APPLICATION",
+				"PRODUCT VERSION", "PROCESS AREA", "MODULE", "SUB PROCESS AREA" });
+		listOfScriptColumnName.add(new String[] { "ROLE", "TEST SCRIPT STATUS", "TEST CASE DESCRIPTION",
+				"EXPECTED RESULT", "PRIORITY", "DEPENDENCY", "STANDARD CUSTOM" });
+		listOfScriptColumnName.add(new String[] { "CUSTOMER ID", "CUSTOMISATION REFERENCE", "ATTRIBUTE1", "ATTRIBUTE2",
+				"ATTRIBUTE3", "ATTRIBUTE4", "ATTRIBUTE5" });
+		listOfScriptColumnName
+				.add(new String[] { "ATTRIBUTE6", "ATTRIBUTE7", "ATTRIBUTE8", "ATTRIBUTE9", "ATTRIBUTE10", "", "" });
+		return listOfScriptColumnName;
 	}
-	
+
 	public ResponseEntity<StreamingResponseBody> generateTemplate(Optional<Integer> scriptId) {
 		try {
-			ScriptMaster scriptMasterData = scriptId.isPresent() ? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get()) : null;
+			ScriptMaster scriptMasterData = scriptId.isPresent()
+					? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get())
+					: null;
 
 			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns("PRODUCT_VERSION", "PROCESS",
 					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD");
@@ -252,7 +260,8 @@ public class TemplateDownloadService {
 			for (String[] row : listOfScriptColumnName) {
 				for (int i = 1; i <= row.length; i++) {
 					Cell keyCell = automationSheet.getRow(i).createCell(column);
-					setCellStyle(keyCell, font, FillPatternType.SOLID_FOREGROUND, IndexedColors.LEMON_CHIFFON, BorderStyle.THIN);
+					setCellStyle(keyCell, font, FillPatternType.SOLID_FOREGROUND, IndexedColors.LEMON_CHIFFON,
+							BorderStyle.THIN);
 					keyCell.setCellValue(row[i - 1]);
 					column++;
 
