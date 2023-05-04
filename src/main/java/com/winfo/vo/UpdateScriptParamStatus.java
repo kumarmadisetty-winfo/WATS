@@ -15,6 +15,7 @@ public class UpdateScriptParamStatus {
 	
 	@JsonProperty("success")
 	private boolean success;
+	
 	private String result;
 
 }

@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+//import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -44,7 +46,7 @@ public class HealthCheck {
 	@Autowired
 	DataBaseEntryDao dao;
 
-	@Value("${configvO.config_url}")
+	@Value("${hubUrl}")
 	private String watsHubUrl;
 
 	@Value("${oci.config.name}")
@@ -141,13 +143,14 @@ public class HealthCheck {
 
 	public ResponseDto seleniumGridCheck() {
 		try {
-			JSONParser jsonParser = new JSONParser();
 			RestTemplate restTemplate = new RestTemplate();
-			String url = watsHubUrl.replaceAll("wd/hub", "").concat("grid/api/hub");
+			String url = watsHubUrl.concat("status");
 			String result = restTemplate.getForObject(url, String.class);
-			JSONObject obj = (JSONObject) jsonParser.parse(result);
-			JSONObject obj1 = (JSONObject) obj.get("slotCounts");
-			long total = (long) obj1.get("total");
+			JSONParser parser = new JSONParser();
+			JSONObject obj = (JSONObject) parser.parse(result);
+			JSONObject obj1 = (JSONObject) obj.get("value");
+			JSONArray jsonarray = (JSONArray) obj1.get("nodes");
+			long total = (long) jsonarray.size();
 			if (total > 0) {
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} else {

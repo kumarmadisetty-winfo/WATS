@@ -38,6 +38,7 @@ public class MessageQueueDto implements Serializable {
 	
 	@JsonProperty("manualTrigger")
 	private boolean manualTrigger;
+	
 	private AuditScriptExecTrail autditTrial;
 	private AUDIT_TRAIL_STAGES stage;
 	

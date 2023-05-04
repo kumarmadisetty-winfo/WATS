@@ -14,6 +14,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15317,7 +15321,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			if (param1.equalsIgnoreCase("Review Distributions")) {
 				WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
 						+ "\")]/following::*[text()=\"Account Class\"]//preceding::input[contains(@id,\"Filter\")])[3]"));
-
 				waittill.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::*[text()=\"Account Class\"]//preceding::input[contains(@id,\"Filter\")])[3]";
@@ -15326,7 +15329,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			}
-		} catch (Exception e) {
+		}catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -15425,6 +15428,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void typeIntoValidxpath(WebDriver driver, String keysToSend, WebElement waittill,
 			FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
 		try {
+			driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
 			waittill.clear();
 			waittill.click();
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -15441,7 +15445,9 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public void clearMethod(WebDriver driver, WebElement waittill) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+//		WebDriverWait wait = new WebDriverWait(driver, 60);
+		Duration timeoutDuration = Duration.ofSeconds(60);
+		WebDriverWait wait = new WebDriverWait(driver, timeoutDuration);
 		wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		waittill.click();
 		waittill.clear();

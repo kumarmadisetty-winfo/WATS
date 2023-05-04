@@ -17,7 +17,7 @@ public class ApiValidationMigrationDto {
 	private List<Integer> validationLookupCodes= new ArrayList<>();
 	
 	private String targetEnvironment;
-	
+
 	@JsonProperty("flag")
 	private boolean flag;
 
