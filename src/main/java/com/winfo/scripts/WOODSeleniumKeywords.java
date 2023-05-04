@@ -8650,6 +8650,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Thread.sleep(2000);
 				waittill.sendKeys(Keys.BACK_SPACE);
 //				Actions action = new Actions(driver);
+				Thread.sleep(5000);
 				actions.sendKeys(Keys.TAB).build().perform();
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
