@@ -8640,7 +8640,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		// prod
 		try {
-			if (param1.equalsIgnoreCase("Maintain Managers") || (param1.equalsIgnoreCase("Position Details"))) {
+			if (param1.equalsIgnoreCase("Maintain Managers") || (param1.equalsIgnoreCase("Position Details")) || (param1.equalsIgnoreCase("Business Unit")) || (param1.equalsIgnoreCase("Assign Managers"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1
 						+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]")));
@@ -8648,11 +8648,20 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 						+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
-				waittill.sendKeys(keysToSend);
+				waittill.clear();
+				waittill.click();
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+//				keysToSend +="S";
+				jse.executeScript("arguments[0].value=\"" + keysToSend + "S" + "\";", waittill);
+				Thread.sleep(2000);
+				waittill.sendKeys(Keys.BACK_SPACE);
+//				Actions action = new Actions(driver);
+				Thread.sleep(5000);
+				actions.sendKeys(Keys.TAB).build().perform();
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
-				Thread.sleep(2000);
+ 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input)[1]";
@@ -12542,7 +12551,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		//	HCM.ADM.022 (Action & Action Reason)
 		try {
 			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
-					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) || (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action Reason"))) {
+					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action")) ) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
@@ -12556,6 +12565,40 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Thread.sleep(3000);
 
 				WebElement selectvalue = driver.findElement(By.xpath("//li[text()=\"" + keysToSend + "\"]"));
+				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
+				selectvalue.click();
+
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
+				String xpath2 = "//li[text()=\"keysToSend\"]";
+				String xpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
+		
+		try {
+			if ( (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action Reason"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
+
+				WebElement waittext = driver.findElement(By.xpath(
+						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				waittext.click();
+				Thread.sleep(3000);
+
+				WebElement selectvalue = driver.findElement(By.xpath("//*[@class=\"AFDetectExpansion\"]/following::*[@aria-label=\"Action Reason\"]//li[text()=\"" + keysToSend + "\"]"));
 				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
 				selectvalue.click();
 

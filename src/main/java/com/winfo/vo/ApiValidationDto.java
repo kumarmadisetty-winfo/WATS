@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class ApiValidationDto {
 
 	private List<LookUpCodeVO> lookupCodes = new ArrayList<>();
+
 	@JsonProperty("flag")
 	private boolean flag;
 
