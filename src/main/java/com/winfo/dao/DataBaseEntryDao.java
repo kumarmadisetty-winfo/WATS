@@ -34,6 +34,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -1676,7 +1677,6 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
 		}
 	}
-	
 	
 }
 	
