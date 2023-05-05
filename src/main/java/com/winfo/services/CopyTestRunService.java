@@ -375,11 +375,28 @@ public class CopyTestRunService {
 						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
 					scriptParamObj.setInputValue(
 							inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
-				} else {
+				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
+						&& Constants.VALIDATION_TYPE_REGULAR_EXPR.equalsIgnoreCase(scriptParamObj.getValidationType())) {
+					try {
+						String dateFormat = copyTestrunDao
+								.getMeaningUsingValidationName(scriptParamObj.getValidationName());
+						SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+						scriptParamObj.setInputValue(formatter.format(new Date()));
+					} catch (Exception e) {
+						log.info("Exception occured while converting date Format");
+						throw new WatsEBSCustomException(500, "Exception occured while converting date Format", e);
+					}
+
+				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
+						&& (scriptParamObj.getValidationType() == null || "NA".equalsIgnoreCase(scriptParamObj.getValidationType()))) {
+					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+					scriptParamObj.setInputValue(formatter.format(new Date()));
+				}else {
 					scriptParamObj.setInputValue(covertDateobj);
 				}
 			}
-		} else if ("Mandatory".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
+		} else if ("Mandatory".equalsIgnoreCase(scriptParamObj.getUniqueMandatory()) || "Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
+				|| "Both".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
 			if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 				scriptParamObj.setInputValue(null);
 				if (actionsList.contains(scriptParamObj.getAction())) {
