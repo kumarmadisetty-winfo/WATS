@@ -361,11 +361,11 @@ public class CopyTestRunService {
 				}
 				scriptParamObj.setInputValue(hexaDecimal);
 			} else {
-				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-				Date dateobj = new Date();
-				String covertDateobj = dateformate.format(dateobj);
-				Thread.sleep(1);
-				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
+//				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+//				Date dateobj = new Date();
+//				String covertDateobj = dateformate.format(dateobj);
+//				Thread.sleep(1);
+//				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
 				if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 					scriptParamObj.setInputValue(inputValues);
 					if (actionsList.contains(scriptParamObj.getAction())) {
@@ -392,7 +392,8 @@ public class CopyTestRunService {
 					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
 					scriptParamObj.setInputValue(formatter.format(new Date()));
 				}else {
-					scriptParamObj.setInputValue(covertDateobj);
+//					scriptParamObj.setInputValue(covertDateobj);
+					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 				}
 			}
 		} else if ("Mandatory".equalsIgnoreCase(scriptParamObj.getUniqueMandatory()) || "Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
