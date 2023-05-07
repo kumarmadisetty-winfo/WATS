@@ -95,7 +95,7 @@ public class DriverConfiguration {
 			options.setProfile(profile);
 			
 			
-			driver = new RemoteWebDriver(new URL(hubUrl), options);
+			driver = new RemoteWebDriver(new URL("http://watsdemo01.winfosolutions.com:4444/wd/hub"), options);
 			logger.info("driver init success");
 		}
 		if (driver != null) {
