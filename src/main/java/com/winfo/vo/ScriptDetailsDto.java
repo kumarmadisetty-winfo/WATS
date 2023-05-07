@@ -37,5 +37,5 @@ public class ScriptDetailsDto {
 	private String issueKey;
 	private String executedBy;
 	private String targetApplicationName;
-
+	private String oracleReleaseYear;
 }

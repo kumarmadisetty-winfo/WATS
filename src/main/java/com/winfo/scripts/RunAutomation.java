@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -48,6 +46,7 @@ import com.winfo.services.GraphQLService;
 import com.winfo.services.JiraTicketBugService;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
+import com.winfo.services.SmartBearService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
@@ -98,6 +97,8 @@ public class RunAutomation {
 	CodeLinesRepository codeLineRepo;
 	@Autowired
 	GraphQLService graphQLService;
+	@Autowired
+	SmartBearService smartBearService;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -1586,6 +1587,16 @@ public class RunAutomation {
 								fetchConfigVO.getJIRA_ISSUE_URL();
 								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJiraIssueUpdateStatusURL(),fetchConfigVO.getJiraIssueUpdateTransitions());
 							}
+							if ("YES".equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
+									&& "WOOD".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+								String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
+										File.separator) + customerDetails.getCustomerName() + File.separator
+										+ customerDetails.getTestSetName() + File.separator) + seqNum + "_"
+										+ scriptNumber + ".pdf";
+								smartBearService.smartBearIntegrate(fetchMetadataListVO, "Passed", sourceFilePath,
+										fetchConfigVO.getSMARTBEAR_PROJECT_NAME(),
+										fetchConfigVO.getSMARTBEAR_CUSTOM_COLUMN_NAME());
+							}
 					}
 
 				} catch (Exception e) {
@@ -1652,6 +1663,16 @@ public class RunAutomation {
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
+						}
+						if ("YES".equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
+								&& "WOOD".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+							String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
+									File.separator) + customerDetails.getCustomerName() + File.separator
+									+ customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber
+									+ "_RUN" + failedScriptRunCount + ".pdf";
+							smartBearService.smartBearIntegrate(fetchMetadataListVO, "Failed", sourceFilePath,
+									fetchConfigVO.getSMARTBEAR_PROJECT_NAME(),
+									fetchConfigVO.getSMARTBEAR_CUSTOM_COLUMN_NAME());
 						}
 					return;
 				}

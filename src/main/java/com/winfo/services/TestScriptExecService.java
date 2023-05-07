@@ -167,6 +167,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	@Autowired
 	Environment environment;
+	
+	@Autowired
+	SmartBearService smartBearService;
 
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
@@ -625,6 +628,14 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						null, true, false);
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 						.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
+			}
+			if ("YES".equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
+					&& "WOOD".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+				String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/", File.separator)
+						+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+						+ File.separator) + pdfName;
+				smartBearService.smartBearRegenerateAttachment(testLinesDetails, sourceFilePath,
+						fetchConfigVO.getSMARTBEAR_PROJECT_NAME(), fetchConfigVO.getSMARTBEAR_CUSTOM_COLUMN_NAME());
 			}
 		} catch (Exception e) {
 			if (args.getAutditTrial() != null) {
