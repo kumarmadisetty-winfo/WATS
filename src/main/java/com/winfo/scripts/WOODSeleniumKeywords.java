@@ -8502,7 +8502,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				waittill.sendKeys(keysToSend);
 				// typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
 				// fetchMetadataVO);
-				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 
 				WebElement selectvalue = driver.findElement(By.xpath("//*[text()=\"" + keysToSend + "\"]"));
