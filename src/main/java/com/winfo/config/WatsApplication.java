@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(scanBasePackages = "com.winfo")
 @EnableAsync
 @EnableScheduling
-@EnableJpaRepositories(basePackages = "com.winfo.dao")
+@EnableJpaRepositories(basePackages = {"com.winfo.dao","com.winfo.repository"})
 @EntityScan("com.winfo.model")
 public class WatsApplication extends SpringBootServletInitializer {
 
