@@ -438,7 +438,7 @@ public class CopyTestRunService {
 	}
 
 	private void setDateInputValue(String validationName, TestSetScriptParam scriptParamObj) {
-		if(validationName!=""){
+		if(!StringUtils.isBlank(validationName)) {
 		try {
 			String dateFormat = copyTestrunDao
 					.getMeaningUsingValidationName(validationName);
