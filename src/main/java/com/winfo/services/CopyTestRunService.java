@@ -448,9 +448,8 @@ public class CopyTestRunService {
 			throw new WatsEBSCustomException(500, "Exception occured while converting date Format", e);
 		}
 		}
-		else
-		{
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+		else{
+			SimpleDateFormat formatter = new SimpleDateFormat(Constants.MM_dd_yy);
 			scriptParamObj.setInputValue(formatter.format(new Date()));
 		}
 	}
