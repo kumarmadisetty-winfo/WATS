@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -444,8 +445,8 @@ public class CopyTestRunService {
 			SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 			scriptParamObj.setInputValue(formatter.format(new Date()));
 		} catch (Exception e) {
-			log.info("Exception occured while converting date Format");
-			throw new WatsEBSCustomException(500, "Exception occured while converting date Format", e);
+			log.info("Exception occurred while converting date Format");
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
 		}
 		}
 		else{
