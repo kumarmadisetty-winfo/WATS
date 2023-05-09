@@ -46,7 +46,7 @@ public class LimitScriptExecutionDao {
 	}
 
 	public void insertTestrundata(ExecutionAudit executionAudit) {
-		logger.info("executionAudit savaed");
+		logger.info("Execution Audit saved sucessfully");
 		entityManager.persist(executionAudit);
 	}
 
@@ -75,7 +75,6 @@ public class LimitScriptExecutionDao {
 		List<String> results = query.list();
 		String mailId = null;
 		if (results != null && !results.isEmpty()) {
-			logger.info("**result {}", results.get(0));
 			mailId = results.get(0);
 		}
 		return mailId;

@@ -122,17 +122,17 @@ public class RunAutomation {
 	long increment = 0;
 
 	@Async
-	public ResponseDto run(String args) throws MalformedURLException {
-		log.info("TestRunId ***" + args);
+	public ResponseDto run(String testRunId) throws MalformedURLException {
+		log.info(" Test Run Id : " + testRunId);
 
 		ResponseDto executeTestrunVo;
-		String checkPackage = dataBaseEntry.getPackage(args);
+		String checkPackage = dataBaseEntry.getPackage(testRunId);
 		if (checkPackage != null && checkPackage.toLowerCase().contains(Constants.EBS)) {
-			executeTestrunVo = ebsRun(args);
+			executeTestrunVo = ebsRun(testRunId);
 		} else {
-			executeTestrunVo = cloudRun(args);
+			executeTestrunVo = cloudRun(testRunId);
 		}
-		log.info("End of Test Script Run # : " + args);
+		log.info("End of Test Script Run # : " + testRunId);
 
 		return executeTestrunVo;
 	}
@@ -183,11 +183,11 @@ public class RunAutomation {
 
 	public ResponseDto cloudRun(String testSetId) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
-		log.info("Start of cloud run method");
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
+			log.info(String.format("Customer Id : %s, Customer Name : %s, Project Name : %s  " , customerDetails.getCustomerId(), customerDetails.getCustomerName(), customerDetails.getProjectName()));
 			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 				String key = graphQLService.createTestRunInJiraXrayCloud(customerDetails);
 				fetchConfigVO.setTestRunIssueId(key);
@@ -202,8 +202,6 @@ public class RunAutomation {
 
 			Date date = new Date();
 			fetchConfigVO.setStarttime1(date);
-
-			log.info("Independent scripts # - {} ", metaDataMap.toString());
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
 			try {
 				for (Entry<Integer, List<ScriptDetailsDto>> metaData : metaDataMap.entrySet()) {
@@ -258,7 +256,7 @@ public class RunAutomation {
 								if (flag.equalsIgnoreCase("STOPPED")) {
 									metaData.getValue().clear();
 									executor.shutdown();
-									System.out.println("treminattion is succeed");
+									log.info(" Script Termination is Succeed");
 								} else {
 									if (run) {
 										executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData,
@@ -292,7 +290,7 @@ public class RunAutomation {
 										post.setP_exception_path(detailurl);
 										post.setP_test_set_line_path(scripturl);
 										failcount = failcount + 1;
-										System.out.println("Came here to check fail condition");
+										log.info("Checking fail count : " + failcount);
 
 //										dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 
@@ -347,7 +345,7 @@ public class RunAutomation {
 				executeTestrunVo.setStatusDescr("SUCCESS");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				System.out.println("Exception in dependant block of code");
+				log.error("Exception in dependent block of code");
 				Thread.currentThread().interrupt();
 			}
 		} catch (Exception e) {
@@ -445,7 +443,6 @@ public class RunAutomation {
 
 		// XpathPerformance code for cases added
 		long startTime = System.currentTimeMillis();
-		log.info("Run started in swithch actions at ::::::::::::: {}", startTime);
 		int i = 0;
 		String passurl = null;
 		String failurl = null;
@@ -1499,18 +1496,18 @@ public class RunAutomation {
 							break;
 
 						default:
-							System.out.println("Action Name is not matched with" + "" + actionName);
+							log.info("Action Name is not matched with " + "" + actionName);
 							break;
 
 						}
 						fetchConfigVO.setStatus1("Pass");
-						System.out.println("Successfully Executed the" + "" + actionName);
+						log.info("Successfully Executed the" + "" + actionName);
 						try {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									testScriptParamId, "Pass");
 							fetchMetadataVO.setStatus("Pass");
 						} catch (Exception e) {
-							System.out.println("e");
+							log.error(e.getMessage());
 						}
 					}
 
@@ -1530,10 +1527,10 @@ public class RunAutomation {
 							post.setP_exception_path(detailurl);
 							post.setP_test_set_line_path(scripturl);
 							long endTime = System.currentTimeMillis();
-							System.out.println("endTime:::::::::::::" + endTime);
+							log.info("endTime:::::::::::::" + endTime);
 
 							long gap = startTime - endTime;
-							System.out.println("gap:::::::::::::" + gap);
+							log.info("Time difference ::::::::::::: " + gap);
 
 							Date enddate = new Date();
 							fetchConfigVO.setEndtime(enddate);
@@ -1594,9 +1591,8 @@ public class RunAutomation {
 						Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScriptId()));
 						s.setStatusMsg("Fail");
 					}
-					System.out.println("Failed to Execute the " + "" + actionName);
-					System.out.println(
-							"Error occurred in TestCaseName=" + actionName + "" + "Exception=" + "" + e.getMessage());
+					log.error("Failed to Execute the " + "" + actionName);
+					log.error(e.getMessage());
 					errorMessagesHandler.getError(actionName, fetchMetadataVO, fetchConfigVO, testScriptParamId,
 							message, param1, param2, dataBaseEntry.getPassword(param, userName, fetchConfigVO));
 					isError = true;

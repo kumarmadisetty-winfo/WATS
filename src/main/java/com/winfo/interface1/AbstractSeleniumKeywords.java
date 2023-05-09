@@ -44,6 +44,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+import org.jfree.util.Log;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -381,7 +382,6 @@ public abstract class AbstractSeleniumKeywords {
 
 				objNames = response.getListObjects().getObjects().stream().map(objSummary -> objSummary.getName())
 						.collect(Collectors.toList());
-				logger.info(objNames.size());
 				ListIterator<String> listIt = objNames.listIterator();
 				createDir(screenshotPath);
 				while (listIt.hasNext()) {
@@ -742,7 +742,7 @@ public abstract class AbstractSeleniumKeywords {
 						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails,writer);
 			}
 			document.close();
-
+				
 		} catch (Exception e) {
 			logger.info("Not able to Create pdf {}", e);
 		}
@@ -754,8 +754,9 @@ public abstract class AbstractSeleniumKeywords {
 					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
 			uploadPDF(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
-			logger.info(e);
+			logger.info(e.getMessage());
 		}
+		logger.info("Endddddddddddddddddddddd");
 	}
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
@@ -1511,7 +1512,7 @@ public abstract class AbstractSeleniumKeywords {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						if(getResponse != null) {
-							logger.info("DELETED MARKER " + getResponse.getIsDeleteMarker());
+							logger.info("DELETED MARKER : " + getResponse.getIsDeleteMarker());
 						}
 					}
 				} else {
@@ -2111,7 +2112,7 @@ public abstract class AbstractSeleniumKeywords {
 			return;
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			System.out.println(fileLocation);
+			logger.error(fileLocation);
 			e.printStackTrace();
 			throw e;
 
@@ -2126,7 +2127,7 @@ public abstract class AbstractSeleniumKeywords {
 			List imageUrlList = new ArrayList();
 			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
-			System.out.println(imageDir);
+			logger.info("Image Dir : " + imageDir);
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -2190,10 +2191,8 @@ public abstract class AbstractSeleniumKeywords {
 			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
 				imageUrlList.add(imageFileName);
 				File pdfFile = new File(imageDir + "/" + imageFileName);
-				System.out.println(pdfFile);
 				FileInputStream input = new FileInputStream(pdfFile);
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				byte[] buffer = new byte[99999999];
@@ -2217,8 +2216,6 @@ public abstract class AbstractSeleniumKeywords {
 //						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 //						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 //						HttpMethod.POST, uploadSessionRequest, Object.class);
-
-				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
 						: null;
@@ -2232,14 +2229,12 @@ public abstract class AbstractSeleniumKeywords {
 				HttpEntity<byte[]> uploadingFileRequest = new HttpEntity<>(data, uploadingFileHeader);
 				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
 						uploadingFileRequest, byte[].class);
-
-				System.out.println(putResponse);
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
+				logger.info("response status: " + response.getStatusCode());
+				logger.info("response body: " + response.getBody());
+				logger.info("response : " + response);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -2259,16 +2254,15 @@ public abstract class AbstractSeleniumKeywords {
 			ResponseEntity<Object> response = restTemplate.exchange(
 					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
-			System.out.println(response);
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e.getMessage());
 		}
-		System.out.println(acessToken);
+		logger.info("Acess Token " +acessToken);
 		return acessToken;
 	}
 }

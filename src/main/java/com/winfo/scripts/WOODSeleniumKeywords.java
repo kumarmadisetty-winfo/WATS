@@ -204,7 +204,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 			throw e;
 		}
 	}
@@ -279,9 +278,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Menunavigation " + scripNumber);
-
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -329,19 +326,16 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			if (count == 0) {
 				count = 1;
-				System.out.println(" The Count Value is : " + count);
 				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count,
 						customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
-				System.out.println(" The Count Value is : " + count);
 				navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, null, count,
 						customerDetails);
 			} else {
-				System.out.println("Count value exceeds the limit");
+				log.error("Count value exceeds the limit : " + count);
 				log.error("Failed During Navigation");
 				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
-				System.out.println("Not able to navitage to the :" + "" + param1);
 				throw e;
 			}
 
@@ -471,9 +465,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			log.error("Failed During Navigation");
+			log.error("Failed During Navigation : " + fetchMetadataVO.getScriptNumber());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 			throw e;
 		}
 	}
@@ -490,9 +483,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			log.error("Failed During Navigation");
+			log.error("Failed During Navigation : " + fetchMetadataVO.getScriptNumber());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -503,14 +495,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement wait = driver.findElement(By.xpath("//*[text()=\"Select Year\"]/preceding-sibling::input[1]"));
 			String yearValue = wait.getAttribute("title");
 			int year = Integer.parseInt(yearValue);
-			System.out.println("The value of the year is: " + year);
 			String xpath = "//*[text()=\"Select Year\"]/preceding-sibling::input[1]";
 			if (year < Integer.parseInt(param1)) {
 				while (year != Integer.parseInt(param1)) {
 					WebElement increment = driver.findElement(By.xpath("//a[@title=\"increment\"]"));
 					increment.click();
 					year = year + 1;
-					System.out.println(year);
 				}
 				xpath = xpath + ";" + "//a[@title=\"increment\"]";
 			} else if (year > Integer.parseInt(param1)) {
@@ -518,11 +508,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					WebElement decrement = driver.findElement(By.xpath("//a[@title=\"decrement\"]"));
 					decrement.click();
 					year = year - 1;
-					System.out.println(year);
 				}
 				xpath = xpath + ";" + "//a[@title=\"decrement\"]";
 			} else {
-				System.out.println("The given year is matched with the Oracle year");
+				log.info("The given year is matched with the Oracle year");
 			}
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -530,9 +519,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			log.error("Failed During Navigation");
+			log.error("Failed During Navigation : " + fetchMetadataVO.getScriptNumber());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -557,12 +545,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("Failed to logout " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.error("failed to do navigate URl " + scripNumber);
+			log.error("Failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
@@ -659,9 +645,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Failed During Task " + scripNumber);
+			log.info("Failed During Open Task Menu " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed to Open Task Menu");
 			throw e;
 		}
 	}
@@ -696,17 +681,14 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			if (count == 0) {
 				count = 1;
-				System.out.println(" The Count Value is : " + count);
 				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
 			} else if (count <= 10) {
 				count = count + 1;
-				System.out.println(" The Count Value is : " + count);
 				openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
 			} else {
-				System.out.println("Count value exceeds the limit");
-				log.error("Failed to Open Task Menu");
+				log.error("Count value exceeds the limit");
+				log.error("Failed to Open Task Menu " + fetchMetadataVO.getScriptNumber());
 				screenshotFail(driver, fetchMetadataVO, customerDetails);
-				System.out.println("Failed to Open Task Menu");
 				throw e;
 
 			}
@@ -770,17 +752,17 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				+ customerDetails.getTestSetName() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
-			System.out.println("creating directory: " + theDir.getName());
+			log.info("creating directory: " + theDir.getName());
 			boolean result = false;
 			try {
 				theDir.mkdirs();
 				result = true;
 			} catch (SecurityException se) {
 				// handle it
-				System.out.println(se.getMessage());
+				log.error(se.getMessage());
 			}
 		} else {
-			System.out.println("Folder exist");
+			log.info("Folder exist");
 		}
 		// String vidPath = "C:\\Users\\Winfo Solutions\\Desktop\\"+name;
 		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
@@ -799,20 +781,18 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //	            	 System.out.println(targetFileList.get(i));
 //	             }
 			if (targetFile1 != null) {
-				System.out.println(targetFile1);
 				str = targetFile1;
 				ipl = cvLoadImage(str);
 				recorder.record(grabberConverter.convert(ipl));
 			}
 			for (String image : targetFileList) {
-				System.out.println(image);
 				str = image;
 				ipl = cvLoadImage(str);
 				recorder.record(grabberConverter.convert(ipl));
 			}
 			recorder.stop();
-			System.out.println("ok");
 		} catch (org.bytedeco.javacv.FrameRecorder.Exception e) {
+			log.error("Failed during convert JPG to Movie");
 			e.printStackTrace();
 		}
 	}
@@ -825,7 +805,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				System.out.println("File " + listOfFiles[i].getName());
 				String fileName = listOfFiles[i].getName();
 				String[] fileNameArr = fileName.split("\\.");
 				String fileExt = fileNameArr[fileNameArr.length - 1];
@@ -946,7 +925,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 							testSetId);
 				}
 
-				System.out.println("copynumberValue:::" + copynumberValue);
+				log.info("copynumberValue:::" + copynumberValue);
 
 				String value = globalValueForSteps;
 
@@ -972,7 +951,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -1003,7 +982,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
 							testSetId);
 				}
-				System.out.println("copynumberValue:::" + copynumberValue);
+				log.info("copynumberValue:::" + copynumberValue);
 
 				String value = globalValueForSteps;
 				Thread.sleep(2000);
@@ -1050,7 +1029,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
 							testSetId);
 				}
-				System.out.println("copynumberValue:::" + copynumberValue);
+				log.info("copynumberValue:::" + copynumberValue);
 
 				String value = globalValueForSteps;
 				// Thread.sleep(2000);
@@ -1099,7 +1078,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
 			}
 
-			System.out.println("copynumberValue:::" + copynumberValue);
+			log.info("copynumberValue:::" + copynumberValue);
 
 			String value = globalValueForSteps;
 
@@ -1136,7 +1115,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -1161,7 +1140,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId, testSetId);
 			}
 			String value = globalValueForSteps;
-			System.out.println("copynumberValue:::" + copynumberValue);
+			log.info("copynumberValue:::" + copynumberValue);
 			waittill.click();
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -1208,7 +1187,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (inputParam2.equals("Accounting Period")) {
@@ -1227,7 +1206,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Accounting Period Clear" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -1243,7 +1222,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(4000);
@@ -1258,7 +1237,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 		}
@@ -1275,7 +1254,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -1292,7 +1271,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Clear" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -1311,14 +1290,13 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				// equal,we will close.
 				if (!mainWindow.equals(childWindow)) {
 					driver.switchTo().window(childWindow);
-					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					log.info("Successfully Windowclosed" + scripNumber);
+					log.info("Successfully Windowclosed: " + scripNumber);
 				}
 			}
 		} catch (Exception e) {
@@ -1339,7 +1317,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During switchToActiveElement Action." + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e.getMessage());
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -1372,7 +1350,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1394,7 +1372,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1418,7 +1396,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1442,7 +1420,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1465,7 +1443,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed during ClickMenu " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1486,7 +1464,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			System.out.println(e);
+			log.error(e.getMessage());
 			log.error("failed during ClickMenu " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1512,7 +1490,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			System.out.println(e);
+			log.error(e.getMessage());
 			log.error("Failed during SingnInSignOut " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1548,7 +1526,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1573,7 +1551,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During NotificationLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1596,7 +1574,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			System.out.println(e);
+			log.error(e.getMessage());
 			log.error("Failed during NotificationLink" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -1628,7 +1606,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -1652,7 +1630,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -1679,7 +1657,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Publish to Managers")) {
@@ -1704,7 +1682,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1723,7 +1701,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdown " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -1755,7 +1733,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1778,7 +1756,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1796,7 +1774,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During clickButtonDropdownText " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -1844,7 +1822,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During Process Monitor ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1876,7 +1854,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1914,7 +1892,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(4000);
@@ -1939,7 +1917,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -1973,7 +1951,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2008,7 +1986,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2042,7 +2020,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2081,7 +2059,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During ClickExpand or Collapse" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2115,7 +2093,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 46
 		try {
@@ -2140,7 +2118,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2171,7 +2149,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 32
@@ -2198,7 +2176,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -2225,7 +2203,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payment Process Requests") && param1.equalsIgnoreCase("Name")) {
@@ -2251,7 +2229,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Review installments selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 15
 		try {
@@ -2278,7 +2256,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2306,7 +2284,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2334,7 +2312,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -2357,7 +2335,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2380,7 +2358,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2401,7 +2379,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2435,7 +2413,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(3000);
@@ -2490,7 +2468,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2516,7 +2494,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2538,7 +2516,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked clickTableImage" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableImage" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -2569,7 +2547,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// prod
 		try {
@@ -2592,7 +2570,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 43
 		try {
@@ -2616,7 +2594,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 15
@@ -2640,7 +2618,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// Dh 9
@@ -2686,7 +2664,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickImag" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -2721,7 +2699,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equals("Republish")) {
@@ -2744,7 +2722,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -2770,7 +2748,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Provider or Receiver clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -2795,7 +2773,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// label[contains(text(),\"Enter Cost Centre\")]/following::input[1]
 		try {
@@ -2820,7 +2798,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -2845,7 +2823,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Customer")) {
@@ -2869,7 +2847,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add to Selected") || param1.equalsIgnoreCase("Remove from Selected")) {
@@ -2892,7 +2870,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Selected clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Go to Member Selection")) {
@@ -2916,7 +2894,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Go to Member Selection clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -2941,7 +2919,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -2966,7 +2944,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Back")) {
@@ -2988,7 +2966,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Back clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3017,7 +2995,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3039,7 +3017,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3062,7 +3040,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3090,7 +3068,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3114,7 +3092,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -3137,7 +3115,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickImag" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -3191,7 +3169,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ("yes".equalsIgnoreCase(fetchMetadataVO.getConditionalPopup())) {
@@ -3228,7 +3206,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search...")) {
@@ -3255,7 +3233,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// HCM.ADM.1132 HS2 (click button)
@@ -3282,7 +3260,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 57
@@ -3312,7 +3290,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// Dh 39
@@ -3341,7 +3319,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// Dh 39
@@ -3375,7 +3353,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// Dh 39
@@ -3406,7 +3384,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 31
@@ -3446,7 +3424,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3488,7 +3466,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3519,7 +3497,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 29
@@ -3551,7 +3529,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 29
@@ -3582,7 +3560,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 10
@@ -3628,7 +3606,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clicking Done Button" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3669,7 +3647,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3712,7 +3690,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -3752,7 +3730,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3795,7 +3773,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3834,7 +3812,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -3888,7 +3866,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH changes 6
 		try {
@@ -3916,7 +3894,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH changes 6
 		try {
@@ -3943,7 +3921,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Issue Refund ok clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param2.equalsIgnoreCase("Save and Close") && param1.equalsIgnoreCase("Manage Expenditure Types"))
@@ -3969,7 +3947,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH fix 4
 		try {
@@ -3999,7 +3977,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH fix 4
@@ -4024,7 +4002,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH fix4
@@ -4053,7 +4031,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
@@ -4079,7 +4057,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
@@ -4109,7 +4087,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// for "PTP.AP.327 Applying a prepayment to Invoice" when exectuing in Fusion
 		// instance
@@ -4161,7 +4139,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
@@ -4186,7 +4164,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton Done" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Notifications")) {
@@ -4213,7 +4191,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expend")) {
@@ -4239,7 +4217,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("OK")) {
@@ -4266,13 +4244,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Line")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				Thread.sleep(8000);
-				System.out.println("here1234");
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("//*[contains(text(),\"" + param1 + "\")]/following::span[normalize-space(text())=\"K\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -4294,7 +4271,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit Line clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Members") || param1.equalsIgnoreCase("Complete Report")) {
@@ -4318,7 +4295,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Members clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Contacts") && param2.equalsIgnoreCase("OK")) {
@@ -4343,7 +4320,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Contacts clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(2000);
@@ -4372,7 +4349,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
@@ -4399,7 +4376,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
@@ -4425,7 +4402,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Ok clickButton" + scripNumber);
 		}
@@ -4452,7 +4429,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Select clickButton" + scripNumber);
 		}
@@ -4479,7 +4456,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Done clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Apply")) {
@@ -4506,7 +4483,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
@@ -4976,7 +4953,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -5003,7 +4980,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during OK clickButton" + scripNumber);
 		}
@@ -5049,7 +5026,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during add Application clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Unapply Application")) {
@@ -5095,7 +5072,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Application clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Submit")) {
@@ -5147,7 +5124,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Columns") || param1.equalsIgnoreCase("Show All")) {
@@ -5176,7 +5153,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Columns or Show All clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add to Document Builder")) {
@@ -5201,7 +5178,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Add to Document Builder clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Freeze")) {
@@ -5303,7 +5280,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit")) {
@@ -5329,7 +5306,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Edit clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reverse")) {
@@ -5354,7 +5331,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reverse clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
@@ -5378,7 +5355,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Apply clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Republish")) {
@@ -5403,7 +5380,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Match Invoice Lines") && param2.equalsIgnoreCase("OK")) {
@@ -5428,7 +5405,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Republish clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		//HCM.ADM.022 (Edit) (Review)
 		try {
@@ -5456,7 +5433,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -5482,7 +5459,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		
 		// HCM.ADM.022 (search)
@@ -5511,7 +5488,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -5538,7 +5515,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -5585,7 +5562,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5606,7 +5583,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5627,7 +5604,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -5658,13 +5635,13 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //		              fetchConfigVO.setErrormessage(text);
 //		  			return;
 //		        } catch (Exception e) {
-//		            System.out.println(e);
+//		            log.error(e.getMessage());
 //		        }try {
 //		              String text = driver.findElement(By.xpath("//div[contains(@class,\"Error\")]")).getText();
 //		              fetchConfigVO.setErrormessage(text);
 //		  			return;
 //		        } catch (Exception e) {
-//		            System.out.println(e);
+//		            log.error(e.getMessage());
 //		        }
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5687,7 +5664,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -5718,7 +5695,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Agreements") && (param2.equalsIgnoreCase("Headers: Search Results"))) {
@@ -5747,7 +5724,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Agreements") || param2.equalsIgnoreCase("Search Results")) {
@@ -5770,7 +5747,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts") || param1.equalsIgnoreCase("Manage Customers")) {
@@ -5823,7 +5800,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Journals") || param1.equalsIgnoreCase("Journal Lines")
@@ -5852,7 +5829,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Addresses")) {
@@ -5877,7 +5854,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -5904,7 +5881,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Addresses clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Approved")) {
@@ -5930,7 +5907,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approved clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Orders")) {
@@ -5956,7 +5933,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Orders clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts")) {
@@ -5982,7 +5959,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Receipts clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// Adding Xpath for \"Checking the dashboard for unposted & journals in error
 		// for
@@ -6032,7 +6009,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during Journals in Requiring Attention clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("List of Processes Meeting Search Criteria")) {
@@ -6057,7 +6034,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 			//HCM.ADM.022 (Search Results)
 		try {
@@ -6086,7 +6063,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickTableLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6146,7 +6123,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("SecondLine")) {
@@ -6172,11 +6149,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during SecondLine tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(6000);
-			// System.out.println("Here1 came");
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1 + "\"]//td)[1]")));
@@ -6197,7 +6173,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Here1 came tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6220,7 +6196,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6242,7 +6218,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6262,7 +6238,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -6288,7 +6264,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableRowSelect" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -6337,7 +6313,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			} catch (Exception e) {
 
-				System.out.println(e);
+				log.error(e.getMessage());
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -6387,7 +6363,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				log.error("Failed during Scanned clickLink" + scripNumber);
 
-				System.out.println(e);
+				log.error(e.getMessage());
 
 			}
 			// DH fix
@@ -6420,7 +6396,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during Export clickLink" + scripNumber);
-				System.out.println(e);
+				log.error(e.getMessage());
 			}
 			if (param1.equalsIgnoreCase("Report") && param2.equalsIgnoreCase("Apply")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6443,7 +6419,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Home")) {
@@ -6469,7 +6445,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Home clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Financials Details") && param2.equalsIgnoreCase("Invoices")) {
@@ -6496,7 +6472,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financials Details or Invoices  clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Approve")) {
@@ -6520,7 +6496,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Approve clickLink" + scripNumber);
 		}
@@ -6553,7 +6529,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Export")) {
@@ -6580,7 +6556,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Export")) {
@@ -6607,7 +6583,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Export clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project")) {
@@ -6654,7 +6630,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 		}
@@ -6685,7 +6661,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Financial Reporting Center clickLink" + scripNumber);
 		}
@@ -6719,7 +6695,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receivables clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
@@ -6745,7 +6721,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -6771,7 +6747,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Requisition Lines clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Details")) {
@@ -6797,7 +6773,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Details" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -6831,7 +6807,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Journal")) {
@@ -6863,7 +6839,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Journal clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Receipt Details") || param1.equalsIgnoreCase("General Information")) {
@@ -6892,7 +6868,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Receipt Details clickLink" + scripNumber);
 		}
@@ -6918,7 +6894,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during View clickLink" + scripNumber);
 		}
@@ -6973,7 +6949,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during clickLink" + scripNumber);
-				System.out.println(e);
+				log.error(e.getMessage());
 			}
 			try {
 				// Changed == to equals method
@@ -7001,12 +6977,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				log.error("Failed during clickLink" + scripNumber);
-				System.out.println(e);
+				log.error(e.getMessage());
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Invoice Actions clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7035,7 +7011,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics")) {
@@ -7062,7 +7038,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Attachment") || param1.equalsIgnoreCase("Invoice Summary")
@@ -7090,7 +7066,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Attachment or Invoice Summary clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7114,7 +7090,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7139,7 +7115,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7165,7 +7141,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7189,7 +7165,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7214,7 +7190,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7239,7 +7215,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// Need to check for what purpose
 		try {
@@ -7265,7 +7241,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -7289,7 +7265,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7309,7 +7285,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7335,7 +7311,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLink" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7374,7 +7350,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7410,7 +7386,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7433,7 +7409,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7456,7 +7432,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7477,7 +7453,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickRadiobutton" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -7518,7 +7494,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 31
 		try {
@@ -7548,7 +7524,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 50
@@ -7579,7 +7555,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 50
@@ -7610,7 +7586,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 31
@@ -7641,7 +7617,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 25
@@ -7669,7 +7645,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -7698,7 +7674,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -7730,7 +7706,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -7765,7 +7741,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Item Description clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Purpose")) {
@@ -7798,7 +7774,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Scenario")) {
@@ -7830,7 +7806,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Scenario clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Purpose")) {
@@ -7862,7 +7838,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Address Purpose clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Name")) {
@@ -7887,7 +7863,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Name clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Match Invoice Lines")
@@ -7917,7 +7893,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Match Invoice Lines clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7943,7 +7919,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -7972,7 +7948,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8001,7 +7977,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8030,7 +8006,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8057,7 +8033,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -8086,7 +8062,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickCheckbox" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -8126,7 +8102,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -8151,7 +8127,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// Changed == to equals method
@@ -8179,7 +8155,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8204,7 +8180,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8227,7 +8203,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked clickLinkAction" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickLinkAction" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -8256,7 +8232,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8274,7 +8250,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8292,7 +8268,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Description for Internal Candidates")
@@ -8312,7 +8288,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
@@ -8332,7 +8308,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 20
@@ -8356,7 +8332,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -8386,7 +8362,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// PROD
 		try {
@@ -8412,7 +8388,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -8437,7 +8413,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -8461,7 +8437,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -8485,7 +8461,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during textarea" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -8525,7 +8501,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 
@@ -8555,7 +8531,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH
 		try {
@@ -8585,7 +8561,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")
@@ -8611,7 +8587,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			// throw e;
 		}
 		// HS2
@@ -8639,7 +8615,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// prod
 		try {
@@ -8676,7 +8652,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// prod
 		try {
@@ -8702,7 +8678,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// prod
 		try {
@@ -8728,7 +8704,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 65
@@ -8774,7 +8750,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during Invoice Dates sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -8803,7 +8779,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 39 OTC.AR.236
@@ -8830,7 +8806,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Delegate To") && param1.equalsIgnoreCase("Approval Delegations")) {
@@ -8862,7 +8838,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 39 OTC.AR.236
@@ -8893,7 +8869,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 32 // HCM.ADM.022 (date)
@@ -8921,7 +8897,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 39 SCM.PM.509
 
@@ -8949,7 +8925,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 12
@@ -8979,7 +8955,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -9005,7 +8981,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Password sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// Here Adding xpath for invoice dates AP.452
 
@@ -9051,7 +9027,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during Invoice Dates  sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -9090,7 +9066,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -9118,7 +9094,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Delegate to  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -9157,7 +9133,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -9185,7 +9161,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
@@ -9210,7 +9186,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Report sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account")
@@ -9239,7 +9215,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account")
@@ -9269,7 +9245,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -9295,7 +9271,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Phone or Mobile sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Line") && param2.equalsIgnoreCase("Name")) {
@@ -9321,7 +9297,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Line or Name  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
  			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("Person Name")) {
@@ -9351,7 +9327,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card or Person Name sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -9380,7 +9356,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Query By Example  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -9413,7 +9389,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Unapply Accounting Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 
@@ -9456,7 +9432,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Accounting Periods")
@@ -9486,7 +9462,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Manage Accounting Periods sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics") && param2.equalsIgnoreCase("Search")) {
@@ -9512,7 +9488,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Report")) {
@@ -9540,7 +9516,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Daily Rates")) {
@@ -9568,7 +9544,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Daily Rates sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Line") && param2.equalsIgnoreCase("Category Name")) {
@@ -9624,7 +9600,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 35
 		try {
@@ -9671,7 +9647,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			// throw e;
 		}
 		try {
@@ -9702,7 +9678,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Expense Item sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(10000);
@@ -9732,7 +9708,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// HCM.ADM.111465 (Name) HCM.ADM.024 (Person Number)
 		try {
@@ -9761,7 +9737,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked sendValue" + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 		}
@@ -9789,7 +9765,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9819,7 +9795,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9850,7 +9826,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9879,7 +9855,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -9904,7 +9880,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -9929,7 +9905,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -9957,7 +9933,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -9988,7 +9964,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 
@@ -10060,7 +10036,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Postal Code Legal Entity  dropdownTexts" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -10089,7 +10065,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10118,7 +10094,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10187,7 +10163,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10217,7 +10193,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10244,7 +10220,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -10323,7 +10299,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownTexts" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -10364,7 +10340,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry multiplelinestableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -10527,7 +10503,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -10695,7 +10671,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -10856,7 +10832,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  multiplelinestableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -10898,7 +10874,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Characteristic")
@@ -10930,7 +10906,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Characteristic")
@@ -10953,7 +10929,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Inspection Results") && param2.equalsIgnoreCase("Expiry Date")
@@ -10977,7 +10953,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Acceptable Values") && param2.equalsIgnoreCase("Acceptable Value"))) {
@@ -10998,7 +10974,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Manage Financial Project Plan")
@@ -11021,7 +10997,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Manage Financial Project Plan")
@@ -11044,7 +11020,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 40
 		try {
@@ -11067,7 +11043,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 34
@@ -11099,7 +11075,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -11130,7 +11106,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 29
@@ -11158,7 +11134,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// New Code for PTP.PO.511
@@ -11183,7 +11159,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -11207,7 +11183,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// Dh changes 8
 		try {
@@ -11231,7 +11207,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add Project Customer")) {
@@ -11254,7 +11230,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH changes
 		try {
@@ -11281,7 +11257,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH changes
 		try {
@@ -11311,7 +11287,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Funded Amount tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -11343,7 +11319,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  Associated Projects or Funded Amount tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -11375,7 +11351,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or FProject Number tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -11407,7 +11383,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Associated Projects or Task Number tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -11438,7 +11414,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Time Entry tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Mon")) {
@@ -11601,7 +11577,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -11643,7 +11619,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Lines") && param2.equalsIgnoreCase("Price")) {
@@ -11667,7 +11643,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Price  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Lines") && param2.equalsIgnoreCase("Expenditure Item Date")) {
@@ -11691,7 +11667,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Lines or Expenditure Item Date tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Lines") || param2.equalsIgnoreCase("Item")) {
@@ -11714,7 +11690,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 12
 		try {
@@ -11741,7 +11717,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Clicked Lines or Item tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param2.equalsIgnoreCase("Application Reference")) {
@@ -11764,7 +11740,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Application Reference tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// Add Xpath for "Register a mass promise to pay(AR.249)
 
@@ -11804,7 +11780,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during tableSendKeys" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Provider") || param1.equalsIgnoreCase("Receiver")) {
@@ -11830,7 +11806,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(6000);
@@ -11857,7 +11833,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[text()=\"" + param1 + "\"]/following::*[text()=\""
@@ -11877,7 +11853,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver
@@ -11898,7 +11874,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// Add Xpath for "Journal submitted but Approver on vacation(RTR.GL.115)"
@@ -11921,7 +11897,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath(
@@ -11942,7 +11918,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1
@@ -11962,7 +11938,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1
@@ -11982,7 +11958,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -12003,7 +11979,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH
 		try {
@@ -12030,7 +12006,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(6000);
@@ -12056,7 +12032,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			// tab(driver, fetchMetadataVO, fetchConfigVO);
@@ -12076,7 +12052,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -12124,7 +12100,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -12146,7 +12122,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -12170,7 +12146,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -12226,7 +12202,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12277,7 +12253,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
@@ -12294,7 +12270,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownTexts" + scripNumber);
@@ -12334,7 +12310,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// OB.9 DH
 		try {
@@ -12366,7 +12342,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// dh 8
 		try {
@@ -12391,7 +12367,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -12414,7 +12390,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
@@ -12438,7 +12414,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 		}
@@ -12466,7 +12442,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Billing tableDropdownValues" + scripNumber);
 		}
@@ -12493,7 +12469,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during tableDropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12517,7 +12493,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12539,7 +12515,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableDropdownValues" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -12584,7 +12560,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		
 		try {
@@ -12618,7 +12594,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -12652,7 +12628,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tableSendKeys" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Interviewer Responses")) {
@@ -12681,7 +12657,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add Enrollment") && (param2.equalsIgnoreCase("Select Plan"))) {
@@ -12710,7 +12686,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH
 		try {
@@ -12763,7 +12739,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// HS2
 		try {
@@ -12794,7 +12770,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Element Entry") && param2.equalsIgnoreCase("Element Name")) {
@@ -12830,14 +12806,14 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					button.click();
 
 				} catch (Exception e) {
-					System.out.println(e);
+					log.error(e.getMessage());
 				}
 				return;
 			}
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Relationship Information") && (param2.equalsIgnoreCase("Contact Type"))) {
@@ -12865,7 +12841,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// OTL.004 DH
 		try {
@@ -12897,7 +12873,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 32
@@ -12928,7 +12904,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
@@ -12983,7 +12959,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 55
@@ -13014,7 +12990,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -13045,7 +13021,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -13076,7 +13052,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -13106,7 +13082,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -13137,7 +13113,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 48
@@ -13165,7 +13141,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
@@ -13220,7 +13196,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 29
@@ -13252,7 +13228,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 14 SCP.512
@@ -13299,7 +13275,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		// DH 24
@@ -13349,7 +13325,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -13408,7 +13384,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -13458,7 +13434,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				} catch (Exception e) {
 					// String scripNumber = fetchMetadataVO.getScriptNumber();
 					log.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
-					System.out.println(e);
+					log.error(e.getMessage());
 				}
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -13468,7 +13444,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		// This is to select the dropdown and select \"All\" and deselect All then
 		// Selecting Draft
@@ -13505,7 +13481,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		// --------------------------(including new change
 		// here)<------------------------------
@@ -13546,7 +13522,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 
 		// --------------------------------------------(ends
@@ -13589,7 +13565,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account") && param2.equalsIgnoreCase("Country")) {
@@ -13638,7 +13614,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Bank Account or Country dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		// for "PTP.PO.301 Request New Supplier" when exectuing in Fusion instance
 		try {
@@ -13678,7 +13654,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("Country")) {
@@ -13729,7 +13705,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Address or Country  dropdownValues" + scripNumber);
-			System.out.println(ex);
+			log.error(ex.getMessage());
 		}
 		try {
 
@@ -13769,7 +13745,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Assets dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -13798,7 +13774,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Request dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Report")) {
@@ -13830,7 +13806,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 
@@ -13948,7 +13924,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("FIN-7073-UDG Cognos Extract")) {
@@ -14023,7 +13999,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		// DH 27
 		try {
@@ -14107,7 +14083,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 
@@ -14362,7 +14338,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			log.error("Failed during  dropdownValues" + scripNumber);
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 		try {
@@ -14412,7 +14388,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
@@ -14737,7 +14713,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Ledger")) {
@@ -14891,7 +14867,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14962,7 +14938,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 			return;
 		} catch (Exception exe) {
-			System.out.println(exe);
+			log.error(exe.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 		}
@@ -15045,7 +15021,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15069,7 +15045,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15092,7 +15068,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15112,7 +15088,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		}
@@ -15161,7 +15137,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		
 		try {
@@ -15193,7 +15169,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		
 		try {
@@ -15213,7 +15189,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -15241,7 +15217,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -15271,7 +15247,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Event Type dropdownValues" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -15294,7 +15270,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			log.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  dropdownValues" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -15336,8 +15312,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("(//img[@title=\"" + param1 + "\"]/following::*[text()=\"" + param2
-					+ "\"]/preceding::input[@type=\"text\"])[3]");
 		}
 
 		try {
@@ -15356,8 +15330,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("(//img[@title=\"" + param1 + "\"]/following::*[text()=\"" + param2
-					+ "\"]/preceding::input[@type=\"text\"])[3]");
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//img[@title=\"" + param1 + "\"])[1]"));
@@ -15378,7 +15350,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("//img[@title=\"" + param1 + "\"][1]");
 			// throw e;
 		}
 		// DH Changes 6
@@ -15402,7 +15373,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  clickFilter" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("//img[@title=\"" + param1 + "\"][1]");
 			throw e;
 		}
 	}
@@ -15423,7 +15393,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  password" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -15488,9 +15458,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15505,7 +15473,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15520,7 +15487,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Field during scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -15536,7 +15502,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -15550,7 +15515,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			log.error("Failed during  scrollUsingElement" + fetchMetadataVO.getScriptNumber());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15563,7 +15528,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			log.error("Failed during  scrollUsingElement" + fetchMetadataVO.getScriptNumber());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),\"" + inputParam + "\")]"));
@@ -15578,7 +15543,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary=\"" + inputParam + "\"]//td//a)[1]"));
@@ -15593,7 +15557,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -15607,7 +15570,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(inputParam);
+			log.error("Failed during  scrollUsingElement" + fetchMetadataVO.getScriptNumber());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,\"" + inputParam + "\")]"));
@@ -15622,7 +15585,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15637,7 +15599,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -15653,7 +15614,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver
@@ -15669,7 +15629,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title=\"" + inputParam + "\"]"));
@@ -15684,7 +15643,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
-			System.out.println(inputParam);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title=\"" + inputParam + "\"])[1]"));
@@ -15700,7 +15658,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  scrollUsingElement" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(inputParam);
 			e.printStackTrace();
 			throw e;
 		}
@@ -15732,7 +15689,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  tab" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed to do TAB Action");
 			e.printStackTrace();
 			throw e;
 		}
@@ -15762,7 +15718,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Actions actions = new Actions(driver);
@@ -15781,7 +15737,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  mousehover" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -15799,7 +15755,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  enter" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -15813,7 +15769,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			log.error("Failed To Delete All The Cookies.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("cookies not deleted");
 			throw e;
 		}
 	}
@@ -15833,7 +15788,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during selectCheckBox" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
-			System.out.println(xpath);
 			throw e;
 		}
 	}
@@ -15859,7 +15813,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Holds")) {
@@ -15880,7 +15833,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Holds selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Batch Status")) {
@@ -15901,7 +15853,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Batch Status selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Release") && param2.equalsIgnoreCase("Name")) {
@@ -15922,7 +15873,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Release selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15940,7 +15890,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15958,7 +15907,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15976,7 +15924,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15994,7 +15941,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			if (param2 == "") {
@@ -16013,7 +15959,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
-			System.out.println(param2);
 		}
 		try {
 			WebElement waittext = driver
@@ -16028,7 +15973,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.info("Sucessfully Clicked selectByText" + scripNumber);
 			return;
 		} catch (Exception e) {
-			System.out.println(param2);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByText" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -16060,7 +16004,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectByValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
 			e.printStackTrace();
 			throw e;
 		}
@@ -16103,7 +16046,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			if (m.find()) {
 				// we\"re only looking for one group, so get it
 				theGroup = m.group(0);
-				System.out.println(theGroup);
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
@@ -16111,7 +16053,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 			return theGroup;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 
@@ -16127,15 +16069,13 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			if (m.find()) {
 				// we\"re only looking for one group, so get it
 				theGroup = m.group(0);
-				System.out.println(theGroup);
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 
@@ -16159,7 +16099,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyunderscorewithnumber(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
@@ -16180,7 +16119,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 
 		}
 
@@ -16194,7 +16132,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getAttribute("value");
-				System.out.println(stringToSearch);
 //				value = copyValuesWithSpc(stringToSearch);
 				// value = copyValuesWithSpc(webElement);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16213,7 +16150,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 		}
 
 		// Dh 611
@@ -16230,7 +16166,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
@@ -16251,7 +16186,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 
 		}
 		try {
@@ -16267,7 +16201,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
@@ -16288,7 +16221,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 
 		}
 
@@ -16306,7 +16238,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyunderscore(stringToSearch);
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16325,8 +16256,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
-
-			System.out.println(inputParam2);
 
 		}
 
@@ -16348,7 +16277,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyValuesWithSpc(stringToSearch);
 
 				// value = copyValuesWithSpc(webElement);
@@ -16369,7 +16297,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 		}
 
 		try {
@@ -16380,7 +16307,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Actions actions = new Actions(driver);
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyValuesWithSpc(stringToSearch);
 				// value = copyValuesWithSpc(webElement);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16399,7 +16325,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 		}
 
 		// DH 31
@@ -16414,7 +16339,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
-				System.out.println(stringToSearch);
 				value = copyNumbers(stringToSearch);
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16433,8 +16357,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
-
-			System.out.println(inputParam2);
 
 		}
 
@@ -16470,8 +16392,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Totals or Total copynumber" + scripNumber);
 
-			System.out.println(inputParam2);
-
 		}
 		try {
 
@@ -16506,8 +16426,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during  copynumber" + scripNumber);
-
-			System.out.println(inputParam2);
 
 		}
 
@@ -16550,7 +16468,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-			System.out.println(inputParam2);
 
 		}
 
@@ -16586,8 +16503,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
-			System.out.println(inputParam1);
-
 		}
 
 		try {
@@ -16620,8 +16535,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
-
-			System.out.println(inputParam1);
 
 		}
 		try {
@@ -16656,8 +16569,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copynumber" + scripNumber);
 
-			System.out.println(inputParam1);
-
 		}
 
 		try {
@@ -16691,8 +16602,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 
-			System.out.println(inputParam1);
-
 			throw e;
 
 		}
@@ -16707,22 +16616,15 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		try {
 
-//	          System.out.println(value);
-
 			String number = webElement.getText();
 
-			System.out.println(number);
-
 			num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
-
-			System.out.println(num);
-
 			log.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
 			log.error("Sucessfully Clicked copynumber");
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -16751,7 +16653,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	 * 
 	 * } catch (Exception e) {
 	 * 
-	 * System.out.println(e);
+	 * log.error(e.getMessage());
 	 * 
 	 * }
 	 * 
@@ -16768,33 +16670,27 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		try {
 			String number = webElement.getText().toString();
-			System.out.println(number);
 			num = number.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 			num1 = num.replaceAll("[().$#@!*&^\\/\\\\]", "");
 			// String num2= num1.trim();
 			String num2 = num1.replaceAll("[^a-zA-Z0-9]", "").trim();
-			System.out.println(num2);
 			Thread.sleep(2000);
 			log.info("Successfully Copied the Number");
 			return num2;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 
 			String number = webElement.getText().toString();
 
-			System.out.println(number);
-
 			num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
-
-			System.out.println(num);
 
 			log.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -16808,19 +16704,14 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		try {
 
-//	          System.out.println(value);
-
 			String number = webElement.getText().toString();
 
-			System.out.println(number);
-
 			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", number);
-			System.out.println(num);
 			log.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 		}
 
@@ -16833,7 +16724,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			WebElement webElement = driver.findElement(By.xpath(xpath));
 			String number = webElement.getText();
-			System.out.println(number);
 			String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
@@ -16843,7 +16733,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copyy" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
 			throw e;
 		}
 		return xpath;
@@ -16858,7 +16747,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String[] text = element.getText().split(":");
 				if (text.length == 2) {
 					texts.add(text[1].trim().toString());
-					System.out.println(texts.get(0));
 					StringSelection stringSelection = new StringSelection(texts.get(0));
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
@@ -16869,7 +16757,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during copytext" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
 			throw e;
 		}
 		return xpath;
@@ -16886,7 +16773,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during maximize" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not maximize");
 			e.printStackTrace();
 			throw e;
 
@@ -16903,7 +16789,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchWindow" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not switch to window");
 			e.printStackTrace();
 
 			throw e;
@@ -16919,7 +16804,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			while (itr.hasNext()) {
 				String childWindow = itr.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
 				Thread.sleep(4000);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16928,7 +16812,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchDefaultContent" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -16943,7 +16826,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			while (itr.hasNext()) {
 				String childWindow = itr.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 			driver.close();
 			Thread.sleep(2000);
@@ -16952,7 +16834,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			while (itr1.hasNext()) {
 				String childWindow = itr1.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 			driver.close();
 			Set<String> set2 = driver.getWindowHandles();
@@ -16960,7 +16841,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			while (itr2.hasNext()) {
 				String childWindow = itr2.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 
 			renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -16968,7 +16848,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -16983,7 +16862,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			while (itr.hasNext()) {
 				String childWindow = itr.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 			driver.close();
 			Set<String> set1 = driver.getWindowHandles();
@@ -16991,7 +16869,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			while (itr1.hasNext()) {
 				String childWindow = itr1.next();
 				driver.switchTo().window(childWindow);
-				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
@@ -17002,7 +16879,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during switchToParentWindow" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -17024,7 +16900,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed During dragAnddrop Action." + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(xpath);
 			e.printStackTrace();
 			throw e;
 		}
@@ -17046,7 +16921,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -17062,7 +16937,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(20000);
@@ -17073,7 +16948,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String childWindow = itr.next();
 				if (!mainWindow.equals(childWindow)) {
 					driver.switchTo().window(childWindow);
-					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
@@ -17087,7 +16961,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to Handle the window" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("failed while hadling window");
 			e.printStackTrace();
 			throw e;
 		}
@@ -17112,7 +16985,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17131,7 +17004,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -17148,7 +17021,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,\"" + inputParam + "\")]"));
@@ -17162,7 +17035,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -17177,7 +17050,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17194,7 +17067,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			log.error("Failed During switchToFrame Action");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -17224,7 +17097,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
 				Thread.sleep(5000);
 				File file = new File(fileLocation+param3);
-				System.out.println("Is file Present*** "+file.isFile());
 				uploadZip.sendKeys(file.getAbsolutePath());
 				log.info("Successfully Uploaded The File");
 				screenshot(webDriver, scriptDetailsDto, customerProjectDto);
@@ -17245,7 +17117,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			WebElement uploadZip = webDriver.findElement(By.xpath(uploadXPath));
 			Thread.sleep(5000);
 			File file = new File(fileLocation+param3);
-			System.out.println("Is file Present*** "+file.isFile());
 			uploadZip.sendKeys(file.getAbsolutePath());
 			log.info("Successfully Uploaded The File");
 			screenshot(webDriver, scriptDetailsDto, customerProjectDto);
@@ -17286,7 +17157,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during refreshPage" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("can not refresh the page");
 			e.printStackTrace();
 			throw e;
 
@@ -17298,19 +17168,19 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
 			return text;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,\"Error\")]")).getText();
 			return text;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 //			try {
 //				String text = driver.findElement(By.xpath("//div[contains(text(),\"Error\")]")).getText();
 //				return text;
 //			} catch (Exception e) {
-//				System.out.println(e);
+//				log.error(e.getMessage());
 //			}
 		try {
 			String text = driver
@@ -17318,7 +17188,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					.getText();
 			return text;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		return null;
 	}
@@ -17346,7 +17216,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			log.error("Failed during Click action.");
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
@@ -17367,7 +17237,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			if (m.find()) {
 				// we\"re only looking for one group, so get it
 				theGroup = m.group(0);
-				System.out.println(theGroup);
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
@@ -17375,7 +17244,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 			return theGroup;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 
@@ -17401,7 +17270,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -17480,7 +17349,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -17506,7 +17375,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed During Login page");
 		}
 		return xpath;
 	}
@@ -17553,7 +17421,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during navigator " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 			throw e;
 		}
 	}
@@ -17587,7 +17454,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			log.error("Failed during Menunavigation " + scripNumber);
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 	}
@@ -17648,10 +17514,9 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			return xpath;
 
 		} catch (Exception e) {
-			System.out.println("Count value exceeds the limit");
-			log.error("Failed During Navigation");
+			log.error("Count value exceeds the limit: " + count);
+			log.error("Failed During Navigation: " + fetchMetadataVO.getScriptNumber());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
 
@@ -17686,7 +17551,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Oracle ERP OPERA Trigger Synchronization") && param2.equalsIgnoreCase("Run")) {
@@ -17714,7 +17579,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17745,7 +17610,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17775,7 +17640,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17804,7 +17669,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17829,7 +17694,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Create Time Card clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17854,7 +17719,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -17885,7 +17750,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		/*
 		 * try { if(param1.equalsIgnoreCase("DH SCM Supplier Site Inactivation") &&
@@ -17904,7 +17769,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
 		 * scripNumber = fetchMetadataVO.getScriptNumber();
-		 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
+		 * log.error("Failed during clickButton" + scripNumber); log.error(e.getMessage());
 		 * }
 		 */
 		// testing
@@ -17934,7 +17799,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		/*
@@ -17955,7 +17820,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 		 * scriptID,metadataID,xpath); return; } }catch (Exception e) { String
 		 * scripNumber = fetchMetadataVO.getScriptNumber();
-		 * log.error("Failed during clickButton" + scripNumber); System.out.println(e);
+		 * log.error("Failed during clickButton" + scripNumber); log.error(e.getMessage());
 		 * }
 		 */
 		try {
@@ -17985,7 +17850,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -18015,7 +17880,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -18039,7 +17904,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Submit Now")
@@ -18061,7 +17926,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Back")) {
@@ -18084,7 +17949,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -18107,7 +17972,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -18130,7 +17995,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18150,7 +18015,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during clickButton" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18197,7 +18062,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	 * metadataID=fetchMetadataVO.getScript_meta_data_id();service.saveXpathParams(
 	 * scriptID,metadataID,xpath); return keysToSend;
 	 * 
-	 * } catch (Exception e) { System.out.println(e); String scripNumber =
+	 * } catch (Exception e) { log.error(e.getMessage()); String scripNumber =
 	 * fetchMetadataVO.getScriptNumber(); log.error("Failed during sendValue" +
 	 * scripNumber); screenshotFail(driver, "Failed during sendValue",
 	 * fetchMetadataVO, fetchConfigVO); throw e; } }
@@ -18227,7 +18092,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -18253,7 +18118,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -18294,7 +18159,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -18322,7 +18187,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -18346,7 +18211,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during sendValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -18381,7 +18246,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during mousehover" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 
 		try {
@@ -18402,7 +18267,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -18445,7 +18310,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
@@ -18478,7 +18342,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
@@ -18610,7 +18473,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("failed to do navigate URl " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Not able to navitage to the Url");
 		}
 	}
 
@@ -18658,7 +18520,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to enter password " + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18686,7 +18548,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Failed during login page " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println("Failed During Login page");
 		}
 		return xpath;
 	}
@@ -18850,7 +18711,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during Close Date sendValue" + scripNumber);
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 
@@ -18898,7 +18759,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			System.out.println(e);
+			log.error(e.getMessage());
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -18934,7 +18795,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed during selectAValue" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -18966,7 +18827,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			throw e;
 		}
 
@@ -18993,7 +18854,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			log.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
