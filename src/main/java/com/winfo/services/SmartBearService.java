@@ -114,8 +114,7 @@ public class SmartBearService {
 	private String getProjectId(String projectName) throws IOException {
 		logger.info("Getting project ID for project name: {}", projectName);
 		Map<String, Object> projects = callApi(smartBearVersion1Url + "/projects", HttpMethodUtils.GET, null);
-		List<Map<String, Object>> listOfResults = (List<Map<String, Object>>) projects.get(RESULTS);
-		Optional<Map<String, Object>> optionalProject = listOfResults.stream()
+		Optional<Map<String, Object>> optionalProject = ((List<Map<String, Object>>) projects.get(RESULTS)).stream()
 				.filter(map -> map.get("proj_name").toString().equalsIgnoreCase(projectName)).findFirst();
 		if (optionalProject.isPresent()) {
 			return optionalProject.get().get("id").toString();
@@ -171,8 +170,8 @@ public class SmartBearService {
 		Map<String, Object> items = callApi(
 				smartBearVersion2Url + PROJECTS_PATH + projectId + TEST_RUNS_PATH + executionId + "/items",
 				HttpMethodUtils.GET, null);
-		List<Map<String, Object>> listOfResults = (List<Map<String, Object>>) items.get(RESULTS);
-		Optional<Map<String, Object>> optionalItem = listOfResults.stream().findFirst();
+		Optional<Map<String, Object>> optionalItem = ((List<Map<String, Object>>) items.get(RESULTS)).stream()
+				.findFirst();
 		if (optionalItem.isPresent()) {
 			return optionalItem.get().get("id").toString();
 		} else {
