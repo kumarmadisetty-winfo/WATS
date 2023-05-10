@@ -114,8 +114,7 @@ public class DataBaseEntryDao {
 			query.setParameter("testSetId", Integer.parseInt(testSetId));
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cant update start time and end time in TestSet");
-			logger.error(e);
+			logger.info("cant update start time and end time in TestSet " + e.getMessage());
 		}
 		
 	}
@@ -200,8 +199,7 @@ public class DataBaseEntryDao {
 			testSetScriptParam.setLineExecutionStatus(status);
 			em.merge(testSetScriptParam);
 		} catch (Exception e) {
-			logger.info("cant update passed script line status");
-			logger.error(e);
+			logger.info("Can't update passed script line status " + e.getMessage());
 		}
 	}
 
@@ -214,8 +212,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			productVersion = (String) query.getResultList().get(0);
 		} catch (Exception e) {
-			logger.info("cant get product version.");
-			logger.error(e);
+			logger.info("Can't get product version " + e.getMessage());
 		}
 
 		return productVersion;
@@ -235,8 +232,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			errorMessage = (String) query.getResultList().get(0);
 		} catch (Exception e) {
-			logger.info("cant get error message");
-			logger.error(e);
+			logger.info("Failed to get error message " + e.getMessage());
 		}
 
 		return errorMessage;
@@ -250,8 +246,7 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info("cant update in progress script status");
-			logger.error(e);
+			logger.info("can't update in progress script status " + e.getMessage());
 		}
 	}
 
@@ -266,9 +261,8 @@ public class DataBaseEntryDao {
 							+ " AND TEST_SET_LINE_ID = " + lineId);
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cant update starttime");
-			logger.error(e);
-		}
+			logger.info("can't update start time " + e.getMessage());
+	}
 	}
 
 	public int getNextExecutionNum() {
@@ -555,8 +549,7 @@ public class DataBaseEntryDao {
 					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where testRunId='" + testSetId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("Error Updation PDF Generation Status");
-			logger.error(e);
+			logger.info("Error Updation PDF Generation Status " + e.getMessage());
 		}
 	}
 
@@ -1024,8 +1017,7 @@ public class DataBaseEntryDao {
 					+ testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cant update passed script line status");
-			logger.error(e);
+			logger.info("can't update passed script line status " + e.getMessage());
 		}
 	}
 
@@ -1049,8 +1041,7 @@ public class DataBaseEntryDao {
 				em.merge(scriptParam);
 			}
 		} catch (Exception e) {
-			logger.info("cant update inprogress scriptLine status");
-			logger.error(e);
+			logger.info("can't update inprogress scriptLine status " + e.getMessage());
 		}
 	}
 
@@ -1064,8 +1055,7 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info("cant update in progress script status");
-			logger.error(e);
+			logger.info("Failed to update script status to In-progress " + e.getMessage());
 		}
 	}
 
@@ -1095,8 +1085,8 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info(String.format("cant update script status to - %s", status));
-			logger.error(e);
+			logger.error(String.format("cant update script status to - %s", status));
+			logger.error(e.getMessage());
 		}
 	}
 

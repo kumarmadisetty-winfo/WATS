@@ -124,6 +124,7 @@ public class TestCaseDataService {
 			testCaseMap.put(seq, testcasedata);
 
 		}
+		logger.info("Prepare Test Data : %s",testCaseMap);
 
 	}
 
@@ -141,6 +142,8 @@ public class TestCaseDataService {
 				Integer seq = Integer.parseInt(testcase.getSeqNum());
 
 				Integer dependency = testcase.getDependencyScriptNumber();
+				logger.debug(String.format("Test Line Id: %s, Sequence Number : %s, Dependency : %s  " , 
+						test_line_id, seq, dependency));
 				if (test_line_id != null && dependency == null) {
 
 					prepareTestData(testCaseMap, testcase, seq);
@@ -150,7 +153,6 @@ public class TestCaseDataService {
 					prepareTestData(dependentScriptMap, testcase, seq);
 
 				}
-
 			}
 
 		}

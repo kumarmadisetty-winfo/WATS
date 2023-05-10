@@ -37,8 +37,7 @@ public class CopyTestrunController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Created new test run and returned testSetId")})
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException, JsonProcessingException {
-		log.info("Test Run Name**" + copyTestrunvo.getNewtestrunname());
-		log.info("copyTestrunvo.getCreation_date()" + copyTestrunvo.getCreationDate());
+		log.info("Test Run Name : " + copyTestrunvo.getNewtestrunname());
 		int newtestrun = 0;
 		if (copyTestrunvo.getRequestType().equalsIgnoreCase("copyTestRun")) {
 			newtestrun = service.copyTestrun(copyTestrunvo);
@@ -60,7 +59,7 @@ public class CopyTestrunController {
 			+ "<B>IncementalValue:</B> IncrementValue is refer to sequenceNumber. If we add new scripts to the testRun then sequenceNumber should be increment for each script ")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Added script successfully" )})
 	public ResponseDto addScriptOnTestRun(@RequestBody InsertScriptsVO scriptVO) {
-		log.info("Test Set Id *** " + scriptVO.getTestSetId());
+		log.info("Test Set Id  " + scriptVO.getTestSetId());
 		return service.addScriptsOnTestRun(scriptVO);
 	}
 }

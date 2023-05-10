@@ -46,7 +46,7 @@ public class MigrationSender {
 			+ "<B>ProductVersion:</B>productVersion should be provided because if script multple productVersion then based upon productVersion will migrate the script")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script Migrated Successfully")})
 	public String customerRepoData(@RequestBody ScriptDtlsDto scriptDtls) {
-		logger.info("SCRIPT IDS**" + scriptDtls.getScriptId());
+		logger.info("SCRIPT ID " + scriptDtls.getScriptId());
 		return service.scriptMetaData(scriptDtls);
 
 	}
@@ -58,7 +58,7 @@ public class MigrationSender {
 	@ApiResponses( value = { @ApiResponse( code=200,message="TestRun Migrated Successfully")})
 	public String testRunMigration(@RequestBody TestRunDetails testRunDetails)
 			throws ParseException, JsonProcessingException {
-		logger.info("TestRunId**" + testRunDetails.getListOfTestRun().get(0));
+		logger.info("Test Run Id " + testRunDetails.getListOfTestRun().get(0));
 		return testRunMigrationService.testRunMigration(testRunDetails);
 	}
 

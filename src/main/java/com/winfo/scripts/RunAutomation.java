@@ -188,6 +188,7 @@ public class RunAutomation {
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			log.info(String.format("Customer Id : %s, Customer Name : %s, Project Name : %s  " , customerDetails.getCustomerId(), customerDetails.getCustomerName(), customerDetails.getProjectName()));
+			log.debug("Management Tool Enabled value : %s ", fetchConfigVO.getMANAGEMENT_TOOL_ENABLED());
 			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 				String key = graphQLService.createTestRunInJiraXrayCloud(customerDetails);
 				fetchConfigVO.setTestRunIssueId(key);
@@ -356,7 +357,7 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 
-	public void executorMethod(String args, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
+	public void executorMethod(String testRunId, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
 			Entry<Integer, List<ScriptDetailsDto>> metaData, Map<Integer, Status> scriptStatus,
 			CustomerProjectDto customerDetails) throws Exception {
 		List<String> failList = new ArrayList<>();
@@ -366,7 +367,7 @@ public class RunAutomation {
 		String testSetLineId = fetchMetadataListsVO.get(0).getTestSetLineId();
 
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
-		String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String passUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
 		String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
@@ -377,7 +378,7 @@ public class RunAutomation {
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
 				+ ".pdf";
-		log.info("Pass Url - {}", passurl);
+		log.info("Pass Url - {}", passUrl);
 		log.info("Fail Url - {}", failurl);
 		log.info("Detailed Url - {}", detailurl);
 		boolean isDriverError = true;
@@ -389,7 +390,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
+			switchActions(testSetId, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
 		}
 		catch (WebDriverException e) {
 			if(driver == null)
@@ -407,7 +408,7 @@ public class RunAutomation {
 				post.setP_status("Fail");
 				post.setP_script_id(scriptId);
 				post.setP_test_set_line_id(testSetLineId);
-				post.setP_pass_path(passurl);
+				post.setP_pass_path(passUrl);
 				post.setP_fail_path(failurl);
 				post.setP_exception_path(detailurl);
 				post.setP_test_set_line_path(scripturl);
@@ -482,17 +483,14 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
+			log.info(" Instance Name " + instanceName);
 			seleniumFactory.getInstanceObjFromAbstractClass(instanceName)
 					.deleteOldScreenshotForScriptFrmObjStore(fetchMetadataListVO.get(0), customerDetails);
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
 			String checkValidScript = "Yes";
-
-			//String checkValidScript = xpathService.checkValidScript(scriptID);
-
-			log.info("Valid script check.......::" + checkValidScript);
-
+			log.info(" Valid script check " + checkValidScript);
 			Boolean validationFlag = null;
 			Map<String, String> accessTokenStorage = new HashMap<>();
 			ApiValidationVO api = new ApiValidationVO();
@@ -513,6 +511,7 @@ public class RunAutomation {
 				seqNum = fetchMetadataVO.getSeqNum();
 				String screenParameter = fetchMetadataVO.getInputParameter();
 				testScriptParamId = fetchMetadataVO.getTestScriptParamId();
+				log.debug(String.format("actionName: %s, testSetId : %s, testSetLineId : %s , scriptId1 : %s , scriptNumber : %s, seqNum : %s, screenParameter : %s , testScriptParamId : %s" , actionName, testSetId, testSetLineId, scriptId1 , scriptNumber, seqNum , screenParameter));
 				if (i == 0) {
 					dataBaseEntry.updateInProgressScriptStatus(testSetLineId, startdate);
 				}
