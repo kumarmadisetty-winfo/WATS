@@ -1587,8 +1587,8 @@ public class RunAutomation {
 								fetchConfigVO.getJIRA_ISSUE_URL();
 								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJiraIssueUpdateStatusURL(),fetchConfigVO.getJiraIssueUpdateTransitions());
 							}
-							if ("YES".equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-									&& "WOOD".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+							if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
+									&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
 								String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
 										File.separator) + customerDetails.getCustomerName() + File.separator
 										+ customerDetails.getTestSetName() + File.separator) + seqNum + "_"
@@ -1664,8 +1664,8 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 						}
-						if ("YES".equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-								&& "WOOD".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+						if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
+								&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
 							String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
 									File.separator) + customerDetails.getCustomerName() + File.separator
 									+ customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber

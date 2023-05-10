@@ -1,0 +1,63 @@
+package com.winfo.common;
+
+import java.io.File;
+
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import com.winfo.exception.WatsEBSCustomException;
+
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+@Component
+public class OkHttpService {
+	private final Logger logger = LogManager.getLogger(OkHttpService.class);
+
+	public void attachPdf(String url, String filePath, String authHeader) {
+		logger.info("Received details as input in attachPdf method");
+		try {
+			File file = new File(filePath);
+			RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+					.addFormDataPart(file.getName(), file.getName(),
+							RequestBody.create(file, okhttp3.MediaType.parse("application/octet-stream")))
+					.addFormDataPart("Title", file.getName()).build();
+			Request request = new Request.Builder().url(url).method("POST", body).addHeader("Authorization", authHeader)
+					.addHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
+					.addHeader("X-Atlassian-Token", "no-check").build();
+			OkHttpClient client = new OkHttpClient.Builder().build();
+			try (Response response = client.newCall(request).execute()) {
+				if (response.isSuccessful()) {
+					logger.info("Pdf attached succefully!");
+				} else if (response.code() == 404) {
+					throw new NotFoundException("Endpoint not found");
+				} else if (response.code() == 401) {
+					throw new WatsEBSCustomException(401, "Authentication Error");
+				} else if (response.code() == 500) {
+					throw new InternalServerErrorException("Internal server error");
+				}
+			}
+
+		} catch (NotFoundException ex) {
+			logger.error("{}", ex.getMessage());
+			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+		} catch (WatsEBSCustomException ex) {
+			logger.error("{}", ex.getMessage());
+			throw new WatsEBSCustomException(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+		} catch (InternalServerErrorException ex) {
+			logger.error("{}", ex.getMessage());
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+		} catch (Exception ex) {
+			logger.error("Error while calling API: {}", ex.getMessage());
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+		}
+	}
+}

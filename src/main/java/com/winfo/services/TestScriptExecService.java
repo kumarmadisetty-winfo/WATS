@@ -629,8 +629,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 						.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 			}
-			if ("YES".equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-					&& "WOOD".equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+			if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
+					&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
 				String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/", File.separator)
 						+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
 						+ File.separator) + pdfName;
@@ -844,7 +844,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+//	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
