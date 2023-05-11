@@ -48,7 +48,6 @@ public class DateUtils {
 	}
 	
 	public static Date findMinStartTimeAndMaxEndTime(List<Date> listOfDates, String maxOrMin) {
-		listOfDates.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
 		if("MAX".equalsIgnoreCase(maxOrMin)) {
 			return listOfDates.stream().max(Date::compareTo).get();
 		} else {
