@@ -2538,6 +2538,7 @@ public class XpathPerformance {
 		String lineNumber = fetchMetadataVO.getLineNumber();
 		String testSetLine=fetchMetadataVO.getTestSetLineId();
 		String	xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+		log.info(" Xpath Location " + xpathlocation);
 		if (xpathlocation != null) {
 		try {
 			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2);
@@ -2556,7 +2557,7 @@ public class XpathPerformance {
 				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 				throw new IOException("Failed during login page");
 			}
-			log.info("XpathPerformance=> Succesfully login to application ");
+			log.info("XpathPerformance=> Succesfully login into application ");
 		} catch (Exception e) {
 			if (count == 0) {
 				count = 1;

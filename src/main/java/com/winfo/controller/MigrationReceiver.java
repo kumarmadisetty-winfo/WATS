@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,6 @@ import com.winfo.services.GetApiValidationMigrationService;
 import com.winfo.services.TestRunMigrationGetService;
 import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.DomGenericResponseBean;
-import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestRunMigrationDto;
 import com.winfo.vo.WatsMasterDataVOList;
@@ -24,7 +22,7 @@ import com.winfo.vo.WatsMasterDataVOList;
 @RestController
 public class MigrationReceiver {
 
-	public final Logger logger = LogManager.getLogger(MigrationReceiver.class);
+	public static final Logger logger = Logger.getLogger(JobController.class);
 
 	@Autowired
 	CentralToCustomerPostService service;

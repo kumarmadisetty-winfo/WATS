@@ -855,7 +855,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName()
 				+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH;
-
+		logger.info(" ScreenShot Folder Path " + screenShotFolderPath);
 		for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
 			testScriptParamId = fetchMetadataVO.getTestScriptParamId();

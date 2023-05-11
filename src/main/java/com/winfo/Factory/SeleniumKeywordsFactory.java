@@ -10,7 +10,7 @@ import com.winfo.interface1.SeleniumKeyWordsInterface;
 
 @Configuration
 public class SeleniumKeywordsFactory {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger= Logger.getLogger(SeleniumKeywordsFactory.class);
 	@Autowired
 	private ApplicationContext context;
 
@@ -19,7 +19,7 @@ public class SeleniumKeywordsFactory {
 
 			return context.getBean(instanceName, SeleniumKeyWordsInterface.class);
 		} catch (Exception e) {
-			log.info("instance name not found");
+			logger.info(" Instance name not found");
 		}
 		return null;
 	}
@@ -29,7 +29,7 @@ public class SeleniumKeywordsFactory {
 
 			return context.getBean(instanceName, AbstractSeleniumKeywords.class);
 		} catch (Exception e) {
-			log.info("instance name not found");
+			logger.info(" Instance name not found");
 		}
 		return null;
 	}

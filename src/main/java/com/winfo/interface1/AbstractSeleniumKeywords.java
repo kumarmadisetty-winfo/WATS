@@ -2229,9 +2229,7 @@ public abstract class AbstractSeleniumKeywords {
 				HttpEntity<byte[]> uploadingFileRequest = new HttpEntity<>(data, uploadingFileHeader);
 				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
 						uploadingFileRequest, byte[].class);
-				logger.info("response status: " + response.getStatusCode());
-				logger.info("response body: " + response.getBody());
-				logger.info("response : " + response);
+				logger.info(String.format(" Response status : %s, Response body : %s, Response : %s ", response.getStatusCode(), response.getBody(), response));
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());

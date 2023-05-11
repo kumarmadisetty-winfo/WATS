@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 public class CopyTestrunController {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(CopyTestrunController.class);
 
 	@Autowired
 	CopyTestRunService service;
@@ -37,7 +37,7 @@ public class CopyTestrunController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Created new test run and returned testSetId")})
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException, JsonProcessingException {
-		log.info("Test Run Name : " + copyTestrunvo.getNewtestrunname());
+		logger.info("Test Run Name : " + copyTestrunvo.getNewtestrunname());
 		int newtestrun = 0;
 		if (copyTestrunvo.getRequestType().equalsIgnoreCase("copyTestRun")) {
 			newtestrun = service.copyTestrun(copyTestrunvo);
@@ -45,10 +45,10 @@ public class CopyTestrunController {
 			newtestrun = service.reRun(copyTestrunvo);
 		}
 		CopyTestrunjson jsondata = new CopyTestrunjson();
-		log.info("newtestrun" + newtestrun);
+		logger.info("newtestrun" + newtestrun);
 		jsondata.setNewTestRunId(newtestrun);
 		jsondata.setStatusMessage("SUCCESS");
-		log.info(jsondata.toString());
+		logger.info(jsondata.toString());
 		return jsondata;
 	}
 
@@ -59,7 +59,7 @@ public class CopyTestrunController {
 			+ "<B>IncementalValue:</B> IncrementValue is refer to sequenceNumber. If we add new scripts to the testRun then sequenceNumber should be increment for each script ")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Added script successfully" )})
 	public ResponseDto addScriptOnTestRun(@RequestBody InsertScriptsVO scriptVO) {
-		log.info("Test Set Id  " + scriptVO.getTestSetId());
+		logger.info("Test Set Id  " + scriptVO.getTestSetId());
 		return service.addScriptsOnTestRun(scriptVO);
 	}
 }
