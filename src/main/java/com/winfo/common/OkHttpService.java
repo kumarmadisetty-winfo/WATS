@@ -43,6 +43,10 @@ public class OkHttpService {
 					throw new WatsEBSCustomException(401, "Authentication Error");
 				} else if (response.code() == 500) {
 					throw new InternalServerErrorException("Internal server error");
+				} else if (response.code() == 400) {
+					throw new WatsEBSCustomException(400, "Bad Request");
+				} else if (response.code() == 503) {
+					throw new WatsEBSCustomException(503, "Service Unavailable");
 				}
 			}
 
@@ -51,7 +55,7 @@ public class OkHttpService {
 			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
 		} catch (WatsEBSCustomException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+			throw new WatsEBSCustomException(ex.getErrorCode(), ex.getMessage());
 		} catch (InternalServerErrorException ex) {
 			logger.error("{}", ex.getMessage());
 			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());

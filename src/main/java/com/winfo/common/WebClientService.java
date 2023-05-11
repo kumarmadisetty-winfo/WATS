@@ -60,6 +60,10 @@ public class WebClientService {
 								clientResponse -> Mono.error(new WatsEBSCustomException(401, "Authentication Error")))
 						.onStatus(httpStatus -> HttpStatus.INTERNAL_SERVER_ERROR.equals(httpStatus),
 								clientResponse -> Mono.error(new InternalServerErrorException("Internal server error")))
+						.onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus),
+								clientResponse -> Mono.error(new WatsEBSCustomException(400,"Bad Request")))
+						.onStatus(httpStatus -> HttpStatus.SERVICE_UNAVAILABLE.equals(httpStatus),
+								clientResponse -> Mono.error(new WatsEBSCustomException(503,"Service Unavailable")))
 						.bodyToMono(String.class);
 			} else {
 				bodyToMono = client.method(httpMethod).uri(apiValidationData.getUrl())
@@ -71,6 +75,10 @@ public class WebClientService {
 								clientResponse -> Mono.error(new WatsEBSCustomException(401, "Authentication Error")))
 						.onStatus(httpStatus -> HttpStatus.INTERNAL_SERVER_ERROR.equals(httpStatus),
 								clientResponse -> Mono.error(new InternalServerErrorException("Internal server error")))
+						.onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus),
+								clientResponse -> Mono.error(new WatsEBSCustomException(400,"Bad Request")))
+						.onStatus(httpStatus -> HttpStatus.SERVICE_UNAVAILABLE.equals(httpStatus),
+								clientResponse -> Mono.error(new WatsEBSCustomException(503,"Service Unavailable")))
 						.bodyToMono(String.class);
 			}
 
@@ -82,7 +90,7 @@ public class WebClientService {
 			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
 		} catch (WatsEBSCustomException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+			throw new WatsEBSCustomException(ex.getErrorCode(), ex.getMessage());
 		} catch (InternalServerErrorException ex) {
 			logger.error("{}", ex.getMessage());
 			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
