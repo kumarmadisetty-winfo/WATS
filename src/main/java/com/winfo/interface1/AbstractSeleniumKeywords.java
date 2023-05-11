@@ -1254,11 +1254,17 @@ public abstract class AbstractSeleniumKeywords {
 		int i = 0;
 		int j = 0;
 		int increment = 0;
+		StringBuffer stringBuffer = new StringBuffer();
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
-			String fileName = metaDataVO.getSeqNum() + "_" + metaDataVO.getLineNumber() + "_"
-					+ metaDataVO.getScenarioName() + "_" + metaDataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + metaDataVO.getLineNumber();
+			stringBuffer.setLength(0);
+
+			stringBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getLineNumber()).append("_")
+					.append(metaDataVO.getScenarioName()).append("_").append(metaDataVO.getScriptNumber()).append("_")
+					.append(customerDetails.getTestSetName()).append("_").append(metaDataVO.getLineNumber());
+
+			String fileName = stringBuffer.toString();
+			
 			String nextSeqNumber = "0";
 			String currentSeqNumber = "0";
 			increment++;
@@ -1279,8 +1285,10 @@ public abstract class AbstractSeleniumKeywords {
 
 			if (image != null) {
 				i++;
-				Image img = Image.getInstance(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerName
-						+ FORWARD_SLASH + testRunName1 + FORWARD_SLASH + image);
+				stringBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()).append(customerName)
+						.append(FORWARD_SLASH).append(testRunName1).append(FORWARD_SLASH).append(image);
+
+				Image img = Image.getInstance(stringBuffer.toString());
 				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 				String sno = image.split("_")[0];
 				String sNo = SCRIPT_NUMBER;
@@ -1564,8 +1572,14 @@ public abstract class AbstractSeleniumKeywords {
 			List<String> objNames = null;
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
-				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
-						+ FORWARD_SLASH + customerDetails.getTestSetName() + FORWARD_SLASH + testSetLine.getSeqNum();
+//				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
+//						+ FORWARD_SLASH + customerDetails.getTestSetName() + FORWARD_SLASH + testSetLine.getSeqNum();
+				StringBuffer stringBuffer = new StringBuffer();
+				stringBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerDetails.getCustomerName()).append(FORWARD_SLASH)
+						.append(customerDetails.getTestSetName()).append(FORWARD_SLASH).append(testSetLine.getSeqNum());
+				
+				String objectStoreScreenShotPath = stringBuffer.toString();
+				
 				ListObjectsRequest listScreenShotObjectsRequest = ListObjectsRequest.builder()
 						.namespaceName(ociNamespace).bucketName(ociBucketName).prefix(objectStoreScreenShotPath)
 						.delimiter(FORWARD_SLASH).build();
@@ -1657,12 +1671,16 @@ public abstract class AbstractSeleniumKeywords {
 					.append("_").append(fetchMetadataVO.getScenarioName()).append("_")
 					.append(fetchMetadataVO.getScriptNumber()).append("_").append(customerDetails.getTestSetName())
 					.append("_").append(fetchMetadataVO.getLineNumber());
-
+			
 			imageName = isPassed ? imageName.append("_Passed".concat(PNG_EXTENSION))
 					: imageName.append("_Failed".concat(PNG_EXTENSION));
+			
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION())
+					.append(customerDetails.getCustomerName()).append(FORWARD_SLASH)
+					.append(customerDetails.getTestSetName());
 
-			File imagePath = new File(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-					+ FORWARD_SLASH + customerDetails.getTestSetName());
+			File imagePath = new File(stringBuffer.toString());
 
 			if (!imagePath.exists()) {
 				logger.info(String.format("creating directory: {}", imagePath.getName()));
@@ -1681,8 +1699,15 @@ public abstract class AbstractSeleniumKeywords {
 			baos.close();
 			fileOutputStream.close();
 			File source = new File(imagePath + File.separator + imageName);
-			String folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
-					+ customerDetails.getTestSetName();
+//			String folderName = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName() + FORWARD_SLASH
+//					+ customerDetails.getTestSetName();
+//			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.setLength(0);
+			stringBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerDetails.getCustomerName())
+					.append(FORWARD_SLASH).append(customerDetails.getTestSetName());
+
+			String folderName = stringBuffer.toString();
+
 
 			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName.toString());
 			Files.delete(Paths.get(source.getPath()));
@@ -1742,11 +1767,30 @@ public abstract class AbstractSeleniumKeywords {
 			FetchConfigVO fetchConfigVO) throws IOException, com.itextpdf.text.DocumentException {
 
 		document.newPage();
-		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + FORWARD_SLASH
-				+ customerDetails.getTestSetName();
-		fileName = fileName + "_Passed.txt";
-		String localPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
-				+ customerDetails.getTestSetName() + File.separator) + fileName;
+//		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + FORWARD_SLASH
+//				+ customerDetails.getTestSetName();
+//		fileName = fileName + "_Passed.txt";
+//		String localPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
+//				+ customerDetails.getTestSetName() + File.separator) + fileName;
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
+				.append(FORWARD_SLASH).append(customerDetails.getTestSetName());
+
+		String folderName = stringBuffer.toString();
+
+		stringBuffer.setLength(0);
+
+		stringBuffer.append(fileName).append("_Passed.txt");
+
+		fileName = stringBuffer.toString();
+
+		stringBuffer.setLength(0);
+
+		stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
+				.append(File.separator).append(customerDetails.getTestSetName()).append(File.separator)
+				.append(fileName);
+
+		String localPath = stringBuffer.toString();
 		downloadObjectFromObjectStore(localPath, folderName, fileName);
 		Path path = Paths.get(localPath);
 		byte[] bytes = Files.readAllBytes(path);
@@ -1799,9 +1843,16 @@ public abstract class AbstractSeleniumKeywords {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		String str = "{\n" + "  \"HTTP Type\": \"POST\",\n" + "  \"Request Header\": {\n"
-				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n" + "  },\n" + "  \"Request Body\": {\n"
-				+ "    \"grant_type\": \"client_credentials\"\n" + "  }\n" + "}";
+//		String str = "{\n" + "  \"HTTP Type\": \"POST\",\n" + "  \"Request Header\": {\n"
+//				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n" + "  },\n" + "  \"Request Body\": {\n"
+//				+ "    \"grant_type\": \"client_credentials\"\n" + "  }\n" + "}";
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("{\n").append("  \"HTTP Type\": \"POST\",\n").append("  \"Request Header\": {\n")
+				.append("    \"Content-Type\": \"application/x-www-form-urlencoded\"\n").append("  },\n")
+				.append("  \"Request Body\": {\n").append("    \"grant_type\": \"client_credentials\"\n")
+				.append("  }\n").append("}");
+		String str = stringBuffer.toString();
+
 		ApiValidationVO apiValidationData = objectMapper.readValue(str, ApiValidationVO.class);
 		apiValidationData.setUrl(fetchConfigVO.getAPI_AUTHENTICATION_URL());
 		String token = null;
@@ -2010,15 +2061,33 @@ public abstract class AbstractSeleniumKeywords {
 			createScreenShot(fetchMetadataVO, fetchConfigVO, "Response : " + api.getResponseCode(), customerDetails,
 					true);
 
-			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName() + "/"
-					+ fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
-					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-					.concat(".txt");
-			String name = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
-					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-					.concat(".txt");
+//			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName() + "/"
+//					+ fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+//					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+//					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
+//					.concat(".txt");
+//			String name = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
+//					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
+//					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
+//					.concat(".txt");
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getTestSetName())
+					.append("/").append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
+					.append("_").append(fetchMetadataVO.getScenarioName()).append("_")
+					.append(fetchMetadataVO.getScriptNumber()).append("_").append(customerDetails.getTestSetName())
+					.append("_").append(fetchMetadataVO.getLineNumber()).append("_Passed").append(".txt");
+
+			String fileName = stringBuffer.toString();
+
+			stringBuffer.setLength(0);
+
+			stringBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
+					.append("_").append(fetchMetadataVO.getScenarioName()).append("_")
+					.append(fetchMetadataVO.getScriptNumber()).append("_").append(customerDetails.getTestSetName())
+					.append("_").append(fetchMetadataVO.getLineNumber()).append("_Passed").append(".txt");
+
+			String name = stringBuffer.toString();
+
 			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName());
 
 			try (PrintWriter out = new PrintWriter(fileName)) {
@@ -2077,8 +2146,14 @@ public abstract class AbstractSeleniumKeywords {
 		if (fileName != null) {
 			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
 
-			String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
-					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+//			String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
+//					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
+					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
+					.append(customerDetails.getTestSetName()).append("_Passed");
+			String newName = stringBuffer.toString();
+
 			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
 				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
 
@@ -2199,8 +2274,11 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			String accessToken = getSharepointAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getTestSetName() + "/");
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append(fetchConfigVO.getPdf_path()).append(customerDetails.getCustomerName()).append("/")
+					.append(customerDetails.getTestSetName()).append("/");
+			File imageDir = new File(stringBuffer.toString());
+
 			System.out.println(imageDir);
 
 			RestTemplate restTemplate = new RestTemplate();
@@ -2279,13 +2357,15 @@ public abstract class AbstractSeleniumKeywords {
 				input.close();
 				byte[] data = bos.toByteArray();
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
-				bodyMap.add("user-file", data);
+				bodyMap.add("user-file", data);			
+				stringBuffer.append("https://graph.microsoft.com/v1.0/drives/").append(driveId).append("/items/")
+						.append(itemId).append(":/").append(customerDetails.getCustomerName()).append("/")
+						.append(customerDetails.getProjectName()).append("/").append(customerDetails.getTestSetName())
+						.append("/").append(imageFileName).append(":/createUploadSession");
 
-				ResponseEntity<Object> response = restTemplate.exchange(
-						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/items/" + itemId + ":/"
-								+ customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
-								+ customerDetails.getTestSetName() + "/" + imageFileName + ":/createUploadSession",
-						HttpMethod.POST, uploadSessionRequest, Object.class);
+				ResponseEntity<Object> response = restTemplate.exchange(stringBuffer.toString(), HttpMethod.POST,
+						uploadSessionRequest, Object.class);
+
 
 //				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
 //						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
