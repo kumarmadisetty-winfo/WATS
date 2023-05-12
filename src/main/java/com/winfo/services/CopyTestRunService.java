@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -364,11 +365,11 @@ public class CopyTestRunService {
 				}
 				scriptParamObj.setInputValue(hexaDecimal);
 			} else {
-				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
-				Date dateobj = new Date();
-				String covertDateobj = dateformate.format(dateobj);
-				Thread.sleep(1);
-				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
+//				DateFormat dateformate = new SimpleDateFormat("dd-MM-yy HH:mm:ss.SSS");
+//				Date dateobj = new Date();
+//				String covertDateobj = dateformate.format(dateobj);
+//				Thread.sleep(1);
+//				covertDateobj = covertDateobj.replaceAll("[^0-9]", "");
 				if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 					scriptParamObj.setInputValue(inputValues);
 					if (actionsList.contains(scriptParamObj.getAction())) {
@@ -378,11 +379,20 @@ public class CopyTestRunService {
 						&& "copyTestRun".equalsIgnoreCase(copyTestrunvo.getRequestType())) {
 					scriptParamObj.setInputValue(
 							inputValues.replace(inputValues.split(">")[0], copyTestrunvo.getNewtestrunname()));
-				} else {
-					scriptParamObj.setInputValue(covertDateobj);
+				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
+						&& Constants.VALIDATION_TYPE_REGULAR_EXPR.equalsIgnoreCase(scriptParamObj.getValidationType())) {
+					setDateInputValue(scriptParamObj.getValidationName(), scriptParamObj);
+
+				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
+						&& (scriptParamObj.getValidationType() == null || "NA".equalsIgnoreCase(scriptParamObj.getValidationType()))) {
+					setDateInputValue("",scriptParamObj);
+				}else {
+//					scriptParamObj.setInputValue(covertDateobj);
+					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 				}
 			}
-		} else if ("Mandatory".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
+		} else if ("Mandatory".equalsIgnoreCase(scriptParamObj.getUniqueMandatory()) || "Unique".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())
+				|| "Both".equalsIgnoreCase(scriptParamObj.getUniqueMandatory())) {
 			if (inputValues == null || "copynumber".equalsIgnoreCase(scriptParamObj.getAction())) {
 				scriptParamObj.setInputValue(null);
 				if (actionsList.contains(scriptParamObj.getAction())) {
@@ -397,19 +407,10 @@ public class CopyTestRunService {
 				if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes())
 						&& Constants.VALIDATION_TYPE_REGULAR_EXPR
 								.equalsIgnoreCase(scriptParamObj.getValidationType())) {
-					try {
-						String dateFormat = copyTestrunDao
-								.getMeaningUsingValidationName(scriptParamObj.getValidationName());
-						SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-						scriptParamObj.setInputValue(formatter.format(new Date()));
-					} catch (Exception e) {
-						log.info("Exception occured while converting date Format");
-						throw new WatsEBSCustomException(500, "Exception occured while converting date Format", e);
-					}
+					setDateInputValue(scriptParamObj.getValidationName(),scriptParamObj);
 
 				} else if (Constants.VALIDATION_DATATYPE_DATE.equalsIgnoreCase(scriptParamObj.getDataTypes()) && (scriptParamObj.getValidationType() == null || "NA".equalsIgnoreCase(scriptParamObj.getValidationType()))) {
-					SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
-					scriptParamObj.setInputValue(formatter.format(new Date()));
+					setDateInputValue("",scriptParamObj);
 				} else {
 					scriptParamObj.setInputValue(testSetScriptParamObj.getInputValue());
 				}
@@ -437,6 +438,24 @@ public class CopyTestRunService {
 			     }
 		}
 
+	}
+
+	private void setDateInputValue(String validationName, TestSetScriptParam scriptParamObj) {
+		if(!StringUtils.isBlank(validationName)) {
+		try {
+			String dateFormat = copyTestrunDao
+					.getMeaningUsingValidationName(validationName);
+			SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+			scriptParamObj.setInputValue(formatter.format(new Date()));
+		} catch (Exception e) {
+			log.info("Exception occurred while converting date Format");
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
+		}
+		}
+		else{
+			SimpleDateFormat formatter = new SimpleDateFormat(Constants.MM_dd_yy);
+			scriptParamObj.setInputValue(formatter.format(new Date()));
+		}
 	}
 
 	@Transactional

@@ -77,6 +77,20 @@ public class Constants {
 			return this.label;
 		}
 	}
+	
+	public enum smartBear {
+		WOOD("WOOD"), YES("YES");
+
+		public final String label;
+
+		private smartBear(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return this.label;
+		}
+	}
 
 
 	public static String addQuotes(String string) {
@@ -105,5 +119,5 @@ public class Constants {
 	public static final String GENERATING = "generating";
 	public static final String VALIDATION_TYPE_REGULAR_EXPR="REGULAR_EXPR";
 	public static final String VALIDATION_DATATYPE_DATE="Date";
-	
+	public static final String MM_dd_yy="MM/dd/yy";
 }

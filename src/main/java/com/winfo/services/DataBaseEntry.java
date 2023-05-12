@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
@@ -30,6 +29,8 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -56,6 +57,11 @@ public class DataBaseEntry {
 	ApplicationContext appContext;
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
+	
+	@Autowired
+	private ScriptMasterRepository scriptMasterRepository;
 
 	
 	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
@@ -550,7 +556,7 @@ public class DataBaseEntry {
 	}
 
 	public ScriptMaster getScriptDetailsByScriptId(Integer scriptId) {
-		return dao.getScriptDetailsByScriptId(scriptId);
+		return scriptMasterRepository.findById(scriptId).get();
 	}
 	
 	public String getDirectoryPath() {
@@ -590,4 +596,19 @@ public class DataBaseEntry {
 		dao.UpdateTestSetScriptParamContainsExcel(testscriptparamid);
 	}
 	
+	public List<String> findLookUpCodesUsingLookUpName(String lookUpName) {
+		return lookUpCodeJpaRepository.findLookUpCodesUsingLookUpName(lookUpName);
+	}
+	
+	public List<String> getActionByTargetApplication(String targetApplication) {
+		return lookUpCodeJpaRepository.getActionByTargetApplication(targetApplication);
+	}
+	
+	public String getActionMeaningScriptIdAndLineNumber(Integer scriptId, Integer scriptMetaDataId) {
+		return lookUpCodeJpaRepository.getActionMeaningScriptIdAndLineNumber(scriptId,scriptMetaDataId);
+	}
+	
+	public String getMeaningByTargetCode(String lookUpCode, String lookUpName) {
+		return lookUpCodeJpaRepository.getMeaningByTargetCode(lookUpCode,lookUpName);
+	}
 }

@@ -2259,7 +2259,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			Thread.sleep(2000);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(5000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			takeScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked selectAValue" + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"][1]";

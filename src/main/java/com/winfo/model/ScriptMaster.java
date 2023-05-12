@@ -97,6 +97,9 @@ public class ScriptMaster {
 
 	@Column(name = "CUSTOMISATION_REFERENCE")
 	private String customisationReference;
+	
+	@Column(name = "ATTRIBUTE1")
+	private String attribute1;
 
 	@Column(name = "ATTRIBUTE2")
 	private String attribute2;

@@ -34,6 +34,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -790,6 +791,7 @@ public class DataBaseEntryDao {
 				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION\r\n"
 				+ " ,wttsl.dependency_tr\r\n" 
 				+ "          , wttsl.ISSUE_KEY\r\n"
+				+", wtp.ORACLE_RELEASE_YEAR\r\n"
 				+ "      from\r\n" + "      execute_status ex_st,\r\n"
 				+ "      win_ta_test_set        wtts,\r\n" + "    win_ta_script_master ma,\r\n"
 				+ "           win_ta_test_set_lines  wttsl,\r\n"
@@ -870,7 +872,9 @@ public class DataBaseEntryDao {
 				
 				scriptDetailsDto.setIssueKey(
 						NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
-
+				
+				scriptDetailsDto.setOracleReleaseYear(
+						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}
 		} catch (Exception e) {
@@ -1676,7 +1680,6 @@ public class DataBaseEntryDao {
 			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
 		}
 	}
-	
 	
 }
 	

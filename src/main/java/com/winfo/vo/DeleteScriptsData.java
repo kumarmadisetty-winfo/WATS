@@ -16,7 +16,7 @@ public class DeleteScriptsData {
 	private List<Integer> script_id = new ArrayList<Integer>();
 
 	private String prod_ver;
-	
+
 	@JsonProperty("deleteAll")
 	private boolean deleteAll;
 
