@@ -1190,8 +1190,8 @@ public abstract class AbstractSeleniumKeywords {
 					Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
 					click2.setReference("#" + scriptNumber);
 					// Add table rows with clickable anchors
-			        PdfPCell scriptNumberCell = new PdfPCell(new Phrase(ca1));
-			        PdfPCell pageNumberCell = new PdfPCell(new Phrase(click));
+			        PdfPCell scriptNumberCell = new PdfPCell(ca1);
+			        PdfPCell pageNumberCell = new PdfPCell(click);
 			        
 			        // Set cell styles
 			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
