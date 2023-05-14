@@ -83,6 +83,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
@@ -1145,38 +1146,69 @@ public abstract class AbstractSeleniumKeywords {
 		p2.add(target2);
 		document.add(p2);
 		document.add(Chunk.NEWLINE);
+		
+		// Create a table
+		PdfPTable table = new PdfPTable(2);
+		table.setWidthPercentage(100);
+
+		// Add table headers
+		table.addCell("Script Number");
+		table.addCell("Page Number");
 
 		Chunk dottedLine = new Chunk(new DottedLineSeparator());
 		for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
 			Map<String, String> str1 = entry.getValue();
 			for (Entry<String, String> entry1 : str1.entrySet()) {
-				Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
-				click.setReference("#" + entry1.getKey());
+				String scriptNumber = entry1.getKey();
+		        String pageNumber = entry.getKey().toString();
+				Anchor click = new Anchor(pageNumber, bf15);
+				click.setReference("#" + scriptNumber);
 				Paragraph pr = new Paragraph();
-				Anchor ca1 = new Anchor(entry1.getKey(), bf15);
-				ca1.setReference("#" + entry1.getKey());
-				String compare = entry1.getValue();
+				Anchor ca1 = new Anchor(scriptNumber, bf15);
+				ca1.setReference("#" + scriptNumber);
+				String compare = scriptNumber;
 				if (!compare.equals("null")) {
 					Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
-					click1.setReference("#" + entry1.getKey());
-					pr.add(ca1);
-					pr.add(click1);
-					pr.add(dottedLine);
-					pr.add(click);
-					document.add(Chunk.NEWLINE);
-					document.add(pr);
+					click1.setReference("#" + scriptNumber);
+					// Add table rows with clickable anchors
+			        PdfPCell scriptNumberCell = new PdfPCell(new Phrase(ca1));
+			        PdfPCell pageNumberCell = new PdfPCell(new Phrase(click));
+			        
+			        // Set cell styles
+			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			        
+			        table.addCell(scriptNumberCell);
+			        table.addCell(pageNumberCell);
+//					pr.add(ca1);
+//					pr.add(click1);
+//					pr.add(dottedLine);
+//					pr.add(click);
+//					document.add(Chunk.NEWLINE);
+//					document.add(pr);
 				} else {
 					Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
-					click2.setReference("#" + entry1.getKey());
-					pr.add(ca1);
-					pr.add(click2);
-					pr.add(dottedLine);
-					pr.add(click);
-					document.add(Chunk.NEWLINE);
-					document.add(pr);
+					click2.setReference("#" + scriptNumber);
+					// Add table rows with clickable anchors
+			        PdfPCell scriptNumberCell = new PdfPCell(new Phrase(ca1));
+			        PdfPCell pageNumberCell = new PdfPCell(new Phrase(click));
+			        
+			        // Set cell styles
+			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			        
+			        table.addCell(scriptNumberCell);
+			        table.addCell(pageNumberCell);
+//					pr.add(ca1);
+//					pr.add(click2);
+//					pr.add(dottedLine);
+//					pr.add(click);
+//					document.add(Chunk.NEWLINE);
+//					document.add(pr);
 				}
 			}
 		}
+		document.add(table);
 
 		int i = 0;
 		int j = 0;
