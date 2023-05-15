@@ -30,6 +30,7 @@ import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -58,6 +59,9 @@ public class DataBaseEntry {
 	private static final String COMPLETED = "Completed";
 	@Autowired
 	private LookUpCodeRepository lookUpCodeJpaRepository;
+	
+	@Autowired
+	private ScriptMasterRepository scriptMasterRepository;
 
 	
 	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
@@ -552,7 +556,7 @@ public class DataBaseEntry {
 	}
 
 	public ScriptMaster getScriptDetailsByScriptId(Integer scriptId) {
-		return dao.getScriptDetailsByScriptId(scriptId);
+		return scriptMasterRepository.findById(scriptId).get();
 	}
 	
 	public String getDirectoryPath() {

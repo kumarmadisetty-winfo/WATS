@@ -1,18 +1,20 @@
 package com.winfo.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
@@ -40,6 +42,8 @@ public class CommonObjectStoreUtils {
 	public static final String FORWARD_SLASH = "/";
 	@Autowired
 	WatsPluginDao dao;
+	@Autowired
+	MessageUtil messageUtil;
 	
 	public ResponseEntity<StreamingResponseBody> getFileFromCommonObjectStore(String filePath,String fileName,MediaType mediaType) throws IOException {
 
@@ -64,13 +68,13 @@ public class CommonObjectStoreUtils {
 			} catch (BmcException e) {
 				log.error(fileName+ " is not exist in Object Store");
 				throw new WatsEBSCustomException(e.getStatusCode(),
-						MessageUtil.getMessage("CommonObjectStoreUtils.Error.FileNotPresent", fileName), e);
+						MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		    }catch (IOException e) {
 		    	log.error("Exception occured while returning file from service");
-				throw new WatsEBSCustomException(403, MessageUtil.getMessage("CommonObjectStoreUtils.Error.FailedToReturnTheFile"), e);
+				throw new WatsEBSCustomException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 			} catch (Exception e) {
 				log.error("Exception occured while downloading "+fileName+" from Object Store");
-		    	throw new WatsEBSCustomException(500,MessageUtil.getMessage("CommonObjectStoreUtils.Error.DownloadFailed",fileName), e);
+		    	throw new WatsEBSCustomException(500,MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
 		    }
 	}
 }

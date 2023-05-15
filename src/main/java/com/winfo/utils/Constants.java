@@ -77,6 +77,20 @@ public class Constants {
 			return this.label;
 		}
 	}
+	
+	public enum smartBear {
+		WOOD("WOOD"), YES("YES");
+
+		public final String label;
+
+		private smartBear(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return this.label;
+		}
+	}
 
 
 	public static String addQuotes(String string) {
