@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.JiraTicketBugDao;
+import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestRunVO;
@@ -53,6 +54,10 @@ public class JiraTicketBugService {
 	JiraTicketBugDao dao;
 	@Autowired
 	private WebClient.Builder webClientBuilder;
+	
+	@Autowired
+	MessageUtil messageUtil;
+	
 	@Value("${jira.username}")
 	private String userName;
 	@Value("${jira.password}")
@@ -311,7 +316,7 @@ public class JiraTicketBugService {
 			DomGenericResponseBean response = new DomGenericResponseBean();
 			response.setStatus(400);
 			response.setStatusMessage("ERROR");
-			response.setDescription(MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
+			response.setDescription(messageUtil.getJiraTicketBugService().getError().getNotAbleToCreateIssue());
 			bean.add(response);
 			logger.error(e);
 //			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
