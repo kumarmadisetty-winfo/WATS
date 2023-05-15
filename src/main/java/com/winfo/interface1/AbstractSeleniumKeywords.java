@@ -756,7 +756,6 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Endddddddddddddddddddddd");
 	}
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
