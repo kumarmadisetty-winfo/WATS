@@ -45,7 +45,6 @@ import com.winfo.services.GraphQLService;
 import com.winfo.services.JiraTicketBugService;
 import com.winfo.services.LimitScriptExecutionService;
 import com.winfo.services.ScriptXpathService;
-import com.winfo.services.SmartBearService;
 import com.winfo.services.TestCaseDataService;
 import com.winfo.services.TestScriptExecService;
 import com.winfo.utils.Constants;
@@ -97,8 +96,6 @@ public class RunAutomation {
 	CodeLinesRepository codeLineRepo;
 	@Autowired
 	GraphQLService graphQLService;
-	@Autowired
-	SmartBearService smartBearService;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -1581,16 +1578,6 @@ public class RunAutomation {
 								fetchConfigVO.getJIRA_ISSUE_URL();
 								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJiraIssueUpdateStatusURL(),fetchConfigVO.getJiraIssueUpdateTransitions());
 							}
-							if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-									&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
-								String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
-										File.separator) + customerDetails.getCustomerName() + File.separator
-										+ customerDetails.getTestSetName() + File.separator) + seqNum + "_"
-										+ scriptNumber + ".pdf";
-								smartBearService.smartBearIntegrate(fetchMetadataListVO, "Passed", sourceFilePath,
-										fetchConfigVO.getSMARTBEAR_PROJECT_NAME(),
-										fetchConfigVO.getSMARTBEAR_CUSTOM_COLUMN_NAME());
-							}
 					}
 
 				} catch (Exception e) {
@@ -1656,16 +1643,6 @@ public class RunAutomation {
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
 									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
-						}
-						if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-								&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
-							String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
-									File.separator) + customerDetails.getCustomerName() + File.separator
-									+ customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber
-									+ "_RUN" + failedScriptRunCount + ".pdf";
-							smartBearService.smartBearIntegrate(fetchMetadataListVO, "Failed", sourceFilePath,
-									fetchConfigVO.getSMARTBEAR_PROJECT_NAME(),
-									fetchConfigVO.getSMARTBEAR_CUSTOM_COLUMN_NAME());
 						}
 					return;
 				}

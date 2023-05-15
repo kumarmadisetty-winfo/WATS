@@ -51,9 +51,6 @@ public class CopyTestRunService {
 
 	@Autowired
 	CopyTestRunDao copyTestrunDao;
-	
-	@Autowired
-	MessageUtil messageUtil;
 
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
@@ -502,7 +499,7 @@ public class CopyTestRunService {
 				invalidTestRunName = existingProductVersion == null ? testSetObj.getTestRunName()
 						: existLineObj.getTestRun().getTestRunName();
 				return new ResponseDto(500, Constants.ERROR,
-						MessageUtil.getMessage(messageUtil.getCopyTestRunService().getError().getInvalidProductVersion(), invalidTestRunName));
+						MessageUtil.getMessage("CopyTestRunService.Error.InvalidProductVersion", invalidTestRunName));
 			} else if (!existingProductVersion.equalsIgnoreCase(newProductVersion)) {
 				Integer scriptIdFromMaster = copyTestrunDao.getScriptIdFromMaster(existLineObj.getScriptNumber(),
 						existingProductVersion);
@@ -625,17 +622,17 @@ public class CopyTestRunService {
 		}
 		if(listOfTestSetLinesObj.isEmpty()) {
 			return new ResponseDto(500, Constants.ERROR,
-					MessageUtil.getMessage(messageUtil.getCopyTestRunService().getError().getInvalidScript()));
+					MessageUtil.getMessage("CopyTestRunService.Error.InvalidScript"));
 			
 		}
 		
 		if (listOfScriptNumberWrongProductVersion.isEmpty()) {
 			return new ResponseDto(200, Constants.SUCCESS,
-					messageUtil.getCopyTestRunService().getSuccess().getScriptAdded());
+					MessageUtil.getMessage("CopyTestRunService.Success.ScriptAdded"));
 		} else {
 			String msg = listOfScriptNumberWrongProductVersion.toString().replace("[", "").replace("]", "");
 			return new ResponseDto(500, Constants.ERROR, MessageUtil
-					.getMessage(messageUtil.getCopyTestRunService().getError().getProductVersionMissing(), existingProductVersion, msg));
+					.getMessage("CopyTestRunService.Error.ProductVersionMissing", existingProductVersion, msg));
 		}
 
 	}

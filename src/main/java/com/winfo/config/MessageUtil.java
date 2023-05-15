@@ -1,101 +1,84 @@
 package com.winfo.config;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+public final class MessageUtil {
 
-import lombok.Data;
+	private static final String MESSAGE_FILE = "messages.properties";
+	private static final Map<String, String> messageMap = new HashMap<>();
 
-@PropertySource("classpath:messages.properties")
-@ConfigurationProperties
-@Data
-@Component
-public class MessageUtil {
-	private HealthCheck healthCheck;
-	private CopyTestRunService copyTestRunService;
-	private ObjectStore objectStore;
-	private CopyDataCustomerService copyDataCustomerService;
-	private DeleteDataDao deleteDataDao;
-	private Deletion deletion;
-	private CommonObjectStoreUtils commonObjectStoreUtils;
-	private JiraTicketBugService jiraTicketBugService;
-	
-	@Data
-	public static class Error {
-		private String DbAccessibilityMessage;
-		private String SeleniumGridMessage;
-		private String ObjectStoreAccess;
-		private String SharePointAccess;
-		private String InvalidScript;
-		private String InvalidProductVersion;
-		private String ProductVersionMissing;
-		private String ScriptNotFound;
-		private String PdfAndScreenshotNotDeleted;
-		private String FileNotPresent;
-		private String FailedToReturnTheFile;
-		private String DownloadFailed;
-		private String IssueAlreadyExists;
-		private String NotAbleToCreateIssue;
+	static {
+		reloadMessages();
+		URL resource = MessageUtil.class.getClassLoader().getResource(MESSAGE_FILE);
+		Path path = null;
+		try {
+			path = Paths.get(resource.toURI()).toAbsolutePath().getParent();
+		} catch (URISyntaxException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			WatchService watchService = FileSystems.getDefault().newWatchService();
+			path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+			Thread watchThread = new Thread(() -> {
+				while (true) {
+					try {
+						WatchKey key = watchService.take();
+						for (WatchEvent<?> event : key.pollEvents()) {
+							if (event.context().toString().equals(MESSAGE_FILE)) {
+								reloadMessages();
+							}
+						}
+						key.reset();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						Thread.currentThread().interrupt();
+					}
+				}
+			});
+			watchThread.setDaemon(true);
+			watchThread.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	@Data
-	public static class Success {
-		private String SanityCheckMessage;
-		private String CopyData;
-		private String ScriptAdded;
-		private String ScriptDeleted;
-		private String PdfAndScreenshotDeleted;
-		private String ScreenshotNotPresent;
-		private String ScreenshotDeleted;
-		private String PdfNotPresent;
-		private String PdfDeleted;
-		private String IssueCreated;
-		
+
+	private static void reloadMessages() {
+		try (InputStream input = MessageUtil.class.getClassLoader().getResourceAsStream(MESSAGE_FILE)) {
+			Properties properties = new Properties();
+			properties.load(input);
+			for (String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				messageMap.put(key, value);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	@Data
-	public static class CopyTestRunService {
-		private Success success;
-		private Error error;
-	}
-	@Data
-	public static class HealthCheck{
-		private Error error;
-		private Success success;
-	}
-	@Data
-	public static class ObjectStore{
-		private String ConfigFileIOException;
-		private String AccessDeniedException;
-	}
-	@Data
-	public static class CopyDataCustomerService{
-		private Error error;
-		private Success success;
-	}
-	@Data
-	public static class DeleteDataDao{
-		private Error error;
-		private Success success;
-	}
-	@Data
-	public static class Deletion{
-		private Error error;
-		private Success success;
-	}
-	@Data
-	public static class CommonObjectStoreUtils{
-		private Error error;
-		private Success success;
-	}
-	@Data
-	public static class JiraTicketBugService{
-		private Error error;
-		private Success success;
-	}
-	
+
 	public static String getMessage(String code, Object... args) {
-		return MessageFormat.format(code, args);
+		String message = messageMap.get(code);
+		if (message == null) {
+			return code;
+		}
+		return MessageFormat.format(message, args);
+	}
+
+	private MessageUtil() {
+		throw new IllegalStateException("Can not initialize utility class");
 	}
 }

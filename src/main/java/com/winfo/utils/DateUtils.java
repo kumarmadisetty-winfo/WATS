@@ -2,10 +2,9 @@ package com.winfo.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.winfo.constants.DateConstants;
 
@@ -48,10 +47,12 @@ public class DateUtils {
 	}
 	
 	public static Date findMinStartTimeAndMaxEndTime(List<Date> listOfDates, String maxOrMin) {
+		Collections.sort(listOfDates);
+		
 		if("MAX".equalsIgnoreCase(maxOrMin)) {
-			return listOfDates.stream().max(Date::compareTo).get();
+			return listOfDates.get(listOfDates.size() - 1);
 		} else {
-			return listOfDates.stream().min(Comparator.naturalOrder()).get();
+			return listOfDates.get(0);
 		}
 	}
 

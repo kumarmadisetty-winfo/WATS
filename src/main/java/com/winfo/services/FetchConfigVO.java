@@ -162,39 +162,9 @@ public class FetchConfigVO {
     
     private String MANAGEMENT_TOOL_ENABLED;
     
-    private String SMARTBEAR_ENABLED;
-    
-    private String SMARTBEAR_PROJECT_NAME;
-    
-    private String SMARTBEAR_CUSTOM_COLUMN_NAME;
     
     
-    
-   	public String getSMARTBEAR_ENABLED() {
-		return SMARTBEAR_ENABLED;
-	}
-
-	public void setSMARTBEAR_ENABLED(String sMARTBEAR_ENABLED) {
-		SMARTBEAR_ENABLED = sMARTBEAR_ENABLED;
-	}
-
-	public String getSMARTBEAR_PROJECT_NAME() {
-		return SMARTBEAR_PROJECT_NAME;
-	}
-
-	public void setSMARTBEAR_PROJECT_NAME(String sMARTBEAR_PROJECT_NAME) {
-		SMARTBEAR_PROJECT_NAME = sMARTBEAR_PROJECT_NAME;
-	}
-
-	public String getSMARTBEAR_CUSTOM_COLUMN_NAME() {
-		return SMARTBEAR_CUSTOM_COLUMN_NAME;
-	}
-
-	public void setSMARTBEAR_CUSTOM_COLUMN_NAME(String sMARTBEAR_CUSTOM_COLUMN_NAME) {
-		SMARTBEAR_CUSTOM_COLUMN_NAME = sMARTBEAR_CUSTOM_COLUMN_NAME;
-	}
-
-	public String getMANAGEMENT_TOOL_ENABLED() {
+   	public String getMANAGEMENT_TOOL_ENABLED() {
 		return MANAGEMENT_TOOL_ENABLED;
 	}
 

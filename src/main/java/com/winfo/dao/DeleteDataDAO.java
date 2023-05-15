@@ -27,9 +27,6 @@ public class DeleteDataDAO {
 	
 	@Autowired
 	ApplicationContext appContext;
-	
-	@Autowired
-	MessageUtil messageUtil;
 
 	public List<DomGenericResponseBean> deleteData(@RequestBody DeleteScriptsData deletescriptsdata) {
 		Session session = entityManager.unwrap(Session.class);
@@ -84,15 +81,15 @@ public class DeleteDataDAO {
 		if (count == 1) {
 			response.setStatus(404);
 			response.setStatusMessage(Constants.ERROR);
-			response.setDescription(messageUtil.getDeleteDataDao().getError().getScriptNotFound());
+			response.setDescription(MessageUtil.getMessage("DeleteDataDao.Error.ScriptNotFound"));
 			bean.add(response);
 		} else {
 			response.setStatus(200);
 			response.setStatusMessage(Constants.SUCCESS);
 			if (scriptIds.size() == 1) {
-				response.setDescription(MessageUtil.getMessage(messageUtil.getDeleteDataDao().getSuccess().getScriptDeleted(),scriptNumber));
+				response.setDescription(MessageUtil.getMessage("DeleteDataDao.Success.ScriptDeleted",scriptNumber));
 			} else {
-				response.setDescription(MessageUtil.getMessage(messageUtil.getDeleteDataDao().getSuccess().getScriptDeleted(),i));
+				response.setDescription(MessageUtil.getMessage("DeleteDataDao.Success.ScriptDeleted",i));
 			}
 			bean.add(response);
 		}
