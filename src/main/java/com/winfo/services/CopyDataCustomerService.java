@@ -24,7 +24,9 @@ import com.winfo.vo.DomGenericResponseBean;
 public class CopyDataCustomerService {
 	@Autowired
 	CopyDataCustomerDao dao;
-
+	@Autowired
+	MessageUtil messageUtil;
+	
 	@Transactional
 	public DomGenericResponseBean copyData(CopyDataDetails copyDataDetails) {
 
@@ -73,7 +75,7 @@ public class CopyDataCustomerService {
 		}
 
 		return new DomGenericResponseBean(200, Constants.SUCCESS, MessageUtil
-				.getMessage("CopyDataCustomerService.Success.CopyData", count, copyDataDetails.getProductVersionNew()));
+				.getMessage(messageUtil.getCopyDataCustomerService().getSuccess().getCopyData(), count, copyDataDetails.getProductVersionNew()));
 
 	}
 
