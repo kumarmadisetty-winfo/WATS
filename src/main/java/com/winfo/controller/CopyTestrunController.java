@@ -45,10 +45,10 @@ public class CopyTestrunController {
 			newtestrun = service.reRun(copyTestrunvo);
 		}
 		CopyTestrunjson jsondata = new CopyTestrunjson();
-		logger.info("newtestrun" + newtestrun);
+		logger.info("New Test Run " + newtestrun);
 		jsondata.setNewTestRunId(newtestrun);
 		jsondata.setStatusMessage("SUCCESS");
-		logger.info(jsondata.toString());
+		logger.info("CopyTestRun Json Data " +jsondata.toString());
 		return jsondata;
 	}
 

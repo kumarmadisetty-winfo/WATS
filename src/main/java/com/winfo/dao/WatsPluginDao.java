@@ -55,7 +55,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("USER ID " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;

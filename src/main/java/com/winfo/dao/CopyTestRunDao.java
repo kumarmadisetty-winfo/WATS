@@ -34,7 +34,7 @@ public class CopyTestRunDao {
 
 	public TestSet saveTestrun(TestSet testSetObj) {
 		entityManager.persist(testSetObj);
-		logger.info("setTestrundata.getTestsetid() 1:" + testSetObj.getTestRunId());
+		logger.info("Test Run Id " + testSetObj.getTestRunId());
 		return testSetObj;
 	}
 
@@ -87,7 +87,7 @@ public class CopyTestRunDao {
 
 	public int updateTestSetRecord(TestSet testSetObj) {
 		entityManager.merge(testSetObj);
-		logger.info("getTestrun.getTestsetid() 2:" + testSetObj.getTestRunId());
+		logger.info("Test Run Id " + testSetObj.getTestRunId());
 		return testSetObj.getTestRunId();
 
 	}

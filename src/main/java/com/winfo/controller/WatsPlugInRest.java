@@ -57,7 +57,7 @@ public class WatsPlugInRest {
 	@ApiOperation( value="Wats Login",notes = " We should pass productVersion to get testRun names")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public List<String> getTestrunData(@PathVariable String productverson) {
-		logger.info("productverson " + productverson);
+		logger.info("Product Version " + productverson);
 		return service.getTestrunDataPVerson(productverson);
 	}
 
