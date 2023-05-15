@@ -1171,15 +1171,20 @@ public abstract class AbstractSeleniumKeywords {
 					Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
 					click1.setReference("#" + scriptNumber);
 					// Add table rows with clickable anchors
-			        PdfPCell scriptNumberCell = new PdfPCell(new Phrase(ca1));
-			        PdfPCell pageNumberCell = new PdfPCell(new Phrase(click));
+//			        PdfPCell scriptNumberCell = new PdfPCell(new Phrase(ca1));
+//			        PdfPCell pageNumberCell = new PdfPCell(new Phrase(new Anchor(click)));
+					
+					Paragraph scriptNumberParagraph = new Paragraph();
+			        scriptNumberParagraph.add(ca1);
 			        
+			        Paragraph pageNumberParagraph = new Paragraph();
+			        pageNumberParagraph.add(click);
 			        // Set cell styles
-			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			        
-			        table.addCell(scriptNumberCell);
-			        table.addCell(pageNumberCell);
+			        table.addCell(scriptNumberParagraph);
+			        table.addCell(pageNumberParagraph);
 //					pr.add(ca1);
 //					pr.add(click1);
 //					pr.add(dottedLine);
@@ -1190,15 +1195,27 @@ public abstract class AbstractSeleniumKeywords {
 					Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
 					click2.setReference("#" + scriptNumber);
 					// Add table rows with clickable anchors
-			        PdfPCell scriptNumberCell = new PdfPCell(ca1);
-			        PdfPCell pageNumberCell = new PdfPCell(click);
+//			        PdfPCell scriptNumberCell = new PdfPCell(ca1);
+//			        PdfPCell pageNumberCell = new PdfPCell(click);
+//			        
+//			        // Set cell styles
+//			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					
+					Paragraph scriptNumberParagraph = new Paragraph();
+			        scriptNumberParagraph.add(ca1);
 			        
+			        Paragraph pageNumberParagraph = new Paragraph();
+			        pageNumberParagraph.add(click);
 			        // Set cell styles
-			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//			        scriptNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//			        pageNumberCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			        
-			        table.addCell(scriptNumberCell);
-			        table.addCell(pageNumberCell);
+			        table.addCell(scriptNumberParagraph);
+			        table.addCell(pageNumberParagraph);
+			        
+//			        table.addCell(scriptNumberCell);
+//			        table.addCell(pageNumberCell);
 //					pr.add(ca1);
 //					pr.add(click2);
 //					pr.add(dottedLine);
