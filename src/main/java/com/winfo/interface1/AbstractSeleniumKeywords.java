@@ -2101,7 +2101,7 @@ public abstract class AbstractSeleniumKeywords {
 			}
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location " + fileLocation);
 			e.printStackTrace();
 		}
 		try {
@@ -2111,7 +2111,7 @@ public abstract class AbstractSeleniumKeywords {
 			return;
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location " + fileLocation);
 			e.printStackTrace();
 			throw e;
 
@@ -2126,7 +2126,7 @@ public abstract class AbstractSeleniumKeywords {
 			List imageUrlList = new ArrayList();
 			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
-			logger.info("Image Dir : " + imageDir);
+			logger.info("Image Directory : " + imageDir);
 
 			RestTemplate restTemplate = new RestTemplate();
 
