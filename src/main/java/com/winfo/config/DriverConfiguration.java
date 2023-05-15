@@ -94,13 +94,22 @@ public class DriverConfiguration {
 			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
 			options.setProfile(profile);
 			
+			try {
+				driver = new RemoteWebDriver(new URL(hubUrl), options);
+				logger.info("driver init success");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
-			driver = new RemoteWebDriver(new URL(hubUrl), options);
-			logger.info("driver init success");
 		}
 		if (driver != null) {
 			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			try {
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return driver;
 	}

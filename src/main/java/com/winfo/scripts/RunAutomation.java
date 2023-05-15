@@ -215,13 +215,16 @@ public class RunAutomation {
 						try {
 							long starttimeIntermediate = System.currentTimeMillis();
 							String flag = dataBaseEntry.getTrMode(testSetId, fetchConfigVO);
+							log.info(flag);
 							if (flag.equalsIgnoreCase("STOPPED")) {
 								metaData.getValue().clear();
 								executor.shutdown();
 								log.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
+								log.info("execution Started");
 								executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails);
+								log.info("execution finished");
 							}
 							long i = System.currentTimeMillis() - starttimeIntermediate;
 							increment = increment + i;
@@ -389,7 +392,12 @@ public class RunAutomation {
 		try {
 			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
 			String operatingSystem = actionContainsExcel ? "windows" : null;
-			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
+			try {
+				driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			isDriverError = false;
 			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
 		}
