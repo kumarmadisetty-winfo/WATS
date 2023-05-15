@@ -236,7 +236,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
-			logger.info("Navigated to given Url");
+			logger.info("Successfully Navigate to the Navigate URL ");
 		} catch (Exception e) {
 			logger.error("Failed During Navigation");
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
