@@ -507,7 +507,7 @@ public class RunAutomation {
 				seqNum = fetchMetadataVO.getSeqNum();
 				String screenParameter = fetchMetadataVO.getInputParameter();
 				testScriptParamId = fetchMetadataVO.getTestScriptParamId();
-				logger.debug(String.format("actionName: %s, testSetId : %s, testSetLineId : %s , scriptId1 : %s , scriptNumber : %s, seqNum : %s, screenParameter : %s , testScriptParamId : %s" , actionName, testSetId, testSetLineId, scriptId1 , scriptNumber, seqNum , screenParameter));
+				logger.debug(String.format("actionName: %s, testSetId : %s, testSetLineId : %s , scriptId : %s , scriptNumber : %s, seqNum : %s, screenParameter : %s , testScriptParamId : %s" , actionName, testSetId, testSetLineId, scriptId1 , scriptNumber, seqNum , screenParameter, testScriptParamId));
 				if (i == 0) {
 					dataBaseEntry.updateInProgressScriptStatus(testSetLineId, startdate);
 				}
