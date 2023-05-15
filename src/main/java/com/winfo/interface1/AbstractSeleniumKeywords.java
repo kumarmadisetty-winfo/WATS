@@ -1485,8 +1485,13 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void deleteScreenShotFromTempLocation(String screenshotFolder, CustomerProjectDto customerDetails) {
-		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
-				+ File.separator;
+//		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+//				+ File.separator;
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(customerDetails.getCustomerName()).append(File.separator)
+				.append(customerDetails.getTestSetName()).append(File.separator);
+		String path = stringBuffer.toString();
+		stringBuffer.setLength(0);
 		try {
 			if (screenshotFolder != null) {
 				File folder = new File(screenshotFolder + path);
@@ -1500,8 +1505,13 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void deletePdfsFromTempLocation(String pdfFolder, CustomerProjectDto customerDetails) {
-		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
-				+ File.separator;
+//		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
+//				+ File.separator;
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(customerDetails.getCustomerName()).append(File.separator)
+				.append(customerDetails.getTestSetName()).append(File.separator);
+		String path = stringBuffer.toString();
+		stringBuffer.setLength(0);
 		try {
 			if (pdfFolder != null) {
 				File folder = new File(pdfFolder + path);
@@ -1716,15 +1726,6 @@ public abstract class AbstractSeleniumKeywords {
 			FetchConfigVO fetchConfigVO) throws IOException, com.itextpdf.text.DocumentException {
 
 		document.newPage();
-//		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + FORWARD_SLASH
-//				+ customerDetails.getTestSetName();
-//		fileName = fileName + "_Passed.txt";
-//		String localPath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + File.separator
-//				+ customerDetails.getTestSetName() + File.separator) + fileName;
-//		stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
-//				.append(FORWARD_SLASH).append(customerDetails.getTestSetName());
-//
-//		String folderName = stringBuffer.toString();
 		String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(), customerDetails.getTestSetName());
 
 		StringBuffer stringBuffer = new StringBuffer();
@@ -1792,9 +1793,6 @@ public abstract class AbstractSeleniumKeywords {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//		String str = "{\n" + "  \"HTTP Type\": \"POST\",\n" + "  \"Request Header\": {\n"
-//				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n" + "  },\n" + "  \"Request Body\": {\n"
-//				+ "    \"grant_type\": \"client_credentials\"\n" + "  }\n" + "}";
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("{\n").append("  \"HTTP Type\": \"POST\",\n").append("  \"Request Header\": {\n")
 				.append("    \"Content-Type\": \"application/x-www-form-urlencoded\"\n").append("  },\n")
@@ -2009,16 +2007,6 @@ public abstract class AbstractSeleniumKeywords {
 //			return response.statusCode();
 			createScreenShot(fetchMetadataVO, fetchConfigVO, "Response : " + api.getResponseCode(), customerDetails,
 					true);
-
-//			String fileName = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName() + "/"
-//					+ fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
-//					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-//					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-//					.concat(".txt");
-//			String name = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getLineNumber() + "_"
-//					+ fetchMetadataVO.getScenarioName() + "_" + fetchMetadataVO.getScriptNumber() + "_"
-//					+ customerDetails.getTestSetName() + "_" + fetchMetadataVO.getLineNumber() + "_Passed")
-//					.concat(".txt");
 			StringBuffer stringBuffer = new StringBuffer();
 			stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getTestSetName())
 					.append("/").append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
@@ -2094,9 +2082,6 @@ public abstract class AbstractSeleniumKeywords {
 
 		if (fileName != null) {
 			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
-
-//			String newName = (fetchMetadataVO.getSeqNum() + "_" + fetchMetadataVO.getScenarioName() + "_"
-//					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
 			StringBuffer stringBuffer = new StringBuffer();
 			stringBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
 					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
