@@ -45,7 +45,7 @@ import com.winfo.vo.ResponseDto;
 
 @Service
 public class CopyTestRunService {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(CopyTestRunService.class);
 
 	private static final String NEW = "New";
 
@@ -207,7 +207,7 @@ public class CopyTestRunService {
 			}
 
 		}
-		log.info("before saveTestrun");
+		logger.info("before saveTestrun");
 		for (TestSetLine oldTestSetLine : testSetObj.getTestRunScriptDatalist()) {
 			if (oldTestSetLine.getDependencyTr() != null) {
 				mapOfLinesData.get(oldTestSetLine.getTestRunScriptId())
@@ -244,7 +244,7 @@ public class CopyTestRunService {
 		executeStatusObj.setFlag('I');
 		executeStatusObj.setTestRunName(copyTestrunvo.getNewtestrunname());
 		copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
-		log.info("newtestrun 1:" + newtestrun.getTestRunId());
+		logger.info("newtestrun 1:" + newtestrun.getTestRunId());
 		return newtestrun.getTestRunId();
 	}
 
@@ -445,7 +445,7 @@ public class CopyTestRunService {
 			SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 			scriptParamObj.setInputValue(formatter.format(new Date()));
 		} catch (Exception e) {
-			log.info("Exception occurred while converting date Format");
+			logger.info("Exception occurred while converting date Format");
 			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
 		}
 		}
@@ -458,7 +458,7 @@ public class CopyTestRunService {
 	@Transactional
 	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		log.info("getTestrun infromation");
+		logger.info("getTestrun infromation");
 		for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
 			String status = getScriptdata.getStatus();
 			if (status.equalsIgnoreCase("fail")) {
@@ -469,9 +469,9 @@ public class CopyTestRunService {
 				}
 			}
 		}
-		log.info("before update");
+		logger.info("before update");
 		int newtestrun = copyTestrunDao.updateTestSetRecord(getTestrun);
-		log.info("newtestrun 2:" + newtestrun);
+		logger.info("newtestrun 2:" + newtestrun);
 		return newtestrun;
 	}
 

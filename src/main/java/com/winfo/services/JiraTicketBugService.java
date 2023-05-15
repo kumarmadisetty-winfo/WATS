@@ -11,8 +11,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,8 +34,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.JiraTicketBugDao;
-import com.winfo.exception.WatsEBSCustomException;
-import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.TestRunVO;
@@ -47,7 +44,7 @@ import reactor.core.publisher.Mono;
 @RefreshScope
 public class JiraTicketBugService {
 	
-	public final Logger log = LogManager.getLogger(RunAutomation.class);
+	public static final Logger logger = Logger.getLogger(JiraTicketBugService.class);
 	private static final String TRANSITIONS = "transitions";
 	@Autowired
 	private TestCaseDataService testRunService;
@@ -316,7 +313,7 @@ public class JiraTicketBugService {
 			response.setStatusMessage("ERROR");
 			response.setDescription(MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 			bean.add(response);
-			log.error(e);
+			logger.error(e);
 //			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 		}
 		return bean;
@@ -326,7 +323,7 @@ public class JiraTicketBugService {
 	@SuppressWarnings("serial")
 	public void jiraIssueFixed(String jiraIssueKey,String jiraIssueUrl,String jiraIssueTransitions) throws JsonMappingException, JsonProcessingException {
 		try{
-			log.info("changing status of Passed script in jira");
+			logger.info("changing status of Passed script in jira");
 			String[] jiraIssueTransitionsArray = jiraIssueTransitions.split(",");
 			List <String> jiraIssueTransitionsList = Arrays.asList(jiraIssueTransitionsArray);
 			for(int j = 0 ; j < jiraIssueTransitionsList.size() ; j++){
@@ -349,9 +346,9 @@ public class JiraTicketBugService {
 					}
 				}
 			}
-			log.info("Status of Passed script in jira Successfully changed.");
+			logger.info("Status of Passed script in jira Successfully changed.");
 		}catch (Exception e) {
-			log.error("Error occured while updating status of "+jiraIssueKey+" issue in jira");
+			logger.error("Error occured while updating status of "+jiraIssueKey+" issue in jira");
 		}
 	}
 

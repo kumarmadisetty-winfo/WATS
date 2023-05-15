@@ -38,7 +38,7 @@ import reactor.core.publisher.Mono;
 @RefreshScope
 public class JiraUserServiceManagement {
 
-	public final Logger log = LogManager.getLogger(JiraUserServiceManagement.class);
+	public final Logger logger = LogManager.getLogger(JiraUserServiceManagement.class);
 	private static final String CONTENT_TYPE = "Content-Type";
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String ACCEPT = "Accept";
@@ -58,7 +58,7 @@ public class JiraUserServiceManagement {
 
 	@SuppressWarnings("unchecked")
 	public ResponseDto userManegement(JiraUserManagement jiraUserManagementDTO) throws Exception {
-		log.info("Received details as input : Organization - {}, Mail - {}, UserName - {}",
+		logger.info("Received details as input : Organization - {}, Mail - {}, UserName - {}",
 				jiraUserManagementDTO.getOrganization(), jiraUserManagementDTO.getUserMail(),
 				jiraUserManagementDTO.getUserName());
 		try {
@@ -134,7 +134,7 @@ public class JiraUserServiceManagement {
 
 			return new ResponseDto(200, Constants.SUCCESS, "User Creation Completed!");
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 	}
@@ -146,7 +146,7 @@ public class JiraUserServiceManagement {
 	 ****************************/
 
 	private List<Map<String, Object>> getUserInfo(String userMail) throws Exception {
-		log.info("Received details as input in getUserInfo() : Mail - {}", userMail);
+		logger.info("Received details as input in getUserInfo() : Mail - {}", userMail);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -159,13 +159,13 @@ public class JiraUserServiceManagement {
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<List<Map<String, Object>>>() {
 			});
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to get the user info!");
 		}
 	}
 
 	private Map<String, Object> getAllTheOrganization() throws Exception {
-		log.info("Received details as input in getAllTheOrganization()");
+		logger.info("Received details as input in getAllTheOrganization()");
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -178,13 +178,13 @@ public class JiraUserServiceManagement {
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to get all the organization details!");
 		}
 	}
 
 	private Map<String, Object> createOrganization(Map<String, Object> mapOfBody) throws Exception {
-		log.info("Received details as input in createOrganization() : Body - {}", mapOfBody);
+		logger.info("Received details as input in createOrganization() : Body - {}", mapOfBody);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -202,13 +202,13 @@ public class JiraUserServiceManagement {
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to create the organization!");
 		}
 	}
 
 	private void addOrganizationToProject(Map<String, Object> mapOfBody) throws Exception {
-		log.info("Received details as input in addOrganizationToProject() : Body - {}", mapOfBody);
+		logger.info("Received details as input in addOrganizationToProject() : Body - {}", mapOfBody);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -224,13 +224,13 @@ public class JiraUserServiceManagement {
 			apiValidationData.setHttpType(HttpMethodUtils.POST);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to add the organization to the project!");
 		}
 	}
 
 	private Map<String, Object> getOrganizationPresentInServiceDesk() throws Exception {
-		log.info("Received details as input in getOrganizationPresentInServiceDesk()");
+		logger.info("Received details as input in getOrganizationPresentInServiceDesk()");
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -243,13 +243,13 @@ public class JiraUserServiceManagement {
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to get all the organization present in the project!");
 		}
 	}
 
 	private Map<String, Object> createUser(Map<String, Object> mapOfBody) throws Exception {
-		log.info("Received details as input in createUser() : Body - {}", mapOfBody);
+		logger.info("Received details as input in createUser() : Body - {}", mapOfBody);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -267,13 +267,13 @@ public class JiraUserServiceManagement {
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to create new user!");
 		}
 	}
 
 	private void addUserToOrganization(Map<String, Object> mapOfBody, String organizationId) throws Exception {
-		log.info("Received details as input in addUserToOrganization() : Body - {}, Organization ID - {}", mapOfBody,
+		logger.info("Received details as input in addUserToOrganization() : Body - {}, Organization ID - {}", mapOfBody,
 				organizationId);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -289,13 +289,13 @@ public class JiraUserServiceManagement {
 			apiValidationData.setHttpType(HttpMethodUtils.POST);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to add the user to the organization!");
 		}
 	}
 
 	public void removeUserFromOrganization(Map<String, Object> mapOfBody, String organizationId) throws Exception {
-		log.info("Received details as input in removeUserFromOrganization() : Body - {}, Organization ID - {}",
+		logger.info("Received details as input in removeUserFromOrganization() : Body - {}, Organization ID - {}",
 				mapOfBody, organizationId);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -311,13 +311,13 @@ public class JiraUserServiceManagement {
 			apiValidationData.setHttpType(HttpMethodUtils.DELETE);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to remove the user from the organization!");
 		}
 	}
 
 	public void removeUserFromProject(Map<String, Object> mapOfBody) throws Exception {
-		log.info("Received details as input in removeUserFromProject() : Body - {}", mapOfBody);
+		logger.info("Received details as input in removeUserFromProject() : Body - {}", mapOfBody);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -333,13 +333,13 @@ public class JiraUserServiceManagement {
 			apiValidationData.setHttpType(HttpMethodUtils.DELETE);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to remove the user from the project!");
 		}
 	}
 
 	public void removeOrganization(Map<String, Object> mapOfBody) throws Exception {
-		log.info("Received details as input in removeOrganization() : Body - {}", mapOfBody);
+		logger.info("Received details as input in removeOrganization() : Body - {}", mapOfBody);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			ApiValidationVO apiValidationData = new ApiValidationVO();
@@ -354,7 +354,7 @@ public class JiraUserServiceManagement {
 			apiValidationData.setHttpType(HttpMethodUtils.DELETE);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			throw new WatsEBSCustomException(500, "Not able to remove the organization from the project!");
 		}
 	}
@@ -366,7 +366,7 @@ public class JiraUserServiceManagement {
 	 ************************/
 
 	private void apiValidationResponse(ApiValidationVO apiValidationData) throws Exception {
-		log.info(
+		logger.info(
 				"Received details as input in apiValidationResponse() : URL - {},HTTP Type - {},Request Header - {},Request Body - {},Response - {}",
 				apiValidationData.getUrl(), apiValidationData.getHttpType(), apiValidationData.getRequestHeader(),
 				apiValidationData.getRequestBody(), apiValidationData.getResponse());
@@ -404,7 +404,7 @@ public class JiraUserServiceManagement {
 			String result = bodyToMono.block();
 			apiValidationData.setResponse(result);
 		} catch (Exception ex) {
-			log.error(ex);
+			logger.error(ex);
 			throw new WatsEBSCustomException(500, "Not able to hit the jira url!");
 		}
 	}
@@ -417,7 +417,7 @@ public class JiraUserServiceManagement {
 
 	@SuppressWarnings("unchecked")
 	public ResponseDto removeUser(@Valid JiraUserManagement jiraUserManagementDTO) throws Exception {
-		log.info("Received details as input : Organization - {}, Mail - {}, UserName - {}",
+		logger.info("Received details as input : Organization - {}, Mail - {}, UserName - {}",
 				jiraUserManagementDTO.getOrganization(), jiraUserManagementDTO.getUserMail(),
 				jiraUserManagementDTO.getUserName());
 		try {
@@ -456,7 +456,7 @@ public class JiraUserServiceManagement {
 				return new ResponseDto(299, Constants.WARNING, "User does not exists!");
 			}
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 	}
@@ -492,7 +492,7 @@ public class JiraUserServiceManagement {
 				return new ResponseDto(299, Constants.WARNING, "Organization does not exists!");
 			}
 		} catch (Exception e) {
-			log.error(e);
+			logger.error(e);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
 

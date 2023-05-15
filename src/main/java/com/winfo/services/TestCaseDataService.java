@@ -7,15 +7,12 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +23,8 @@ import com.winfo.vo.ScriptDetailsDto;
 @RefreshScope
 public class TestCaseDataService {
 
-	Logger logger = LogManager.getLogger(TestCaseDataService.class);
+
+	public static final Logger logger = Logger.getLogger(TestCaseDataService.class);
 
 	@Value("${configvO.config_url1}")
 	private String config_url;
@@ -124,7 +122,7 @@ public class TestCaseDataService {
 			testCaseMap.put(seq, testcasedata);
 
 		}
-		logger.info("Prepare Test Data : %s",testCaseMap);
+		logger.debug("Prepare Test Data " + testCaseMap);
 
 	}
 

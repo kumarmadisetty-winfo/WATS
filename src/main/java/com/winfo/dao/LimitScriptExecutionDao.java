@@ -26,7 +26,7 @@ import com.winfo.model.ExecutionAudit;
 @Repository
 public class LimitScriptExecutionDao {
 
-public static final Logger logger = Logger.getLogger(JobController.class);
+public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.class);
 	@Autowired
 	private EntityManager entityManager;
 

@@ -2554,7 +2554,7 @@ public class XpathPerformance {
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("XpathPerformance=> Failed to logout " + scripNumber);
+			logger.info("XpathPerformance=> Successfully Navigated to the URL " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("XpathPerformance=> failed to do navigate URl " + scripNumber);

@@ -23,7 +23,7 @@ import com.winfo.vo.WatsPluginMetaDataVO;
 @Service
 public class PluginTestrunService {
 	
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(PluginTestrunService.class);
 
 	@Autowired
 	WatsPluginDao dao;

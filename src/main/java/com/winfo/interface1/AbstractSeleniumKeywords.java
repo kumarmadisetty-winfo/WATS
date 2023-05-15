@@ -754,7 +754,7 @@ public abstract class AbstractSeleniumKeywords {
 					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
 			uploadPDF(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		logger.info("Endddddddddddddddddddddd");
 	}

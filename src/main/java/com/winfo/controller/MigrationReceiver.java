@@ -22,7 +22,7 @@ import com.winfo.vo.WatsMasterDataVOList;
 @RestController
 public class MigrationReceiver {
 
-	public static final Logger logger = Logger.getLogger(JobController.class);
+	public static final Logger logger = Logger.getLogger(MigrationReceiver.class);
 
 	@Autowired
 	CentralToCustomerPostService service;
