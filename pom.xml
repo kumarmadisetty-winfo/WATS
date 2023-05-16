@@ -53,116 +53,143 @@
 			<version>2.9.2</version>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
+			<groupId>
+				io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
+			<groupId>
+				org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.26</version>
-			<scope>provided</scope>
+			<scope>
+				provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-filestorage</artifactId>
+			<artifactId>
+				oci-java-sdk-filestorage</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
+			<groupId>
+				com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-objectstorage</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
+			<groupId>
+				com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-audit</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
+			<groupId>
+				com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
+			<groupId>
+				com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-database</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.assertthat/selenium-shutterbug -->
 		<dependency>
-			<groupId>com.assertthat</groupId>
+			<groupId>
+				com.assertthat</groupId>
 			<artifactId>selenium-shutterbug</artifactId>
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
+			<groupId>
+				org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
+					<groupId>
+						org.springframework.boot</groupId>
+					<artifactId>
+						spring-boot-starter-logging</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.sikulix/sikulixapi -->
 		<dependency>
-			<groupId>com.sikulix</groupId>
+			<groupId>
+				com.sikulix</groupId>
 			<artifactId>sikulixapi</artifactId>
 			<version>2.0.4</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.slf4j</groupId>
+					<groupId>
+						org.slf4j</groupId>
 					<artifactId>slf4j-nop</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
+			<groupId>
+				org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.9.10</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-			<scope>compile</scope>
+			<scope>
+				compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
+			<artifactId>
+				spring-cloud-starter-config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
+			<groupId>
+				org.eclipse.persistence</groupId>
 			<artifactId>javax.persistence</artifactId>
-			<version>2.2.1</version>
+			<version>
+				2.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
+			<artifactId>
+				spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>
+				org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>5.4.27.Final</version>
 		</dependency>
 		<dependency>
 
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 
 		</dependency>
 		<dependency>
-			<groupId>org.json</groupId>
+			<groupId>
+				org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20180813</version>
 		</dependency>
@@ -171,7 +198,8 @@
 			<scope>runtime</scope> </dependency> -->
 		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 		<dependency>
-			<groupId>com.itextpdf</groupId>
+			<groupId>
+				com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13</version>
 		</dependency>
@@ -179,24 +207,31 @@
 		<!-- <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-rest-webmvc</artifactId> 
 			<version>3.2.5.RELEASE</version> </dependency> -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<scope>
+				provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.geronimo.components</groupId>
+			<groupId>
+				org.apache.geronimo.components</groupId>
 			<artifactId>geronimo-jaspi</artifactId>
-			<version>2.0.0</version>
+			<version>
+				2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
-			<artifactId>jasypt-spring-boot-starter</artifactId>
+			<artifactId>
+				jasypt-spring-boot-starter</artifactId>
 			<version>2.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
+			<scope>
+				runtime</scope>
 		</dependency>
 		<!--<dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-config</artifactId> 
 			</dependency> -->
@@ -204,54 +239,65 @@
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
+			<artifactId>
+				jackson-core</artifactId>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8 -->
 		<dependency>
 			<groupId>com.oracle.ojdbc</groupId>
-			<artifactId>ojdbc8</artifactId>
+			<artifactId>
+				ojdbc8</artifactId>
 			<version>19.3.0.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+			<groupId>
+				org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.kafka</groupId>
+			<groupId>
+				org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
+			<groupId>
+				org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.13</version>
+			<version>
+				1.9.13</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
+			<artifactId>
+				jackson-databind</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
+			<groupId>
+				com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
-			<groupId>commons-io</groupId>
+			<groupId>
+				commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.mail</groupId>
+			<groupId>
+				javax.mail</groupId>
 			<artifactId>javax.mail-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.mail</groupId>
+			<groupId>
+				com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
 		</dependency>
 
@@ -263,63 +309,77 @@
 
 		<!-- https://mvnrepository.com/artifact/org.ghost4j/ghost4j -->
 		<dependency>
-			<groupId>org.ghost4j</groupId>
+			<groupId>
+				org.ghost4j</groupId>
 			<artifactId>ghost4j</artifactId>
 			<version>1.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
+			<groupId>
+				org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.jai-imageio/jai-imageio-core -->
 		<dependency>
-			<groupId>com.github.jai-imageio</groupId>
+			<groupId>
+				com.github.jai-imageio</groupId>
 			<artifactId>jai-imageio-core</artifactId>
-			<version>1.3.0</version>
+			<version>
+				1.3.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna -->
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
+			<artifactId>
+				jna</artifactId>
 			<version>5.4.0</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.lept4j/lept4j -->
 		<dependency>
-			<groupId>net.sourceforge.lept4j</groupId>
+			<groupId>
+				net.sourceforge.lept4j</groupId>
 			<artifactId>lept4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
+			<groupId>
+				javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.beust</groupId>
+			<groupId>
+				com.beust</groupId>
 			<artifactId>jcommander</artifactId>
 			<version>1.72</version>
 		</dependency>
 		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
+			<groupId>
+				org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>${selenium.version}</version>
+			<version>
+				${selenium.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
+			<artifactId>
+				xml-apis</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
+			<artifactId>
+				jfreechart</artifactId>
 			<version>1.0.19</version>
 		</dependency>
 				<dependency>
-			<groupId>io.appium</groupId>
+			<groupId>
+				io.appium</groupId>
 			<artifactId>java-client</artifactId>
 			<version>5.0.0-BETA9</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
+			<groupId>
+				org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.16</version>
 		</dependency>
@@ -329,44 +389,52 @@
 			<version>20090211</version> </dependency> -->
 
 		<dependency>
-			<groupId>org.freemarker</groupId>
+			<groupId>
+				org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
+			<groupId>
+				javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.jayway.restassured/rest-assured -->
 		<dependency>
-			<groupId>com.jayway.restassured</groupId>
+			<groupId>
+				com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>2.9.0</version>
-			<scope>compile</scope>
+			<scope>
+				compile</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
 		<dependency>
 			<groupId>com.aventstack</groupId>
-			<artifactId>extentreports</artifactId>
+			<artifactId>
+				extentreports</artifactId>
 			<version>3.1.5</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/velocity/velocity-dep -->
 		<dependency>
-			<groupId>velocity</groupId>
+			<groupId>
+				velocity</groupId>
 			<artifactId>velocity-dep</artifactId>
 			<version>1.4</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.uncommons/reportng -->
 		<dependency>
-			<groupId>org.uncommons</groupId>
+			<groupId>
+				org.uncommons</groupId>
 			<artifactId>reportng</artifactId>
 			<version>1.1.4</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
 		<dependency>
-			<groupId>com.google.inject</groupId>
+			<groupId>
+				com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>3.0</version>
 		</dependency>
@@ -377,7 +445,8 @@
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
-			<groupId>org.json</groupId>
+			<groupId>
+				org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20180813</version>
 		</dependency>
@@ -387,9 +456,11 @@
 
 		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
+			<groupId>
+				com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
+			<version>
+				1.1.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
@@ -404,58 +475,69 @@
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
-			<version>0.1.55</version>
+			<version>
+				0.1.55</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.relevantcodes/extentreports -->
 		<dependency>
 			<groupId>com.relevantcodes</groupId>
-			<artifactId>extentreports</artifactId>
+			<artifactId>
+				extentreports</artifactId>
 			<version>2.41.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
 		<!--dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
 			<version>1.2.17</version> </dependency> -->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
+			<groupId>
+				org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
+			<groupId>
+				org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
+			<groupId>
+				org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.bytedeco</groupId>
+			<groupId>
+				org.bytedeco</groupId>
 			<artifactId>javacv</artifactId>
 			<version>1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.bytedeco</groupId>
+			<groupId>
+				org.bytedeco</groupId>
 			<artifactId>javacpp</artifactId>
 			<version>1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
+			<groupId>
+				org.codehaus.groovy</groupId>
 			<artifactId>groovy</artifactId>
 			<version>2.5.13</version>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
+			<groupId>
+				org.codehaus.groovy</groupId>
 			<artifactId>groovy-json</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.aspose</groupId>
+			<groupId>
+				com.aspose</groupId>
 			<artifactId>aspose-cells</artifactId>
 			<version>22.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot -->
 		<dependency>
-			<groupId>ru.yandex.qatools.ashot</groupId>
+			<groupId>
+				ru.yandex.qatools.ashot</groupId>
 			<artifactId>ashot</artifactId>
 			<version>1.5.4</version>
 		</dependency>
@@ -464,36 +546,42 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-
-		    <groupId>com.squareup.okhttp3</groupId>
-		    <artifactId>okhttp</artifactId>
-		    <version>4.10.0</version>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.10.0</version>
 		</dependency>
 		<dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
+            <groupId>
+				org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>1.3.70</version>
-        </dependency>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.google.guava</groupId>
+				<groupId>
+					com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>31.0.1-jre</version>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework.cloud</groupId>
+				<groupId>
+					org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
+				<version>
+					${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.oracle.oci.sdk</groupId>
+				<groupId>
+					com.oracle.oci.sdk</groupId>
 				<artifactId>oci-java-sdk-bom</artifactId>
 				<!-- replace the version below with your required version -->
-				<version>1.23.3</version>
+				<version>
+					1.23.3</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -502,7 +590,8 @@
 
 	<profiles>
 		<profile>
-			<id>dev</id>
+			<id>
+				dev</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -513,41 +602,56 @@
 						<version>3.0.6-SNAPSHOT</version> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
 						<artifactId>maven-pmd-plugin</artifactId> <version>3.10.0</version> </plugin> -->
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -556,27 +660,33 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-surefire-plugin</artifactId>
 						<version>2.18.1</version>
 						<configuration>
 							<suiteXmlFiles>
-								<suiteXmlFile>testng.xml</suiteXmlFile>
+								<suiteXmlFile>
+									testng.xml</suiteXmlFile>
 							</suiteXmlFiles>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,dev</profiles>
 				<instance>dev</instance>
 			</properties>
 		</profile>
 
 		<profile>
-			<id>wellful</id>
+			<id>
+				wellful</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -587,37 +697,50 @@
 						<version>3.0.6-SNAPSHOT</version> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
 						<artifactId>maven-pmd-plugin</artifactId> <version>3.10.0</version> </plugin> -->
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -626,20 +749,25 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-surefire-plugin</artifactId>
 						<version>2.18.1</version>
 						<configuration>
 							<suiteXmlFiles>
-								<suiteXmlFile>testng.xml</suiteXmlFile>
+								<suiteXmlFile>
+									testng.xml</suiteXmlFile>
 							</suiteXmlFiles>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,wellful</profiles>
 				<instance>wellful</instance>
 			</properties>
@@ -647,7 +775,8 @@
 
 
 		<profile>
-			<id>orange</id>
+			<id>
+				orange</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -655,45 +784,61 @@
 				<finalName>wats</finalName>
 				<plugins>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -702,18 +847,23 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								<addDefaultImplementationEntries>
+									true</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -722,8 +872,10 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,orange</profiles>
 				<instance>orange</instance>
 			</properties>
@@ -731,7 +883,8 @@
 
 
 		<profile>
-			<id>hub</id>
+			<id>
+				hub</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -741,45 +894,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 
@@ -789,19 +958,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -810,15 +984,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,hub</profiles>
 				<instance>hub</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>prd</id>
+			<id>
+				prd</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -828,46 +1005,62 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
-												
+												<include>
+													oci/</include>
+
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -877,19 +1070,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -898,13 +1096,14 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,prd</profiles>
 				<instance>prd</instance>
 
 
-
 			</properties>
 
 		</profile>
@@ -912,7 +1111,8 @@
 
 
 		<profile>
-			<id>dh</id>
+			<id>
+				dh</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -922,45 +1122,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -970,19 +1186,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -991,20 +1212,22 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,dh</profiles>
 				<instance>dh</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 
 		<profile>
-			<id>bennett</id>
+			<id>
+				bennett</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1014,45 +1237,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1062,19 +1301,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1083,19 +1327,21 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,bennett</profiles>
 				<instance>bennett</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 		<profile>
-			<id>tst</id>
+			<id>
+				tst</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1105,45 +1351,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1153,19 +1415,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1174,11 +1441,12 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,tst</profiles>
 				<instance>tst</instance>
-
 
 
 			</properties>
@@ -1192,7 +1460,8 @@
 
 
 		<profile>
-			<id>hs2</id>
+			<id>
+				hs2</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1203,41 +1472,56 @@
 						<version>3.0.6-SNAPSHOT</version> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
 						<artifactId>maven-pmd-plugin</artifactId> <version>3.10.0</version> </plugin> -->
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -1246,27 +1530,33 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-surefire-plugin</artifactId>
 						<version>2.18.1</version>
 						<configuration>
 							<suiteXmlFiles>
-								<suiteXmlFile>testng.xml</suiteXmlFile>
+								<suiteXmlFile>
+									testng.xml</suiteXmlFile>
 							</suiteXmlFiles>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,hs2</profiles>
 				<instance>hs2</instance>
 			</properties>
 		</profile>
 
 		<profile>
-			<id>wats</id>
+			<id>
+				wats</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1276,45 +1566,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1324,19 +1630,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1345,19 +1656,21 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,wats</profiles>
 				<instance>wats</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 		<profile>
-			<id>camden</id>
+			<id>
+				camden</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1367,45 +1680,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1415,19 +1744,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1436,67 +1770,86 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,camden</profiles>
 				<instance>camden</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 		<profile>
-			<id>lumentum</id>
+			<id>
+				lumentum</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>wats</finalName>
+				<finalName>
+					wats</finalName>
 
 				<plugins>
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-clean-plugin</artifactId>
+						<artifactId>
+							maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1506,19 +1859,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1527,19 +1885,21 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,lumentum</profiles>
 				<instance>lumentum</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 		<profile>
-			<id>wats01</id>
+			<id>
+				wats01</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1549,45 +1909,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1597,19 +1973,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1618,19 +1999,21 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,wats01</profiles>
 				<instance>wats01</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 		<profile>
-			<id>wats02</id>
+			<id>
+				wats02</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1640,45 +2023,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1688,19 +2087,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1709,19 +2113,21 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,wats02</profiles>
 				<instance>wats02</instance>
 
 
-
 			</properties>
 
 		</profile>
 
 		<profile>
-			<id>wats03</id>
+			<id>
+				wats03</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1731,45 +2137,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 
 										</resource>
@@ -1779,19 +2201,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1800,13 +2227,14 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,wats03</profiles>
 				<instance>wats03</instance>
 
 
-
 			</properties>
 
 		</profile>
@@ -1830,7 +2258,8 @@
 
 
 		<profile>
-			<id>uat</id>
+			<id>
+				uat</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1840,46 +2269,62 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -1888,19 +2333,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1909,15 +2359,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,uat</profiles>
 				<instance>uat</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>rep</id>
+			<id>
+				rep</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -1927,45 +2380,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -1974,19 +2443,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -1995,15 +2469,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,rep</profiles>
 				<instance>rep</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>arlodev</id>
+			<id>
+				arlodev</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -2013,45 +2490,61 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -2060,19 +2553,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2081,15 +2579,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,arlodev</profiles>
 				<instance>arlodev</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>arlop</id>
+			<id>
+				arlop</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -2099,47 +2600,63 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 
 
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -2148,19 +2665,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2169,15 +2691,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,arlop</profiles>
 				<instance>arlop</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>udgs</id>
+			<id>
+				udgs</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -2187,46 +2712,62 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -2235,19 +2776,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2256,64 +2802,84 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,udgs</profiles>
 				<instance>udgs</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>verisure</id>
+			<id>
+				verisure</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
-				<finalName>wats</finalName>
+				<finalName>
+					wats</finalName>
 
 				<plugins>
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-clean-plugin</artifactId>
+						<artifactId>
+							maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -2322,19 +2888,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2343,15 +2914,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,verisure</profiles>
 				<instance>verisure</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>demo</id>
+			<id>
+				demo</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -2361,46 +2935,62 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -2409,19 +2999,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2430,15 +3025,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,demo</profiles>
 				<instance>demo</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>sample</id>
+			<id>
+				sample</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -2448,46 +3046,62 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 											<includes>
-												<include>*.properties</include>
-												<include>graphQl/</include>
+												<include>
+													*.properties</include>
+												<include>
+													graphQl/</include>
 											</includes>
 										</resource>
 									</resources>
@@ -2496,19 +3110,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2517,15 +3136,18 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,sample</profiles>
 				<instance>sample</instance>
 			</properties>
 
 		</profile>
 		<profile>
-			<id>wood</id>
+			<id>
+				wood</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -2535,41 +3157,55 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
+						<groupId>
+							org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-resources-plugin</artifactId>
+						<version>
+							${maven-resources-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>default-resources</id>
+								<id>
+									default-resources</id>
 								<phase>validate</phase>
 								<goals>
-									<goal>copy-resources</goal>
+									<goal>
+										copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>target/classes</outputDirectory>
+									<outputDirectory>
+										target/classes</outputDirectory>
 									<useDefaultDelimiters>false</useDefaultDelimiters>
 									<delimiters>
-										<delimiter>#</delimiter>
+										<delimiter>
+											#</delimiter>
 									</delimiters>
 									<resources>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>Images/</include>
+												<include>
+													Images/</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>src/main/resources/</directory>
-											<filtering>true</filtering>
+											<directory>
+												src/main/resources/</directory>
+											<filtering>
+												true</filtering>
 											<includes>
 												<include>*.properties</include>
-												<include>oci/</include>
+												<include>
+													oci/</include>
 											</includes>
 
 
@@ -2580,19 +3216,24 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
+						<groupId>
+							org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
 							<manifest>
-								<addDefaultImplementationEntries>true
+								<addDefaultImplementationEntries>
+									true
 								</addDefaultImplementationEntries>
 							</manifest>
 							<archive>
 								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}
+									<Specification-Title>
+										${project.name}</Specification-Title>
+									<Specification-Version>
+										${project.version}
 									</Specification-Version>
-									<Implementation-Version>${build.number}
+									<Implementation-Version>
+										${build.number}
 									</Implementation-Version>
 								</manifestEntries>
 							</archive>
@@ -2601,11 +3242,12 @@
 				</plugins>
 			</build>
 			<properties>
-				<config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
-				<app.name>application</app.name>
+				<config.server.uri>
+					http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
+				<app.name>
+					application</app.name>
 				<profiles>default,wood</profiles>
 				<instance>wood</instance>
-
 
 
 			</properties>
