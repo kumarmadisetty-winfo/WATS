@@ -1220,6 +1220,7 @@ public abstract class AbstractSeleniumKeywords {
 					.append(customerDetails.getTestSetName()).append("_").append(metaDataVO.getLineNumber());
 
 			String fileName = stringBuffer.toString();
+			stringBuffer.setLength(0);
 			
 			String nextSeqNumber = "0";
 			String currentSeqNumber = "0";
