@@ -655,11 +655,12 @@ public abstract class AbstractSeleniumKeywords {
 
 		return totalExecutedTime;
 	}
-
+	
 	public void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) {
 		try {
-			String folder = createFolder(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION(),customerDetails.getCustomerName(), customerDetails.getTestSetName());
+			String folder = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+					+ File.separator + customerDetails.getTestSetName() + File.separator);
 			String file = (folder + pdffileName);
 			findPassAndFailCount(fetchConfigVO, customerDetails.getTestSetId());
 
@@ -695,17 +696,16 @@ public abstract class AbstractSeleniumKeywords {
 				int passcount = fetchConfigVO.getPasscount();
 				int failcount = fetchConfigVO.getFailcount();
 				int others = fetchConfigVO.getOtherCount();
-
-				Map<String, String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(),
-						pdffileName, fetchConfigVO);
+				
+				Map<String,String> totalTimeTaken = findExecutionTimeForTestRun(customerDetails.getTestSetId(), pdffileName, fetchConfigVO);
 				String totalExecutedTime = totalTimeTaken.get("totalExecutedTime");
 				String totalElapsedTime = totalTimeTaken.get("totalElapsedTime");
 				Date tendTime = fetchConfigVO.getEndtime();
 				Date tStarttime = fetchConfigVO.getStarttime();
 				String startTime = dateFormat.format(tStarttime);
 				String endTime = dateFormat.format(tendTime);
-				String[] testArr = { TEST_RUN_NAME, testRunName1, EXECUTED_BY, executedBy, START_TIME, startTime,
-						END_TIME, endTime, EXECUTION_TIME, totalExecutedTime, ELAPSED_TIME, totalElapsedTime };
+				String[] testArr = { TEST_RUN_NAME, testRunName1, EXECUTED_BY, executedBy, START_TIME, startTime, END_TIME, endTime, EXECUTION_TIME,
+						totalExecutedTime, ELAPSED_TIME, totalElapsedTime };
 				document.add(watsLogo);
 				document.add(new Paragraph(report, font23));
 				document.add(Chunk.NEWLINE);
@@ -721,7 +721,7 @@ public abstract class AbstractSeleniumKeywords {
 					generateDetailsPDF(document, watsLogo, passcount, failcount, others, writer);
 					String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 					if (API_TESTING.equalsIgnoreCase(checkPackage)) {
-						Map<Integer, Integer> mapOfResponseCodeAndCount = new HashMap<Integer, Integer>();
+						Map<Integer, Integer> mapOfResponseCodeAndCount = new HashMap<Integer,Integer>();
 						ObjectMapper objectMapper = new ObjectMapper();
 						objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 						List<String> responseCodeList = dynamicnumber.getResponseCode(customerDetails.getTestSetId());
@@ -747,11 +747,11 @@ public abstract class AbstractSeleniumKeywords {
 					generateFailedPDF(document, passcount, failcount);
 				}
 				addRestOfPagesToPDF(document, fileNameList, watsLogo, fetchConfigVO, fetchMetadataListVO,
-						customerDetails, writer);
+						customerDetails,writer);
 			} else if (!(PASSED_PDF.equalsIgnoreCase(pdffileName) || FAILED_PDF.equalsIgnoreCase(pdffileName)
 					|| DETAILED_PDF.equalsIgnoreCase(pdffileName))) {
 				generateScriptLvlPDF(document, fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime(), watsLogo,
-						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails, writer);
+						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails,writer);
 			}
 			document.close();
 
@@ -759,17 +759,11 @@ public abstract class AbstractSeleniumKeywords {
 			logger.info("Not able to Create pdf {}", e);
 		}
 		try {
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(customerDetails.getCustomerName()).append(FORWARD_SLASH)
-					.append(customerDetails.getTestSetName()).append(FORWARD_SLASH);
-			String destinationFilePath = stringBuffer.append(pdffileName).toString();
+			String destinationFilePath = (customerDetails.getCustomerName() + FORWARD_SLASH
+					+ customerDetails.getTestSetName() + FORWARD_SLASH) + pdffileName;
 
-			stringBuffer.setLength(0);
-
-			stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
-					.append(File.separator).append(customerDetails.getTestSetName()).append(File.separator);
-			String sourceFilePath = stringBuffer.append(pdffileName).toString();
-			stringBuffer.setLength(0);
+			String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+					+ File.separator + customerDetails.getTestSetName() + File.separator) + pdffileName;
 			uploadPDF(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
 			logger.info(e);
@@ -1727,15 +1721,18 @@ public abstract class AbstractSeleniumKeywords {
 			FetchConfigVO fetchConfigVO) throws IOException, com.itextpdf.text.DocumentException {
 
 		document.newPage();
-		String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(), customerDetails.getTestSetName());
-
+//		String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(), customerDetails.getTestSetName());
+//
 		StringBuffer stringBuffer = new StringBuffer();
-
-		stringBuffer.append(fileName).append("_Passed.txt");
-
-		fileName = stringBuffer.toString();
-
+//
+//		stringBuffer.append(fileName).append("_Passed.txt");
+//
+//		fileName = stringBuffer.toString();
+//
 		stringBuffer.setLength(0);
+		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + FORWARD_SLASH
+				+ customerDetails.getTestSetName();
+		fileName = fileName + "_Passed.txt";
 
 		stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
 				.append(File.separator).append(customerDetails.getTestSetName()).append(File.separator)
@@ -1794,12 +1791,21 @@ public abstract class AbstractSeleniumKeywords {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append("{\n").append("  \"HTTP Type\": \"POST\",\n").append("  \"Request Header\": {\n")
-				.append("    \"Content-Type\": \"application/x-www-form-urlencoded\"\n").append("  },\n")
-				.append("  \"Request Body\": {\n").append("    \"grant_type\": \"client_credentials\"\n")
-				.append("  }\n").append("}");
-		String str = stringBuffer.toString();
+//		StringBuffer stringBuffer = new StringBuffer();
+//		stringBuffer.append("{\n").append("  \"HTTP Type\": \"POST\",\n").append("  \"Request Header\": {\n")
+//				.append("    \"Content-Type\": \"application/x-www-form-urlencoded\"\n").append("  },\n")
+//				.append("  \"Request Body\": {\n").append("    \"grant_type\": \"client_credentials\"\n")
+//				.append("  }\n").append("}");
+//		String str = stringBuffer.toString();
+		String str = "{\n"
+				+ "  \"HTTP Type\": \"POST\",\n"
+				+ "  \"Request Header\": {\n"
+				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n"
+				+ "  },\n"
+				+ "  \"Request Body\": {\n"
+				+ "    \"grant_type\": \"client_credentials\"\n"
+				+ "  }\n"
+				+ "}";
 
 		ApiValidationVO apiValidationData = objectMapper.readValue(str, ApiValidationVO.class);
 		apiValidationData.setUrl(fetchConfigVO.getAPI_AUTHENTICATION_URL());
@@ -2209,10 +2215,13 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			String accessToken = getSharepointAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(fetchConfigVO.getPdf_path()).append(customerDetails.getCustomerName()).append("/")
-					.append(customerDetails.getTestSetName()).append("/");
-			File imageDir = new File(stringBuffer.toString());
+//			StringBuffer stringBuffer = new StringBuffer();
+//			stringBuffer.append(fetchConfigVO.getPdf_path()).append(customerDetails.getCustomerName()).append("/")
+//					.append(customerDetails.getTestSetName()).append("/");
+//			File imageDir = new File(stringBuffer.toString());
+			
+			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+					+ customerDetails.getTestSetName() + "/");
 
 			System.out.println(imageDir);
 
@@ -2293,14 +2302,19 @@ public abstract class AbstractSeleniumKeywords {
 				byte[] data = bos.toByteArray();
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
 				bodyMap.add("user-file", data);			
-				stringBuffer.append("https://graph.microsoft.com/v1.0/drives/").append(driveId).append("/items/")
-						.append(itemId).append(":/").append(customerDetails.getCustomerName()).append("/")
-						.append(customerDetails.getProjectName()).append("/").append(customerDetails.getTestSetName())
-						.append("/").append(imageFileName).append(":/createUploadSession");
+//				stringBuffer.append("https://graph.microsoft.com/v1.0/drives/").append(driveId).append("/items/")
+//						.append(itemId).append(":/").append(customerDetails.getCustomerName()).append("/")
+//						.append(customerDetails.getProjectName()).append("/").append(customerDetails.getTestSetName())
+//						.append("/").append(imageFileName).append(":/createUploadSession");
+//
+//				ResponseEntity<Object> response = restTemplate.exchange(stringBuffer.toString(), HttpMethod.POST,
+//						uploadSessionRequest, Object.class);
 
-				ResponseEntity<Object> response = restTemplate.exchange(stringBuffer.toString(), HttpMethod.POST,
-						uploadSessionRequest, Object.class);
-
+				ResponseEntity<Object> response = restTemplate.exchange(
+						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/items/" + itemId + ":/"
+								+ customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
+								+ customerDetails.getTestSetName() + "/" + imageFileName + ":/createUploadSession",
+						HttpMethod.POST, uploadSessionRequest, Object.class);
 
 //				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
 //						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
