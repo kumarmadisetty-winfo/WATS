@@ -8491,6 +8491,38 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
+			if (param2.equalsIgnoreCase("Position")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1
+						+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]")));
+				WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1
+						+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittill).build().perform();
+				
+				waittill.clear();
+				waittill.click();
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("arguments[0].value=\"" + keysToSend + "\";", waittill);
+				Thread.sleep(5000);
+				actions.sendKeys(Keys.ENTER).build().perform();
+//				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked sendValue" + scripNumber);
+				String xpath = "(//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input)[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during e sendValue" + scripNumber);
+			System.out.println(e);
+		}
+		try {
 			if (param1.equalsIgnoreCase("Create Interview") && param2.equalsIgnoreCase("Interviewers")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[text()=\"" + param1
@@ -8637,7 +8669,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		// prod
 		try {
-			if (param1.equalsIgnoreCase("Maintain Managers") || (param1.equalsIgnoreCase("Position Details")) || (param1.equalsIgnoreCase("Business Unit")) || (param1.equalsIgnoreCase("Assign Managers"))) {
+			if (param1.equalsIgnoreCase("Maintain Managers") || (param2.equalsIgnoreCase("Position Details")) || (param2.equalsIgnoreCase("Position")) || (param2.equalsIgnoreCase("Address")) || (param2.equalsIgnoreCase("Country")) || (param2.equalsIgnoreCase("Business Unit")) || (param1.equalsIgnoreCase("Assign Managers"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1
 						+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]")));
