@@ -104,11 +104,7 @@ public class DriverConfiguration {
 		}
 		if (driver != null) {
 			driver.manage().window().maximize();
-			try {
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 			
 		}
 		return driver;
