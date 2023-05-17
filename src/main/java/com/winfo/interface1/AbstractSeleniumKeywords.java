@@ -178,7 +178,7 @@ public abstract class AbstractSeleniumKeywords {
 	@Autowired
 	DynamicRequisitionNumber dynamicnumber;
 	
-	public static String createFolderName(String SCREENSHOT, String FORWARD_SLASH, String customerName,
+	private String createFolderName(String SCREENSHOT, String FORWARD_SLASH, String customerName,
 			String testSetName) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.setLength(0);
@@ -190,7 +190,7 @@ public abstract class AbstractSeleniumKeywords {
 		return folderName;
 	}
 	
-	public static String createImageName(ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails,
+	private String createImageName(ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails,
 			String PNG_EXTENSION, String status) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.setLength(0);
@@ -204,7 +204,7 @@ public abstract class AbstractSeleniumKeywords {
 		return imageName;
 	}
 	
-	public static String createFolder(String WINDOWS_SCREENSHOT_LOCATION, String customerName, String testSetName) {
+	private String createFolder(String WINDOWS_SCREENSHOT_LOCATION, String customerName, String testSetName) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.setLength(0);
 		stringBuffer.append(WINDOWS_SCREENSHOT_LOCATION).append(customerName).append(File.separator).append(testSetName)
