@@ -93,6 +93,8 @@ public class DriverConfiguration {
 			options.addArguments(BrowserConstants.DISABLE_INFOBARS.getValue());
 			options.setCapability(BrowserConstants.MARIONETTE.getValue(), true);
 			options.setProfile(profile);
+			
+			
 			driver = new RemoteWebDriver(new URL(hubUrl), options);
 			logger.info("driver init success");
 	
