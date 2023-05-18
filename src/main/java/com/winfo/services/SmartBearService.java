@@ -17,8 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.common.OkHttpService;
 import com.winfo.common.WebClientService;
+import com.winfo.constants.HttpMethodConstants;
 import com.winfo.exception.WatsEBSCustomException;
-import com.winfo.utils.HttpMethodUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.ScriptDetailsDto;
 
@@ -113,7 +113,7 @@ public class SmartBearService {
 	@SuppressWarnings("unchecked")
 	private String getProjectId(String projectName) throws IOException {
 		logger.info("Getting project ID for project name: {}", projectName);
-		Map<String, Object> projects = callApi(smartBearVersion1Url + "/projects", HttpMethodUtils.GET, null);
+		Map<String, Object> projects = callApi(smartBearVersion1Url + "/projects", HttpMethodConstants.GET, null);
 		Optional<Map<String, Object>> optionalProject = ((List<Map<String, Object>>) projects.get(RESULTS)).stream()
 				.filter(map -> map.get("proj_name").toString().equalsIgnoreCase(projectName)).findFirst();
 		if (optionalProject.isPresent()) {
@@ -135,7 +135,7 @@ public class SmartBearService {
 				+ databaseEntry.getScriptDetailsByScriptId(Integer.parseInt(fetchMetadataListVO.get(0).getScriptId()))
 						.getProcessArea();
 		Map<String, Object> scripts = callApi(smartBearVersion1Url + PROJECTS_PATH + projectId
-				+ "/tests/?Filter=(active=true) and (folder_name = '" + folderName + "')", HttpMethodUtils.GET, null);
+				+ "/tests/?Filter=(active=true) and (folder_name = '" + folderName + "')", HttpMethodConstants.GET, null);
 
 		Optional<Map<String, Object>> optionalScript = ((List<Map<String, Object>>) scripts.get(RESULTS)).stream()
 				.filter(map -> ((List<Map<String, Object>>) map.get("custom_fields")).stream()
@@ -155,7 +155,7 @@ public class SmartBearService {
 		Map<String, Object> requestBody = new HashMap<>();
 		requestBody.put("TestId", scriptId);
 		Map<String, Object> execution = callApi(smartBearVersion2Url + PROJECTS_PATH + projectId + "/testruns",
-				HttpMethodUtils.POST, requestBody);
+				HttpMethodConstants.POST, requestBody);
 		if (execution.containsKey("id")) {
 			return execution.get("id").toString();
 		} else {
@@ -169,7 +169,7 @@ public class SmartBearService {
 		logger.info("Getting item ID for execution ID: {}", executionId);
 		Map<String, Object> items = callApi(
 				smartBearVersion2Url + PROJECTS_PATH + projectId + TEST_RUNS_PATH + executionId + "/items",
-				HttpMethodUtils.GET, null);
+				HttpMethodConstants.GET, null);
 		Optional<Map<String, Object>> optionalItem = ((List<Map<String, Object>>) items.get(RESULTS)).stream()
 				.findFirst();
 		if (optionalItem.isPresent()) {

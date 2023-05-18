@@ -25,9 +25,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.winfo.constants.HttpMethodConstants;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.utils.Constants;
-import com.winfo.utils.HttpMethodUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.JiraUserManagement;
 import com.winfo.vo.ResponseDto;
@@ -154,7 +154,7 @@ public class JiraUserServiceManagement {
 			Map<String, String> map = new HashMap<>();
 			map.put(ACCEPT, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(map);
-			apiValidationData.setHttpType(HttpMethodUtils.GET);
+			apiValidationData.setHttpType(HttpMethodConstants.GET);
 			apiValidationResponse(apiValidationData);
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<List<Map<String, Object>>>() {
 			});
@@ -173,7 +173,7 @@ public class JiraUserServiceManagement {
 			Map<String, String> map = new HashMap<>();
 			map.put(ACCEPT, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(map);
-			apiValidationData.setHttpType(HttpMethodUtils.GET);
+			apiValidationData.setHttpType(HttpMethodConstants.GET);
 			apiValidationResponse(apiValidationData);
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
@@ -197,7 +197,7 @@ public class JiraUserServiceManagement {
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.POST);
+			apiValidationData.setHttpType(HttpMethodConstants.POST);
 			apiValidationResponse(apiValidationData);
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
@@ -221,7 +221,7 @@ public class JiraUserServiceManagement {
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.POST);
+			apiValidationData.setHttpType(HttpMethodConstants.POST);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			log.error(e);
@@ -238,7 +238,7 @@ public class JiraUserServiceManagement {
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.GET);
+			apiValidationData.setHttpType(HttpMethodConstants.GET);
 			apiValidationResponse(apiValidationData);
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
@@ -262,7 +262,7 @@ public class JiraUserServiceManagement {
 			mapOfHeaders.put(ACCEPT, APPLICATION_JSON);
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.POST);
+			apiValidationData.setHttpType(HttpMethodConstants.POST);
 			apiValidationResponse(apiValidationData);
 			return mapper.readValue(apiValidationData.getResponse(), new TypeReference<Map<String, Object>>() {
 			});
@@ -286,7 +286,7 @@ public class JiraUserServiceManagement {
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.POST);
+			apiValidationData.setHttpType(HttpMethodConstants.POST);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			log.error(e);
@@ -308,7 +308,7 @@ public class JiraUserServiceManagement {
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.DELETE);
+			apiValidationData.setHttpType(HttpMethodConstants.DELETE);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			log.error(e);
@@ -330,7 +330,7 @@ public class JiraUserServiceManagement {
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			mapOfHeaders.put("X-ExperimentalApi", "opt-in");
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.DELETE);
+			apiValidationData.setHttpType(HttpMethodConstants.DELETE);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			log.error(e);
@@ -351,7 +351,7 @@ public class JiraUserServiceManagement {
 			Map<String, String> mapOfHeaders = new HashMap<>();
 			mapOfHeaders.put(CONTENT_TYPE, APPLICATION_JSON);
 			apiValidationData.setRequestHeader(mapOfHeaders);
-			apiValidationData.setHttpType(HttpMethodUtils.DELETE);
+			apiValidationData.setHttpType(HttpMethodConstants.DELETE);
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			log.error(e);
