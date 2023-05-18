@@ -1,6 +1,6 @@
-package com.winfo.utils;
+package com.winfo.constants;
 
-public class HttpMethodUtils {
+public class HttpMethodConstants {
 	public static final String GET = "GET";
 	public static final String POST = "POST";
 	public static final String DELETE = "DELETE";
