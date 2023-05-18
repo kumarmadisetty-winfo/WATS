@@ -8506,6 +8506,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				jse.executeScript("arguments[0].value=\"" + keysToSend + "\";", waittill);
 				Thread.sleep(5000);
 				actions.sendKeys(Keys.ENTER).build().perform();
+				Thread.sleep(5000);
 //				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
