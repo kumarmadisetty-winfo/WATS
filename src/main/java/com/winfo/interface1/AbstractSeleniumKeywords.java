@@ -179,31 +179,30 @@ public abstract class AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 
 	private String createFolderName(String SCREENSHOT, String FORWARD_SLASH, String customerName, String testSetName) {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerName).append(FORWARD_SLASH)
+		StringBuffer folderNameBuffer = new StringBuffer();
+		folderNameBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerName).append(FORWARD_SLASH)
 				.append(testSetName);
-		String folderName = stringBuffer.toString();
+		String folderName = folderNameBuffer.toString();
 		return folderName;
 	}
 
 	private String createImageName(ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails,
 			String PNG_EXTENSION, String status) {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber()).append("_")
+		StringBuffer imageNameBuffer = new StringBuffer();
+		imageNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber()).append("_")
 				.append(fetchMetadataVO.getScenarioName()).append("_").append(fetchMetadataVO.getScriptNumber())
 				.append("_").append(customerDetails.getTestSetName()).append("_")
 				.append(fetchMetadataVO.getLineNumber()).append(status).append(PNG_EXTENSION);
-		String imageName = stringBuffer.toString();
+		String imageName = imageNameBuffer.toString();
 		return imageName;
 	}
 
 	private String createFolder(String WINDOWS_SCREENSHOT_LOCATION, String customerName, String testSetName) {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.setLength(0);
-		stringBuffer.append(WINDOWS_SCREENSHOT_LOCATION).append(customerName).append(File.separator).append(testSetName)
+		StringBuffer folderBuffer = new StringBuffer();
+		folderBuffer.setLength(0);
+		folderBuffer.append(WINDOWS_SCREENSHOT_LOCATION).append(customerName).append(File.separator).append(testSetName)
 				.append(File.separator);
-		String folder = stringBuffer.toString();
-		stringBuffer.setLength(0);
+		String folder = folderBuffer.toString();
 		return folder;
 
 	}
@@ -330,7 +329,6 @@ public abstract class AbstractSeleniumKeywords {
 	public String uploadObjectToObjectStore(String localFilePath, String folderName, String fileName) {
 
 		PutObjectResponse response = null;
-		StringBuffer stringBuffer = new StringBuffer();
 		try {
 			/**
 			 * Create a default authentication provider that uses the DEFAULT profile in the
@@ -345,8 +343,9 @@ public abstract class AbstractSeleniumKeywords {
 			File file = new File(FILE_NAME);
 			long fileSize = FileUtils.sizeOf(file);
 			InputStream is = new FileInputStream(file);
-			stringBuffer.append(folderName).append(FORWARD_SLASH).append(fileName);
-			String destinationFilePath = stringBuffer.toString();
+			StringBuffer destinationFileBuffer = new StringBuffer();
+			destinationFileBuffer.append(folderName).append(FORWARD_SLASH).append(fileName);
+			String destinationFilePath = destinationFileBuffer.toString();
 			/* Create a service client */
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 
@@ -381,11 +380,11 @@ public abstract class AbstractSeleniumKeywords {
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
 
 				String seqnum = (seqNum == null) ? "" : seqNum;
-				StringBuffer stringBuffer = new StringBuffer();
-				stringBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerName).append(FORWARD_SLASH)
+				StringBuffer objectStoreScreenShotBuffer = new StringBuffer();
+				objectStoreScreenShotBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerName).append(FORWARD_SLASH)
 						.append(testSetName).append(FORWARD_SLASH).append(seqnum);
 
-				String objectStoreScreenShotPath = stringBuffer.toString();
+				String objectStoreScreenShotPath = objectStoreScreenShotBuffer.toString();
 
 				ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder().namespaceName(ociNamespace)
 						.bucketName(ociBucketName).prefix(objectStoreScreenShotPath).delimiter(FORWARD_SLASH).build();
@@ -660,11 +659,11 @@ public abstract class AbstractSeleniumKeywords {
 	public void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) {
 		try {
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
+			StringBuffer folderBuffer = new StringBuffer();
+			folderBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
 					.append(File.separator).append(customerDetails.getTestSetName()).append(File.separator);
 
-			String folder = stringBuffer.toString();
+			String folder = folderBuffer.toString();
 			String file = (folder + pdffileName);
 			findPassAndFailCount(fetchConfigVO, customerDetails.getTestSetId());
 
@@ -764,18 +763,18 @@ public abstract class AbstractSeleniumKeywords {
 			logger.info("Not able to Create pdf {}", e);
 		}
 		try {
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(customerDetails.getCustomerName()).append(FORWARD_SLASH)
+			StringBuffer destinationFileBuffer = new StringBuffer();
+			destinationFileBuffer.append(customerDetails.getCustomerName()).append(FORWARD_SLASH)
 					.append(customerDetails.getTestSetName()).append(FORWARD_SLASH).append(pdffileName);
 
-			String destinationFilePath = stringBuffer.toString();
+			String destinationFilePath = destinationFileBuffer.toString();
 
-			StringBuffer stringBuffer1 = new StringBuffer();
-			stringBuffer1.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
+			StringBuffer sourceFileBuffer = new StringBuffer();
+			sourceFileBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
 					.append(File.separator).append(customerDetails.getTestSetName()).append(File.separator)
 					.append(pdffileName);
 
-			String sourceFilePath = stringBuffer1.toString();
+			String sourceFilePath = sourceFileBuffer.toString();
 
 			uploadPDF(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
@@ -839,13 +838,13 @@ public abstract class AbstractSeleniumKeywords {
 		int increment = 0;
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
-			StringBuffer stringBuffer = new StringBuffer();
+			StringBuffer fileNameBuffer = new StringBuffer();
 
-			stringBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getLineNumber()).append("_")
+			fileNameBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getLineNumber()).append("_")
 					.append(metaDataVO.getScenarioName()).append("_").append(metaDataVO.getScriptNumber()).append("_")
 					.append(customerDetails.getTestSetName()).append("_").append(metaDataVO.getLineNumber());
 
-			String fileName = stringBuffer.toString();
+			String fileName = fileNameBuffer.toString();
 
 			String nextSeqNumber = "0";
 			String currentSeqNumber = "0";
@@ -867,10 +866,10 @@ public abstract class AbstractSeleniumKeywords {
 
 			if (image != null) {
 				i++;
-				stringBuffer.setLength(0);
-				stringBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()).append(customerName)
+				StringBuffer imageBuffer = new StringBuffer();
+				imageBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()).append(customerName)
 						.append(FORWARD_SLASH).append(testRunName1).append(FORWARD_SLASH).append(image);
-				Image img = Image.getInstance(stringBuffer.toString());
+				Image img = Image.getInstance(imageBuffer.toString());
 				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 				String status = image.split("_")[6].split("\\.")[0];
 				String scenario = image.split("_")[2];
@@ -922,17 +921,17 @@ public abstract class AbstractSeleniumKeywords {
 				// Adding the downloaded pdf after that particular script
 
 				if (!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
-					stringBuffer.setLength(0);
-					stringBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getScenarioName())
+					StringBuffer docNameBuffer = new StringBuffer();
+					docNameBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getScenarioName())
 							.append("_").append(metaDataVO.getScriptNumber()).append("_")
 							.append(customerDetails.getTestSetName()).append("_Passed");
-					String docName = stringBuffer.toString();
-					stringBuffer.setLength(0);
-					stringBuffer.append(fetchConfigVO.getDownlod_file_path()).append(docName).append(".pdf");
-					File file = new File(stringBuffer.toString());
+					String docName = docNameBuffer.toString();
+					StringBuffer fileBuffer = new StringBuffer();
+					fileBuffer.append(fetchConfigVO.getDownlod_file_path()).append(docName).append(".pdf");
+					File file = new File(fileBuffer.toString());
 					if (file.exists()) {
 						PdfContentByte contentByte = writer.getDirectContent();
-						PdfReader pdfReader = new PdfReader(stringBuffer.toString());
+						PdfReader pdfReader = new PdfReader(fileBuffer.toString());
 						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
 							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
 							document.newPage();
@@ -1217,17 +1216,14 @@ public abstract class AbstractSeleniumKeywords {
 		int i = 0;
 		int j = 0;
 		int increment = 0;
-		StringBuffer stringBuffer = new StringBuffer();
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
-			stringBuffer.setLength(0);
-
-			stringBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getLineNumber()).append("_")
+			StringBuffer fileNameBuffer = new StringBuffer();
+			fileNameBuffer.append(metaDataVO.getSeqNum()).append("_").append(metaDataVO.getLineNumber()).append("_")
 					.append(metaDataVO.getScenarioName()).append("_").append(metaDataVO.getScriptNumber()).append("_")
 					.append(customerDetails.getTestSetName()).append("_").append(metaDataVO.getLineNumber());
 
-			String fileName = stringBuffer.toString();
-			stringBuffer.setLength(0);
+			String fileName = fileNameBuffer.toString();
 
 			String nextSeqNumber = "0";
 			String currentSeqNumber = "0";
@@ -1249,10 +1245,11 @@ public abstract class AbstractSeleniumKeywords {
 
 			if (image != null) {
 				i++;
-				stringBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()).append(customerName)
+				StringBuffer imageBuffer = new StringBuffer();
+				imageBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()).append(customerName)
 						.append(FORWARD_SLASH).append(testRunName1).append(FORWARD_SLASH).append(image);
 
-				Image img = Image.getInstance(stringBuffer.toString());
+				Image img = Image.getInstance(imageBuffer.toString());
 				Rectangle pageSize = new Rectangle(img.getPlainWidth(), img.getPlainHeight() + 100);
 				String sno = image.split("_")[0];
 				String sNo = SCRIPT_NUMBER;
@@ -1493,13 +1490,10 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void deleteScreenShotFromTempLocation(String screenshotFolder, CustomerProjectDto customerDetails) {
-//		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
-//				+ File.separator;
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(customerDetails.getCustomerName()).append(File.separator)
+		StringBuffer pathBuffer = new StringBuffer();
+		pathBuffer.append(customerDetails.getCustomerName()).append(File.separator)
 				.append(customerDetails.getTestSetName()).append(File.separator);
-		String path = stringBuffer.toString();
-		stringBuffer.setLength(0);
+		String path = pathBuffer.toString();
 		try {
 			if (screenshotFolder != null) {
 				File folder = new File(screenshotFolder + path);
@@ -1513,13 +1507,10 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public void deletePdfsFromTempLocation(String pdfFolder, CustomerProjectDto customerDetails) {
-//		String path = customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
-//				+ File.separator;
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(customerDetails.getCustomerName()).append(File.separator)
+		StringBuffer pathBuffer = new StringBuffer();
+		pathBuffer.append(customerDetails.getCustomerName()).append(File.separator)
 				.append(customerDetails.getTestSetName()).append(File.separator);
-		String path = stringBuffer.toString();
-		stringBuffer.setLength(0);
+		String path = pathBuffer.toString();
 		try {
 			if (pdfFolder != null) {
 				File folder = new File(pdfFolder + path);
@@ -1545,15 +1536,14 @@ public abstract class AbstractSeleniumKeywords {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			List<String> objNames = null;
 			try (ObjectStorage client = new ObjectStorageClient(provider);) {
-
-//				String objectStoreScreenShotPath = SCREENSHOT + FORWARD_SLASH + customerDetails.getCustomerName()
-//						+ FORWARD_SLASH + customerDetails.getTestSetName() + FORWARD_SLASH + testSetLine.getSeqNum();
-				StringBuffer stringBuffer = new StringBuffer();
-				stringBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerDetails.getCustomerName())
+				
+				StringBuffer objectStoreScreenShotBuffer = new StringBuffer();
+				
+				objectStoreScreenShotBuffer.append(SCREENSHOT).append(FORWARD_SLASH).append(customerDetails.getCustomerName())
 						.append(FORWARD_SLASH).append(customerDetails.getTestSetName()).append(FORWARD_SLASH)
 						.append(testSetLine.getSeqNum());
 
-				String objectStoreScreenShotPath = stringBuffer.toString();
+				String objectStoreScreenShotPath = objectStoreScreenShotBuffer.toString();
 
 				ListObjectsRequest listScreenShotObjectsRequest = ListObjectsRequest.builder()
 						.namespaceName(ociNamespace).bucketName(ociBucketName).prefix(objectStoreScreenShotPath)
@@ -1650,12 +1640,12 @@ public abstract class AbstractSeleniumKeywords {
 			imageName = isPassed ? imageName.append("_Passed".concat(PNG_EXTENSION))
 					: imageName.append("_Failed".concat(PNG_EXTENSION));
 
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION())
+			StringBuffer imagePathBuffer = new StringBuffer();
+			imagePathBuffer.append(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION())
 					.append(customerDetails.getCustomerName()).append(FORWARD_SLASH)
 					.append(customerDetails.getTestSetName());
 
-			File imagePath = new File(stringBuffer.toString());
+			File imagePath = new File(imagePathBuffer.toString());
 
 			if (!imagePath.exists()) {
 				logger.info(String.format("creating directory: {}", imagePath.getName()));
@@ -1735,24 +1725,21 @@ public abstract class AbstractSeleniumKeywords {
 			FetchConfigVO fetchConfigVO) throws IOException, com.itextpdf.text.DocumentException {
 
 		document.newPage();
-//		String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(), customerDetails.getTestSetName());
-//
-		StringBuffer stringBuffer = new StringBuffer();
-//
-//		stringBuffer.append(fileName).append("_Passed.txt");
-//
-//		fileName = stringBuffer.toString();
-//
-		stringBuffer.setLength(0);
-		String folderName = fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName() + FORWARD_SLASH
-				+ customerDetails.getTestSetName();
-		fileName = fileName + "_Passed.txt";
+		
+		StringBuffer folderNameBuffer = new StringBuffer();
+		folderNameBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
+				.append(FORWARD_SLASH).append(customerDetails.getTestSetName());
 
-		stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
+		String folderName = folderNameBuffer.toString();
+
+		fileName = fileName + "_Passed.txt";
+		
+		StringBuffer localPathBuffer = new StringBuffer();
+		localPathBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getCustomerName())
 				.append(File.separator).append(customerDetails.getTestSetName()).append(File.separator)
 				.append(fileName);
 
-		String localPath = stringBuffer.toString();
+		String localPath = localPathBuffer.toString();
 		downloadObjectFromObjectStore(localPath, folderName, fileName);
 		Path path = Paths.get(localPath);
 		byte[] bytes = Files.readAllBytes(path);
@@ -1805,12 +1792,6 @@ public abstract class AbstractSeleniumKeywords {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//		StringBuffer stringBuffer = new StringBuffer();
-//		stringBuffer.append("{\n").append("  \"HTTP Type\": \"POST\",\n").append("  \"Request Header\": {\n")
-//				.append("    \"Content-Type\": \"application/x-www-form-urlencoded\"\n").append("  },\n")
-//				.append("  \"Request Body\": {\n").append("    \"grant_type\": \"client_credentials\"\n")
-//				.append("  }\n").append("}");
-//		String str = stringBuffer.toString();
 		String str = "{\n" + "  \"HTTP Type\": \"POST\",\n" + "  \"Request Header\": {\n"
 				+ "    \"Content-Type\": \"application/x-www-form-urlencoded\"\n" + "  },\n" + "  \"Request Body\": {\n"
 				+ "    \"grant_type\": \"client_credentials\"\n" + "  }\n" + "}";
@@ -1824,8 +1805,8 @@ public abstract class AbstractSeleniumKeywords {
 			for (Entry<String, String> map : apiValidationData.getRequestHeader().entrySet()) {
 				headers.set(map.getKey(), map.getValue());
 			}
-			headers.set("Authorization", "Basic " + fetchConfigVO.getAPI_AUTHENTICATION_CODE()); // Converting object to
-																									// string
+			headers.set("Authorization", "Basic " + fetchConfigVO.getAPI_AUTHENTICATION_CODE());
+// 			Converting object to string
 //			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 //			String json = ow.writeValueAsString(apiValidationData.getRequestBody());
 
@@ -2022,23 +2003,23 @@ public abstract class AbstractSeleniumKeywords {
 //			return response.statusCode();
 			createScreenShot(fetchMetadataVO, fetchConfigVO, "Response : " + api.getResponseCode(), customerDetails,
 					true);
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getTestSetName())
+			StringBuffer fileNameBuffer = new StringBuffer();
+			fileNameBuffer.append(fetchConfigVO.getWINDOWS_PDF_LOCATION()).append(customerDetails.getTestSetName())
 					.append("/").append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
 					.append("_").append(fetchMetadataVO.getScenarioName()).append("_")
 					.append(fetchMetadataVO.getScriptNumber()).append("_").append(customerDetails.getTestSetName())
 					.append("_").append(fetchMetadataVO.getLineNumber()).append("_Passed").append(".txt");
 
-			String fileName = stringBuffer.toString();
+			String fileName = fileNameBuffer.toString();
 
-			stringBuffer.setLength(0);
+			StringBuffer nameBuffer = new StringBuffer();
 
-			stringBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
+			nameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getLineNumber())
 					.append("_").append(fetchMetadataVO.getScenarioName()).append("_")
 					.append(fetchMetadataVO.getScriptNumber()).append("_").append(customerDetails.getTestSetName())
 					.append("_").append(fetchMetadataVO.getLineNumber()).append("_Passed").append(".txt");
 
-			String name = stringBuffer.toString();
+			String name = nameBuffer.toString();
 
 			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName());
 
@@ -2097,11 +2078,11 @@ public abstract class AbstractSeleniumKeywords {
 
 		if (fileName != null) {
 			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
+			StringBuffer newNameBuffer = new StringBuffer();
+			newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
 					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 					.append(customerDetails.getTestSetName()).append("_Passed");
-			String newName = stringBuffer.toString();
+			String newName = newNameBuffer.toString();
 
 			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
 				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
@@ -2223,11 +2204,6 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			String accessToken = getSharepointAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-//			StringBuffer stringBuffer = new StringBuffer();
-//			stringBuffer.append(fetchConfigVO.getPdf_path()).append(customerDetails.getCustomerName()).append("/")
-//					.append(customerDetails.getTestSetName()).append("/");
-//			File imageDir = new File(stringBuffer.toString());
-
 			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
 
@@ -2310,14 +2286,6 @@ public abstract class AbstractSeleniumKeywords {
 				byte[] data = bos.toByteArray();
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
 				bodyMap.add("user-file", data);
-//				stringBuffer.append("https://graph.microsoft.com/v1.0/drives/").append(driveId).append("/items/")
-//						.append(itemId).append(":/").append(customerDetails.getCustomerName()).append("/")
-//						.append(customerDetails.getProjectName()).append("/").append(customerDetails.getTestSetName())
-//						.append("/").append(imageFileName).append(":/createUploadSession");
-//
-//				ResponseEntity<Object> response = restTemplate.exchange(stringBuffer.toString(), HttpMethod.POST,
-//						uploadSessionRequest, Object.class);
-
 				ResponseEntity<Object> response = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/items/" + itemId + ":/"
 								+ customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
