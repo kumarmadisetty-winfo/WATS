@@ -36,6 +36,7 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.HealthCheckVO;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.SanityCheckVO;

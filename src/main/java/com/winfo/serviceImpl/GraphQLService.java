@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.config.GraphqlSchemaReaderUtil;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.GraphqlRequestBody;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.ScriptJiraXrayCloud;

@@ -1,4 +1,4 @@
-package com.winfo.serviceImpl;
+package com.winfo.vo;
 
 import java.util.List;
 

@@ -36,6 +36,7 @@ import com.oracle.bmc.core.responses.UpdateInstancePoolResponse;
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
 import com.winfo.dao.VmInstanceDAO;
+import com.winfo.vo.FetchConfigVO;
 
 @Service
 @RefreshScope
