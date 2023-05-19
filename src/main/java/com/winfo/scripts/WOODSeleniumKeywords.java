@@ -12565,7 +12565,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Thread.sleep(2000);
 				waittext1.sendKeys(Keys.BACK_SPACE);
 				Thread.sleep(5000);
-				WebElement selectvalue = driver.findElement(By.xpath("//*[text()='Data Scientist V:Supply Chain S&SS - GF Onshore Staff:37.5 Standard Hours']"));
+				WebElement selectvalue = driver.findElement(By.xpath("//*[text()=\"" + keysToSend + "\"]"));
 				selectvalue.click();
 				Thread.sleep(5000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
