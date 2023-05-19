@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+import com.winfo.vo.FetchConfigVO;
+import com.winfo.vo.FetchMetadataListVO;
+import com.winfo.vo.FetchMetadataVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service

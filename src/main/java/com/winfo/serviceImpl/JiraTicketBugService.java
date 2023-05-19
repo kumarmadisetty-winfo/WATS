@@ -38,6 +38,8 @@ import com.winfo.dao.JiraTicketBugDao;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DomGenericResponseBean;
+import com.winfo.vo.FetchConfigVO;
+import com.winfo.vo.FetchMetadataVO;
 import com.winfo.vo.TestRunVO;
 
 import reactor.core.publisher.Mono;

@@ -38,6 +38,9 @@ import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.Constants.UPDATE_STATUS;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
+import com.winfo.vo.FetchConfigVO;
+import com.winfo.vo.FetchMetadataVO;
+import com.winfo.vo.FetchScriptVO;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
 

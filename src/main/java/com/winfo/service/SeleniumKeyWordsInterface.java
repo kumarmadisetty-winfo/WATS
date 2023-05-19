@@ -8,9 +8,9 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
-import com.winfo.serviceImpl.FetchConfigVO;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service

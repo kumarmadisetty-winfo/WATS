@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.ImmutableMap;
 import com.winfo.constants.BrowserConstants;
 import com.winfo.constants.DriverConstants;
-import com.winfo.serviceImpl.FetchConfigVO;
+import com.winfo.vo.FetchConfigVO;
 
 @Component
 @RefreshScope

@@ -35,9 +35,9 @@ import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
-import com.winfo.serviceImpl.FetchConfigVO;
 import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service
