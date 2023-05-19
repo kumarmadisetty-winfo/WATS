@@ -25,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,16 +62,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16863,7 +16859,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				System.out.println(driver.switchTo().window(childWindow).getTitle());
 			}
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+//			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			log.error("Failed to Handle the window");
@@ -16896,7 +16892,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+//			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16947,8 +16943,12 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 					driver.switchTo().window(childWindow);
-				}
+					
+					}
+			
 			}
+			
+			
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			log.info("Successfully Handeled the window" + scripNumber);
 		} catch (Exception e) {
