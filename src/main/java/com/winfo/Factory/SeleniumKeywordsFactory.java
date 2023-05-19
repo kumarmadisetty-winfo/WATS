@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
-import com.winfo.service.AbstractSeleniumKeywords;
 import com.winfo.service.SeleniumKeyWordsInterface;
+import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 
 @Configuration
 public class SeleniumKeywordsFactory {

@@ -61,8 +61,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
-import com.winfo.service.AbstractSeleniumKeywords;
 import com.winfo.service.SeleniumKeyWordsInterface;
+import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.FetchConfigVO;

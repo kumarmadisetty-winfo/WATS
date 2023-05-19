@@ -66,8 +66,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.itextpdf.text.DocumentException;
-import com.winfo.service.AbstractSeleniumKeywords;
 import com.winfo.service.SeleniumKeyWordsInterface;
+import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.FetchConfigVO;

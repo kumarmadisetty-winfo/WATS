@@ -58,8 +58,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import com.lowagie.text.DocumentException;
-import com.winfo.service.AbstractSeleniumKeywords;
 import com.winfo.service.SeleniumKeyWordsInterface;
+import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.FetchConfigVO;
