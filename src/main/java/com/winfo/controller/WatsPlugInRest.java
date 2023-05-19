@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.winfo.exception.WatsEBSCustomException;
-import com.winfo.services.PluginTestrunService;
-import com.winfo.services.WatsPluginService;
+import com.winfo.serviceImpl.PluginTestrunService;
+import com.winfo.serviceImpl.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.WatsScriptAssistantVO;
 

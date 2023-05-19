@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.winfo.services.VMDetailesService;
+import com.winfo.serviceImpl.VMDetailesService;
 
 @Component
 @Transactional

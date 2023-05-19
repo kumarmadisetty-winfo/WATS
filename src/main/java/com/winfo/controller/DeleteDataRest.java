@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import com.winfo.services.DeleteDataService;
+import com.winfo.serviceImpl.DeleteDataService;
 import com.winfo.vo.DeleteScriptsData;
 
 

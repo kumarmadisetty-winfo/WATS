@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.winfo.services.HealthCheck;
+import com.winfo.serviceImpl.HealthCheck;
 import com.winfo.vo.SanityCheckVO;
 
 import io.swagger.annotations.ApiOperation;

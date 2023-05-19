@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.services.DeletionService;
+import com.winfo.serviceImpl.DeletionService;
 import com.winfo.vo.DeleteEvidenceReportDto;
 import com.winfo.vo.ResponseDto;
 

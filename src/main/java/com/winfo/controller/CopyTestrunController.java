@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.winfo.services.CopyTestRunService;
+import com.winfo.serviceImpl.CopyTestRunService;
 import com.winfo.vo.CopyTestrunjson;
 import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.InsertScriptsVO;

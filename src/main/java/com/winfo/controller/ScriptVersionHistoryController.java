@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
-import com.winfo.services.ScriptVersionHistoryService;
+import com.winfo.serviceImpl.ScriptVersionHistoryService;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.VersionHistoryDto;
 
