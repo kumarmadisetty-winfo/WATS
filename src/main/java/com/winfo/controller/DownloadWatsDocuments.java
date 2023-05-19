@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.winfo.services.WatsDocumentService;
+import com.winfo.serviceImpl.WatsDocumentService;
 import com.winfo.vo.WatsDocumentVo;
 
 import io.swagger.annotations.ApiOperation;

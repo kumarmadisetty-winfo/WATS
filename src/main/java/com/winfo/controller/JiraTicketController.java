@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.services.JiraTicketBugService;
-import com.winfo.services.JiraUserServiceManagement;
+import com.winfo.serviceImpl.JiraTicketBugService;
+import com.winfo.serviceImpl.JiraUserServiceManagement;
 import com.winfo.vo.BugDetails;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.JiraUserManagement;

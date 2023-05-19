@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.winfo.services.TestScriptExecService;
+import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.ResponseDto;

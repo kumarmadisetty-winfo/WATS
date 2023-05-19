@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.services.CentralToCustomerPostService;
-import com.winfo.services.GetApiValidationMigrationService;
-import com.winfo.services.TestRunMigrationGetService;
+import com.winfo.serviceImpl.CentralToCustomerPostService;
+import com.winfo.serviceImpl.GetApiValidationMigrationService;
+import com.winfo.serviceImpl.TestRunMigrationGetService;
 import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;

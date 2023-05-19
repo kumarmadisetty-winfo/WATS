@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.winfo.dao.VmInstanceDAO;
-import com.winfo.services.VMDetailesService;
+import com.winfo.serviceImpl.VMDetailesService;
 
 @Component
 public class SchedulerService {

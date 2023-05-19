@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.scripts.RunAutomation;
-import com.winfo.services.HealthCheck;
+import com.winfo.serviceImpl.HealthCheck;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.TestScriptDto;
 

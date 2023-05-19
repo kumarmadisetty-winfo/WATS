@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.winfo.services.CustomerToCentralGetService;
-import com.winfo.services.PostApiValidationMigrationService;
-import com.winfo.services.TestRunMigrationService;
+import com.winfo.serviceImpl.CustomerToCentralGetService;
+import com.winfo.serviceImpl.PostApiValidationMigrationService;
+import com.winfo.serviceImpl.TestRunMigrationService;
 import com.winfo.vo.ApiValidationMigrationDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptDtlsDto;
