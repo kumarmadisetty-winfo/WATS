@@ -12577,40 +12577,51 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
-//		
-//		try {
-//			if (param1.equalsIgnoreCase("Hire an Employee") && param2.equalsIgnoreCase("Position")) {
-//				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-//				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-//						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]")));
-//
-//				WebElement waittext = driver.findElement(By.xpath(
-//						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]"));
-//				Actions actions = new Actions(driver);
-//				actions.moveToElement(waittext).build().perform();
+		
+		try {
+			if (param1.equalsIgnoreCase("Hire an Employee") && param2.equalsIgnoreCase("Position")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]")));
+
+				WebElement waittext = driver.findElement(By.xpath(
+						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
 //				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-//				waittext.click();
-//				Thread.sleep(3000);
-//				WebElement selectvalue = driver.findElement(By.xpath("//*[text()=\"+keysToSend+\"]"));
-//				// clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-//				selectvalue.click();
-////				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO);
-//				screenshot(driver, fetchMetadataVO, customerDetails);
-//				String scripNumber = fetchMetadataVO.getScriptNumber();
-//				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
-//				String xpath2 = "//li[text()=\"keysToSend\"]";
-//				String xpath = xpath1 + ";" + xpath2;
-//				String scriptID = fetchMetadataVO.getScriptId();
-//				String lineNumber = fetchMetadataVO.getLineNumber();
-//				service.saveXpathParams(scriptID, lineNumber, xpath);
-//				log.info("Sucessfully clicked  dropdownValues" + scripNumber);
-//				return;
-//			}
-//		} catch (Exception e) {
-//			String scripNumber = fetchMetadataVO.getScriptNumber();
-//			log.error("Failed during dropdownValues" + scripNumber);
-//			System.out.println(e);
-//		}
+				waittext.click();
+				Thread.sleep(5000);
+				WebElement waittext1 = driver.findElement(By.xpath(
+						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]"));
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].value=\"" + keysToSend + "S" + "\";", waittext1);
+				Thread.sleep(2000);
+				waittext1.sendKeys(Keys.BACK_SPACE);
+				Thread.sleep(5000);
+//				WebElement selectvalue = driver.findElement(By.xpath("//*[text()="+ keysToSend +"]"));
+//				WebElement selectvalue = driver.findElement(By.xpath("//*[text()='" + keysToSend + "']"));
+				WebElement selectvalue = driver.findElement(By.xpath("//*[text()='Data Scientist V:Supply Chain S&SS - GF Onshore Staff:37.5 Standard Hours']"));
+				selectvalue.click();
+				Thread.sleep(5000);
+//				Select dropdown = new Select(waittext);
+//				dropdown.selectByVisibleText("//*[text()=\"+keysToSend+\"]");
+				
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath1 = "//div[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
+				String xpath2 = "//li[text()=\"keysToSend\"]";
+				String xpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				log.info("Sucessfully clicked  dropdownValues" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during dropdownValues" + scripNumber);
+			System.out.println(e);
+		}
 		
 		//	HCM.ADM.022 (Action & Action Reason)
 		try {
