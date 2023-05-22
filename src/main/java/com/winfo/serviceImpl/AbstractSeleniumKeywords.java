@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -1441,17 +1442,19 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	private static void addTableHeader(PdfPTable table, Font font) {
-		String[] headers = { "Sequence Number", "Script Number", "Test Case Name", "Status", "Page Number" };
-		for (String header : headers) {
-			PdfPCell headerCell = new PdfPCell(new Phrase(header, font));
-			headerCell.setBackgroundColor(new BaseColor(167, 216, 241));
-			headerCell.setUseAscender(true);
-			headerCell.setVerticalAlignment(Element.ALIGN_LEFT);
-			headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			headerCell.setPadding(5);
-			table.addCell(headerCell);
-		}
+	    String[] headers = { "Sequence Number", "Script Number", "Test Case Name", "Status", "Page Number" };
+	    Arrays.stream(headers)
+	            .map(header -> {
+	                PdfPCell headerCell = new PdfPCell(new Phrase(header, font));
+	                headerCell.setBackgroundColor(new BaseColor(167, 216, 241));
+	                headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	                headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	                headerCell.setPadding(5);
+	                return headerCell;
+	            })
+	            .forEach(table::addCell);
 	}
+
 
 	private static void addTableRow(PdfPTable table, String seqNum, String scriptNum, String scenarioName,
 			String pageNum, String status, Font font, Font anchorFont, String reference, Font statusContentFont) {
