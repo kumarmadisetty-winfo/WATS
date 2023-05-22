@@ -31,6 +31,7 @@ import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -65,7 +66,9 @@ public class DataBaseEntry {
 	
 	@Autowired
 	private ScriptMasterRepository scriptMasterRepository;
-
+	
+	@Autowired
+	private TestSetLinesRepository testSetLinesRepository;
 	
 	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
 		dao.updateStartAndEndTimeForTestSetTable(testSetId, startTime, endTime);
@@ -613,5 +616,9 @@ public class DataBaseEntry {
 	
 	public String getMeaningByTargetCode(String lookUpCode, String lookUpName) {
 		return lookUpCodeJpaRepository.getMeaningByTargetCode(lookUpCode,lookUpName);
+	}
+	
+	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
+		return testSetLinesRepository.findBySeqNum(Integer.parseInt(testSetId), Integer.parseInt(seqNumber));
 	}
 }

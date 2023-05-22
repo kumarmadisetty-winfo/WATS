@@ -80,17 +80,19 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.lowagie.text.DocumentException;
 import com.oracle.bmc.ConfigFileReader;
@@ -107,7 +109,9 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetAttribute;
+import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
 import com.winfo.utils.StringUtils;
@@ -163,9 +167,11 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String EXECUTION_SUMMARY = "Execution Summary";
 	private static final String SCRIPT_NUMBER = "Script Number";
 	private static final String STEP_DESC = "Step Description : ";
-	private static final String TEST_PARAM = "Test Parameter : ";
-	private static final String TEST_VALUE = "Test Value : ";
+	private static final String TEST_PARAM = "Input Parameter : ";
+	private static final String TEST_VALUE = "Input Test Data : ";
 	private static final String SCENARIO_NAME = "Test Case Name";
+	private static final String TEST_CASE_DESCRIPTION = "Test Case Description";
+	private static final String EXPECTED_RESULT = "Expected Result";
 	private static final String LINE_NUMBER = "Line Number : ";
 	private static final String SCREENSHOT = "Screenshot";
 	private static final String ELAPSED_TIME = "Elapsed Time";
@@ -1005,7 +1011,7 @@ public abstract class AbstractSeleniumKeywords {
 	public void generateDetailsPDF(Document document, Image watsLogo, int passCount, int failCount, int others,
 			PdfWriter writer) throws DocumentException, com.itextpdf.text.DocumentException {
 		String start = EXECUTION_SUMMARY;
-		String pichart = "Pie-Chart";
+		String pichart = "Test Execution Summary Report";
 		Font font23 = FontFactory.getFont(ARIAL, 23);
 		Font fontWhite23 = FontFactory.getFont(ARIAL, 23, BaseColor.WHITE);
 		document.add(Chunk.NEWLINE);
@@ -1170,46 +1176,43 @@ public abstract class AbstractSeleniumKeywords {
 		document.add(watsLogo);
 		Anchor target2 = new Anchor(String.valueOf("Page Numbers"), bfBold);
 		target2.setName(String.valueOf("details"));
-		Chunk ch1 = new Chunk("Script Numbers", bfBold);
-		ch1.setBackground(new BaseColor(38, 99, 175), 0f, 10f, 1730f, 15f);
 		Paragraph p2 = new Paragraph();
-		p2.add(ch1);
-		p2.add(new Chunk(new VerticalPositionMark()));
 		p2.add(target2);
 		document.add(p2);
 		document.add(Chunk.NEWLINE);
+		
+		Font titleFont = FontFactory.getFont("Open Sans", BaseFont.IDENTITY_H, 20, Font.BOLD, BaseColor.BLACK);
+		Font anchorFont = new Font(FontFamily.TIMES_ROMAN, 20, Font.UNDERLINE | Font.NORMAL, BaseColor.BLUE);
+		Font contentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.BLACK);
+		Font passContentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.GREEN);
+		Font failContentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.RED);
 
-		Chunk dottedLine = new Chunk(new DottedLineSeparator());
+		PdfPTable table = createTable(5);
+		addTableHeader(table, titleFont);
+
+
 		for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
 			Map<String, String> str1 = entry.getValue();
 			for (Entry<String, String> entry1 : str1.entrySet()) {
-				Anchor click = new Anchor(String.valueOf(entry.getKey()), bf15);
-				click.setReference("#" + entry1.getKey());
-				Paragraph pr = new Paragraph();
-				Anchor ca1 = new Anchor(entry1.getKey(), bf15);
-				ca1.setReference("#" + entry1.getKey());
+				String scriptNumber = entry1.getKey();
+				String pageNumber = entry.getKey().toString();
+
+				String[] split = scriptNumber.split("_");
+				TestSetLine testSetLineDetails = databaseentry
+						.getTestSetLineBySequenceNumber(customerDetails.getTestSetId(), split[0]);
+				ScriptMaster scriptMaster = databaseentry.getScriptDetailsByScriptId(testSetLineDetails.getScriptId());
+
 				String compare = entry1.getValue();
 				if (!compare.equals("null")) {
-					Anchor click1 = new Anchor(String.valueOf("(Failed)"), bf14);
-					click1.setReference("#" + entry1.getKey());
-					pr.add(ca1);
-					pr.add(click1);
-					pr.add(dottedLine);
-					pr.add(click);
-					document.add(Chunk.NEWLINE);
-					document.add(pr);
+					addTableRow(table, testSetLineDetails.getSeqNum().toString(), testSetLineDetails.getScriptNumber(),
+							scriptMaster.getScenarioName(), pageNumber, "Fail", contentFont, anchorFont, scriptNumber, failContentFont);
 				} else {
-					Anchor click2 = new Anchor(String.valueOf("(Passed)"), bf13);
-					click2.setReference("#" + entry1.getKey());
-					pr.add(ca1);
-					pr.add(click2);
-					pr.add(dottedLine);
-					pr.add(click);
-					document.add(Chunk.NEWLINE);
-					document.add(pr);
+					addTableRow(table, testSetLineDetails.getSeqNum().toString(), testSetLineDetails.getScriptNumber(),
+							scriptMaster.getScenarioName(), pageNumber, "Pass", contentFont, anchorFont, scriptNumber, passContentFont);
 				}
 			}
 		}
+		document.add(table);
 
 		int i = 0;
 		int j = 0;
@@ -1254,7 +1257,12 @@ public abstract class AbstractSeleniumKeywords {
 				String scriptNumber1 = image.split("_")[3];
 				String snm = SCENARIO_NAME;
 				String scriptName = image.split("_")[2];
-
+				ScriptMaster sm = databaseentry.getScriptDetailsByScriptId(Integer.parseInt(metaDataVO.getScriptId()));
+				String testCaseDescription = TEST_CASE_DESCRIPTION;
+				String description = sm.getScenarioDescription();
+				String expectedResult = EXPECTED_RESULT;
+				String result = sm.getExpectedResult();
+				
 				if (!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(pageSize);
 					document.newPage();
@@ -1268,7 +1276,18 @@ public abstract class AbstractSeleniumKeywords {
 					PdfPTable table2 = new PdfPTable(2);
 					table2.setWidths(new int[] { 1, 1 });
 					table2.setWidthPercentage(100f);
-					String[] strArr = { sNo, scriptNumber1, snm, scriptName };
+					String[] strArr;
+
+					if (sm.getScenarioDescription() != null && sm.getExpectedResult() != null) {
+					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result};
+					} else if (sm.getScenarioDescription() != null) {
+					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description};
+					} else if (sm.getExpectedResult() != null) {
+					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result};
+					} else {
+					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName};
+					}
+					
 					for (String str : strArr) {
 						insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
 					}
@@ -1413,7 +1432,61 @@ public abstract class AbstractSeleniumKeywords {
 		}
 
 	}
+	
+	private static PdfPTable createTable(int column) throws com.itextpdf.text.DocumentException {
+		PdfPTable table = new PdfPTable(column);
+		table.setWidths(new float[] { 0.35f, 0.5f, 2.55f, 0.3f, 0.3f });
+		table.setWidthPercentage(100);
+		return table;
+	}
 
+	private static void addTableHeader(PdfPTable table, Font font) {
+		String[] headers = { "Sequence Number", "Script Number", "Test Case Name", "Status", "Page Number" };
+		for (String header : headers) {
+			PdfPCell headerCell = new PdfPCell(new Phrase(header, font));
+			headerCell.setBackgroundColor(new BaseColor(167, 216, 241));
+			headerCell.setUseAscender(true);
+			headerCell.setVerticalAlignment(Element.ALIGN_LEFT);
+			headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			headerCell.setPadding(5);
+			table.addCell(headerCell);
+		}
+	}
+
+	private static void addTableRow(PdfPTable table, String seqNum, String scriptNum, String scenarioName,
+			String pageNum, String status, Font font, Font anchorFont, String reference, Font statusContentFont) {
+		Anchor pageNumberColumn = createAnchor(pageNum, anchorFont, reference);
+		Paragraph pageNumberParagraph = createParagraph(pageNumberColumn);
+		table.addCell(createCell(new Paragraph(createAnchor(seqNum, font, null)), Element.ALIGN_RIGHT, font));
+		table.addCell(createCell(new Paragraph(createAnchor(scriptNum, font, null)), Element.ALIGN_LEFT, font));
+		table.addCell(createCell(new Paragraph(createAnchor(scenarioName, font, null)), Element.ALIGN_LEFT, font));
+		table.addCell(createCell(new Paragraph(createAnchor(status, statusContentFont, null)), Element.ALIGN_LEFT, statusContentFont));
+		table.addCell(createCell(pageNumberParagraph, Element.ALIGN_RIGHT, anchorFont));
+	}
+
+	private static PdfPCell createCell(Paragraph content, int horizontalAlignment, Font font) {
+		PdfPCell cell = new PdfPCell(content);
+		cell.setHorizontalAlignment(horizontalAlignment);
+		cell.setVerticalAlignment(Element.ALIGN_CENTER);
+		cell.setPadding(10);
+		cell.setMinimumHeight(40f);
+		return cell;
+	}
+	
+	private static Anchor createAnchor(String content, Font font, String reference) {
+		Anchor anchor = new Anchor(content, font);
+		if (reference != null) {
+			anchor.setReference("#" + reference);
+		}
+		return anchor;
+	}
+
+	private static Paragraph createParagraph(Anchor anchor) {
+		Paragraph paragraph = new Paragraph();
+		paragraph.add(anchor);
+		return paragraph;
+	}
+	
 	public void insertCell(PdfPTable table, String text, int align, int colspan, Font font) {
 
 		// create a new cell with the specified Text and Font
