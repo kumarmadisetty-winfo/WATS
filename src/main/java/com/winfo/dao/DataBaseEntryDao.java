@@ -30,6 +30,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.QueryException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -877,9 +878,18 @@ public class DataBaseEntryDao {
 						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}
+		} catch (QueryException e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					"Error executing the query: " + e.getMessage(), e);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					"Error accessing array element: " + e.getMessage(), e);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					"Exception occured while fetching all steps details for test run", e);
 		}
 		return listOfTestRunExecutionVo;
 	}
