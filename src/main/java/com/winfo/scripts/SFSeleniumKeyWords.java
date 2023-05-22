@@ -2620,6 +2620,34 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("Save")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath("//button[text()='"+param1+"']")));
+				WebElement waittext = driver.findElement(
+						By.xpath("//button[text()='"+param1+"']"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				waittext.click();
+				Thread.sleep(6000);
+				//clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+		
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				log.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+				String xpath = "//button[text()='param1']";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.error("Failed during Republish clickButton" + scripNumber);
+			System.out.println(e);
+		}
+		//button[text()=\""+param1+"\"]
+		try {
 			if (param1.equalsIgnoreCase("Mark as Current Stage")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -9954,6 +9982,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				//waittill.sendKeys(keysToSend);
+				waittill.sendKeys(Keys.BACK_SPACE);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -16554,6 +16583,15 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public String getErrorMessages(WebDriver driver) {
 		try {
 			String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
+			return text;
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		try {
+			String text = driver.findElement(By.xpath("//lightning-icon[@title='Error']")).getText();
+			if(text.isEmpty()) {
+				text = null;
+			}
 			return text;
 		} catch (Exception e) {
 			System.out.println(e);
