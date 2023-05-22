@@ -1275,7 +1275,7 @@ public abstract class AbstractSeleniumKeywords {
 					document.add(pa);
 					document.add(Chunk.NEWLINE);
 					PdfPTable table2 = new PdfPTable(2);
-					table2.setWidths(new int[] { 1, 1 });
+					table2.setWidths(new float[] { 1, 3 });
 					table2.setWidthPercentage(100f);
 					String[] strArr;
 
@@ -1436,7 +1436,7 @@ public abstract class AbstractSeleniumKeywords {
 	
 	private static PdfPTable createTable(int column) throws com.itextpdf.text.DocumentException {
 		PdfPTable table = new PdfPTable(column);
-		table.setWidths(new float[] { 0.35f, 0.5f, 2.55f, 0.3f, 0.3f });
+		table.setWidths(new float[] { 0.35f, 0.6f, 2.45f, 0.3f, 0.3f });
 		table.setWidthPercentage(100);
 		return table;
 	}
