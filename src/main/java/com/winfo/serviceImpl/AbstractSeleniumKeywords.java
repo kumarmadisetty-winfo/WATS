@@ -1193,8 +1193,8 @@ public abstract class AbstractSeleniumKeywords {
 
 		for (Entry<Integer, Map<String, String>> entry : toc.entrySet()) {
 			Map<String, String> str1 = entry.getValue();
-			for (Entry<String, String> entry1 : str1.entrySet()) {
-				String scriptNumber = entry1.getKey();
+			for (Entry<String, String> mapOfScriptNumberAndStatus : str1.entrySet()) {
+				String scriptNumber = mapOfScriptNumberAndStatus.getKey();
 				String pageNumber = entry.getKey().toString();
 
 				String[] split = scriptNumber.split("_");
@@ -1202,7 +1202,7 @@ public abstract class AbstractSeleniumKeywords {
 						.getTestSetLineBySequenceNumber(customerDetails.getTestSetId(), split[0]);
 				ScriptMaster scriptMaster = databaseentry.getScriptDetailsByScriptId(testSetLineDetails.getScriptId());
 
-				String compare = entry1.getValue();
+				String compare = mapOfScriptNumberAndStatus.getValue();
 				if (!compare.equals("null")) {
 					addTableRow(table, testSetLineDetails.getSeqNum().toString(), testSetLineDetails.getScriptNumber(),
 							scriptMaster.getScenarioName(), pageNumber, "Fail", contentFont, anchorFont, scriptNumber, failContentFont);
