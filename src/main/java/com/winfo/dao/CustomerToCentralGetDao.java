@@ -490,7 +490,7 @@ public class CustomerToCentralGetDao {
 			for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
 				ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
 				scriptMetaDataListDto.add(scriptMetaDataDto);
-				if(scriptMetaData.getValidationName() != null && API_VALIDATION.equals(scriptMetaData.getValidationType())) {
+				if(scriptMetaData.getValidationName() != null && !scriptMetaData.getValidationName().equals("NA") && API_VALIDATION.equals(scriptMetaData.getValidationType())) {
 					LookUpCodeVO lookUpCodeObj = dataBaseEntryDao.getLookupCode(scriptMetaData.getValidationType(), scriptMetaData.getValidationName());
 					lookUpCodeMap.put(scriptMetaData.getValidationName(), lookUpCodeObj);
 					validationType = API_VALIDATION;
