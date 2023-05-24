@@ -424,7 +424,6 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed to enter password " + scripNumber);
-			logger.error(e);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -640,7 +639,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Failed During Open Task " + scripNumber);
+			logger.error("Failed During Open Task " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -755,7 +754,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				result = true;
 			} catch (SecurityException se) {
 				// handle it
-				logger.error(se.getMessage());
+				logger.error("Failed during conver JPG to Movie " + se.getMessage());
 			}
 		} else {
 			logger.info("Folder exist");
@@ -1177,7 +1176,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during clear action " + e.getMessage());
 		}
 		try {
 			if (inputParam2.equals("Accounting Period")) {
@@ -1339,7 +1338,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("failed during ClickMenu " + scripNumber);
+			logger.error("Failed during ClickMenu " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1361,7 +1360,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("failed during ClickMenu " + scripNumber);
+			logger.error("Failed during ClickMenu " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1385,7 +1384,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("failed during ClickMenu " + scripNumber);
+			logger.error("Failed during ClickMenu " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1409,7 +1408,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("failed during ClickMenu " + scripNumber);
+			logger.error("Failed during ClickMenu " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1432,7 +1431,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("failed during ClickMenu " + scripNumber);
+			logger.error("Failed during ClickMenu " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1455,7 +1454,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error(e.getMessage());
-			logger.error("failed during ClickMenu " + scripNumber);
+			logger.error("Failed during ClickMenu " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -1829,7 +1828,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						"(//h2[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"])[1]"));
 				Expand.click();
 			} catch (Exception e) {
-
+				logger.error("Failed During Process Monitor ClickExpand or Collapse" + e.getMessage());
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
@@ -2535,7 +2534,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 		// prod
 		try {
@@ -2558,7 +2557,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 		// DH 43
 		try {
@@ -2582,7 +2581,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 
 		// DH 15
@@ -2606,7 +2605,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 
 		// Dh 9
@@ -8182,7 +8181,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Text Area" + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8201,7 +8200,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Text Area" + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8220,7 +8219,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Text Area" + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Description for Internal Candidates")||(param1.equalsIgnoreCase("Qualifications for Internal Candidates"))) {
@@ -8390,7 +8389,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during textArea" + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -10435,8 +10434,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
-
+			logger.error("Failed during Time Entry multiplelinestableSendKeys" + e.getMessage());
 		}
 
 		try {
@@ -10603,7 +10601,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during Time Entry multiplelinestableSendKeys" + e.getMessage());
 
 		}
 
@@ -12289,7 +12287,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Schedule New Process or Name dropdownValues" + e.getMessage());
 		}
 
 		try {
@@ -15364,7 +15362,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during scrollUsingElement " + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15377,7 +15375,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during scrollUsingElement " + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),\"" + inputParam + "\")]"));
@@ -15419,7 +15417,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during scrollUsingElement " + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,\"" + inputParam + "\")]"));
@@ -15879,7 +15877,6 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 			theGroup = theGroup.replaceAll(" ", "");
 			// print the group out for verification
-			System.out.format(theGroup);
 		}
 		return theGroup;
 	}
@@ -15897,11 +15894,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy under score with number " + e.getMessage());
 			throw e;
 		}
 
@@ -15920,11 +15916,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy under score " + e.getMessage());
 			throw e;
 		}
 
@@ -16524,7 +16519,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			logger.info("Successfully Copied the Number");
 			return num2;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy Integer value " + e.getMessage());
 		}
 		try {
 
@@ -16536,7 +16531,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy Integer value " + e.getMessage());
 
 		}
 
@@ -16557,7 +16552,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy Integer value " + e.getMessage());
 
 		}
 
@@ -16765,7 +16760,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during window Handle " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -16782,7 +16777,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during window Handle " + e.getMessage());
 		}
 		try {
 			Thread.sleep(20000);
@@ -16831,7 +16826,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 			} catch (Exception e) {
-				logger.error(e.getMessage());
+				logger.error("Failed during Switch to frame " + e.getMessage());
 			}
 		
 		try {
@@ -16850,7 +16845,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			return;
 		}} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switch to frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -16867,7 +16862,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switch to frame " + e.getMessage());
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,\"" + inputParam + "\")]"));
@@ -16881,7 +16876,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switch to frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -16896,7 +16891,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switch to frame " + e.getMessage());
 		}
 
 		try {
@@ -16913,8 +16908,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error("Failed During switchToFrame Action");
+			logger.error("Failed During switchToFrame Action " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -16949,7 +16943,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -16968,7 +16962,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 			throw e;
 		}
@@ -16983,7 +16977,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -17009,13 +17003,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during to get error messages " + e.getMessage());
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,\"Error\")]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during to get error messages " + e.getMessage());
 		}
 //		try {
 //			String text = driver.findElement(By.xpath("//div[contains(text(),\"Error\")]")).getText();
@@ -17027,7 +17021,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String text = driver.findElement(By.xpath("//div[contains(@id,\"ConfirmationDialogId\") and text()=\"Error\"]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during to get error messages " + e.getMessage());
 		}
 		return null;
 	}
@@ -17054,8 +17048,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error("Failed during Click action.");
+			logger.error("Failed during multiple send Keys " + e.getMessage() );
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 	}
@@ -17078,11 +17071,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy values with special characters " + e.getMessage());
 			throw e;
 		}
 

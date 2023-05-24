@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,12 +23,13 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class PostApiValidationMigrationService {
-
+	public static final Logger logger = Logger.getLogger(PostApiValidationMigrationService.class);
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
 	public ResponseDto webClientService(ApiValidationDto listOfLookUpCodesData, String customerUrl) throws JsonMappingException, JsonProcessingException {
 		if (customerUrl.equals("")) {
+			logger.error("Invalid URL " +customerUrl);
 			return new ResponseDto(500,"Invalid URL","Invalid URL!!");
 		} else {
 			String uri = customerUrl + "/apiValidationMigrationReceiver";
@@ -58,6 +60,7 @@ public class PostApiValidationMigrationService {
 			return webClientService(apiDto, customerUrl);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Failed during api validation migration " + e.getMessage());
 			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
 		}
 	}

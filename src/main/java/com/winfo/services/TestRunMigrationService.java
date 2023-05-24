@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.winfo.controller.JobController;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
@@ -39,7 +41,7 @@ public class TestRunMigrationService {
 	private static final String ACTION = "ACTION";
 	private static final String UNIQUE_MANDATORY = "UNIQUE_MANDATORY";
 	private static final String DATATYPES = "DATATYPES";
-
+	public static final Logger logger = Logger.getLogger(TestRunMigrationService.class);
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
 
@@ -55,7 +57,7 @@ public class TestRunMigrationService {
 		if ("[]".equals(response)) {
 			response = "[{\"status\":404,\"statusMessage\":\"PV_ERROR\",\"description\":\"Wrong Product Version\"}]";
 		}
-		System.out.println(response);
+		logger.info("Test Run Migration Response " +response);
 		return response;
 	}
 
@@ -65,7 +67,7 @@ public class TestRunMigrationService {
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
 
 		String customerURI = dataBaseEntryDao.getCentralRepoUrl(testRunDetails.getCustomerName());
-
+		logger.info("Customer URI " + customerURI);
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
 
@@ -168,7 +170,7 @@ public class TestRunMigrationService {
 			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.getLookUp(DATATYPES, lookUpCodeDataTypes));
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
-		}
+			logger.info("Succesfully added migration data");		}
 		return webClientService(testRunMigrationDto, customerURI);
 
 	}

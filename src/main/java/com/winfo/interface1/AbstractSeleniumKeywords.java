@@ -225,7 +225,7 @@ public abstract class AbstractSeleniumKeywords {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed During Taking screenshot");
+			logger.error("Failed During Taking screenshot ");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
 		}
@@ -392,8 +392,8 @@ public abstract class AbstractSeleniumKeywords {
 					String imageName = objectName.substring(objectName.lastIndexOf(FORWARD_SLASH) + 1,
 							objectName.length());
 					File file = new File(screenshotPath + File.separator + imageName);
-					logger.info("Image Name ****** " + imageName);
-					logger.info(file.exists() + "FileExist or not ******" + file.getPath());
+					logger.info("Image Name  " + imageName);
+					logger.info("File Path " + file.getPath());
 					try (final InputStream stream = getResponse.getInputStream();
 							final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
@@ -2256,10 +2256,11 @@ public abstract class AbstractSeleniumKeywords {
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
+			logger.debug("Sharepoint Response " + response);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		logger.info("Acess Token " +acessToken);
+		logger.info("Sharepoint Access Token " +acessToken);
 		return acessToken;
 	}
 }

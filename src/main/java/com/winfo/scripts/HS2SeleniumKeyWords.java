@@ -757,7 +757,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				result = true;
 			} catch (SecurityException se) {
 				// handle it
-				logger.error(se.getMessage());
+				logger.error("Failed during convert JPG To Movie " +se.getMessage());
 			}
 		} else {
 			logger.info("Folder exist");
@@ -1097,7 +1097,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Paste Method");
+			logger.error("Failed during Paste Method " +e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -1159,7 +1159,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during Paste Method " +e.getMessage());
 
 		}
 
@@ -1204,7 +1204,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Paste Method");
+			logger.error("Failed during Paste Method " +e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 
@@ -1249,7 +1249,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed During Accounting Period Clear " + e.getMessage());
 		}
 		try {
 			if (inputParam2.equals("Accounting Period")) {
@@ -2639,7 +2639,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 		// prod
 		try {
@@ -2662,7 +2662,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 		// DH 43
 		try {
@@ -2686,7 +2686,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 
 		// DH 15
@@ -2710,7 +2710,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 
 		// Dh 9
@@ -8231,7 +8231,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during teext area " + e.getMessage());
 		}
 
 		// DH 20
@@ -8255,7 +8255,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during teext area " + e.getMessage());
 		}
 
 		try {
@@ -10297,7 +10297,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during multiple lines table SendKeys " + e.getMessage());
 
 		}
 
@@ -10465,7 +10465,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during multiple lines table SendKeys " + e.getMessage());
 
 		}
 
@@ -12049,7 +12049,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during dropdown values" +e.getMessage());
 		}
 
 		try {
@@ -12570,7 +12570,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 					button.click();
 
 				} catch (Exception e) {
-					logger.error(e.getMessage());
+					logger.error("Failed during dropdown values " + e.getMessage());
 				}
 				return;
 			}
@@ -15291,7 +15291,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during  scrollUsingElement" + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15304,7 +15304,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during  scrollUsingElement" + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),\"" + inputParam + "\")]"));
@@ -15346,7 +15346,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during  scrollUsingElement" + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,\"" + inputParam + "\")]"));
@@ -15821,11 +15821,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy underscore " +e.getMessage());
 			throw e;
 		}
 
@@ -16500,10 +16499,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
-			logger.error("Sucessfully Clicked copynumber");
-
-			logger.error(e.getMessage());
-
+			logger.error("Sucessfully Clicked copynumber " + e.getMessage());
 		}
 
 		return num;
@@ -16556,7 +16552,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.info("Successfully Copied the Number");
 			return num2;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy integer value " + e.getMessage());
 		}
 		try {
 
@@ -16567,8 +16563,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
-
-			logger.error(e.getMessage());
+			logger.error("Failed during copy integer value " + e.getMessage());
 
 		}
 
@@ -16589,7 +16584,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy negative value " + e.getMessage());
 
 		}
 
@@ -16853,7 +16848,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,\"" + inputParam + "\")]"));
@@ -16867,7 +16862,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -16882,7 +16877,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 
 		try {
@@ -16935,7 +16930,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -16954,7 +16949,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 			throw e;
 		}
@@ -16969,7 +16964,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			}
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -16996,13 +16991,13 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,\"Error\")]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 //		try {
 //			String text = driver.findElement(By.xpath("//div[contains(text(),'Error')]")).getText();
@@ -17035,8 +17030,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error("Failed during Click action.");
+			logger.error("Failed during multiple SendKeys " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
@@ -17051,11 +17045,8 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
             screenshot(driver, fetchMetadataVO, customerDetails);
             return;
 
-
-
        } catch (Exception e) {
-            logger.error(e.getMessage());
-            logger.error("Failed during Click action.");
+            logger.error("Failed during multiple SendKeys " + e.getMessage());
             screenshotFail(driver, fetchMetadataVO, customerDetails);
         }
 	}
@@ -17078,11 +17069,10 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy value with special characters " + e.getMessage());
 			throw e;
 		}
 
@@ -18711,7 +18701,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during  Informatica Click Image " + e.getMessage());
 			throw e;
 		}
 

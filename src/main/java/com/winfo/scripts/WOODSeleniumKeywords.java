@@ -761,7 +761,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				result = true;
 			} catch (SecurityException se) {
 				// handle it
-				logger.error(se.getMessage());
+				logger.error("Failed during convert JPG to Movie " + se.getMessage());
 			}
 		} else {
 			logger.info("Folder exist");
@@ -953,7 +953,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during Paste value " + e.getMessage());
 
 		}
 
@@ -984,7 +984,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
 							testSetId);
 				}
-				logger.info("copynumberValue:::" + copynumberValue);
+				logger.info("copynumberValue " + copynumberValue);
 
 				String value = globalValueForSteps;
 				Thread.sleep(2000);
@@ -1005,7 +1005,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Paste Method");
+			logger.error("Failed during Paste value " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -1117,7 +1117,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during Paste value " + e.getMessage());
 
 		}
 
@@ -1189,7 +1189,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during clear action " + e.getMessage());
 		}
 		try {
 			if (inputParam2.equals("Accounting Period")) {
@@ -2549,7 +2549,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click image " + e.getMessage());
 		}
 		// prod
 		try {
@@ -2572,7 +2572,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click image " + e.getMessage());
 		}
 		// DH 43
 		try {
@@ -2596,7 +2596,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click image " + e.getMessage());
 		}
 
 		// DH 15
@@ -2620,7 +2620,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click image " + e.getMessage());
 		}
 
 		// Dh 9
@@ -8234,7 +8234,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8252,7 +8252,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8270,7 +8270,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Description for Internal Candidates")
@@ -8290,7 +8290,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 		}
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
@@ -8310,7 +8310,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 		}
 
 		// DH 20
@@ -8334,7 +8334,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 		}
 
 		try {
@@ -10673,7 +10673,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during text area" + e.getMessage());
 
 		}
 
@@ -12369,7 +12369,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during table dropdowns " + e.getMessage());
 		}
 
 		try {
@@ -16033,7 +16033,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 			theGroup = theGroup.replaceAll(" ", "");
 			// print the group out for verification
-			System.out.format(theGroup);
 		}
 		return theGroup;
 	}
@@ -16051,11 +16050,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy under score with number " + e.getMessage());
 			throw e;
 		}
 
@@ -16077,7 +16075,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy underscore " + e.getMessage());
 			throw e;
 		}
 
@@ -16624,9 +16622,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
-			logger.error("Sucessfully Clicked copynumber");
-
-			logger.error(e.getMessage());
+			logger.error("Sucessfully Clicked copynumber " + e.getMessage());
 
 		}
 
@@ -16680,7 +16676,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("Successfully Copied the Number");
 			return num2;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy integer value " + e.getMessage());
 		}
 		try {
 
@@ -16692,7 +16688,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy integer value " + e.getMessage());
 
 		}
 
@@ -16713,7 +16709,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy negative value " + e.getMessage());
 
 		}
 
@@ -16923,7 +16919,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during window handle " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -16939,7 +16935,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during window handle " + e.getMessage());
 		}
 		try {
 			Thread.sleep(20000);
@@ -16987,7 +16983,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 
 		try {
@@ -17006,7 +17002,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -17023,7 +17019,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,\"" + inputParam + "\")]"));
@@ -17037,7 +17033,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -17052,7 +17048,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during switch to frame " + e.getMessage());
 		}
 
 		try {
@@ -17109,7 +17105,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 //				screenshotFail(driver, "Failed during Link Case", fetchMetadataVO, fetchConfigVO);
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -17127,7 +17123,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 
 			e.printStackTrace();
 			throw e;
@@ -17143,7 +17139,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -17170,13 +17166,13 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,\"Error\")]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 //			try {
 //				String text = driver.findElement(By.xpath("//div[contains(text(),\"Error\")]")).getText();
@@ -17190,7 +17186,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					.getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 		return null;
 	}
@@ -17218,8 +17214,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error("Failed during Click action.");
+			logger.error("Failed during multiple sendkeys " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 	}
@@ -17242,11 +17237,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during multiple sendkeys " + e.getMessage());
 			throw e;
 		}
 
@@ -18829,7 +18823,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Informatica click Image " + e.getMessage());
 			throw e;
 		}
 

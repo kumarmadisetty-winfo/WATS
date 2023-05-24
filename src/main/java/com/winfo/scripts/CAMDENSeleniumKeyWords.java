@@ -704,7 +704,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				result = true;
 			} catch (SecurityException se) {
 				// handle it
-				logger.error(se.getMessage());
+				logger.error("Failed during convert JPG to Movie " + se.getMessage());
 			}
 		} else {
 			logger.info("Folder exist");
@@ -900,7 +900,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during paste a value " + e.getMessage());
 
 		}
 
@@ -1060,7 +1060,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during paste a value " + e.getMessage());
 
 		}
 
@@ -1131,7 +1131,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during clear method " + e.getMessage());
 		}
 		try {
 			if (inputParam2.equals("Accounting Period")) {
@@ -2364,7 +2364,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 		// prod
 		try {
@@ -2383,7 +2383,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 		// DH 43
 		try {
@@ -2403,7 +2403,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 		}
 
 		// DH 15
@@ -7874,7 +7874,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text Area " + e.getMessage());
 		}
 
 		// DH 20
@@ -7894,7 +7894,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during text Area " + e.getMessage());
 		}
 
 		try {
@@ -9813,7 +9813,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during Time Entry multiplelinestableSendKeys" + e.getMessage());
 
 		}
 
@@ -9990,7 +9990,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			}
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during Time Entry multiplelinestableSendKeys" + e.getMessage());
 
 		}
 
@@ -11643,7 +11643,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 					button.click();
 
 				} catch (Exception e) {
-					logger.error(e.getMessage());
+					logger.error("Failed during dropdown values " + e.getMessage());
 				}
 				return;
 			}
@@ -14290,7 +14290,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Scroll Using Element " + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//td[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -14303,7 +14303,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Scroll Using Element " + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//div[contains(text(),\"" + inputParam + "\")]"));
@@ -14345,7 +14345,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Scroll Using Element " + e.getMessage());
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[contains(@id,\"" + inputParam + "\")]"));
@@ -14824,11 +14824,10 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy under score "  + e.getMessage());
 			throw e;
 		}
 
@@ -15432,7 +15431,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			logger.info("Successfully Copied the Number");
 			return num2;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy Integer value " + e.getMessage());
 		}
 		try {
 
@@ -15444,7 +15443,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy Integer value " + e.getMessage());
 
 		}
 
@@ -15467,7 +15466,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during copy Negative  value " + e.getMessage());
 
 		}
 
@@ -15707,7 +15706,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switvh to Frame " + e.getMessage());
 		}
 		try {
 			WebElement waittext = driver.findElement(By.xpath("//iframe[contains(@id,\"" + inputParam + "\")]"));
@@ -15721,7 +15720,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switvh to Frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(5000);
@@ -15736,7 +15735,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switvh to Frame " + e.getMessage());
 		}
 		try {
 			Thread.sleep(10000);
@@ -15788,7 +15787,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -15807,7 +15806,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
 			screenshotFail(webDriver, scriptDetailsDto, customerProjectDto);
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 			throw e;
 		}
@@ -15822,7 +15821,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			}
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location" + fileLocation);
 			e.printStackTrace();
 		}
 		
@@ -15849,20 +15848,20 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 		try {
 			String text = driver.findElement(By.xpath("//div[contains(@class,\"Error\")]")).getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 		try {
 			String text = driver.findElement(By.xpath("//*[contains(@id,\"popup-container\")]//*[text()=\"Error\"]"))
 					.getText();
 			return text;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 		return null;
 
@@ -15911,11 +15910,10 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				// theGroup = theGroup.replaceAll("\\b\\w+(?<!\\w[\\d@]\\b)\\b", "");
 				// System.out.println(theGroup);
 				theGroup = theGroup.replaceAll(" ", "");
-				System.out.format(theGroup);
 			}
 			return theGroup;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during copy value with special characters " + e.getMessage());
 			throw e;
 		}
 
@@ -17367,7 +17365,7 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Informatica Click Image " + e.getMessage());
 			throw e;
 		}
 
