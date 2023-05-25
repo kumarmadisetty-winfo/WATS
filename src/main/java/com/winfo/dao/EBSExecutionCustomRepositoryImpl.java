@@ -4,11 +4,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.winfo.controller.JobController;
 
 @Repository
 public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepository {
@@ -54,7 +55,7 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 //        return entityManager.createQuery(query)
 //            .getSingleResult().toString();
 //    }
-	private static final Logger log = LogManager.getLogger(EBSExecutionCustomRepositoryImpl.class);
+	public static final Logger logger = Logger.getLogger(EBSExecutionCustomRepositoryImpl.class);
 	@Autowired
 	private EntityManager entityManager;
 
@@ -73,7 +74,7 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 	 */
 	@Transactional
 	public String findByConfigurationId(int testrunId, String column) {
-		log.info("start getTestRunScriptStepsData method in {}", this.getClass());
+		logger.info("start getTestRunScriptStepsData method in {}" + this.getClass());
 		String resultList = "";
 		String sql = "SELECT value_name from WIN_TA_CONFIG_LINES WHERE configuration_id in (select configuration_id from win_ta_test_set where test_set_id="
 				+ testrunId + ") AND key_name='" + column + "'";
@@ -82,9 +83,9 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 			Query query = getSession().createSQLQuery(sql);
 			resultList = query.getSingleResult().toString();
 		} catch (Exception e) {
-			log.error(String.format(EXCEPTION_MSG, testrunId));
+			logger.error(String.format(EXCEPTION_MSG, testrunId));
 		}
-		log.info("exit method getTestRunScriptStepsData in {}", this.getClass());
+		logger.info("exit method getTestRunScriptStepsData in {}" + this.getClass());
 		return resultList;
 	}
 
@@ -98,7 +99,7 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 			Query query = getSession().createSQLQuery(sql);
 			resultList = query.getSingleResult().toString();
 		} catch (Exception e) {
-			log.error(String.format(EXCEPTION_MSG, testRunScriptParamId));
+			logger.error(String.format(EXCEPTION_MSG, testRunScriptParamId));
 		}
 		return resultList;
 	}
@@ -113,7 +114,7 @@ public class EBSExecutionCustomRepositoryImpl implements EBSExecutionCustomRepos
 			Query query = getSession().createSQLQuery(sql);
 			resultList = query.getSingleResult().toString();
 		} catch (Exception e) {
-			log.error(String.format(EXCEPTION_MSG, testRunScriptParamId));
+			logger.error(String.format(EXCEPTION_MSG, testRunScriptParamId));
 		}
 		return resultList;
 	}

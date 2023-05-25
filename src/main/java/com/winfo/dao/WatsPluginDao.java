@@ -22,7 +22,7 @@ import com.winfo.vo.DomGenericResponseBean;
 @Repository
 
 public class WatsPluginDao {
-	Logger log = Logger.getLogger(WatsPluginDao.class);
+	public static final Logger logger = Logger.getLogger(WatsPluginDao.class);
 	private static final String USER_ID = "userId";
 
 	@Autowired
@@ -55,7 +55,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info("USER ID " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -71,7 +71,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -88,7 +88,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -105,7 +105,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -148,7 +148,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -163,10 +163,10 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			log.info("id" + id);
+			logger.info("id" + id);
 			return id;
 		} else {
 			return 0;
@@ -180,7 +180,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -195,10 +195,10 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			log.info("id" + id);
+			logger.info("id" + id);
 			return id;
 		} else {
 			return 0;
@@ -212,7 +212,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -232,7 +232,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
@@ -249,7 +249,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {

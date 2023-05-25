@@ -41,7 +41,8 @@ import com.winfo.vo.FetchConfigVO;
 @Service
 @RefreshScope
 public class VMDetailesService {
-	Logger log = Logger.getLogger("Logger");
+
+	public static final Logger logger = Logger.getLogger(VMDetailesService.class);
 
 	@Autowired
 	private VmInstanceDAO vmInstanceDao;
@@ -128,10 +129,10 @@ public class VMDetailesService {
 			FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testRunId);
 			getWebDriver(fetchConfigVO);
 
-			log.info("no of vms lanched" + updateResponse.getInstancePool().getSize());
+			logger.info("no of vms lanched" + updateResponse.getInstancePool().getSize());
 
 		} catch (Exception e) {
-			log.error("failed at sart the vms" + e);
+			logger.error("failed at sart the vms" + e);
 			e.printStackTrace();
 		}
 
@@ -181,7 +182,7 @@ public class VMDetailesService {
 				Thread.sleep(3 * 60 * 1000);
 				getWebDriver(fetchConfigVO);
 
-				log.error("failed at stop the vms" + e);
+				logger.error("failed at stop the vms" + e);
 				e.printStackTrace();
 			}
 		}
@@ -224,11 +225,11 @@ public class VMDetailesService {
 
 					System.out
 							.println("all vms are stoped and wait 2mits" + updateResponse.getInstancePool().getSize());
-					log.info("all vms are stoped" + updateResponse.getInstancePool().getSize());
+					logger.info("all vms are stoped" + updateResponse.getInstancePool().getSize());
 				}
 			}
 		} catch (Exception e) {
-			log.error("failed at stop the vms" + e);
+			logger.error("failed at stop the vms" + e);
 			System.out.println("Exception" + e);
 		}
 	}
@@ -258,7 +259,7 @@ public class VMDetailesService {
 			return client.listInstancePoolInstances(listInstancePoolInstancesRequest);
 		} catch (Exception e) {
 			System.out.println("Exception" + e);
-			log.error("failed at configuration setup" + e);
+			logger.error("failed at configuration setup" + e);
 		}
 		return null;
 	}

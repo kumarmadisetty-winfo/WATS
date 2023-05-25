@@ -45,6 +45,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+import org.jfree.util.Log;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -251,7 +252,7 @@ public abstract class AbstractSeleniumKeywords {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed During Taking screenshot");
+			logger.error("Failed During Taking screenshot ");
 			logger.error("Exception while taking Screenshot" + e.getMessage());
 			return e.getMessage();
 		}
@@ -399,7 +400,6 @@ public abstract class AbstractSeleniumKeywords {
 
 				objNames = response.getListObjects().getObjects().stream().map(objSummary -> objSummary.getName())
 						.collect(Collectors.toList());
-				logger.info(objNames.size());
 				ListIterator<String> listIt = objNames.listIterator();
 				createDir(screenshotPath);
 				while (listIt.hasNext()) {
@@ -410,8 +410,8 @@ public abstract class AbstractSeleniumKeywords {
 					String imageName = objectName.substring(objectName.lastIndexOf(FORWARD_SLASH) + 1,
 							objectName.length());
 					File file = new File(screenshotPath + File.separator + imageName);
-					logger.info("Image Name ****** " + imageName);
-					logger.info(file.exists() + "FileExist or not ******" + file.getPath());
+					logger.info("Image Name  " + imageName);
+					logger.info("File Path " + file.getPath());
 					try (final InputStream stream = getResponse.getInputStream();
 							final OutputStream outputStream = new FileOutputStream(file.getPath())) {
 
@@ -763,7 +763,7 @@ public abstract class AbstractSeleniumKeywords {
 						fetchMetadataListVO, fetchConfigVO, fileNameList, customerDetails, writer);
 			}
 			document.close();
-
+				
 		} catch (Exception e) {
 			logger.info("Not able to Create pdf {}", e);
 		}
@@ -783,7 +783,7 @@ public abstract class AbstractSeleniumKeywords {
 
 			uploadPDF(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
-			logger.info(e);
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -1638,7 +1638,7 @@ public abstract class AbstractSeleniumKeywords {
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						if (getResponse != null) {
 							logger.info("DELETED MARKER " + getResponse.getIsDeleteMarker());
-						}
+							}
 					}
 				} else {
 					logger.info("Screenshot is not present");
@@ -2255,7 +2255,7 @@ public abstract class AbstractSeleniumKeywords {
 			}
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			logger.error(fileLocation);
+			logger.error("File Location " + fileLocation);
 			e.printStackTrace();
 		}
 		try {
@@ -2265,7 +2265,7 @@ public abstract class AbstractSeleniumKeywords {
 			return;
 		} catch (Exception e) {
 			logger.error("Failed During uploadFileAutoIT Action.");
-			System.out.println(fileLocation);
+			logger.error("File Location " + fileLocation);
 			e.printStackTrace();
 			throw e;
 
@@ -2280,9 +2280,7 @@ public abstract class AbstractSeleniumKeywords {
 			List imageUrlList = new ArrayList();
 			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
-
-			System.out.println(imageDir);
-
+			logger.info("Image Directory : " + imageDir);
 			RestTemplate restTemplate = new RestTemplate();
 
 			// Outer header
@@ -2345,10 +2343,8 @@ public abstract class AbstractSeleniumKeywords {
 			String itemId = itemDetailsMap != null ? StringUtils.convertToString(itemDetailsMap.get("id")) : null;
 			for (File imageFile : imageDir.listFiles()) {
 				String imageFileName = imageFile.getName();
-				System.out.println(imageFileName);
 				imageUrlList.add(imageFileName);
 				File pdfFile = new File(imageDir + "/" + imageFileName);
-				System.out.println(pdfFile);
 				FileInputStream input = new FileInputStream(pdfFile);
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				byte[] buffer = new byte[99999999];
@@ -2371,8 +2367,6 @@ public abstract class AbstractSeleniumKeywords {
 //						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 //						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
 //						HttpMethod.POST, uploadSessionRequest, Object.class);
-
-				System.out.println(response);
 				Map<String, Object> linkedMap = response.getBody() != null
 						? (LinkedHashMap<String, Object>) response.getBody()
 						: null;
@@ -2386,14 +2380,10 @@ public abstract class AbstractSeleniumKeywords {
 				HttpEntity<byte[]> uploadingFileRequest = new HttpEntity<>(data, uploadingFileHeader);
 				ResponseEntity<byte[]> putResponse = restTemplate.exchange(uploadUrl, HttpMethod.PUT,
 						uploadingFileRequest, byte[].class);
-
-				System.out.println(putResponse);
-				System.out.println("response status: " + response.getStatusCode());
-				System.out.println("response body: " + response.getBody());
-				System.out.println("response : " + response);
+				logger.info(String.format(" Response status : %s, Response body : %s, Response : %s ", response.getStatusCode(), response.getBody(), response));
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -2413,16 +2403,16 @@ public abstract class AbstractSeleniumKeywords {
 			ResponseEntity<Object> response = restTemplate.exchange(
 					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
-			System.out.println(response);
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
+			logger.debug("Sharepoint Response " + response);
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e.getMessage());
 		}
-		System.out.println(acessToken);
+		logger.info("Sharepoint Access Token " +acessToken);
 		return acessToken;
 	}
 }

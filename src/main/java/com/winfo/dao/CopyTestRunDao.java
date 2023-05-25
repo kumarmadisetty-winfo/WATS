@@ -22,7 +22,8 @@ import com.winfo.model.TestSetLine;
 @SuppressWarnings({ "deprecation", "unchecked" })
 @Repository
 public class CopyTestRunDao {
-	Logger log = Logger.getLogger("Logger");
+
+ public static final Logger logger = Logger.getLogger(CopyTestRunDao.class);;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,7 +34,7 @@ public class CopyTestRunDao {
 
 	public TestSet saveTestrun(TestSet testSetObj) {
 		entityManager.persist(testSetObj);
-		log.info("setTestrundata.getTestsetid() 1:" + testSetObj.getTestRunId());
+		logger.info("Test Run Id " + testSetObj.getTestRunId());
 		return testSetObj;
 	}
 
@@ -44,7 +45,7 @@ public class CopyTestRunDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -59,10 +60,10 @@ public class CopyTestRunDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			log.info("id" + id);
+			logger.info("id" + id);
 			return id;
 		} else {
 			return 0;
@@ -76,7 +77,7 @@ public class CopyTestRunDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -86,7 +87,7 @@ public class CopyTestRunDao {
 
 	public int updateTestSetRecord(TestSet testSetObj) {
 		entityManager.merge(testSetObj);
-		log.info("getTestrun.getTestsetid() 2:" + testSetObj.getTestRunId());
+		logger.info("Test Run Id " + testSetObj.getTestRunId());
 		return testSetObj.getTestRunId();
 
 	}
@@ -101,7 +102,7 @@ public class CopyTestRunDao {
 		SQLQuery<?> query = session.createSQLQuery(sql);
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			log.info(results.get(0));
+			logger.info(results.get(0));
 			return (String) results.get(0);
 		}
 		return null;
@@ -161,7 +162,7 @@ public class CopyTestRunDao {
 	}
 
 	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
-		log.info("TestSetLineID *** " + testSetLineId);
+		logger.info("TestSet Line ID  " + testSetLineId);
 		return entityManager.find(TestSetLine.class, testSetLineId);
 	}
 	
@@ -186,7 +187,7 @@ public class CopyTestRunDao {
 	
 	public void updateExecuteStatusDtls(ExecuteStatus executeStatus) {
 		entityManager.persist(executeStatus);
-		log.info("setTestrundata.getTestsetid() 1:" + executeStatus.getTestRunName());
+		logger.info("Execute Status Test Run Name " + executeStatus.getTestRunName());
 	}
 
 	public String getMeaningUsingValidationName(String validationName) {

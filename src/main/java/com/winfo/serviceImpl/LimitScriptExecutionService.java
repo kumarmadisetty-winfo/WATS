@@ -33,7 +33,7 @@ import com.winfo.vo.ScriptDetailsDto;
 @Service
 @RefreshScope
 public class LimitScriptExecutionService {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(LimitScriptExecutionService.class);
 
 	@Autowired
 	private LimitScriptExecutionDao limitScriptExecutionDao;
@@ -52,7 +52,7 @@ public class LimitScriptExecutionService {
 
 	@Transactional
 	public int getLimitedCountForConfiguration(String testRunNo) {
-		log.info("goto limitScriptExecutionDao class");
+		logger.info("goto limitScriptExecutionDao class");
 		System.out.println("goto limitScriptExecutionDao class");
 		return limitScriptExecutionDao.getLimitedCountForConfiguration();
 	}
@@ -72,11 +72,11 @@ public class LimitScriptExecutionService {
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
 			System.out.println("data added successfully");
-			log.info("data added successfully");
+			logger.info("data added successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("testrun data not added " + e);
-			log.error("testrun data not added " + e);
+			logger.error("testrun data not added " + e);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class LimitScriptExecutionService {
 			Transport.send(message);
 		} catch (Exception e) {
 			System.out.println("respect alert mail not sent  " + e);
-			log.error("respect alert mail not sent" + e);
+			logger.error("respect alert mail not sent" + e);
 		}
 	}
 
@@ -132,7 +132,7 @@ public class LimitScriptExecutionService {
 			Transport.send(message);
 		} catch (Exception e) {
 			System.out.println("respect execuption mail not sent " + e);
-			log.error("respect execuption mail not sent  " + e);
+			logger.error("respect execuption mail not sent  " + e);
 		}
 	}
 
@@ -205,9 +205,9 @@ public class LimitScriptExecutionService {
 			executionAudit.setExecutionEndTime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
-			log.info("data added successfully");
+			logger.info("data added successfully");
 		} catch (Exception e) {
-			log.error("testrun data not added " + e);
+			logger.error("testrun data not added " + e);
 			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
 		}
 	}

@@ -22,8 +22,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -34,7 +33,8 @@ import com.winfo.vo.EmailParamDto;
 
 @Service
 public class SendMailServiceImpl {
-	private static Logger logger = LoggerFactory.getLogger(SendMailServiceImpl.class);
+
+	public static final Logger logger = Logger.getLogger(SendMailServiceImpl.class);
 
 	@Value("${smpt.from.mail}")
 	private String userName;
@@ -55,15 +55,15 @@ public class SendMailServiceImpl {
 			multiPart = (Multipart) message.getContent();
 
 			int numberOfParts = multiPart.getCount();
-			logger.info("Downloading attachments - {}", numberOfParts);
+			logger.info("Downloading attachments - {}" + numberOfParts);
 			for (int partCount = 0; partCount < numberOfParts; partCount++) {
 				MimeBodyPart part = (MimeBodyPart) multiPart.getBodyPart(partCount);
 				if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
 					String filePath = environment.getProperty("file.path") + File.separator + part.getFileName();
-					logger.info("Downloading attachment to path - {}", filePath);
+					logger.info("Downloading attachment to path - {}" + filePath);
 					part.saveFile(filePath);
 					downloadedAttachments.add(filePath);
-					logger.info("Downloaded attachment to path - {}", filePath);
+					logger.info("Downloaded attachment to path - {}" + filePath);
 				}
 			}
 
