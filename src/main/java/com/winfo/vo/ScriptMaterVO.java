@@ -144,12 +144,13 @@ public class ScriptMaterVO {
 			role = dataBaseEntry.getMeaningByTargetCode(role, "ROLE");
 		}
 		if (scriptMetaDatalist != null) {
-			for (ScriptMetaDataVO metaData : scriptMetaDatalist) {
-				if (metaData.getAction() != null) {
-					String updatedAction = dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION");
-					metaData.setAction(updatedAction);
-				}
-			}
+		    scriptMetaDatalist.stream()
+		        .filter(metaData -> metaData.getAction() != null)
+		        .forEach(metaData -> {
+		            String updatedAction = dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION");
+		            metaData.setAction(updatedAction);
+		        });
 		}
+
 	}
 }
