@@ -95,7 +95,7 @@ public class JiraTicketBugService {
 					.bodyToMono(String.class);
 			response = result.block();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("Failed to create Jira ticket " +e.getMessage());
 		}
 		return response;
 
