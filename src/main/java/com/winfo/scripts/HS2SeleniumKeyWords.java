@@ -15777,6 +15777,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (param2 == "") {
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(text(),\"" + param1 + "\")]/following::select[1]")));
+				logger.info("started selectByText");
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -15815,13 +15816,23 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		Select selectBox = new Select(waittext);
-		selectBox.selectByVisibleText(inputData);
-		String scripNumber = fetchMetadataVO.getScriptNumber();
-		log.info("Sucessfully Clicked selectMethod" + scripNumber);
-		screenshot(driver, fetchMetadataVO, customerDetails);
+		
+		try {
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			logger.info("before selectBox step");
+			Select selectBox = new Select(waittext);
+			logger.info("before selectBox step");
+			selectBox.selectByVisibleText(inputData);
+			logger.info("after selectBox step");
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Sucessfully Clicked selectMethod" + scripNumber);
+			screenshot(driver, fetchMetadataVO, customerDetails);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		
 		return;
 	}
 
