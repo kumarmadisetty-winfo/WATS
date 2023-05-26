@@ -1637,7 +1637,7 @@ public abstract class AbstractSeleniumKeywords {
 						DeleteObjectResponse getResponse = client.deleteObject(DeleteObjectRequest.builder()
 								.namespaceName(ociNamespace).bucketName(ociBucketName).objectName(objectName).build());
 						if (getResponse != null) {
-							logger.info("DELETED MARKER " + getResponse.getIsDeleteMarker());
+							logger.debug("DELETED MARKER " + getResponse.getIsDeleteMarker());
 							}
 					}
 				} else {
