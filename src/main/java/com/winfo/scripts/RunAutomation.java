@@ -392,7 +392,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passurl, failurl, detailurl, scripturl);
 		}
 		catch (WebDriverException e) {
 			if(driver == null)
@@ -438,7 +438,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(String param, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial)
+			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial, String scriptId, String passurl, String failurl, String detailurl, String scripturl)
 			throws Exception {
 
 		String log4jConfPath = "log4j.properties";
@@ -448,14 +448,9 @@ public class RunAutomation {
 		long startTime = System.currentTimeMillis();
 		log.info("Run started in swithch actions at ::::::::::::: {}", startTime);
 		int i = 0;
-		String passurl = null;
-		String failurl = null;
 		String actionName = null;
-		String detailurl = null;
-		String scripturl = null;
 		String testSetId = null;
 		String testSetLineId = null;
-		String scriptId = null;
 		String scriptId1 = null;
 		String scriptNumber = null;
 		String seqNum = null;
@@ -466,21 +461,6 @@ public class RunAutomation {
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SES, null);
 		
 		try {
-			scriptId = fetchMetadataListVO.get(0).getScriptId();
-			passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-					+ "Passed_Report.pdf";
-			failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-					+ "Failed_Report.pdf";
-			detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-					+ "Detailed_Report.pdf";
-			scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
-					+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-					+ fetchMetadataListVO.get(0).getSeqNum() + "_" + fetchMetadataListVO.get(0).getScriptNumber()
-					+ ".pdf";
-
 			String userName = null;
 			String globalValueForSteps = null;
 			Date startdate = new Date();
