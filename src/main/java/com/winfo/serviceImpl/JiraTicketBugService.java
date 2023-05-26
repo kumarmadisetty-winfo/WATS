@@ -95,7 +95,7 @@ public class JiraTicketBugService {
 					.bodyToMono(String.class);
 			response = result.block();
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error(e);
 		}
 		return response;
 
@@ -120,10 +120,10 @@ public class JiraTicketBugService {
 			File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
 
-			System.out.println("jira pdf path= " + filenew);
+			logger.info("jira pdf path= " + filenew);
 			builder.part("file", new FileSystemResource(filenew));
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error("Fail during Multi Value Map " +e.getMessage());
 		}
 		return builder.build();
 	}
@@ -264,7 +264,7 @@ public class JiraTicketBugService {
 						if (entry.getKey().equals("key")) {
 							issuekey = entry.getValue().toString();
 						}
-						System.out.println(entry.getKey() + "=" + entry.getValue());
+						logger.info(entry.getKey() + "=" + entry.getValue());
 
 					}
 
@@ -299,7 +299,7 @@ public class JiraTicketBugService {
 
 		}
 
-		System.out.println(count + " Record(s) Updated.");
+		logger.info(count + " Record(s) Updated.");
 		String finalIssuekey=String.join("','", issueKeyList);
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count > 0) {
@@ -320,7 +320,7 @@ public class JiraTicketBugService {
 			response.setStatusMessage("ERROR");
 			response.setDescription(messageUtil.getJiraTicketBugService().getError().getNotAbleToCreateIssue());
 			bean.add(response);
-			logger.error(e);
+			logger.error("Failed during create jira ticket " +e.getMessage());
 //			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 		}
 		return bean;

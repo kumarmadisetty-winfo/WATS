@@ -114,7 +114,7 @@ public class VMDetailesService {
 					.updateInstancePoolDetails(updateInstancePoolDetails).build();
 
 			UpdateInstancePoolResponse updateResponse = client.updateInstancePool(updateRequest);
-			System.out.println("no of vms lanched and wait 2mits" + updateResponse.getInstancePool().getSize());
+			logger.info("no of vms lanched and wait 2mits" + updateResponse.getInstancePool().getSize());
 			String fistVmStatus = null;
 
 			while (!"Running".equalsIgnoreCase(fistVmStatus)) {
@@ -132,7 +132,7 @@ public class VMDetailesService {
 			logger.info("no of vms lanched" + updateResponse.getInstancePool().getSize());
 
 		} catch (Exception e) {
-			logger.error("failed at sart the vms" + e);
+			logger.error("failed at sart the vms" + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -152,13 +152,13 @@ public class VMDetailesService {
 			ChromeOptions options = new ChromeOptions();
 			
 			if (os.contains("win")) {
-				System.out.println("windows location");
+				logger.info("Script executing on windows location");
 				options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",
 																										// "C:\\Program
 																										// Files
 																										// (x86)\\Google\\Chrome\\Application\\chrome.exe");
 			} else {
-				System.out.println("linex location");
+				logger.info("Script executing on linux location");
 				options.setBinary("/usr/bin/google-chrome");
 			}
 
@@ -182,7 +182,7 @@ public class VMDetailesService {
 				Thread.sleep(3 * 60 * 1000);
 				getWebDriver(fetchConfigVO);
 
-				logger.error("failed at stop the vms" + e);
+				logger.error("failed at stop the vms" + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -222,15 +222,11 @@ public class VMDetailesService {
 						Thread.sleep(7000);
 						listresponse = getListOfInstancesResponse(response, client, compementId);
 					}
-
-					System.out
-							.println("all vms are stoped and wait 2mits" + updateResponse.getInstancePool().getSize());
 					logger.info("all vms are stoped" + updateResponse.getInstancePool().getSize());
 				}
 			}
 		} catch (Exception e) {
-			logger.error("failed at stop the vms" + e);
-			System.out.println("Exception" + e);
+			logger.error("Failed at stop the vms" + e.getMessage());
 		}
 	}
 
@@ -238,7 +234,7 @@ public class VMDetailesService {
 			ComputeManagementClient client, String instancePoolId) {
 		try {
 
-			System.out.println("instanceSummary");
+			logger.info("Pool Instance Response " + response);
 			ListInstancePoolInstancesRequest listInstancePoolInstancesRequest = ListInstancePoolInstancesRequest
 					.builder().compartmentId(response.getItems().get(0).getCompartmentId())
 					.instancePoolId(response.getItems().get(0).getId())
@@ -258,8 +254,7 @@ public class VMDetailesService {
 //					.sortOrder(ListInstancePoolInstancesRequest.SortOrder.Desc).build();
 			return client.listInstancePoolInstances(listInstancePoolInstancesRequest);
 		} catch (Exception e) {
-			System.out.println("Exception" + e);
-			logger.error("failed at configuration setup" + e);
+			logger.error("Failed at configuration setup " + e.getMessage());
 		}
 		return null;
 	}

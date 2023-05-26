@@ -71,7 +71,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -88,7 +88,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -105,7 +105,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -148,7 +148,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -163,7 +163,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
 			logger.info("id" + id);
@@ -180,7 +180,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -195,7 +195,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
 			logger.info("id" + id);
@@ -212,7 +212,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Result " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {

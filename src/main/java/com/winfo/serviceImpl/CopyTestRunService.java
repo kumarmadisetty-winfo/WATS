@@ -474,7 +474,7 @@ public class CopyTestRunService {
 		}
 		logger.info("before update");
 		int newtestrun = copyTestrunDao.updateTestSetRecord(getTestrun);
-		logger.info("newtestrun 2:" + newtestrun);
+		logger.info("New test run " + newtestrun);
 		return newtestrun;
 	}
 

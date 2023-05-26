@@ -271,7 +271,7 @@ public class DataBaseEntryDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.error(results.get(0));
+			logger.info("Result " +results.get(0));
 
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
@@ -301,7 +301,7 @@ public class DataBaseEntryDao {
 		File file = new File(jpgFile).exists() ? new File(jpgFile) : new File(pngFile);
 		byte[] screenshotArray = new byte[(int) file.length()];
 		try (FileInputStream fileInputStream = new FileInputStream(file);) {
-			logger.error(fileInputStream.read(screenshotArray));
+			logger.info("File Input Stream " + fileInputStream.read(screenshotArray));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

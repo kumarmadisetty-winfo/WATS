@@ -765,7 +765,7 @@ public abstract class AbstractSeleniumKeywords {
 			document.close();
 				
 		} catch (Exception e) {
-			logger.info("Not able to Create pdf {}", e);
+			logger.error("Failed to Create pdf " + e.getMessage());
 		}
 		try {
 			StringBuffer destinationFileBuffer = new StringBuffer();
@@ -783,7 +783,7 @@ public abstract class AbstractSeleniumKeywords {
 
 			uploadPDF(sourceFilePath, destinationFilePath);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to Create pdf " + e.getMessage());
 		}
 	}
 
@@ -2383,7 +2383,7 @@ public abstract class AbstractSeleniumKeywords {
 				logger.info(String.format(" Response status : %s, Response body : %s, Response : %s ", response.getStatusCode(), response.getBody(), response));
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed to upload Pdf To Sharepoint " +e.getMessage());
 		}
 	}
 
